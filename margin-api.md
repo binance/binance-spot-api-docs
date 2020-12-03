@@ -262,16 +262,19 @@ Post a new order for margin account.
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
+isIsolated | STRING | NO | For isolated margin or not, "TRUE", "FALSE"，default "FALSE"
 side |	ENUM |YES |	BUY<br>SELL
 type | ENUM | YES	
-quantity | DECIMAL |	YES	
+quantity | DECIMAL |	NO
+quoteOrderQty | DECIMAL | NO	
 price |	DECIMAL | NO	
 stopPrice | DECIMAL | NO | Used with STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, and TAKE_PROFIT_LIMIT orders.
 newClientOrderId | STRING | NO | A unique id for the order. Automatically generated if not sent.
 icebergQty | DECIMAL | NO | Used with LIMIT, STOP_LOSS_LIMIT, and TAKE_PROFIT_LIMIT to create an iceberg order.
 newOrderRespType | ENUM | NO | Set the response JSON. ACK, RESULT, or FULL; MARKET and LIMIT order types default to FULL, all other orders default to ACK.
+sideEffectType | ENUM | NO | NO_SIDE_EFFECT, MARGIN_BUY, AUTO_REPAY; default NO_SIDE_EFFECT.
 timeInForce | ENUM | NO | GTC,IOC,FOK
-recvWindow | LONG | NO
+recvWindow | LONG | NO | The value cannot be greater than 60000
 timestamp | LONG | YES
 
 **Response ACK:**
