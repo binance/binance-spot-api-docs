@@ -6,11 +6,13 @@
 
 Name | Description
 ------------ | ------------
-[rest-api.md](./rest-api.md) | Details on the Rest API (/api)
-[errors.md](./errors.md) | Descriptions of possible error messages from the Rest API
-[web-socket-streams.md](./web-socket-streams.md) | Details on available streams and payloads
-[user-data-stream.md](./user-data-stream.md) | Details on the dedicated account stream
-[wapi-api.md](./wapi-api.md) | Details on the Withdrawal API (/wapi)
-[margin-api.md](./margin-api.md) | Details on the Margin Trade API (/sapi)
-[Futures-API](https://binance-docs.github.io/apidocs/futures/en/) | Details on the Futures API (/fapi)
-
+[rest-api.md](./rest-api.md)     | Details on the Rest API (/api)
+[errors.md](./errors.md)   | Descriptions of possible error messages from the Rest API
+[web-socket-streams.md](./web-socket-streams.md)   | Details on available streams and payloads
+[user-data-stream.md](./user-data-stream.md)   | Details on the dedicated account stream
+[Wallet, Sub-account](https://binance-docs.github.io/apidocs/spot/en) | Details on Wallet and sub-accounts endpoints(/sapi, /wapi)
+[Margin, BLVT](https://binance-docs.github.io/apidocs/spot/en) | Details on Margin and BLVT endpoints(/sapi, /wapi)
+[Mining](https://binance-docs.github.io/apidocs/spot/en) | Details on Mining endpoints(/sapi, /wapi)
+[BSwap, Savings](https://binance-docs.github.io/apidocs/spot/en) | Details on BSwap and Savings endpoints(/sapi, /wapi)
+[USDT-M Futures](https://binance-docs.github.io/apidocs/futures/en/)  | Details on USDT-M Futures API (/fapi)
+[COIN-M Futures](https://binance-docs.github.io/apidocs/delivery/en/) | Details on COIN-M Futures API (/dapi)
