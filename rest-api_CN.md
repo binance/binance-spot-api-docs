@@ -329,6 +329,7 @@ NONE
     "baseAssetPrecision": 8,
     "quoteAsset": "BTC",
     "quotePrecision": 8,
+    "quoteAssetPrecision": 8,
     "orderTypes": ["LIMIT", "MARKET"],
     "icebergAllowed": false,
     "filters": [{
