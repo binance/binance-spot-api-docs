@@ -12,5 +12,9 @@
 [errors_CN.md](./errors_CN.md) | 错误代码及含义
 [web-socket-streams_CN.md](./web-socket-streams_CN.md) | 行情数据流接口的描述
 [user-data-stream_CN.md](./user-data-stream_CN.md) | 用户数据流接口的描述
-[wapi-api_CN.md](./wapi-api_CN.md) | 提现接口(及其他账户信息)的描述(/wapi)
-[Futures-API](https://binance-docs.github.io/apidocs/futures/cn/) | 币安合约API中文文档 (/fapi)
+[Wallet, Sub-account](https://binance-docs.github.io/apidocs/spot/cn) | 钱包，子账户接口的描述(/sapi, /wapi)
+[Margin, BLVT](https://binance-docs.github.io/apidocs/spot/cn) | 杠杆，杠杆代币接口的描述(/sapi, /wapi)
+[Mining](https://binance-docs.github.io/apidocs/spot/cn) | 矿池接口的描述(/sapi, /wapi)
+[BSwap, Savings](https://binance-docs.github.io/apidocs/spot/cn) | 流动性挖矿，币安宝接口的描述(/sapi, /wapi)
+[USDT-M Futures](https://binance-docs.github.io/apidocs/futures/cn/) | U本位合约相关API (/fapi)
+[COIN-M Futures](https://binance-docs.github.io/apidocs/delivery/cn/) | 币本位合约相关API (/dapi)
