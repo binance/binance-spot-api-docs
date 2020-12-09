@@ -495,7 +495,8 @@ NONE
       "baseAsset": "ETH",
       "baseAssetPrecision": 8,
       "quoteAsset": "BTC",
-      "quotePrecision": 8,
+      "quotePrecision": 8, // will be removed in future api versions (v4+)
+      "quoteAssetPrecision": 8,
       "baseCommissionPrecision": 8,
       "quoteCommissionPrecision": 8,
       "orderTypes": [
