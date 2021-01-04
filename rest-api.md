@@ -656,6 +656,8 @@ limit | INT | NO | Default 500; max 1000.
 * If both startTime and endTime are sent, time between startTime and endTime must be less than 1 hour.
 * If fromId, startTime, and endTime are not sent, the most recent aggregate trades will be returned.
 
+**Note:** In contrary to other routes, the `limit` property counts from `endTime` to `startTime`.
+
 **Response:**
 ```javascript
 [
