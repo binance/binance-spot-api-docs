@@ -1,4 +1,12 @@
-# CHANGELOG for Binance's API (2020-11-27)
+# CHANGELOG for Binance's API (2021-01-01)
+
+## 2021-01-01
+
+**USER DATA STREAM**
+
+* `outboundAccountInfo` has been removed.
+
+---
 
 ## 2020-11-27
 
@@ -23,7 +31,7 @@ USER DATA STREAM
 ---
 
 ## 2020-05-01
-* From 2020-05-01 UTC 00:00, all symbols will have a limit of 200 open orders using the [MAX_NUM_ORDERS](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#max_num_orders) filter.
+* From 2020-05-01 UTC 00:00, all symbols will have a limit of 200 open orders using the [MAX_NUM_ORDERS](./rest-api.md#max_num_orders) filter.
     * No existing orders will be removed or canceled.
     * Accounts that have 200 or more open orders on a symbol will not be able to place new orders on that symbol until the open order count is below 200.
     * OCO orders count as 2 open orders before the `LIMIT` order is touched or the `STOP_LOSS` (or `STOP_LOSS_LIMIT`) order is triggered; once this happens the other order is canceled and will no longer count as an open order.

@@ -14,7 +14,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# User Data Streams for Binance (2020-09-09)
+# User Data Streams for Binance (2021-01-01)
 # General WSS information
 * The base API endpoint is: **https://api.binance.com**
 * A User Data Stream `listenKey` is valid for 60 minutes after creation.
@@ -102,57 +102,6 @@ listenKey | STRING | YES
       "l": "0.000000"             //Locked
     }
   ]
-}
-```
-
-**IMPORTANT NOTE: `outboundAccountInfo` has been deprecated and will be removed in the future. <br> It is recommended to use `outboundAccountPosition` instead.**
-
-`outboundAccountInfo` shows the balance of non-zero assets and any asset that has recently been reduced to 0. <br>
-For assets recently reduced to 0, they will only be pushed once to notify the user has a zero balance for that asset and will not be pushed again. <br>
-Any asset that is not included in the `outboundAccountInfo` should be considered having a balance of 0.
-
-```javascript
-{
-  "e": "outboundAccountInfo",   // Event type
-  "E": 1499405658849,           // Event time
-  "m": 0,                       // Maker commission rate (bips)
-  "t": 0,                       // Taker commission rate (bips)
-  "b": 0,                       // Buyer commission rate (bips)
-  "s": 0,                       // Seller commission rate (bips)
-  "T": true,                    // Can trade?
-  "W": true,                    // Can withdraw?
-  "D": true,                    // Can deposit?
-  "u": 1499405658848,           // Time of last account update
-  "B": [                        // Balances array
-    {
-      "a": "LTC",               // Asset
-      "f": "17366.18538083",    // Free amount
-      "l": "0.00000000"         // Locked amount
-    },
-    {
-      "a": "BTC",
-      "f": "10537.85314051",
-      "l": "2.19464093"
-    },
-    {
-      "a": "ETH",
-      "f": "17902.35190619",
-      "l": "0.00000000"
-    },
-    {
-      "a": "BNB",
-      "f": "4503.29769312",
-      "l": "0.00000000"
-    },
-    {
-      "a": "NEO",
-      "f": "0.00000000",
-      "l": "0.00000000"
-    }
-  ],
-  "P": [
-    "SPOT"
-  ]  
 }
 ```
 
