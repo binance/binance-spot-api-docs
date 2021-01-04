@@ -1,4 +1,13 @@
-# 更新日志 (2020-11-27)
+# 更新日志 (2021-01-01)
+
+
+## 2021-01-01
+
+**USER DATA STREAM**
+
+* 移除`outboundAccountInfo`事件.
+
+---
 
 ## 2020-11-27
 
@@ -19,7 +28,7 @@
 ---
 
 ## 2020-05-01
-* 从2020-05-01 UTC 00:00开始, 所有交易对都会有最多200个挂单的限制, 体现在过滤器[MAX_NUM_ORDERS](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api_CN.md#max_num_orders-%E6%9C%80%E5%A4%9A%E8%AE%A2%E5%8D%95%E6%95%B0)上.
+* 从2020-05-01 UTC 00:00开始, 所有交易对都会有最多200个挂单的限制, 体现在过滤器[MAX_NUM_ORDERS](./rest-api_CN.md#max_num_orders-%E6%9C%80%E5%A4%9A%E8%AE%A2%E5%8D%95%E6%95%B0)上.
   * 已经存在的挂单不会被移除或者撤销。
   * 单交易对(`symbol`)的挂单数量达到或超过200的账号, 无法在此交易对上下新的订单, 除非挂单数量低于200。
   * OCO订单在被触发成`LIMIT`订单, 或者被触发成`STOP_LOSS`(或者`STOP_LOSS_LIMIT`)前, 被认为是2个挂单量. 一旦OCO订单被触发, 就只被算作一个挂单。
