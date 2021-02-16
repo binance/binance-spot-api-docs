@@ -286,6 +286,13 @@ These terms will be used throughout the documentation, so it is recommended espe
 * `quote asset` refers to the asset that is the `price` of a symbol. For the symbol BTCUSDT, USDT would be the `quote asset`.
 
 
+## DECIMAL definition
+
+Decimal values (e.g. quantity and price) are of passed as string with up to 8 decimals.
+
+Note that despite this precision, values provided must conform to the corresponding filters. For example providing a `price`
+with more precision than the `tickSize` for that symbol will result in the request being rejected (status = 400, error = "Bad Request").
+
 ## ENUM definitions
 **Symbol status (status):**
 
