@@ -6,6 +6,11 @@
   - [HTTP Return Codes](#http-return-codes)
   - [Error Codes](#error-codes)
   - [General Information on Endpoints](#general-information-on-endpoints)
+- [Public Rest API for Binance (2020-11-27)](#public-rest-api-for-binance-2020-11-27)
+  - [General API Information](#general-api-information)
+  - [HTTP Return Codes](#http-return-codes)
+  - [Error Codes](#error-codes)
+  - [General Information on Endpoints](#general-information-on-endpoints)
 - [LIMITS](#limits)
   - [General Info on Limits](#general-info-on-limits)
   - [IP Limits](#ip-limits)
@@ -18,7 +23,7 @@
     - [Example 2: As a query string](#example-2-as-a-query-string)
     - [Example 3: Mixed query string and request body](#example-3-mixed-query-string-and-request-body)
 - [Public API Endpoints](#public-api-endpoints)
-  - [Terminology](#terminology)
+    - [Terminology](#terminology)
   - [ENUM definitions](#enum-definitions)
   - [General endpoints](#general-endpoints)
     - [Test connectivity](#test-connectivity)
@@ -1310,6 +1315,8 @@ timestamp | LONG | YES |
 **Notes:**
 * If `orderId` is set, it will get orders >= that `orderId`. Otherwise most recent orders are returned.
 * For some historical orders `cummulativeQuoteQty` will be < 0, meaning the data is not available at this time.
+* If `startTime` and `endTime` are set, `endTime` has to be greater than `startTime`. 
+* Either `orderId` or (`startTime` and `endTime`) must be sent when used these optional parameters. 
 
 **Response:**
 ```javascript
