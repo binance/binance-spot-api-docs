@@ -1310,6 +1310,7 @@ timestamp | LONG | YES |
 **Notes:**
 * If `orderId` is set, it will get orders >= that `orderId`. Otherwise most recent orders are returned.
 * For some historical orders `cummulativeQuoteQty` will be < 0, meaning the data is not available at this time.
+* If `startTime` and/or `endTime` provided, `orderId`  is not required. 
 
 **Response:**
 ```javascript

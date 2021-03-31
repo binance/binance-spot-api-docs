@@ -1012,7 +1012,10 @@ recvWindow | LONG | NO |
 timestamp | LONG | YES |
 
 **注意:**
-* 某些较早的订单`cummulativeQuoteQty`会小于0，代表数据不可用，忽略即可
+* 如设置 `orderId` , 订单量将 >=  `orderId`。否则将返回最新订单。
+* 一些历史订单 `cummulativeQuoteQty`  < 0, 是指数据此时不存在。
+* 如果设置 `startTime` 和 `endTime`, `orderId` 就不需要设置。
+
 
 **响应:**
 ```javascript
