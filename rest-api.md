@@ -1066,6 +1066,7 @@ timestamp | LONG | YES |
 Notes:
 * Either `orderId` or `origClientOrderId` must be sent.
 * For some historical orders `cummulativeQuoteQty` will be < 0, meaning the data is not available at this time.
+* The `isWorking` field indicates... [?]
 
 
 **Response:**
