@@ -144,6 +144,9 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 #### -2016 NO_TRADING_WINDOW
  * No trading window could be found for the symbol. Try ticker/24hrs instead.
 
+#### -2018 NO_SUCH_ORDER_LIST
+ * Order list does not exist.
+
 
 ## Messages for -1010 ERROR_MSG_RECEIVED, -2010 NEW_ORDER_REJECTED, and -2011 CANCEL_REJECTED
 This code is sent when an error has been returned by the matching engine.
