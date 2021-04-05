@@ -16,3 +16,13 @@ Name | Description
 [BSwap, Savings](https://binance-docs.github.io/apidocs/spot/en) | Details on BSwap and Savings endpoints(/sapi, /wapi)
 [USDT-M Futures](https://binance-docs.github.io/apidocs/futures/en/)  | Details on USDT-M Futures API (/fapi)
 [COIN-M Futures](https://binance-docs.github.io/apidocs/delivery/en/) | Details on COIN-M Futures API (/dapi)
+
+# Contact Us
+
+* [Binance API Telegram Group](https://t.me/binance_api_english)
+    * For any questions regarding sudden drop in performance with the API and/or Websockets.
+    * For any general questions about the API not covered in the documentation.
+* [Binance Developers](https://dev.binance.vision/)
+    * For any questions/help regarding code implementation with API and/or Websockets.
+* [Binance Customer Support](https://www.binance.com/en/support-center)
+    * For cases such as missing funds, help with 2FA, etc.
