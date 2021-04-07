@@ -18,3 +18,14 @@
 [BSwap, Savings](https://binance-docs.github.io/apidocs/spot/cn) | 流动性挖矿，币安宝接口的描述(/sapi, /wapi)
 [USDT-M Futures](https://binance-docs.github.io/apidocs/futures/cn/) | U本位合约相关API (/fapi)
 [COIN-M Futures](https://binance-docs.github.io/apidocs/delivery/cn/) | 币本位合约相关API (/dapi)
+
+
+# 联系我们
+
+* [Binance API 中文电报群](https://t.me/Binance_api_Chinese)
+    * 适合咨询关于API或者Websocket性能方面的疑问和困扰.
+    * 可以咨询在文档上面没有的API问题.
+* [Binance 开发者论坛](https://dev.binance.vision/)
+    * 可以提问或者咨询关于API或者Websocket代码方面问题.
+* [Binance 客服](https://www.binance.com/zh-CN/support-center)
+    * 咨询关于账户, 资金， 2FA等问题.
