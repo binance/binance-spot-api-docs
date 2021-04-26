@@ -6,7 +6,7 @@
 从 **April 28, 2021 00:00 UTC** 开始,下面接口的权重有如下变动:
 
 * `GET /api/v3/order` 权重改为 2
-* `GET /api/v3/openOrder` 权重改为 3
+* `GET /api/v3/openOrders` 权重改为 3
 * `GET /api/v3/allOrders` 权重改为 10
 * `GET /api/v3/orderList` 权重改为 2
 * `GET /api/v3/openOrderList` 权重改为 3

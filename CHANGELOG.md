@@ -5,7 +5,7 @@
 On **April 28, 2021 00:00 UTC** the weights to the following endpoints will be adjusted:
 
 * `GET /api/v3/order` weight increased to 2
-* `GET /api/v3/openOrder` weight increased to 3
+* `GET /api/v3/openOrders` weight increased to 3
 * `GET /api/v3/allOrders` weight increased to 10
 * `GET /api/v3/orderList` weight increased to 2
 * `GET /api/v3/openOrderList` weight increased to 3
