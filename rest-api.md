@@ -71,7 +71,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2020-11-27)
+# Public Rest API for Binance (2021-04-28)
 
 ## General API Information
 * The base endpoint is: **https://api.binance.com**
@@ -468,7 +468,7 @@ GET /api/v3/exchangeInfo
 Current exchange trading rules and symbol information
 
 **Weight:**
-1
+10
 
 **Parameters:**
 NONE
@@ -1051,7 +1051,7 @@ GET /api/v3/order (HMAC SHA256)
 Check an order's status.
 
 **Weight:**
-1
+2
 
 **Parameters:**
 
@@ -1248,7 +1248,7 @@ GET /api/v3/openOrders  (HMAC SHA256)
 Get all open orders on a symbol. **Careful** when accessing this with no symbol.
 
 **Weight:**
-1 for a single symbol; **40** when the symbol parameter is omitted
+3 for a single symbol; **40** when the symbol parameter is omitted
 
 **Parameters:**
 
@@ -1293,7 +1293,7 @@ GET /api/v3/allOrders (HMAC SHA256)
 Get all account orders; active, canceled, or filled.
 
 **Weight:**
-5 with symbol
+10 with symbol
 
 **Parameters:**
 
@@ -1529,7 +1529,7 @@ Additional notes:
 GET /api/v3/orderList (HMAC SHA256)
 ```
 
-**Weight**: 1
+**Weight**: 2
 
 Retrieves a specific OCO based on provided optional parameters
 
@@ -1645,7 +1645,7 @@ timestamp|LONG|YES|
 GET /api/v3/openOrderList (HMAC SHA256)
 ```
 
-Weight: 2
+Weight: 3
 
 **Parameters**
 
@@ -1689,7 +1689,7 @@ GET /api/v3/account (HMAC SHA256)
 Get current account information.
 
 **Weight:**
-5
+10
 
 **Parameters:**
 
@@ -1735,7 +1735,7 @@ GET /api/v3/myTrades  (HMAC SHA256)
 Get trades for a specific account and symbol.
 
 **Weight:**
-5 with symbol
+10 with symbol
 
 **Parameters:**
 
