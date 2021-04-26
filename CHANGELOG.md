@@ -1,4 +1,18 @@
-# CHANGELOG for Binance's API (2021-01-01)
+# CHANGELOG for Binance's API (2021-04-26)
+
+## 2021-04-26
+
+On **April 28, 2021 00:00 UTC** the weights to the following endpoints will be adjusted:
+
+* `GET /api/v3/order` weight increased to 2
+* `GET /api/v3/openOrders` weight increased to 3
+* `GET /api/v3/allOrders` weight increased to 10
+* `GET /api/v3/orderList` weight increased to 2
+* `GET /api/v3/openOrderList` weight increased to 3
+* `GET /api/v3/account` weight increased to 10
+* `GET /api/v3/myTrades` weight increased to 10
+* `GET /api/v3/exchangeInfo` weight increased to 10
+
 
 ## 2021-01-01
 
