@@ -120,7 +120,7 @@
 
 #### -1130 无效参数(值)
  * Invalid data sent for a parameter.
- * Data sent for paramter '%s' is not valid.
+ * Data sent for parameter '%s' is not valid.
 
 #### -2010 订单被拒绝
  * NEW_ORDER_REJECTED
