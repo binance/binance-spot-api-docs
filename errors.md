@@ -124,7 +124,7 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 #### -1130 INVALID_PARAMETER
  * Invalid data sent for a parameter.
- * Data sent for paramter '%s' is not valid.
+ * Data sent for parameter '%s' is not valid.
 
 #### -2010 NEW_ORDER_REJECTED
  * NEW_ORDER_REJECTED
