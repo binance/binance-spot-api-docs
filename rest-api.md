@@ -10,6 +10,7 @@
   - [General Info on Limits](#general-info-on-limits)
   - [IP Limits](#ip-limits)
   - [Order Rate Limits](#order-rate-limits)
+- [Data Sources](#data-sources)
 - [Endpoint security type](#endpoint-security-type)
 - [SIGNED (TRADE and USER_DATA) Endpoint security](#signed-trade-and-user_data-endpoint-security)
   - [Timing security](#timing-security)
@@ -18,7 +19,7 @@
     - [Example 2: As a query string](#example-2-as-a-query-string)
     - [Example 3: Mixed query string and request body](#example-3-mixed-query-string-and-request-body)
 - [Public API Endpoints](#public-api-endpoints)
-  - [Terminology](#terminology)
+    - [Terminology](#terminology)
   - [ENUM definitions](#enum-definitions)
   - [General endpoints](#general-endpoints)
     - [Test connectivity](#test-connectivity)
@@ -143,6 +144,19 @@ Sample Payload below:
 * Every successful order response will contain a `X-MBX-ORDER-COUNT-(intervalNum)(intervalLetter)` header which has the current order count for the account for all order rate limiters defined.
 * Rejected/unsuccessful orders are not guaranteed to have `X-MBX-ORDER-COUNT-**` headers in the response.
 * **The order rate limit is counted against each account**.
+
+# Data Sources
+* The API system is asynchronous, so some delay in the response is normal and expected.
+* Each endpoint has a data source indicating where the data is being retrieved, and thus which endpoints have the most up-to-date response.
+
+These are the three sources, ordered by which is has the most up-to-date response to the one with potential delays in updates.
+
+  * **Matching Engine** - the data is from the matching Engine
+  * **Memory** - the data is from a server's local or external memory
+  * **Database** - the data is taken directly from a database
+
+Some endpoints can have more than 1 data source. (e.g. Memory => Database)
+This means that the endpoint will check the first Data Source, and if it cannot find the value it's looking for it will check the next one.
 
 # Endpoint security type
 * Each endpoint has a security type that determines how you will
@@ -437,6 +451,9 @@ Test connectivity to the Rest API.
 **Parameters:**
 NONE
 
+**Data Source:**
+Memory
+
 **Response:**
 ```javascript
 {}
@@ -453,6 +470,9 @@ Test connectivity to the Rest API and get the current server time.
 
 **Parameters:**
 NONE
+
+**Data Source:**
+Memory
 
 **Response:**
 ```javascript
@@ -472,6 +492,9 @@ Current exchange trading rules and symbol information
 
 **Parameters:**
 NONE
+
+**Data Source:**
+Memory
 
 **Response:**
 ```javascript
@@ -551,6 +574,9 @@ Name | Type | Mandatory | Description
 symbol | STRING | YES |
 limit | INT | NO | Default 100; max 5000. Valid limits:[5, 10, 20, 50, 100, 500, 1000, 5000]
 
+**Data Source:**
+Memory
+
 **Response:**
 ```javascript
 {
@@ -587,6 +613,9 @@ Name | Type | Mandatory | Description
 symbol | STRING | YES |
 limit | INT | NO | Default 500; max 1000.
 
+**Data Source:**
+Memory
+
 **Response:**
 ```javascript
 [
@@ -618,6 +647,9 @@ Name | Type | Mandatory | Description
 symbol | STRING | YES |
 limit | INT | NO | Default 500; max 1000.
 fromId | LONG | NO | TradeId to fetch from. Default gets most recent trades.
+
+**Data Source:**
+Database
 
 **Response:**
 ```javascript
@@ -655,6 +687,9 @@ limit | INT | NO | Default 500; max 1000.
 
 * If both startTime and endTime are sent, time between startTime and endTime must be less than 1 hour.
 * If fromId, startTime, and endTime are not sent, the most recent aggregate trades will be returned.
+
+**Data Source:**
+Database
 
 **Response:**
 ```javascript
@@ -694,6 +729,9 @@ limit | INT | NO | Default 500; max 1000.
 
 * If startTime and endTime are not sent, the most recent klines are returned.
 
+**Data Source:**
+Database
+
 **Response:**
 ```javascript
 [
@@ -729,6 +767,8 @@ Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
 
+**Data Source:**
+Memory
 
 **Response:**
 ```javascript
@@ -755,6 +795,9 @@ Name | Type | Mandatory | Description
 symbol | STRING | NO |
 
 * If the symbol is not sent, tickers for all symbols will be returned in an array.
+
+**Data Source:**
+Memory
 
 **Response:**
 ```javascript
@@ -825,6 +868,9 @@ symbol | STRING | NO |
 
 * If the symbol is not sent, prices for all symbols will be returned in an array.
 
+**Data Source:**
+Memory
+
 **Response:**
 ```javascript
 {
@@ -862,6 +908,9 @@ Name | Type | Mandatory | Description
 symbol | STRING | NO |
 
 * If the symbol is not sent, bookTickers for all symbols will be returned in an array.
+
+**Data Source:**
+Memory
 
 **Response:**
 ```javascript
@@ -942,6 +991,9 @@ Trigger order price rules against market price for both MARKET and LIMIT version
 
 * Price above market price: `STOP_LOSS` `BUY`, `TAKE_PROFIT` `SELL`
 * Price below market price: `STOP_LOSS` `SELL`, `TAKE_PROFIT` `BUY`
+
+**Data Source:**
+Matching Engine
 
 **Response ACK:**
 ```javascript
@@ -1038,6 +1090,8 @@ Creates and validates a new order but does not send it into the matching engine.
 
 Same as `POST /api/v3/order`
 
+**Data Source:**
+Memory
 
 **Response:**
 ```javascript
@@ -1067,6 +1121,8 @@ Notes:
 * Either `orderId` or `origClientOrderId` must be sent.
 * For some historical orders `cummulativeQuoteQty` will be < 0, meaning the data is not available at this time.
 
+**Data Source:**
+Database
 
 **Response:**
 ```javascript
@@ -1114,6 +1170,9 @@ timestamp | LONG | YES |
 
 Either `orderId` or `origClientOrderId` must be sent.
 
+**Data Source:**
+Matching Engine
+
 **Response:**
 ```javascript
 {
@@ -1148,6 +1207,9 @@ Name | Type | Mandatory | Description
 symbol | STRING | YES |
 recvWindow | LONG | NO | The value cannot be greater than ```60000```
 timestamp | LONG | YES |
+
+**Data Source:**
+Matching Engine
 
 **Response**
 ```javascript
@@ -1260,6 +1322,9 @@ timestamp | LONG | YES |
 
 * If the symbol is not sent, orders for all symbols will be returned in an array.
 
+**Data Source:**
+Database
+
 **Response:**
 ```javascript
 [
@@ -1294,6 +1359,9 @@ Get all account orders; active, canceled, or filled.
 
 **Weight:**
 10 with symbol
+
+**Data Source:**
+Database
 
 **Parameters:**
 
@@ -1379,6 +1447,9 @@ Additional Info:
 * Order Rate Limit
     * `OCO` counts as 2 orders against the order rate limit. 
 
+**Data Source:**
+Matching Engine
+
 **Response:**
 
 ```json
@@ -1463,6 +1534,9 @@ timestamp|LONG|YES|
 Additional notes:
 * Canceling an individual leg will cancel the entire OCO
 
+**Data Source:**
+Matching Engine
+
 **Response**
 
 ```javascript
@@ -1542,6 +1616,9 @@ origClientOrderId|STRING|NO| Either ```orderListId``` or ```listClientOrderId```
 recvWindow|LONG|NO| The value cannot be greater than ```60000```
 timestamp|LONG|YES|
 
+**Data Source:**
+Database
+
 **Response:**
 
 ```javascript
@@ -1589,6 +1666,9 @@ endTime|LONG|NO|
 limit|INT|NO| Default Value: 500; Max Value: 1000
 recvWindow|LONG|NO| The value cannot be greater than ```60000```
 timestamp|LONG|YES|
+
+**Data Source:**
+Database
 
 **Response:**
 
@@ -1654,6 +1734,9 @@ Name| Type|Mandatory| Description
 recvWindow|LONG|NO| The value cannot be greater than ```60000```
 timestamp|LONG|YES|
 
+**Data Source:**
+Database
+
 **Response:**
 
 ```javascript
@@ -1697,6 +1780,9 @@ Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 recvWindow | LONG | NO | The value cannot be greater than ```60000```
 timestamp | LONG | YES |
+
+**Data Source:**
+Memory => Database
 
 **Response:**
 ```javascript
@@ -1753,6 +1839,9 @@ timestamp | LONG | YES |
 * If `fromId` is set, it will get trades >= that `fromId`.
 Otherwise most recent trades are returned.
 
+**Data Source:**
+Database
+
 **Response:**
 ```javascript
 [
@@ -1774,7 +1863,7 @@ Otherwise most recent trades are returned.
 ]
 ```
 ## User data stream endpoints
-Specifics on how user data streams work is in another document.
+Specifics on how user data streams work can be found [here.](https://github.com/binance/binance-spot-api-docs/blob/master/user-data-stream.md)
 
 ### Start user data stream (USER_STREAM)
 ```
@@ -1787,6 +1876,9 @@ Start a new user data stream. The stream will close after 60 minutes unless a ke
 
 **Parameters:**
 NONE
+
+**Data Source:** 
+Memory
 
 **Response:**
 ```javascript
@@ -1803,6 +1895,9 @@ Keepalive a user data stream to prevent a time out. User data streams will close
 
 **Weight:**
 1
+
+**Data Source"**
+Memory
 
 **Parameters:**
 
@@ -1829,6 +1924,9 @@ Close out a user data stream.
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 listenKey | STRING | YES
+
+**Data Source:**
+Memory
 
 **Response:**
 ```javascript

@@ -34,6 +34,17 @@
 * **收到429后仍然继续违反访问限制，会被封禁IP，并收到418错误码**
 * 频繁违反限制，封禁时间会逐渐延长，**从最短2分钟到最长3天**.
 
+# 数据来源
+* 因为API系统是异步的, 所以返回的数据有延时很正常, 也在预期之中。
+* 在每个接口中，都列出了其数据的来源，可以用于理解数据的时效性。
+
+系统一共有3个数据来源，按照更新速度的先后排序。排在前面的数据最新，在后面就有可能存在延迟。
+  * **撮合引擎** - 表示数据来源于撮合引擎
+  * **缓存** - 表示数据来源于内部或者外部的缓存
+  * **数据库** - 表示数据直接来源于数据库
+
+有些接口有不止一个数据源, 比如 `缓存 => 数据库`, 这表示接口会先从第一个数据源检查，如果没有数据，则检查下一个数据源。
+
 # 接口鉴权类型
 * 每个接口都有自己的鉴权类型，鉴权类型决定了访问时应当进行何种鉴权
 * 如果需要 API-key，应当在HTTP头中以`X-MBX-APIKEY`字段传递
@@ -255,6 +266,9 @@ GET /api/v3/ping
 **参数:**
 NONE
 
+**数据源:**
+缓存
+
 **响应:**
 ```javascript
 {}
@@ -271,6 +285,9 @@ GET /api/v3/time
 
 **参数:**
 NONE
+
+**数据源:**
+缓存
 
 **响应:**
 ```javascript
@@ -290,6 +307,9 @@ GET /api/v3/exchangeInfo
 
 **Parameters:**
 NONE
+
+**数据源:**
+缓存
 
 **响应:**
 ```javascript
@@ -375,6 +395,9 @@ limit | INT | NO | 默认 100; 最大 1000. 可选值:[5, 10, 20, 50, 100, 500, 
 
 **注意:** limit=0 返回全部orderbook，但数据量会非常非常非常非常大！
 
+**数据源:**
+缓存
+
 **响应:**
 ```javascript
 {
@@ -412,6 +435,9 @@ Name | Type | Mandatory | Description
 symbol | STRING | YES |
 limit | INT | NO | Default 500; max 1000.
 
+**数据源:**
+缓存
+
 **响应:**
 ```javascript
 [
@@ -441,6 +467,11 @@ Name | Type | Mandatory | Description
 symbol | STRING | YES |
 limit | INT | NO | Default 500; max 1000.
 fromId | LONG | NO | 从哪一条成交id开始返回. 缺省返回最近的成交记录
+
+
+**数据源:**
+数据库
+
 
 **响应:**
 ```javascript
@@ -477,6 +508,9 @@ limit | INT | NO | 默认 500; 最大 1000.
 
 * 如果同时发送startTime和endTime，间隔必须小于一小时
 * 如果没有发送任何筛选参数(fromId, startTime,endTime)，默认返回最近的成交记录
+
+**数据源:**
+数据库
 
 **响应:**
 ```javascript
@@ -515,6 +549,10 @@ limit | INT | NO | Default 500; max 1000.
 
 * 缺省返回最近的数据
 
+**数据源:**
+数据库
+
+
 **响应:**
 ```javascript
 [
@@ -544,6 +582,11 @@ GET /api/v3/avgPrice
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
+
+**数据源:**
+缓存
+
+
 **响应:**
 ```javascript
 {
@@ -568,6 +611,8 @@ Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | NO |
 
+**数据源:**
+缓存
 
 **响应:**
 ```javascript
@@ -640,6 +685,9 @@ symbol | STRING | NO |
 
 * 不发送交易对参数，则会返回所有交易对信息
 
+**数据源:**
+缓存
+
 **响应:**
 ```javascript
 {
@@ -678,6 +726,10 @@ Name | Type | Mandatory | Description
 symbol | STRING | NO |
 
 * 不发送交易对参数，则会返回所有交易对信息
+
+**数据源:**
+缓存
+
 
 **响应:**
 ```javascript
@@ -760,6 +812,9 @@ Type | 强制要求的参数
 * 比下单时当前市价低: `STOP_LOSS` `SELL`, `TAKE_PROFIT` `BUY`
 
 关于 newOrderRespType的三种选择
+
+**数据源:**
+撮合引擎
 
 **Response ACK:**
 返回速度最快，不包含成交信息，信息量最少
@@ -855,6 +910,8 @@ POST /api/v3/order/test (HMAC SHA256)
 
 参考 `POST /api/v3/order`
 
+**数据源:**
+缓存
 
 **响应:**
 ```javascript
@@ -884,6 +941,8 @@ timestamp | LONG | YES |
 * 至少需要发送 `orderId` 与 `origClientOrderId`中的一个
 * 某些订单中`cummulativeQuoteQty`<0，是由于这些订单是cummulativeQuoteQty功能上线之前的订单。
 
+**数据源:**
+数据库
 
 **响应:**
 ```javascript
@@ -928,6 +987,9 @@ timestamp | LONG | YES |
 
 `orderId` 与 `origClientOrderId` 必须至少发送一个
 
+**数据源:**
+撮合引擎
+
 **响应:**
 ```javascript
 {
@@ -966,6 +1028,9 @@ recvWindow | LONG | NO |
 timestamp | LONG | YES |
 
 * 不带symbol参数，会返回所有交易对的挂单
+
+**数据源:**
+数据库
 
 **响应:**
 ```javascript
@@ -1016,6 +1081,8 @@ timestamp | LONG | YES |
 * 一些历史订单 `cummulativeQuoteQty`  < 0, 是指数据此时不存在。
 * 如果设置 `startTime` 和 `endTime`, `orderId` 就不需要设置。
 
+**数据源:**
+数据库
 
 **响应:**
 ```javascript
@@ -1055,6 +1122,9 @@ Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 recvWindow | LONG | NO |
 timestamp | LONG | YES |
+
+**数据源:**
+缓存 => 数据库
 
 **响应:**
 ```javascript
@@ -1103,6 +1173,9 @@ limit | INT | NO | Default 500; max 1000.
 recvWindow | LONG | NO |
 timestamp | LONG | YES |
 
+**数据源:**
+数据库
+
 **响应:**
 ```javascript
 [
@@ -1136,6 +1209,10 @@ POST /api/v3/userDataStream
 **Parameters:**
 NONE
 
+**数据源:**
+缓存
+
+
 **响应:**
 ```javascript
 {
@@ -1158,6 +1235,9 @@ Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 listenKey | STRING | YES
 
+**数据源:**
+缓存
+
 **响应:**
 ```javascript
 {}
@@ -1176,6 +1256,9 @@ DELETE /api/v3/userDataStream
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 listenKey | STRING | YES
+
+**数据源:**
+缓存
 
 **响应:**
 ```javascript
