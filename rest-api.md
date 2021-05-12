@@ -491,7 +491,16 @@ Current exchange trading rules and symbol information
 10
 
 **Parameters:**
-NONE
+
+There are 3 possible options:
+
+|Options|Example|
+----- | ----|
+|No parameter|curl -X GET "https://api.binance.com/api/v3/exchangeInfo"|
+|symbol|curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbol=BNBBTC"|
+|symbols| curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbols=%5B%22BNBBTC%22,%22BTCUSDT%22%5D" or curl -g GET 'https://api.binance.com/api/v3/exchangeInfo?symbols=["BTCUSDT","BNBBTC"]'|
+
+If any symbol provided in either `symbol` or `symbols` do not exist, the endpoint will throw an error.
 
 **Data Source:**
 Memory

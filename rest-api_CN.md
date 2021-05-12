@@ -305,8 +305,18 @@ GET /api/v3/exchangeInfo
 **权重:**
 10
 
-**Parameters:**
-NONE
+
+**参数:**
+
+有三种用法
+
+|用法|举例|
+----- | ----|
+|不需要交易对|curl -X GET "https://api.binance.com/api/v3/exchangeInfo"|
+|单个交易对|curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbol=BNBBTC"|
+|多个交易对| curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbols=%5B%22BNBBTC%22,%22BTCUSDT%22%5D" or curl -g GET 'https://api.binance.com/api/v3/exchangeInfo?symbols=["BTCUSDT","BNBBTC"]'|
+
+如果传入的交易对不存在, 接口会返回错误。
 
 **数据源:**
 缓存
