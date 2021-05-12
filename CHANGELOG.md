@@ -3,6 +3,7 @@
 ## 2021-05-12
 * Added `Data Source` in the documentation to explain where each endpoint is retrieving its data.
 * Added field `Data Source` to each API endpoint in the documentation
+* GET `api/v3/exchangeInfo` now supports single or multi-symbol query
 
 ---
 
