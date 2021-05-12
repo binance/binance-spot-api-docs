@@ -149,9 +149,9 @@ Sample Payload below:
 * The API system is asynchronous, so some delay in the response is normal and expected.
 * Each endpoint has a data source indicating where the data is being retrieved, and thus which endpoints have the most up-to-date response.
 
-These are the four sources, ordered by which is has the most up-to-date response to the one with potential delays in updates.
+These are the three sources, ordered by which is has the most up-to-date response to the one with potential delays in updates.
 
-* **Matching Engine** - the data is from the response from the matching Engine
+* **Matching Engine** - the data is from the matching Engine
 * **Memory** - the data is from a server's local or external memory
 * **Database** - the data is taken directly from a database
 
