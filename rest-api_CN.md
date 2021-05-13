@@ -1,4 +1,4 @@
-# REST行情与交易接口 (2020-11-27)
+# REST行情与交易接口 (2021-05-12)
 # 基本信息
 * 本篇列出REST接口的baseurl **https://api.binance.com**
 * 如果上面的baseURL访问有性能问题，请访问下面的API集群:
