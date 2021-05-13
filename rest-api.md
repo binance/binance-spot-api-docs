@@ -72,7 +72,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2021-04-28)
+# Public Rest API for Binance (2021-05-12)
 
 ## General API Information
 * The base endpoint is: **https://api.binance.com**
