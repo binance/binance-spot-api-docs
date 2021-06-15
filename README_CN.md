@@ -20,6 +20,18 @@
 [COIN-M Futures](https://binance-docs.github.io/apidocs/delivery/cn/) | 币本位合约相关API (/dapi)
 
 
+# 相关信息
+
+* [Postman Collections](https://github.com/binance/binance-api-postman)
+    * 现在你可以通过Postman collection来快速体验、使用API接口.
+* [Python Connector](https://github.com/binance/binance-connector-python)
+    * 一个轻量级的Python代码库，提供让用户直接调用API的方法。
+    * 支持所有现货的接口.
+* [Spot Testnet](https://testnet.binance.vision/)
+    * 用户可以使用现货的测试网来体验SPOT交易.
+    * 现在只能通过API来测试交易, 没有UI.
+    * 只支持以 `/api/*`开头的接口, `/sapi/*`接口不支持.
+
 # 联系我们
 
 * [Binance API 中文电报群](https://t.me/Binance_api_Chinese)

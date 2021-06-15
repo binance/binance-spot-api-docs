@@ -17,6 +17,19 @@ Name | Description
 [USDT-M Futures](https://binance-docs.github.io/apidocs/futures/en/)  | Details on USDT-M Futures API (/fapi)
 [COIN-M Futures](https://binance-docs.github.io/apidocs/delivery/en/) | Details on COIN-M Futures API (/dapi)
 
+
+# Useful Resources
+
+* [Postman Collections](https://github.com/binance/binance-api-postman)
+    * A postman collection containing the API endpoints for quick and easy use.
+    * This is recommended for new users who want to get a quick-start into using the API.
+* [Python Connector](https://github.com/binance/binance-connector-python)
+    * This is a lightweight library that works as a connector to Binance public API, written in Python.
+* [Spot Testnet](https://testnet.binance.vision/)
+    * Users can use the SPOT Testnet to practice SPOT trading.
+    * Currently, this is only available via the API.
+    * Only endpoints starting with `/api/*` are supported, `/sapi/*` is not supported.
+
 # Contact Us
 
 * [Binance API Telegram Group](https://t.me/binance_api_english)
