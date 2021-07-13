@@ -2040,7 +2040,7 @@ The `ICEBERG_PARTS` filter defines the maximum parts an iceberg order can have. 
 }
 ```
 
-### MARKET_LOT_SIZE
+### MARKET\_LOT\_SIZE
 The `MARKET_LOT_SIZE` filter defines the `quantity` (aka "lots" in auction terms) rules for `MARKET` orders on a symbol. There are 3 parts:
 
 * `minQty` defines the minimum `quantity` allowed.
@@ -2063,7 +2063,7 @@ In order to pass the `market lot size`, the following must be true for `quantity
 }
 ```
 
-### MAX_NUM_ORDERS
+### MAX\_NUM\_ORDERS
 The `MAX_NUM_ORDERS` filter defines the maximum number of orders an account is allowed to have open on a symbol.
 Note that both "algo" orders and normal orders are counted for this filter.
 
@@ -2075,7 +2075,7 @@ Note that both "algo" orders and normal orders are counted for this filter.
 }
 ```
 
-### MAX_NUM_ALGO_ORDERS
+### MAX\_NUM\_ALGO\_ORDERS
 The `MAX_NUM_ALGO_ORDERS` filter defines the maximum number of "algo" orders an account is allowed to have open on a symbol.
 "Algo" orders are `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, and `TAKE_PROFIT_LIMIT` orders.
 
@@ -2087,7 +2087,7 @@ The `MAX_NUM_ALGO_ORDERS` filter defines the maximum number of "algo" orders an 
 }
 ```
 
-### MAX_NUM_ICEBERG_ORDERS
+### MAX\_NUM\_ICEBERG\_ORDERS
 The `MAX_NUM_ICEBERG_ORDERS` filter defines the maximum number of `ICEBERG` orders an account is allowed to have open on a symbol.
 An `ICEBERG` order is any order where the `icebergQty` is > 0.
 
@@ -2118,7 +2118,7 @@ The `MAX_POSITION` filter defines the allowed maximum position an account can ha
 
 
 ## Exchange Filters
-### EXCHANGE_MAX_NUM_ORDERS
+### EXCHANGE\_MAX\_NUM\_ORDERS
 The `MAX_NUM_ORDERS` filter defines the maximum number of orders an account is allowed to have open on the exchange.
 Note that both "algo" orders and normal orders are counted for this filter.
 
@@ -2130,7 +2130,7 @@ Note that both "algo" orders and normal orders are counted for this filter.
 }
 ```
 
-### EXCHANGE_MAX_NUM_ALGO_ORDERS
+### EXCHANGE\_MAX\_NUM\_ALGO\_ORDERS
 The `MAX_ALGO_ORDERS` filter defines the maximum number of "algo" orders an account is allowed to have open on the exchange.
 "Algo" orders are `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, and `TAKE_PROFIT_LIMIT` orders.
 

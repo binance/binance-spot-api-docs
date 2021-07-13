@@ -552,7 +552,7 @@ GET /api/v3/klines
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-interval | ENUM | YES |
+interval | ENUM | YES | 详见枚举定义：K线间隔
 startTime | LONG | NO |
 endTime | LONG | NO |
 limit | INT | NO | Default 500; max 1000.
@@ -785,10 +785,11 @@ POST /api/v3/order  (HMAC SHA256)
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-side | ENUM | YES |
-type | ENUM | YES |
-timeInForce | ENUM | NO |
-quantity | DECIMAL | YES |
+side | ENUM | YES | 详见枚举定义：订单方向
+type | ENUM | YES | 详见枚举定义：订单种类
+timeInForce | ENUM | NO | 详见枚举定义：Time in force
+quantity | DECIMAL | NO |
+quoteOrderQty | DECIMAL | NO |
 price | DECIMAL | NO |
 newClientOrderId | STRING | NO | 用户自定义的orderid，如空缺系统会自动赋值
 stopPrice | DECIMAL | NO | 仅 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` 需要此参数
@@ -1372,10 +1373,10 @@ lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参
   }
 ```
 
-### MARKET_LOT_SIZE 市价订单尺寸
+### MARKET\_LOT\_SIZE 市价订单尺寸
 参考LOT_SIZE，区别仅在于对市价单还是限价单生效
 
-### MAX_NUM_ORDERS 最多订单数
+### MAX\_NUM\_ORDERS 最多订单数
 定义了某个交易对最多允许的挂单数量（不包括已关闭的订单）
 普通订单与条件订单均计算在内
 
@@ -1387,7 +1388,7 @@ lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参
   }
 ```
 
-### MAX_NUM_ALGO_ORDERS 最多条件单数
+### MAX\_NUM\_ALGO\_ORDERS 最多条件单数
 定义了某个交易对最多允许的条件单数量（不包括已关闭的订单）
 
 **/exchangeInfo 响应中的格式:**
@@ -1398,7 +1399,7 @@ lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参
   }
 ```
 
-### MAX_NUM_ICEBERG_ORDERS 最多冰山单数
+### MAX\_NUM\_ICEBERG\_ORDERS 最多冰山单数
 定义了某个交易对最多允许的冰山订单数
 `icebergQty` > 0.
 
@@ -1428,7 +1429,7 @@ lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参
 ```
 
 ## 交易所级别过滤器
-### EXCHANGE_MAX_NUM_ORDERS 最多订单数
+### EXCHANGE\_MAX\_NUM\_ORDERS 最多订单数
 
 **/exchangeInfo 响应中的格式:**
 ```javascript
@@ -1438,7 +1439,7 @@ lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参
   }
 ```
 
-### EXCHANGE_MAX_NUM_ALGO_ORDERS 最多条件单数
+### EXCHANGE\_MAX\_NUM\_ALGO\_ORDERS 最多条件单数
 
 **/exchangeInfo 响应中的格式:**
 ```javascript
