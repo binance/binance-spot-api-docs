@@ -170,7 +170,7 @@ There is no & between "GTC" and "quantity=1".
 
 
 ## 枚举定义
-**交易对状态:**
+**交易对状态 (status):**
 
 * PRE_TRADING 盘前交易
 * TRADING 正常交易中
@@ -184,7 +184,7 @@ There is no & between "GTC" and "quantity=1".
 
 * SPOT 现货
 
-**订单状态:**
+**订单状态 (status):**
 
 * NEW 新建订单
 * PARTIALLY_FILLED  部分成交
@@ -194,34 +194,34 @@ There is no & between "GTC" and "quantity=1".
 * REJECTED 订单被拒绝
 * EXPIRED 订单过期(根据timeInForce参数规则)
 
-**订单种类:**
+**订单种类 (orderTypes, type):**
 
 * LIMIT 限价单
 * MARKET  市价单
 * STOP_LOSS 止损单
-* STOP_LOSS_LIMIT 限价止损单
+* STOP\_LOSS\_LIMIT 限价止损单
 * TAKE_PROFIT 止盈单
-* TAKE_PROFIT_LIMIT 限价止盈单
+* TAKE\_PROFIT\_LIMIT 限价止盈单
 * LIMIT_MAKER 限价做市单
 
-**订单返回类型:**
+**订单返回类型 (newOrderRespType):**
 
 * ACK
 * RESULT
 * FULL
 
-**订单方向:**
+**订单方向 (side):**
 
-* 买入
-* 卖出
+* BUY - 买入
+* SELL - 卖出
 
-**Time in force:**
+**Time in force (timeInForce):**
 
 * GTC - Good Till Cancel 成交为止
 * IOC - Immediate or Cancel 无法立即成交(吃单)的部分就撤销
 * FOK - Fill or Kill 无法全部立即成交就撤销
 
-**K线间隔:**
+**K线间隔 (interval):**
 
 m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 
@@ -241,13 +241,13 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 * 1w
 * 1M
 
-**限制种类 (rateLimitType)**
+**限制种类 (rateLimitType):**
 
-* REQUESTS_WEIGHT  单位时间请求权重之和上限
-* ORDERS    单位时间下单(撤单)次数上限
-* RAW_REQUESTS  单位时间请求次数上限
+* REQUESTS_WEIGHT - 单位时间请求权重之和上限
+* ORDERS - 单位时间下单(撤单)次数上限
+* RAW_REQUESTS - 单位时间请求次数上限
 
-**限制间隔**
+**限制间隔 (interval):**
 
 * SECOND
 * MINUTE
