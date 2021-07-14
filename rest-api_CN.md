@@ -170,7 +170,7 @@ There is no & between "GTC" and "quantity=1".
 
 
 ## 枚举定义
-**交易对状态:**
+**交易对状态 (status):**
 
 * PRE_TRADING 盘前交易
 * TRADING 正常交易中
@@ -184,7 +184,7 @@ There is no & between "GTC" and "quantity=1".
 
 * SPOT 现货
 
-**订单状态:**
+**订单状态 (status):**
 
 * NEW 新建订单
 * PARTIALLY_FILLED  部分成交
@@ -194,7 +194,7 @@ There is no & between "GTC" and "quantity=1".
 * REJECTED 订单被拒绝
 * EXPIRED 订单过期(根据timeInForce参数规则)
 
-**订单种类:**
+**订单种类 (orderTypes, type):**
 
 * LIMIT 限价单
 * MARKET  市价单
@@ -204,24 +204,24 @@ There is no & between "GTC" and "quantity=1".
 * TAKE_PROFIT_LIMIT 限价止盈单
 * LIMIT_MAKER 限价做市单
 
-**订单返回类型:**
+**订单返回类型 (newOrderRespType):**
 
 * ACK
 * RESULT
 * FULL
 
-**订单方向:**
+**订单方向 (side):**
 
-* 买入
-* 卖出
+* BUY - 买入
+* SELL - 卖出
 
-**Time in force:**
+**Time in force (timeInForce):**
 
 * GTC - Good Till Cancel 成交为止
 * IOC - Immediate or Cancel 无法立即成交(吃单)的部分就撤销
 * FOK - Fill or Kill 无法全部立即成交就撤销
 
-**K线间隔:**
+**K线间隔 (interval):**
 
 m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 
@@ -241,13 +241,13 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 * 1w
 * 1M
 
-**限制种类 (rateLimitType)**
+**限制种类 (rateLimitType):**
 
-* REQUESTS_WEIGHT  单位时间请求权重之和上限
-* ORDERS    单位时间下单(撤单)次数上限
-* RAW_REQUESTS  单位时间请求次数上限
+* REQUESTS_WEIGHT - 单位时间请求权重之和上限
+* ORDERS - 单位时间下单(撤单)次数上限
+* RAW_REQUESTS - 单位时间请求次数上限
 
-**限制间隔**
+**限制间隔 (interval):**
 
 * SECOND
 * MINUTE
@@ -552,7 +552,7 @@ GET /api/v3/klines
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-interval | ENUM | YES |
+interval | ENUM | YES | 详见枚举定义：K线间隔
 startTime | LONG | NO |
 endTime | LONG | NO |
 limit | INT | NO | Default 500; max 1000.
@@ -785,10 +785,11 @@ POST /api/v3/order  (HMAC SHA256)
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-side | ENUM | YES |
-type | ENUM | YES |
-timeInForce | ENUM | NO |
-quantity | DECIMAL | YES |
+side | ENUM | YES | 详见枚举定义：订单方向
+type | ENUM | YES | 详见枚举定义：订单种类
+timeInForce | ENUM | NO | 详见枚举定义：Time in force
+quantity | DECIMAL | NO |
+quoteOrderQty | DECIMAL | NO |
 price | DECIMAL | NO |
 newClientOrderId | STRING | NO | 用户自定义的orderid，如空缺系统会自动赋值
 stopPrice | DECIMAL | NO | 仅 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` 需要此参数
