@@ -199,9 +199,9 @@ There is no & between "GTC" and "quantity=1".
 * LIMIT 限价单
 * MARKET  市价单
 * STOP_LOSS 止损单
-* STOP\_LOSS\_LIMIT 限价止损单
+* STOP_LOSS_LIMIT 限价止损单
 * TAKE_PROFIT 止盈单
-* TAKE\_PROFIT\_LIMIT 限价止盈单
+* TAKE_PROFIT_LIMIT 限价止盈单
 * LIMIT_MAKER 限价做市单
 
 **订单返回类型 (newOrderRespType):**
@@ -1373,10 +1373,10 @@ lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参
   }
 ```
 
-### MARKET\_LOT\_SIZE 市价订单尺寸
+### MARKET_LOT_SIZE 市价订单尺寸
 参考LOT_SIZE，区别仅在于对市价单还是限价单生效
 
-### MAX\_NUM\_ORDERS 最多订单数
+### MAX_NUM_ORDERS 最多订单数
 定义了某个交易对最多允许的挂单数量（不包括已关闭的订单）
 普通订单与条件订单均计算在内
 
@@ -1388,7 +1388,7 @@ lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参
   }
 ```
 
-### MAX\_NUM\_ALGO\_ORDERS 最多条件单数
+### MAX_NUM_ALGO_ORDERS 最多条件单数
 定义了某个交易对最多允许的条件单数量（不包括已关闭的订单）
 
 **/exchangeInfo 响应中的格式:**
@@ -1399,7 +1399,7 @@ lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参
   }
 ```
 
-### MAX\_NUM\_ICEBERG\_ORDERS 最多冰山单数
+### MAX_NUM_ICEBERG_ORDERS 最多冰山单数
 定义了某个交易对最多允许的冰山订单数
 `icebergQty` > 0.
 
@@ -1429,7 +1429,7 @@ lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参
 ```
 
 ## 交易所级别过滤器
-### EXCHANGE\_MAX\_NUM\_ORDERS 最多订单数
+### EXCHANGE_MAX_NUM_ORDERS 最多订单数
 
 **/exchangeInfo 响应中的格式:**
 ```javascript
@@ -1439,7 +1439,7 @@ lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参
   }
 ```
 
-### EXCHANGE\_MAX\_NUM\_ALGO\_ORDERS 最多条件单数
+### EXCHANGE_MAX_NUM_ALGO_ORDERS 最多条件单数
 
 **/exchangeInfo 响应中的格式:**
 ```javascript
