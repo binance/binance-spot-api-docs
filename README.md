@@ -23,8 +23,10 @@ Name | Description
 * [Postman Collections](https://github.com/binance/binance-api-postman)
     * A postman collection containing the API endpoints for quick and easy use.
     * This is recommended for new users who want to get a quick-start into using the API.
-* [Python Connector](https://github.com/binance/binance-connector-python)
-    * This is a lightweight library that works as a connector to Binance public API, written in Python.
+* Connector    
+    * This is a lightweight library that works as a connector to Binance public API.
+    * [Python](https://github.com/binance/binance-connector-python)
+    * [Node.js](https://github.com/binance/binance-connector-node)
 * [Spot Testnet](https://testnet.binance.vision/)
     * Users can use the SPOT Testnet to practice SPOT trading.
     * Currently, this is only available via the API.
