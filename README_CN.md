@@ -24,9 +24,11 @@
 
 * [Postman Collections](https://github.com/binance/binance-api-postman)
     * 现在你可以通过Postman collection来快速体验、使用API接口.
-* [Python Connector](https://github.com/binance/binance-connector-python)
-    * 一个轻量级的Python代码库，提供让用户直接调用API的方法。
+* Connector
+    * 一个轻量级的代码库，提供让用户直接调用API的方法。
     * 支持所有现货的接口.
+    * [Python](https://github.com/binance/binance-connector-python)
+    * [Node.js](https://github.com/binance/binance-connector-node)
 * [Spot Testnet](https://testnet.binance.vision/)
     * 用户可以使用现货的测试网来体验SPOT交易.
     * 现在只能通过API来测试交易, 没有UI.
