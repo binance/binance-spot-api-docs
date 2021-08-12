@@ -1,4 +1,4 @@
-# REST行情与交易接口 (2021-05-12)
+# REST行情与交易接口 (2021-08-12)
 # 基本信息
 * 本篇列出REST接口的baseurl **https://api.binance.com**
 * 如果上面的baseURL访问有性能问题，请访问下面的API集群:
@@ -1177,6 +1177,7 @@ GET /api/v3/myTrades  (HMAC SHA256)
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
+orderId|LONG|NO| 必须要和参数`symbol`一起使用.
 startTime | LONG | NO |
 endTime | LONG | NO |
 fromId | LONG | NO |返回该fromId之后的成交，缺省返回最近的成交
