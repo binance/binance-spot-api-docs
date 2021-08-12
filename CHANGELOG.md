@@ -3,6 +3,8 @@
 ## 2021-08-12
 * GET `api/v3/myTrades` has a new optional field `orderId`
 
+---
+
 ## 2021-05-12
 * Added `Data Source` in the documentation to explain where each endpoint is retrieving its data.
 * Added field `Data Source` to each API endpoint in the documentation
