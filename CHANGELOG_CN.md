@@ -3,6 +3,7 @@
 ## 2021-05-12
 * 在文档中添加接口的数据来源说明
 * 在每个接口中添加相应的数据源
+* GET `api/v3/exchangeInfo` 现在支持单个或者多个交易对查询
 
 ## 2021-04-26
 
@@ -79,7 +80,7 @@ WEB SOCKET 连接限制
 ### Rest API
   * 账户交易权限被禁时允许进行撤单操作。
   * 增加了新的过滤器: `PERCENT_PRICE`, `MARKET_LOT_SIZE`, `MAX_NUM_ICEBERG_ORDERS`。
-  * 增加了 `RAW_REQUST` 频率限制. 该限制仅统计请求次数，不统计请求权重。
+  * 增加了 `RAW_REQUESTS` 频率限制. 该限制仅统计请求次数，不统计请求权重。
   * /api/v3/ticker/price 无symbol参数时，权重增加到2。
   * /api/v3/ticker/bookTicker 无symbol参数时，权重增加到2。
   * DELETE /api/v3/order 现在会返回订单撤销前所处的末次状态。

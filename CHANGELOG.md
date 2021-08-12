@@ -316,7 +316,7 @@ By end of Q1 2020, the following endpoints will be removed from the API. The doc
 ### Rest API
 * Can now cancel orders through the Rest API during a trading ban.
 * New filters: `PERCENT_PRICE`, `MARKET_LOT_SIZE`, `MAX_NUM_ICEBERG_ORDERS`.
-* Added `RAW_REQUST` rate limit. Limits based on the number of requests over X minutes regardless of weight.
+* Added `RAW_REQUESTS` rate limit. Limits based on the number of requests over X minutes regardless of weight.
 * /api/v3/ticker/price increased to weight of 2 for a no symbol query.
 * /api/v3/ticker/bookTicker increased weight of 2 for a no symbol query.
 * DELETE /api/v3/order will now return an execution report of the final state of the order.
