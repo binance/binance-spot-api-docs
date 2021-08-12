@@ -1837,6 +1837,7 @@ Get trades for a specific account and symbol.
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
+orderId|LONG|NO| This can only be used in combination with `symbol`.
 startTime | LONG | NO |
 endTime | LONG | NO |
 fromId | LONG | NO | TradeId to fetch from. Default gets most recent trades.
