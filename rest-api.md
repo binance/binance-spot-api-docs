@@ -65,7 +65,7 @@
     - [MAX_NUM_ORDERS](#max_num_orders)
     - [MAX_NUM_ALGO_ORDERS](#max_num_algo_orders)
     - [MAX_NUM_ICEBERG_ORDERS](#max_num_iceberg_orders)
-    - [MAX_POSITION FILTER](#max_position-filter)
+    - [MAX_POSITION](#max_position)
   - [Exchange Filters](#exchange-filters)
     - [EXCHANGE_MAX_NUM_ORDERS](#exchange_max_num_orders)
     - [EXCHANGE_MAX_NUM_ALGO_ORDERS](#exchange_max_num_algo_orders)
@@ -2100,7 +2100,7 @@ An `ICEBERG` order is any order where the `icebergQty` is > 0.
 }
 ```
 
-### MAX_POSITION FILTER
+### MAX_POSITION 
 
 The `MAX_POSITION` filter defines the allowed maximum position an account can have on the base asset of a symbol. An account's position defined as the sum of the account's:
 1. free balance of the base asset
