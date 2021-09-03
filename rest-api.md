@@ -1757,7 +1757,7 @@ Database
     "listOrderStatus": "EXECUTING",
     "listClientOrderId": "wuB13fmulKj3YjdqWEcsnp",
     "transactionTime": 1565246080644,
-    "symbol": "1565246079109",
+    "symbol": "LTCBTC",
     "orders": [
       {
         "symbol": "LTCBTC",
