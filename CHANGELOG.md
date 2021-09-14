@@ -1,5 +1,8 @@
 # CHANGELOG for Binance's API (2021-08-12)
 
+## 2021-09-14
+* Add a [YAML file](https://github.com/binance/binance-api-swagger) with OpenApi specification on the RESTful API.
+
 ## 2021-08-12
 * GET `api/v3/myTrades` has a new optional field `orderId`
 
