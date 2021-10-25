@@ -29,6 +29,8 @@
     * 支持所有现货的接口.
     * [Python](https://github.com/binance/binance-connector-python)
     * [Node.js](https://github.com/binance/binance-connector-node)
+* [Swagger](https://github.com/binance/binance-api-swagger)
+    * 一个基于OpenAPI规范的RESTful API接口定义的YAML文件，还有便于交互的 Swagger UI 页面。
 * [Spot Testnet](https://testnet.binance.vision/)
     * 用户可以使用现货的测试网来体验SPOT交易.
     * 现在只能通过API来测试交易, 没有UI.

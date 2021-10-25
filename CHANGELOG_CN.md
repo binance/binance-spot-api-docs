@@ -1,5 +1,7 @@
 # 更新日志 (2021-08-12)
 
+## 2021-09-14
+* 添加一个基于OpenAPI规范的RESTful API接口定义的[YAML文件](https://github.com/binance/binance-api-swagger)
 
 ## 2021-08-12
 * GET `api/v3/myTrades` 添加新的参数 `orderId`
