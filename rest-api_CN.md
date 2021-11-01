@@ -1216,6 +1216,44 @@ timestamp | LONG | YES |
   }
 ]
 ```
+### 查询目前下单数 (TRADE)
+```
+GET api/v3/rateLimit/order
+```
+获取用户在当前时间区间内的下单总数。
+
+**权重(IP):**
+20
+
+**参数:**
+名称 | 类型| 是否必需 | 描述
+------------ | ------------ | ------------ | ------------
+recvWindow | LONG | NO | 赋值不得大于 ```60000```
+timestamp | LONG | YES |
+
+**数据源:**
+缓存
+
+**响应**
+```javascript
+[
+  {
+    "rateLimitType": "ORDERS",
+    "interval": "SECOND",
+    "intervalNum": 10,
+    "limit": 10000,
+    "count": 0
+  },
+  {
+    "rateLimitType": "ORDERS",
+    "interval": "DAY",
+    "intervalNum": 1,
+    "limit": 20000,
+    "count": 0
+  }
+]
+```
+
 ## 用户数据流订阅接口
 此处仅列出如何得到数据流名称及如何维持有效期的接口，具体订阅方式参考另一篇websocket接口文档
 
