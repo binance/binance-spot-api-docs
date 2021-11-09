@@ -43,3 +43,5 @@ Name | Description
     * For any questions/help regarding code implementation with API and/or Websockets.
 * [Binance Customer Support](https://www.binance.com/en/support-center)
     * For cases such as missing funds, help with 2FA, etc.
+* [Discussion forum](https://dev.binance.vision)
+    * For API questions
