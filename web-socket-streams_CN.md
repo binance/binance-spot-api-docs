@@ -188,6 +188,35 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 ]
 ```
 
+## 按Symbol的最优挂单信息
+实时推送指定交易对最优挂单信息
+
+**Stream Name:** \<symbol\>@bookTicker
+
+**Payload:**
+```javascript
+{
+  "u":400900217,     // order book updateId
+  "s":"BNBUSDT",     // 交易对
+  "b":"25.35190000", // 买单最优挂单价格
+  "B":"31.21000000", // 买单最优挂单数量
+  "a":"25.36520000", // 卖单最优挂单价格
+  "A":"40.66000000"  // 卖单最优挂单数量
+}
+```
+
+## 全市场最优挂单信息
+实时推送所有交易对最优挂单信息
+
+**Stream Name:** !bookTicker
+
+**Payload:**
+```javascript
+{
+  // 同 <symbol>@bookTicker payload
+}
+```
+
 ## 有限档深度信息
 每秒推送有限档深度信息。levels表示几档买卖单信息, 可选 5/10/20档
 
