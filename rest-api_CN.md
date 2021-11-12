@@ -40,7 +40,7 @@
 
 ##下单频率限制
 * 每个成功的下单回报将包含一个`X-MBX-ORDER-COUNT-(intervalNum)(intervalLetter)`的头，其中包含当前账户已用的下单限制数量。
-* 当下单数超过限制时，会收到带有429但不含`Retry-After`头的响应。请检查 `GET api/v3/exchangeInfo` 的下单频率限制 (rateLimitType = ORDERS) 并等待封禁时间结束。
+* 当下单数超过限制时，会收到带有429但不含`Retry-After`头的响应。请检查 `GET api/v3/rateLimit/order` 的下单频率限制 (rateLimitType = ORDERS) 并等待封禁时间结束。
 * 被拒绝或不成功的下单并不保证回报中包含以上头内容。
 * **下单频率限制是基于每个账户计数的。**
 
