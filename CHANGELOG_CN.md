@@ -1,4 +1,9 @@
-# 更新日志 (2021-08-12)
+# 更新日志 (2021-11-01)
+
+## 2021-11-01
+* 新增接口 `GET api/v3/rateLimit/order`
+    * 回传用户在当前时间区间内的下单总数
+    * 此接口的权重为20
 
 ## 2021-09-14
 * 添加一个基于OpenAPI规范的RESTful API接口定义的[YAML文件](https://github.com/binance/binance-api-swagger)

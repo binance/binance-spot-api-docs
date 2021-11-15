@@ -40,7 +40,7 @@
 
 ##下单频率限制
 * 每个成功的下单回报将包含一个`X-MBX-ORDER-COUNT-(intervalNum)(intervalLetter)`的头，其中包含当前账户已用的下单限制数量。
-* 当下单数超过限制时，会收到带有429但不含`Retry-After`头的响应。请检查 `GET api/v3/exchangeInfo` 的下单频率限制 (rateLimitType = ORDERS) 并等待封禁时间结束。
+* 当下单数超过限制时，会收到带有429但不含`Retry-After`头的响应。请检查 `GET api/v3/rateLimit/order` 的下单频率限制 (rateLimitType = ORDERS) 并等待封禁时间结束。
 * 被拒绝或不成功的下单并不保证回报中包含以上头内容。
 * **下单频率限制是基于每个账户计数的。**
 
@@ -645,7 +645,9 @@ symbol | STRING | NO |
   "lastPrice": "4.00000200",
   "lastQty": "200.00000000",
   "bidPrice": "4.00000000",
+  "bidQty": "100.00000000",
   "askPrice": "4.00000200",
+  "askQty": "100.00000000",
   "openPrice": "99.00000000",
   "highPrice": "100.00000000",
   "lowPrice": "0.10000000",
@@ -670,7 +672,9 @@ OR
     "lastPrice": "4.00000200",
     "lastQty": "200.00000000",
     "bidPrice": "4.00000000",
+    "bidQty": "100.00000000",
     "askPrice": "4.00000200",
+    "askQty": "100.00000000",
     "openPrice": "99.00000000",
     "highPrice": "100.00000000",
     "lowPrice": "0.10000000",
@@ -1216,6 +1220,44 @@ timestamp | LONG | YES |
   }
 ]
 ```
+### 查询目前下单数 (TRADE)
+```
+GET api/v3/rateLimit/order
+```
+获取用户在当前时间区间内的下单总数。
+
+**权重(IP):**
+20
+
+**参数:**
+名称 | 类型| 是否必需 | 描述
+------------ | ------------ | ------------ | ------------
+recvWindow | LONG | NO | 赋值不得大于 ```60000```
+timestamp | LONG | YES |
+
+**数据源:**
+缓存
+
+**响应**
+```javascript
+[
+  {
+    "rateLimitType": "ORDERS",
+    "interval": "SECOND",
+    "intervalNum": 10,
+    "limit": 10000,
+    "count": 0
+  },
+  {
+    "rateLimitType": "ORDERS",
+    "interval": "DAY",
+    "intervalNum": 1,
+    "limit": 20000,
+    "count": 0
+  }
+]
+```
+
 ## 用户数据流订阅接口
 此处仅列出如何得到数据流名称及如何维持有效期的接口，具体订阅方式参考另一篇websocket接口文档
 

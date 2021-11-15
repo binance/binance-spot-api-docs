@@ -50,6 +50,7 @@
     - [Query Open OCO (USER_DATA)](#query-open-oco-user_data)
     - [Account information (USER_DATA)](#account-information-user_data)
     - [Account trade list (USER_DATA)](#account-trade-list-user_data)
+    - [Query Current Order Count Usage (TRADE)](#query-current-order-count-usage-trade)
   - [User data stream endpoints](#user-data-stream-endpoints)
     - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
     - [Keepalive user data stream (USER_STREAM)](#keepalive-user-data-stream-user_stream)
@@ -141,7 +142,7 @@ Sample Payload below:
 * **The limits on the API are based on the IPs, not the API keys.**
 
 ## Order Rate Limits
-* Every successful order response will contain a `X-MBX-ORDER-COUNT-(intervalNum)(intervalLetter)` header which has the current order count for the account for all order rate limiters defined.
+* Every successful order response will contain a `X-MBX-ORDER-COUNT-(intervalNum)(intervalLetter)` header which has the current order count for the account for all order rate limiters defined. To monitor order count usage, refer to `GET api/v3/rateLimit/order`.
 * When the order count exceeds the limit, you will receive a 429 error without the `Retry-After` header. Please check the Order Rate Limit rules using `GET api/v3/exchangeInfo` and wait for reactivation accordingly.
 * Rejected/unsuccessful orders are not guaranteed to have `X-MBX-ORDER-COUNT-**` headers in the response.
 * **The order rate limit is counted against each account**.
@@ -820,7 +821,9 @@ Memory
   "lastPrice": "4.00000200",
   "lastQty": "200.00000000",
   "bidPrice": "4.00000000",
+  "bidQty": "100.00000000",
   "askPrice": "4.00000200",
+  "askQty": "100.00000000",
   "openPrice": "99.00000000",
   "highPrice": "100.00000000",
   "lowPrice": "0.10000000",
@@ -845,7 +848,9 @@ OR
     "lastPrice": "4.00000200",
     "lastQty": "200.00000000",
     "bidPrice": "4.00000000",
+    "bidQty": "100.00000000",
     "askPrice": "4.00000200",
+    "askQty": "100.00000000",
     "openPrice": "99.00000000",
     "highPrice": "100.00000000",
     "lowPrice": "0.10000000",
@@ -1873,6 +1878,50 @@ Database
   }
 ]
 ```
+
+### Query Current Order Count Usage (TRADE)
+```
+GET /api/v3/rateLimit/order
+```
+
+Displays the user's current order count usage for all intervals.
+
+
+**Weight:**
+20
+
+**Parameters:**
+
+Name | Type | Mandatory | Description
+------------ | ------------ | ------------ | ------------
+recvWindow | LONG | NO | The value cannot be greater than ```60000```
+timestamp | LONG | YES |
+
+**Data Source:**
+Memory
+
+**Response:**
+
+```json
+[
+
+  {
+    "rateLimitType": "ORDERS",
+    "interval": "SECOND",
+    "intervalNum": 10,
+    "limit": 50,
+    "count": 0
+  },
+  {
+    "rateLimitType": "ORDERS",
+    "interval": "DAY",
+    "intervalNum": 1,
+    "limit": 160000,
+    "count": 0
+  }
+]
+```
+
 ## User data stream endpoints
 Specifics on how user data streams work can be found [here.](https://github.com/binance/binance-spot-api-docs/blob/master/user-data-stream.md)
 
