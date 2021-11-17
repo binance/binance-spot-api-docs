@@ -1,7 +1,7 @@
 # CHANGELOG for Binance's API (2021-11-01)
 
 ## 2021-11-01
-* GET `api/v3/rateLimit/order` added
+* `GET /api/v3/rateLimit/order` added
     * The endpoint will display the user's current order count usage for all intervals.
     * This endpoint will have a request weight of 20.
 

@@ -1222,7 +1222,7 @@ timestamp | LONG | YES |
 ```
 ### 查询目前下单数 (TRADE)
 ```
-GET api/v3/rateLimit/order
+GET /api/v3/rateLimit/order
 ```
 获取用户在当前时间区间内的下单总数。
 

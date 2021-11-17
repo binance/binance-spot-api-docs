@@ -1,7 +1,7 @@
 # 更新日志 (2021-11-01)
 
 ## 2021-11-01
-* 新增接口 `GET api/v3/rateLimit/order`
+* 新增接口 `GET /api/v3/rateLimit/order`
     * 回传用户在当前时间区间内的下单总数
     * 此接口的权重为20
 
