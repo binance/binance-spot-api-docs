@@ -1447,7 +1447,7 @@ lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参
 **/exchangeInfo 响应中的格式:**
 ```javascript
   {
-    "filterType": "MAX_ALGO_ORDERS",
+    "filterType": "MAX_NUM_ALGO_ORDERS",
     "maxNumAlgoOrders": 5
   }
 ```
@@ -1497,7 +1497,7 @@ lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参
 **/exchangeInfo 响应中的格式:**
 ```javascript
   {
-    "filterType": "EXCHANGE_MAX_ALGO_ORDERS",
+    "filterType": "EXCHANGE_MAX_NUM_ALGO_ORDERS",
     "maxNumAlgoOrders": 200
   }
 ```

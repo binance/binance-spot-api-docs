@@ -2170,7 +2170,7 @@ The `MAX_POSITION` filter defines the allowed maximum position an account can ha
 
 ## Exchange Filters
 ### EXCHANGE_MAX_NUM_ORDERS
-The `MAX_NUM_ORDERS` filter defines the maximum number of orders an account is allowed to have open on the exchange.
+The `EXCHANGE_MAX_NUM_ORDERS` filter defines the maximum number of orders an account is allowed to have open on the exchange.
 Note that both "algo" orders and normal orders are counted for this filter.
 
 **/exchangeInfo format:**
@@ -2182,13 +2182,13 @@ Note that both "algo" orders and normal orders are counted for this filter.
 ```
 
 ### EXCHANGE_MAX_NUM_ALGO_ORDERS
-The `MAX_ALGO_ORDERS` filter defines the maximum number of "algo" orders an account is allowed to have open on the exchange.
+The `EXCHANGE_MAX_NUM_ALGO_ORDERS` filter defines the maximum number of "algo" orders an account is allowed to have open on the exchange.
 "Algo" orders are `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, and `TAKE_PROFIT_LIMIT` orders.
 
 **/exchangeInfo format:**
 ```javascript
 {
-  "filterType": "EXCHANGE_MAX_ALGO_ORDERS",
+  "filterType": "EXCHANGE_MAX_NUM_ALGO_ORDERS",
   "maxNumAlgoOrders": 200
 }
 ```
