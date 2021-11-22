@@ -173,9 +173,9 @@
 "Filter failure: ICEBERG_PARTS" | 冰山订单只能被分割成有限个小订单。
 "Filter failure: MARKET_LOT_SIZE" | 与LOT_SIZE含义一致，只是对市价单生效。
 "Filter failure: MAX_NUM_ORDERS" | 账户在该交易对下最多挂单数。
-"Filter failure: MAX_ALGO_ORDERS" | 账户在该交易对下最多的止盈/止损挂单数。
+"Filter failure: MAX_NUM_ALGO_ORDERS" | 账户在该交易对下最多的止盈/止损挂单数。
 "Filter failure: MAX_NUM_ICEBERG_ORDERS" | 账户在该交易对下最多的冰山订单数。
 "Filter failure: EXCHANGE_MAX_NUM_ORDERS" | 账户在全交易所最多的挂单数。
-"Filter failure: EXCHANGE_MAX_ALGO_ORDERS" | 账户在全交易所最多的止盈/止损挂单数。
+"Filter failure: EXCHANGE_MAX_NUM_ALGO_ORDERS" | 账户在全交易所最多的止盈/止损挂单数。
 
 
