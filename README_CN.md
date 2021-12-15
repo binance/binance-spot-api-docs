@@ -29,6 +29,9 @@
     * 支持所有现货的接口.
     * [Python](https://github.com/binance/binance-connector-python)
     * [Node.js](https://github.com/binance/binance-connector-node)
+    * [Ruby](https://github.com/binance/binance-connector-ruby)
+    * [DotNET](https://github.com/binance/binance-connector-dotnet)
+    * [Java](https://github.com/binance/binance-connector-java)
 * [Swagger](https://github.com/binance/binance-api-swagger)
     * 一个基于OpenAPI规范的RESTful API接口定义的YAML文件，还有便于交互的 Swagger UI 页面。
 * [Spot Testnet](https://testnet.binance.vision/)
