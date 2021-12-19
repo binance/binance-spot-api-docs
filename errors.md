@@ -11,7 +11,7 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 ## 10xx - General Server or Network issues
 #### -1000 UNKNOWN
- * An unknown error occured while processing the request.
+ * An unknown error occurred while processing the request.
 
 #### -1001 DISCONNECTED
  * Internal error; unable to process your request. Please try again.
