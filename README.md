@@ -27,6 +27,9 @@ Name | Description
     * This is a lightweight library that works as a connector to Binance public API.
     * [Python](https://github.com/binance/binance-connector-python)
     * [Node.js](https://github.com/binance/binance-connector-node)
+    * [Ruby](https://github.com/binance/binance-connector-ruby)
+    * [DotNET](https://github.com/binance/binance-connector-dotnet)
+    * [Java](https://github.com/binance/binance-connector-java)
 * [Swagger](https://github.com/binance/binance-api-swagger)
     * A YAML file with OpenApi specification on the RESTful API is available to be used, as well as a Swagger UI page for the consulting.
 * [Spot Testnet](https://testnet.binance.vision/)
