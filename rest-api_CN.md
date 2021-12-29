@@ -192,10 +192,10 @@ There is no & between "GTC" and "quantity=1".
 
 **账户与交易对权限(权限):**
 
-*SPOT 现货
-*MARGIN 杠杆
-*LEVERAGED 杠杆代币
-*TRD_GRP_002 交易组 002
+* SPOT 现货
+* MARGIN 杠杆
+* LEVERAGED 杠杆代币
+* TRD_GRP_002 交易组 002
 
 **订单状态 (status):**
 
