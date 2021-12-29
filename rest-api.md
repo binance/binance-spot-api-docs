@@ -313,9 +313,12 @@ These terms will be used throughout the documentation, so it is recommended espe
 * AUCTION_MATCH
 * BREAK
 
-**Symbol type:**
+**Account and Symbol Permissions (permissions):**
 
 * SPOT
+* MARGIN
+* LEVERAGED
+* TRD_GRP_002
 
 **Order status (status):**
 

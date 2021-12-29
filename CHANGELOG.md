@@ -1,4 +1,7 @@
-# CHANGELOG for Binance's API (2021-11-01)
+# CHANGELOG for Binance's API (2021-12-29)
+
+## 2021-12-29
+* Removed out dated "Symbol Type" enum; added "Permissions" enum.
 
 ## 2021-11-01
 * `GET /api/v3/rateLimit/order` added
