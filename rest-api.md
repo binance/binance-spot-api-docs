@@ -978,7 +978,7 @@ symbol | STRING | YES |
 side | ENUM | YES |
 type | ENUM | YES |
 timeInForce | ENUM | NO |
-quantity | DECIMAL | NO |
+quantity | DECIMAL | YES |
 quoteOrderQty|DECIMAL|NO|
 price | DECIMAL | NO |
 newClientOrderId | STRING | NO | A unique id among open orders. Automatically generated if not sent.<br> Orders with the same `newClientOrderID` can be accepted only when the previous one is filled, otherwise the order will be rejected.
