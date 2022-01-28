@@ -1071,24 +1071,28 @@ Matching Engine
       "price": "3999.00000000",
       "qty": "5.00000000",
       "commission": "19.99500000",
+      "commissionAsset": "USDT",
       "tradeId": 57
     },
     {
       "price": "3998.00000000",
       "qty": "2.00000000",
       "commission": "7.99600000",
+      "commissionAsset": "USDT",
       "tradeId": 58
     },
     {
       "price": "3997.00000000",
       "qty": "1.00000000",
       "commission": "3.99700000",
+      "commissionAsset": "USDT",
       "tradeId": 59
     },
     {
       "price": "3995.00000000",
       "qty": "1.00000000",
       "commission": "3.99500000",
+      "commissionAsset": "USDT",
       "tradeId": 60
     }
   ]
