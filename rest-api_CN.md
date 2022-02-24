@@ -1,4 +1,4 @@
-# REST行情与交易接口 (2021-08-12)
+# REST行情与交易接口 (2022-02-24)
 # 基本信息
 * 本篇列出REST接口的baseurl **https://api.binance.com**
 * 如果上面的baseURL访问有性能问题，请访问下面的API集群:
@@ -195,7 +195,7 @@ There is no & between "GTC" and "quantity=1".
 * SPOT 现货
 * MARGIN 杠杆
 * LEVERAGED 杠杆代币
-* TRD_GRP_002 交易组 002
+* TRD_GRP_002 交易组 002  
 
 **订单状态 (status):**
 
@@ -403,18 +403,19 @@ GET /api/v3/depth
 
 **权重:**
 
-Limit | Weight
+限制 | 权重
 ------------ | ------------
-5, 10, 20, 50, 100 | 1
-500 | 5
-1000 | 10
+1-100 | 1
+101-500 | 5
+501-1000 | 10
+1001-5000 | 50
 
 **参数:**
 
 名称 | 类型 | 是否必须 | 描述
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-limit | INT | NO | 默认 100; 最大 1000. 可选值:[5, 10, 20, 50, 100, 500, 1000]
+limit | INT | NO | 默认 100; 最大 5000. 可选值:[5, 10, 20, 50, 100, 500, 1000, 5000] <br> 如果 limit > 5000, 最多返回5000条数据.
 
 **注意:** limit=0 返回全部orderbook，但数据量会非常非常非常非常大！
 
@@ -1352,7 +1353,7 @@ listenKey | STRING | YES
 逻辑伪代码如下：
 * `price` >= `minPrice`
 * `price` <= `maxPrice`
-* (`price`-`minPrice`) % `tickSize` == 0
+* `price` % `tickSize` == 0
 
 **/exchangeInfo 响应中的格式:**
 ```javascript
@@ -1381,6 +1382,31 @@ listenKey | STRING | YES
     "avgPriceMins": 5
   }
 ```
+
+#### PERCENT_PRICE_BY_SIDE
+
+> **ExchangeInfo format:**
+```javascript
+    {
+          "filterType": "PERCENT_PRICE_BY_SIDE",
+          "bidMultiplierUp": "10",
+          "bidMultiplierDown": "9",
+          "askMultiplierUp": "0.1",
+          "askMultiplierDown": "0.2",
+          "avgPriceMins": 1
+    }
+```
+
+`PERCENT_PRICE_BY_SIDE` 过滤器定义了基于交易对lastPrice的合法价格范围. 取决于`BUY`或者`SELL`, 价格范围可能有所不同.
+
+买向订单需要满足:
+* `Max Order price` <= `bidMultiplierUp` * `lastPrice`
+* `Minimum Order price` >= `bidMultiplierDown` * `lastPrice`
+
+卖向订单需要满足:
+* `Max Order Price` <= `askMultiplierUp` * `lastPrice`
+* `Min Order Price` >= `askMultiplierDown` * `lastPrice`
+
 
 ### LOT_SIZE 订单尺寸
 lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参数进行合法性检查。包含三个部分：
