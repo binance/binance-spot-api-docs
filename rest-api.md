@@ -59,6 +59,7 @@
   - [Symbol filters](#symbol-filters)
     - [PRICE_FILTER](#price_filter)
     - [PERCENT_PRICE](#percent_price)
+    - [PERCENT_PRICE_BY_SIDE](#percent_price_by_side)
     - [LOT_SIZE](#lot_size)
     - [MIN_NOTIONAL](#min_notional)
     - [ICEBERG_PARTS](#iceberg_parts)
@@ -73,7 +74,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2021-08-12)
+# Public Rest API for Binance (2022-02-24)
 
 ## General API Information
 * The base endpoint is: **https://api.binance.com**
@@ -572,21 +573,19 @@ GET /api/v3/depth
 **Weight:**
 Adjusted based on the limit:
 
-
-Limit | Weight
------------- | ------------
-5, 10, 20, 50, 100 | 1
-500 | 5
-1000 | 10
-5000| 50
-
+|Limit|Request Weight
+------|-------
+1-100|  1
+101-500| 5
+501-1000| 10
+1001-5000| 50
 
 **Parameters:**
 
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-limit | INT | NO | Default 100; max 5000. Valid limits:[5, 10, 20, 50, 100, 500, 1000, 5000]
+limit | INT | NO | Default 100; max 5000. <br> If limit > 5000. then the response will truncate to 5000. 
 
 **Data Source:**
 Memory
@@ -2017,7 +2016,7 @@ Any of the above variables can be set to 0, which disables that rule in the `pri
 
 * `price` >= `minPrice`
 * `price` <= `maxPrice`
-* (`price`-`minPrice`) % `tickSize` == 0
+* `price` % `tickSize` == 0
 
 **/exchangeInfo format:**
 ```javascript
@@ -2046,6 +2045,31 @@ In order to pass the `percent price`, the following must be true for `price`:
   "avgPriceMins": 5
 }
 ```
+
+### PERCENT_PRICE_BY_SIDE
+The `PERCENT_PRICE_BY_SIDE` filter defines the valid range for the price based on the last price of the symbol. <br>
+There is a different range depending on whether the order is placed on the `BUY` side or the `SELL` side.
+
+Buy orders will succeed on this filter if:
+* `Order price` <= `bidMultiplierUp` * `lastPrice`
+* `Order price` >= `bidMultiplierDown` * `lastPrice`
+
+Sell orders will succeed on this filter if:
+* `Order Price` <= `askMultiplierUp` * `lastPrice`
+* `Order Price` >= `askMultiplierDown` * `lastPrice`
+
+**/exchangeInfo format:**
+```javascript
+    {
+          "filterType": "PERCENT_PRICE_BY_SIDE",
+          "bidMultiplierUp": "1.2",
+          "bidMultiplierDown": "0.2",
+          "askMultiplierUp": "5",
+          "askMultiplierDown": "0.8",
+          "avgPriceMins": 1
+    }
+```
+
 
 ### LOT_SIZE
 The `LOT_SIZE` filter defines the `quantity` (aka "lots" in auction terms) rules for a symbol. There are 3 parts:

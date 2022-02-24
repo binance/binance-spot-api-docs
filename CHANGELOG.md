@@ -1,4 +1,24 @@
-# CHANGELOG for Binance's API (2021-12-29)
+# CHANGELOG for Binance's API (2022-02-24)
+
+## 2022-02-24
+
+* `(price-minPrice) % tickSize == 0` rule in `PRICE_FILTER` has been changed to `price % tickSize == 0`.
+* A new filter `PERCENT_PRICE_BY_SIDE` has been added.
+* Changes to GET `api/v3/depth`
+    * The `limit` value can be outside of the previous values (i.e. 5, 10, 20, 50, 100, 500, 1000,5000) and will return the correct limit. (i.e. if limit=3 then the response will be the top 3 bids and asks)
+    * The limit still cannot exceed 5000. If the limit provided is greater than 5000, then the response will be truncated to 5000.
+    * Due to the changes, these are the updated request weights based on the limit value provided:
+
+|Limit|Request Weight
+------|-------
+1-100|  1
+101-500| 5
+501-1000| 10
+1001-5000| 50
+
+* Changes to GET `api/v3/aggTrades`
+    * When providing `startTime` and `endTime`, the oldest items are returned.
+---
 
 ## 2021-12-29
 * Removed out dated "Symbol Type" enum; added "Permissions" enum.
