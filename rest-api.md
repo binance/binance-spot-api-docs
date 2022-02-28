@@ -549,6 +549,7 @@ Memory
       "icebergAllowed": true,
       "ocoAllowed": true,
       "quoteOrderQtyMarketAllowed": true,
+      "allowTrailingStop": false,
       "isSpotTradingAllowed": true,
       "isMarginTradingAllowed": true,
       "filters": [

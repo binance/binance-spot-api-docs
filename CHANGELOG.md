@@ -1,4 +1,8 @@
-# CHANGELOG for Binance's API (2022-02-24)
+# CHANGELOG for Binance's API (2022-02-28)
+
+## 2022-02-28
+
+* New field `allowTrailingStop` has been added to GET /api/v3/exchangeInfo
 
 ## 2022-02-24
 
