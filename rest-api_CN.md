@@ -27,7 +27,13 @@
 * 对参数的顺序不做要求。
 
 # 访问限制
+* 以下 是`intervalLetter` 作为头部值:
+  * SECOND => S
+  * MINUTE => M
+  * HOUR => H
+  * DAY => D
 * 在 `/api/v3/exchangeInfo`接口中`rateLimits`数组里包含有REST接口(不限于本篇的REST接口)的访问限制。包括带权重的访问频次限制、下单速率限制。本篇`枚举定义`章节有限制类型的进一步说明。
+* 违反任何一个速率限制时，将返回429。
 
 ## IP 访问限制
 * 每个请求将包含一个`X-MBX-USED-WEIGHT-(intervalNum)(intervalLetter)`的头，其中包含当前IP所有请求的已使用权重。
@@ -199,13 +205,37 @@ There is no & between "GTC" and "quantity=1".
 
 **订单状态 (status):**
 
-* NEW 新建订单
-* PARTIALLY_FILLED  部分成交
-* FILLED  全部成交
-* CANCELED  已撤销
-* PENDING_CANCEL 正在撤销中(目前不会遇到这个状态)
-* REJECTED 订单被拒绝
-* EXPIRED 订单过期(根据timeInForce参数规则)
+状态 | 描述
+-----------| --------------
+`NEW` | 订单被交易引擎接受
+`PARTIALLY_FILLED`| 部分订单被成交
+`FILLED` | 订单完全成交
+`CANCELED` | 用户撤销了订单
+`PENDING_CANCEL` | 撤销中(目前并未使用)
+`REJECTED`       | 订单没有被交易引擎接受，也没被处理
+`EXPIRED` | 订单被交易引擎取消, 比如 <br/>LIMIT FOK 订单没有成交<br/>市价单没有完全成交<br/>强平期间被取消的订单<br/>交易所维护期间被取消的订单
+
+**OCO 状态 (状态类型集 listStatusType):**
+
+状态 | 描述
+-----------| --------------
+`RESPONSE`     | 当ListStatus响应失败的操作时使用。 (订单完成或取消订单)
+`EXEC_STARTED` | 当已经下单或者订单有更新时
+`ALL_DONE`     | 当订单执行结束或者不在激活状态
+
+
+**OCO 订单状态 (订单状态集 listOrderStatus):**
+
+状态 | 描述
+-----------| --------------
+`EXECUTING` | 当已经下单或者订单有更新时
+`ALL_DONE`| 当订单执行结束或者不在激活状态
+`REJECT` | 当订单状态响应失败(订单完成或取消订单)
+
+
+**指定订单的类型**
+
+* OCO 选择性委托订单
 
 **订单种类 (orderTypes, type):**
 
@@ -230,9 +260,13 @@ There is no & between "GTC" and "quantity=1".
 
 **Time in force (timeInForce):**
 
-* GTC - Good Till Cancel 成交为止
-* IOC - Immediate or Cancel 无法立即成交(吃单)的部分就撤销
-* FOK - Fill or Kill 无法全部立即成交就撤销
+这里定义了订单多久能够失效
+
+Status | Description
+-----------| --------------
+`GTC` | 成交为止 <br> 订单会一直有效，直到被成交或者取消。
+`IOC` | 无法立即成交的部分就撤销 <br> 订单在失效前会尽量多的成交。
+`FOK` | 无法全部立即成交就撤销 <br> 如果无法全部成交，订单会失效。
 
 **K线间隔 (interval):**
 
@@ -1043,6 +1077,55 @@ timestamp | LONG | YES |
 }
 ```
 
+``
+DELETE /api/v3/openOrders
+``
+
+撤销单一交易对下所有挂单, 包括OCO的挂单。
+
+**权重(IP):**
+1
+
+**参数:**
+
+Name | Type | Mandatory | Description
+------------ | ------------ | ------------ | ------------
+symbol | STRING | YES |
+recvWindow | LONG | NO | 不能大于 ```60000```
+timestamp | LONG | YES |
+
+**数据源:**
+撮合引擎
+
+
+## 查询订单 (USER_DATA)
+
+
+**响应**
+```javascript
+{
+  "symbol": "LTCBTC", // 交易对
+  "orderId": 1, // 系统的订单ID
+  "orderListId": -1, // OCO订单的ID，不然就是-1
+  "clientOrderId": "myOrder1", // 客户自己设置的ID
+  "price": "0.1", // 订单价格
+  "origQty": "1.0", // 用户设置的原始订单数量
+  "executedQty": "0.0", // 交易的订单数量
+  "cummulativeQuoteQty": "0.0", // 累计交易的金额
+  "status": "NEW", // 订单状态
+  "timeInForce": "GTC", // 订单的时效方式
+  "type": "LIMIT", // 订单类型， 比如市价单，现价单等
+  "side": "BUY", // 订单方向，买还是卖
+  "stopPrice": "0.0", // 止损价格
+  "icebergQty": "0.0", // 冰山数量
+  "time": 1499827319559, // 订单时间
+  "updateTime": 1499827319559, // 最后更新时间
+  "isWorking": true, // 订单是否出现在orderbook中
+  "origQuoteOrderQty": "0.000000" // 原始的交易金额
+}
+```
+
+
 ### 查看账户当前挂单 (USER_DATA)
 ```
 GET /api/v3/openOrders  (HMAC SHA256)
@@ -1138,6 +1221,306 @@ timestamp | LONG | YES |
     "time": 1499827319559,
     "updateTime": 1499827319559,
     "isWorking": true
+  }
+]
+```
+``
+POST /api/v3/order/oco (HMAC SHA256)
+``
+
+## 发送新 OCO 订单
+
+**权重(UID)**: 2
+**权重(IP)**: 1
+
+**参数**:
+
+名称 |类型| 是否必需 | 描述
+-----|-----|----------| -----------
+symbol|STRING| YES|
+listClientOrderId|STRING|NO| 整个orderList的唯一ID
+side|ENUM|YES| 详见枚举定义：订单方向
+quantity|DECIMAL|YES|
+limitClientOrderId|STRING|NO| 限价单的唯一ID
+price|DECIMAL|YES|
+limitIcebergQty|DECIMAL|NO|
+stopClientOrderId |STRING|NO| 止损/止损限价单的唯一ID
+stopPrice |DECIMAL| YES
+stopLimitPrice|DECIMAL|NO| 如果提供，须配合提交`stopLimitTimeInForce`
+stopIcebergQty|DECIMAL|NO|
+stopLimitTimeInForce|ENUM|NO| 有效值 `GTC`/`FOK`/`IOC`
+newOrderRespType|ENUM|NO| 详见枚举定义：订单返回类型
+recvWindow|LONG|NO| 不能大于 `60000`
+timestamp|LONG|YES|
+
+
+其他信息:
+
+* 价格限制:
+  * `SELL`: 限价 > 最新成交价 >触发价
+  * `BUY`: 限价 < 最新成交价 < 触发价
+* 数量限制:
+  * 两个 legs 必须具有同样的数量。
+  * `ICEBERG`数量不必相同
+* 下单rate
+  * 一个`OCO`订单被算成2个普通订单.
+
+**数据源:**
+撮合引擎
+
+
+## 取消 OCO 订单(TRADE)
+
+``
+DELETE /api/v3/orderList (HMAC SHA256)
+``
+
+取消整个订单列表。
+
+**权重(IP)**: 1
+
+**参数**
+
+名称| 类型| 是否必需| 描述
+----| ----|------|------
+symbol| STRING| YES|
+orderListId|LONG|NO| `orderListId` 或 `listClientOrderId` 必须被提供
+listClientOrderId|STRING|NO| `orderListId` 或 `listClientOrderId` 必须被提供
+newClientOrderId|STRING|NO| 用户自定义的本次撤销操作的ID(注意不是被撤销的订单的自定义ID)。如无指定会自动赋值。
+recvWindow|LONG|NO|不能大于 `60000`
+timestamp|LONG|YES|
+
+其他注意点:
+
+* 取消单个 leg 将取消整个 OCO 订单。
+
+
+**数据源:**
+撮合引擎
+
+**响应**
+
+```javascript
+{
+  "orderListId": 0,
+  "contingencyType": "OCO",
+  "listStatusType": "ALL_DONE",
+  "listOrderStatus": "ALL_DONE",
+  "listClientOrderId": "C3wyj4WVEktd7u9aVBRXcN",
+  "transactionTime": 1574040868128,
+  "symbol": "LTCBTC",
+  "orders": [
+    {
+      "symbol": "LTCBTC",
+      "orderId": 2,
+      "clientOrderId": "pO9ufTiFGg3nw2fOdgeOXa"
+    },
+    {
+      "symbol": "LTCBTC",
+      "orderId": 3,
+      "clientOrderId": "TXOvglzXuaubXAaENpaRCB"
+    }
+  ],
+  "orderReports": [
+    {
+      "symbol": "LTCBTC",
+      "origClientOrderId": "pO9ufTiFGg3nw2fOdgeOXa",
+      "orderId": 2,
+      "orderListId": 0,
+      "clientOrderId": "unfWT8ig8i0uj6lPuYLez6",
+      "price": "1.00000000",
+      "origQty": "10.00000000",
+      "executedQty": "0.00000000",
+      "cummulativeQuoteQty": "0.00000000",
+      "status": "CANCELED",
+      "timeInForce": "GTC",
+      "type": "STOP_LOSS_LIMIT",
+      "side": "SELL",
+      "stopPrice": "1.00000000"
+    },
+    {
+      "symbol": "LTCBTC",
+      "origClientOrderId": "TXOvglzXuaubXAaENpaRCB",
+      "orderId": 3,
+      "orderListId": 0,
+      "clientOrderId": "unfWT8ig8i0uj6lPuYLez6",
+      "price": "3.00000000",
+      "origQty": "10.00000000",
+      "executedQty": "0.00000000",
+      "cummulativeQuoteQty": "0.00000000",
+      "status": "CANCELED",
+      "timeInForce": "GTC",
+      "type": "LIMIT_MAKER",
+      "side": "SELL"
+    }
+  ]
+}
+```
+
+## 查询 OCO (USER_DATA)
+
+``
+GET /api/v3/orderList (HMAC SHA256)
+``
+
+根据提供的可选参数检索特定的OCO。
+
+**权重(IP)**: 2
+
+**参数**:
+
+名称| 类型|是否必需| 描述
+----|-----|----|----------
+orderListId|LONG|NO|   ```orderListId``` 或 ```origClientOrderId``` 必须提供一个。
+origClientOrderId|STRING|NO|  ```orderListId``` 或 ```origClientOrderId``` 必须提供一个。
+recvWindow|LONG|NO| 赋值不得大于 ```60000```
+timestamp|LONG|YES|
+
+**数据源:**
+数据库
+
+**响应**
+
+```javascript
+{
+    "orderListId": 27,
+    "contingencyType": "OCO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "h2USkA5YQpaXHPIrkd96xE",
+    "transactionTime": 1565245656253,
+    "symbol": "LTCBTC",
+    "orders": [
+        {
+            "symbol": "LTCBTC",
+            "orderId": 4,
+            "clientOrderId": "qD1gy3kc3Gx0rihm9Y3xwS"
+        },
+        {
+            "symbol": "LTCBTC",
+            "orderId": 5,
+            "clientOrderId": "ARzZ9I00CPM8i3NhmU9Ega"
+        }
+    ]
+}
+```
+
+## 查询所有 OCO (USER_DATA)
+
+``
+GET /api/v3/allOrderList (HMAC SHA256)
+``
+
+根据提供的可选参数检索所有的OCO。
+
+**权重(IP)**: 10
+
+**参数**
+
+名称|类型| 是否必需| 描述
+----|----|----|---------
+fromId|LONG|NO| 提供该项后, `startTime` 和 `endTime` 都不可提供
+startTime|LONG|NO|
+endTime|LONG|NO|
+limit|INT|NO| 默认值: 500; 最大值: 1000
+recvWindow|LONG|NO| 赋值不能超过 `60000`
+timestamp|LONG|YES|
+
+**数据源:**
+数据库
+
+**响应**
+
+```javascript
+[
+  {
+    "orderListId": 29,
+    "contingencyType": "OCO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "amEEAXryFzFwYF1FeRpUoZ",
+    "transactionTime": 1565245913483,
+    "symbol": "LTCBTC",
+    "orders": [
+      {
+        "symbol": "LTCBTC",
+        "orderId": 4,
+        "clientOrderId": "oD7aesZqjEGlZrbtRpy5zB"
+      },
+      {
+        "symbol": "LTCBTC",
+        "orderId": 5,
+        "clientOrderId": "Jr1h6xirOxgeJOUuYQS7V3"
+      }
+    ]
+  },
+  {
+    "orderListId": 28,
+    "contingencyType": "OCO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "hG7hFNxJV6cZy3Ze4AUT4d",
+    "transactionTime": 1565245913407,
+    "symbol": "LTCBTC",
+    "orders": [
+      {
+        "symbol": "LTCBTC",
+        "orderId": 2,
+        "clientOrderId": "j6lFOfbmFMRjTYA7rRJ0LP"
+      },
+      {
+        "symbol": "LTCBTC",
+        "orderId": 3,
+        "clientOrderId": "z0KCjOdditiLS5ekAFtK81"
+      }
+    ]
+  }
+]
+```
+
+## 查询 OCO 挂单 (USER_DATA)
+
+``
+GET /api/v3/openOrderList (HMAC SHA256)
+``
+
+**权重(IP)**: 3
+
+**参数**
+
+名称| 类型|是否必需| 描述
+----|-----|---|------------------
+recvWindow|LONG|NO| 赋值不能大于 ```60000```
+timestamp|LONG|YES|
+
+
+**数据源:**
+数据库
+
+**响应**
+
+```javascript
+[
+  {
+    "orderListId": 31,
+    "contingencyType": "OCO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "wuB13fmulKj3YjdqWEcsnp",
+    "transactionTime": 1565246080644,
+    "symbol": "LTCBTC",
+    "orders": [
+      {
+        "symbol": "LTCBTC",
+        "orderId": 4,
+        "clientOrderId": "r3EH2N76dHfLoSZWIUw1bT"
+      },
+      {
+        "symbol": "LTCBTC",
+        "orderId": 5,
+        "clientOrderId": "Cv1SnyPD3qhqpbjpYEHbd2"
+      }
+    ]
   }
 ]
 ```
