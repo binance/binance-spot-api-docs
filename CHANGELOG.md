@@ -2,7 +2,7 @@
 
 ## 2022-02-28
 
-* New field `allowTrailingStop` has been added to GET /api/v3/exchangeInfo
+* New field `allowTrailingStop` has been added to `GET /api/v3/exchangeInfo`
 
 ## 2022-02-24
 

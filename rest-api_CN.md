@@ -409,6 +409,7 @@ GET /api/v3/exchangeInfo
     "quoteAssetPrecision": 8,
     "orderTypes": ["LIMIT", "MARKET"],
     "icebergAllowed": false,
+    "allowTrailingStop": false,
     "filters": [{
       "filterType": "PRICE_FILTER",
       "minPrice": "0.00000100",
