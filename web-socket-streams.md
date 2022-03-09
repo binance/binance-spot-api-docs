@@ -469,4 +469,4 @@ Order book price and quantity depth updates used to locally manage an order book
 9. Receiving an event that removes a price level that is not in your local order book can happen and is normal.
 
 Note: 
-Due to snapshot having a depth limit, a price level outside of a snapshot and without quantity change as the market moves, won't be in the Diff. Depth Stream event and consequently not included in the local order book, causing slight difference with the live order book. However, maximum depth limit of 5000 is enough to manage the best prices.
+Due to depth snapshots having a limit on the number of price levels, a price level outside of the initial snapshot that doesn't have a quantity change won't have an update in the Diff. Depth Stream. Consequently, those price levels will not be visible in the local order book even when applying all updates from the Diff. Depth Stream correctly and cause the local order book to have some slight differences with the real order book. However, for most use cases the depth limit of 5000 is enough to understand the market and trade effectively.
