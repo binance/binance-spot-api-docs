@@ -2,6 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [Web Socket Streams for Binance (2019-11-13)](#web-socket-streams-for-binance-2019-11-13)
 - [General WSS information](#general-wss-information)
   - [Websocket Limits](#websocket-limits)
   - [Live Subscribing/Unsubscribing to streams](#live-subscribingunsubscribing-to-streams)
@@ -10,6 +11,7 @@
     - [Listing Subscriptions](#listing-subscriptions)
     - [Setting Properties](#setting-properties)
     - [Retrieving Properties](#retrieving-properties)
+    - [Error Messages](#error-messages)
 - [Detailed Stream information](#detailed-stream-information)
   - [Aggregate Trade Streams](#aggregate-trade-streams)
   - [Trade Streams](#trade-streams)
@@ -465,3 +467,6 @@ Order book price and quantity depth updates used to locally manage an order book
 7. The data in each event is the **absolute** quantity for a price level.
 8. If the quantity is 0, **remove** the price level.
 9. Receiving an event that removes a price level that is not in your local order book can happen and is normal.
+
+Note: 
+Due to depth snapshots having a limit on the number of price levels, a price level outside of the initial snapshot that doesn't have a quantity change won't have an update in the Diff. Depth Stream. Consequently, those price levels will not be visible in the local order book even when applying all updates from the Diff. Depth Stream correctly and cause the local order book to have some slight differences with the real order book. However, for most use cases the depth limit of 5000 is enough to understand the market and trade effectively.
