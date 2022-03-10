@@ -354,8 +354,6 @@ Status | Description
 
 **Order types (orderTypes, type):**
 
-More information on how the order types definitions can be found here: [Types of Orders](https://www.binance.com/en/support/articles/360033779452-Types-of-Order)
-
 * LIMIT
 * MARKET
 * STOP_LOSS
