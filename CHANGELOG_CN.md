@@ -1,4 +1,28 @@
-# 更新日志 (2022-02-28)
+# 更新日志 (2022-04-12)
+
+## 2022-04-12
+
+**Note:** 下面的变更会在后面几天上线.
+
+
+* `GET api/v3/allOrders` 如果没有提供 `symbol`, 则返回错误信息:
+    ```json
+    {
+     "code": -1102,
+     "msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed."
+    }
+    ```
+* 修复一个错误信息中的拼写错误。 如果账号被禁用了相应的权限(比如提款，交易等), 则服务器返回错误:
+    ```json
+    "This action is disabled on this account."
+    ```
+* 在市场数据(market data)审计中，发现了一些现货的聚合交易数据(aggTrades)中的问题.
+    * 丢失的记录已经被补回.
+    * 重复的记录被标记成无效，具体的值设置成如下:
+        * p = '0' // price
+        * q = '0' // qty
+        * f = -1 // ﬁrst_trade_id
+        * l = -1 // last_trade_id
 
 ## 2022-02-28
 
