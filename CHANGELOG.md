@@ -1,8 +1,35 @@
-# CHANGELOG for Binance's API (2022-02-28)
+# CHANGELOG for Binance's API (2022-04-12)
+
+## 2022-04-12
+
+**Note:** The changes are being rolled out during the next few days, so these will not appear right away.
+
+* Error message changed on `GET api/v3/allOrders` where `symbol` is not provided:
+    ```json
+    {
+     "code": -1102,
+     "msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed."
+    }
+    ```
+* Fixed a typo with an error message when an account has disabled permissions (e.g. to withdraw, to trade, etc)
+    ```json
+    "This action is disabled on this account." 
+    ```
+* During a market data audit, we detected some issues with the Spot aggregate trade data.
+    * Missing aggregate trades were recovered.
+    * Duplicated records were marked invalid with the following values:
+        * p = '0' // price
+        * q = '0' // qty
+        * f = -1 // ﬁrst_trade_id
+        * l = -1 // last_trade_id
+
+---
 
 ## 2022-02-28
 
 * New field `allowTrailingStop` has been added to `GET /api/v3/exchangeInfo`
+
+---
 
 ## 2022-02-24
 
