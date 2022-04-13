@@ -1,4 +1,34 @@
-# CHANGELOG for Binance's API (2022-04-12)
+# CHANGELOG for Binance's API (2022-04-13)
+
+---
+
+## 2022-04-13 
+
+REST API
+
+* Trailing Stops has been enabled.
+    * This is a type of algo order where the activation is based on a percentage of a price change in the market using the new parameter `trailingDelta`.
+    * This can only used with any of the following order types: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`.
+    * The `trailingDelta` parameter will be done in Basis Points or BIPS.
+        * For example: a STOP_LOSS SELL order with a `trailingDelta` of 100 will trigger after a price decrease of 1% from the highest price after the order is placed. (100 / 10,000 => 0.01 => 1%)
+    * When used in combination with OCO Orders, the `trailingDelta` will determine when the contingent leg of the OCO will trigger.
+    * When `trailingDelta` is used in combination with `stopPrice`, once the `stopPrice` condition is met, the trailing stop starts tracking the price change from the `stopPrice` based on the `trailingDelta` provided.
+    * When no `stopPrice` is sent, the trailing stop starts tracking the price changes from the last price based on the `trailingDelta` provided.
+* Changes to POST `/api/v3/order`
+    * New optional field `trailingDelta`
+* Changes to POST `/api/v3/order/test`
+    * New optional field `trailingDelta`
+* Changes to POST `/api/v3/order/oco`
+    * New optional field `trailingDelta`
+* A new filter `TRAILING_DELTA` has been added.
+    * This filter is defined by the minimum and maximum values for the `trailingDelta` value.
+
+USER DATA STREAM
+
+* New field in `executionReport`
+    * "d" for `trailingDelta`
+
+---
 
 ## 2022-04-12
 

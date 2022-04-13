@@ -1,4 +1,4 @@
-# Error codes for Binance (2019-09-25)
+# Error codes for Binance (2022-04-13)
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
 ```javascript
@@ -186,6 +186,7 @@ Error message | Description
 "Filter failure: MAX_NUM_ORDERS" | Account has too many open orders on the symbol.
 "Filter failure: MAX_NUM_ALGO_ORDERS" | Account has too many open stop loss and/or take profit orders on the symbol.
 "Filter failure: MAX_NUM_ICEBERG_ORDERS" | Account has too many open iceberg orders on the symbol.
+"Filter failure: TRAILING_DELTA" | `trailingDelta` is not within the defined range of the filter for that order type.
 "Filter failure: EXCHANGE_MAX_NUM_ORDERS" | Account has too many open orders on the exchange.
 "Filter failure: EXCHANGE_MAX_NUM_ALGO_ORDERS" | Account has too many open stop loss and/or take profit orders on the exchange.
 
