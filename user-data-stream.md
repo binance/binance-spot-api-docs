@@ -14,7 +14,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# User Data Streams for Binance (2021-01-01)
+# User Data Streams for Binance (2022-04-13)
 # General WSS information
 * The base API endpoint is: **https://api.binance.com**
 * A User Data Stream `listenKey` is valid for 60 minutes after creation.
@@ -142,6 +142,7 @@ Average price can be found by doing `Z` divided by `z`.
   "q": "1.00000000",             // Order quantity
   "p": "0.10264410",             // Order price
   "P": "0.00000000",             // Stop price
+  "d": 4,                        // Trailing Delta
   "F": "0.00000000",             // Iceberg quantity
   "g": -1,                       // OrderListId
   "C": null,                     // Original client order ID; This is the ID of the order being canceled

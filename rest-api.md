@@ -74,7 +74,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2022-02-24)
+# Public Rest API for Binance (2022-04-13)
 
 ## General API Information
 * The base endpoint is: **https://api.binance.com**
@@ -981,6 +981,7 @@ quoteOrderQty|DECIMAL|NO|
 price | DECIMAL | NO |
 newClientOrderId | STRING | NO | A unique id among open orders. Automatically generated if not sent.<br> Orders with the same `newClientOrderID` can be accepted only when the previous one is filled, otherwise the order will be rejected.
 stopPrice | DECIMAL | NO | Used with `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, and `TAKE_PROFIT_LIMIT` orders.
+trailingDelta|LONG|NO| 
 icebergQty | DECIMAL | NO | Used with `LIMIT`, `STOP_LOSS_LIMIT`, and `TAKE_PROFIT_LIMIT` to create an iceberg order.
 newOrderRespType | ENUM | NO | Set the response JSON. `ACK`, `RESULT`, or `FULL`; `MARKET` and `LIMIT` order types default to `FULL`, all other orders default to `ACK`.
 recvWindow | LONG | NO |The value cannot be greater than ```60000```
@@ -1448,6 +1449,7 @@ quantity|DECIMAL|YES|
 limitClientOrderId|STRING|NO| A unique Id for the limit order
 price|DECIMAL|YES|
 limitIcebergQty|DECIMAL|NO| Used to make the `LIMIT_MAKER` leg an iceberg order.
+trailingDelta|LONG|NO|
 stopClientOrderId |STRING|NO| A unique Id for the stop loss/stop loss limit leg
 stopPrice |DECIMAL| YES
 stopLimitPrice|DECIMAL|NO | If provided, `stopLimitTimeInForce` is required.
@@ -2196,6 +2198,35 @@ The `MAX_POSITION` filter defines the allowed maximum position an account can ha
   "filterType":"MAX_POSITION",
   "maxPosition":"10.00000000"
 }
+```
+
+### TRAILING_DELTA
+
+The `TRAILING_DELTA` filter defines the minimum and maximum value for the parameter `trailingDelta`.
+
+In order for a trailing stop order to pass this filter, the following must be true:
+
+For `STOP_LOSS BUY`, `STOP_LOSS_LIMIT_BUY`,`TAKE_PROFIT SELL` and `TAKE_PROFIT_LIMIT SELL` orders: 
+
+* `trailingDelta` >= `minTrailingAboveDelta`
+* `trailingDelta` <= `maxTrailingAboveDelta` 
+
+For `STOP_LOSS SELL`, `STOP_LOSS_LIMIT SELL`, `TAKE_PROFIT BUY`, and `TAKE_PROFIT_LIMIT BUY` orders:
+
+* `trailingDelta` >= `minTrailingBelowDelta`
+* `trailingDelta` <= `maxTrailingBelowDelta`
+
+
+**/exchangeInfo format:**
+
+```javascript
+    {
+          "filterType": "TRAILING_DELTA",
+          "minTrailingAboveDelta": 10,
+          "maxTrailingAboveDelta": 2000,
+          "minTrailingBelowDelta": 10,
+          "maxTrailingBelowDelta": 2000
+   }
 ```
 
 
