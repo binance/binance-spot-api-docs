@@ -1,4 +1,32 @@
-# 更新日志 (2022-04-12)
+# 更新日志 (2022-04-13)
+
+---
+
+## 2022-04-13
+
+REST API
+
+* 现货交易支持追踪止损(Trailing Stop)订单.
+    * 追踪止损通过一个新的参数`trailingDelta`来设置基于市场价的一个自动触发价格.
+    * 只适用于订单类型: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`.
+    * 参数`trailingDelta`的单位为基点(BIPS).
+        * 比如一个`STOP_LOSS`卖单设置`trailingDelta`为100, 那么订单会在当前市场价格从下单后的最高点下降1%的时候被触发。(100 / 10,000 => 0.01 => 1%)
+    * 用于OCO订单的时候, 如果市场变动触发了`STOP_LOSS`订单, 那么此止损订单变成追踪止损订单.
+    * 当参数`trailingDelta`和`stopPrice`一起使用时, 一旦`stopPrice`条件被触发，系统会开始追踪当前的价格变动. 从`stopPrice`价格开始，到基于`trailingDelta`值之间变动.
+    * 如果没有提供`stopPrice`, 系统开始追踪价格从最新价到基于`trailingDelta`值之间变动.
+* `POST /api/v3/order` 变动
+    * 添加新可选参数 `trailingDelta`
+* `POST /api/v3/order/test` 变动
+    * 添加新可选参数 `trailingDelta`
+* `POST /api/v3/order/oco` 变动
+    * 添加新可选参数 `trailingDelta`
+* 添加新的过滤器 `TRAILING_DELTA`
+    * 用于限定 `trailingDelta` 的最大和最小值.
+
+USER DATA STREAM
+
+* User Data Stream 的`executionReport`添加新参数
+  * "d" 代表`trailingDelta`
 
 ## 2022-04-12
 
