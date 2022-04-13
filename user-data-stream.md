@@ -142,7 +142,7 @@ Average price can be found by doing `Z` divided by `z`.
   "q": "1.00000000",             // Order quantity
   "p": "0.10264410",             // Order price
   "P": "0.00000000",             // Stop price
-  "d": 4,                        // Trailing Delta
+  "d": 4,                        // Trailing Delta; This is only visible if the order was a trailing stop order.
   "F": "0.00000000",             // Iceberg quantity
   "g": -1,                       // OrderListId
   "C": null,                     // Original client order ID; This is the ID of the order being canceled
