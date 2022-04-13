@@ -1,4 +1,4 @@
-# WebSocket 行情接口(2022-04-13)
+# WebSocket 账户接口(2022-04-13)
 
 # 基本信息
 * 本篇所列出REST接口的baseurl **https://api.binance.com**
