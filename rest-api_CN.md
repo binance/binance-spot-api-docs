@@ -1,5 +1,7 @@
-# REST行情与交易接口 (2022-02-24)
+# REST行情与交易接口 (2022-04-13)
+
 # 基本信息
+
 * 本篇列出REST接口的baseurl **https://api.binance.com**
 * 如果上面的baseURL访问有性能问题，请访问下面的API集群:
   * **https://api1.binance.com**
@@ -846,6 +848,7 @@ quoteOrderQty | DECIMAL | NO |
 price | DECIMAL | NO |
 newClientOrderId | STRING | NO | 用户自定义的orderid，如空缺系统会自动赋值
 stopPrice | DECIMAL | NO | 仅 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` 需要此参数
+trailingDelta|LONG|NO| 用于 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, 和 `TAKE_PROFIT_LIMIT` 类型的订单.
 icebergQty | DECIMAL | NO | 仅有限价单(包括条件限价单与限价做事单)可以使用该参数，含义为创建冰山订单并指定冰山订单的尺寸
 newOrderRespType | ENUM | NO | 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`, 其他默认为`ACK`. 
 recvWindow | LONG | NO |
@@ -1245,6 +1248,7 @@ quantity|DECIMAL|YES|
 limitClientOrderId|STRING|NO| 限价单的唯一ID
 price|DECIMAL|YES|
 limitIcebergQty|DECIMAL|NO|
+trailingDelta|LONG|NO|
 stopClientOrderId |STRING|NO| 止损/止损限价单的唯一ID
 stopPrice |DECIMAL| YES
 stopLimitPrice|DECIMAL|NO| 如果提供，须配合提交`stopLimitTimeInForce`
@@ -1897,6 +1901,34 @@ lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参
   "filterType": "MAX_POSITION",
   "maxPosition": "10.00000000"
 }
+```
+
+### TRAILING_DELTA 过滤器
+
+
+此过滤器定义了参数`trailingDelta`的最大和最小值.
+
+下追踪止损订单, 需要满足条件:
+
+对于 `STOP_LOSS BUY`, `STOP_LOSS_LIMIT_BUY`, `TAKE_PROFIT SELL` 和 `TAKE_PROFIT_LIMIT SELL` 订单:
+
+* `trailingDelta` >= `minTrailingAboveDelta`
+* `trailingDelta` <= `maxTrailingAboveDelta`
+
+对于 `STOP_LOSS SELL`, `STOP_LOSS_LIMIT SELL`, `TAKE_PROFIT BUY`, 和 `TAKE_PROFIT_LIMIT BUY` 订单:
+
+* `trailingDelta` >= `minTrailingBelowDelta`
+* `trailingDelta` <= `maxTrailingBelowDelta`
+
+ **/exchangeInfo format:**
+```javascript
+    {
+          "filterType": "TRAILING_DELTA",
+          "minTrailingAboveDelta": 10,
+          "maxTrailingAboveDelta": 2000,
+          "minTrailingBelowDelta": 10,
+          "maxTrailingBelowDelta": 2000
+   }
 ```
 
 ## 交易所级别过滤器
