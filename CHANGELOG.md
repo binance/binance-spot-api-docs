@@ -10,7 +10,7 @@ REST API
     * This is a type of algo order where the activation is based on a percentage of a price change in the market using the new parameter `trailingDelta`.
     * This can only used with any of the following order types: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`.
     * The `trailingDelta` parameter will be done in Basis Points or BIPS.
-        * For example: a STOP_LOSS SELL order with a `trailingDelta` of 100 will trigger after a price decrease of 1%. (100 / 1000 => 0.01 => 1%) 
+        * For example: a STOP_LOSS SELL order with a `trailingDelta` of 100 will trigger after a price decrease of 1% from the highest price after the order is placed. (100 / 10,000 => 0.01 => 1%)
     * When used in combination with OCO Orders, the `trailingDelta` will determine when the contingent leg of the OCO will trigger.
     * When `trailingDelta` is used in combination with `stopPrice`, once the `stopPrice` condition is met, the trailing stop starts tracking the price change from the `stopPrice` based on the `trailingDelta` provided.
     * When no `stopPrice` is sent, the trailing stop starts tracking the price changes from the last price based on the `trailingDelta` provided.
