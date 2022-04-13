@@ -6,7 +6,7 @@
 
 REST API
 
-* Trailing Stops has been enabled.
+* Trailing Stops have been enabled.
     * This is a type of algo order where the activation is based on a percentage of a price change in the market using the new parameter `trailingDelta`.
     * This can only used with any of the following order types: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`.
     * The `trailingDelta` parameter will be done in Basis Points or BIPS.
