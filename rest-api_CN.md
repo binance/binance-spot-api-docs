@@ -1,21 +1,27 @@
 # REST行情与交易接口 (2022-04-13)
-
-# 基本信息
-
-* 本篇列出REST接口的baseurl **https://api.binance.com**
+## API 基本信息
+* 本篇列出接口的baseurl: **https://api.binance.com**
 * 如果上面的baseURL访问有性能问题，请访问下面的API集群:
   * **https://api1.binance.com**
   * **https://api2.binance.com**
   * **https://api3.binance.com**
-* 所有接口的响应都是JSON格式
-* 响应中如有数组，数组元素以时间升序排列，越早的数据越提前。
-* 所有时间、时间戳均为UNIX时间，单位为毫秒
-* HTTP `4XX` 错误码用于指示错误的请求内容、行为、格式。
-* HTTP `429` 错误码表示警告访问频次超限，即将被封IP
+* 所有接口的响应都是 JSON 格式。
+* 响应中如有数组，数组元素以时间**升序**排列，越早的数据越提前。  
+* 所有时间、时间戳均为UNIX时间，单位为**毫秒**。
+
+## HTTP 返回代码
+
+* HTTP `4XX` 错误码用于指示错误的请求内容、行为、格式。问题在于请求者。
+* HTTP `403` 错误码表示违反WAF限制(Web应用程序防火墙)。
+* HTTP `429` 错误码表示警告访问频次超限，即将被封IP。
 * HTTP `418` 表示收到429后继续访问，于是被封了。
-* HTTP `5XX` 错误码用于指示Binance服务侧的问题。 
-* HTTP `504` 表示API服务端已经向业务核心提交了请求但未能获取响应，特别需要注意的是`504`代码不代表请求失败，而是未知。很可能已经得到了执行，也有可能执行失败，需要做进一步确认。
+* HTTP `5XX` 错误码用于指示Binance服务侧的问题。    
+
+
+## 接口错误代码
+
 * 每个接口都有可能抛出异常，异常响应格式如下：
+
 ```javascript
 {
   "code": -1121,
@@ -23,13 +29,17 @@
 }
 ```
 
-* 具体的错误码及其解释在[错误代码汇总.md](./错误代码汇总.md)
-* `GET`方法的接口, 参数必须在`query string`中发送.
-* `POST`, `PUT`, 和 `DELETE` 方法的接口, 参数可以在 `query string`中发送，也可以在 `request body`中发送(content type `application/x-www-form-urlencoded`。允许混合这两种方式发送参数。但如果同一个参数名在query string和request body中都有，query string中的会被优先采用。
+* 具体的错误码及其解释在[错误代码汇总](./errors_CN.md)
+
+## 接口的基本信息
+* `GET` 方法的接口, 参数必须在 `query string`中发送。
+* `POST`, `PUT`, 和 `DELETE` 方法的接口,参数可以在内容形式为`application/x-www-form-urlencoded`的 `query string` 中发送，也可以在 `request body` 中发送。 如果你喜欢，也可以混合这两种方式发送参数。
 * 对参数的顺序不做要求。
+* 但如果同一个参数名在`query string`和`request body`中都有，`query string`中的会被优先采用。
 
 # 访问限制
-* 以下 是`intervalLetter` 作为头部值:
+## 访问限制基本信息
+* 以下是`intervalLetter` 作为头部值:
   * SECOND => S
   * MINUTE => M
   * HOUR => H
@@ -46,11 +56,12 @@
 * `Retry-After`的头会与带有418或429的响应发送，并且会给出**以秒为单位**的等待时长(如果是429)以防止禁令，或者如果是418，直到禁令结束。
 * **访问限制是基于IP的，而不是API Key**
 
-##下单频率限制
+## 下单频率限制
 * 每个成功的下单回报将包含一个`X-MBX-ORDER-COUNT-(intervalNum)(intervalLetter)`的头，其中包含当前账户已用的下单限制数量。
-* 当下单数超过限制时，会收到带有429但不含`Retry-After`头的响应。请检查 `GET api/v3/rateLimit/order` 的下单频率限制 (rateLimitType = ORDERS) 并等待封禁时间结束。
+* 当下单数超过限制时，会收到带有429但不含`Retry-After`头的响应。请检查 `GET api/v3/exchangeInfo` 的下单频率限制 (rateLimitType = ORDERS) 并等待封禁时间结束。
 * 被拒绝或不成功的下单并不保证回报中包含以上头内容。
 * **下单频率限制是基于每个账户计数的。**
+* 用户可以通过接口 `GET api/v3/rateLimit/order` 来查询当前的下单量.
 
 # 数据来源
 * 因为API系统是异步的, 所以返回的数据有延时很正常, 也在预期之中。
@@ -64,10 +75,13 @@
 有些接口有不止一个数据源, 比如 `缓存 => 数据库`, 这表示接口会先从第一个数据源检查，如果没有数据，则检查下一个数据源。
 
 # 接口鉴权类型
-* 每个接口都有自己的鉴权类型，鉴权类型决定了访问时应当进行何种鉴权
-* 如果需要 API-key，应当在HTTP头中以`X-MBX-APIKEY`字段传递
-* API-key 与 API-secret 是大小写敏感的
-* 可以在网页用户中心修改API-key 所具有的权限，例如读取账户信息、发送交易指令、发送提现指令
+* 每个接口都有自己的鉴权类型，鉴权类型决定了访问时应当进行何种鉴权。
+* 鉴权类型会在本文档中各个接口名称旁声明，如果没有特殊声明即默认为 `NONE`。
+* 如果需要 API-keys，应当在HTTP头中以 `X-MBX-APIKEY`字段传递。
+* API-keys 与 secret-keys **是大小写敏感的**。
+* API-keys可以被配置为只拥有访问一些接口的权限。
+ 例如, 一个 API-key 仅可用于发送交易指令, 而另一个 API-key 则可访问除交易指令外的所有路径。
+* 默认 API-keys 可访问所有鉴权路径.
 
 鉴权类型 | 描述
 ------------ | ------------
@@ -77,18 +91,19 @@ USER_DATA | 需要有效的API-KEY和签名
 USER_STREAM | 需要有效的API-KEY
 MARKET_DATA | 需要有效的API-KEY
 
+* `TRADE` 和 `USER_DATA` 接口是 签名(SIGNED)接口.
 
 # 需要签名的接口 (TRADE 与 USER_DATA)
-* 调用这些接口时，除了接口本身所需的参数外，还需要传递`signature`即签名参数。
+* 调用`SIGNED` 接口时，除了接口本身所需的参数外，还需要在`query string` 或 `request body`中传递 `signature`, 即签名参数。
 * 签名使用`HMAC SHA256`算法. API-KEY所对应的API-Secret作为 `HMAC SHA256` 的密钥，其他所有参数作为`HMAC SHA256`的操作对象，得到的输出即为签名。
-* 签名大小写不敏感。
-* 当同时使用query string和request body时，`HMAC SHA256`的输入query string在前，request body在后
+* `签名` **大小写不敏感**.
+* `totalParams`定义为与`request body`串联的`query string`。
 
 ## 时间同步安全
-* 签名接口均需要传递`timestamp`参数, 其值应当是请求发送时刻的unix时间戳（毫秒）
-* 服务器收到请求时会判断请求中的时间戳，如果是5000毫秒之前发出的，则请求会被认为无效。这个时间窗口值可以通过发送可选参数`recvWindow`来自定义。
-* 另外，如果服务器计算得出客户端时间戳在服务器时间的‘未来’一秒以上，也会拒绝请求。
+* 签名接口均需要传递 `timestamp`参数，其值应当是请求发送时刻的unix时间戳(毫秒)。
+* 服务器收到请求时会判断请求中的时间戳，如果是5000毫秒之前发出的，则请求会被认为无效。这个时间空窗值可以通过发送可选参数 `recvWindow`来定义。
 * 逻辑伪代码：
+
   ```javascript
   if (timestamp < (serverTime + 1000) && (serverTime - timestamp) <= recvWindow) {
     // process request
@@ -99,13 +114,13 @@ MARKET_DATA | 需要有效的API-KEY
 
 **关于交易时效性** 
 互联网状况并不100%可靠，不可完全依赖,因此你的程序本地到币安服务器的时延会有抖动.
-这是我们设置`recvWindow`的目的所在，如果你从事高频交易，对交易时效性有较高的要求，可以灵活设置recvWindow以达到你的要求。
+这是我们设置`recvWindow`的目的所在，如果你从事高频交易，对交易时效性有较高的要求，可以灵活设置`recvWindow`以达到你的要求。
 **不推荐使用5秒以上的recvWindow**
 
 
 ## POST /api/v3/order 的示例
 
-以下是在linux bash环境下使用 echo openssl 和curl工具实现的一个调用接口下单的示例
+以下是在linux bash环境下使用 `echo`,`openssl`和`curl`工具实现的一个调用接口下单的示例
 apikey、secret仅供示范
 
 Key | Value
@@ -183,8 +198,10 @@ There is no & between "GTC" and "quantity=1".
 
 # 公开API接口
 ## 术语解释
-* `base asset` 指一个交易对的交易对象，即写在靠前部分的资产名
-* `quote asset` 指一个交易对的定价资产，即写在靠后部分资产名
+这里的术语适用于全部文档，建议特别是新手熟读，也便于理解。
+
+* `base asset` 指一个交易对的交易对象，即写在靠前部分的资产名, 比如`BTCUSDT`, `BTC`是`base asset`。
+* `quote asset` 指一个交易对的定价资产，即写在靠后部分的资产名, 比如`BTCUSDT`, `USDT`是`quote asset`。
 
 
 ## 枚举定义
@@ -293,8 +310,36 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 **限制种类 (rateLimitType):**
 
 * REQUESTS_WEIGHT - 单位时间请求权重之和上限
+
+    ```json
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 1200
+    }
+    ```
+
 * ORDERS - 单位时间下单(撤单)次数上限
+
+    ```json
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "SECOND",
+      "intervalNum": 1,
+      "limit": 10
+    }
+
 * RAW_REQUESTS - 单位时间请求次数上限
+
+    ```json
+    {
+      "rateLimitType": "RAW_REQUESTS",
+      "interval": "MINUTE",
+      "intervalNum": 5,
+      "limit": 5000
+    }
+    ```
 
 **限制间隔 (interval):**
 
@@ -1708,6 +1753,7 @@ listenKey | STRING | YES
 ```
 DELETE /api/v3/userDataStream
 ```
+关闭用户数据流。
 
 **权重:**
 1
@@ -1772,29 +1818,30 @@ listenKey | STRING | YES
 ```
 
 #### PERCENT_PRICE_BY_SIDE
-
-> **ExchangeInfo format:**
-```javascript
-    {
-          "filterType": "PERCENT_PRICE_BY_SIDE",
-          "bidMultiplierUp": "10",
-          "bidMultiplierDown": "9",
-          "askMultiplierUp": "0.1",
-          "askMultiplierDown": "0.2",
-          "avgPriceMins": 1
-    }
-```
-
 `PERCENT_PRICE_BY_SIDE` 过滤器定义了基于交易对lastPrice的合法价格范围. 取决于`BUY`或者`SELL`, 价格范围可能有所不同.
 
 买向订单需要满足:
-* `Max Order price` <= `bidMultiplierUp` * `lastPrice`
-* `Minimum Order price` >= `bidMultiplierDown` * `lastPrice`
+
+* `Order price` <= `bidMultiplierUp` * `lastPrice`
+* `Order price` >= `bidMultiplierDown` * `lastPrice`
 
 卖向订单需要满足:
-* `Max Order Price` <= `askMultiplierUp` * `lastPrice`
-* `Min Order Price` >= `askMultiplierDown` * `lastPrice`
 
+* `Order Price` <= `askMultiplierUp` * `lastPrice`
+* `Order Price` >= `askMultiplierDown` * `lastPrice`
+
+
+**/exchangeInfo 响应中的格式:**
+```javascript
+  {
+    "filterType": "PERCENT_PRICE_BY_SIDE",
+    "bidMultiplierUp": "1.2",
+    "bidMultiplierDown": "0.2",
+    "askMultiplierUp": "5",
+    "askMultiplierDown": "0.8",
+    "avgPriceMins": 1
+  }
+```
 
 ### LOT_SIZE 订单尺寸
 lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参数进行合法性检查。包含三个部分：
@@ -1820,10 +1867,13 @@ lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参
 ```
 
 ### MIN_NOTIONAL 最小金额
-这个过滤器用于检查订单的最小金额。金额的单位是quoteAsset，可以通过 `price` * `quantity`得到
-
-如果`applyToMarket` 为真，则市价单也需要服从最小金额过滤器。
-由于市价单不存在price参数，当对市价单计算订单金额时，使用过去`avgPriceMins`分钟的平均价格。如果`avgPriceMins`为0则使用最新成交价格。
+MIN_NOTIONAL过滤器定义了交易对订单所允许的最小名义价值(成交额)。
+订单的名义价值是`价格`*`数量`。
+如果是高级订单(比如止盈止损订单`STOP_LOSS_LIMIT`)，名义价值会按照`stopPrice` * `quantity`来计算。
+如果是冰山订单，名义价值会按照`price` * `icebergQty`来计算。
+`applyToMarket`确定 `MIN_NOTIONAL`过滤器是否也将应用于`MARKET`订单。   
+由于`MARKET`订单没有价格，因此会在最后`avgPriceMins`分钟内使用平均价格。   
+`avgPriceMins`是计算平均价格的分钟数。 0表示使用最后的价格。 
 
 
 **/exchangeInfo 响应中的格式:**
@@ -1849,7 +1899,27 @@ lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参
 ```
 
 ### MARKET_LOT_SIZE 市价订单尺寸
-参考LOT_SIZE，区别仅在于对市价单还是限价单生效
+`MARKET_LOT_SIZE`过滤器为交易对上的`MARKET`订单定义了`数量`(即拍卖中的"手数")规则。 共有3部分：
+
+* `minQty`定义了允许的最小`quantity`。
+* `maxQty`定义了允许的最大数量。
+* `stepSize`定义了可以增加/减少数量的间隔。
+
+为了通过`market lot size`，`quantity`必须满足以下条件：
+
+* `quantity` >= `minQty`
+* `quantity` <= `maxQty`
+* (`quantity`-`minQty`) % `stepSize` == 0
+
+**/exchangeInfo 响应中的格式:**
+```javascript
+  {
+    "filterType": "MARKET_LOT_SIZE",
+    "minQty": "0.00100000",
+    "maxQty": "100000.00000000",
+    "stepSize": "0.00100000"
+  }
+```
 
 ### MAX_NUM_ORDERS 最多订单数
 定义了某个交易对最多允许的挂单数量（不包括已关闭的订单）
@@ -1864,7 +1934,8 @@ lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参
 ```
 
 ### MAX_NUM_ALGO_ORDERS 最多条件单数
-定义了某个交易对最多允许的条件单数量（不包括已关闭的订单）
+`MAX_NUM_ALGO_ORDERS`过滤器定义允许账户在交易对上开设的"algo"订单的最大数量。    
+"Algo"订单是`STOP_LOSS`，`STOP_LOSS_LIMIT`，`TAKE_PROFIT`和`TAKE_PROFIT_LIMIT`止盈止损单。
 
 **/exchangeInfo 响应中的格式:**
 ```javascript
@@ -1875,8 +1946,8 @@ lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参
 ```
 
 ### MAX_NUM_ICEBERG_ORDERS 最多冰山单数
-定义了某个交易对最多允许的冰山订单数
-`icebergQty` > 0.
+`MAX_NUM_ICEBERG_ORDERS`过滤器定义了允许在交易对上开设账户的`ICEBERG`订单的最大数量。     
+`ICEBERG`订单是icebergQty大于0的任何订单。
 
 **/exchangeInfo 响应中的格式:**
 ```javascript
@@ -1933,6 +2004,8 @@ lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参
 
 ## 交易所级别过滤器
 ### EXCHANGE_MAX_NUM_ORDERS 最多订单数
+`EXCHANGE_MAX_NUM_ORDERS`过滤器定义了允许在交易对上开设账户的最大订单数。    
+请注意，此过滤器同时计算"algo"订单和常规订单。
 
 **/exchangeInfo 响应中的格式:**
 ```javascript
@@ -1943,6 +2016,8 @@ lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参
 ```
 
 ### EXCHANGE_MAX_NUM_ALGO_ORDERS 最多条件单数
+`EXCHANGE_MAX_ALGO_ORDERS`过滤器定义了允许在交易上开设账户的"algo"订单的最大数量。    
+"Algo"订单是`STOP_LOSS`，`STOP_LOSS_LIMIT`，`TAKE_PROFIT`和`TAKE_PROFIT_LIMIT`订单。
 
 **/exchangeInfo 响应中的格式:**
 ```javascript

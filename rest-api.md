@@ -6,6 +6,11 @@
   - [HTTP Return Codes](#http-return-codes)
   - [Error Codes](#error-codes)
   - [General Information on Endpoints](#general-information-on-endpoints)
+- [Public Rest API for Binance (2022-02-24)](#public-rest-api-for-binance-2022-02-24)
+  - [General API Information](#general-api-information)
+  - [HTTP Return Codes](#http-return-codes)
+  - [Error Codes](#error-codes)
+  - [General Information on Endpoints](#general-information-on-endpoints)
 - [LIMITS](#limits)
   - [General Info on Limits](#general-info-on-limits)
   - [IP Limits](#ip-limits)
@@ -88,13 +93,11 @@
 
 ## HTTP Return Codes
 
-* HTTP `4XX` return codes are used for malformed requests;
-  the issue is on the sender's side.
+* HTTP `4XX` return codes are used for malformed requests; the issue is on the sender's side.
 * HTTP `403` return code is used when the WAF Limit (Web Application Firewall) has been violated.
 * HTTP `429` return code is used when breaking a request rate limit.
 * HTTP `418` return code is used when an IP has been auto-banned for continuing to send requests after receiving `429` codes.
-* HTTP `5XX` return codes are used for internal errors; the issue is on
-  Binance's side.
+* HTTP `5XX` return codes are used for internal errors; the issue is on Binance's side.
   It is important to **NOT** treat this as a failure operation; the execution status is
   **UNKNOWN** and could have been a success.
 
@@ -164,7 +167,7 @@ This means that the endpoint will check the first Data Source, and if it cannot 
 # Endpoint security type
 * Each endpoint has a security type that determines how you will
   interact with it. This is stated next to the NAME of the endpoint.
-    * If no security type is stated, assume the security type is NONE.
+* If no security type is stated, assume the security type is NONE.
 * API-keys are passed into the Rest API via the `X-MBX-APIKEY`
   header.
 * API-keys and secret-keys **are case sensitive**.
@@ -200,6 +203,7 @@ MARKET_DATA | Endpoint requires sending a valid API-Key.
   milliseconds after `timestamp` the request is valid for. If `recvWindow`
   is not sent, **it defaults to 5000**.
 * The logic is as follows:
+
   ```javascript
   if (timestamp < (serverTime + 1000) && (serverTime - timestamp) <= recvWindow) {
     // process request
@@ -2061,14 +2065,14 @@ Sell orders will succeed on this filter if:
 
 **/exchangeInfo format:**
 ```javascript
-    {
-          "filterType": "PERCENT_PRICE_BY_SIDE",
-          "bidMultiplierUp": "1.2",
-          "bidMultiplierDown": "0.2",
-          "askMultiplierUp": "5",
-          "askMultiplierDown": "0.8",
-          "avgPriceMins": 1
-    }
+  {
+    "filterType": "PERCENT_PRICE_BY_SIDE",
+    "bidMultiplierUp": "1.2",
+    "bidMultiplierDown": "0.2",
+    "askMultiplierUp": "5",
+    "askMultiplierDown": "0.8",
+    "avgPriceMins": 1
+  }
 ```
 
 

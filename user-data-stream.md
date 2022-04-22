@@ -2,11 +2,12 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [User Data Streams for Binance (2021-01-01)](#user-data-streams-for-binance-2021-01-01)
 - [General WSS information](#general-wss-information)
 - [API Endpoints](#api-endpoints)
-  - [Create a listenKey](#create-a-listenkey)
-  - [Ping/Keep-alive a listenKey](#pingkeep-alive-a-listenkey)
-  - [Close a listenKey](#close-a-listenkey)
+  - [Create a listenKey (USER_STREAM)](#create-a-listenkey-user_stream)
+  - [Ping/Keep-alive a listenKey (USER_STREAM)](#pingkeep-alive-a-listenkey-user_stream)
+  - [Close a listenKey (USER_STREAM)](#close-a-listenkey-user_stream)
 - [Web Socket Payloads](#web-socket-payloads)
   - [Account Update](#account-update)
   - [Balance Update](#balance-update)
@@ -26,7 +27,7 @@
 * A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark
 
 # API Endpoints
-## Create a listenKey
+## Create a listenKey (USER_STREAM)
 ```
 POST /api/v3/userDataStream
 ```
@@ -45,7 +46,7 @@ NONE
 }
 ```
 
-## Ping/Keep-alive a listenKey
+## Ping/Keep-alive a listenKey (USER_STREAM)
 ```
 PUT /api/v3/userDataStream
 ```
@@ -65,7 +66,7 @@ listenKey | STRING | YES
 {}
 ```
 
-## Close a listenKey
+## Close a listenKey (USER_STREAM)
 ```
 DELETE /api/v3/userDataStream
 ```
@@ -163,7 +164,7 @@ Average price can be found by doing `Z` divided by `z`.
   "M": false,                    // Ignore
   "O": 1499405658657,            // Order creation time
   "Z": "0.00000000",             // Cumulative quote asset transacted quantity
-  "Y": "0.00000000",              // Last quote asset transacted quantity (i.e. lastPrice * lastQty)
+  "Y": "0.00000000",             // Last quote asset transacted quantity (i.e. lastPrice * lastQty)
   "Q": "0.00000000"              // Quote Order Qty
 }
 ```
