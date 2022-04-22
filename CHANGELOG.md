@@ -1,8 +1,65 @@
-# CHANGELOG for Binance's API (2022-02-28)
+# CHANGELOG for Binance's API (2022-04-13)
+
+---
+
+## 2022-04-13
+
+REST API
+
+* Trailing Stops have been enabled.
+    * This is a type of algo order where the activation is based on a percentage of a price change in the market using the new parameter `trailingDelta`.
+    * This can only used with any of the following order types: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`.
+    * The `trailingDelta` parameter will be done in Basis Points or BIPS.
+        * For example: a STOP_LOSS SELL order with a `trailingDelta` of 100 will trigger after a price decrease of 1% from the highest price after the order is placed. (100 / 10,000 => 0.01 => 1%)
+    * When used in combination with OCO Orders, the `trailingDelta` will determine when the contingent leg of the OCO will trigger.
+    * When `trailingDelta` is used in combination with `stopPrice`, once the `stopPrice` condition is met, the trailing stop starts tracking the price change from the `stopPrice` based on the `trailingDelta` provided.
+    * When no `stopPrice` is sent, the trailing stop starts tracking the price changes from the last price based on the `trailingDelta` provided.
+* Changes to POST `/api/v3/order`
+    * New optional field `trailingDelta`
+* Changes to POST `/api/v3/order/test`
+    * New optional field `trailingDelta`
+* Changes to POST `/api/v3/order/oco`
+    * New optional field `trailingDelta`
+* A new filter `TRAILING_DELTA` has been added.
+    * This filter is defined by the minimum and maximum values for the `trailingDelta` value.
+
+USER DATA STREAM
+
+* New field in `executionReport`
+    * "d" for `trailingDelta`
+
+---
+
+## 2022-04-12
+
+**Note:** The changes are being rolled out during the next few days, so these will not appear right away.
+
+* Error message changed on `GET api/v3/allOrders` where `symbol` is not provided:
+    ```json
+    {
+     "code": -1102,
+     "msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed."
+    }
+    ```
+* Fixed a typo with an error message when an account has disabled permissions (e.g. to withdraw, to trade, etc)
+    ```json
+    "This action is disabled on this account."
+    ```
+* During a market data audit, we detected some issues with the Spot aggregate trade data.
+    * Missing aggregate trades were recovered.
+    * Duplicated records were marked invalid with the following values:
+        * p = '0' // price
+        * q = '0' // qty
+        * f = -1 // ﬁrst_trade_id
+        * l = -1 // last_trade_id
+
+---
 
 ## 2022-02-28
 
 * New field `allowTrailingStop` has been added to `GET /api/v3/exchangeInfo`
+
+---
 
 ## 2022-02-24
 
@@ -107,7 +164,7 @@ USER DATA STREAM
 * New field `permissions`
     * Defines the trading permissions that are allowed on accounts and symbols.
     * `permissions` is an enum array; values:
-        * `SPOT` 
+        * `SPOT`
         * `MARGIN`
     * `permissions` will replace `isSpotTradingAllowed` and `isMarginTradingAllowed` on `GET api/v3/exchangeInfo` in future API versions (v4+).
     * For an account to trade on a symbol, the account and symbol must share at least 1 permission in common.
@@ -343,10 +400,10 @@ By end of Q1 2020, the following endpoints will be removed from the API. The doc
 * When canceling the Rest API can now return `errorCode` -1013 OR -2011 if the symbol's `status` isn't `TRADING`.
 * `api/v1/depth` no longer has the ignored and empty `[]`.
 * `api/v3/myTrades` now returns `quoteQty`; the price * qty of for the trade.
-  
+
 ### Websocket streams
 * `<symbol>@depth` and `<symbol>@depthX` streams no longer have the ignored and empty `[]`.
-  
+
 ### System improvements
 * Matching Engine stability/reliability improvements.
 * Rest API performance improvements.
@@ -362,7 +419,7 @@ By end of Q1 2020, the following endpoints will be removed from the API. The doc
 * DELETE /api/v3/order will now return an execution report of the final state of the order.
 * `MIN_NOTIONAL` filter has two new parameters: `applyToMarket` (whether or not the filter is applied to MARKET orders) and `avgPriceMins` (the number of minutes over which the price averaged for the notional estimation).
 * `intervalNum` added to /api/v1/exchangeInfo limits. `intervalNum` describes the amount of the interval. For example: `intervalNum` 5, with `interval` minute, means "every 5 minutes".
-  
+
 #### Explanation for the average price calculation:
 1. (qty * price) of all trades / sum of qty of all trades over previous 5 minutes.
 

@@ -157,7 +157,7 @@
 "Take profit limit orders are not supported for this symbol." | 该交易对无法发起止盈限价单
 "Price * QTY is zero or less." | 订单金额必须大于0
 "IcebergQty exceeds QTY." |冰山订单中小订单的Quantity必须小于总的Quantity
-"This action disabled is on this account." | 账户被封禁，联系客服
+"This action is disabled on this account." | 联系客户支持； 该帐户已禁用了某些操作。
 "Unsupported order combination" | `orderType`, `timeInForce`, `stopPrice`, `icebergQty` 某些参数取某些值的时候另一些参数必须/不得提供。
 "Order would trigger immediately." | 止盈、止损单必须在未来触发，如果条件太弱现在的市场行情就可以触发（通常是误操作填错了条件），就会报这个错误。
 "Cancel order is invalid. Check origClOrdId and orderId." | 撤销订单必须提供`origClOrdId`或者`orderId`中的一个。 

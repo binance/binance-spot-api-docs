@@ -1,4 +1,4 @@
-# Error codes for Binance (2019-09-25)
+# Error codes for Binance (2022-04-13)
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
 ```javascript
@@ -164,7 +164,7 @@ Error message | Description
 "Take profit limit orders are not supported for this symbol." | `TAKE_PROFIT_LIMIT` is not enabled on the symbol
 "Price * QTY is zero or less." | `price` * `quantity` is too low
 "IcebergQty exceeds QTY." | `icebergQty` must be less than the order quantity
-"This action disabled is on this account." | Contact customer support; some actions have been disabled on the account.
+"This action is disabled on this account." | Contact customer support; some actions have been disabled on the account.
 "Unsupported order combination" | The `orderType`, `timeInForce`, `stopPrice`, and/or `icebergQty` combination isn't allowed.
 "Order would trigger immediately." | The order's stop price is not valid when compared to the last traded price.
 "Cancel order is invalid. Check origClOrdId and orderId." | No `origClOrdId` or `orderId` was sent in.
@@ -186,6 +186,7 @@ Error message | Description
 "Filter failure: MAX_NUM_ORDERS" | Account has too many open orders on the symbol.
 "Filter failure: MAX_NUM_ALGO_ORDERS" | Account has too many open stop loss and/or take profit orders on the symbol.
 "Filter failure: MAX_NUM_ICEBERG_ORDERS" | Account has too many open iceberg orders on the symbol.
+"Filter failure: TRAILING_DELTA" | `trailingDelta` is not within the defined range of the filter for that order type.
 "Filter failure: EXCHANGE_MAX_NUM_ORDERS" | Account has too many open orders on the exchange.
 "Filter failure: EXCHANGE_MAX_NUM_ALGO_ORDERS" | Account has too many open stop loss and/or take profit orders on the exchange.
 
