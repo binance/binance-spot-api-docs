@@ -901,22 +901,22 @@ timestamp | LONG | YES |
 
 根据 order `type`的不同，某些参数强制要求，具体如下:
 
-Type | 强制要求的参数
------------- | ------------
+Type | 强制要求的参数 | 其他信息
+------------ | ------------ | ------------
 `LIMIT` | `timeInForce`, `quantity`, `price`
-`MARKET` | `quantity`
-`STOP_LOSS` | `quantity`, `stopPrice`
-`STOP_LOSS_LIMIT` | `timeInForce`, `quantity`,  `price`, `stopPrice`
-`TAKE_PROFIT` | `quantity`, `stopPrice`
-`TAKE_PROFIT_LIMIT` | `timeInForce`, `quantity`, `price`, `stopPrice`
-`LIMIT_MAKER` | `quantity`, `price`
+`MARKET` | `quantity` |  市价买卖单可用`quantity`参数来设置`base asset`数量.<br> 例如：BTCUSDT 市价单，BTC 买卖数量取决于`quantity`参数. <br><br>市价买卖单可用`quoteOrderQty`参数来设置`quote asset`数量. 正确的`quantity`取决于市场的流动性与`quoteOrderQty`<br> 例如: 市价 `BUY` BTCUSDT，单子会基于`quoteOrderQty`- USDT 的数量，购买 BTC.<br> 市价 `SELL` BTCUSDT，单子会卖出 BTC 来满足`quoteOrderQty`- USDT 的数量.
+`STOP_LOSS` | `quantity`, `stopPrice`, `trailingDelta` | 条件满足后会下`MARKET`单子. (例如：达到`stopPrice`或`trailingDelta`被启动)
+`STOP_LOSS_LIMIT` | `timeInForce`, `quantity`,  `price`, `stopPrice`, `trailingDelta`
+`TAKE_PROFIT` | `quantity`, `stopPrice`, `trailingDelta` | 条件满足后会下`MARKET`单子. (例如：达到`stopPrice`或`trailingDelta`被启动)
+`TAKE_PROFIT_LIMIT` | `timeInForce`, `quantity`, `price`, `stopPrice`, `trailingDelta`
+`LIMIT_MAKER` | `quantity`, `price` | 订单大部分情况下与普通的限价单没有区别，但是如果在当前价格会立即吃对手单并成交则下单会被拒绝。因此使用这个订单类型可以保证订单一定是挂单方，不会成为吃单方。
 
 其他:
 
-* `LIMIT_MAKER` 订单大部分情况下与普通的限价单没有区别，但是如果在当前价格会立即吃对手单并成交则下单会被拒绝。因此使用这个订单类型可以保证订单一定是挂单方，不会成为吃单方。
-* `STOP_LOSS` 与 `TAKE_PROFIT` 的执行逻辑是当 `stopPrice` 到达时，触发一个市价单。
-* 冰山订单的 `timeInForce`必须设置为`GTC`.
-
+* 任何`LIMIT`或`LIMIT_MAKER`只要填`icebergQty`参数都可以下冰上订单。 
+* 冰山订单的 `timeInForce`必须设置为`GTC`。
+* `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT_LIMIT` 与 `TAKE_PROFIT` 单子都能同时填上`trailingDelta`与`stopPrice`。
+* 填上`quoteOrderQty`的市价单不会触犯过滤器的`LOT_SIZE`限制。订单的`quantity`会尽量满足`quoteOrderQty`的数量。
 
 条件单的触发价格必须:
 
