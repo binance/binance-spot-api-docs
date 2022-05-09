@@ -1557,7 +1557,7 @@ timestamp|LONG|YES|
 
 Additional notes:
 * Canceling an individual leg will cancel the entire OCO
-* If both `orderListId` and `listClientOrderId` are sent, `orderId` takes precedence.
+* If both `orderListId` and `listClientOrderId` are sent, `orderListId` takes precedence.
 
 **Data Source:**
 Matching Engine
