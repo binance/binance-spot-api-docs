@@ -1102,7 +1102,8 @@ newClientOrderId | STRING | NO |  用户自定义的本次撤销操作的ID(注�
 recvWindow | LONG | NO |
 timestamp | LONG | YES |
 
-`orderId` 与 `origClientOrderId` 必须至少发送一个
+* `orderId` 与 `origClientOrderId` 必须至少发送一个.
+* 如果两个参数一起发送, `orderId`优先被考虑.
 
 **数据源:**
 撮合引擎
@@ -1342,7 +1343,8 @@ timestamp|LONG|YES|
 
 其他注意点:
 
-* 取消单个 leg 将取消整个 OCO 订单。
+* 取消单个 leg 将取消整个 OCO 订单.
+* 如果 `orderListId` 和 `listClientOrderId` 一起发送, `orderListId` 优先被考虑.
 
 
 **数据源:**
