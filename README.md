@@ -17,6 +17,12 @@ Name | Description
 [USDT-M Futures](https://binance-docs.github.io/apidocs/futures/en/)  | Details on USDT-M Futures API (/fapi)
 [COIN-M Futures](https://binance-docs.github.io/apidocs/delivery/en/) | Details on COIN-M Futures API (/dapi)
 
+# FAQ
+
+
+Name | Description
+------------ | ------------
+[trailing-stop-faq.md](./faqs/trailing-stop-faq.md)   | Detailed Information on the behavior of Trailing Stops on the Rest API
 
 # Useful Resources
 
