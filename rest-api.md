@@ -6,11 +6,6 @@
   - [HTTP Return Codes](#http-return-codes)
   - [Error Codes](#error-codes)
   - [General Information on Endpoints](#general-information-on-endpoints)
-- [Public Rest API for Binance (2022-02-24)](#public-rest-api-for-binance-2022-02-24)
-  - [General API Information](#general-api-information)
-  - [HTTP Return Codes](#http-return-codes)
-  - [Error Codes](#error-codes)
-  - [General Information on Endpoints](#general-information-on-endpoints)
 - [LIMITS](#limits)
   - [General Info on Limits](#general-info-on-limits)
   - [IP Limits](#ip-limits)
@@ -1196,6 +1191,7 @@ recvWindow | LONG | NO | The value cannot be greater than ```60000```
 timestamp | LONG | YES |
 
 Either `orderId` or `origClientOrderId` must be sent.
+If both parameters are sent, `orderId` takes precedence.
 
 **Data Source:**
 Matching Engine
@@ -1561,6 +1557,7 @@ timestamp|LONG|YES|
 
 Additional notes:
 * Canceling an individual leg will cancel the entire OCO
+* If both `orderListId` and `listClientOrderId` are sent, `orderId` takes precedence.
 
 **Data Source:**
 Matching Engine
