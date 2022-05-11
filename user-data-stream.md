@@ -2,7 +2,6 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [User Data Streams for Binance (2021-01-01)](#user-data-streams-for-binance-2021-01-01)
 - [General WSS information](#general-wss-information)
 - [API Endpoints](#api-endpoints)
   - [Create a listenKey (USER_STREAM)](#create-a-listenkey-user_stream)
