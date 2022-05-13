@@ -797,15 +797,70 @@ GET /api/v3/ticker/24hr
 24 hour rolling window price change statistics. **Careful** when accessing this with no symbol.
 
 **Weight:**
-1 for a single symbol; **40** when the symbol parameter is omitted
+
+<table>
+<thead>
+    <tr>
+        <th>Parameter</th>
+        <th>Symbols Provided</th>
+        <th>Weight</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td rowspan=2>symbol</td>
+        <td>1</td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>symbol parameter is omitted</td>
+        <td>40</td>
+    </tr>
+    <tr>
+        <td rowspan=4>symbols</td>
+        <td>1-20</td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>21-100</td>
+        <td>20</td>
+    </tr>
+    <tr>
+        <td>101 or more</td>
+        <td>40</td>
+    </tr>
+    <tr>
+        <td>symbols parameter is omitted</td>
+        <td>40</td>
+    </tr>
+</tbody>
+</table>
 
 **Parameters:**
 
-Name | Type | Mandatory | Description
------------- | ------------ | ------------ | ------------
-symbol | STRING | NO |
-
-* If the symbol is not sent, tickers for all symbols will be returned in an array.
+<table>
+<thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Mandatory</th>
+        <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>symbol</td>
+        <td>STRING</td>
+        <td>NO</td>
+        <td rowspan=2>Parameter symbol and symbols cannot be used in combination. <br> If neither parameter is sent, tickers for all symbols will be returned in an array.</td>
+     </tr>
+     <tr>
+        <td>symbols</td>
+        <td>STRING</td>
+        <td>NO</td>
+     </tr>
+</tbody>
+</table>
 
 **Data Source:**
 Memory
@@ -873,15 +928,59 @@ GET /api/v3/ticker/price
 Latest price for a symbol or symbols.
 
 **Weight:**
-1 for a single symbol; **2** when the symbol parameter is omitted
+
+<table>
+<thead>
+    <tr>
+        <th>Parameter</th>
+        <th>Symbols Provided</th>
+        <th>Weight</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td rowspan=2>symbol</td>
+        <td>1</td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>symbol parameter is omitted</td>
+        <td>2</td>
+    </tr>
+    <tr>
+        <td>symbols</td>
+        <td>Any</td>
+        <td>2</td>
+    </tr>
+</tbody>
+</table>
 
 **Parameters:**
 
-Name | Type | Mandatory | Description
------------- | ------------ | ------------ | ------------
-symbol | STRING | NO |
+<table>
+<thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Mandatory</th>
+      <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>symbol</td>
+        <td>STRING</td>
+        <td>NO</td>
+        <td rowspan=2> Parameter symbol and symbols cannot be used in combination. <br> If neither parameter is sent, prices for all symbols will be returned in an array.</td>
+    </tr>
+    <tr>
+        <td>symbols</td>
+        <td>STRING</td>
+        <td>NO</td>
+    </tr>
+</tbody>
+</table>
 
-* If the symbol is not sent, prices for all symbols will be returned in an array.
 
 **Data Source:**
 Memory
@@ -914,15 +1013,59 @@ GET /api/v3/ticker/bookTicker
 Best price/qty on the order book for a symbol or symbols.
 
 **Weight:**
-1 for a single symbol; **2** when the symbol parameter is omitted
+
+<table>
+<thead>
+    <tr>
+        <th>Parameter</th>
+        <th>Symbols Provided</th>
+        <th>Weight</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td rowspan=2>symbol</td>
+        <td>1</td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>symbol parameter is omitted</td>
+        <td>2</td>
+    </tr>
+    <tr>
+        <td>symbols</td>
+        <td>Any</td>
+        <td>2</td>
+    </tr>
+</tbody>
+</table>
 
 **Parameters:**
 
-Name | Type | Mandatory | Description
------------- | ------------ | ------------ | ------------
-symbol | STRING | NO |
+<table>
+<thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Mandatory</th>
+      <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>symbol</td>
+        <td>STRING</td>
+        <td>NO</td>
+        <td rowspan=2> Parameter symbol and symbols cannot be used in combination. <br> If neither parameter is sent, bookTickers for all symbols will be returned in an array.</td>
+    </tr>
+    <tr>
+        <td>symbols</td>
+        <td>STRING</td>
+        <td>NO</td>
+    </tr>
+</tbody>
+</table>
 
-* If the symbol is not sent, bookTickers for all symbols will be returned in an array.
 
 **Data Source:**
 Memory
