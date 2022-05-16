@@ -708,14 +708,70 @@ GET /api/v3/ticker/24hr
 请注意，不携带symbol参数会返回全部交易对数据，不仅数据庞大，而且权重极高
 
 **权重:**
-带symbol为1
-不带为40
+
+<table>
+<thead>
+    <tr>
+        <th>参数</th>
+        <th>提供Symbol数量</th>
+        <th>权重</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td rowspan=2>symbol</td>
+        <td>1</td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>不提供symbol</td>
+        <td>40</td>
+    </tr>
+    <tr>
+        <td rowspan=4>symbols</td>
+        <td>1-20</td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>21-100</td>
+        <td>20</td>
+    </tr>
+    <tr>
+        <td> >= 101</td>
+        <td>40</td>
+    </tr>
+    <tr>
+        <td>不提供symbol</td>
+        <td>40</td>
+    </tr>
+</tbody>
+</table>
 
 **参数:**
 
-Name | Type | Mandatory | Description
------------- | ------------ | ------------ | ------------
-symbol | STRING | NO |
+<table>
+<thead>
+    <tr>
+        <th>名称</th>
+        <th>类型</th>
+        <th>是否强制要求</th>
+        <th>详情</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>symbol</td>
+        <td>STRING</td>
+        <td>NO</td>
+        <td rowspan=2>参数 `symbol` 和 `symbols` 不可以一起使用 <br> 如果都不提供, 所有symbol的ticker数据都会返回.</td>
+     </tr>
+     <tr>
+        <td>symbols</td>
+        <td>STRING</td>
+        <td>NO</td>
+     </tr>
+</tbody>
+</table>
 
 **数据源:**
 缓存
@@ -783,15 +839,61 @@ GET /api/v3/ticker/price
 返回最近价格
 
 **权重:**
-单交易对1
-无交易对2
+
+<table>
+<thead>
+    <tr>
+        <th>参数</th>
+        <th>Symbols数量</th>
+        <th>权重</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td rowspan=2>symbol</td>
+        <td>1</td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>不提供symbol</td>
+        <td>2</td>
+    </tr>
+    <tr>
+        <td>symbols</td>
+        <td>不限</td>
+        <td>2</td>
+    </tr>
+</tbody>
+</table>
 
 
 **参数:**
 
-Name | Type | Mandatory | Description
------------- | ------------ | ------------ | ------------
-symbol | STRING | NO |
+
+<table>
+<thead>
+    <tr>
+      <th>参数名</th>
+      <th>类型</th>
+      <th>是否强制</th>
+      <th>详情</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>symbol</td>
+        <td>STRING</td>
+        <td>NO</td>
+        <td rowspan=2> 参数 `symbol` 和 `symbols` 不可以一起使用 <br> 如果都不提供, 所有symbol的价格数据都会返回. </td>
+    </tr>
+    <tr>
+        <td>symbols</td>
+        <td>STRING</td>
+        <td>NO</td>
+    </tr>
+</tbody>
+</table>
+
 
 * 不发送交易对参数，则会返回所有交易对信息
 
