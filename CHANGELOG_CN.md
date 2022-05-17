@@ -1,4 +1,31 @@
-# 更新日志 (2022-04-13)
+# 更新日志 (2022-05-17)
+
+* `GET api/v3/aggTrades` 更新
+    * 如果同时提供 `startTime` 和 `endTime`, 旧的记录会返回.
+* 如果接口 `GET /api/v3/myTrades` 中没有提供参数 `symbol`, 错误消息变为:
+
+```json
+{
+"code": -1102,
+"msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed." 
+}
+```
+* 下面的接口提供参数 `symbols` 用于查询多个symbol.
+    * `GET /api/v3/ticker/24hr`
+    * `GET /api/v3/ticker/price`
+    * `GET /api/v3/ticker/bookTicker`
+
+* 上面接口的权重取决于请求 `symbols` 的数量, 具体请看下面的列表:
+
+|接口|Symbols的数量|权重|
+|-----|-----|----|
+| `GET /api/v3/ticker/price`|Any| 2|
+|`GET /api/v3/ticker/bookTicker`|Any|2|
+|`GET /api/v3/ticker/24hr`|1-20|1|
+|`GET /api/v3/ticker/24hr`|21-100|20|
+|`GET /api/v3/ticker/24hr`| >= 101|40|
+
+
 
 ---
 
