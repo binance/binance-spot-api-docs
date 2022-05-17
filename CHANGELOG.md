@@ -1,4 +1,32 @@
-# CHANGELOG for Binance's API (2022-04-13)
+# CHANGELOG for Binance's API (2022-05-17)
+
+---
+
+## 2022-05-17
+
+* Changes to GET `api/v3/aggTrades`
+    * When providing `startTime` and `endTime`, the oldest items are returned.
+* Changed error messaging on `GET /api/v3/myTrades` where parameter `symbol` is not provided:
+```json
+{
+"code": -1102,
+"msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed." 
+}
+```
+*  The following endpoints now support multi-symbol querying using the parameter `symbols`.
+    * `GET /api/v3/ticker/24hr`
+    * `GET /api/v3/ticker/price`
+    * `GET /api/v3/ticker/bookTicker`
+* In the above, the request weight will depend on the number of symbols provided in `symbols`. <br> Please refer to the table below:
+
+|Endpoint|Number of Symbols|Weight|
+|-----|-----|----|
+| `GET /api/v3/ticker/price`|Any| 2|
+|`GET /api/v3/ticker/bookTicker`|Any|2|
+|`GET /api/v3/ticker/24hr`|1-20|1|
+|`GET /api/v3/ticker/24hr`|21-100|20|
+|`GET /api/v3/ticker/24hr`|101 or more|40|
+
 
 ---
 
