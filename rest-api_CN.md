@@ -983,7 +983,7 @@ GET /api/v3/ticker/bookTicker
         <td>symbol</td>
         <td>STRING</td>
         <td>NO</td>
-        <td rowspan=2> 参数 `symbol` 和 `symbols` 不可以一起使用 <br> 如果都不提供, 所有symbol的价格数据都会返回. <br><br>
+        <td rowspan=2> 参数 `symbol` 和 `symbols` 不可以一起使用 <br> 如果都不提供, 所有symbol的bookTicker数据都会返回. <br><br>
         symbols参数可接受的格式：
          ["BTCUSDT","BNBUSDT"] <br>
          或 <br>
