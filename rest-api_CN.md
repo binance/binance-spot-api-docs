@@ -763,7 +763,12 @@ GET /api/v3/ticker/24hr
         <td>symbol</td>
         <td>STRING</td>
         <td>NO</td>
-        <td rowspan=2>参数 `symbol` 和 `symbols` 不可以一起使用 <br> 如果都不提供, 所有symbol的ticker数据都会返回.</td>
+        <td rowspan=2>参数 `symbol` 和 `symbols` 不可以一起使用 <br> 如果都不提供, 所有symbol的ticker数据都会返回. <br><br>
+         symbols参数可接受的格式：
+         ["BTCUSDT","BNBUSDT"] <br>
+         或 <br>
+         %5B%22BTCUSDT%22,%22BNBUSDT%22%5D
+        </td>
      </tr>
      <tr>
         <td>symbols</td>
@@ -884,7 +889,12 @@ GET /api/v3/ticker/price
         <td>symbol</td>
         <td>STRING</td>
         <td>NO</td>
-        <td rowspan=2> 参数 `symbol` 和 `symbols` 不可以一起使用 <br> 如果都不提供, 所有symbol的价格数据都会返回. </td>
+        <td rowspan=2> 参数 `symbol` 和 `symbols` 不可以一起使用 <br> 如果都不提供, 所有symbol的价格数据都会返回. <br><br>
+        symbols参数可接受的格式：
+         ["BTCUSDT","BNBUSDT"] <br>
+         或 <br>
+         %5B%22BTCUSDT%22,%22BNBUSDT%22%5D
+        </td>
     </tr>
     <tr>
         <td>symbols</td>
@@ -928,14 +938,65 @@ GET /api/v3/ticker/bookTicker
 返回当前最优的挂单(最高买单，最低卖单)
 
 **权重:**
-单交易对1
-无交易对2
+
+<table>
+<thead>
+    <tr>
+        <th>参数</th>
+        <th>Symbols数量</th>
+        <th>权重</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td rowspan=2>symbol</td>
+        <td>1</td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>不提供symbol</td>
+        <td>2</td>
+    </tr>
+    <tr>
+        <td>symbols</td>
+        <td>不限</td>
+        <td>2</td>
+    </tr>
+</tbody>
+</table>
+
 
 **参数:**
 
-Name | Type | Mandatory | Description
------------- | ------------ | ------------ | ------------
-symbol | STRING | NO |
+
+<table>
+<thead>
+    <tr>
+      <th>参数名</th>
+      <th>类型</th>
+      <th>是否强制</th>
+      <th>详情</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>symbol</td>
+        <td>STRING</td>
+        <td>NO</td>
+        <td rowspan=2> 参数 `symbol` 和 `symbols` 不可以一起使用 <br> 如果都不提供, 所有symbol的bookTicker数据都会返回. <br><br>
+        symbols参数可接受的格式：
+         ["BTCUSDT","BNBUSDT"] <br>
+         或 <br>
+         %5B%22BTCUSDT%22,%22BNBUSDT%22%5D
+        </td>
+    </tr>
+    <tr>
+        <td>symbols</td>
+        <td>STRING</td>
+        <td>NO</td>
+    </tr>
+</tbody>
+</table>
 
 * 不发送交易对参数，则会返回所有交易对信息
 

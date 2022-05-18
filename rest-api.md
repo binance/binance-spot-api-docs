@@ -852,7 +852,12 @@ GET /api/v3/ticker/24hr
         <td>symbol</td>
         <td>STRING</td>
         <td>NO</td>
-        <td rowspan=2>Parameter symbol and symbols cannot be used in combination. <br> If neither parameter is sent, tickers for all symbols will be returned in an array.</td>
+        <td rowspan=2>Parameter symbol and symbols cannot be used in combination. <br> If neither parameter is sent, tickers for all symbols will be returned in an array. <br><br>
+         Examples of accepted format for the symbols parameter:
+         ["BTCUSDT","BNBUSDT"] <br>
+         or <br>
+         %5B%22BTCUSDT%22,%22BNBUSDT%22%5D
+        </td>
      </tr>
      <tr>
         <td>symbols</td>
@@ -971,7 +976,11 @@ Latest price for a symbol or symbols.
         <td>symbol</td>
         <td>STRING</td>
         <td>NO</td>
-        <td rowspan=2> Parameter symbol and symbols cannot be used in combination. <br> If neither parameter is sent, prices for all symbols will be returned in an array.</td>
+        <td rowspan=2> Parameter symbol and symbols cannot be used in combination. <br> If neither parameter is sent, prices for all symbols will be returned in an array. <br><br>
+        Examples of accepted format for the symbols parameter:
+         ["BTCUSDT","BNBUSDT"] <br>
+         or <br>
+         %5B%22BTCUSDT%22,%22BNBUSDT%22%5D</td>
     </tr>
     <tr>
         <td>symbols</td>
@@ -1056,7 +1065,12 @@ Best price/qty on the order book for a symbol or symbols.
         <td>symbol</td>
         <td>STRING</td>
         <td>NO</td>
-        <td rowspan=2> Parameter symbol and symbols cannot be used in combination. <br> If neither parameter is sent, bookTickers for all symbols will be returned in an array.</td>
+        <td rowspan=2> Parameter symbol and symbols cannot be used in combination. <br> If neither parameter is sent, bookTickers for all symbols will be returned in an array.
+         <br><br>
+        Examples of accepted format for the symbols parameter:
+         ["BTCUSDT","BNBUSDT"] <br>
+         or <br>
+         %5B%22BTCUSDT%22,%22BNBUSDT%22%5D</td>
     </tr>
     <tr>
         <td>symbols</td>
