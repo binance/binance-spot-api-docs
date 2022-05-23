@@ -2351,6 +2351,8 @@ The `MAX_POSITION` filter defines the allowed maximum position an account can ha
 
 `BUY` orders will be rejected if the account's position is greater than the maximum position allowed.
 
+If an order's `quantity` can cause the position to overflow, this will also fail the `MAX_POSITION` filter.
+
 **/exchangeInfo format:**
 ```javascript
 {
