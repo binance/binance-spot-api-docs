@@ -4,7 +4,8 @@
 ## 2022-05-23
 * Changes to Order Book Depth Levels
     * Quantities in the Depth levels were returning negative values in situations where they were exceeding the max value, resulting in an overflow.
-    * Going forward depth levels will not overflow, but will be capped at signed 64 bit maximum. (9,223,372,036,854,775,807). This means that the depth level is at max value *or more*.
+    * Going forward depth levels will not overflow, but will be capped at the max value based on the precision of the base asset. This means that the depth level is at max value *or more*.
+        * E.g. If the precision is 8, then the max value for quantity will be at 92,233,720,368.54775807.
     * When the fix has been applied, a change in the order book at the affected price level is required for the changes to be visible.
 * What does this affect?
     * SPOT API
