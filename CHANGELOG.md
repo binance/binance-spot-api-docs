@@ -16,7 +16,7 @@
         * `<symbol>@depth<levels>@100ms`
 
 * Updates to `MAX_POSITION`
-    * If an order's 'quantity' can cause the position to overflow, this will now fail the `MAX_POSITION` filter.
+    * If an order's `quantity` can cause the position to overflow, this will now fail the `MAX_POSITION` filter.
 ---
 
 ## 2022-05-17

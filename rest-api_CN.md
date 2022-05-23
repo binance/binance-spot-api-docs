@@ -2131,6 +2131,8 @@ MIN_NOTIONAL过滤器定义了交易对订单所允许的最小名义价值(成�
 
 如果用户的仓位大于最大的允许仓位，买单会被拒绝。
 
+如果一个订单的数量(`quantity`) 可能导致持有仓位溢出, 会触发过滤器 `MAX_POSITION`.
+
 **/exchangeInfo 响应中的格式:**
 ```javascript
 {
