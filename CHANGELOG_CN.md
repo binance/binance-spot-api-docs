@@ -1,4 +1,24 @@
-# 更新日志 (2022-05-17)
+# 更新日志 (2022-05-23)
+
+## 2022-05-23
+* Order Book 深度的变动
+    * 之前深度的数量在一些极端情况下会出现负数.
+    * 之后深度数量不会溢出, 而是限制在64位的最大值(9,223,372,036,854,775,807). 这表示深度的数量达到，或者超过了最大值.
+    * 原有的深度价位, 在修复上线后, 需要价位上有变动, 才能体现新的修复.
+* 哪里有影响?
+    * 现货深度接口
+        * `GET /api/v3/depth`
+    * Websocket Streams
+        * `<symbol>@depth`
+        * `<symbol>@depth@100ms`
+        * `<symbol>@depth<levels>`
+        * `<symbol>@depth<levels>@100ms`
+
+* `MAX_POSITION` 的更新
+    * 如果一个订单的数量(`quantity`) 可能导致持有仓位溢出, 会触发过滤器 `MAX_POSITION`.
+
+---
+
 
 * `GET api/v3/aggTrades` 更新
     * 如果同时提供 `startTime` 和 `endTime`, 旧的记录会返回.
