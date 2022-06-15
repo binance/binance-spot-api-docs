@@ -1,4 +1,4 @@
-# Web Socket 行情接口(2018-11-13)
+# Web Socket 行情接口(2022-06-15)
 # 基本信息
 * 本篇所列出的所有wss接口的baseurl为: **wss://stream.binance.com:9443**
 * 所有stream均可以直接访问，或者作为组合streams的一部分。
@@ -272,6 +272,67 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
   ]
 }
 ```
+
+
+## 按Symbol的滚动窗口统计
+
+单个symbol的滚动窗口统计, 支持多个时间窗口。
+
+**Stream 名称:** \<symbol\>@ticker_\<window_size\>
+
+**Window Sizes:** 1h, 4h
+
+**更新速度:** 1000ms
+
+*注意*: <br/>
+- 该数据流和 \<symbol\>@ticker 不一样。
+- `O` (`open time`) 会在每分钟整点开始, 而 `C` (`closing time`)是当前更新时间。
+
+**Payload:**
+```javascript
+{
+  "e": "1hTicker",    // Event type
+  "E": 123456789,     // Event time
+  "s": "BNBBTC",      // Symbol
+  "p": "0.0015",      // Price change
+  "P": "250.00",      // Price change percent
+  "o": "0.0010",      // Open price
+  "h": "0.0025",      // High price
+  "l": "0.0010",      // Low price
+  "c": "0.0025",      // Last price
+  "w": "0.0018",      // Weighted average price
+  "v": "10000",       // Total traded base asset volume
+  "q": "18",          // Total traded quote asset volume
+  "O": 0,             // Statistics open time
+  "C": 86400000,      // Statistics close time
+  "F": 0,             // First trade ID
+  "L": 18150,         // Last trade Id
+  "n": 18151          // Total number of trades
+}
+```
+
+## 全市场滚动窗口统计
+
+全市场symbols的滚动窗口ticker统计，计算于多个窗口。<br>
+
+注意：有变动的ticker才会推送。
+
+**Stream 名称:** !ticker_\<window-size\>@arr
+
+**Window Size:** 1h, 4h
+
+**更新速度:** 1000ms
+
+> **Payload:**
+```javascript
+[
+  {
+    // 同 <symbol>@ticker_<window-size> payload,
+    // 间隔内更新的每个symbol。
+  }
+]
+```
+
 
 ## 如何正确在本地维护一个orderbook副本
 1. 订阅 **wss://stream.binance.com:9443/ws/bnbbtc@depth**

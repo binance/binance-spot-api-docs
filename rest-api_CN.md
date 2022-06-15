@@ -1,4 +1,4 @@
-# REST行情与交易接口 (2022-04-13)
+# REST行情与交易接口 (2022-06-15)
 ## API 基本信息
 * 本篇列出接口的baseurl: **https://api.binance.com**
 * 如果上面的baseURL访问有性能问题，请访问下面的API集群:
@@ -457,6 +457,7 @@ GET /api/v3/exchangeInfo
     "orderTypes": ["LIMIT", "MARKET"],
     "icebergAllowed": false,
     "allowTrailingStop": false,
+    "cancelReplaceAllowed": false,
     "filters": [{
       "filterType": "PRICE_FILTER",
       "minPrice": "0.00000100",
@@ -1034,6 +1035,75 @@ OR
 ]
 ```
 
+
+## 滚动窗口价格变动统计
+
+
+```
+GET /api/v3/ticker
+```
+
+**注意:** 此接口和 `GET /api/v3/ticker/24hr` 有所不同.
+
+此接口统计的时间范围会稍微比请求的`windowSize`多一些.
+
+接口的 `openTime` 是某一分钟的起始，而结束是当前的时间. 所以实际的统计区间会比请求的时间窗口稍微多一些，最高不到一分钟。
+
+比如, 结束时间 `closeTime` 是 1641287867099 (January 04, 2022 09:17:47:099 UTC) , `windowSize` 为 `1d`. 那么开始时间 `openTime` 则为 1641201420000 (January 3, 2022, 09:17:00 UTC)
+
+**权重(IP):** 5
+
+**参数**
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Mandatory</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>symbol</td>
+    <td rowspan=2>STRING</td>
+    <td rowspan=2>YES</td>
+    <td rowspan=2> 提供 symbol或者symbols 其中之一  <br> <tt>symbols</tt> 可以传入的格式: <br> ["BTCUSDT","BNBUSDT"] <br>or <br>%5B%22BTCUSDT%22,%22BNBUSDT%22%5D
+    </td>
+  </tr>
+  <tr>
+     <td>symbols</td>
+  </tr>
+  <tr>
+     <td>windowSize</td>
+     <td>ENUM</td>
+     <td>NO</td>
+     <td>默认为 <tt>1d</tt> <br> <tt>windowSize</tt> 支持的值: <br> 如果是分钟: <tt>1m</tt>,<tt>2m</tt>....<tt>59m</tt> <br> 如果是小时: <tt>1h</tt>, <tt>2h</tt>....<tt>23h</tt> <br> 如果是天: <tt>1d</tt>...<tt>7d</tt> <br><br>  不可以组合使用, 比如<tt>1d2h</tt></td>
+  </tr>
+  <tr>
+  </tr>
+</table>
+
+**数据源:** 数据库
+
+**响应**
+```javascript
+{
+  "symbol":             "BNBBTC",
+  "priceChange":        "-8.00000000",  // 价格变化
+  "priceChangePercent": "-88.889",      // 价格变化百分比
+  "weightedAvgPrice":   "2.60427807",  
+  "openPrice":          "9.00000000",
+  "highPrice":          "9.00000000",
+  "lowPrice":           "1.00000000",
+  "lastPrice":          "1.00000000",
+  "volume":             "187.00000000",
+  "quoteVolume":        "487.00000000",
+  "openTime":           1641859200000,  // ticker的开始时间
+  "closeTime":          1642031999999,  // ticker的结束时间
+  "firstId":            0,              // 统计时间内的第一笔trade id
+  "lastId":             60,
+  "count":              61              // 统计时间内交易笔数
+}
+```
+
 ## 账户接口
 ### 下单  (TRADE)
 ```
@@ -1197,6 +1267,182 @@ POST /api/v3/order/test (HMAC SHA256)
 ```javascript
 {}
 ```
+
+
+### 撤消挂单再下单 (TRADE)
+
+```
+POST /api/v3/order/cancelReplace
+```
+撤消挂单并在同个交易对上重新下单。
+
+过滤器会在撤消订单前判断参数。
+
+如果订单成功发往撮合引擎，下单的数量会加 1。
+
+**Weight(IP):** 1
+
+**Parameters:**
+Name | Type | Mandatory | Description
+------------ | ------------ | ------------ | ------------
+symbol | STRING | YES |
+side   |ENUM| YES|
+type   |ENUM| YES|
+cancelReplaceMode|ENUM|YES| 指定类型：`STOP_ON_FAILURE` - 如果撤消订单失败将不会继续重新下单。<br> `ALLOW_FAILURES` - 不管撤消订单是否成功都会继续重新下单。
+timeInForce|ENUM|NO|
+quantity|DECIMAL|NO|
+quoteOrderQty |DECIMAL|NO
+price |DECIMAL|NO
+cancelNewClientOrderId|STRING|NO
+cancelOrigClientOrderId|STRING| NO| 必须提供`cancelOrigClientOrderId` 或者 `cancelOrderId`。 如果两个参数都提供, `cancelOrderId` 会占优先。
+cancelOrderId|LONG|NO| 必须提供`cancelOrigClientOrderId` 或者 `cancelOrderId`。 如果两个参数都提供, `cancelOrderId` 会占优先。
+newClientOrderId |STRING|NO| 用于辨识新订单。
+stopPrice|DECIMAL|NO|
+trailingDelta|LONG|NO|
+icebergQty|DECIMAL|NO|
+newOrderRespType|ENUM|NO|指定响应类型: <br> 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`, 其他默认为`ACK`.
+recvWindow | LONG | NO | 不能大于 `60000`
+timestamp | LONG | YES |
+
+
+如同 `POST /api/v3/order` , 额外的强制参数取决于 `type` 。
+
+响应格式根据消息的处理是成功、部分成功还是失败而有所不同。
+
+**数据来源:**
+撮合引擎
+
+
+**Response SUCCESS:**
+```javascript
+// 撤单和下单都成功
+{
+  "cancelResult": "SUCCESS",
+  "newOrderResult": "SUCCESS",
+  "cancelResponse": {
+    "symbol": "BTCUSDT",
+    "origClientOrderId": "DnLo3vTAQcjha43lAZhZ0y",
+    "orderId": 9,
+    "orderListId": -1,
+    "clientOrderId": "osxN3JXAtJvKvCqGeMWMVR",
+    "price": "0.01000000",
+    "origQty": "0.000100",
+    "executedQty": "0.00000000",
+    "cummulativeQuoteQty": "0.00000000",
+    "status": "CANCELED",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "SELL"
+  },
+  "newOrderResponse": {
+    "symbol": "BTCUSDT",
+    "orderId": 10,
+    "orderListId": -1,
+    "clientOrderId": "wOceeeOzNORyLiQfw7jd8S",
+    "transactTime": 1652928801803,
+    "price": "0.02000000",
+    "origQty": "0.040000",
+    "executedQty": "0.00000000",
+    "cummulativeQuoteQty": "0.00000000",
+    "status": "NEW",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "fills": []
+  }
+}
+```
+
+**选择了STOP_ON_FAILURE, 撤单出现错误**
+```javascript
+{
+  "code": -2022,
+  "msg": "Order cancel-replace failed.",
+  "data": {
+    "cancelResult": "FAILURE",
+    "newOrderResult": "NOT_ATTEMPTED",
+    "cancelResponse": {
+      "code": -2011,
+      "msg": "Unknown order sent."
+    },
+    "newOrderResponse": null
+  }
+}
+```
+
+**响应：撤单成功，下单失败**
+```javascript
+{
+  "code": -2021,
+  "msg": "Order cancel-replace partially failed.",
+  "data": {
+    "cancelResult": "SUCCESS",
+    "newOrderResult": "FAILURE",
+    "cancelResponse": {
+      "symbol": "BTCUSDT",
+      "origClientOrderId": "86M8erehfExV8z2RC8Zo8k",
+      "orderId": 3,
+      "orderListId": -1,
+      "clientOrderId": "G1kLo6aDv2KGNTFcjfTSFq",
+      "price": "0.006123",
+      "origQty": "10000.000000",
+      "executedQty": "0.000000",
+      "cummulativeQuoteQty": "0.000000",
+      "status": "CANCELED",
+      "timeInForce": "GTC",
+      "type": "LIMIT_MAKER",
+      "side": "SELL"
+    },
+    "newOrderResponse": {
+      "code": -2010,
+      "msg": "Order would immediately match and take."
+    }
+  }
+}
+```
+
+**选择ALLOW_FAILURE, 撤单出现错误**
+```javascript
+{
+  "code": -2021,
+  "msg": "Order cancel-replace partially failed.",
+  "data": {
+    "cancelResult": "FAILURE",
+    "newOrderResult": "SUCCESS",
+    "cancelResponse": {
+      "code": -2011,
+      "msg": "Unknown order sent."
+    },
+    "newOrderResponse": {
+      "symbol": "BTCUSDT",
+      "orderId": 11,
+      "orderListId": -1,
+      "clientOrderId": "pfojJMg6IMNDKuJqDxvoxN",
+      "transactTime": 1648540168818
+    }
+  }
+}
+```
+>**响应：撤单和下单失败**
+```javascript
+{
+  "code": -2022,
+  "msg": "Order cancel-replace failed.",
+  "data": {
+    "cancelResult": "FAILURE",
+    "newOrderResult": "FAILURE",
+    "cancelResponse": {
+      "code": -2011,
+      "msg": "Unknown order sent."
+    },
+    "newOrderResponse": {
+      "code": -2010,
+      "msg": "Order would immediately match and take."
+    }
+  }
+}
+```
+
 
 ### 查询订单 (USER_DATA)
 ```
@@ -2051,6 +2297,33 @@ MIN_NOTIONAL过滤器定义了交易对订单所允许的最小名义价值(成�
   }
 ```
 
+### NOTIONAL 名义价值
+
+**/exchangeInfo 响应中的格式:**
+
+```javascript
+{
+   "filterType": "NOTIONAL",
+   "minNotional": "10.00000000",
+   "applyMinToMarket": false,
+   "maxNotional": "10000.00000000",
+   "applyMaxToMarket": false,
+   "avgPriceMins": 5
+}
+```
+
+名义价值过滤器(`NOTIONAL`)定义了订单在一个交易对上可以下单的名义价值区间.<br><br>
+`applyMinToMarket` 定义了 `minNotional` 是否适用于市价单(`MARKET`)  <br>
+`applyMaxToMarket` 定义了 `maxNotional` 是否适用于市价单(`MARKET`).
+
+要通过此过滤器, 订单的名义价值 (单价 x 数量, `price * quantity`) 需要满足如下条件:
+
+* `price * quantity` <= `maxNotional`
+* `price * quantity` >= `minNotional`
+
+对于市价单(`MARKET`), 用于计算的价格采用的是在 `avgPriceMins` 定义的时间之内的平均价.<br>
+如果 `avgPriceMins` 为 0, 则采用最新的价格.
+
 ### ICEBERG_PARTS 冰山订单拆分数
 `ICEBERG_PARTS` 代表冰山订单最多可以拆分成多少个小订单。
 计算方法为 `向上取整(qty / icebergQty)`.
@@ -2192,4 +2465,18 @@ MIN_NOTIONAL过滤器定义了交易对订单所允许的最小名义价值(成�
     "filterType": "EXCHANGE_MAX_NUM_ALGO_ORDERS",
     "maxNumAlgoOrders": 200
   }
+```
+
+### EXCHANGE_MAX_NUM_ICEBERG_ORDERS 冰山订单的最大订单数
+
+此过滤器定义了允许账号持有的最大冰山订单数量.
+
+
+**/exchangeInfo 响应中的格式:**
+
+```javascript
+{
+  "filterType": "EXCHANGE_MAX_NUM_ICEBERG_ORDERS",
+  "maxNumIcebergOrders": 10000
+}
 ```
