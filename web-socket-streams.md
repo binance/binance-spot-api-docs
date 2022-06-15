@@ -19,6 +19,8 @@
   - [All Market Mini Tickers Stream](#all-market-mini-tickers-stream)
   - [Individual Symbol Ticker Streams](#individual-symbol-ticker-streams)
   - [All Market Tickers Stream](#all-market-tickers-stream)
+  - [Individual Symbol Rolling Window Statistics Streams](#individual-symbol-rolling-window-statistics-streams)
+  - [All Market Rolling Window Statistics Streams](#all-market-rolling-window-statistics-streams)
   - [Individual Symbol Book Ticker Streams](#individual-symbol-book-ticker-streams)
   - [All Book Tickers Stream](#all-book-tickers-stream)
   - [Partial Book Depth Streams](#partial-book-depth-streams)
@@ -27,7 +29,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Web Socket Streams for Binance (2019-11-13)
+# Web Socket Streams for Binance (2022-06-15)
 # General WSS information
 * The base endpoint is: **wss://stream.binance.com:9443**
 * Streams can be accessed either in a single raw stream or in a combined stream
@@ -366,6 +368,67 @@ m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
   }
 ]
 ```
+
+## Individual Symbol Rolling Window Statistics Streams
+
+Rolling window ticker statistics for a single symbol, computed over multiple windows.
+
+**Stream Name:** \<symbol\>@ticker_\<window_size\>
+
+**Window Sizes:** 1h,4h
+
+**Update Speed:** 1000ms
+
+**Note**: This stream is different from the \<symbol\>@ticker stream.
+The open time `"O"` always starts on a minute, while the closing time `"C"` is the current time of the update.
+As such, the effective window might be up to 1 minute wider that \<window_size\>.
+
+**Payload:**
+
+```javascript
+{
+  "e": "1hTicker",    // Event type
+  "E": 123456789,     // Event time
+  "s": "BNBBTC",      // Symbol
+  "p": "0.0015",      // Price change
+  "P": "250.00",      // Price change percent
+  "o": "0.0010",      // Open price
+  "h": "0.0025",      // High price
+  "l": "0.0010",      // Low price
+  "c": "0.0025",      // Last price
+  "w": "0.0018",      // Weighted average price
+  "v": "10000",       // Total traded base asset volume
+  "q": "18",          // Total traded quote asset volume
+  "O": 0,             // Statistics open time
+  "C": 86400000,      // Statistics close time
+  "F": 0,             // First trade ID
+  "L": 18150,         // Last trade Id
+  "n": 18151          // Total number of trades
+}
+```
+
+
+## All Market Rolling Window Statistics Streams
+
+Rolling window ticker statistics for all market symbols, computed over multiple windows.
+Note that only tickers that have changed will be present in the array.
+
+**Stream Name:** !ticker_\<window-size\>@arr
+
+**Window Size:** 1h,4h
+
+**Update Speed:** 1000ms
+
+**Payload:**
+```javascript
+[
+  {
+    // Same as <symbol>@ticker_<window-size> payload,
+    // one for each symbol updated within the interval.
+  }
+]
+```
+
 
 ## Individual Symbol Book Ticker Streams
 Pushes any update to the best bid or ask's price or quantity in real-time for a specified symbol.

@@ -1,6 +1,31 @@
-# CHANGELOG for Binance's API (2022-05-23)
+# CHANGELOG for Binance's API (2022-06-15)
 
 ---
+
+## 2022-06-15
+
+**Note:** The update is being rolled out over the next few days, so these changes may not be visible right away.
+
+SPOT API
+
+* `GET /api/v3/ticker` added
+    * Rolling window price change statistics based on `windowSize` provided.
+    * Contrary to `GET /api/v3/ticker/24hr` the list of symbols cannot be omitted.
+    * If `windowSize` not specified, the value will default to `1d`.
+    * Response is similar to `GET /api/v3/ticker/24hr`, minus the following fields: `prevClosePrice`, `lastQty`, `bidPrice`, `bidQty`, `askPrice`, `askQty`
+* `GET /api/v3/exchangeInfo` returns new field `cancelReplaceAllowed` in `symbols` list. 
+* `POST /api/v3/order/cancelReplace` added
+    * Cancels an existing order and places a new order on the same symbol.
+    * The filters are evaluated **before** the cancel order is placed.
+        * e.g. If the `MAX_NUM_ORDERS` filter is 10, and the total number of open orders on the account is also 10, when using `POST /api/v3/order/cancelReplace` both the cancel order placement and new order will fail because of the filter.
+    * The change is being rolled out in the next few days, thus this feature will be enabled once the upgrade is completed.
+* New filter `NOTIONAL` has been added.
+    * Defines the allowed notional value (`price * quantity`) based on a configured `minNotional` and `maxNotional`
+* New exchange filter `EXCHANGE_MAX_NUM_ICEBERG_ORDERS` has been added.
+    * Defines the limit of open iceberg orders on an account
+
+---
+
 ## 2022-05-23
 * Changes to Order Book Depth Levels
     * Quantities in the Depth levels were returning negative values in situations where they were exceeding the max value, resulting in an overflow.
