@@ -1,4 +1,4 @@
-# 错误代码汇总 (2018-11-13)
+# 错误代码汇总 (2022-06-15)
 币安Rest接口(包括wapi)返回的错误包含两部分，错误码与错误信息. 错误码是大类，一个错误码可能对应多个不同的错误信息。
 以下是一个完整错误码实例
 ```javascript
@@ -162,6 +162,20 @@
 "Order would trigger immediately." | 止盈、止损单必须在未来触发，如果条件太弱现在的市场行情就可以触发（通常是误操作填错了条件），就会报这个错误。
 "Cancel order is invalid. Check origClOrdId and orderId." | 撤销订单必须提供`origClOrdId`或者`orderId`中的一个。 
 "Order would immediately match and take." | `LIMIT_MAKER` 订单如果按照规则会成为Taker，就会报此错。
+"The relationship of the prices for the orders is not correct." | `OCO`订单中设置的价格不符合报价规则：<br> The rules are: <br> `SELL Orders`: Limit Price > Last Price > Stop Price <br>`BUY Orders`: Limit Price < Last Price < Stop Price
+"OCO orders are not supported for this symbol" | `OCO`订单不支持该交易对
+"Quote order qty market orders are not support for this symbol."| 这个交易对，市价单不支持参数`quoteOrderQty`
+"Trailing stop orders are not supported for this symbol."         | 此symbol不支持 `trailingDelta`
+"Order cancel-replace is not supported for this symbol."          | 此symbol不支持 `POST /api/v3/order/cancelReplace` 
+
+## 关于 POST /api/v3/order/cancelReplace 的错误
+
+### -2021 Order cancel-replace partially failed
+收到该错误码代表撤单**或者**下单失败。
+
+### -2022 Order cancel-replace failed.
+收到该错误码代表撤单**和**下单都失败。
+
 
 ## -9xxx 订单未能通过过滤器
 错误信息 | 描述

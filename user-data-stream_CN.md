@@ -1,4 +1,4 @@
-# WebSocket 账户接口(2022-04-13)
+# WebSocket 账户接口(2022-06-15)
 
 # 基本信息
 * 本篇所列出API接口的base url : **https://api.binance.com**
