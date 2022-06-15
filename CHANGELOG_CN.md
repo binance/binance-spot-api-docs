@@ -1,4 +1,37 @@
-# 更新日志 (2022-05-23)
+# 更新日志 (2022-06-15)
+
+## 2022-06-15
+
+**注意:** 此变动不会立刻可用, 会在后面几天上线。
+
+
+SPOT API
+
+* 添加新接口 `GET /api/v3/ticker` 
+    * 基于 `windowSize` 返回最近的价格变动。
+    * 无需像 `GET /api/v3/ticker/24hr` 提供symbols参数。
+    * 如果不提供 `windowSize` 参数，默认值是`1d`。
+    * 响应和 `GET /api/v3/ticker/24hr` 相似，但不包括以下数据：`prevClosePrice`, `lastQty`, `bidPrice`, `bidQty`, `askPrice`, `askQty`
+* 添加新接口 `POST /api/v3/order/cancelReplace`
+    * 撤消当前的挂单并在同样的交易对上下新订单。
+    * 过滤器会在**撤单前**做判断。
+        * 例如，`MAX_NUM_ORDERS` 是 10，如果目前挂单也是10，调用 `POST /api/v3/order/cancelReplace`会失败。撤单与下单的操作都不会被执行。 
+    * 更新将在几天后上线，升级完毕后才会开启此功能。
+* `GET /api/v3/exchangeInfo` 在`symbols`列表里返回新数据`cancelReplaceAllowed`。
+* 添加新的过滤器 `NOTIONAL`
+    * 基于`minNotional` 与 `maxNotional` 值来限制名义价值 (`price * quantity`)
+* 添加新的过滤器 `EXCHANGE_MAX_NUM_ICEBERG_ORDERS`
+    * 账号最大冰山挂单数
+
+WEBSOCKETS
+
+* 新的symbol ticker流, 可以选择 `1h` 或者 `4h`时间窗口：
+    * 单个交易对: `<symbol>@ticker_<window-size>`
+    * 市场所有交易对: `!ticker_<window-size>@arr`
+
+
+---
+
 
 ## 2022-05-23
 * Order Book 深度的变动
