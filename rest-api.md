@@ -1127,10 +1127,10 @@ GET /api/v3/ticker
 
 **Note:** This endpoint is different from the `GET /api/v3/ticker/24hr` endpoint.
 
-The window used to compute statistics is typically slightly wider than requested `windowSize`.
+The window used to compute statistics will be no more than 59999ms from the requested `windowSize`. 
 
 `openTime` for `/api/v3/ticker` always starts on a minute, while the `closeTime` is the current time of the request.
-As such, the effective window might be up to 1 minute wider than requested.
+As such, the effective window will be up to 59999ms wider than `windowSize`.
 
 E.g. If the `closeTime` is 1641287867099 (January 04, 2022 09:17:47:099 UTC) , and the `windowSize` is `1d`. the `openTime` will be: 1641201420000 (January 3, 2022, 09:17:00)
 

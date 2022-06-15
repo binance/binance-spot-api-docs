@@ -287,6 +287,7 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 *注意*: <br/>
 - 该数据流和 \<symbol\>@ticker 不一样。
 - `O` (`open time`) 会在每分钟整点开始, 而 `C` (`closing time`)是当前更新时间。
+- 实际统计的时间范围会比\<window_size\>多不超过59999ms。
 
 **Payload:**
 ```javascript

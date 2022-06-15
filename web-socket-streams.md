@@ -381,7 +381,7 @@ Rolling window ticker statistics for a single symbol, computed over multiple win
 
 **Note**: This stream is different from the \<symbol\>@ticker stream.
 The open time `"O"` always starts on a minute, while the closing time `"C"` is the current time of the update.
-As such, the effective window might be up to 1 minute wider that \<window_size\>.
+As such, the effective window might be up to 59999ms wider that \<window_size\>.
 
 **Payload:**
 
