@@ -1172,6 +1172,8 @@ Database
 
 **Response**
 
+When using `symbol`:
+
 ```javascript
 {
   "symbol":             "BNBBTC",
@@ -1192,7 +1194,48 @@ Database
 }
 
 ```
+or
 
+When using `symbols`:
+
+```javascript
+[
+  {
+    "symbol": "BTCUSDT",
+    "priceChange": "-154.13000000",
+    "priceChangePercent": "-0.740",
+    "weightedAvgPrice": "20677.46305250",
+    "openPrice": "20825.27000000",
+    "highPrice": "20972.46000000",
+    "lowPrice": "20327.92000000",
+    "lastPrice": "20671.14000000",
+    "volume": "72.65112300",
+    "quoteVolume": "1502240.91155513",
+    "openTime": 1655432400000,
+    "closeTime": 1655446835460,
+    "firstId": 11147809,
+    "lastId": 11149775,
+    "count": 1967
+  },
+  {
+    "symbol": "BNBBTC",
+    "priceChange": "0.00008530",
+    "priceChangePercent": "0.823",
+    "weightedAvgPrice": "0.01043129",
+    "openPrice": "0.01036170",
+    "highPrice": "0.01049850",
+    "lowPrice": "0.01033870",
+    "lastPrice": "0.01044700",
+    "volume": "166.67000000",
+    "quoteVolume": "1.73858301",
+    "openTime": 1655432400000,
+    "closeTime": 1655446835460,
+    "firstId": 2351674,
+    "lastId": 2352034,
+    "count": 361
+  }
+]
+```
 
 ## Account endpoints
 ### New order  (TRADE)
