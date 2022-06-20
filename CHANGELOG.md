@@ -1,4 +1,23 @@
-# CHANGELOG for Binance's API (2022-06-15)
+# CHANGELOG for Binance's API (2022-06-20)
+
+
+---
+
+## 2022-06-20
+
+Changes to `GET /api/v3/ticker`
+
+* Weight has been reduced from 5 to 2 per symbol, regardless of `windowSize`. 
+* The max number of symbols that can be processed in a request is 100.
+    * If the number of `symbols` sent is more than 100, the error will be as follows:
+    ```json
+    {
+     "code": -1101,
+     "msg": "Too many values sent for parameter 'symbols', maximum allowed up to 100." 
+    }
+    ```
+* The max Weight for this endpoint will cap at 100.
+    * I.e. If the request has more than 50 symbols, the Weight will still be 100, regardless of `windowSize`.
 
 ---
 
