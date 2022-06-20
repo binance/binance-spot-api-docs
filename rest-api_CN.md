@@ -1051,7 +1051,7 @@ GET /api/v3/ticker
 
 比如, 结束时间 `closeTime` 是 1641287867099 (January 04, 2022 09:17:47:099 UTC) , `windowSize` 为 `1d`. 那么开始时间 `openTime` 则为 1641201420000 (January 3, 2022, 09:17:00 UTC)
 
-**权重(IP):** 5
+**权重(IP):** 2/交易对. <br><br> 如果`symbols`请求的交易对超过50, 上限是100.
 
 **参数**
 <table>
@@ -1065,7 +1065,7 @@ GET /api/v3/ticker
     <td>symbol</td>
     <td rowspan=2>STRING</td>
     <td rowspan=2>YES</td>
-    <td rowspan=2> 提供 symbol或者symbols 其中之一  <br> <tt>symbols</tt> 可以传入的格式: <br> ["BTCUSDT","BNBUSDT"] <br>or <br>%5B%22BTCUSDT%22,%22BNBUSDT%22%5D
+    <td rowspan=2> 提供 symbol或者symbols 其中之一  <br> <tt>symbols</tt> 可以传入的格式: <br> ["BTCUSDT","BNBUSDT"] <br>or <br>%5B%22BTCUSDT%22,%22BNBUSDT%22%5D <br><br> <tt>symbols</tt> 允许最多100个交易对
     </td>
   </tr>
   <tr>
@@ -1080,6 +1080,7 @@ GET /api/v3/ticker
   <tr>
   </tr>
 </table>
+
 
 **数据源:** 数据库
 

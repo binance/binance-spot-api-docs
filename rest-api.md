@@ -1136,7 +1136,7 @@ E.g. If the `closeTime` is 1641287867099 (January 04, 2022 09:17:47:099 UTC) , a
 
 **Weight:**
 
-5 for each requested <tt>symbol</tt> regardless of <tt>windowSize</tt>
+2 for each requested <tt>symbol</tt> regardless of <tt>windowSize</tt>. <br><br> The weight for this request will cap at 100 once the number of `symbols` in the request is more than 50.
 
 **Parameters**
 
@@ -1151,7 +1151,7 @@ E.g. If the `closeTime` is 1641287867099 (January 04, 2022 09:17:47:099 UTC) , a
     <td>symbol</td>
     <td rowspan=2>STRING</td>
     <td rowspan=2>YES</td>
-    <td rowspan=2>Either <tt>symbol</tt> or <tt>symbols</tt> must be provided <br> Examples of accepted format for the <tt>symbols</tt> parameter: <br> ["BTCUSDT","BNBUSDT"] <br>or <br>%5B%22BTCUSDT%22,%22BNBUSDT%22%5D
+    <td rowspan=2>Either <tt>symbol</tt> or <tt>symbols</tt> must be provided <br><br> Examples of accepted format for the <tt>symbols</tt> parameter: <br> ["BTCUSDT","BNBUSDT"] <br>or <br>%5B%22BTCUSDT%22,%22BNBUSDT%22%5D <br><br> The maximum number of <tt>symbols</tt> allowed in a request is 100.
     </td>
   </tr>
   <tr>
