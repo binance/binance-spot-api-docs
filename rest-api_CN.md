@@ -220,7 +220,9 @@ There is no & between "GTC" and "quantity=1".
 * SPOT 现货
 * MARGIN 杠杆
 * LEVERAGED 杠杆代币
-* TRD_GRP_002 交易组 002  
+* TRD_GRP_002 交易组 002
+* TRD_GRP_003 交易组 003
+* TRD_GRP_004 交易组 004
 
 **订单状态 (status):**
 

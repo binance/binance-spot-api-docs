@@ -324,6 +324,8 @@ These terms will be used throughout the documentation, so it is recommended espe
 * MARGIN
 * LEVERAGED
 * TRD_GRP_002
+* TRD_GRP_003
+* TRD_GRP_004
 
 **Order status (status):**
 
