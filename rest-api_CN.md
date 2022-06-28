@@ -1340,7 +1340,7 @@ timeInForce|ENUM|NO|
 quantity|DECIMAL|NO|
 quoteOrderQty |DECIMAL|NO
 price |DECIMAL|NO
-cancelNewClientOrderId|STRING|NO
+cancelNewClientOrderId|STRING|NO | 用户自定义的id，如空缺系统会自动赋值
 cancelOrigClientOrderId|STRING| NO| 必须提供`cancelOrigClientOrderId` 或者 `cancelOrderId`。 如果两个参数都提供, `cancelOrderId` 会占优先。
 cancelOrderId|LONG|NO| 必须提供`cancelOrigClientOrderId` 或者 `cancelOrderId`。 如果两个参数都提供, `cancelOrderId` 会占优先。
 newClientOrderId |STRING|NO| 用于辨识新订单。
