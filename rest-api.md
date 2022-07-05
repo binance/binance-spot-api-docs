@@ -1629,7 +1629,7 @@ Name | Type | Mandatory | Description
 symbol | STRING | YES |
 side   |ENUM| YES|
 type   |ENUM| YES|
-cancelReplaceMode|ENUM|YES| The allowed values are: <br> `STOP_ON_FAILURE` - If the cancel request fails, the new order placement will not be attempted. <br> `ALLOW_FAILURES` - new order placement will be attempted even if cancel request fails.
+cancelReplaceMode|ENUM|YES| The allowed values are: <br> `STOP_ON_FAILURE` - If the cancel request fails, the new order placement will not be attempted. <br> `ALLOW_FAILURE` - new order placement will be attempted even if cancel request fails.
 timeInForce|ENUM|NO|
 quantity|DECIMAL|NO|
 quoteOrderQty |DECIMAL|NO

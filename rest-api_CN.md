@@ -1335,7 +1335,7 @@ Name | Type | Mandatory | Description
 symbol | STRING | YES |
 side   |ENUM| YES|
 type   |ENUM| YES|
-cancelReplaceMode|ENUM|YES| 指定类型：`STOP_ON_FAILURE` - 如果撤消订单失败将不会继续重新下单。<br> `ALLOW_FAILURES` - 不管撤消订单是否成功都会继续重新下单。
+cancelReplaceMode|ENUM|YES| 指定类型：`STOP_ON_FAILURE` - 如果撤消订单失败将不会继续重新下单。<br> `ALLOW_FAILURE` - 不管撤消订单是否成功都会继续重新下单。
 timeInForce|ENUM|NO|
 quantity|DECIMAL|NO|
 quoteOrderQty |DECIMAL|NO
