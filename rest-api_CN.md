@@ -2237,9 +2237,10 @@ listenKey | STRING | YES
 ## 交易对过滤器
 ### PRICE_FILTER 价格过滤器
 价格过滤器用于检测order订单中price参数的合法性
-* `minPrice` 定义了 `price`/`stopPrice` 允许的最小值
-* `maxPrice` 定义了 `price`/`stopPrice` 允许的最大值。
-* `tickSize` 定义了 `price`/`stopPrice` 的步进间隔，即price必须等于minPrice+(tickSize的整数倍)
+* `minPrice` 定义了 `price`/`stopPrice` 允许的最小值; `minPrice` == 0 的时候则失效。
+* `maxPrice` 定义了 `price`/`stopPrice` 允许的最大值; `maxPrice` == 0 的时候则失效。
+* `tickSize` 定义了 `price`/`stopPrice` 的步进间隔; `tickSize` == 0 的时候则失效。
+
 以上每一项均可为0，为0时代表这一项不再做限制。
 
 逻辑伪代码如下：
