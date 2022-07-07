@@ -1323,7 +1323,7 @@ POST /api/v3/order/cancelReplace
 ```
 撤消挂单并在同个交易对上重新下单。
 
-过滤器会在撤消订单前判断参数。
+过滤器会在撤消订单和下单前判断参数与目前下单数量。
 
 即使请求中没有尝试发送新订单，比如(`newOrderResult: NOT_ATTEMPTED`)，下单的数量仍然会加1。
 
