@@ -1615,7 +1615,7 @@ POST /api/v3/order/cancelReplace
 ```
 Cancels an existing order and places a new order on the same symbol.
 
-Filters are evaluated before the cancel order is placed.
+Filters and Order Count are evaluated before the processing of the cancellation and order placement occurs. 
 
 A new order that was not attempted (i.e. when `newOrderResult: NOT_ATTEMPTED` ), will still increase the order count by 1.
 
