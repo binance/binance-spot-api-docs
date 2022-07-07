@@ -1325,7 +1325,7 @@ POST /api/v3/order/cancelReplace
 
 过滤器会在撤消订单前判断参数。
 
-如果订单成功发往撮合引擎，下单的数量会加 1。
+哪怕没有尝试发送新订单，比如(`newOrderResult: NOT_ATTEMPTED`)，下单的数量仍然会加1。
 
 **Weight(IP):** 1
 
