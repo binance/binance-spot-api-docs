@@ -1515,7 +1515,7 @@ timestamp | LONG | YES |
 * 某些订单中`cummulativeQuoteQty`<0，是由于这些订单是cummulativeQuoteQty功能上线之前的订单。
 
 **数据源:**
-数据库
+缓存 => 数据库
 
 **响应:**
 ```javascript
@@ -1653,7 +1653,7 @@ timestamp | LONG | YES |
 * 不带symbol参数，会返回所有交易对的挂单
 
 **数据源:**
-数据库
+缓存 => 数据库
 
 **响应:**
 ```javascript
