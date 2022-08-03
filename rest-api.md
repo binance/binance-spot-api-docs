@@ -1426,7 +1426,7 @@ Notes:
 * For some historical orders `cummulativeQuoteQty` will be < 0, meaning the data is not available at this time.
 
 **Data Source:**
-Database
+Memory => Database
 
 **Response:**
 ```javascript
@@ -1807,7 +1807,7 @@ timestamp | LONG | YES |
 * If the symbol is not sent, orders for all symbols will be returned in an array.
 
 **Data Source:**
-Database
+Memory => Database
 
 **Response:**
 ```javascript
@@ -2327,7 +2327,7 @@ timestamp | LONG | YES |
 Otherwise most recent trades are returned.
 
 **Data Source:**
-Database
+Memory => Database
 
 **Response:**
 ```javascript
