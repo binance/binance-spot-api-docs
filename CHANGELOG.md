@@ -15,7 +15,7 @@ REST API
     * New optional fields `limitStrategyId`, `limitStrategyType`, `stopStrategyId`, `stopStrategyType`
     * These are the strategy metadata parameters for both legs of the OCO orders.
     * `limitStrategyType` and `stopStrategyType` both cannot be less than `1000000`.
-* Changes to `GET /api/v3/order`, `GET /api/v3/openOrders` and `GET /api/v3/allOrders`
+* Changes to `GET /api/v3/order`, `GET /api/v3/openOrders`, and `GET /api/v3/allOrders`
     * New fields `strategyId` and `strategyType` will appear in the response JSON for orders that had these fields populated upon order placement.
 * Changes to `DELETE /api/v3/order` and `DELETE /api/v3/openOrders`
     * New fields `strategyId` and `strategyType` will appear in the response JSON for cancelled orders that had these fields populated upon order placement.
