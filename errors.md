@@ -1,4 +1,4 @@
-# Error codes for Binance (2022-06-15)
+# Error codes for Binance (2022-08-08)
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
 ```javascript
@@ -125,6 +125,9 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 #### -1130 INVALID_PARAMETER
  * Invalid data sent for a parameter.
  * Data sent for parameter '%s' is not valid.
+
+#### -1134 BAD_STRATEGY_TYPE
+ * `strategyType` was less than 1000000. 
 
 #### -2010 NEW_ORDER_REJECTED
  * NEW_ORDER_REJECTED
