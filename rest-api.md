@@ -79,7 +79,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2022-06-15)
+# Public Rest API for Binance (2022-08-08)
 
 ## General API Information
 * The base endpoint is: **https://api.binance.com**
@@ -1261,6 +1261,8 @@ quantity | DECIMAL | NO |
 quoteOrderQty|DECIMAL|NO|
 price | DECIMAL | NO |
 newClientOrderId | STRING | NO | A unique id among open orders. Automatically generated if not sent.<br> Orders with the same `newClientOrderID` can be accepted only when the previous one is filled, otherwise the order will be rejected.
+strategyId |INT| NO|
+strategyType |INT| NO| The value cannot be less than `1000000`.
 stopPrice | DECIMAL | NO | Used with `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, and `TAKE_PROFIT_LIMIT` orders.
 trailingDelta|LONG|NO| Used with `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, and `TAKE_PROFIT_LIMIT` orders.
 icebergQty | DECIMAL | NO | Used with `LIMIT`, `STOP_LOSS_LIMIT`, and `TAKE_PROFIT_LIMIT` to create an iceberg order.
@@ -1320,7 +1322,9 @@ Matching Engine
   "status": "FILLED",
   "timeInForce": "GTC",
   "type": "MARKET",
-  "side": "SELL"
+  "side": "SELL",
+  "strategyId": 1,               // This is only visible if the field was populated on order placement.
+  "strategyType": 1000000        // This is only visible if the field was populated on order placement.
 }
 ```
 
@@ -1340,6 +1344,8 @@ Matching Engine
   "timeInForce": "GTC",
   "type": "MARKET",
   "side": "SELL",
+  "strategyId": 1,               // This is only visible if the field was populated on order placement.
+  "strategyType": 1000000        // This is only visible if the field was populated on order placement.
   "fills": [
     {
       "price": "4000.00000000",
@@ -1638,6 +1644,8 @@ cancelNewClientOrderId|STRING|NO| Used to uniquely identify this cancel. Automat
 cancelOrigClientOrderId|STRING| NO| Either the `cancelOrigClientOrderId` or `cancelOrderId` must be provided. If both are provided, `cancelOrderId` takes precedence.
 cancelOrderId|LONG|NO| Either the `cancelOrigClientOrderId` or `cancelOrderId` must be provided. If both are provided, `cancelOrderId` takes precedence.
 newClientOrderId |STRING|NO| Used to identify the new order.
+strategyId |INT| NO|
+strategyType |INT| NO| The value cannot be less than `1000000`.
 stopPrice|DECIMAL|NO|
 trailingDelta|LONG|NO|
 icebergQty|DECIMAL|NO|
@@ -1910,10 +1918,14 @@ side|ENUM|YES|
 quantity|DECIMAL|YES|
 limitClientOrderId|STRING|NO| A unique Id for the limit order
 price|DECIMAL|YES|
+limitStrategyId |INT| NO
+limitStrategyType | INT| NO | The value cannot be less than `1000000`.
 limitIcebergQty|DECIMAL|NO| Used to make the `LIMIT_MAKER` leg an iceberg order.
 trailingDelta|LONG|NO|
 stopClientOrderId |STRING|NO| A unique Id for the stop loss/stop loss limit leg
 stopPrice |DECIMAL| YES
+stopStrategyId |INT| NO
+stopStrategyType |INT| NO | The value cannot be less than `1000000`.
 stopLimitPrice|DECIMAL|NO | If provided, `stopLimitTimeInForce` is required.
 stopIcebergQty|DECIMAL|NO| Used with `STOP_LOSS_LIMIT` leg to make an iceberg order.
 stopLimitTimeInForce|ENUM|NO| Valid values are `GTC`/`FOK`/`IOC`

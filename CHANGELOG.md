@@ -1,5 +1,32 @@
-# CHANGELOG for Binance's API (2022-06-20)
+# CHANGELOG for Binance's API (2022-08-08)
 
+---
+
+## 2022-08-08
+
+REST API
+
+* Changes to `POST /api/v3/order` and `POST /api/v3/order/cancelReplace` 
+    * New optional fields `strategyId` and `strategyType`
+        * `strategyId` is a parameter used to identify an order as part of a strategy. 
+        * `strategyType` is a parameter used to identify what strategy was running. (E.g. If all the orders are part of spot grid strategy, it can be set to `strategyType=1000000`)
+            * Note that the minimum value allowed for `strategyType` is `1000000`.
+* Changes to `POST /api/v3/order/oco`
+    * New optional fields `limitStrategyId`, `limitStrategyType`. `stopStrategyId`, `stopStrategyType`
+    * These are the strategy metadata parameters for both legs of the OCO orders.
+    * `limitStrategyType` and `stopStrategyType` both cannot be less than `1000000`.
+* Changes to `GET /api/v3/order`, `GET /api/v3/openOrders`, and `GET /api/v3/allOrders`
+    * New fields `strategyId` and `strategyType` will appear in the response JSON for orders that had these fields populated upon order placement.
+* Changes to `DELETE /api/v3/order` and `DELETE /api/v3/openOrders`
+    * New fields `strategyId` and `strategyType` will appear in the response JSON for cancelled orders that had these fields populated upon order placement.
+
+
+USER DATA STREAM
+
+* New fields to eventType `executionReport`
+    * `j` for `strategyId`
+    * `J` for `strategyType`
+    * Note that these fields only appear if these were populated upon order placement.
 
 ---
 
