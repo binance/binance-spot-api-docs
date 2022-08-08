@@ -1,4 +1,4 @@
-# REST行情与交易接口 (2022-06-15)
+# REST行情与交易接口 (2022-08-08)
 ## API 基本信息
 * 本篇列出接口的baseurl: **https://api.binance.com**
 * 如果上面的baseURL访问有性能问题，请访问下面的API集群:
@@ -1172,6 +1172,8 @@ quantity | DECIMAL | NO |
 quoteOrderQty | DECIMAL | NO |
 price | DECIMAL | NO |
 newClientOrderId | STRING | NO | 用户自定义的orderid，如空缺系统会自动赋值
+strategyId |INT| NO|
+strategyType |INT| NO| 不能低于 `1000000`.
 stopPrice | DECIMAL | NO | 仅 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` 需要此参数
 trailingDelta|LONG|NO| 用于 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, 和 `TAKE_PROFIT_LIMIT` 类型的订单.
 icebergQty | DECIMAL | NO | 仅有限价单(包括条件限价单与限价做事单)可以使用该参数，含义为创建冰山订单并指定冰山订单的尺寸
@@ -1235,6 +1237,8 @@ Type | 强制要求的参数 | 其他信息
   "timeInForce": "GTC",
   "type": "MARKET",
   "side": "SELL"
+  "strategyId": 1,               // 下单填了参数才会返回
+  "strategyType": 1000000        // 下单填了参数才会返回
 }
 ```
 
@@ -1254,6 +1258,8 @@ Type | 强制要求的参数 | 其他信息
   "timeInForce": "GTC",
   "type": "MARKET",
   "side": "SELL",
+  "strategyId": 1,               // 下单填了参数才会返回
+  "strategyType": 1000000        // 下单填了参数才会返回
   "fills": [
     {
       "price": "4000.00000000",
@@ -1344,6 +1350,8 @@ cancelNewClientOrderId|STRING|NO | 用户自定义的id，如空缺系统会自�
 cancelOrigClientOrderId|STRING| NO| 必须提供`cancelOrigClientOrderId` 或者 `cancelOrderId`。 如果两个参数都提供, `cancelOrderId` 会占优先。
 cancelOrderId|LONG|NO| 必须提供`cancelOrigClientOrderId` 或者 `cancelOrderId`。 如果两个参数都提供, `cancelOrderId` 会占优先。
 newClientOrderId |STRING|NO| 用于辨识新订单。
+strategyId |INT| NO|
+strategyType |INT| NO| 不能低于 `1000000`.
 stopPrice|DECIMAL|NO|
 trailingDelta|LONG|NO|
 icebergQty|DECIMAL|NO|
@@ -1749,10 +1757,14 @@ side|ENUM|YES| 详见枚举定义：订单方向
 quantity|DECIMAL|YES|
 limitClientOrderId|STRING|NO| 限价单的唯一ID
 price|DECIMAL|YES|
+limitStrategyId |INT| NO
+limitStrategyType | INT| NO | 不能低于 `1000000`
 limitIcebergQty|DECIMAL|NO|
 trailingDelta|LONG|NO|
 stopClientOrderId |STRING|NO| 止损/止损限价单的唯一ID
 stopPrice |DECIMAL| YES
+stopStrategyId |INT| NO
+stopStrategyType |INT| NO | 不能低于 `1000000`
 stopLimitPrice|DECIMAL|NO| 如果提供，须配合提交`stopLimitTimeInForce`
 stopIcebergQty|DECIMAL|NO|
 stopLimitTimeInForce|ENUM|NO| 有效值 `GTC`/`FOK`/`IOC`

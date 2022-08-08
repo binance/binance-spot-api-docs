@@ -1,4 +1,4 @@
-# 错误代码汇总 (2022-06-15)
+# 错误代码汇总 (2022-08-08)
 币安Rest接口(包括wapi)返回的错误包含两部分，错误码与错误信息. 错误码是大类，一个错误码可能对应多个不同的错误信息。
 以下是一个完整错误码实例
 ```javascript
@@ -121,6 +121,9 @@
 #### -1130 无效参数(值)
  * Invalid data sent for a parameter.
  * Data sent for parameter '%s' is not valid.
+
+#### -1134 strategyType不符合需求
+ * `strategyType` was less than 1000000. 
 
 #### -2010 订单被拒绝
  * NEW_ORDER_REJECTED
