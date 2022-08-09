@@ -1,4 +1,33 @@
-# 更新日志 (2022-06-20)
+# 更新日志 (2022-08-08)
+
+---
+
+## 2022-08-08
+
+REST API
+
+* 接口 `POST /api/v3/order` 与 `POST /api/v3/order/cancelReplace` 变动
+    * 添加新可选参数 `strategyId` 与 `strategyType`
+        * `strategyId` 是用于将订单标识为某策略的参数。 
+        * `strategyType` 是用于标识在执行的策略。(例如：如果所有订单属于现货网格策略，订单可设置为`strategyType=1000000`)
+* 接口 `POST /api/v3/order/oco` 变动
+    * 添加新可选参数  `limitStrategyId`, `limitStrategyType`, `stopStrategyId`, `stopStrategyType`
+    * 这些是OCO订单里两个leg的策略元数据
+    * `limitStrategyType` 和 `stopStrategyType` 都不能低于 `1000000`
+* 接口 `GET /api/v3/order`, `GET /api/v3/openOrders` 与 `GET /api/v3/allOrders` 变动
+    * 新增参数 `strategyId` 与 `strategyType` 必须在下单时填上字段才会在回应JSON里返回
+* 接口 `DELETE /api/v3/order` 与 `DELETE /api/v3/openOrders` 变动
+    * 新增参数 `strategyId` 与 `strategyType` 必须在下单时填上字段才会在回应JSON里返回
+
+
+USER DATA STREAM
+
+* eventType `executionReport` 新增参数
+    * `j` 代表 `strategyId`
+    * `J` 代表 `strategyType`
+    * 必须在下单时填上字段才会在回应里返回
+
+---
 
 ## 2022-06-20
 

@@ -12,7 +12,7 @@ REST API
         * `strategyType` is a parameter used to identify what strategy was running. (E.g. If all the orders are part of spot grid strategy, it can be set to `strategyType=1000000`)
             * Note that the minimum value allowed for `strategyType` is `1000000`.
 * Changes to `POST /api/v3/order/oco`
-    * New optional fields `limitStrategyId`, `limitStrategyType`. `stopStrategyId`, `stopStrategyType`
+    * New optional fields `limitStrategyId`, `limitStrategyType`, `stopStrategyId`, `stopStrategyType`
     * These are the strategy metadata parameters for both legs of the OCO orders.
     * `limitStrategyType` and `stopStrategyType` both cannot be less than `1000000`.
 * Changes to `GET /api/v3/order`, `GET /api/v3/openOrders`, and `GET /api/v3/allOrders`
