@@ -2292,17 +2292,17 @@ listenKey | STRING | YES
 #### PERCENT_PRICE_BY_SIDE
 `PERCENT_PRICE_BY_SIDE` 过滤器定义了基于交易对平均价格的合法价格范围. 取决于`BUY`或者`SELL`, 价格范围可能有所不同.<br>
 
-`avgPriceMins` 是用来计算平均价格的分钟数. 0 表示用最新价(last price)<br>
+`avgPriceMins` 是用来计算平均价格的分钟数. 0 表示用最新价(last price).<br>
 
 买向订单需要满足:
 
-* `Order price` <= `bidMultiplierUp` * `lastPrice`
-* `Order price` >= `bidMultiplierDown` * `lastPrice`
+* `Order price` <= `weightedAveragePrice` * `bidMultiplierUp`
+* `Order price` >= `weightedAveragePrice` * `bidMultiplierDown`
 
 卖向订单需要满足:
 
-* `Order Price` <= `askMultiplierUp` * `lastPrice`
-* `Order Price` >= `askMultiplierDown` * `lastPrice`
+* `Order Price` <= `weightedAveragePrice` * `askMultiplierUp`
+* `Order Price` >= `weightedAveragePrice` * `askMultiplierDown`
 
 
 **/exchangeInfo 响应中的格式:**
