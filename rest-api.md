@@ -2524,7 +2524,7 @@ In order to pass the `percent price`, the following must be true for `price`:
 ```
 
 ### PERCENT_PRICE_BY_SIDE
-The `PERCENT_PRICE_BY_SIDE` filter defines the valid range for the price based on the average of the previous trades.
+The `PERCENT_PRICE_BY_SIDE` filter defines the valid range for the price based on the average of the previous trades.<br>
 `avgPriceMins` is the number of minutes the average price is calculated over. 0 means the last price is used. <br>
 There is a different range depending on whether the order is placed on the `BUY` side or the `SELL` side.
 
