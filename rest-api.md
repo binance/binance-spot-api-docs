@@ -57,29 +57,10 @@
     - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
     - [Keepalive user data stream (USER_STREAM)](#keepalive-user-data-stream-user_stream)
     - [Close user data stream (USER_STREAM)](#close-user-data-stream-user_stream)
-- [Filters](#filters)
-  - [Symbol filters](#symbol-filters)
-    - [PRICE_FILTER](#price_filter)
-    - [PERCENT_PRICE](#percent_price)
-    - [PERCENT_PRICE_BY_SIDE](#percent_price_by_side)
-    - [LOT_SIZE](#lot_size)
-    - [MIN_NOTIONAL](#min_notional)
-    - [NOTIONAL](#notional)
-    - [ICEBERG_PARTS](#iceberg_parts)
-    - [MARKET_LOT_SIZE](#market_lot_size)
-    - [MAX_NUM_ORDERS](#max_num_orders)
-    - [MAX_NUM_ALGO_ORDERS](#max_num_algo_orders)
-    - [MAX_NUM_ICEBERG_ORDERS](#max_num_iceberg_orders)
-    - [MAX_POSITION](#max_position)
-    - [TRAILING_DELTA](#trailing_delta)
-  - [Exchange Filters](#exchange-filters)
-    - [EXCHANGE_MAX_NUM_ORDERS](#exchange_max_num_orders)
-    - [EXCHANGE_MAX_NUM_ALGO_ORDERS](#exchange_max_num_algo_orders)
-    - [EXCHANGE_MAX_NUM_ICEBERG_ORDERS](#exchange_max_num_iceberg_orders)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2022-08-08)
+# Public Rest API for Binance (2022-08-23)
 
 ## General API Information
 * The base endpoint is: **https://api.binance.com**
@@ -393,8 +374,9 @@ Status | Description
 
 **Kline/Candlestick chart intervals:**
 
-m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
+s-> seconds; m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
 
+* 1s
 * 1m
 * 3m
 * 5m
@@ -757,22 +739,69 @@ Database
 ```javascript
 [
   [
-    1499040000000,      // Open time
-    "0.01634790",       // Open
-    "0.80000000",       // High
-    "0.01575800",       // Low
-    "0.01577100",       // Close
+    1499040000000,      // Kline open time
+    "0.01634790",       // Open price
+    "0.80000000",       // High price
+    "0.01575800",       // Low price
+    "0.01577100",       // Close price
     "148976.11427815",  // Volume
-    1499644799999,      // Close time
+    1499644799999,      // Kline Close time
     "2434.19055334",    // Quote asset volume
     308,                // Number of trades
     "1756.87402397",    // Taker buy base asset volume
     "28.46694368",      // Taker buy quote asset volume
-    "17928899.62484339" // Ignore.
+    "0"                 // Unused field, ignore.
   ]
 ]
 ```
 
+### UIKlines
+
+The request is similar to klines having the same parameters and response.
+
+`uiKlines` return modified kline data, optimized for presentation of candlestick charts.
+
+```
+GET /api/v3/uiKlines
+```
+
+**Weight:**
+1
+
+**Parameters:**
+
+Name      | Type   | Mandatory    | Description
+------    | ------ | ------------ | ------------
+symbol    | STRING | YES          |
+interval  | ENUM   | YES          |
+startTime | LONG   | NO           |
+endTime   | LONG   | NO           |
+limit     | INT    | NO           | Default 500; max 1000.
+
+* If `startTime` and `endTime` are not sent, the most recent klines are returned.
+
+**Data Source:**
+Database
+
+**Response:**
+```javascript
+[
+  [
+    1499040000000,      // Kline open time
+    "0.01634790",       // Open price
+    "0.80000000",       // High price
+    "0.01575800",       // Low price
+    "0.01577100",       // Close price
+    "148976.11427815",  // Volume
+    1499644799999,      // Kline close time
+    "2434.19055334",    // Quote asset volume
+    308,                // Number of trades
+    "1756.87402397",    // Taker buy base asset volume
+    "28.46694368",      // Taker buy quote asset volume
+    "0"                 // Unused field. Ignore.
+  ]
+]
+```
 
 ### Current average price
 Current average price for a symbol.
@@ -874,13 +903,19 @@ GET /api/v3/ticker/24hr
         <td>STRING</td>
         <td>NO</td>
      </tr>
+     <tr>
+        <td>type</td>
+        <td>ENUM</td>
+        <td>NO</td>
+        <td>Supported values: <tt>FULL</tt> or <tt>MINI</tt>. <br>If none provided, the default is <tt>FULL</tt> </td>
+     </tr>
 </tbody>
 </table>
 
 **Data Source:**
 Memory
 
-**Response:**
+**Response - FULL:**
 ```javascript
 {
   "symbol": "BNBBTC",
@@ -931,6 +966,60 @@ OR
     "firstId": 28385,   // First tradeId
     "lastId": 28460,    // Last tradeId
     "count": 76         // Trade count
+  }
+]
+```
+
+**Response - MINI**
+
+```javascript
+{
+  "symbol":      "BNBBTC",          // Symbol Name
+  "openPrice":   "99.00000000",     // Opening price of the Interval
+  "highPrice":   "100.00000000",    // Highest price in the interval
+  "lowPrice":    "0.10000000",      // Lowest  price in the interval
+  "lastPrice":   "4.00000200",      // Closing price of the interval
+  "volume":      "8913.30000000",   // Total trade volume (in base asset)
+  "quoteVolume": "15.30000000",     // Total trade volume (in quote asset)
+  "openTime":    1499783499040,     // Start of the ticker interval
+  "closeTime":   1499869899040,     // End of the ticker interval
+  "firstId":     28385,             // First tradeId considered
+  "lastId":      28460,             // Last tradeId considered
+  "count":       76                 // Total trade count
+}
+```
+
+OR
+
+```javascript
+[
+  {
+    "symbol": "BNBBTC",
+    "openPrice": "99.00000000",
+    "highPrice": "100.00000000",
+    "lowPrice": "0.10000000",
+    "lastPrice": "4.00000200",
+    "volume": "8913.30000000",
+    "quoteVolume": "15.30000000",
+    "openTime": 1499783499040,
+    "closeTime": 1499869899040,
+    "firstId": 28385,
+    "lastId": 28460,
+    "count": 76
+  },
+  {
+    "symbol": "LTCBTC",
+    "openPrice": "0.07000000",
+    "highPrice": "0.07000000",
+    "lowPrice": "0.07000000",
+    "lastPrice": "0.07000000",
+    "volume": "11.00000000",
+    "quoteVolume": "0.77000000",
+    "openTime": 1656908192899,
+    "closeTime": 1656994592899,
+    "firstId": 0,
+    "lastId": 10,
+    "count": 11
   }
 ]
 ```
@@ -1168,6 +1257,10 @@ E.g. If the `closeTime` is 1641287867099 (January 04, 2022 09:17:47:099 UTC) , a
      <td>Defaults to <tt>1d</tt> if no parameter provided <br> Supported <tt>windowSize</tt> values: <br> <tt>1m</tt>,<tt>2m</tt>....<tt>59m</tt> for minutes <br> <tt>1h</tt>, <tt>2h</tt>....<tt>23h</tt> - for hours <br> <tt>1d</tt>...<tt>7d</tt> - for days <br><br> Units cannot be combined (e.g. <tt>1d2h</tt> is not allowed)</td>
   </tr>
   <tr>
+      <td>type</td>
+      <td>ENUM</td>
+      <td>NO</td>
+      <td>Supported values: <tt>FULL</tt> or <tt>MINI</tt>. <br>If none provided, the default is <tt>FULL</tt> </td>
   </tr>
 </table>
 
@@ -1238,6 +1331,64 @@ When using `symbols`:
     "lastId": 2352034,
     "count": 361
   }
+]
+```
+
+**Response - MINI**
+
+When using `symbol`:
+
+```javascript
+{
+    "symbol": "LTCBTC",
+    "openPrice": "0.10000000",
+    "highPrice": "2.00000000",
+    "lowPrice": "0.10000000",
+    "lastPrice": "2.00000000",
+    "volume": "39.00000000",
+    "quoteVolume": "13.40000000",  // Sum of (price * volume) for all trades
+    "openTime": 1656986580000,     // Open time for ticker window
+    "closeTime": 1657001016795,    // Close time for ticker window
+    "firstId": 0,                  // Trade IDs
+    "lastId": 34,
+    "count": 35                    // Number of trades in the interval
+}
+```
+
+OR
+
+When using `symbols`:
+
+```javascript
+[
+    {
+        "symbol": "BNBBTC",
+        "openPrice": "0.10000000",
+        "highPrice": "2.00000000",
+        "lowPrice": "0.10000000",
+        "lastPrice": "2.00000000",
+        "volume": "39.00000000",
+        "quoteVolume": "13.40000000", // Sum of (price * volume) for all trades
+        "openTime": 1656986880000,    // Open time for ticker window
+        "closeTime": 1657001297799,   // Close time for ticker window
+        "firstId": 0,                 // Trade IDs
+        "lastId": 34,
+        "count": 35                   // Number of trades in the interval
+    },
+    {
+        "symbol": "LTCBTC",
+        "openPrice": "0.07000000",
+        "highPrice": "0.07000000",
+        "lowPrice": "0.07000000",
+        "lastPrice": "0.07000000",
+        "volume": "33.00000000",
+        "quoteVolume": "2.31000000",
+        "openTime": 1656986880000,
+        "closeTime": 1657001297799,
+        "firstId": 0,
+        "lastId": 32,
+        "count": 33
+    }
 ]
 ```
 
@@ -2478,295 +2629,3 @@ Memory
 {}
 ```
 
-# Filters
-Filters define trading rules on a symbol or an exchange.
-Filters come in two forms: `symbol filters` and `exchange filters`.
-
-## Symbol filters
-### PRICE_FILTER
-The `PRICE_FILTER` defines the `price` rules for a symbol. There are 3 parts:
-
-* `minPrice` defines the minimum `price`/`stopPrice` allowed; disabled on `minPrice` == 0.
-* `maxPrice` defines the maximum `price`/`stopPrice` allowed; disabled on `maxPrice` == 0.
-* `tickSize` defines the intervals that a `price`/`stopPrice` can be increased/decreased by; disabled on `tickSize` == 0.
-
-Any of the above variables can be set to 0, which disables that rule in the `price filter`. In order to pass the `price filter`, the following must be true for `price`/`stopPrice` of the enabled rules:
-
-* `price` >= `minPrice`
-* `price` <= `maxPrice`
-* `price` % `tickSize` == 0
-
-**/exchangeInfo format:**
-```javascript
-{
-  "filterType": "PRICE_FILTER",
-  "minPrice": "0.00000100",
-  "maxPrice": "100000.00000000",
-  "tickSize": "0.00000100"
-}
-```
-
-### PERCENT_PRICE
-The `PERCENT_PRICE` filter defines the valid range for the price based on the average of the previous trades.
-`avgPriceMins` is the number of minutes the average price is calculated over. 0 means the last price is used.
-
-In order to pass the `percent price`, the following must be true for `price`:
-* `price` <= `weightedAveragePrice` * `multiplierUp`
-* `price` >= `weightedAveragePrice` * `multiplierDown`
-
-**/exchangeInfo format:**
-```javascript
-{
-  "filterType": "PERCENT_PRICE",
-  "multiplierUp": "1.3000",
-  "multiplierDown": "0.7000",
-  "avgPriceMins": 5
-}
-```
-
-### PERCENT_PRICE_BY_SIDE
-The `PERCENT_PRICE_BY_SIDE` filter defines the valid range for the price based on the average of the previous trades.<br>
-`avgPriceMins` is the number of minutes the average price is calculated over. 0 means the last price is used. <br>
-There is a different range depending on whether the order is placed on the `BUY` side or the `SELL` side.
-
-Buy orders will succeed on this filter if:
-* `Order price` <= `weightedAveragePrice` * `bidMultiplierUp`
-* `Order price` >= `weightedAveragePrice` * `bidMultiplierDown`
-
-Sell orders will succeed on this filter if:
-* `Order Price` <= `weightedAveragePrice` * `askMultiplierUp`
-* `Order Price` >= `weightedAveragePrice` * `askMultiplierDown`
-
-**/exchangeInfo format:**
-```javascript
-  {
-    "filterType": "PERCENT_PRICE_BY_SIDE",
-    "bidMultiplierUp": "1.2",
-    "bidMultiplierDown": "0.2",
-    "askMultiplierUp": "5",
-    "askMultiplierDown": "0.8",
-    "avgPriceMins": 1
-  }
-```
-
-
-### LOT_SIZE
-The `LOT_SIZE` filter defines the `quantity` (aka "lots" in auction terms) rules for a symbol. There are 3 parts:
-
-* `minQty` defines the minimum `quantity`/`icebergQty` allowed.
-* `maxQty` defines the maximum `quantity`/`icebergQty` allowed.
-* `stepSize` defines the intervals that a `quantity`/`icebergQty` can be increased/decreased by.
-
-In order to pass the `lot size`, the following must be true for `quantity`/`icebergQty`:
-
-* `quantity` >= `minQty`
-* `quantity` <= `maxQty`
-* (`quantity`-`minQty`) % `stepSize` == 0
-
-**/exchangeInfo format:**
-```javascript
-{
-  "filterType": "LOT_SIZE",
-  "minQty": "0.00100000",
-  "maxQty": "100000.00000000",
-  "stepSize": "0.00100000"
-}
-```
-
-### MIN_NOTIONAL
-The `MIN_NOTIONAL` filter defines the minimum notional value allowed for an order on a symbol.
-An order's notional value is the `price` * `quantity`.
-`applyToMarket` determines whether or not the `MIN_NOTIONAL` filter will also be applied to `MARKET` orders.
-Since `MARKET` orders have no price, the average price is used over the last `avgPriceMins` minutes.
-`avgPriceMins` is the number of minutes the average price is calculated over. 0 means the last price is used.
-
-
-**/exchangeInfo format:**
-```javascript
-{
-  "filterType": "MIN_NOTIONAL",
-  "minNotional": "0.00100000",
-  "applyToMarket": true,
-  "avgPriceMins": 5
-}
-```
-
-### NOTIONAL
-The `NOTIONAL` filter defines the acceptable notional range allowed for an order on a symbol. <br><br>
-`applyMinToMarket` determines whether the `minNotional` will be applied to `MARKET` orders. <br>
-`applyMaxToMarket` determines whether the `maxNotional` will be applied to `MARKET` orders.
-
-In order to pass this filter, the notional (`price * quantity`) has to pass the following conditions:
-
-* `price * quantity` <= `maxNotional`
-* `price * quantity` >= `minNotional`
-
-For `MARKET` orders, the average price used over the last `avgPriceMins` minutes will be used for calculation. <br>
-If the `avgPriceMins` is 0, then the last price will be used.
-
-**/exchangeInfo format:**
-```javascript
-{
-   "filterType": "NOTIONAL",
-   "minNotional": "10.00000000",
-   "applyMinToMarket": false,
-   "maxNotional": "10000.00000000",
-   "applyMaxToMarket": false,
-   "avgPriceMins": 5
-}
-```
-
-### ICEBERG_PARTS
-The `ICEBERG_PARTS` filter defines the maximum parts an iceberg order can have. The number of `ICEBERG_PARTS` is defined as `CEIL(qty / icebergQty)`.
-
-**/exchangeInfo format:**
-```javascript
-{
-  "filterType": "ICEBERG_PARTS",
-  "limit": 10
-}
-```
-
-### MARKET_LOT_SIZE
-The `MARKET_LOT_SIZE` filter defines the `quantity` (aka "lots" in auction terms) rules for `MARKET` orders on a symbol. There are 3 parts:
-
-* `minQty` defines the minimum `quantity` allowed.
-* `maxQty` defines the maximum `quantity` allowed.
-* `stepSize` defines the intervals that a `quantity` can be increased/decreased by.
-
-In order to pass the `market lot size`, the following must be true for `quantity`:
-
-* `quantity` >= `minQty`
-* `quantity` <= `maxQty`
-* (`quantity`-`minQty`) % `stepSize` == 0
-
-**/exchangeInfo format:**
-```javascript
-{
-  "filterType": "MARKET_LOT_SIZE",
-  "minQty": "0.00100000",
-  "maxQty": "100000.00000000",
-  "stepSize": "0.00100000"
-}
-```
-
-### MAX_NUM_ORDERS
-The `MAX_NUM_ORDERS` filter defines the maximum number of orders an account is allowed to have open on a symbol.
-Note that both "algo" orders and normal orders are counted for this filter.
-
-**/exchangeInfo format:**
-```javascript
-{
-  "filterType": "MAX_NUM_ORDERS",
-  "maxNumOrders": 25
-}
-```
-
-### MAX_NUM_ALGO_ORDERS
-The `MAX_NUM_ALGO_ORDERS` filter defines the maximum number of "algo" orders an account is allowed to have open on a symbol.
-"Algo" orders are `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, and `TAKE_PROFIT_LIMIT` orders.
-
-**/exchangeInfo format:**
-```javascript
-{
-  "filterType": "MAX_NUM_ALGO_ORDERS",
-  "maxNumAlgoOrders": 5
-}
-```
-
-### MAX_NUM_ICEBERG_ORDERS
-The `MAX_NUM_ICEBERG_ORDERS` filter defines the maximum number of `ICEBERG` orders an account is allowed to have open on a symbol.
-An `ICEBERG` order is any order where the `icebergQty` is > 0.
-
-**/exchangeInfo format:**
-```javascript
-{
-  "filterType": "MAX_NUM_ICEBERG_ORDERS",
-  "maxNumIcebergOrders": 5
-}
-```
-
-### MAX_POSITION 
-
-The `MAX_POSITION` filter defines the allowed maximum position an account can have on the base asset of a symbol. An account's position defined as the sum of the account's:
-1. free balance of the base asset
-1. locked balance of the base asset
-1. sum of the qty of all open BUY orders
-
-`BUY` orders will be rejected if the account's position is greater than the maximum position allowed.
-
-If an order's `quantity` can cause the position to overflow, this will also fail the `MAX_POSITION` filter.
-
-**/exchangeInfo format:**
-```javascript
-{
-  "filterType":"MAX_POSITION",
-  "maxPosition":"10.00000000"
-}
-```
-
-### TRAILING_DELTA
-
-The `TRAILING_DELTA` filter defines the minimum and maximum value for the parameter `trailingDelta`.
-
-In order for a trailing stop order to pass this filter, the following must be true:
-
-For `STOP_LOSS BUY`, `STOP_LOSS_LIMIT_BUY`,`TAKE_PROFIT SELL` and `TAKE_PROFIT_LIMIT SELL` orders: 
-
-* `trailingDelta` >= `minTrailingAboveDelta`
-* `trailingDelta` <= `maxTrailingAboveDelta` 
-
-For `STOP_LOSS SELL`, `STOP_LOSS_LIMIT SELL`, `TAKE_PROFIT BUY`, and `TAKE_PROFIT_LIMIT BUY` orders:
-
-* `trailingDelta` >= `minTrailingBelowDelta`
-* `trailingDelta` <= `maxTrailingBelowDelta`
-
-
-**/exchangeInfo format:**
-
-```javascript
-    {
-          "filterType": "TRAILING_DELTA",
-          "minTrailingAboveDelta": 10,
-          "maxTrailingAboveDelta": 2000,
-          "minTrailingBelowDelta": 10,
-          "maxTrailingBelowDelta": 2000
-   }
-```
-
-
-## Exchange Filters
-### EXCHANGE_MAX_NUM_ORDERS
-The `EXCHANGE_MAX_NUM_ORDERS` filter defines the maximum number of orders an account is allowed to have open on the exchange.
-Note that both "algo" orders and normal orders are counted for this filter.
-
-**/exchangeInfo format:**
-```javascript
-{
-  "filterType": "EXCHANGE_MAX_NUM_ORDERS",
-  "maxNumOrders": 1000
-}
-```
-
-### EXCHANGE_MAX_NUM_ALGO_ORDERS
-The `EXCHANGE_MAX_NUM_ALGO_ORDERS` filter defines the maximum number of "algo" orders an account is allowed to have open on the exchange.
-"Algo" orders are `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, and `TAKE_PROFIT_LIMIT` orders.
-
-**/exchangeInfo format:**
-```javascript
-{
-  "filterType": "EXCHANGE_MAX_NUM_ALGO_ORDERS",
-  "maxNumAlgoOrders": 200
-}
-```
-
-### EXCHANGE_MAX_NUM_ICEBERG_ORDERS
-The `EXCHANGE_MAX_NUM_ICEBERG_ORDERS` filter defines the maximum number of iceberg orders an account is allowed to have open on the exchange.
-
-**/exchangeInfo format:**
-```javascript
-{
-  "filterType": "EXCHANGE_MAX_NUM_ICEBERG_ORDERS",
-  "maxNumIcebergOrders": 10000
-}
-```
