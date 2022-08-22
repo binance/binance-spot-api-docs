@@ -2445,6 +2445,7 @@ Memory => Database
   "canTrade": true,
   "canWithdraw": true,
   "canDeposit": true,
+  "brokered":false,
   "updateTime": 123456789,
   "accountType": "SPOT",
   "balances": [
