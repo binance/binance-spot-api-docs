@@ -327,6 +327,7 @@ These terms will be used throughout the documentation, so it is recommended espe
 * TRD_GRP_002
 * TRD_GRP_003
 * TRD_GRP_004
+* TRD_GRP_005
 
 **Order status (status):**
 
