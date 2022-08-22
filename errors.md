@@ -1,4 +1,4 @@
-# Error codes for Binance (2022-08-08)
+# Error codes for Binance (2022-08-23)
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
 ```javascript
@@ -30,6 +30,9 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 #### -1007 TIMEOUT
  * Timeout waiting for response from backend server. Send status unknown; execution status unknown.
+
+#### -1008 SERVER_BUSY
+  * Server is currently overloaded with other requests. Please try again in a few minutes. 
 
 #### -1014 UNKNOWN_ORDER_COMPOSITION
  * Unsupported order combination.
