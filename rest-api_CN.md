@@ -224,6 +224,8 @@ There is no & between "GTC" and "quantity=1".
 * TRD_GRP_002 交易组 002
 * TRD_GRP_003 交易组 003
 * TRD_GRP_004 交易组 004
+* TRD_GRP_005 交易组 005
+
 
 **订单状态 (status):**
 
