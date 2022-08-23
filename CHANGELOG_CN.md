@@ -2,6 +2,25 @@
 
 ---
 
+## 2022-08-23
+
+此变动会滚动发布, 可能需要一段时间更新到所有服务器上。
+
+* 接口 `GET /api/v3/ticker` 与 `GET /api/v3/ticker/24hr` 变动
+    * 添加新可选参数 `type`
+    * `type` 可接受的参数值有 `FULL` 与 `MINI`
+        * `FULL` 是默认值， 也是原来接口所返回的响应
+        * `MINI` 省略了以下字段: `priceChangePercent`, `weightedAvgPrice`, `bidPrice`, `bidQty`, `askPrice`, `askQty` 与 `lastQty`
+* 添加新错误代码 `-1008`
+    * 每当服务器的请求超载时都会发送此消息
+    * 此错误代码只会在 SPOT API 里出现
+* 接口 `GET /api/v3/account` 添加新参数 `brokered`
+* 添加新接口: `GET /api/v3/uiKlines`
+* 添加新k线间隔: `1s`
+
+
+---
+
 ## 2022-08-08
 
 REST API
