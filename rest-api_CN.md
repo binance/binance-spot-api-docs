@@ -294,8 +294,9 @@ Status | Description
 
 **K线间隔 (interval):**
 
-m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
+s -> 秒; m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 
+* 1s
 * 1m
 * 3m
 * 5m
@@ -684,7 +685,58 @@ limit | INT | NO | Default 500; max 1000.
   ]
 ]
 ```
+
+
+### UIK线数据
+
+请求参数与响应和k线接口相同。
+
+`uiKlines` 返回修改后的k线数据，针对k线图的呈现进行了优化。
+
+```
+GET /api/v3/uiKlines
+```
+
+**权重:**
+1
+
+**参数:**
+
+名称 | 类型 | 是否必需 | 描述
+------    | ------ | ------------ | ------------
+symbol    | STRING | YES          |
+interval  | ENUM   | YES          |
+startTime | LONG   | NO           |
+endTime   | LONG   | NO           |
+limit     | INT    | NO           | 默认 500; 最大 1000.
+
+* 如果未发送 startTime 和 endTime ，默认返回最近的交易。
+
+**数据源:**
+数据库
+
+**Response:**
+```javascript
+[
+  [
+    1499040000000,      // k线开盘时间
+    "0.01634790",       // 开盘价
+    "0.80000000",       // 最高价
+    "0.01575800",       // 最低价
+    "0.01577100",       // 收盘价(当前K线未结束的即为最新价)
+    "148976.11427815",  // 成交量
+    1499644799999,      // k线收盘时间
+    "2434.19055334",    // 成交额
+    308,                // 成交笔数
+    "1756.87402397",    // 主动买入成交量
+    "28.46694368",      // 主动买入成交额
+    "0" // 请忽略该参数
+  ]
+]
+```
+
 ### 当前平均价格
+
 ```
 GET /api/v3/avgPrice
 ```
@@ -781,13 +833,19 @@ GET /api/v3/ticker/24hr
         <td>STRING</td>
         <td>NO</td>
      </tr>
+     <tr>
+        <td>type</td>
+        <td>ENUM</td>
+        <td>NO</td>
+        <td>可接受的参数: <tt>FULL</tt> or <tt>MINI</tt>. <br>如果不提供, 默认值为 <tt>FULL</tt> </td>
+    </tr>
 </tbody>
 </table>
 
 **数据源:**
 缓存
 
-**响应:**
+**响应 - FULL:**
 ```javascript
 {
   "symbol": "BNBBTC",
@@ -843,6 +901,61 @@ OR
 ```
 
 
+**响应 - MINI**
+
+```javascript
+{
+  "symbol":      "BNBBTC",          // 交易对
+  "openPrice":   "99.00000000",     // 间隔开盘价
+  "highPrice":   "100.00000000",    // 间隔最高价
+  "lowPrice":    "0.10000000",      // 间隔最低价
+  "lastPrice":   "4.00000200",      // 间隔收盘价
+  "volume":      "8913.30000000",   // 总交易量 (base asset)
+  "quoteVolume": "15.30000000",     // 总交易量 (quote asset)
+  "openTime":    1499783499040,     // ticker间隔的开始时间
+  "closeTime":   1499869899040,     // ticker间隔的结束时间
+  "firstId":     28385,             // 统计时间内的第一笔trade id
+  "lastId":      28460,             // 统计时间内的最后一笔trade id
+  "count":       76                 // 统计时间内交易笔数
+}
+```
+
+OR
+
+```javascript
+[
+  {
+    "symbol": "BNBBTC",
+    "openPrice": "99.00000000",
+    "highPrice": "100.00000000",
+    "lowPrice": "0.10000000",
+    "lastPrice": "4.00000200",
+    "volume": "8913.30000000",
+    "quoteVolume": "15.30000000",
+    "openTime": 1499783499040,
+    "closeTime": 1499869899040,
+    "firstId": 28385,
+    "lastId": 28460,
+    "count": 76
+  },
+  {
+    "symbol": "LTCBTC",
+    "openPrice": "0.07000000",
+    "highPrice": "0.07000000",
+    "lowPrice": "0.07000000",
+    "lastPrice": "0.07000000",
+    "volume": "11.00000000",
+    "quoteVolume": "0.77000000",
+    "openTime": 1656908192899,
+    "closeTime": 1656994592899,
+    "firstId": 0,
+    "lastId": 10,
+    "count": 11
+  }
+]
+```
+
+
 ### 最新价格接口
 ```
 GET /api/v3/ticker/price
@@ -873,6 +986,12 @@ GET /api/v3/ticker/price
         <td>symbols</td>
         <td>不限</td>
         <td>2</td>
+    </tr>
+    <tr>
+        <td>type</td>
+        <td>ENUM</td>
+        <td>NO</td>
+        <td>可接受的参数: <tt>FULL</tt> or <tt>MINI</tt>. <br>如果不提供, 默认值为 <tt>FULL</tt> </td>
     </tr>
 </tbody>
 </table>
@@ -1089,7 +1208,7 @@ GET /api/v3/ticker
 
 **数据源:** 数据库
 
-**响应**
+**响应 - Full**
 
 使用参数 `symbol` 返回:
 
@@ -1151,6 +1270,63 @@ GET /api/v3/ticker
     "lastId": 2352034,
     "count": 361
   }
+]
+```
+
+
+**响应 - MINI**
+
+使用参数 `symbol` 返回:
+
+```javascript
+{
+    "symbol": "LTCBTC",
+    "openPrice": "0.10000000",
+    "highPrice": "2.00000000",
+    "lowPrice": "0.10000000",
+    "lastPrice": "2.00000000",
+    "volume": "39.00000000",
+    "quoteVolume": "13.40000000",  // 此k线内所有交易的price(价格) x volume(交易量)的总和
+    "openTime": 1656986580000,     // ticker窗口的开始时间
+    "closeTime": 1657001016795,    // ticker窗口的结束时间
+    "firstId": 0,                  // 首笔成交id
+    "lastId": 34,
+    "count": 35                    // 统计时间内交易笔数
+}
+```
+
+使用参数 `symbols` 返回:
+
+```javascript
+[
+    {
+        "symbol": "BNBBTC",
+        "openPrice": "0.10000000",
+        "highPrice": "2.00000000",
+        "lowPrice": "0.10000000",
+        "lastPrice": "2.00000000",
+        "volume": "39.00000000",
+        "quoteVolume": "13.40000000", // 此k线内所有交易的price(价格) x volume(交易量)的总和
+        "openTime": 1656986880000,    // ticker窗口的开始时间
+        "closeTime": 1657001297799,   // ticker窗口的结束时间
+        "firstId": 0,                 // 首笔成交id
+        "lastId": 34,
+        "count": 35                   // 统计时间内交易笔数
+    },
+    {
+        "symbol": "LTCBTC",
+        "openPrice": "0.07000000",
+        "highPrice": "0.07000000",
+        "lowPrice": "0.07000000",
+        "lastPrice": "0.07000000",
+        "volume": "33.00000000",
+        "quoteVolume": "2.31000000",
+        "openTime": 1656986880000,
+        "closeTime": 1657001297799,
+        "firstId": 0,
+        "lastId": 32,
+        "count": 33
+    }
 ]
 ```
 
@@ -2076,6 +2252,7 @@ timestamp | LONG | YES |
   "canTrade": true,
   "canWithdraw": true,
   "canDeposit": true,
+  "brokered": false,
   "updateTime": 123456789,
   "balances": [
     {
