@@ -726,8 +726,8 @@ Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
 interval | ENUM | YES |
-startTime | LONG | NO |
-endTime | LONG | NO |
+startTime | LONG | NO | Timestamp in ms
+endTime | LONG | NO | Timestamp in ms
 limit | INT | NO | Default 500; max 1000.
 
 * If startTime and endTime are not sent, the most recent klines are returned.
@@ -774,8 +774,8 @@ Name      | Type   | Mandatory    | Description
 ------    | ------ | ------------ | ------------
 symbol    | STRING | YES          |
 interval  | ENUM   | YES          |
-startTime | LONG   | NO           |
-endTime   | LONG   | NO           |
+startTime | LONG   | NO           | Timestamp in ms
+endTime   | LONG   | NO           | Timestamp in ms
 limit     | INT    | NO           | Default 500; max 1000.
 
 * If `startTime` and `endTime` are not sent, the most recent klines are returned.
@@ -2014,8 +2014,8 @@ Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
 orderId | LONG | NO |
-startTime | LONG | NO |
-endTime | LONG | NO |
+startTime | LONG | NO | Timestamp in ms
+endTime | LONG | NO | Timestamp in ms
 limit | INT | NO | Default 500; max 1000.
 recvWindow | LONG | NO | The value cannot be greater than ```60000```
 timestamp | LONG | YES |
@@ -2312,8 +2312,8 @@ Retrieves all OCO based on provided optional parameters
 Name|Type| Mandatory| Description
 ----|----|----|---------
 fromId|LONG|NO| If supplied, neither ```startTime``` or ```endTime``` can be provided
-startTime|LONG|NO|
-endTime|LONG|NO|
+startTime|LONG|NO|Timestamp in ms
+endTime|LONG|NO|Timestamp in ms
 limit|INT|NO| Default Value: 500; Max Value: 1000
 recvWindow|LONG|NO| The value cannot be greater than ```60000```
 timestamp|LONG|YES|
@@ -2481,8 +2481,8 @@ Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
 orderId|LONG|NO| This can only be used in combination with `symbol`.
-startTime | LONG | NO |
-endTime | LONG | NO |
+startTime | LONG | NO | Timestamp in ms
+endTime | LONG | NO | Timestamp in ms
 fromId | LONG | NO | TradeId to fetch from. Default gets most recent trades.
 limit | INT | NO | Default 500; max 1000.
 recvWindow | LONG | NO | The value cannot be greater than ```60000```
