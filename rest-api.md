@@ -2491,6 +2491,7 @@ timestamp | LONG | YES |
 **Notes:**
 * If `fromId` is set, it will get trades >= that `fromId`.
 Otherwise most recent trades are returned.
+* The time between `startTime` and `endTime` can't be longer than 24 hours.
 
 **Data Source:**
 Memory => Database
