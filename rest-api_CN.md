@@ -2291,6 +2291,11 @@ limit | INT | NO | Default 500; max 1000.
 recvWindow | LONG | NO |
 timestamp | LONG | YES |
 
+
+**备注:**
+* 如果设置了`fromId`, 会返回ID大于此`fromId`的交易. 不然则会返回最近的交易.
+* `startTime`和`endTime`设置的时间间隔不能超过24小时.
+
 **数据源:**
 数据库
 
