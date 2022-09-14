@@ -1274,7 +1274,7 @@ E.g. If the `closeTime` is 1641287867099 (January 04, 2022 09:17:47:099 UTC) , a
 **Data Source:**
 Database
 
-**Response**
+**Response - FULL**
 
 When using `symbol`:
 
@@ -1306,20 +1306,20 @@ When using `symbols`:
 [
   {
     "symbol": "BTCUSDT",
-    "priceChange": "-154.13000000",
-    "priceChangePercent": "-0.740",
-    "weightedAvgPrice": "20677.46305250",
+    "priceChange": "-154.13000000",        // Absolute price change
+    "priceChangePercent": "-0.740",        // Relative price change in percent
+    "weightedAvgPrice": "20677.46305250",  // QuoteVolume / Volume
     "openPrice": "20825.27000000",
     "highPrice": "20972.46000000",
     "lowPrice": "20327.92000000",
     "lastPrice": "20671.14000000",
     "volume": "72.65112300",
-    "quoteVolume": "1502240.91155513",
-    "openTime": 1655432400000,
-    "closeTime": 1655446835460,
-    "firstId": 11147809,
+    "quoteVolume": "1502240.91155513",     // Sum of (price * volume) for all trades
+    "openTime": 1655432400000,             // Open time for ticker window
+    "closeTime": 1655446835460,            // Close time for ticker window
+    "firstId": 11147809,                   // Trade IDs
     "lastId": 11149775,
-    "count": 1967
+    "count": 1967                          // Number of trades in the interval
   },
   {
     "symbol": "BNBBTC",
