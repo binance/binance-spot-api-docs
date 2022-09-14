@@ -1,5 +1,18 @@
-# CHANGELOG for Binance's API (2022-08-23)
+# CHANGELOG for Binance's API (2022-09-15)
 
+
+## 2022-09-15
+
+Note that these are rolling changes, so it may take a few days for it to rollout to all our servers.
+
+* Changes to `GET /api/v3/exchangeInfo`
+    * New optional parameter `permissions` added to display all symbols with the permissions matching the parameter provided. (eg.`SPOT`,`MARGIN`)
+    * If not provided, the default value will be `["SPOT","MARGIN"]`.
+        * This means the request `GET /api/v3/exchangeInfo` without any parameters will show all symbols that can be used for `SPOT` and/or `MARGIN` trading.
+        * To search for symbols that can be traded on other permissions (e.g. `LEVERAGED`, `TRD_GRP_004`, etc), then this needs to be searched for explicitly. (e.g.`permissions`=`LEVERAGED`)
+    * Cannot be combined with `symbol` or `symbols`
+
+---
 
 ## 2022-08-23
 
