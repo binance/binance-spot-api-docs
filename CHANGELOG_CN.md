@@ -7,8 +7,8 @@
 * 接口 `GET /api/v3/exchangeInfo` 的变动
     * 添加一个新的参数 `permissions` , 用于查询适用于相应权限的所有交易对.
     * 如果查询时不提供此参数, 则默认值是 `["SPOT","MARGIN","LEVERAGED"]`.
-        * 这表示如果请求 `GET /api/v3/exchangeInfo` 时候没有任何参数, 则会返回拥有权限是 `SPOT`, `MARGIN` 或者同时包括两者的交易对.
-        * 如果要查询其他交易权限, 比如`LEVERAGED`, `TRD_GRP_004`等, 需要在查询参数里设置(比如`permissions`=`TRD_GRP_004`).
+        * 这表示如果请求 `GET /api/v3/exchangeInfo` 时候没有任何参数, 则会返回拥有权限是 `SPOT`, `MARGIN` , `LEVERAGED` 的交易对.
+        * 如果要查询其他交易权限, 比如`TRD_GRP_004`等, 需要在查询参数里设置(比如`permissions`=`TRD_GRP_004`).
     * 此参数不可以同时和 `symbol` 或者 `symbols` 使用.
 
 
