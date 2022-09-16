@@ -421,7 +421,7 @@ GET /api/v3/exchangeInfo
 * 如果参数 `symbol` 或者 `symbols` 提供的交易对不存在, 系统会返回错误并提示交易对不正确.
 * 所有的参数都是可选的.
 * `permissions` 支持单个或者多个值, 比如 `SPOT`, `["MARGIN","LEVERAGED"]`.
-* 如果`permissions`值没有提供, 其默认值为 `["SPOT","MARGIN"]`. 
+* 如果`permissions`值没有提供, 其默认值为 `["SPOT","MARGIN","LEVERAGED"]`. 
   * 如果想取接口 `GET /api/v3/exchangeInfo` 的所有交易对, 则需要设置此参数的所有可能交易权限值, 比如 `permissions=["SPOT","MARGIN","LEVERAGED","TRD_GRP_002","TRD_GRP_003","TRD_GRP_004","TRD_GRP_005"])`
 
 **数据源:**
