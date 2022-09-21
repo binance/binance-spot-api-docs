@@ -1212,7 +1212,7 @@ GET /api/v3/ticker
 
 **数据源:** 数据库
 
-**响应 - Full**
+**响应 - FULL**
 
 使用参数 `symbol` 返回:
 
