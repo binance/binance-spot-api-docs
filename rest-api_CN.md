@@ -993,12 +993,6 @@ GET /api/v3/ticker/price
         <td>不限</td>
         <td>2</td>
     </tr>
-    <tr>
-        <td>type</td>
-        <td>ENUM</td>
-        <td>NO</td>
-        <td>可接受的参数: <tt>FULL</tt> or <tt>MINI</tt>. <br>如果不提供, 默认值为 <tt>FULL</tt> </td>
-    </tr>
 </tbody>
 </table>
 
@@ -1208,6 +1202,10 @@ GET /api/v3/ticker
      <td>默认为 <tt>1d</tt> <br> <tt>windowSize</tt> 支持的值: <br> 如果是分钟: <tt>1m</tt>,<tt>2m</tt>....<tt>59m</tt> <br> 如果是小时: <tt>1h</tt>, <tt>2h</tt>....<tt>23h</tt> <br> 如果是天: <tt>1d</tt>...<tt>7d</tt> <br><br>  不可以组合使用, 比如<tt>1d2h</tt></td>
   </tr>
   <tr>
+     <td>type</td>
+     <td>ENUM</td>
+      <td>NO</td>
+      <td>可接受的参数: <tt>FULL</tt> or <tt>MINI</tt>. <br>如果不提供, 默认值为 <tt>FULL</tt> </td>
   </tr>
 </table>
 
