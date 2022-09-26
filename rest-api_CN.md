@@ -414,14 +414,14 @@ GET /api/v3/exchangeInfo
 ----- | ----|
 |不需要交易对|curl -X GET "https://api.binance.com/api/v3/exchangeInfo"|
 |单个交易对|curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbol=BNBBTC"|
-|多个交易对| curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbols=%5B%22BNBBTC%22,%22BTCUSDT%22%5D" or curl -g -X GET 'https://api.binance.com/api/v3/exchangeInfo?symbols=["BTCUSDT","BNBBTC"]'|
-| 交易权限 | curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=SPOT" <br> 或者 <br> curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=["MARGIN",LEVERAGED"]" <br> 或者 <br>curl -g -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=%5B%22MARGIN%22%2C%22LEVERAGED%22%5D" |
+|多个交易对| curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbols=%5B%22BNBBTC%22,%22BTCUSDT%22%5D" <br> 或者 <br> curl -g -X GET 'https://api.binance.com/api/v3/exchangeInfo?symbols=["BTCUSDT","BNBBTC"]'|
+| 交易权限 | curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=SPOT" <br> 或者 <br> curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=%5B%22MARGIN%22%2C%22LEVERAGED%22%5D" <br> 或者 <br> curl -g -X GET 'https://api.binance.com/api/v3/exchangeInfo?permissions=["MARGIN","LEVERAGED"]'|
 
 **备注**:
 * 如果参数 `symbol` 或者 `symbols` 提供的交易对不存在, 系统会返回错误并提示交易对不正确.
 * 所有的参数都是可选的.
 * `permissions` 支持单个或者多个值, 比如 `SPOT`, `["MARGIN","LEVERAGED"]`.
-* 如果`permissions`值没有提供, 其默认值为 `["SPOT","MARGIN"]`. 
+* 如果`permissions`值没有提供, 其默认值为 `["SPOT","MARGIN","LEVERAGED"]`. 
   * 如果想取接口 `GET /api/v3/exchangeInfo` 的所有交易对, 则需要设置此参数的所有可能交易权限值, 比如 `permissions=["SPOT","MARGIN","LEVERAGED","TRD_GRP_002","TRD_GRP_003","TRD_GRP_004","TRD_GRP_005"])`
 
 **数据源:**

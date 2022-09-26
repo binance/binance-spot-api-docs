@@ -492,14 +492,14 @@ There are 4 possible options:
 ----- | ----|
 |No parameter|curl -X GET "https://api.binance.com/api/v3/exchangeInfo"|
 |symbol|curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbol=BNBBTC"|
-|symbols| curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbols=%5B%22BNBBTC%22,%22BTCUSDT%22%5D" or curl -g GET 'https://api.binance.com/api/v3/exchangeInfo?symbols=["BTCUSDT","BNBBTC"]' |
-|permissions| curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=SPOT"  <br> or <br> curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=["MARGIN",LEVERAGED"]"  <br> or <br>curl -g GET "https://api.binance.com/api/v3/exchangeInfo?permissions=%5B%22MARGIN%22%2C%22LEVERAGED%22%5D" |
+|symbols| curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbols=%5B%22BNBBTC%22,%22BTCUSDT%22%5D" <br> or <br> curl -g -X  GET 'https://api.binance.com/api/v3/exchangeInfo?symbols=["BTCUSDT","BNBBTC"]' |
+|permissions| curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=SPOT" <br> or <br> curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=%5B%22MARGIN%22%2C%22LEVERAGED%22%5D" <br> or <br> curl -g -X GET 'https://api.binance.com/api/v3/exchangeInfo?permissions=["MARGIN","LEVERAGED"]' |
 
 **Notes**:
 * If the value provided to `symbol` or `symbols` do not exist, the endpoint will throw an error saying the symbol is invalid.
 * All parameters are optional.
 * `permissions` can support single or multiple values (e.g. `SPOT`, `["MARGIN","LEVERAGED"]`)
-* If `permissions` parameter not provided, the default values will be `["SPOT","MARGIN"]`. 
+* If `permissions` parameter not provided, the default values will be `["SPOT","MARGIN","LEVERAGED"]`. 
   * If one wants to view all symbols on `GET /api/v3/exchangeInfo`, then one has to search with all permissions explicitly specified 
   (i.e. `permissions=["SPOT","MARGIN","LEVERAGED","TRD_GRP_002","TRD_GRP_003","TRD_GRP_004","TRD_GRP_005"])`
 
