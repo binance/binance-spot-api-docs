@@ -280,7 +280,7 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 
 **Stream 名称:** \<symbol\>@ticker_\<window_size\>
 
-**Window Sizes:** 1h, 4h
+**Window Sizes:** 1h, 4h, 1d
 
 **更新速度:** 1000ms
 
@@ -320,7 +320,7 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 
 **Stream 名称:** !ticker_\<window-size\>@arr
 
-**Window Size:** 1h, 4h
+**Window Size:** 1h, 4h, 1d
 
 **更新速度:** 1000ms
 

@@ -376,7 +376,7 @@ Rolling window ticker statistics for a single symbol, computed over multiple win
 
 **Stream Name:** \<symbol\>@ticker_\<window_size\>
 
-**Window Sizes:** 1h,4h
+**Window Sizes:** 1h,4h,1d
 
 **Update Speed:** 1000ms
 
@@ -416,7 +416,7 @@ Note that only tickers that have changed will be present in the array.
 
 **Stream Name:** !ticker_\<window-size\>@arr
 
-**Window Size:** 1h,4h
+**Window Size:** 1h,4h,1d
 
 **Update Speed:** 1000ms
 
