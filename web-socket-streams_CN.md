@@ -1,4 +1,4 @@
-# Web Socket 行情接口(2022-06-15)
+# Web Socket 行情接口(2022-09-30)
 # 基本信息
 * 本篇所列出的所有wss接口的baseurl为: **wss://stream.binance.com:9443**
 * 所有stream均可以直接访问，或者作为组合streams的一部分。
@@ -189,7 +189,9 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 ```
 
 ## 按Symbol的最优挂单信息
+
 实时推送指定交易对最优挂单信息
+多个 `<symbol>@bookTicker` 可以订阅在一个WebSocket连接上
 
 **Stream Name:** \<symbol\>@bookTicker
 
@@ -207,6 +209,8 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 
 ## 全市场最优挂单信息
 实时推送所有交易对最优挂单信息
+
+**注意**: 这个功能计划在2022年11月前后下线. 此推送下线后，可以使用`<symbol>@bookTicker`来获得单symbol最优挂单信息. 可以在一个连接上订阅多个`<symbol>@bookTicker`.
 
 **Stream Name:** !bookTicker
 
