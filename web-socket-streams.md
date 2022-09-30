@@ -29,7 +29,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Web Socket Streams for Binance (2022-08-23)
+# Web Socket Streams for Binance (2022-09-30)
 # General WSS information
 * The base endpoint is: **wss://stream.binance.com:9443**
 * Streams can be accessed either in a single raw stream or in a combined stream
@@ -433,6 +433,7 @@ Note that only tickers that have changed will be present in the array.
 
 ## Individual Symbol Book Ticker Streams
 Pushes any update to the best bid or ask's price or quantity in real-time for a specified symbol.
+Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection. 
 
 **Stream Name:** \<symbol\>@bookTicker
 
@@ -451,6 +452,11 @@ Pushes any update to the best bid or ask's price or quantity in real-time for a 
 ```
 
 ## All Book Tickers Stream
+
+**Note:** This feature is scheduled to be removed around **November 2022**.<br>
+Once this has been removed, please use `<symbol>@bookTicker` instead. <br>
+Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection. 
+
 Pushes any update to the best bid or ask's price or quantity in real-time for all symbols.
 
 **Stream Name:** !bookTicker
