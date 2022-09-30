@@ -1,4 +1,16 @@
-# 更新日志 (2022-09-15)
+# 更新日志 (2022-09-30)
+
+
+
+`!bookTicker`的WebSocket推送的变更.
+
+* 全市场最优挂单信息推送(`!bookTicker`)计划在**2022年11月**下线, 具体下线的时间会在后面通告.
+* 请使用按Symbol的最优挂单信息推送(`<symbol>@bookTicker`).
+* 多个 `<symbol>@bookTicker` 可以订阅在一个WebSocket连接上.
+    * 比如 `wss://stream.binance.com:9443/stream?streams=btcusdt@bookTicker/bnbbtc@bookTicker`
+
+___
+
 
 ## 2022-09-15
 
