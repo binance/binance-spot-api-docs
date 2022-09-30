@@ -1,5 +1,16 @@
-# CHANGELOG for Binance's API (2022-09-15)
+# CHANGELOG for Binance's API (2022-09-30)
 
+## 2022-09-30
+
+Scheduled changes to the removal of `!bookTicker` around November 2022.
+
+* The All Book Tickers stream (`!bookTicker`) is set to be removed in **November 2022**.
+* More details of the actual removal date will be announced at a later time.
+* Please use the Individual Book Ticker Streams instead. (`<symbol>@bookTicker`).
+* Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection. 
+    * Example: wss://stream.binance.com:9443/stream?streams=btcusdt@bookTicker/bnbbtc@bookTicker
+
+---
 
 ## 2022-09-15
 
