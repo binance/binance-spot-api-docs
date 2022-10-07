@@ -24,6 +24,7 @@
 
 名称 | 描述
 ------------ | ------------
+[spot_glossary_cn.md](./faqs/spot_glossary_cn.md) | 现货交易API术语表
 [trailing-stop-faq-cn.md](./faqs/trailing-stop-faq-cn.md)   | 追踪止盈止损订单(Trailing Stop)详细信息和常见问题
 
 
