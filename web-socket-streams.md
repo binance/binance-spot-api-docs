@@ -31,7 +31,7 @@
 
 # Web Socket Streams for Binance (2022-09-30)
 # General WSS information
-* The base endpoint is: **wss://stream.binance.com:9443**
+* The base endpoint is: **wss://stream.binance.com:9443** or **wss://stream.binance.com:443**
 * Streams can be accessed either in a single raw stream or in a combined stream
 * Raw streams are accessed at **/ws/\<streamName\>**
 * Combined streams are accessed at **/stream?streams=\<streamName1\>/\<streamName2\>/\<streamName3\>**
