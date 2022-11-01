@@ -175,7 +175,7 @@ Average price can be found by doing `Z` divided by `z`.
 * NEW - The order has been accepted into the engine.
 * CANCELED - The order has been canceled by the user. 
 * REPLACED (currently unused)
-* REJECTED - The order has been rejected and was not processed. (This message appears only with Cancel Replace Orders wherein the new order placement is rejected but the request to cancel request succeeds.)
+* REJECTED - The order has been rejected and was not processed (This message appears only with Cancel Replace Orders wherein the new order placement is rejected but the request to cancel request succeeds.)
 * TRADE - Part of the order or all of the order's quantity has filled.
 * EXPIRED - The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance)
 
