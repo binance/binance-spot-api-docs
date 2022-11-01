@@ -169,7 +169,7 @@ listenKey | STRING | YES
 * NEW 新订单
 * CANCELED 订单被取消
 * REPLACED (保留字段，当前未使用)
-* REJECTED 新订单被拒绝
+* REJECTED 新订单被拒绝 （这信息只会在撤消挂单再下单中发生，下新订单被拒绝但撤消挂单请求成功。）
 * TRADE 订单有新成交
 * EXPIRED 订单失效（根据订单的Time In Force参数）
 
