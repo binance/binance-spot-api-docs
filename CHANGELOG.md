@@ -1,4 +1,12 @@
-# CHANGELOG for Binance's API (2022-09-30)
+# CHANGELOG for Binance's API (2022-11-16)
+
+## 2022-11-16
+
+* Documentation has been updated to show how to create RSA keys.
+* For security reasons, we recommend to use RSA keys instead of HMAC keys when generating an API key.
+* We accept `PKCS#8` (BEGIN PUBLIC KEY).
+
+---
 
 ## 2022-09-30
 

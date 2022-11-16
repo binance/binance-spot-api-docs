@@ -15,9 +15,11 @@
 - [SIGNED (TRADE and USER_DATA) Endpoint security](#signed-trade-and-user_data-endpoint-security)
   - [Timing security](#timing-security)
   - [SIGNED Endpoint Examples for POST /api/v3/order](#signed-endpoint-examples-for-post-apiv3order)
-    - [Example 1: As a request body](#example-1-as-a-request-body)
-    - [Example 2: As a query string](#example-2-as-a-query-string)
-    - [Example 3: Mixed query string and request body](#example-3-mixed-query-string-and-request-body)
+    - [HMAC Keys](#hmac-keys)
+      - [Example 1: As a request body](#example-1-as-a-request-body)
+      - [Example 2: As a query string](#example-2-as-a-query-string)
+      - [Example 3: Mixed query string and request body](#example-3-mixed-query-string-and-request-body)
+    - [RSA Keys](#rsa-keys)
 - [Public API Endpoints](#public-api-endpoints)
     - [Terminology](#terminology)
   - [ENUM definitions](#enum-definitions)
@@ -31,6 +33,7 @@
     - [Old trade lookup (MARKET_DATA)](#old-trade-lookup-market_data)
     - [Compressed/Aggregate trades list](#compressedaggregate-trades-list)
     - [Kline/Candlestick data](#klinecandlestick-data)
+    - [UIKlines](#uiklines)
     - [Current average price](#current-average-price)
     - [24hr ticker price change statistics](#24hr-ticker-price-change-statistics)
     - [Symbol price ticker](#symbol-price-ticker)
@@ -60,7 +63,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2022-09-15)
+# Public Rest API for Binance (2022-11-16)
 
 ## General API Information
 * The base endpoint is: **https://api.binance.com**
@@ -205,6 +208,8 @@ server.
 
 
 ## SIGNED Endpoint Examples for POST /api/v3/order
+
+### HMAC Keys
 Here is a step-by-step example of how to send a valid signed payload from the
 Linux command line using `echo`, `openssl`, and `curl`.
 
@@ -225,7 +230,7 @@ price | 0.1
 recvWindow | 5000
 timestamp | 1499827319559
 
-### Example 1: As a request body
+#### Example 1: As a request body
 * **requestBody:** symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559
 * **HMAC SHA256 signature:**
 
@@ -242,7 +247,7 @@ timestamp | 1499827319559
     [linux]$ curl -H "X-MBX-APIKEY: vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A" -X POST 'https://api.binance.com/api/v3/order' -d 'symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71'
     ```
 
-### Example 2: As a query string
+#### Example 2: As a query string
 * **queryString:** symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559
 * **HMAC SHA256 signature:**
 
@@ -259,7 +264,7 @@ timestamp | 1499827319559
     [linux]$ curl -H "X-MBX-APIKEY: vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A" -X POST 'https://api.binance.com/api/v3/order?symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71'
     ```
 
-### Example 3: Mixed query string and request body
+#### Example 3: Mixed query string and request body
 * **queryString:** symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC
 * **requestBody:** quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559
 * **HMAC SHA256 signature:**
@@ -279,6 +284,124 @@ timestamp | 1499827319559
 
 Note that the signature is different in example 3.
 There is no & between "GTC" and "quantity=1".
+
+### RSA Keys 
+
+This will be a step by step process how to create the signature payload to send a valid signed payload. 
+
+We support `PKCS#8` currently.
+
+To get your API key, you need to upload your RSA Public Key to your account and a corresponding API key will be provided for you.
+
+For this example, the private key will be referenced as `./test-prv-key.pem`
+
+Key | Value
+------------ | ------------
+apiKey | CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ
+
+Parameter | Value
+------------ | ------------
+symbol | BTCUSDT
+side | SELL
+type | LIMIT
+timeInForce | GTC
+quantity | 1
+price | 0.2
+recvWindow | 5000
+timestamp | 1668481559918
+
+**Step 1: Construct the payload**
+
+Arrange the list of parameters into a string. Separate each parameter with a `&`.
+
+For the parameters above, the signature payload would look like this:
+
+```console
+symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918recvWindow=5000
+```
+
+**Step 2: Compute the signature:**
+
+1. Encode signature payload as ASCII data.
+2. Sign payload using RSASSA-PKCS1-v1_5 algorithm with SHA-256 hash function.
+
+```console
+ $ echo -n '?symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918recvWindow=5000' | openssl dgst -keyform PEM -sha256 -sign ./test-prv-key.pem
+```
+3. Encode output as base64 string. 
+
+```console
+$ echo -n '?symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918recvWindow=5000' | openssl dgst -keyform PEM -sha256 -sign ./test-prv-key.pem | openssl enc -base64
+HZ8HOjiJ1s/igS9JA+n7+7Ti/ihtkRF5BIWcPIEluJP6tlbFM/Bf44LfZka/iemt
+ahZAZzcO9TnI5uaXh3++lrqtNonCwp6/245UFWkiW1elpgtVAmJPbogcAv6rSlok
+ztAfWk296ZJXzRDYAtzGH0gq7CgSJKfH+XxaCmR0WcvlKjNQnp12/eKXJYO4tDap
+8UCBLuyxDnR7oJKLHQHJLP0r0EAVOOSIbrFang/1WOq+Jaq4Efc4XpnTgnwlBbWT
+mhWDR1pvS9iVEzcSYLHT/fNnMRxFc7u+j3qI//5yuGuu14KR0MuQKKCSpViieD+f
+Iti46sxPTsjSemoUKp0oXA==
+```
+4. Delete any newlines in the signature.
+
+```console
+$  echo -n '?symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918recvWindow=5000' | openssl dgst -keyform PEM -sha256 -sign ./test-prv-key.pem | openssl enc -base64 | tr -d '\n'
+HZ8HOjiJ1s/igS9JA+n7+7Ti/ihtkRF5BIWcPIEluJP6tlbFM/Bf44LfZka/iemtahZAZzcO9TnI5uaXh3++lrqtNonCwp6/245UFWkiW1elpgtVAmJPbogcAv6rSlokztAfWk296ZJXzRDYAtzGH0gq7CgSJKfH+XxaCmR0WcvlKjNQnp12/eKXJYO4tDap8UCBLuyxDnR7oJKLHQHJLP0r0EAVOOSIbrFang/1WOq+Jaq4Efc4XpnTgnwlBbWTmhWDR1pvS9iVEzcSYLHT/fNnMRxFc7u+j3qI//5yuGuu14KR0MuQKKCSpViieD+fIti46sxPTsjSemoUKp0oXA==
+```
+
+5. Since the signature may contain `/` and `=`, this could cause issues with sending the request. So the signature has to be URL encoded.
+
+```console
+HZ8HOjiJ1s%2FigS9JA%2Bn7%2B7Ti%2FihtkRF5BIWcPIEluJP6tlbFM%2FBf44LfZka%2FiemtahZAZzcO9TnI5uaXh3%2B%2BlrqtNonCwp6%2F245UFWkiW1elpgtVAmJPbogcAv6rSlokztAfWk296ZJXzRDYAtzGH0gq7CgSJKfH%2BXxaCmR0WcvlKjNQnp12%2FeKXJYO4tDap8UCBLuyxDnR7oJKLHQHJLP0r0EAVOOSIbrFang%2F1WOq%2BJaq4Efc4XpnTgnwlBbWTmhWDR1pvS9iVEzcSYLHT%2FfNnMRxFc7u%2Bj3qI%2F%2F5yuGuu14KR0MuQKKCSpViieD%2BfIti46sxPTsjSemoUKp0oXA%3D%3D%5B
+```
+
+6. The curl command:
+
+```console
+ curl -H "X-MBX-APIKEY: CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ" -X POST 'https://api.binance.com/api/v3/order?symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918recvWindow=5000&signature=HZ8HOjiJ1s%2FigS9JA%2Bn7%2B7Ti%2FihtkRF5BIWcPIEluJP6tlbFM%2FBf44LfZka%2FiemtahZAZzcO9TnI5uaXh3%2B%2BlrqtNonCwp6%2F245UFWkiW1elpgtVAmJPbogcAv6rSlokztAfWk296ZJXzRDYAtzGH0gq7CgSJKfH%2BXxaCmR0WcvlKjNQnp12%2FeKXJYO4tDap8UCBLuyxDnR7oJKLHQHJLP0r0EAVOOSIbrFang%2F1WOq%2BJaq4Efc4XpnTgnwlBbWTmhWDR1pvS9iVEzcSYLHT%2FfNnMRxFc7u%2Bj3qI%2F%2F5yuGuu14KR0MuQKKCSpViieD%2BfIti46sxPTsjSemoUKp0oXA%3D%3D%5B'
+```
+
+A sample Bash script below does the similar steps said above.
+
+```bash
+#!/usr/bin/env bash
+
+# Set up authentication:
+apiKey="CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ"   ### REPLACE THIS WITH YOUR API KEY
+
+# Set up the request:
+apiMethod="POST"
+apiCall="v3/order"
+apiParams="symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&recvWindow=5000"
+
+
+function rawurlencode {
+    local value="$1"
+    local len=${#value}
+    local encoded=""
+    local pos c o
+    for (( pos=0 ; pos<len ; pos++ ))
+    do
+        c=${value:$pos:1}
+        case "$c" in
+            [-_.~a-zA-Z0-9] ) o="${c}" ;;
+            * )   printf -v o '%%%02x' "'$c"
+        esac
+        encoded+="$o"
+    done
+    echo "$encoded"
+}
+
+ts=$(date +%s000)
+paramsWithTs="$apiParams&timestamp=$ts"
+
+rawSignature=$(echo -n "$paramsWithTs" \
+               | openssl dgst -keyform PEM -sha256 -sign ./test-prv-key.pem \  ### THIS IS YOUR PRIVATE KEY. DO NOT SHARE THIS FILE WITH ANYONE.
+               | openssl enc -base64 \
+               | tr -d '\n')
+signature=$(rawurlencode "$rawSignature")
+
+curl -H "X-MBX-APIKEY: $apiKey" -X $apiMethod \
+    "https://api.binance.com/api/$apiCall?$paramsWithTs&signature=$signature"
+```
+
 
 # Public API Endpoints
 ### Terminology
