@@ -200,10 +200,10 @@ There is no & between "GTC" and "quantity=1".
 
 ### RSA Keys
 
-这将逐步介绍如何通过有效的签名发送 payload。
-我们支持`PKCS#8`。
-要获取 API Key，您需要在您的账户上上传您的 RSA Public Key。
-对于这个例子，Private Key 将被引用为`./test-prv-key.pem`
+* 这将逐步介绍如何通过有效的签名发送 payload。
+* 我们接受`PKCS#8`格式的RSA密钥。
+* 要获取 API Key，您需要在您的账户上上传您的 RSA Public Key。
+* 对于这个例子，Private Key 将被引用为 `test-prv-key.pem`。
 
 Key | Value
 ------------ | ------------

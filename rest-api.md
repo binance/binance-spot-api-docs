@@ -287,13 +287,10 @@ There is no & between "GTC" and "quantity=1".
 
 ### RSA Keys 
 
-This will be a step by step process how to create the signature payload to send a valid signed payload. 
-
-We support `PKCS#8` currently.
-
-To get your API key, you need to upload your RSA Public Key to your account and a corresponding API key will be provided for you.
-
-For this example, the private key will be referenced as `./test-prv-key.pem`
+* This will be a step by step process how to create the signature payload to send a valid signed payload. 
+* We support `PKCS#8` currently.
+* To get your API key, you need to upload your RSA Public Key to your account and a corresponding API key will be provided for you.
+* For this example, the private key will be referenced as `test-prv-key.pem`
 
 Key | Value
 ------------ | ------------
