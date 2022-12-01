@@ -74,6 +74,20 @@
 * All endpoints return either a JSON object or array.
 * Data is returned in **ascending** order. Oldest first, newest last.
 * All time and timestamp related fields are in **milliseconds**.
+* The base endpoint **https://data.binance.com** can be used to access the following API endpoints that have `NONE` as security type:
+  * GET /api/v3/aggTrades
+  * GET /api/v3/avgPrice
+  * GET /api/v3/depth
+  * GET /api/v3/exchangeInfo
+  * GET /api/v3/klines
+  * GET /api/v3/ping
+  * GET /api/v3/ticker
+  * GET /api/v3/ticker/24hr
+  * GET /api/v3/ticker/bookTicker
+  * GET /api/v3/ticker/price
+  * GET /api/v3/time
+  * GET /api/v3/trades
+  * GET /api/v3/uiKlines
 
 ## HTTP Return Codes
 

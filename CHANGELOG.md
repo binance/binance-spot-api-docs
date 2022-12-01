@@ -1,4 +1,8 @@
-# CHANGELOG for Binance's API (2022-11-16)
+# CHANGELOG for Binance's API (2022-12-02)
+
+## 2022-12-02
+
+* Add a new market data base URL `https://data.binance.com`.
 
 ## 2022-11-16
 

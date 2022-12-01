@@ -8,6 +8,20 @@
 * 所有接口的响应都是 JSON 格式。
 * 响应中如有数组，数组元素以时间**升序**排列，越早的数据越提前。  
 * 所有时间、时间戳均为UNIX时间，单位为**毫秒**。
+* URL **https://data.binance.com** 可以用来访问下面鉴权类型为 `NONE` 的接口:
+  * GET /api/v3/aggTrades
+  * GET /api/v3/avgPrice
+  * GET /api/v3/depth
+  * GET /api/v3/exchangeInfo
+  * GET /api/v3/klines
+  * GET /api/v3/ping
+  * GET /api/v3/ticker
+  * GET /api/v3/ticker/24hr
+  * GET /api/v3/ticker/bookTicker
+  * GET /api/v3/ticker/price
+  * GET /api/v3/time
+  * GET /api/v3/trades
+  * GET /api/v3/uiKlines
 
 ## HTTP 返回代码
 
