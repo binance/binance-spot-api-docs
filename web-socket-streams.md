@@ -39,6 +39,8 @@
 * All symbols for streams are **lowercase**
 * A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark
 * The websocket server will send a `ping frame` every 3 minutes. If the websocket server does not receive a `pong frame` back from the connection within a 10 minute period, the connection will be disconnected. Unsolicited `pong frames` are allowed.
+* The base endpoint **wss://data-stream.binance.com** can be subscribed to receive market data messages. Users data stream is **NOT** available from this URL.
+
 
 ## Websocket Limits
 * WebSocket connections have a limit of 5 incoming messages per second. A message is considered:

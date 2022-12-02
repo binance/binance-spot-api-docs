@@ -2,7 +2,8 @@
 
 ## 2022-12-02
 
-* 新增一个用于访问市场信息的URL: `https://data.binance.com`.
+* 新增一个用于访问市场信息的RESTful API URL: `https://data.binance.com`.
+* 新增一个用于访问市场信息的WebSocket URL: `wss://data-stream.binance.com`.
 
 ## 2022-11-16
 
