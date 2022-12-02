@@ -2,7 +2,8 @@
 
 ## 2022-12-02
 
-* Add a new market data base URL `https://data.binance.com`.
+* Added a new market data base URL `https://data.binance.com`.
+* Added a new WebSocket URL `wss://data-stream.binance.com`.
 
 ## 2022-11-16
 
