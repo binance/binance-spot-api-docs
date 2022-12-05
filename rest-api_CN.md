@@ -1,4 +1,4 @@
-# REST行情与交易接口 (2022-11-16)
+# REST行情与交易接口 (2022-12-05)
 ## API 基本信息
 * 本篇列出接口的baseurl: **https://api.binance.com**
 * 如果上面的baseURL访问有性能问题，请访问下面的API集群:
@@ -6,7 +6,7 @@
   * **https://api2.binance.com**
   * **https://api3.binance.com**
 * 所有接口的响应都是 JSON 格式。
-* 响应中如有数组，数组元素以时间**升序**排列，越早的数据越提前。  
+* 响应中如有数组，数组元素以时间**升序**排列，越早的数据越提前。
 * 所有时间、时间戳均为UNIX时间，单位为**毫秒**。
 * URL **https://data.binance.com** 可以用来访问下面鉴权类型为 `NONE` 的接口:
   * GET /api/v3/aggTrades
@@ -30,7 +30,7 @@
 * HTTP `409` 错误码表示重新下单(cancelReplace)的请求部分成功。(比如取消订单失败，但是下单成功了)
 * HTTP `429` 错误码表示警告访问频次超限，即将被封IP。
 * HTTP `418` 表示收到429后继续访问，于是被封了。
-* HTTP `5XX` 错误码用于指示Binance服务侧的问题。    
+* HTTP `5XX` 错误码用于指示Binance服务侧的问题。
 
 
 ## 接口错误代码
@@ -127,7 +127,7 @@ MARKET_DATA | 需要有效的API-KEY
   }
   ```
 
-**关于交易时效性** 
+**关于交易时效性**
 互联网状况并不100%可靠，不可完全依赖,因此你的程序本地到币安服务器的时延会有抖动.
 这是我们设置`recvWindow`的目的所在，如果你从事高频交易，对交易时效性有较高的要求，可以灵活设置`recvWindow`以达到你的要求。
 **不推荐使用5秒以上的recvWindow**
@@ -541,7 +541,7 @@ GET /api/v3/exchangeInfo
 * 如果参数 `symbol` 或者 `symbols` 提供的交易对不存在, 系统会返回错误并提示交易对不正确.
 * 所有的参数都是可选的.
 * `permissions` 支持单个或者多个值, 比如 `SPOT`, `["MARGIN","LEVERAGED"]`.
-* 如果`permissions`值没有提供, 其默认值为 `["SPOT","MARGIN","LEVERAGED"]`. 
+* 如果`permissions`值没有提供, 其默认值为 `["SPOT","MARGIN","LEVERAGED"]`.
   * 如果想取接口 `GET /api/v3/exchangeInfo` 的所有交易对, 则需要设置此参数的所有可能交易权限值, 比如 `permissions=["SPOT","MARGIN","LEVERAGED","TRD_GRP_002","TRD_GRP_003","TRD_GRP_004","TRD_GRP_005"])`
 
 **数据源:**
@@ -552,7 +552,8 @@ GET /api/v3/exchangeInfo
 {
   "timezone": "UTC",
   "serverTime": 1508631584636,
-  "rateLimits": [{
+  "rateLimits": [
+    {
       "rateLimitType": "REQUESTS_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
@@ -578,35 +579,49 @@ GET /api/v3/exchangeInfo
     }
   ],
   "exchangeFilters": [],
-  "symbols": [{
-    "symbol": "ETHBTC",
-    "status": "TRADING",
-    "baseAsset": "ETH",
-    "baseAssetPrecision": 8,
-    "quoteAsset": "BTC",
-    "quotePrecision": 8,
-    "quoteAssetPrecision": 8,
-    "orderTypes": ["LIMIT", "MARKET"],
-    "icebergAllowed": false,
-    "allowTrailingStop": false,
-    "cancelReplaceAllowed": false,
-    "filters": [{
-      "filterType": "PRICE_FILTER",
-      "minPrice": "0.00000100",
-      "maxPrice": "100000.00000000",
-      "tickSize": "0.00000100"
-    }, {
-      "filterType": "LOT_SIZE",
-      "minQty": "0.00100000",
-      "maxQty": "100000.00000000",
-      "stepSize": "0.00100000"
-    }, {
-      "filterType": "MIN_NOTIONAL",
-      "minNotional": "0.00100000",
-      "applyToMarket": true,
-      "avgPriceMins": 5
-    }]
-  }]
+  "symbols": [
+    {
+      "symbol": "ETHBTC",
+      "status": "TRADING",
+      "baseAsset": "ETH",
+      "baseAssetPrecision": 8,
+      "quoteAsset": "BTC",
+      "quotePrecision": 8,
+      "quoteAssetPrecision": 8,
+      "orderTypes": ["LIMIT", "MARKET"],
+      "icebergAllowed": false,
+      "allowTrailingStop": false,
+      "cancelReplaceAllowed": false,
+      "filters": [
+        {
+          "filterType": "PRICE_FILTER",
+          "minPrice": "0.00000100",
+          "maxPrice": "100000.00000000",
+          "tickSize": "0.00000100"
+        },
+        {
+          "filterType": "LOT_SIZE",
+          "minQty": "0.00100000",
+          "maxQty": "100000.00000000",
+          "stepSize": "0.00100000"
+        },
+        {
+          "filterType": "MIN_NOTIONAL",
+          "minNotional": "0.00100000",
+          "applyToMarket": true,
+          "avgPriceMins": 5
+        }
+      ],
+      "permissions": [
+        "SPOT",
+        "MARGIN"
+      ],
+      "defaultSelfTradePreventionMode": "NONE",
+      "allowedSelfTradePreventionModes": [
+        "NONE"
+      ]
+    }
+  ]
 }
 ```
 
@@ -745,8 +760,7 @@ startTime | LONG | NO | 从该时刻之后的成交记录开始返回结果
 endTime | LONG | NO | 返回该时刻为止的成交记录
 limit | INT | NO | 默认 500; 最大 1000.
 
-* 如果同时发送startTime和endTime，间隔必须小于一小时
-* 如果没有发送任何筛选参数(fromId, startTime,endTime)，默认返回最近的成交记录
+* 如果没有发送任何筛选参数(fromId, startTime, endTime)，默认返回最近的成交记录
 
 **数据源:**
 数据库
@@ -1341,7 +1355,7 @@ GET /api/v3/ticker
   "symbol":             "BNBBTC",
   "priceChange":        "-8.00000000",  // 价格变化
   "priceChangePercent": "-88.889",      // 价格变化百分比
-  "weightedAvgPrice":   "2.60427807",  
+  "weightedAvgPrice":   "2.60427807",
   "openPrice":          "9.00000000",
   "highPrice":          "9.00000000",
   "lowPrice":           "1.00000000",
@@ -1480,7 +1494,7 @@ strategyType |INT| NO| 不能低于 `1000000`.
 stopPrice | DECIMAL | NO | 仅 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` 需要此参数
 trailingDelta|LONG|NO| 用于 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, 和 `TAKE_PROFIT_LIMIT` 类型的订单.
 icebergQty | DECIMAL | NO | 仅有限价单(包括条件限价单与限价做事单)可以使用该参数，含义为创建冰山订单并指定冰山订单的尺寸
-newOrderRespType | ENUM | NO | 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`, 其他默认为`ACK`. 
+newOrderRespType | ENUM | NO | 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`, 其他默认为`ACK`.
 recvWindow | LONG | NO |
 timestamp | LONG | YES |
 
@@ -1498,7 +1512,7 @@ Type | 强制要求的参数 | 其他信息
 
 其他:
 
-* 任何`LIMIT`或`LIMIT_MAKER`只要填`icebergQty`参数都可以下冰上订单。 
+* 任何`LIMIT`或`LIMIT_MAKER`只要填`icebergQty`参数都可以下冰上订单。
 * 冰山订单的 `timeInForce`必须设置为`GTC`。
 * `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT_LIMIT` 与 `TAKE_PROFIT` 单子都能同时填上`trailingDelta`与`stopPrice`。
 * 填上`quoteOrderQty`的市价单不会触犯过滤器的`LOT_SIZE`限制。订单的`quantity`会尽量满足`quoteOrderQty`的数量。
@@ -1541,7 +1555,9 @@ Type | 强制要求的参数 | 其他信息
   "type": "MARKET",
   "side": "SELL"
   "strategyId": 1,               // 下单填了参数才会返回
-  "strategyType": 1000000        // 下单填了参数才会返回
+  "strategyType": 1000000,        // 下单填了参数才会返回
+  "workingTime": 1507725176595,
+  "selfTradePreventionMode": "NONE"
 }
 ```
 
@@ -1562,7 +1578,9 @@ Type | 强制要求的参数 | 其他信息
   "type": "MARKET",
   "side": "SELL",
   "strategyId": 1,               // 下单填了参数才会返回
-  "strategyType": 1000000        // 下单填了参数才会返回
+  "strategyType": 1000000,        // 下单填了参数才会返回
+  "workingTime": 1507725176595,
+  "selfTradePreventionMode": "NONE",
   "fills": [
     {
       "price": "4000.00000000",
@@ -1846,7 +1864,10 @@ timestamp | LONG | YES |
   "icebergQty": "0.0",
   "time": 1499827319559,
   "updateTime": 1499827319559,
-  "isWorking": true
+  "isWorking": true,
+  "workingTime":1499827319559,
+  "origQuoteOrderQty": "0.000000",
+  "selfTradePreventionMode": "NONE"
 }
 ```
 
@@ -1890,7 +1911,8 @@ timestamp | LONG | YES |
   "status": "CANCELED",
   "timeInForce": "GTC",
   "type": "LIMIT",
-  "side": "SELL"
+  "side": "SELL",
+  "selfTradePreventionMode": "NONE"
 }
 ```
 
@@ -1914,6 +1936,103 @@ timestamp | LONG | YES |
 **数据源:**
 撮合引擎
 
+
+**响应**
+
+```json
+[
+  {
+    "symbol": "BTCUSDT",
+    "origClientOrderId": "E6APeyTJvkMvLMYMqu1KQ4",
+    "orderId": 11,
+    "orderListId": -1,
+    "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+    "price": "0.089853",
+    "origQty": "0.178622",
+    "executedQty": "0.000000",
+    "cummulativeQuoteQty": "0.000000",
+    "status": "CANCELED",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "selfTradePreventionMode": "NONE"
+  },
+  {
+    "symbol": "BTCUSDT",
+    "origClientOrderId": "A3EF2HCwxgZPFMrfwbgrhv",
+    "orderId": 13,
+    "orderListId": -1,
+    "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+    "price": "0.090430",
+    "origQty": "0.178622",
+    "executedQty": "0.000000",
+    "cummulativeQuoteQty": "0.000000",
+    "status": "CANCELED",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "selfTradePreventionMode": "NONE"
+  },
+  {
+    "orderListId": 1929,
+    "contingencyType": "OCO",
+    "listStatusType": "ALL_DONE",
+    "listOrderStatus": "ALL_DONE",
+    "listClientOrderId": "2inzWQdDvZLHbbAmAozX2N",
+    "transactionTime": 1585230948299,
+    "symbol": "BTCUSDT",
+    "orders": [
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 20,
+        "clientOrderId": "CwOOIPHSmYywx6jZX77TdL"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 21,
+        "clientOrderId": "461cPg51vQjV3zIMOXNz39"
+      }
+    ],
+    "orderReports": [
+      {
+        "symbol": "BTCUSDT",
+        "origClientOrderId": "CwOOIPHSmYywx6jZX77TdL",
+        "orderId": 20,
+        "orderListId": 1929,
+        "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+        "price": "0.668611",
+        "origQty": "0.690354",
+        "executedQty": "0.000000",
+        "cummulativeQuoteQty": "0.000000",
+        "status": "CANCELED",
+        "timeInForce": "GTC",
+        "type": "STOP_LOSS_LIMIT",
+        "side": "BUY",
+        "stopPrice": "0.378131",
+        "icebergQty": "0.017083",
+        "selfTradePreventionMode": "NONE"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "origClientOrderId": "461cPg51vQjV3zIMOXNz39",
+        "orderId": 21,
+        "orderListId": 1929,
+        "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+        "price": "0.008791",
+        "origQty": "0.690354",
+        "executedQty": "0.000000",
+        "cummulativeQuoteQty": "0.000000",
+        "status": "CANCELED",
+        "timeInForce": "GTC",
+        "type": "LIMIT_MAKER",
+        "side": "BUY",
+        "icebergQty": "0.639962",
+        "selfTradePreventionMode": "NONE"
+      }
+    ]
+  }
+]
+```
 
 ## 查询订单 (USER_DATA)
 
@@ -1996,7 +2115,7 @@ GET /api/v3/allOrders (HMAC SHA256)
 ```
 
 **权重:**
-10 
+10
 
 **Parameters:**
 
@@ -2373,10 +2492,17 @@ timestamp | LONG | YES |
   "takerCommission": 15,
   "buyerCommission": 0,
   "sellerCommission": 0,
+    "commissionRates": {
+    "maker": "0.00150000",
+    "taker": "0.00150000",
+    "buyer": "0.00000000",
+    "seller": "0.00000000"
+  },
   "canTrade": true,
   "canWithdraw": true,
   "canDeposit": true,
   "brokered": false,
+  "requireSelfTradePrevention": false,
   "updateTime": 123456789,
   "balances": [
     {
@@ -2419,6 +2545,38 @@ timestamp | LONG | YES |
 **备注:**
 * 如果设置了`fromId`, 会返回ID大于此`fromId`的交易. 不然则会返回最近的交易.
 * `startTime`和`endTime`设置的时间间隔不能超过24小时.
+* 支持组合的 **可选** 参数：
+  * `symbol`
+  * `orderId`
+  * `fromId`
+  * `startTime`
+  * `endTime`
+  * `symbol` + `orderId`
+  * `symbol` + `fromId`
+  * `symbol` + `startTime`
+  * `symbol` + `endTime`
+  * `orderId` + `fromId`
+  * `orderId` + `startTime`
+  * `orderId` + `endTime`
+  * `fromId` + `startTime`
+  * `fromId` + `endTime`
+  * `startTime` + `endTime`
+  * `symbol` + `orderId` + `fromId`
+  * `symbol` + `orderId` + `startTime`
+  * `symbol` + `orderId` + `endTime`
+  * `symbol` + `fromId` + `startTime`
+  * `symbol` + `fromId` + `endTime`
+  * `symbol` + `startTime` + `endTime`
+  * `orderId` + `fromId` + `startTime`
+  * `orderId` + `fromId` + `endTime`
+  * `orderId` + `startTime` + `endTime`
+  * `fromId` + `startTime` + `endTime`
+  * `symbol` + `orderId` + `fromId` + `startTime`
+  * `symbol` + `orderId` + `fromId` + `endTime`
+  * `symbol` + `orderId` + `startTime` + `endTime`
+  * `symbol` + `fromId` + `startTime` + `endTime`
+  * `orderID` + `fromId` + `startTime` + `endTime`
+  * `symbol` + `orderID` + `fromId` + `startTime` + `endTime`
 
 **数据源:**
 数据库
@@ -2550,4 +2708,3 @@ listenKey | STRING | YES
 ```javascript
 {}
 ```
-
