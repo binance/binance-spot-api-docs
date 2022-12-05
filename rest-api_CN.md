@@ -1,4 +1,4 @@
-# REST行情与交易接口 (2022-11-16)
+# REST行情与交易接口 (2022-12-05)
 ## API 基本信息
 * 本篇列出接口的baseurl: **https://api.binance.com**
 * 如果上面的baseURL访问有性能问题，请访问下面的API集群:
@@ -552,7 +552,8 @@ GET /api/v3/exchangeInfo
 {
   "timezone": "UTC",
   "serverTime": 1508631584636,
-  "rateLimits": [{
+  "rateLimits": [
+    {
       "rateLimitType": "REQUESTS_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
@@ -578,35 +579,49 @@ GET /api/v3/exchangeInfo
     }
   ],
   "exchangeFilters": [],
-  "symbols": [{
-    "symbol": "ETHBTC",
-    "status": "TRADING",
-    "baseAsset": "ETH",
-    "baseAssetPrecision": 8,
-    "quoteAsset": "BTC",
-    "quotePrecision": 8,
-    "quoteAssetPrecision": 8,
-    "orderTypes": ["LIMIT", "MARKET"],
-    "icebergAllowed": false,
-    "allowTrailingStop": false,
-    "cancelReplaceAllowed": false,
-    "filters": [{
-      "filterType": "PRICE_FILTER",
-      "minPrice": "0.00000100",
-      "maxPrice": "100000.00000000",
-      "tickSize": "0.00000100"
-    }, {
-      "filterType": "LOT_SIZE",
-      "minQty": "0.00100000",
-      "maxQty": "100000.00000000",
-      "stepSize": "0.00100000"
-    }, {
-      "filterType": "MIN_NOTIONAL",
-      "minNotional": "0.00100000",
-      "applyToMarket": true,
-      "avgPriceMins": 5
-    }]
-  }]
+  "symbols": [
+    {
+      "symbol": "ETHBTC",
+      "status": "TRADING",
+      "baseAsset": "ETH",
+      "baseAssetPrecision": 8,
+      "quoteAsset": "BTC",
+      "quotePrecision": 8,
+      "quoteAssetPrecision": 8,
+      "orderTypes": ["LIMIT", "MARKET"],
+      "icebergAllowed": false,
+      "allowTrailingStop": false,
+      "cancelReplaceAllowed": false,
+      "filters": [
+        {
+          "filterType": "PRICE_FILTER",
+          "minPrice": "0.00000100",
+          "maxPrice": "100000.00000000",
+          "tickSize": "0.00000100"
+        }, 
+        {
+          "filterType": "LOT_SIZE",
+          "minQty": "0.00100000",
+          "maxQty": "100000.00000000",
+          "stepSize": "0.00100000"
+        }, 
+        {
+          "filterType": "MIN_NOTIONAL",
+          "minNotional": "0.00100000",
+          "applyToMarket": true,
+          "avgPriceMins": 5
+        }
+      ],
+      "permissions": [
+        "SPOT",
+        "MARGIN"
+      ],
+      "defaultSelfTradePreventionMode": "NONE",
+      "allowedSelfTradePreventionModes": [
+        "NONE"
+      ]
+    }
+  ]
 }
 ```
 
@@ -745,8 +760,7 @@ startTime | LONG | NO | 从该时刻之后的成交记录开始返回结果
 endTime | LONG | NO | 返回该时刻为止的成交记录
 limit | INT | NO | 默认 500; 最大 1000.
 
-* 如果同时发送startTime和endTime，间隔必须小于一小时
-* 如果没有发送任何筛选参数(fromId, startTime,endTime)，默认返回最近的成交记录
+* 如果没有发送任何筛选参数(fromId, startTime, endTime)，默认返回最近的成交记录
 
 **数据源:**
 数据库
@@ -1541,7 +1555,9 @@ Type | 强制要求的参数 | 其他信息
   "type": "MARKET",
   "side": "SELL"
   "strategyId": 1,               // 下单填了参数才会返回
-  "strategyType": 1000000        // 下单填了参数才会返回
+  "strategyType": 1000000,        // 下单填了参数才会返回
+  "workingTime": 1507725176595,
+  "selfTradePreventionMode": "NONE"
 }
 ```
 
@@ -1562,7 +1578,9 @@ Type | 强制要求的参数 | 其他信息
   "type": "MARKET",
   "side": "SELL",
   "strategyId": 1,               // 下单填了参数才会返回
-  "strategyType": 1000000        // 下单填了参数才会返回
+  "strategyType": 1000000,        // 下单填了参数才会返回
+  "workingTime": 1507725176595,
+  "selfTradePreventionMode": "NONE",
   "fills": [
     {
       "price": "4000.00000000",
@@ -1846,7 +1864,10 @@ timestamp | LONG | YES |
   "icebergQty": "0.0",
   "time": 1499827319559,
   "updateTime": 1499827319559,
-  "isWorking": true
+  "isWorking": true,
+  "workingTime":1499827319559,
+  "origQuoteOrderQty": "0.000000",
+  "selfTradePreventionMode": "NONE"
 }
 ```
 
@@ -1890,7 +1911,8 @@ timestamp | LONG | YES |
   "status": "CANCELED",
   "timeInForce": "GTC",
   "type": "LIMIT",
-  "side": "SELL"
+  "side": "SELL",
+  "selfTradePreventionMode": "NONE"
 }
 ```
 
@@ -1914,6 +1936,103 @@ timestamp | LONG | YES |
 **数据源:**
 撮合引擎
 
+
+**响应**
+
+```json
+[
+  {
+    "symbol": "BTCUSDT",
+    "origClientOrderId": "E6APeyTJvkMvLMYMqu1KQ4",
+    "orderId": 11,
+    "orderListId": -1,
+    "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+    "price": "0.089853",
+    "origQty": "0.178622",
+    "executedQty": "0.000000",
+    "cummulativeQuoteQty": "0.000000",
+    "status": "CANCELED",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "selfTradePreventionMode": "NONE"
+  },
+  {
+    "symbol": "BTCUSDT",
+    "origClientOrderId": "A3EF2HCwxgZPFMrfwbgrhv",
+    "orderId": 13,
+    "orderListId": -1,
+    "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+    "price": "0.090430",
+    "origQty": "0.178622",
+    "executedQty": "0.000000",
+    "cummulativeQuoteQty": "0.000000",
+    "status": "CANCELED",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "selfTradePreventionMode": "NONE"
+  },
+  {
+    "orderListId": 1929,
+    "contingencyType": "OCO",
+    "listStatusType": "ALL_DONE",
+    "listOrderStatus": "ALL_DONE",
+    "listClientOrderId": "2inzWQdDvZLHbbAmAozX2N",
+    "transactionTime": 1585230948299,
+    "symbol": "BTCUSDT",
+    "orders": [
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 20,
+        "clientOrderId": "CwOOIPHSmYywx6jZX77TdL"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 21,
+        "clientOrderId": "461cPg51vQjV3zIMOXNz39"
+      }
+    ],
+    "orderReports": [
+      {
+        "symbol": "BTCUSDT",
+        "origClientOrderId": "CwOOIPHSmYywx6jZX77TdL",
+        "orderId": 20,
+        "orderListId": 1929,
+        "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+        "price": "0.668611",
+        "origQty": "0.690354",
+        "executedQty": "0.000000",
+        "cummulativeQuoteQty": "0.000000",
+        "status": "CANCELED",
+        "timeInForce": "GTC",
+        "type": "STOP_LOSS_LIMIT",
+        "side": "BUY",
+        "stopPrice": "0.378131",
+        "icebergQty": "0.017083",
+        "selfTradePreventionMode": "NONE"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "origClientOrderId": "461cPg51vQjV3zIMOXNz39",
+        "orderId": 21,
+        "orderListId": 1929,
+        "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+        "price": "0.008791",
+        "origQty": "0.690354",
+        "executedQty": "0.000000",
+        "cummulativeQuoteQty": "0.000000",
+        "status": "CANCELED",
+        "timeInForce": "GTC",
+        "type": "LIMIT_MAKER",
+        "side": "BUY",
+        "icebergQty": "0.639962",
+        "selfTradePreventionMode": "NONE"
+      }
+    ]
+  }
+]
+```
 
 ## 查询订单 (USER_DATA)
 
@@ -2373,10 +2492,17 @@ timestamp | LONG | YES |
   "takerCommission": 15,
   "buyerCommission": 0,
   "sellerCommission": 0,
+    "commissionRates": {
+    "maker": "0.00150000",
+    "taker": "0.00150000",
+    "buyer": "0.00000000",
+    "seller": "0.00000000"
+  },
   "canTrade": true,
   "canWithdraw": true,
   "canDeposit": true,
   "brokered": false,
+  "requireSelfTradePrevention": false,
   "updateTime": 123456789,
   "balances": [
     {
@@ -2419,6 +2545,38 @@ timestamp | LONG | YES |
 **备注:**
 * 如果设置了`fromId`, 会返回ID大于此`fromId`的交易. 不然则会返回最近的交易.
 * `startTime`和`endTime`设置的时间间隔不能超过24小时.
+* 支持组合的 **可选** 参数：
+      * `symbol`
+      * `orderId`
+      * `fromId`
+      * `startTime`
+      * `endTime`
+      * `symbol` + `orderId`
+      * `symbol` + `fromId`
+      * `symbol` + `startTime`
+      * `symbol` + `endTime`
+      * `orderId` + `fromId`
+      * `orderId` + `startTime`
+      * `orderId` + `endTime`
+      * `fromId` + `startTime`
+      * `fromId` + `endTime`
+      * `startTime` + `endTime`
+      * `symbol` + `orderId` + `fromId`
+      * `symbol` + `orderId` + `startTime`
+      * `symbol` + `orderId` + `endTime`
+      * `symbol` + `fromId` + `startTime`
+      * `symbol` + `fromId` + `endTime`
+      * `symbol` + `startTime` + `endTime`
+      * `orderId` + `fromId` + `startTime`
+      * `orderId` + `fromId` + `endTime`
+      * `orderId` + `startTime` + `endTime`
+      * `fromId` + `startTime` + `endTime`
+      * `symbol` + `orderId` + `fromId` + `startTime`
+      * `symbol` + `orderId` + `fromId` + `endTime`
+      * `symbol` + `orderId` + `startTime` + `endTime`
+      * `symbol` + `fromId` + `startTime` + `endTime`
+      * `orderID` + `fromId` + `startTime` + `endTime`
+      * `symbol` + `orderID` + `fromId` + `startTime` + `endTime`
 
 **数据源:**
 数据库
