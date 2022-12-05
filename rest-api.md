@@ -63,7 +63,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2022-11-16)
+# Public Rest API for Binance (2022-12-05)
 
 ## General API Information
 * The base endpoint is: **https://api.binance.com**
@@ -299,12 +299,15 @@ timestamp | 1499827319559
 Note that the signature is different in example 3.
 There is no & between "GTC" and "quantity=1".
 
-### RSA Keys 
+### RSA Keys
 
-* This will be a step by step process how to create the signature payload to send a valid signed payload. 
-* We support `PKCS#8` currently.
-* To get your API key, you need to upload your RSA Public Key to your account and a corresponding API key will be provided for you.
-* For this example, the private key will be referenced as `test-prv-key.pem`
+This will be a step by step process how to create the signature payload to send a valid signed payload.
+
+We support `PKCS#8` currently.
+
+To get your API key, you need to upload your RSA Public Key to your account and a corresponding API key will be provided for you.
+
+For this example, the private key will be referenced as `./test-prv-key.pem`
 
 Key | Value
 ------------ | ------------
@@ -339,7 +342,7 @@ symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timesta
 ```console
  $ echo -n '?symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918recvWindow=5000' | openssl dgst -keyform PEM -sha256 -sign ./test-prv-key.pem
 ```
-3. Encode output as base64 string. 
+3. Encode output as base64 string.
 
 ```console
 $ echo -n '?symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918recvWindow=5000' | openssl dgst -keyform PEM -sha256 -sign ./test-prv-key.pem | openssl enc -base64
@@ -469,7 +472,7 @@ Status | Description
 Status | Description
 -----------| --------------
 `EXECUTING` | Either an order list has been placed or there is an update to the status of the list.
-`ALL_DONE`| An order list has completed execution and thus no longer active. 
+`ALL_DONE`| An order list has completed execution and thus no longer active.
 `REJECT` | The List Status is responding to a failed action either during order placement or order canceled
 
 **ContingencyType**
@@ -502,7 +505,7 @@ This sets how long an order will be active before expiration.
 
 Status | Description
 -----------| --------------
-`GTC` | Good Til Canceled <br> An order will be on the book unless the order is canceled. 
+`GTC` | Good Til Canceled <br> An order will be on the book unless the order is canceled.
 `IOC` | Immediate Or Cancel <br> An order will try to fill the order as much as it can before the order expires.
 `FOK`| Fill or Kill <br> An order will expire if the full order cannot be filled upon execution.
 
@@ -633,8 +636,8 @@ There are 4 possible options:
 * If the value provided to `symbol` or `symbols` do not exist, the endpoint will throw an error saying the symbol is invalid.
 * All parameters are optional.
 * `permissions` can support single or multiple values (e.g. `SPOT`, `["MARGIN","LEVERAGED"]`)
-* If `permissions` parameter not provided, the default values will be `["SPOT","MARGIN","LEVERAGED"]`. 
-  * If one wants to view all symbols on `GET /api/v3/exchangeInfo`, then one has to search with all permissions explicitly specified 
+* If `permissions` parameter not provided, the default values will be `["SPOT","MARGIN","LEVERAGED"]`.
+  * If one wants to view all symbols on `GET /api/v3/exchangeInfo`, then one has to search with all permissions explicitly specified
   (i.e. `permissions=["SPOT","MARGIN","LEVERAGED","TRD_GRP_002","TRD_GRP_003","TRD_GRP_004","TRD_GRP_005"])`
 
 **Data Source:**
@@ -689,6 +692,10 @@ Memory
       "permissions": [
         "SPOT",
         "MARGIN"
+      ],
+      "defaultSelfTradePreventionMode": "NONE",
+      "allowedSelfTradePreventionModes": [
+        "NONE"
       ]
     }
   ]
@@ -716,7 +723,7 @@ Adjusted based on the limit:
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-limit | INT | NO | Default 100; max 5000. <br> If limit > 5000. then the response will truncate to 5000. 
+limit | INT | NO | Default 100; max 5000. <br> If limit > 5000. then the response will truncate to 5000.
 
 **Data Source:**
 Memory
@@ -829,7 +836,6 @@ startTime | LONG | NO | Timestamp in ms to get aggregate trades from INCLUSIVE.
 endTime | LONG | NO | Timestamp in ms to get aggregate trades until INCLUSIVE.
 limit | INT | NO | Default 500; max 1000.
 
-* If both startTime and endTime are sent, time between startTime and endTime must be less than 1 hour.
 * If fromId, startTime, and endTime are not sent, the most recent aggregate trades will be returned.
 
 **Data Source:**
@@ -1361,7 +1367,7 @@ GET /api/v3/ticker
 
 **Note:** This endpoint is different from the `GET /api/v3/ticker/24hr` endpoint.
 
-The window used to compute statistics will be no more than 59999ms from the requested `windowSize`. 
+The window used to compute statistics will be no more than 59999ms from the requested `windowSize`.
 
 `openTime` for `/api/v3/ticker` always starts on a minute, while the `closeTime` is the current time of the request.
 As such, the effective window will be up to 59999ms wider than `windowSize`.
@@ -1568,13 +1574,13 @@ Some additional mandatory parameters based on order `type`:
 
 Type | Additional mandatory parameters | Additional Information
 ------------ | ------------| ------
-`LIMIT` | `timeInForce`, `quantity`, `price`| 
+`LIMIT` | `timeInForce`, `quantity`, `price`|
 `MARKET` | `quantity` or `quoteOrderQty`| `MARKET` orders using the `quantity` field specifies the amount of the `base asset` the user wants to buy or sell at the market price. <br> E.g. MARKET order on BTCUSDT will specify how much BTC the user is buying or selling. <br><br> `MARKET` orders using `quoteOrderQty` specifies the amount the user wants to spend (when buying) or receive (when selling) the `quote` asset; the correct `quantity` will be determined based on the market liquidity and `quoteOrderQty`. <br> E.g. Using the symbol BTCUSDT: <br> `BUY` side, the order will buy as many BTC as `quoteOrderQty` USDT can. <br> `SELL` side, the order will sell as much BTC needed to receive `quoteOrderQty` USDT.
 `STOP_LOSS` | `quantity`, `stopPrice` or `trailingDelta`| This will execute a `MARKET` order when the conditions are met. (e.g. `stopPrice` is met or `trailingDelta` is activated)
-`STOP_LOSS_LIMIT` | `timeInForce`, `quantity`,  `price`, `stopPrice` or `trailingDelta` 
+`STOP_LOSS_LIMIT` | `timeInForce`, `quantity`,  `price`, `stopPrice` or `trailingDelta`
 `TAKE_PROFIT` | `quantity`, `stopPrice` or `trailingDelta` | This will execute a `MARKET` order when the conditions are met. (e.g. `stopPrice` is met or `trailingDelta` is activated)
-`TAKE_PROFIT_LIMIT` | `timeInForce`, `quantity`, `price`, `stopPrice` or `trailingDelta` | 
-`LIMIT_MAKER` | `quantity`, `price`| This is a `LIMIT` order that will be rejected if the order immediately matches and trades as a taker. <br> This is also known as a POST-ONLY order. 
+`TAKE_PROFIT_LIMIT` | `timeInForce`, `quantity`, `price`, `stopPrice` or `trailingDelta` |
+`LIMIT_MAKER` | `quantity`, `price`| This is a `LIMIT` order that will be rejected if the order immediately matches and trades as a taker. <br> This is also known as a POST-ONLY order.
 
 Other info:
 
@@ -1618,7 +1624,9 @@ Matching Engine
   "type": "MARKET",
   "side": "SELL",
   "strategyId": 1,               // This is only visible if the field was populated on order placement.
-  "strategyType": 1000000        // This is only visible if the field was populated on order placement.
+  "strategyType": 1000000,       // This is only visible if the field was populated on order placement.
+  "workingTime": 1507725176595,
+  "selfTradePreventionMode": "NONE"
 }
 ```
 
@@ -1639,7 +1647,9 @@ Matching Engine
   "type": "MARKET",
   "side": "SELL",
   "strategyId": 1,               // This is only visible if the field was populated on order placement.
-  "strategyType": 1000000        // This is only visible if the field was populated on order placement.
+  "strategyType": 1000000,       // This is only visible if the field was populated on order placement.
+  "workingTime": 1507725176595,
+  "selfTradePreventionMode": "NONE",
   "fills": [
     {
       "price": "4000.00000000",
@@ -1748,7 +1758,9 @@ Memory => Database
   "time": 1499827319559,
   "updateTime": 1499827319559,
   "isWorking": true,
-  "origQuoteOrderQty": "0.000000"
+  "workingTime":1499827319559,
+  "origQuoteOrderQty": "0.000000",
+  "selfTradePreventionMode": "NONE"
 }
 ```
 
@@ -1793,7 +1805,8 @@ Matching Engine
   "status": "CANCELED",
   "timeInForce": "GTC",
   "type": "LIMIT",
-  "side": "BUY"
+  "side": "BUY",
+  "selfTradePreventionMode": "NONE"
 }
 ```
 
@@ -1832,7 +1845,8 @@ Matching Engine
     "status": "CANCELED",
     "timeInForce": "GTC",
     "type": "LIMIT",
-    "side": "BUY"
+    "side": "BUY",
+    "selfTradePreventionMode": "NONE"
   },
   {
     "symbol": "BTCUSDT",
@@ -1847,7 +1861,8 @@ Matching Engine
     "status": "CANCELED",
     "timeInForce": "GTC",
     "type": "LIMIT",
-    "side": "BUY"
+    "side": "BUY",
+    "selfTradePreventionMode": "NONE"
   },
   {
     "orderListId": 1929,
@@ -1885,7 +1900,8 @@ Matching Engine
         "type": "STOP_LOSS_LIMIT",
         "side": "BUY",
         "stopPrice": "0.378131",
-        "icebergQty": "0.017083"
+        "icebergQty": "0.017083",
+        "selfTradePreventionMode": "NONE"
       },
       {
         "symbol": "BTCUSDT",
@@ -1901,7 +1917,8 @@ Matching Engine
         "timeInForce": "GTC",
         "type": "LIMIT_MAKER",
         "side": "BUY",
-        "icebergQty": "0.639962"
+        "icebergQty": "0.639962",
+        "selfTradePreventionMode": "NONE"
       }
     ]
   }
@@ -1915,7 +1932,7 @@ POST /api/v3/order/cancelReplace
 ```
 Cancels an existing order and places a new order on the same symbol.
 
-Filters and Order Count are evaluated before the processing of the cancellation and order placement occurs. 
+Filters and Order Count are evaluated before the processing of the cancellation and order placement occurs.
 
 A new order that was not attempted (i.e. when `newOrderResult: NOT_ATTEMPTED` ), will still increase the order count by 1.
 
@@ -1949,7 +1966,7 @@ timestamp | LONG | YES |
 
 Similar to `POST /api/v3/order`, additional mandatory parameters are determined by `type`.
 
-Response format varies depending on whether the processing of the message succeeded, partially succeeded, or failed. 
+Response format varies depending on whether the processing of the message succeeded, partially succeeded, or failed.
 
 **Data Source:**
 Matching Engine
@@ -1974,7 +1991,8 @@ Matching Engine
     "status": "CANCELED",
     "timeInForce": "GTC",
     "type": "LIMIT",
-    "side": "SELL"
+    "side": "SELL",
+    "selfTradePreventionMode": "NONE"
   },
   "newOrderResponse": {
     "symbol": "BTCUSDT",
@@ -1990,7 +2008,9 @@ Matching Engine
     "timeInForce": "GTC",
     "type": "LIMIT",
     "side": "BUY",
-    "fills": []
+    "workingTime": 1669277163808,
+    "fills": [],
+    "selfTradePreventionMode": "NONE"
   }
 }
 ```
@@ -2033,7 +2053,8 @@ Matching Engine
       "status": "CANCELED",
       "timeInForce": "GTC",
       "type": "LIMIT_MAKER",
-      "side": "SELL"
+      "side": "SELL",
+      "selfTradePreventionMode": "NONE"
     },
     "newOrderResponse": {
       "code": -2010,
@@ -2132,7 +2153,9 @@ Memory => Database
     "time": 1499827319559,
     "updateTime": 1499827319559,
     "isWorking": true,
-    "origQuoteOrderQty": "0.000000"
+    "origQuoteOrderQty": "0.000000",
+    "workingTime": 1499827319559,
+    "selfTradePreventionMode": "NONE"
   }
 ]
 ```
@@ -2164,7 +2187,7 @@ timestamp | LONG | YES |
 **Notes:**
 * If `orderId` is set, it will get orders >= that `orderId`. Otherwise most recent orders are returned.
 * For some historical orders `cummulativeQuoteQty` will be < 0, meaning the data is not available at this time.
-* If `startTime` and/or `endTime` provided, `orderId`  is not required. 
+* If `startTime` and/or `endTime` provided, `orderId`  is not required.
 
 **Response:**
 ```javascript
@@ -2187,7 +2210,9 @@ timestamp | LONG | YES |
     "time": 1499827319559,
     "updateTime": 1499827319559,
     "isWorking": true,
-    "origQuoteOrderQty": "0.000000"
+    "origQuoteOrderQty": "0.000000",
+    "workingTime": 1499827319559,
+    "selfTradePreventionMode": "NONE"
   }
 ]
 ```
@@ -2236,7 +2261,7 @@ Additional Info:
     * Both legs must have the same quantity.
     * ```ICEBERG``` quantities however do not have to be the same
 * Order Rate Limit
-    * `OCO` counts as 2 orders against the order rate limit. 
+    * `OCO` counts as 2 orders against the order rate limit.
 
 **Data Source:**
 Matching Engine
@@ -2279,7 +2304,9 @@ Matching Engine
       "timeInForce": "GTC",
       "type": "STOP_LOSS",
       "side": "BUY",
-      "stopPrice": "0.960664"
+      "stopPrice": "0.960664",
+      "workingTime": -1,
+      "selfTradePreventionMode": "NONE"
     },
     {
       "symbol": "LTCBTC",
@@ -2294,7 +2321,9 @@ Matching Engine
       "status": "NEW",
       "timeInForce": "GTC",
       "type": "LIMIT_MAKER",
-      "side": "BUY"
+      "side": "BUY",
+      "workingTime": 1563417480525,
+      "selfTradePreventionMode": "NONE"
     }
   ]
 }
@@ -2367,7 +2396,8 @@ Matching Engine
       "timeInForce": "GTC",
       "type": "STOP_LOSS_LIMIT",
       "side": "SELL",
-      "stopPrice": "1.00000000"
+      "stopPrice": "1.00000000",
+      "selfTradePreventionMode": "NONE"
     },
     {
       "symbol": "LTCBTC",
@@ -2382,7 +2412,8 @@ Matching Engine
       "status": "CANCELED",
       "timeInForce": "GTC",
       "type": "LIMIT_MAKER",
-      "side": "SELL"
+      "side": "SELL",
+      "selfTradePreventionMode": "NONE"
     }
   ]
 }
@@ -2583,10 +2614,17 @@ Memory => Database
   "takerCommission": 15,
   "buyerCommission": 0,
   "sellerCommission": 0,
+  "commissionRates": {
+    "maker": "0.00150000",
+    "taker": "0.00150000",
+    "buyer": "0.00000000",
+    "seller": "0.00000000"
+  },
   "canTrade": true,
   "canWithdraw": true,
   "canDeposit": true,
   "brokered":false,
+  "requireSelfTradePrevention": false,
   "updateTime": 123456789,
   "accountType": "SPOT",
   "balances": [
@@ -2633,6 +2671,38 @@ timestamp | LONG | YES |
 * If `fromId` is set, it will get trades >= that `fromId`.
 Otherwise most recent trades are returned.
 * The time between `startTime` and `endTime` can't be longer than 24 hours.
+* These are the supported combinations of **optional** parameters:
+      * `symbol`
+      * `orderId`
+      * `fromId`
+      * `startTime`
+      * `endTime`
+      * `symbol` + `orderId`
+      * `symbol` + `fromId`
+      * `symbol` + `startTime`
+      * `symbol` + `endTime`
+      * `orderId` + `fromId`
+      * `orderId` + `startTime`
+      * `orderId` + `endTime`
+      * `fromId` + `startTime`
+      * `fromId` + `endTime`
+      * `startTime` + `endTime`
+      * `symbol` + `orderId` + `fromId`
+      * `symbol` + `orderId` + `startTime`
+      * `symbol` + `orderId` + `endTime`
+      * `symbol` + `fromId` + `startTime`
+      * `symbol` + `fromId` + `endTime`
+      * `symbol` + `startTime` + `endTime`
+      * `orderId` + `fromId` + `startTime`
+      * `orderId` + `fromId` + `endTime`
+      * `orderId` + `startTime` + `endTime`
+      * `fromId` + `startTime` + `endTime`
+      * `symbol` + `orderId` + `fromId` + `startTime`
+      * `symbol` + `orderId` + `fromId` + `endTime`
+      * `symbol` + `orderId` + `startTime` + `endTime`
+      * `symbol` + `fromId` + `startTime` + `endTime`
+      * `orderID` + `fromId` + `startTime` + `endTime`
+      * `symbol` + `orderID` + `fromId` + `startTime` + `endTime`
 
 **Data Source:**
 Memory => Database
@@ -2716,7 +2786,7 @@ Start a new user data stream. The stream will close after 60 minutes unless a ke
 **Parameters:**
 NONE
 
-**Data Source:** 
+**Data Source:**
 Memory
 
 **Response:**
@@ -2771,4 +2841,3 @@ Memory
 ```javascript
 {}
 ```
-
