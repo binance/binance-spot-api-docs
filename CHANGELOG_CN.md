@@ -6,7 +6,7 @@
 
 WEBSOCKET
 
-* `!bookTicker` 在 **PLACEHOLDER DATE HERE** 下线。 请改用按 symbol 的最优挂单信息的数据流（`<symbol>@bookTicker`）。
+* `!bookTicker` 在2022-12-07下线。 请改用按 symbol 的最优挂单信息的数据流（`<symbol>@bookTicker`）。
     * 可以通过一个连接订阅多个 `<symbol>@bookTicker` 数据流。 （例如`wss://stream.binance.com:9443/stream?streams=btcusdt@bookTicker/bnbbtc@bookTicker`）
 
 REST API
