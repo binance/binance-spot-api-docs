@@ -1,4 +1,4 @@
-# WebSocket 账户接口(2022-08-08)
+# WebSocket 账户接口(2022-12-05)
 
 # 基本信息
 * 本篇所列出API接口的base url : **https://api.binance.com**
@@ -157,10 +157,13 @@ listenKey | STRING | YES
   "M": false,                    // 请忽略
   "O": 1499405658657,            // 订单创建时间
   "Z": "0.00000000",             // 订单累计已成交金额
-  "Y": "0.00000000",              // 订单末次成交金额
+  "Y": "0.00000000",             // 订单末次成交金额
   "Q": "0.00000000"              // Quote Order Qty
+  "D": 1668680518494,            // 追踪时间; 这仅在追踪止损订单已被激活时可见
   "j": 1,                        // Strategy ID; 下单时填上字段才会返回
   "J": 1000000                   // Strategy Type; 下单时填上字段才会返回
+  "W": 1499405658657,            // Working Time; 订单被添加到 order book 的时间
+  "V": "NONE"                    // SelfTradePreventionMode
 }
 ```
 
