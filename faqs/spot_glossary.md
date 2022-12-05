@@ -298,6 +298,9 @@ Reverse `MARKET` order
 `trailingDelta`
 * Trailing Stop Order parameter that specifies the delta price change required before order activation.
 
+`trailingTime`
+* The time when the trailing order is now active and tracking price changes.
+
 `transactTime`
 * The time when the order occurred. This field (as well as all timestamp related fields) will be in milliseconds.
 
@@ -320,6 +323,9 @@ User Data Stream
 
 `weightedAveragePrice`
 * The volume weighted average price in the last x minutes.
+
+`workingTime`
+* The time when the order started working on the order book.
 
 ---
 

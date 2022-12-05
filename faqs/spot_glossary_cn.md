@@ -298,6 +298,9 @@ Reverse `MARKET` order
 `trailingDelta`
 * 用以定义追踪止盈止损订单被触发的价格差.
 
+`trailingTime`
+* 追踪单被激活和跟踪价格变化的时间.
+
 `transactTime`
 * 订单生产的时间, 单位为毫秒.
 
@@ -321,6 +324,8 @@ User Data Stream
 `weightedAveragePrice`
 * 成交量加权平均价; 将过去N分钟内所有交易的价格按各自的成交量加权而算出的平均价.
 
+`workingTime`
+* 指示订单何时添加到了 order book.
 ---
 
 ## X
