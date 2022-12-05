@@ -1,19 +1,143 @@
-# 更新日志 (2022-12-02)
+# 更新日志 (2022-12-05)
+
+## 2022-12-05
+
+**备注：** 这些更新正在逐步部署到我们所有的服务器，大约需要一周时间才能完成。
+
+WEBSOCKET
+
+* `!bookTicker` 在 **PLACEHOLDER DATE HERE** 下线。 请改用按 symbol 的最优挂单信息的数据流（`<symbol>@bookTicker`）。
+    * 可以通过一个连接订阅多个 `<symbol>@bookTicker` 数据流。 （例如`wss://stream.binance.com:9443/stream?streams=btcusdt@bookTicker/bnbbtc@bookTicker`）
+
+REST API
+
+* 新的错误代码 `-1135`
+    * 如果参数是无效的 JSON 格式，则会出现此错误代码。
+* 新的错误代码 `-1108`
+    * 如果发送的参数的值太长，可能会导致溢出，则会发生此错误。
+    * 此错误代码可能出现在以下接口：
+        * `POST /api/v3/order`
+        * `POST /api/v3/order/cancelReplace`
+        * `POST /api/v3/order/oco`
+* `GET /api/v3/aggTrades` 更新
+    * 之前的规则: `startTime` 和 `endTime` 必须结合使用，并且只能相隔一个小时。
+    * 新的规则: `startTime` 和 `endTime` 可以单独使用，一个小时的限制已被取消。
+        * 仅使用 startTime 时，如果limit的值为N, 将返回从此时间开始的N条交易。
+        * 仅使用 endTime 时，如果limit的值为N, 将返回到此时间的N条交易.
+        * 如果不提供 `limit`，无论是组合使用还是单独发送，服务器端都将使用默认的 `limit`。
+* `GET /api/v3/myTrades` 更新
+    * 修复了 `symbol` + `orderId` 组合会返回所有交易，可能会超过`LIMIT`的默认值`500`。
+    * 之前的行为： API 将根据发送的参数组合发送特定的错误消息。 例如：
+
+        ```json
+            {
+                "code": -1106,
+                "msg": "Parameter X was sent when not required."
+            }
+        ```
+
+    * 新的行为: 如果接口不支持可选参数组合，那么服务器会返回一般性的错误:
+
+        ```json
+            {
+                "code": -1128,
+                "msg": "Combination of optional parameters invalid."
+            }
+        ```
+
+    * 支持组合的 **可选** 参数：
+        * `symbol`
+        * `orderId`
+        * `fromId`
+        * `startTime`
+        * `endTime`
+        * `symbol` + `orderId`
+        * `symbol` + `fromId`
+        * `symbol` + `startTime`
+        * `symbol` + `endTime`
+        * `orderId` + `fromId`
+        * `orderId` + `startTime`
+        * `orderId` + `endTime`
+        * `fromId` + `startTime`
+        * `fromId` + `endTime`
+        * `startTime` + `endTime`
+        * `symbol` + `orderId` + `fromId`
+        * `symbol` + `orderId` + `startTime`
+        * `symbol` + `orderId` + `endTime`
+        * `symbol` + `fromId` + `startTime`
+        * `symbol` + `fromId` + `endTime`
+        * `symbol` + `startTime` + `endTime`
+        * `orderId` + `fromId` + `startTime`
+        * `orderId` + `fromId` + `endTime`
+        * `orderId` + `startTime` + `endTime`
+        * `fromId` + `startTime` + `endTime`
+        * `symbol` + `orderId` + `fromId` + `startTime`
+        * `symbol` + `orderId` + `fromId` + `endTime`
+        * `symbol` + `orderId` + `startTime` + `endTime`
+        * `symbol` + `fromId` + `startTime` + `endTime`
+        * `orderID` + `fromId` + `startTime` + `endTime`
+        * `symbol` + `orderID` + `fromId` + `startTime` + `endTime`
+
+**备注：** 这些新字段将在发布日期后大约一周出现。
+
+* `GET /api/v3/exchangeInfo` 更新
+    * 新字段 `defaultSelfTradePreventionMode` 和 `allowedSelfTradePreventionModes`
+* 下单，查询订单和撤销订单接口的更新:
+    * 响应中会出现新的字段 `selfTradePreventionMode`。
+    * 以下接口会受到影响:
+        * `POST /api/v3/order`
+        * `POST /api/v3/order/oco`
+        * `POST /api/v3/order/cancelReplace`
+        * `GET /api/v3/order`
+        * `DELETE /api/v3/order`
+        * `DELETE /api/v3/orderList`
+* `GET /api/v3/account` 更新
+    * 响应中会出现新的字段 `requireSelfTradePrevention`.
+* 以下接口的响应中会出现新字段 `workingTime`（指示订单何时添加到了订单薄）：
+    * `POST /api/v3/order`
+    * `GET /api/v3/order`
+    * `POST /api/v3/order/cancelReplace`
+    * `POST /api/v3/order/oco`
+    * `GET /api/v3/order`
+    * `GET /api/v3/openOrders`
+    * `GET /api/v3/allOrders`
+* 如果`trailingDelta`作为参数提供给了`TAKE_PROFIT`，`TAKE_PROFIT_LIMIT`，`STOP_LOSS`或 `STOP_LOSS_LIMIT`的订单，那么下面接口中会出现`trailingTime`, 用来表示追踪单被激活和跟踪价格变化的时间: 
+    * `POST /api/v3/order`
+    * `GET /api/v3/order`
+    * `GET /api/v3/openOrders`
+    * `GET /api/v3/allOrders`
+    * `POST /api/v3/order/cancelReplace`
+    * `DELETE /api/v3/order`
+* 字段 `commissionRates` 会在 `GET /api/v3/acccount` 的响应中出现。
+
+
+USER DATA STREAM
+
+* eventType `executionReport` 有新的字段
+    * `V` - `selfTradePreventionMode` 
+    * `D` - `trailing_time`  (追踪单被激活时会出现)
+    * `W` - `workingTime`   (如果 `isWorking`=`true` 会出现)
+
+
+---
 
 ## 2022-12-02
 
 * 新增一个用于访问市场信息的RESTful API URL: `https://data.binance.com`.
 * 新增一个用于访问市场信息的WebSocket URL: `wss://data-stream.binance.com`.
 
+---
+
 ## 2022-11-16
 
 * 文档已更新以显示如何创建 RSA keys。
-* 出于安全原因，我们建议在生成 API key 时使用 RSA keys。
+* 建议在生成 API key 时使用 RSA keys。
 * 我们接受`PKCS#8`（BEGIN PUBLIC KEY）。
 
 ---
 
 ## 2022-09-30
+
 
 `!bookTicker`的WebSocket推送的变更.
 
