@@ -22,14 +22,14 @@
   - [Individual Symbol Rolling Window Statistics Streams](#individual-symbol-rolling-window-statistics-streams)
   - [All Market Rolling Window Statistics Streams](#all-market-rolling-window-statistics-streams)
   - [Individual Symbol Book Ticker Streams](#individual-symbol-book-ticker-streams)
-  - [All Book Tickers Stream](#all-book-tickers-stream)
   - [Partial Book Depth Streams](#partial-book-depth-streams)
   - [Diff. Depth Stream](#diff-depth-stream)
   - [How to manage a local order book correctly](#how-to-manage-a-local-order-book-correctly)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Web Socket Streams for Binance (2022-09-30)
+# Web Socket Streams for Binance (2022-12-05)
+
 # General WSS information
 * The base endpoint is: **wss://stream.binance.com:9443** or **wss://stream.binance.com:443**
 * Streams can be accessed either in a single raw stream or in a combined stream
@@ -40,7 +40,6 @@
 * A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark
 * The websocket server will send a `ping frame` every 3 minutes. If the websocket server does not receive a `pong frame` back from the connection within a 10 minute period, the connection will be disconnected. Unsolicited `pong frames` are allowed.
 * The base endpoint **wss://data-stream.binance.com** can be subscribed to receive market data messages. Users data stream is **NOT** available from this URL.
-
 
 ## Websocket Limits
 * WebSocket connections have a limit of 5 incoming messages per second. A message is considered:
@@ -450,25 +449,6 @@ Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection.
   "B":"31.21000000", // best bid qty
   "a":"25.36520000", // best ask price
   "A":"40.66000000"  // best ask qty
-}
-```
-
-## All Book Tickers Stream
-
-**Note:** This feature is scheduled to be removed around **November 2022**.<br>
-Once this has been removed, please use `<symbol>@bookTicker` instead. <br>
-Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection. 
-
-Pushes any update to the best bid or ask's price or quantity in real-time for all symbols.
-
-**Stream Name:** !bookTicker
-
-**Update Speed:** Real-time
-
-**Payload:**
-```javascript
-{
-  // Same as <symbol>@bookTicker payload
 }
 ```
 
