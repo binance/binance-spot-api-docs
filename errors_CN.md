@@ -1,4 +1,4 @@
-# 错误代码汇总 (2022-08-08)
+# 错误代码汇总 (2022-12-05)
 币安Rest接口(包括wapi)返回的错误包含两部分，错误码与错误信息. 错误码是大类，一个错误码可能对应多个不同的错误信息。
 以下是一个完整错误码实例
 ```javascript
@@ -81,6 +81,9 @@
  * A parameter was sent when not required.
  * Parameter '%s' sent when not required.
 
+#### -1108 参数溢出
+ * Parameter '%s' overflowed.
+
 #### -1111 精度过高
  * Precision is over the maximum defined for this asset.
 
@@ -127,6 +130,10 @@
 
 #### -1134 strategyType不符合需求
  * `strategyType` was less than 1000000. 
+
+#### -1135 无效的JSON
+ * Invalid JSON Request
+ * JSON sent for parameter '%s' is not valid
 
 #### -2010 订单被拒绝
  * NEW_ORDER_REJECTED
@@ -183,7 +190,7 @@
 收到该错误码代表撤单**和**下单都失败。
 
 
-## -9xxx 订单未能通过过滤器
+## 订单未能通过过滤器
 错误信息 | 描述
 ------------ | ------------
 "Filter failure: PRICE_FILTER" | 检查价格的上限、下限、步进间隔。

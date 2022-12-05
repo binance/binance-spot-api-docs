@@ -14,7 +14,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# User Data Streams for Binance (2022-08-08)
+# User Data Streams for Binance (2022-12-05)
 # General WSS information
 * The base API endpoint is: **https://api.binance.com**
 * A User Data Stream `listenKey` is valid for 60 minutes after creation.
@@ -165,8 +165,11 @@ Average price can be found by doing `Z` divided by `z`.
   "Z": "0.00000000",             // Cumulative quote asset transacted quantity
   "Y": "0.00000000",             // Last quote asset transacted quantity (i.e. lastPrice * lastQty)
   "Q": "0.00000000",             // Quote Order Qty
+  "D": 1668680518494,            // Trailing Time; This is only visible if the trailing stop order has been activated.
   "j": 1,                        // Strategy ID; This is only visible if the strategyId parameter was provided upon order placement
   "J": 1000000                   // Strategy Type; This is only visible if the strategyType parameter was provided upon order placement
+  "W": 1499405658657,            // Working Time; This is only visible if the order has been placed on the book.
+  "V": "NONE"                    // SelfTradePreventionMode
 }
 ```
 

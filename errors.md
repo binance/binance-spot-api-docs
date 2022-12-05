@@ -1,4 +1,4 @@
-# Error codes for Binance (2022-08-23)
+# Error codes for Binance (2022-12-05)
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
 ```javascript
@@ -85,6 +85,9 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * A parameter was sent when not required.
  * Parameter '%s' sent when not required.
 
+#### -1108 PARAM_OVERFLOW
+ * Parameter '%s' overflowed.
+
 #### -1111 BAD_PRECISION
  * Precision is over the maximum defined for this asset.
 
@@ -131,6 +134,10 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 #### -1134 BAD_STRATEGY_TYPE
  * `strategyType` was less than 1000000. 
+
+#### -1135 INVALID_JSON
+ * Invalid JSON Request
+ * JSON sent for parameter '%s' is not valid
 
 #### -2010 NEW_ORDER_REJECTED
  * NEW_ORDER_REJECTED
@@ -191,7 +198,7 @@ This code is sent when either the cancellation of the order failed or the new or
 
 This code is sent when both the cancellation of the order failed and the new order placement failed.
 
-## -9xxx Filter failures
+## Filter failures
 Error message | Description
 ------------ | ------------
 "Filter failure: PRICE_FILTER" | `price` is too high, too low, and/or not following the tick size rule for the symbol.

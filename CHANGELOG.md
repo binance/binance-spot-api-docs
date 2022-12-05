@@ -1,9 +1,132 @@
-# CHANGELOG for Binance's API (2022-12-02)
+
+# CHANGELOG for Binance's API (2022-12-05)
+
+## 2022-12-05
+
+**Notice:** These changes are being rolled out gradually to all our servers, and will take approximately a week to complete.
+
+WEBSOCKET
+
+* `!bookTicker` will be removed by **December 7, 2022**. Please use the Individual Book Ticker Streams instead (`<symbol>@bookTicker`).
+    * Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection. (E.g. `wss://stream.binance.com:9443/stream?streams=btcusdt@bookTicker/bnbbtc@bookTicker`)
+
+REST API
+
+* New error code `-1135`
+    * This error code will occur if a parameter requiring a JSON object is invalid.
+* New error code `-1108`
+    * This error will occur if a value to a parameter being sent was too large, potentially causing overflow.
+    * This error code can occur in the following endpoints:
+        * `POST /api/v3/order`
+        * `POST /api/v3/order/cancelReplace`
+        * `POST /api/v3/order/oco`
+* Changes to `GET /api/v3/aggTrades`
+    * Previous behavior: `startTime` and `endTime` had to be used in combination and could only be an hour apart.
+    * New behavior: `startTime` and `endTime` can be used individually and the 1 hour limit has been removed.
+        * When using `startTime` only, this will return trades from that time, up to the `limit` provided.
+        * When using `endTime` only, this will return trades before that time, up to the `limit` provided.
+        * If `limit` not provided, regardless of used in combination or sent individually, the endpoint will use the default limit.
+* Changes to `GET /api/v3/myTrades`
+    * Fixed a bug where `symbol` + `orderId` combination would return all trades even if the number of trades went beyond the `500` default limit.
+    * Previous behavior: The API would send specific error messages depending on the combination of parameters sent. E.g:
+
+        ```json
+            {
+                "code": -1106,
+                "msg": "Parameter X was sent when not required."
+            }
+        ```
+    * New behavior: If the combinations of optional parameters to the endpoint were not supported, then the endpoint will respond with the generic error:
+
+        ```json
+            {
+                "code": -1128,
+                "msg": "Combination of optional parameters invalid."
+            }
+        ```
+
+    *  These are the supported combinations of **optional** parameters:
+        * `symbol`
+        * `orderId`
+        * `fromId`
+        * `startTime`
+        * `endTime`
+        * `symbol` + `orderId`
+        * `symbol` + `fromId`
+        * `symbol` + `startTime`
+        * `symbol` + `endTime`
+        * `orderId` + `fromId`
+        * `orderId` + `startTime`
+        * `orderId` + `endTime`
+        * `fromId` + `startTime`
+        * `fromId` + `endTime`
+        * `startTime` + `endTime`
+        * `symbol` + `orderId` + `fromId`
+        * `symbol` + `orderId` + `startTime`
+        * `symbol` + `orderId` + `endTime`
+        * `symbol` + `fromId` + `startTime`
+        * `symbol` + `fromId` + `endTime`
+        * `symbol` + `startTime` + `endTime`
+        * `orderId` + `fromId` + `startTime`
+        * `orderId` + `fromId` + `endTime`
+        * `orderId` + `startTime` + `endTime`
+        * `fromId` + `startTime` + `endTime`
+        * `symbol` + `orderId` + `fromId` + `startTime`
+        * `symbol` + `orderId` + `fromId` + `endTime`
+        * `symbol` + `orderId` + `startTime` + `endTime`
+        * `symbol` + `fromId` + `startTime` + `endTime`
+        * `orderID` + `fromId` + `startTime` + `endTime`
+        * `symbol` + `orderID` + `fromId` + `startTime` + `endTime`
+
+**Note:** These new fields will appear approximately a week from the release date.
+
+* Changes to `GET /api/v3/exchangeInfo`
+    * New fields `defaultSelfTradePreventionMode` and `allowedSelfTradePreventionModes`
+* Changes to the Order Placement Endpoints/Order Query/Order Cancellation Endpoints:
+    * New field `selfTradePreventionMode` will appear in the response.
+    * Affects the following endpoints:
+        * `POST /api/v3/order`
+        * `POST /api/v3/order/oco`
+        * `POST /api/v3/order/cancelReplace`
+        * `GET /api/v3/order`
+        * `DELETE /api/v3/order`
+        * `DELETE /api/v3/orderList`
+* Changes to  `GET /api/v3/account`
+    * New field `requireSelfTradePrevention` will appear in the response.
+* New field `workingTime`, indicating when the order started working on the order book, will appear in the following endpoints:
+    * `POST /api/v3/order`
+    * `GET /api/v3/order`
+    * `POST /api/v3/order/cancelReplace`
+    * `POST /api/v3/order/oco`
+    * `GET /api/v3/order`
+    * `GET /api/v3/openOrders`
+    * `GET /api/v3/allOrders`
+* Field `trailingTime`, indicating the time when the trailing order is active and tracking price changes, will appear for the following order types  (`TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`, `STOP_LOSS`, `STOP_LOSS_LIMIT` if `trailingDelta` parameter was provided) for the following endpoints: 
+    * `POST /api/v3/order`
+    * `GET /api/v3/order`
+    * `GET /api/v3/openOrders`
+    * `GET /api/v3/allOrders`
+    * `POST /api/v3/order/cancelReplace`
+    * `DELETE /api/v3/order`
+* Field `commissionRates` will appear in the `GET /api/v3/acccount` response
+
+
+USER DATA STREAM
+
+* eventType `executionReport` has new fields
+    * `V` - `selfTradePreventionMode` 
+    * `D` - `trailing_time`  (Appears if the trailing stop order is active)
+    * `W` - `workingTime`   (Appears if `isWorking`=`true`)
+
+
+---
 
 ## 2022-12-02
 
 * Added a new market data base URL `https://data.binance.com`.
 * Added a new WebSocket URL `wss://data-stream.binance.com`.
+
+---
 
 ## 2022-11-16
 
