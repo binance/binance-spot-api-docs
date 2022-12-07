@@ -457,7 +457,7 @@ Status | Description
 `CANCELED` | The order has been canceled by the user.
 ` PENDING_CANCEL` | Currently unused
 `REJECTED`       | The order was not accepted by the engine and not processed.
-`EXPIRED` | The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) <br> or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance)
+`EXPIRED` | The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) <br/> or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance)
 
 **OCO Status (listStatusType):**
 
@@ -505,9 +505,9 @@ This sets how long an order will be active before expiration.
 
 Status | Description
 -----------| --------------
-`GTC` | Good Til Canceled <br> An order will be on the book unless the order is canceled.
-`IOC` | Immediate Or Cancel <br> An order will try to fill the order as much as it can before the order expires.
-`FOK`| Fill or Kill <br> An order will expire if the full order cannot be filled upon execution.
+`GTC` | Good Til Canceled <br/> An order will be on the book unless the order is canceled.
+`IOC` | Immediate Or Cancel <br/> An order will try to fill the order as much as it can before the order expires.
+`FOK`| Fill or Kill <br/> An order will expire if the full order cannot be filled upon execution.
 
 **Kline/Candlestick chart intervals:**
 
@@ -629,8 +629,8 @@ There are 4 possible options:
 ----- | ----|
 |No parameter|curl -X GET "https://api.binance.com/api/v3/exchangeInfo"|
 |symbol|curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbol=BNBBTC"|
-|symbols| curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbols=%5B%22BNBBTC%22,%22BTCUSDT%22%5D" <br> or <br> curl -g -X  GET 'https://api.binance.com/api/v3/exchangeInfo?symbols=["BTCUSDT","BNBBTC"]' |
-|permissions| curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=SPOT" <br> or <br> curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=%5B%22MARGIN%22%2C%22LEVERAGED%22%5D" <br> or <br> curl -g -X GET 'https://api.binance.com/api/v3/exchangeInfo?permissions=["MARGIN","LEVERAGED"]' |
+|symbols| curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbols=%5B%22BNBBTC%22,%22BTCUSDT%22%5D" <br/> or <br/> curl -g -X  GET 'https://api.binance.com/api/v3/exchangeInfo?symbols=["BTCUSDT","BNBBTC"]' |
+|permissions| curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=SPOT" <br/> or <br/> curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=%5B%22MARGIN%22%2C%22LEVERAGED%22%5D" <br/> or <br/> curl -g -X GET 'https://api.binance.com/api/v3/exchangeInfo?permissions=["MARGIN","LEVERAGED"]' |
 
 **Notes**:
 * If the value provided to `symbol` or `symbols` do not exist, the endpoint will throw an error saying the symbol is invalid.
@@ -723,7 +723,7 @@ Adjusted based on the limit:
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-limit | INT | NO | Default 100; max 5000. <br> If limit > 5000. then the response will truncate to 5000.
+limit | INT | NO | Default 100; max 5000. <br/> If limit > 5000. then the response will truncate to 5000.
 
 **Data Source:**
 Memory
@@ -994,7 +994,7 @@ GET /api/v3/ticker/24hr
 </thead>
 <tbody>
     <tr>
-        <td rowspan=2>symbol</td>
+        <td rowspan="2">symbol</td>
         <td>1</td>
         <td>1</td>
     </tr>
@@ -1003,7 +1003,7 @@ GET /api/v3/ticker/24hr
         <td>40</td>
     </tr>
     <tr>
-        <td rowspan=4>symbols</td>
+        <td rowspan="4">symbols</td>
         <td>1-20</td>
         <td>1</td>
     </tr>
@@ -1038,10 +1038,10 @@ GET /api/v3/ticker/24hr
         <td>symbol</td>
         <td>STRING</td>
         <td>NO</td>
-        <td rowspan=2>Parameter symbol and symbols cannot be used in combination. <br> If neither parameter is sent, tickers for all symbols will be returned in an array. <br><br>
+        <td rowspan="2">Parameter symbol and symbols cannot be used in combination. <br/> If neither parameter is sent, tickers for all symbols will be returned in an array. <br/><br/>
          Examples of accepted format for the symbols parameter:
-         ["BTCUSDT","BNBUSDT"] <br>
-         or <br>
+         ["BTCUSDT","BNBUSDT"] <br/>
+         or <br/>
          %5B%22BTCUSDT%22,%22BNBUSDT%22%5D
         </td>
      </tr>
@@ -1054,7 +1054,7 @@ GET /api/v3/ticker/24hr
         <td>type</td>
         <td>ENUM</td>
         <td>NO</td>
-        <td>Supported values: <tt>FULL</tt> or <tt>MINI</tt>. <br>If none provided, the default is <tt>FULL</tt> </td>
+        <td>Supported values: <tt>FULL</tt> or <tt>MINI</tt>. <br/>If none provided, the default is <tt>FULL</tt> </td>
      </tr>
 </tbody>
 </table>
@@ -1190,7 +1190,7 @@ Latest price for a symbol or symbols.
 </thead>
 <tbody>
     <tr>
-        <td rowspan=2>symbol</td>
+        <td rowspan="2">symbol</td>
         <td>1</td>
         <td>1</td>
     </tr>
@@ -1222,10 +1222,10 @@ Latest price for a symbol or symbols.
         <td>symbol</td>
         <td>STRING</td>
         <td>NO</td>
-        <td rowspan=2> Parameter symbol and symbols cannot be used in combination. <br> If neither parameter is sent, prices for all symbols will be returned in an array. <br><br>
+        <td rowspan="2"> Parameter symbol and symbols cannot be used in combination. <br/> If neither parameter is sent, prices for all symbols will be returned in an array. <br/><br/>
         Examples of accepted format for the symbols parameter:
-         ["BTCUSDT","BNBUSDT"] <br>
-         or <br>
+         ["BTCUSDT","BNBUSDT"] <br/>
+         or <br/>
          %5B%22BTCUSDT%22,%22BNBUSDT%22%5D</td>
     </tr>
     <tr>
@@ -1279,7 +1279,7 @@ Best price/qty on the order book for a symbol or symbols.
 </thead>
 <tbody>
     <tr>
-        <td rowspan=2>symbol</td>
+        <td rowspan="2">symbol</td>
         <td>1</td>
         <td>1</td>
     </tr>
@@ -1311,11 +1311,11 @@ Best price/qty on the order book for a symbol or symbols.
         <td>symbol</td>
         <td>STRING</td>
         <td>NO</td>
-        <td rowspan=2> Parameter symbol and symbols cannot be used in combination. <br> If neither parameter is sent, bookTickers for all symbols will be returned in an array.
-         <br><br>
+        <td rowspan="2"> Parameter symbol and symbols cannot be used in combination. <br/> If neither parameter is sent, bookTickers for all symbols will be returned in an array.
+         <br/><br/>
         Examples of accepted format for the symbols parameter:
-         ["BTCUSDT","BNBUSDT"] <br>
-         or <br>
+         ["BTCUSDT","BNBUSDT"] <br/>
+         or <br/>
          %5B%22BTCUSDT%22,%22BNBUSDT%22%5D</td>
     </tr>
     <tr>
@@ -1376,7 +1376,7 @@ E.g. If the `closeTime` is 1641287867099 (January 04, 2022 09:17:47:099 UTC) , a
 
 **Weight:**
 
-2 for each requested <tt>symbol</tt> regardless of <tt>windowSize</tt>. <br><br> The weight for this request will cap at 100 once the number of `symbols` in the request is more than 50.
+2 for each requested <tt>symbol</tt> regardless of <tt>windowSize</tt>. <br/><br/> The weight for this request will cap at 100 once the number of `symbols` in the request is more than 50.
 
 **Parameters**
 
@@ -1389,9 +1389,9 @@ E.g. If the `closeTime` is 1641287867099 (January 04, 2022 09:17:47:099 UTC) , a
   </tr>
   <tr>
     <td>symbol</td>
-    <td rowspan=2>STRING</td>
-    <td rowspan=2>YES</td>
-    <td rowspan=2>Either <tt>symbol</tt> or <tt>symbols</tt> must be provided <br><br> Examples of accepted format for the <tt>symbols</tt> parameter: <br> ["BTCUSDT","BNBUSDT"] <br>or <br>%5B%22BTCUSDT%22,%22BNBUSDT%22%5D <br><br> The maximum number of <tt>symbols</tt> allowed in a request is 100.
+    <td rowspan="2">STRING</td>
+    <td rowspan="2">YES</td>
+    <td rowspan="2">Either <tt>symbol</tt> or <tt>symbols</tt> must be provided <br/><br/> Examples of accepted format for the <tt>symbols</tt> parameter: <br/> ["BTCUSDT","BNBUSDT"] <br/>or <br/>%5B%22BTCUSDT%22,%22BNBUSDT%22%5D <br/><br/> The maximum number of <tt>symbols</tt> allowed in a request is 100.
     </td>
   </tr>
   <tr>
@@ -1401,13 +1401,13 @@ E.g. If the `closeTime` is 1641287867099 (January 04, 2022 09:17:47:099 UTC) , a
      <td>windowSize</td>
      <td>ENUM</td>
      <td>NO</td>
-     <td>Defaults to <tt>1d</tt> if no parameter provided <br> Supported <tt>windowSize</tt> values: <br> <tt>1m</tt>,<tt>2m</tt>....<tt>59m</tt> for minutes <br> <tt>1h</tt>, <tt>2h</tt>....<tt>23h</tt> - for hours <br> <tt>1d</tt>...<tt>7d</tt> - for days <br><br> Units cannot be combined (e.g. <tt>1d2h</tt> is not allowed)</td>
+     <td>Defaults to <tt>1d</tt> if no parameter provided <br/> Supported <tt>windowSize</tt> values: <br/> <tt>1m</tt>,<tt>2m</tt>....<tt>59m</tt> for minutes <br/> <tt>1h</tt>, <tt>2h</tt>....<tt>23h</tt> - for hours <br/> <tt>1d</tt>...<tt>7d</tt> - for days <br/><br/> Units cannot be combined (e.g. <tt>1d2h</tt> is not allowed)</td>
   </tr>
   <tr>
       <td>type</td>
       <td>ENUM</td>
       <td>NO</td>
-      <td>Supported values: <tt>FULL</tt> or <tt>MINI</tt>. <br>If none provided, the default is <tt>FULL</tt> </td>
+      <td>Supported values: <tt>FULL</tt> or <tt>MINI</tt>. <br/>If none provided, the default is <tt>FULL</tt> </td>
   </tr>
 </table>
 
@@ -1560,7 +1560,7 @@ timeInForce | ENUM | NO |
 quantity | DECIMAL | NO |
 quoteOrderQty|DECIMAL|NO|
 price | DECIMAL | NO |
-newClientOrderId | STRING | NO | A unique id among open orders. Automatically generated if not sent.<br> Orders with the same `newClientOrderID` can be accepted only when the previous one is filled, otherwise the order will be rejected.
+newClientOrderId | STRING | NO | A unique id among open orders. Automatically generated if not sent.<br/> Orders with the same `newClientOrderID` can be accepted only when the previous one is filled, otherwise the order will be rejected.
 strategyId |INT| NO|
 strategyType |INT| NO| The value cannot be less than `1000000`.
 stopPrice | DECIMAL | NO | Used with `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, and `TAKE_PROFIT_LIMIT` orders.
@@ -1575,12 +1575,12 @@ Some additional mandatory parameters based on order `type`:
 Type | Additional mandatory parameters | Additional Information
 ------------ | ------------| ------
 `LIMIT` | `timeInForce`, `quantity`, `price`|
-`MARKET` | `quantity` or `quoteOrderQty`| `MARKET` orders using the `quantity` field specifies the amount of the `base asset` the user wants to buy or sell at the market price. <br> E.g. MARKET order on BTCUSDT will specify how much BTC the user is buying or selling. <br><br> `MARKET` orders using `quoteOrderQty` specifies the amount the user wants to spend (when buying) or receive (when selling) the `quote` asset; the correct `quantity` will be determined based on the market liquidity and `quoteOrderQty`. <br> E.g. Using the symbol BTCUSDT: <br> `BUY` side, the order will buy as many BTC as `quoteOrderQty` USDT can. <br> `SELL` side, the order will sell as much BTC needed to receive `quoteOrderQty` USDT.
+`MARKET` | `quantity` or `quoteOrderQty`| `MARKET` orders using the `quantity` field specifies the amount of the `base asset` the user wants to buy or sell at the market price. <br/> E.g. MARKET order on BTCUSDT will specify how much BTC the user is buying or selling. <br/><br/> `MARKET` orders using `quoteOrderQty` specifies the amount the user wants to spend (when buying) or receive (when selling) the `quote` asset; the correct `quantity` will be determined based on the market liquidity and `quoteOrderQty`. <br/> E.g. Using the symbol BTCUSDT: <br/> `BUY` side, the order will buy as many BTC as `quoteOrderQty` USDT can. <br/> `SELL` side, the order will sell as much BTC needed to receive `quoteOrderQty` USDT.
 `STOP_LOSS` | `quantity`, `stopPrice` or `trailingDelta`| This will execute a `MARKET` order when the conditions are met. (e.g. `stopPrice` is met or `trailingDelta` is activated)
 `STOP_LOSS_LIMIT` | `timeInForce`, `quantity`,  `price`, `stopPrice` or `trailingDelta`
 `TAKE_PROFIT` | `quantity`, `stopPrice` or `trailingDelta` | This will execute a `MARKET` order when the conditions are met. (e.g. `stopPrice` is met or `trailingDelta` is activated)
 `TAKE_PROFIT_LIMIT` | `timeInForce`, `quantity`, `price`, `stopPrice` or `trailingDelta` |
-`LIMIT_MAKER` | `quantity`, `price`| This is a `LIMIT` order that will be rejected if the order immediately matches and trades as a taker. <br> This is also known as a POST-ONLY order.
+`LIMIT_MAKER` | `quantity`, `price`| This is a `LIMIT` order that will be rejected if the order immediately matches and trades as a taker. <br/> This is also known as a POST-ONLY order.
 
 Other info:
 
@@ -1946,7 +1946,7 @@ Name | Type | Mandatory | Description
 symbol | STRING | YES |
 side   |ENUM| YES|
 type   |ENUM| YES|
-cancelReplaceMode|ENUM|YES| The allowed values are: <br> `STOP_ON_FAILURE` - If the cancel request fails, the new order placement will not be attempted. <br> `ALLOW_FAILURE` - new order placement will be attempted even if cancel request fails.
+cancelReplaceMode|ENUM|YES| The allowed values are: <br/> `STOP_ON_FAILURE` - If the cancel request fails, the new order placement will not be attempted. <br/> `ALLOW_FAILURE` - new order placement will be attempted even if cancel request fails.
 timeInForce|ENUM|NO|
 quantity|DECIMAL|NO|
 quoteOrderQty |DECIMAL|NO
@@ -1960,7 +1960,7 @@ strategyType |INT| NO| The value cannot be less than `1000000`.
 stopPrice|DECIMAL|NO|
 trailingDelta|LONG|NO|
 icebergQty|DECIMAL|NO|
-newOrderRespType|ENUM|NO|Allowed values: <br> `ACK`, `RESULT`, `FULL` <br> `MARKET` and `LIMIT` orders types default to `FULL`; all other orders default to `ACK`
+newOrderRespType|ENUM|NO|Allowed values: <br/> `ACK`, `RESULT`, `FULL` <br/> `MARKET` and `LIMIT` orders types default to `FULL`; all other orders default to `ACK`
 recvWindow | LONG | NO | The value cannot be greater than `60000`
 timestamp | LONG | YES |
 

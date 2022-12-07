@@ -408,9 +408,9 @@ curl -H "X-MBX-APIKEY: $apiKey" -X $apiMethod \
 
 Status | Description
 -----------| --------------
-`GTC` | 成交为止 <br> 订单会一直有效，直到被成交或者取消。
-`IOC` | 无法立即成交的部分就撤销 <br> 订单在失效前会尽量多的成交。
-`FOK` | 无法全部立即成交就撤销 <br> 如果无法全部成交，订单会失效。
+`GTC` | 成交为止 <br/> 订单会一直有效，直到被成交或者取消。
+`IOC` | 无法立即成交的部分就撤销 <br/> 订单在失效前会尽量多的成交。
+`FOK` | 无法全部立即成交就撤销 <br/> 如果无法全部成交，订单会失效。
 
 **K线间隔 (interval):**
 
@@ -534,8 +534,8 @@ GET /api/v3/exchangeInfo
 ----- | ----|
 |不需要交易对|curl -X GET "https://api.binance.com/api/v3/exchangeInfo"|
 |单个交易对|curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbol=BNBBTC"|
-|多个交易对| curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbols=%5B%22BNBBTC%22,%22BTCUSDT%22%5D" <br> 或者 <br> curl -g -X GET 'https://api.binance.com/api/v3/exchangeInfo?symbols=["BTCUSDT","BNBBTC"]'|
-| 交易权限 | curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=SPOT" <br> 或者 <br> curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=%5B%22MARGIN%22%2C%22LEVERAGED%22%5D" <br> 或者 <br> curl -g -X GET 'https://api.binance.com/api/v3/exchangeInfo?permissions=["MARGIN","LEVERAGED"]'|
+|多个交易对| curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbols=%5B%22BNBBTC%22,%22BTCUSDT%22%5D" <br/> 或者 <br/> curl -g -X GET 'https://api.binance.com/api/v3/exchangeInfo?symbols=["BTCUSDT","BNBBTC"]'|
+| 交易权限 | curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=SPOT" <br/> 或者 <br/> curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=%5B%22MARGIN%22%2C%22LEVERAGED%22%5D" <br/> 或者 <br/> curl -g -X GET 'https://api.binance.com/api/v3/exchangeInfo?permissions=["MARGIN","LEVERAGED"]'|
 
 **备注**:
 * 如果参数 `symbol` 或者 `symbols` 提供的交易对不存在, 系统会返回错误并提示交易对不正确.
@@ -645,7 +645,7 @@ GET /api/v3/depth
 名称 | 类型 | 是否必须 | 描述
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-limit | INT | NO | 默认 100; 最大 5000. 可选值:[5, 10, 20, 50, 100, 500, 1000, 5000] <br> 如果 limit > 5000, 最多返回5000条数据.
+limit | INT | NO | 默认 100; 最大 5000. 可选值:[5, 10, 20, 50, 100, 500, 1000, 5000] <br/> 如果 limit > 5000, 最多返回5000条数据.
 
 **注意:** limit=0 返回全部orderbook，但数据量会非常非常非常非常大！
 
@@ -917,7 +917,7 @@ GET /api/v3/ticker/24hr
 </thead>
 <tbody>
     <tr>
-        <td rowspan=2>symbol</td>
+        <td rowspan="2">symbol</td>
         <td>1</td>
         <td>1</td>
     </tr>
@@ -926,7 +926,7 @@ GET /api/v3/ticker/24hr
         <td>40</td>
     </tr>
     <tr>
-        <td rowspan=4>symbols</td>
+        <td rowspan="4">symbols</td>
         <td>1-20</td>
         <td>1</td>
     </tr>
@@ -961,10 +961,10 @@ GET /api/v3/ticker/24hr
         <td>symbol</td>
         <td>STRING</td>
         <td>NO</td>
-        <td rowspan=2>参数 `symbol` 和 `symbols` 不可以一起使用 <br> 如果都不提供, 所有symbol的ticker数据都会返回. <br><br>
+        <td rowspan="2">参数 `symbol` 和 `symbols` 不可以一起使用 <br/> 如果都不提供, 所有symbol的ticker数据都会返回. <br/><br/>
          symbols参数可接受的格式：
-         ["BTCUSDT","BNBUSDT"] <br>
-         或 <br>
+         ["BTCUSDT","BNBUSDT"] <br/>
+         或 <br/>
          %5B%22BTCUSDT%22,%22BNBUSDT%22%5D
         </td>
      </tr>
@@ -977,7 +977,7 @@ GET /api/v3/ticker/24hr
         <td>type</td>
         <td>ENUM</td>
         <td>NO</td>
-        <td>可接受的参数: <tt>FULL</tt> or <tt>MINI</tt>. <br>如果不提供, 默认值为 <tt>FULL</tt> </td>
+        <td>可接受的参数: <tt>FULL</tt> or <tt>MINI</tt>. <br/>如果不提供, 默认值为 <tt>FULL</tt> </td>
     </tr>
 </tbody>
 </table>
@@ -1114,7 +1114,7 @@ GET /api/v3/ticker/price
 </thead>
 <tbody>
     <tr>
-        <td rowspan=2>symbol</td>
+        <td rowspan="2">symbol</td>
         <td>1</td>
         <td>1</td>
     </tr>
@@ -1148,10 +1148,10 @@ GET /api/v3/ticker/price
         <td>symbol</td>
         <td>STRING</td>
         <td>NO</td>
-        <td rowspan=2> 参数 `symbol` 和 `symbols` 不可以一起使用 <br> 如果都不提供, 所有symbol的价格数据都会返回. <br><br>
+        <td rowspan="2"> 参数 `symbol` 和 `symbols` 不可以一起使用 <br/> 如果都不提供, 所有symbol的价格数据都会返回. <br/><br/>
         symbols参数可接受的格式：
-         ["BTCUSDT","BNBUSDT"] <br>
-         或 <br>
+         ["BTCUSDT","BNBUSDT"] <br/>
+         或 <br/>
          %5B%22BTCUSDT%22,%22BNBUSDT%22%5D
         </td>
     </tr>
@@ -1208,7 +1208,7 @@ GET /api/v3/ticker/bookTicker
 </thead>
 <tbody>
     <tr>
-        <td rowspan=2>symbol</td>
+        <td rowspan="2">symbol</td>
         <td>1</td>
         <td>1</td>
     </tr>
@@ -1242,10 +1242,10 @@ GET /api/v3/ticker/bookTicker
         <td>symbol</td>
         <td>STRING</td>
         <td>NO</td>
-        <td rowspan=2> 参数 `symbol` 和 `symbols` 不可以一起使用 <br> 如果都不提供, 所有symbol的bookTicker数据都会返回. <br><br>
+        <td rowspan="2"> 参数 `symbol` 和 `symbols` 不可以一起使用 <br/> 如果都不提供, 所有symbol的bookTicker数据都会返回. <br/><br/>
         symbols参数可接受的格式：
-         ["BTCUSDT","BNBUSDT"] <br>
-         或 <br>
+         ["BTCUSDT","BNBUSDT"] <br/>
+         或 <br/>
          %5B%22BTCUSDT%22,%22BNBUSDT%22%5D
         </td>
     </tr>
@@ -1309,7 +1309,7 @@ GET /api/v3/ticker
 
 比如, 结束时间 `closeTime` 是 1641287867099 (January 04, 2022 09:17:47:099 UTC) , `windowSize` 为 `1d`. 那么开始时间 `openTime` 则为 1641201420000 (January 3, 2022, 09:17:00 UTC)
 
-**权重(IP):** 2/交易对. <br><br> 如果`symbols`请求的交易对超过50, 上限是100.
+**权重(IP):** 2/交易对. <br/><br/> 如果`symbols`请求的交易对超过50, 上限是100.
 
 **参数**
 <table>
@@ -1321,9 +1321,9 @@ GET /api/v3/ticker
   </tr>
   <tr>
     <td>symbol</td>
-    <td rowspan=2>STRING</td>
-    <td rowspan=2>YES</td>
-    <td rowspan=2> 提供 symbol或者symbols 其中之一  <br> <tt>symbols</tt> 可以传入的格式: <br> ["BTCUSDT","BNBUSDT"] <br>or <br>%5B%22BTCUSDT%22,%22BNBUSDT%22%5D <br><br> <tt>symbols</tt> 允许最多100个交易对
+    <td rowspan="2">STRING</td>
+    <td rowspan="2">YES</td>
+    <td rowspan="2"> 提供 symbol或者symbols 其中之一  <br/> <tt>symbols</tt> 可以传入的格式: <br/> ["BTCUSDT","BNBUSDT"] <br/>or <br/>%5B%22BTCUSDT%22,%22BNBUSDT%22%5D <br/><br/> <tt>symbols</tt> 允许最多100个交易对
     </td>
   </tr>
   <tr>
@@ -1333,13 +1333,13 @@ GET /api/v3/ticker
      <td>windowSize</td>
      <td>ENUM</td>
      <td>NO</td>
-     <td>默认为 <tt>1d</tt> <br> <tt>windowSize</tt> 支持的值: <br> 如果是分钟: <tt>1m</tt>,<tt>2m</tt>....<tt>59m</tt> <br> 如果是小时: <tt>1h</tt>, <tt>2h</tt>....<tt>23h</tt> <br> 如果是天: <tt>1d</tt>...<tt>7d</tt> <br><br>  不可以组合使用, 比如<tt>1d2h</tt></td>
+     <td>默认为 <tt>1d</tt> <br/> <tt>windowSize</tt> 支持的值: <br/> 如果是分钟: <tt>1m</tt>,<tt>2m</tt>....<tt>59m</tt> <br/> 如果是小时: <tt>1h</tt>, <tt>2h</tt>....<tt>23h</tt> <br/> 如果是天: <tt>1d</tt>...<tt>7d</tt> <br/><br/>  不可以组合使用, 比如<tt>1d2h</tt></td>
   </tr>
   <tr>
      <td>type</td>
      <td>ENUM</td>
       <td>NO</td>
-      <td>可接受的参数: <tt>FULL</tt> or <tt>MINI</tt>. <br>如果不提供, 默认值为 <tt>FULL</tt> </td>
+      <td>可接受的参数: <tt>FULL</tt> or <tt>MINI</tt>. <br/>如果不提供, 默认值为 <tt>FULL</tt> </td>
   </tr>
 </table>
 
@@ -1503,7 +1503,7 @@ timestamp | LONG | YES |
 Type | 强制要求的参数 | 其他信息
 ------------ | ------------ | ------------
 `LIMIT` | `timeInForce`, `quantity`, `price`
-`MARKET` | `quantity` |  市价买卖单可用`quantity`参数来设置`base asset`数量.<br> 例如：BTCUSDT 市价单，BTC 买卖数量取决于`quantity`参数. <br><br>市价买卖单可用`quoteOrderQty`参数来设置`quote asset`数量. 正确的`quantity`取决于市场的流动性与`quoteOrderQty`<br> 例如: 市价 `BUY` BTCUSDT，单子会基于`quoteOrderQty`- USDT 的数量，购买 BTC.<br> 市价 `SELL` BTCUSDT，单子会卖出 BTC 来满足`quoteOrderQty`- USDT 的数量.
+`MARKET` | `quantity` |  市价买卖单可用`quantity`参数来设置`base asset`数量.<br/> 例如：BTCUSDT 市价单，BTC 买卖数量取决于`quantity`参数. <br/><br/>市价买卖单可用`quoteOrderQty`参数来设置`quote asset`数量. 正确的`quantity`取决于市场的流动性与`quoteOrderQty`<br/> 例如: 市价 `BUY` BTCUSDT，单子会基于`quoteOrderQty`- USDT 的数量，购买 BTC.<br/> 市价 `SELL` BTCUSDT，单子会卖出 BTC 来满足`quoteOrderQty`- USDT 的数量.
 `STOP_LOSS` | `quantity`, `stopPrice`, `trailingDelta` | 条件满足后会下`MARKET`单子. (例如：达到`stopPrice`或`trailingDelta`被启动)
 `STOP_LOSS_LIMIT` | `timeInForce`, `quantity`,  `price`, `stopPrice`, `trailingDelta`
 `TAKE_PROFIT` | `quantity`, `stopPrice`, `trailingDelta` | 条件满足后会下`MARKET`单子. (例如：达到`stopPrice`或`trailingDelta`被启动)
@@ -1662,7 +1662,7 @@ Name | Type | Mandatory | Description
 symbol | STRING | YES |
 side   |ENUM| YES|
 type   |ENUM| YES|
-cancelReplaceMode|ENUM|YES| 指定类型：`STOP_ON_FAILURE` - 如果撤消订单失败将不会继续重新下单。<br> `ALLOW_FAILURE` - 不管撤消订单是否成功都会继续重新下单。
+cancelReplaceMode|ENUM|YES| 指定类型：`STOP_ON_FAILURE` - 如果撤消订单失败将不会继续重新下单。<br/> `ALLOW_FAILURE` - 不管撤消订单是否成功都会继续重新下单。
 timeInForce|ENUM|NO|
 quantity|DECIMAL|NO|
 quoteOrderQty |DECIMAL|NO
@@ -1676,7 +1676,7 @@ strategyType |INT| NO| 不能低于 `1000000`.
 stopPrice|DECIMAL|NO|
 trailingDelta|LONG|NO|
 icebergQty|DECIMAL|NO|
-newOrderRespType|ENUM|NO|指定响应类型: <br> 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`, 其他默认为`ACK`.
+newOrderRespType|ENUM|NO|指定响应类型: <br/> 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`, 其他默认为`ACK`.
 recvWindow | LONG | NO | 不能大于 `60000`
 timestamp | LONG | YES |
 

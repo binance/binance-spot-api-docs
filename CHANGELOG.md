@@ -282,7 +282,7 @@ SPOT API
     * `GET /api/v3/ticker/24hr`
     * `GET /api/v3/ticker/price`
     * `GET /api/v3/ticker/bookTicker`
-* In the above, the request weight will depend on the number of symbols provided in `symbols`. <br> Please refer to the table below:
+* In the above, the request weight will depend on the number of symbols provided in `symbols`. <br/> Please refer to the table below:
 
 |Endpoint|Number of Symbols|Weight|
 |-----|-----|----|

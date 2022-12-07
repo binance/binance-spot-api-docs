@@ -45,8 +45,8 @@ In order to pass the `percent price`, the following must be true for `price`:
 ```
 
 ### PERCENT_PRICE_BY_SIDE
-The `PERCENT_PRICE_BY_SIDE` filter defines the valid range for the price based on the average of the previous trades.<br>
-`avgPriceMins` is the number of minutes the average price is calculated over. 0 means the last price is used. <br>
+The `PERCENT_PRICE_BY_SIDE` filter defines the valid range for the price based on the average of the previous trades.<br/>
+`avgPriceMins` is the number of minutes the average price is calculated over. 0 means the last price is used. <br/>
 There is a different range depending on whether the order is placed on the `BUY` side or the `SELL` side.
 
 Buy orders will succeed on this filter if:
@@ -112,8 +112,8 @@ Since `MARKET` orders have no price, the average price is used over the last `av
 ```
 
 ### NOTIONAL
-The `NOTIONAL` filter defines the acceptable notional range allowed for an order on a symbol. <br><br>
-`applyMinToMarket` determines whether the `minNotional` will be applied to `MARKET` orders. <br>
+The `NOTIONAL` filter defines the acceptable notional range allowed for an order on a symbol. <br/><br/>
+`applyMinToMarket` determines whether the `minNotional` will be applied to `MARKET` orders. <br/>
 `applyMaxToMarket` determines whether the `maxNotional` will be applied to `MARKET` orders.
 
 In order to pass this filter, the notional (`price * quantity`) has to pass the following conditions:
@@ -121,7 +121,7 @@ In order to pass this filter, the notional (`price * quantity`) has to pass the 
 * `price * quantity` <= `maxNotional`
 * `price * quantity` >= `minNotional`
 
-For `MARKET` orders, the average price used over the last `avgPriceMins` minutes will be used for calculation. <br>
+For `MARKET` orders, the average price used over the last `avgPriceMins` minutes will be used for calculation. <br/>
 If the `avgPriceMins` is 0, then the last price will be used.
 
 **/exchangeInfo format:**

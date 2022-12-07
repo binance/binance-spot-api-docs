@@ -78,7 +78,7 @@ Between `12:04:00` and `12:05:00` a series of linear trades lead to a decrease i
 
 Between `12:05:00` and `12:05:30` a series of linear trades lead to an increase in last price to 44,100. This trade is equal to, or surpasses, the order's requirement of 500 BIPS, as `44,100 = 42,000 * 1.05`. This causes the order to trigger and start working against the order book at its limit price of 45,000.
 
-<img alt="image" src="https://user-images.githubusercontent.com/17701918/167370103-ab3b4c05-1e13-4a25-b99a-42f9e4d6adc8.png">
+<img alt="image" src="https://user-images.githubusercontent.com/17701918/167370103-ab3b4c05-1e13-4a25-b99a-42f9e4d6adc8.png" />
 
 ### Scenario B - Trailing Stop Loss Limit Sell Order
 
@@ -94,7 +94,7 @@ Between `12:04:00` and `12:05:00` a series of linear trades lead to an increase 
 
 Between `12:05:00` and `12:05:30` a series of linear trades lead to a decrease in last price to 36,900. This trade is equal to, or surpasses, the order's requirement of 1000 BIPS, as `36,900 = 41,000 * 0.90`. This causes the order to trigger and start working against the order book at its limit price of 38,000.
 
-<img alt="image" src="https://user-images.githubusercontent.com/17701918/167370383-eb813cc1-d9b8-4a94-896c-a1a29551e09d.png">
+<img alt="image" src="https://user-images.githubusercontent.com/17701918/167370383-eb813cc1-d9b8-4a94-896c-a1a29551e09d.png" />
 
 ### Scenario C - Trailing Take Profit Limit Buy Order
 
@@ -112,7 +112,7 @@ Between `12:04:00` and `12:05:00` a series of linear trades lead to a decrease i
 
 Between `12:05:00` and `12:05:30` a series of linear trades lead to an increase in last price to 40,145. This trade is equal to, or surpasses, the order's requirement of 850 BIPS, as `40,145 = 37,000 * 1.085`. This causes the order to trigger and start working against the order book at its limit price of 38,500.
 
-<img alt="image" src="https://user-images.githubusercontent.com/17701918/167370339-f1b83c76-790b-4108-8c9a-db2d89a4850f.png">
+<img alt="image" src="https://user-images.githubusercontent.com/17701918/167370339-f1b83c76-790b-4108-8c9a-db2d89a4850f.png" />
 
 ### Scenario D - Trailing Take Profit Limit Sell Order
 
@@ -132,7 +132,7 @@ Between `12:05:00` and `12:06:00` a series of linear trades lead to an increase 
 
 Between `12:06:00` and `12:06:50` a series of linear trades lead to a decrease in last price to 43,012.5. This trade is equal to, or surpasses, the order's requirement of 750 BIPS, as `43,012.5 = 46,500 * 0.925`. This causes the order to trigger and start working against the order book at its limit price of 41,000.
 
-<img alt="image" src="https://user-images.githubusercontent.com/17701918/167370298-172b227a-198d-46ee-a385-5cc267dc253b.png">
+<img alt="image" src="https://user-images.githubusercontent.com/17701918/167370298-172b227a-198d-46ee-a385-5cc267dc253b.png" />
 
 ### Scenario E - Trailing Stop Order Without A Stop Price
 
@@ -146,7 +146,7 @@ Between `12:03:00` and `12:04:00` a series of linear trades lead to an increase 
 
 Between `12:04:00` and `12:04:45` a series of linear trades lead to a decrease in last price to 42,315. This trade is equal to, or surpasses, the order's requirement of 700 BIPS, as `42,315 = 45,500 * 0.93`. This causes the order to trigger and start working against the order book at its limit price of 39,000.
 
-<img alt="image" src="https://user-images.githubusercontent.com/17701918/167370616-17d3295a-3e7c-4314-aa13-ad44e685a311.png">
+<img alt="image" src="https://user-images.githubusercontent.com/17701918/167370616-17d3295a-3e7c-4314-aa13-ad44e685a311.png" />
 
 ## Trailing Stop Order Examples
 

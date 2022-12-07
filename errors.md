@@ -182,7 +182,7 @@ Error message | Description
 "Order would trigger immediately." | The order's stop price is not valid when compared to the last traded price.
 "Cancel order is invalid. Check origClOrdId and orderId." | No `origClOrdId` or `orderId` was sent in.
 "Order would immediately match and take." | `LIMIT_MAKER` order type would immediately match and trade, and not be a pure maker order.
-"The relationship of the prices for the orders is not correct." | The prices set in the `OCO` is breaking the Price rules. <br> The rules are: <br> `SELL Orders`: Limit Price > Last Price > Stop Price <br>`BUY Orders`: Limit Price < Last Price < Stop Price
+"The relationship of the prices for the orders is not correct." | The prices set in the `OCO` is breaking the Price rules. <br/> The rules are: <br/> `SELL Orders`: Limit Price > Last Price > Stop Price <br/>`BUY Orders`: Limit Price < Last Price < Stop Price
 "OCO orders are not supported for this symbol" | `OCO` is not enabled on the symbol
 "Quote order qty market orders are not support for this symbol."| `MARKET` orders using the parameter `quoteOrderQty` are not enabled on the symbol.
 "Trailing stop orders are not supported for this symbol."   | Orders using `trailingDelta` are not enabled on the symbol.
@@ -207,7 +207,7 @@ Error message | Description
 "Filter failure: MIN_NOTIONAL" | `price` * `quantity` is too low to be a valid order for the symbol.
 "Filter failure: ICEBERG_PARTS" | `ICEBERG` order would break into too many parts; icebergQty is too small.
 "Filter failure: MARKET_LOT_SIZE" | `MARKET` order's `quantity` is too high, too low, and/or not following the step size rule for the symbol.
-"Filter failure: MAX_POSITION" | The account's position has reached the maximum defined limit. <br> This is composed of the sum of the balance of the base asset, and the sum of the quantity of all open `BUY` orders.
+"Filter failure: MAX_POSITION" | The account's position has reached the maximum defined limit. <br/> This is composed of the sum of the balance of the base asset, and the sum of the quantity of all open `BUY` orders.
 "Filter failure: MAX_NUM_ORDERS" | Account has too many open orders on the symbol.
 "Filter failure: MAX_NUM_ALGO_ORDERS" | Account has too many open stop loss and/or take profit orders on the symbol.
 "Filter failure: MAX_NUM_ICEBERG_ORDERS" | Account has too many open iceberg orders on the symbol.

@@ -45,9 +45,9 @@
 ```
 
 #### PERCENT_PRICE_BY_SIDE
-`PERCENT_PRICE_BY_SIDE` 过滤器定义了基于交易对平均价格的合法价格范围. 取决于`BUY`或者`SELL`, 价格范围可能有所不同.<br>
+`PERCENT_PRICE_BY_SIDE` 过滤器定义了基于交易对平均价格的合法价格范围. 取决于`BUY`或者`SELL`, 价格范围可能有所不同.<br/>
 
-`avgPriceMins` 是用来计算平均价格的分钟数. 0 表示用最新价(last price).<br>
+`avgPriceMins` 是用来计算平均价格的分钟数. 0 表示用最新价(last price).<br/>
 
 买向订单需要满足:
 
@@ -130,8 +130,8 @@ MIN_NOTIONAL过滤器定义了交易对订单所允许的最小名义价值(成�
 }
 ```
 
-名义价值过滤器(`NOTIONAL`)定义了订单在一个交易对上可以下单的名义价值区间.<br><br>
-`applyMinToMarket` 定义了 `minNotional` 是否适用于市价单(`MARKET`)  <br>
+名义价值过滤器(`NOTIONAL`)定义了订单在一个交易对上可以下单的名义价值区间.<br/><br/>
+`applyMinToMarket` 定义了 `minNotional` 是否适用于市价单(`MARKET`)  <br/>
 `applyMaxToMarket` 定义了 `maxNotional` 是否适用于市价单(`MARKET`).
 
 要通过此过滤器, 订单的名义价值 (单价 x 数量, `price * quantity`) 需要满足如下条件:
@@ -139,7 +139,7 @@ MIN_NOTIONAL过滤器定义了交易对订单所允许的最小名义价值(成�
 * `price * quantity` <= `maxNotional`
 * `price * quantity` >= `minNotional`
 
-对于市价单(`MARKET`), 用于计算的价格采用的是在 `avgPriceMins` 定义的时间之内的平均价.<br>
+对于市价单(`MARKET`), 用于计算的价格采用的是在 `avgPriceMins` 定义的时间之内的平均价.<br/>
 如果 `avgPriceMins` 为 0, 则采用最新的价格.
 
 ### ICEBERG_PARTS 冰山订单拆分数
