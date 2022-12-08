@@ -128,14 +128,6 @@ USER DATA STREAM
 
 ---
 
-## 2022-11-16
-
-* Documentation has been updated to show how to create RSA keys.
-* For security reasons, we recommend to use RSA keys instead of HMAC keys when generating an API key.
-* We accept `PKCS#8` (BEGIN PUBLIC KEY).
-
----
-
 ## 2022-09-30
 
 Scheduled changes to the removal of `!bookTicker` around November 2022.
