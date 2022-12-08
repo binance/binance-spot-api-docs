@@ -128,14 +128,6 @@ USER DATA STREAM
 
 ---
 
-## 2022-11-16
-
-* 文档已更新以显示如何创建 RSA keys。
-* 建议在生成 API key 时使用 RSA keys。
-* 我们接受`PKCS#8`（BEGIN PUBLIC KEY）。
-
----
-
 ## 2022-09-30
 
 
