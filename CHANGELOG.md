@@ -45,7 +45,7 @@ REST API
             }
         ```
     * Added a new combination of supported parameters: `symbol` + `orderId` + `fromId`.
-    * The following combinations of parameters were previously supported but now **removed**.
+    * The following combinations of parameters were previously supported but no longer accepted, as these combinations were only taking `fromId` into consideration, ignoring `startTime` and `endTime`: 
         * `symbol` + `fromId` + `startTime`
         * `symbol` + `fromId` + `endTime`
         * `symbol` + `fromId` + `startTime` + `endTime`
