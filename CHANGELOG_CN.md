@@ -44,8 +44,12 @@ REST API
                 "msg": "Combination of optional parameters invalid."
             }
         ```
-
-    * 支持的所有参数组合：
+    * 添加一个新的参数组合: `symbol` + `orderId` + `fromId`.
+    * 下面的参数组合不再支持:
+        * `symbol` + `fromId` + `startTime`
+        * `symbol` + `fromId` + `endTime`
+        * `symbol` + `fromId` + `startTime` + `endTime`
+    * 当前支持的所有参数组合：
         * `symbol`
         * `symbol` + `orderId`
         * `symbol` + `startTime`
