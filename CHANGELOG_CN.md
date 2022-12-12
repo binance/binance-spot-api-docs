@@ -45,7 +45,7 @@ REST API
             }
         ```
 
-    * 支持组合的 **可选** 参数：
+    * 支持的所有参数组合：
         * `symbol`
         * `symbol` + `orderId`
         * `symbol` + `startTime`
