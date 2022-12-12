@@ -45,38 +45,14 @@ REST API
             }
         ```
 
-    *  These are the supported combinations of **optional** parameters:
+    *  These are the supported combinations for this endpoint:
         * `symbol`
-        * `orderId`
-        * `fromId`
-        * `startTime`
-        * `endTime`
         * `symbol` + `orderId`
-        * `symbol` + `fromId`
         * `symbol` + `startTime`
         * `symbol` + `endTime`
-        * `orderId` + `fromId`
-        * `orderId` + `startTime`
-        * `orderId` + `endTime`
-        * `fromId` + `startTime`
-        * `fromId` + `endTime`
-        * `startTime` + `endTime`
-        * `symbol` + `orderId` + `fromId`
-        * `symbol` + `orderId` + `startTime`
-        * `symbol` + `orderId` + `endTime`
-        * `symbol` + `fromId` + `startTime`
-        * `symbol` + `fromId` + `endTime`
+        * `symbol` + `fromId`
         * `symbol` + `startTime` + `endTime`
-        * `orderId` + `fromId` + `startTime`
-        * `orderId` + `fromId` + `endTime`
-        * `orderId` + `startTime` + `endTime`
-        * `fromId` + `startTime` + `endTime`
-        * `symbol` + `orderId` + `fromId` + `startTime`
-        * `symbol` + `orderId` + `fromId` + `endTime`
-        * `symbol` + `orderId` + `startTime` + `endTime`
-        * `symbol` + `fromId` + `startTime` + `endTime`
-        * `orderID` + `fromId` + `startTime` + `endTime`
-        * `symbol` + `orderID` + `fromId` + `startTime` + `endTime`
+        * `symbol`+ `orderId` + `fromId`
 
 **Note:** These new fields will appear approximately a week from the release date.
 
