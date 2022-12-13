@@ -1,5 +1,20 @@
 
-# CHANGELOG for Binance's API (2022-12-05)
+# CHANGELOG for Binance's API (2022-12-13)
+
+## 2022-12-13
+
+REST API
+
+Some error messages on error code `-1003` have changed. 
+* Previous error message: `Too much request weight used; current limit is %s request weight per %s %s. Please use the websocket for live updates to avoid polling the API.` has been updated to:
+```
+Too much request weight used; current limit is %s request weight per %s. Please use WebSocket Streams for live updates to avoid polling the API.
+```
+* Previous error message `Way too much request weight used; IP banned until %s. Please use the websocket for live updates to avoid bans.` has been updated to:
+```
+Way too much request weight used; IP banned until %s. Please use WebSocket Streams for live updates to avoid bans.
+```
+
 
 ## 2022-12-05
 
