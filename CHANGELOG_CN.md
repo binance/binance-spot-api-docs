@@ -1,4 +1,19 @@
-# 更新日志 (2022-12-05)
+# 更新日志 (2022-12-13)
+
+## 2022-12-13
+
+REST API
+
+错误代码 `-1003` 的一些错误消息已更改
+* 之前错误消息: `Too much request weight used; current limit is %s request weight per %s %s. Please use the websocket for live updates to avoid polling the API.` 改成了：
+```
+Too much request weight used; current limit is %s request weight per %s. Please use WebSocket Streams for live updates to avoid polling the API.
+```
+* 之前错误消息: `Way too much request weight used; IP banned until %s. Please use the websocket for live updates to avoid bans.` 改成了：
+```
+Way too much request weight used; IP banned until %s Please use WebSocket Streams for live updates to avoid bans.
+```
+
 
 ## 2022-12-05
 

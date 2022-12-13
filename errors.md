@@ -1,4 +1,4 @@
-# Error codes for Binance (2022-12-05)
+# Error codes for Binance (2022-12-13)
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
 ```javascript
@@ -21,9 +21,8 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 #### -1003 TOO_MANY_REQUESTS
  * Too many requests queued.
- * Too much request weight used; please use the websocket for live updates to avoid polling the API.
- * Too much request weight used; current limit is %s request weight per %s %s. Please use the websocket for live updates to avoid polling the API.
- * Way too much request weight used; IP banned until %s. Please use the websocket for live updates to avoid bans.
+ * Too much request weight used; current limit is %s request weight per %s. Please use WebSocket Streams for live updates to avoid polling the API.
+ * Way too much request weight used; IP banned until %s. Please use WebSocket Streams for live updates to avoid bans.
 
 #### -1006 UNEXPECTED_RESP
  * An unexpected response was received from the message bus. Execution status unknown.
