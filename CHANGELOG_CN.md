@@ -1,4 +1,15 @@
-# 更新日志 (2022-12-13)
+# 更新日志 (2022-12-15)
+
+## 2012-12-15
+
+现货 WebSocket API 现在可以在 SPOT 测试网上使用。
+
+* WebSocket API 允许通过 WebSocket 连接下订单、取消订单等。
+* WebSocket API 是一个 **独立** 于 WebSocket 市场数据流的服务。 即，下订单和收听市场数据需要两个独立的 WebSocket 连接。
+* WebSocket API 与 REST API 相同过滤器和速率限制规则。
+* WebSocket API 与 REST API 提供相同的功能，接受相同的参数，返回相同的状态和错误代码。
+
+**WEBSOCKET API 会晚些时候在生产系统中可用。**
 
 ## 2022-12-13
 
