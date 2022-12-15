@@ -3,12 +3,15 @@
 
 ## 2012-12-15
 
-SPOT WebSocket API is now available on **SPOT Testnet**.
-
-* WebSocket API allows placing orders, canceling orders, etc. through a WebSocket connection.
-* WebSocket API is a **separate** service from WebSocket Market Data streams. I.e., placing orders and listening to market data requires two separate WebSocket connections.
-* WebSocket API is subject to the same Filter and Rate Limit rules as REST API.
-* WebSocket API and REST API are functionally equivalent: they provide the same features, accept the same parameters, return the same status and error codes.
+* New RSA signature
+    * Documentation has been updated to show how to create RSA keys.
+    * For security reasons, we recommend to use RSA keys instead of HMAC keys when generating an API key.
+    * We accept `PKCS#8` (BEGIN PUBLIC KEY).
+* SPOT WebSocket API is now available on **SPOT Testnet**.
+    * WebSocket API allows placing orders, canceling orders, etc. through a WebSocket connection.
+    * WebSocket API is a **separate** service from WebSocket Market Data streams. I.e., placing orders and listening to market data requires two separate WebSocket connections.
+    * WebSocket API is subject to the same Filter and Rate Limit rules as REST API.
+    * WebSocket API and REST API are functionally equivalent: they provide the same features, accept the same parameters, return the same status and error codes.
 
 **WEBSOCKET API WILL BE AVAILABLE ON THE LIVE EXCHANGE AT A LATER DATE.**
 
