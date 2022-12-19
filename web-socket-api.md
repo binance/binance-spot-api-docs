@@ -67,6 +67,7 @@
 
 * The base endpoint is: **`wss://ws-api.binance.com:443/ws-api/v3`**
   * If you experience issues with the standard 443 port, alternative port 9443 is also available.
+  * The base endpoint for [testnet](https://testnet.binance.vision/) is: `wss://testnet.binance.vision/ws-api/v3`
 * A single connection to the API is only valid for 24 hours; expect to be disconnected after the 24-hour mark.
 * WebSocket server will send a **ping frame** every 3 minutes.
   * If the server does not receive a **pong frame** response within 10 minutes, you will be disconnected.

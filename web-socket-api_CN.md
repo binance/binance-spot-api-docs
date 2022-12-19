@@ -4,6 +4,7 @@
 
 * 本篇所列出的 wss 接口的 base URL：**`wss://ws-api.binance.com:443/ws-api/v3`**
   * 如果使用标准443端口时遇到问题，可以使用替代端口9443。
+  * [现货测试网](https://testnet.binance.vision)的 base URL 是 `wss://testnet.binance.vision/ws-api/v3`。
 * 每个到 base URL 的链接有效期不超过24小时，请妥善处理断线重连。
 * WebSocket 服务器将在每3分钟发送一个 **ping 帧**。
   * 如果服务器在10分钟内没有收到 **pong 帧** 响应，会主动断开链接。
