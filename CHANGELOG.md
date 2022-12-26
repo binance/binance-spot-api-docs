@@ -1,7 +1,13 @@
+# CHANGELOG for Binance's API (2022-12-26)
 
-# CHANGELOG for Binance's API (2022-12-15)
+## 2022-12-26
 
-## 2012-12-15
+* Spot WebSocket API is now available on the live exchange.
+* Spot Websocket API can be accessed through this URL: `wss://ws-api.binance.com/ws-api/v3`
+
+---
+
+## 2022-12-15
 
 * New RSA signature
     * Documentation has been updated to show how to create RSA keys.
@@ -15,6 +21,8 @@
     * WebSocket API and REST API are functionally equivalent: they provide the same features, accept the same parameters, return the same status and error codes.
 
 **WEBSOCKET API WILL BE AVAILABLE ON THE LIVE EXCHANGE AT A LATER DATE.**
+
+---
 
 ## 2022-12-13
 
@@ -30,6 +38,7 @@ Too much request weight used; current limit is %s request weight per %s. Please 
 Way too much request weight used; IP banned until %s. Please use WebSocket Streams for live updates to avoid bans.
 ```
 
+---
 
 ## 2022-12-05
 
