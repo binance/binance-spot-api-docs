@@ -1,6 +1,13 @@
-# 更新日志 (2022-12-15)
+# 更新日志 (2022-12-26)
 
-## 2012-12-15
+## 2022-12-26
+
+* 现货的 Websocket API 发布到生产系统中。
+* 现货的 Websocket API 可以通过URL: `wss://ws-api.binance.com/ws-api/v3` 来访问。
+
+---
+
+## 2022-12-15
 
 * 添加新的RSA签名验证方式
     * 文档已更新以显示如何创建 RSA keys。
@@ -36,7 +43,7 @@ Way too much request weight used; IP banned until %s Please use WebSocket Stream
 
 WEBSOCKET
 
-* `!bookTicker` 在2022-12-07下线。 请改用按 symbol 的最优挂单信息的数据流（`<symbol>@bookTicker`）。
+* `!bookTicker` 在 **2022-12-07** 下线。 请改用按 symbol 的最优挂单信息的数据流（`<symbol>@bookTicker`）。
     * 可以通过一个连接订阅多个 `<symbol>@bookTicker` 数据流。 （例如`wss://stream.binance.com:9443/stream?streams=btcusdt@bookTicker/bnbbtc@bookTicker`）
 
 REST API
