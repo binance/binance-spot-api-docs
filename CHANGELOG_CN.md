@@ -6,6 +6,7 @@
     * 文档已更新以显示如何创建 RSA keys。
     * 建议在生成 API key 时使用 RSA keys。
     * 我们接受`PKCS#8`（BEGIN PUBLIC KEY）。
+    * 稍后将添加有关如何上传 RSA public key 的更多详细信息。
 * 现货 WebSocket API 现在可以在 SPOT 测试网上使用。
     * WebSocket API 允许通过 WebSocket 连接下订单、取消订单等。
     * WebSocket API 是一个 **独立** 于 WebSocket 市场数据流的服务。 即，下订单和收听市场数据需要两个独立的 WebSocket 连接。
