@@ -7,6 +7,7 @@
     * Documentation has been updated to show how to create RSA keys.
     * For security reasons, we recommend to use RSA keys instead of HMAC keys when generating an API key.
     * We accept `PKCS#8` (BEGIN PUBLIC KEY).
+    * More details on how to upload your RSA public key will be added at a later date.
 * SPOT WebSocket API is now available on **SPOT Testnet**.
     * WebSocket API allows placing orders, canceling orders, etc. through a WebSocket connection.
     * WebSocket API is a **separate** service from WebSocket Market Data streams. I.e., placing orders and listening to market data requires two separate WebSocket connections.
