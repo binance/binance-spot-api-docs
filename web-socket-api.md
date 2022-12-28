@@ -16,6 +16,7 @@
   - [SIGNED (TRADE and USER_DATA) request security](#signed-trade-and-user_data-request-security)
   - [Timing security](#timing-security)
   - [SIGNED request example (HMAC)](#signed-request-example-hmac)
+  - [SIGNED request example (RSA)](#signed-request-example-rsa)
 - [Data sources](#data-sources)
 - [Public API requests](#public-api-requests)
     - [Terminology](#terminology)
@@ -61,7 +62,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public WebSocket API for Binance (2022-12-15)
+# Public WebSocket API for Binance (2022-12-28)
 
 ## General API Information
 
@@ -529,8 +530,7 @@ Security type | API key  | Signature | Description
 ## SIGNED (TRADE and USER_DATA) request security
 
 * `SIGNED` requests require an additional parameter: `signature`, authorizing the request.
-* The signature is computed using HMAC-SHA-256 algorithm.
-  See [computation example](#signed-request-example-hmac) below.
+* Please consult [SIGNED request example (HMAC)](#signed-request-example-hmac) and [SIGNED request example (RSA)](#signed-request-example-rsa) on how to compute signature.
 
 ## Timing security
 
@@ -539,6 +539,7 @@ Security type | API key  | Signature | Description
   * If `recvWindow` is not sent, **it defaults to 5000 milliseconds**.
   * Maximum `recvWindow` is 60000 milliseconds.
 * Request processing logic is as follows:
+
   ```javascript
   if (timestamp < (serverTime + 1000) && (serverTime - timestamp) <= recvWindow) {
     // process request
@@ -557,7 +558,7 @@ server.
 
 ## SIGNED request example (HMAC)
 
-Here is a step-by-step guide on how to sign requests.
+Here is a step-by-step guide on how to sign requests using HMAC secret key.
 
 Example API key and secret key:
 
@@ -565,6 +566,10 @@ Key          | Value
 ------------ | ------------
 apiKey       | `vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A`
 secretKey    | `NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j`
+
+**WARNING: DO NOT SHARE YOUR API KEY AND SECRET KEY WITH ANYONE.**
+
+The example keys are provided here only for illustrative purposes.
 
 Example of request:
 
@@ -594,23 +599,22 @@ As you can see, the `signature` parameter is currently missing.
 
 Take all request `params` except for the `signature`, sort them by name in alphabetical order:
 
-```
-  apiKey              vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A
-  newOrderRespType    ACK
-  price               52000.00
-  quantity            0.01000000
-  recvWindow          100
-  side                SELL
-  symbol              BTCUSDT
-  timeInForce         GTC
-  timestamp           1645423376532
-  type                LIMIT
-```
+Parameter        | Value
+---------------- | ------------
+apiKey           | vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A
+newOrderRespType | ACK
+price            | 52000.00
+quantity         | 0.01000000
+recvWindow       | 100
+side             | SELL
+symbol           | BTCUSDT
+timeInForce      | GTC
+timestamp        | 1645423376532
+type             | LIMIT
 
-Format parameters as `key=value` pairs and intersperse with `&`,
-producing a string similar to HTTP query string.
+Format parameters as `parameter=value` pairs separated by `&`.
 
-This is the signature payload:
+Resulting signature payload:
 
 ```
 apiKey=vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A&newOrderRespType=ACK&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
@@ -622,8 +626,7 @@ apiKey=vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A&newOrder
 2. Sign signature payload as ASCII data.
 3. Encode HMAC-SHA-256 output as a hex string.
 
-Note that `apiKey`, `secretKey`, and the payload are **case-sensitive**.
-Resulting signature value is case-insensitive though.
+Note that `apiKey`, `secretKey`, and the payload are **case-sensitive**, while resulting signature value is case-insensitive.
 
 You can cross-check your signature algorithm implementation with OpenSSL:
 
@@ -636,7 +639,7 @@ cc15477742bd704c29492d96c7ead9414dfd8e0ec4a00f947bb5bb454ddbd08a
 
 **Step 3. Add `signature` to request `params`**
 
-Finally, complete the request with resulting signature:
+Finally, complete the request by adding the `signature` parameter with the signature string.
 
 ```json
 {
@@ -654,6 +657,109 @@ Finally, complete the request with resulting signature:
     "timestamp":        1645423376532,
     "apiKey":           "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
     "signature":        "cc15477742bd704c29492d96c7ead9414dfd8e0ec4a00f947bb5bb454ddbd08a"
+  }
+}
+```
+
+## SIGNED request example (RSA)
+
+Here is a step-by-step guide on how to sign requests using your RSA private key.
+
+Key          | Value
+------------ | ------------
+apiKey       | `CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ`
+
+In this example, we assume the private key is stored in the `test-prv-key.pem` file.
+
+**WARNING: DO NOT SHARE YOUR API KEY AND PRIVATE KEY WITH ANYONE.**
+
+The example keys are provided here only for illustrative purposes.
+
+Example of request:
+
+```json
+{
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol":           "BTCUSDT",
+    "side":             "SELL",
+    "type":             "LIMIT",
+    "timeInForce":      "GTC",
+    "quantity":         "0.01000000",
+    "price":            "52000.00",
+    "newOrderRespType": "ACK",
+    "recvWindow":       100,
+    "timestamp":        1645423376532,
+    "apiKey":           "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
+    "signature":        "------ FILL ME ------"
+  }
+}
+```
+
+**Step 1. Construct the signature payload**
+
+Take all request `params` except for the `signature`, sort them by name in alphabetical order:
+
+Parameter        | Value
+---------------- | ------------
+apiKey           | CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ
+newOrderRespType | ACK
+price            | 52000.00
+quantity         | 0.01000000
+recvWindow       | 100
+side             | SELL
+symbol           | BTCUSDT
+timeInForce      | GTC
+timestamp        | 1645423376532
+type             | LIMIT
+
+Format parameters as `parameter=value` pairs separated by `&`.
+
+Resulting signature payload:
+
+```
+apiKey=CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ&newOrderRespType=ACK&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
+```
+
+**Step 2. Compute the signature**
+
+1. Encode signature payload as ASCII data.
+2. Sign payload using RSASSA-PKCS1-v1_5 algorithm with SHA-256 hash function.
+3. Encode output as base64 string. 
+
+Note that `apiKey`, the payload, and the resulting `signature` are **case-sensitive**.
+
+You can cross-check your signature algorithm implementation with OpenSSL:
+
+```console
+$ echo -n 'apiKey=CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ&newOrderRespType=ACK&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT' \
+  | openssl dgst -sha256 -sign test-prv-key.pem \
+  | openssl enc -base64 -A
+
+OJJaf8C/3VGrU4ATTR4GiUDqL2FboSE1Qw7UnnoYNfXTXHubIl1iaePGuGyfct4NPu5oVEZCH4Q6ZStfB1w4ssgu0uiB/Bg+fBrRFfVgVaLKBdYHMvT+ljUJzqVaeoThG9oXlduiw8PbS9U8DYAbDvWN3jqZLo4Z2YJbyovyDAvDTr/oC0+vssLqP7NmlNb3fF3Bj7StmOwJvQJTbRAtzxK5PP7OQe+0mbW+D7RqVkUiSswR8qJFWTeSe4nXXNIdZdueYhF/Xf25L+KitJS5IHdIHcKfEw3MQzHFb2ZsGWkjDQwxkwr7Noi0Zaa+gFtxCuatGFm9dFIyx217pmSHtA==
+```
+
+**Step 3. Add `signature` to request `params`**
+
+Finally, complete the request by adding the `signature` parameter with the signature string.
+
+```json
+{
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol":           "BTCUSDT",
+    "side":             "SELL",
+    "type":             "LIMIT",
+    "timeInForce":      "GTC",
+    "quantity":         "0.01000000",
+    "price":            "52000.00",
+    "newOrderRespType": "ACK",
+    "recvWindow":       100,
+    "timestamp":        1645423376532,
+    "apiKey":           "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
+    "signature":        "OJJaf8C/3VGrU4ATTR4GiUDqL2FboSE1Qw7UnnoYNfXTXHubIl1iaePGuGyfct4NPu5oVEZCH4Q6ZStfB1w4ssgu0uiB/Bg+fBrRFfVgVaLKBdYHMvT+ljUJzqVaeoThG9oXlduiw8PbS9U8DYAbDvWN3jqZLo4Z2YJbyovyDAvDTr/oC0+vssLqP7NmlNb3fF3Bj7StmOwJvQJTbRAtzxK5PP7OQe+0mbW+D7RqVkUiSswR8qJFWTeSe4nXXNIdZdueYhF/Xf25L+KitJS5IHdIHcKfEw3MQzHFb2ZsGWkjDQwxkwr7Noi0Zaa+gFtxCuatGFm9dFIyx217pmSHtA=="
   }
 }
 ```

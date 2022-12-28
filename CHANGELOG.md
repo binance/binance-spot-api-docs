@@ -1,4 +1,8 @@
-# CHANGELOG for Binance's API (2022-12-26)
+# CHANGELOG for Binance's API (2022-12-28)
+
+## 2022-12-28
+
+* SPOT WebSocket API documentation has been updated to show how to sign a request using an RSA key.
 
 ## 2022-12-26
 
