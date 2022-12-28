@@ -347,6 +347,8 @@ curl -H "X-MBX-APIKEY: $apiKey" -X $apiMethod \
 * TRD_GRP_003 交易组 003
 * TRD_GRP_004 交易组 004
 * TRD_GRP_005 交易组 005
+* TRD_GRP_006 交易组 006
+* TRD_GRP_007 交易组 007
 
 
 **订单状态 (status):**
@@ -544,7 +546,7 @@ GET /api/v3/exchangeInfo
 * 所有的参数都是可选的.
 * `permissions` 支持单个或者多个值, 比如 `SPOT`, `["MARGIN","LEVERAGED"]`.
 * 如果`permissions`值没有提供, 其默认值为 `["SPOT","MARGIN","LEVERAGED"]`.
-  * 如果想取接口 `GET /api/v3/exchangeInfo` 的所有交易对, 则需要设置此参数的所有可能交易权限值, 比如 `permissions=["SPOT","MARGIN","LEVERAGED","TRD_GRP_002","TRD_GRP_003","TRD_GRP_004","TRD_GRP_005"])`
+  * 如果想取接口 `GET /api/v3/exchangeInfo` 的所有交易对, 则需要设置此参数的所有可能交易权限值, 比如 `permissions=["SPOT","MARGIN","LEVERAGED","TRD_GRP_002","TRD_GRP_003","TRD_GRP_004","TRD_GRP_005","TRD_GRP_006","TRD_GRP_007"])`
 
 **数据源:**
 缓存
