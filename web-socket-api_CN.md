@@ -1,4 +1,4 @@
-# Binance 的公共 WebSocket API (2022-12-15)
+# Binance 的公共 WebSocket API (2022-12-28)
 
 ## API 基本信息
 
@@ -455,8 +455,7 @@ API 有多种频率限制间隔。
 ## SIGNED (TRADE 和 USER_DATA) 请求鉴权
 
 * 为了授权请求，`SIGNED` 请求必须带 `signature` 参数。
-* 签名可以使用 HMAC-SHA-256 算法计算。请参阅下面的 [计算示例](#SIGNED-请求示例-HMAC)。
-
+* 请参考 [签名请求示例（HMAC）](#SIGNED-请求示例-HMAC)和 [签名请求示例（RSA）](#SIGNED-请求示例-RSA)理解如何计算签名。
 
 ## 时间同步安全
 
@@ -466,6 +465,7 @@ API 有多种频率限制间隔。
   * 最大 `recvWindow` 为60000毫秒。
 
 * 请求处理逻辑:
+
   ```javascript
   if (timestamp < (serverTime + 1000) && (serverTime - timestamp) <= recvWindow) {
     // 处理请求
@@ -480,7 +480,7 @@ API 有多种频率限制间隔。
 
 ## SIGNED 请求示例 (HMAC)
 
-这是有关如何签署请求的分步指南。
+这是有关如何用 HMAC secret key 签署请求的分步指南。
 
 示例 API key 和 secret key：
 
@@ -489,7 +489,11 @@ Key          | Value
 apiKey       | `vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A`
 secretKey    | `NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j`
 
-请求示例:
+**警告：请勿与任何人共享您的私钥。** 
+
+示例密钥仅供参考。
+
+请求示例：
 
 ```json
 {
@@ -513,35 +517,35 @@ secretKey    | `NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j
 
 如您所见，目前缺少 `signature` 参数。
 
-**第一步: 创建签名内容**
+**第一步：创建签名内容**
 
 除了 `signature` 之外，获取所有请求 `params`，然后按名称按字母顺序进行排序：
 
-```
-  apiKey              vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A
-  newOrderRespType    ACK
-  price               52000.00
-  quantity            0.01000000
-  recvWindow          100
-  side                SELL
-  symbol              BTCUSDT
-  timeInForce         GTC
-  timestamp           1645423376532
-  type                LIMIT
-```
+参数              | 取值
+---------------- | ------------
+apiKey           | vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A
+newOrderRespType | ACK
+price            | 52000.00
+quantity         | 0.01000000
+recvWindow       | 100
+side             | SELL
+symbol           | BTCUSDT
+timeInForce      | GTC
+timestamp        | 1645423376532
+type             | LIMIT
 
-将参数格式化为 `key=value` 对并穿插 `&`，生成 HTTP query string类似的string。
+将参数格式化为 `参数=取值` 对并用 `&` 分隔每个参数：
 
 签名效载荷示例：
 ```
 apiKey=vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A&newOrderRespType=ACK&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
 ```
 
-**第二步: 计算签名**
+**第二步：计算签名**
 
 1. 将 `secretKey` 解释为 ASCII 数据，将其用作 HMAC-SHA-256 的 key。
 2. 将签名有效负载签名为 ASCII 数据。
-3. 将 HMAC-SHA-256 输出编码为hex string。
+3. 将 HMAC-SHA-256 输出编码为 hex string。
 
 请注意，`apiKey`、`secretKey` 和有效负载是**大小写敏感的**。
 生成的签名值是不区分大小写的。
@@ -555,7 +559,7 @@ $ echo -n 'apiKey=vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh
 cc15477742bd704c29492d96c7ead9414dfd8e0ec4a00f947bb5bb454ddbd08a
 ```
 
-**第三步: 添加 `signature` 到 `params` 中**
+**第三步：添加 `signature` 到 `params` 中**
 
 最后，使用生成的签名完成请求：
 
@@ -575,6 +579,103 @@ cc15477742bd704c29492d96c7ead9414dfd8e0ec4a00f947bb5bb454ddbd08a
     "timestamp":        1645423376532,
     "apiKey":           "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
     "signature":        "cc15477742bd704c29492d96c7ead9414dfd8e0ec4a00f947bb5bb454ddbd08a"
+  }
+}
+```
+
+## SIGNED 请求示例 (RSA)
+
+Key          | Value
+------------ | ------------
+apiKey       | `CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ`
+
+对于这个例子，Private Key 将被引用为 `test-prv-key.pem`。
+
+**警告：请勿与任何人共享您的私钥。** 示例密钥仅供参考。
+
+请求例子：
+
+```json
+{
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol":           "BTCUSDT",
+    "side":             "SELL",
+    "type":             "LIMIT",
+    "timeInForce":      "GTC",
+    "quantity":         "0.01000000",
+    "price":            "52000.00",
+    "newOrderRespType": "ACK",
+    "recvWindow":       100,
+    "timestamp":        1645423376532,
+    "apiKey":           "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
+    "signature":        "------ FILL ME ------"
+  }
+}
+```
+
+**第一步：计算 Payload**
+
+除了 `signature`，获取请求的所有其它 `params`，然后按名称字母顺序对它们进行排序：
+
+参数              | 取值
+---------------- | ------------
+apiKey           | CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ
+newOrderRespType | ACK
+price            | 52000.00
+quantity         | 0.01000000
+recvWindow       | 100
+side             | SELL
+symbol           | BTCUSDT
+timeInForce      | GTC
+timestamp        | 1645423376532
+type             | LIMIT
+
+将参数格式化为 `参数=取值` 对并用 `&` 分隔每个参数：
+
+```
+apiKey=CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ&newOrderRespType=ACK&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
+```
+
+**第二步：计算签名**
+
+1. 将签名有效负载编码为 ASCII 数据。
+2. 使用带有 SHA-256 hash 函数的 RSASSA-PKCS1-v1_5 算法对 payload 进行签名。
+3. 将输出编码为 base64 string。
+
+请注意，`apiKey`, payload 和生成的签名值都是**大小写敏感**的。
+
+您可以使用 OpenSSL 交叉检查您的签名算法：
+
+```console
+$ echo -n 'apiKey=CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ&newOrderRespType=ACK&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT' \
+  | openssl dgst -sha256 -sign test-prv-key.pem \
+  | openssl enc -base64 -A
+
+OJJaf8C/3VGrU4ATTR4GiUDqL2FboSE1Qw7UnnoYNfXTXHubIl1iaePGuGyfct4NPu5oVEZCH4Q6ZStfB1w4ssgu0uiB/Bg+fBrRFfVgVaLKBdYHMvT+ljUJzqVaeoThG9oXlduiw8PbS9U8DYAbDvWN3jqZLo4Z2YJbyovyDAvDTr/oC0+vssLqP7NmlNb3fF3Bj7StmOwJvQJTbRAtzxK5PP7OQe+0mbW+D7RqVkUiSswR8qJFWTeSe4nXXNIdZdueYhF/Xf25L+KitJS5IHdIHcKfEw3MQzHFb2ZsGWkjDQwxkwr7Noi0Zaa+gFtxCuatGFm9dFIyx217pmSHtA==
+```
+
+**第三步：在请求的 `params` 参数添加签名值**
+
+最后，使用生成的签名完成请求：
+
+```json
+{
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol":           "BTCUSDT",
+    "side":             "SELL",
+    "type":             "LIMIT",
+    "timeInForce":      "GTC",
+    "quantity":         "0.01000000",
+    "price":            "52000.00",
+    "newOrderRespType": "ACK",
+    "recvWindow":       100,
+    "timestamp":        1645423376532,
+    "apiKey":           "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
+    "signature":        "OJJaf8C/3VGrU4ATTR4GiUDqL2FboSE1Qw7UnnoYNfXTXHubIl1iaePGuGyfct4NPu5oVEZCH4Q6ZStfB1w4ssgu0uiB/Bg+fBrRFfVgVaLKBdYHMvT+ljUJzqVaeoThG9oXlduiw8PbS9U8DYAbDvWN3jqZLo4Z2YJbyovyDAvDTr/oC0+vssLqP7NmlNb3fF3Bj7StmOwJvQJTbRAtzxK5PP7OQe+0mbW+D7RqVkUiSswR8qJFWTeSe4nXXNIdZdueYhF/Xf25L+KitJS5IHdIHcKfEw3MQzHFb2ZsGWkjDQwxkwr7Noi0Zaa+gFtxCuatGFm9dFIyx217pmSHtA=="
   }
 }
 ```
