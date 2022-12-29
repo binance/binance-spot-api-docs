@@ -1,5 +1,48 @@
+# CHANGELOG for Binance's API (2022-12-28)
 
-# CHANGELOG for Binance's API (2022-12-05)
+## 2022-12-28
+
+* SPOT WebSocket API documentation has been updated to show how to sign a request using an RSA key.
+
+## 2022-12-26
+
+* Spot WebSocket API is now available on the live exchange.
+* Spot Websocket API can be accessed through this URL: `wss://ws-api.binance.com/ws-api/v3`
+
+---
+
+## 2022-12-15
+
+* New RSA signature
+    * Documentation has been updated to show how to create RSA keys.
+    * For security reasons, we recommend to use RSA keys instead of HMAC keys when generating an API key.
+    * We accept `PKCS#8` (BEGIN PUBLIC KEY).
+    * More details on how to upload your RSA public key will be added at a later date.
+* SPOT WebSocket API is now available on **SPOT Testnet**.
+    * WebSocket API allows placing orders, canceling orders, etc. through a WebSocket connection.
+    * WebSocket API is a **separate** service from WebSocket Market Data streams. I.e., placing orders and listening to market data requires two separate WebSocket connections.
+    * WebSocket API is subject to the same Filter and Rate Limit rules as REST API.
+    * WebSocket API and REST API are functionally equivalent: they provide the same features, accept the same parameters, return the same status and error codes.
+
+**WEBSOCKET API WILL BE AVAILABLE ON THE LIVE EXCHANGE AT A LATER DATE.**
+
+---
+
+## 2022-12-13
+
+REST API
+
+Some error messages on error code `-1003` have changed. 
+* Previous error message: `Too much request weight used; current limit is %s request weight per %s %s. Please use the websocket for live updates to avoid polling the API.` has been updated to:
+```
+Too much request weight used; current limit is %s request weight per %s. Please use WebSocket Streams for live updates to avoid polling the API.
+```
+* Previous error message `Way too much request weight used; IP banned until %s. Please use the websocket for live updates to avoid bans.` has been updated to:
+```
+Way too much request weight used; IP banned until %s. Please use WebSocket Streams for live updates to avoid bans.
+```
+
+---
 
 ## 2022-12-05
 

@@ -1,4 +1,45 @@
-# 更新日志 (2022-12-05)
+# 更新日志 (2022-12-28)
+
+## 2022-12-28
+
+* 现货 WebSocket API 文档已更新，添加了如何使用 RSA key 签署请求。
+
+## 2022-12-26
+
+* 现货的 Websocket API 发布到生产系统中。
+* 现货的 Websocket API 可以通过URL: `wss://ws-api.binance.com/ws-api/v3` 来访问。
+
+---
+
+## 2022-12-15
+
+* 添加新的RSA签名验证方式
+    * 文档已更新以显示如何创建 RSA keys。
+    * 建议在生成 API key 时使用 RSA keys。
+    * 我们接受`PKCS#8`（BEGIN PUBLIC KEY）。
+    * 稍后将添加有关如何上传 RSA public key 的更多详细信息。
+* 现货 WebSocket API 现在可以在 SPOT 测试网上使用。
+    * WebSocket API 允许通过 WebSocket 连接下订单、取消订单等。
+    * WebSocket API 是一个 **独立** 于 WebSocket 市场数据流的服务。 即，下订单和收听市场数据需要两个独立的 WebSocket 连接。
+    * WebSocket API 与 REST API 相同过滤器和速率限制规则。
+    * WebSocket API 与 REST API 提供相同的功能，接受相同的参数，返回相同的状态和错误代码。
+
+**WEBSOCKET API 会晚些时候在生产系统中可用。**
+
+## 2022-12-13
+
+REST API
+
+错误代码 `-1003` 的一些错误消息已更改
+* 之前错误消息: `Too much request weight used; current limit is %s request weight per %s %s. Please use the websocket for live updates to avoid polling the API.` 改成了：
+```
+Too much request weight used; current limit is %s request weight per %s. Please use WebSocket Streams for live updates to avoid polling the API.
+```
+* 之前错误消息: `Way too much request weight used; IP banned until %s. Please use the websocket for live updates to avoid bans.` 改成了：
+```
+Way too much request weight used; IP banned until %s Please use WebSocket Streams for live updates to avoid bans.
+```
+
 
 ## 2022-12-05
 
@@ -6,7 +47,7 @@
 
 WEBSOCKET
 
-* `!bookTicker` 在2022-12-07下线。 请改用按 symbol 的最优挂单信息的数据流（`<symbol>@bookTicker`）。
+* `!bookTicker` 在 **2022-12-07** 下线。 请改用按 symbol 的最优挂单信息的数据流（`<symbol>@bookTicker`）。
     * 可以通过一个连接订阅多个 `<symbol>@bookTicker` 数据流。 （例如`wss://stream.binance.com:9443/stream?streams=btcusdt@bookTicker/bnbbtc@bookTicker`）
 
 REST API
@@ -44,8 +85,12 @@ REST API
                 "msg": "Combination of optional parameters invalid."
             }
         ```
-
-    * 支持的所有参数组合：
+    * 添加一个新的参数组合: `symbol` + `orderId` + `fromId`.
+    * 下面的参数组合不再支持:
+        * `symbol` + `fromId` + `startTime`
+        * `symbol` + `fromId` + `endTime`
+        * `symbol` + `fromId` + `startTime` + `endTime`
+    * 当前支持的所有参数组合：
         * `symbol`
         * `symbol` + `orderId`
         * `symbol` + `startTime`
