@@ -165,7 +165,7 @@ listenKey | STRING | YES
 
 **备注:** 通过将`Z`除以`z`可以找到平均价格。
 
-如果订单是OCO，则除了显示"executionReport"事件外，还将显示一个名为"ListStatus"的事件。
+如果订单是OCO，则除了显示`executionReport`事件外，还将显示一个名为`ListStatus`的事件。
 
 > **Payload**
 
@@ -203,6 +203,6 @@ listenKey | STRING | YES
 * REPLACED - (保留字段，当前未使用)
 * REJECTED - 新订单被拒绝 （这信息只会在撤消挂单再下单中发生，下新订单被拒绝但撤消挂单请求成功）。
 * TRADE - 订单有新成交。
-* EXPIRED - 订单已根据 Time In Force 参数的规则取消（e.g. 没有成交的 LIMIT FOK 订单或部分成交的 LIMIT IOC 订单）或者被交易所取消（e.g. 强平或维护期间取消的订单）
+* EXPIRED - 订单已根据 Time In Force 参数的规则取消（e.g. 没有成交的 LIMIT FOK 订单或部分成交的 LIMIT IOC 订单）或者被交易所取消（e.g. 强平或维护期间取消的订单）。
 
-请查阅文档[公开API参数](#public-api-definitions)以及以下文档，以获取相关的枚举定义。
+请查阅[公开API参数](#public-api-definitions)文档获取更多枚举定义。
