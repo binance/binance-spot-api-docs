@@ -11,6 +11,7 @@
   - [Account Update](#account-update)
   - [Balance Update](#balance-update)
   - [Order Update](#order-update)
+    - [Execution types](#execution-types)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -125,10 +126,6 @@ Balance Update occurs during the following:
 ## Order Update
 Orders are updated with the `executionReport` event.
 
-Check the [Rest API Documentation](./rest-api.md#enum-definitions) and below for relevant enum definitions.
-
-Average price can be found by doing `Z` divided by `z`.
-
 **Payload:**
 ```javascript
 {
@@ -173,14 +170,7 @@ Average price can be found by doing `Z` divided by `z`.
 }
 ```
 
-**Execution types:**
-
-* NEW - The order has been accepted into the engine.
-* CANCELED - The order has been canceled by the user. 
-* REPLACED (currently unused)
-* REJECTED - The order has been rejected and was not processed (This message appears only with Cancel Replace Orders wherein the new order placement is rejected but the request to cancel request succeeds.)
-* TRADE - Part of the order or all of the order's quantity has filled.
-* EXPIRED - The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance)
+**Note:** Average price can be found by doing `Z` divided by `z`.
 
 If the order is an OCO, an event will be displayed named `ListStatus` in addition to the `executionReport` event.
 
@@ -211,3 +201,14 @@ If the order is an OCO, an event will be displayed named `ListStatus` in additio
   ]
 }
 ```
+
+### Execution types
+
+* NEW - The order has been accepted into the engine.
+* CANCELED - The order has been canceled by the user. 
+* REPLACED (currently unused)
+* REJECTED - The order has been rejected and was not processed (This message appears only with Cancel Replace Orders wherein the new order placement is rejected but the request to cancel request succeeds.)
+* TRADE - Part of the order or all of the order's quantity has filled.
+* EXPIRED - The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance)
+
+Check the [Rest API Documentation](./rest-api.md#enum-definitions) for other enum definitions.
