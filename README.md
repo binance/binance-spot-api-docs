@@ -26,7 +26,8 @@ Name | Description
 Name | Description
 ------------ | ------------
 [spot_glossary.md](./faqs/spot_glossary.md) | Definition of terms used in the API
-[trailing-stop-faq.md](./faqs/trailing-stop-faq.md)   | Detailed Information on the behavior of Trailing Stops on the Rest API
+[trailing-stop-faq.md](./faqs/trailing-stop-faq.md)   | Detailed Information on the behavior of Trailing Stops on the API
+[stp-faq.md](./faqs/stp_faq.md) | Detailed Information on the behavior of Self Trade Prevention (aka STP) on the API
 
 
 # Useful Resources
