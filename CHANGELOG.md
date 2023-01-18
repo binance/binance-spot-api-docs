@@ -1,8 +1,86 @@
-# CHANGELOG for Binance's API (2022-12-28)
+# CHANGELOG for Binance's API (2023-01-18)
+
+## RELEASE DATE TBD
+
+**New Feature**: Self-Trade Prevention (aka STP) will be added to the system at a later date. This will prevent orders from matching with orders from the same account, or accounts under the same `tradeGroupId`. 
+
+Please refer to `GET /api/v3/exchangeInfo` from the Rest API or `exchangeInfo` from the Websocket API on the status. 
+
+```javascript
+"defaultSelfTradePreventionMode": "NONE",   //If selfTradePreventionMode not provided, this will be the value passed to the engine
+"allowedSelfTradePreventionModes": [        //What the allowed modes of selfTradePrevention are
+    "NONE",
+    "EXPIRE_TAKER",
+    "EXPIRE_BOTH",
+    "EXPIRE_MAKER"
+]
+```
+
+Additional details on the functionality of STP is explained in the [STP FAQ](./faqs/stp_faq.md) document.
+
+REST API
+
+* New order status: `EXPIRED_IN_MATCH` - This means that the order expired due to STP being triggered.
+* New endpoint:
+   * `GET /api/v3/myPreventedMatches` - This queries the orders that expired due to STP being triggered.
+* New optional parameter `selfTradePreventionMode` has been added to the following endpoints:
+    * `POST /api/v3/order`
+    * `POST /api/v3/order/oco`
+    * `POST /api/v3/cancelReplace`
+* New responses that will appear for all order placement endpoints if there was a prevented match (i.e. if an order could have matched with an order of the same account, or the accounts are in the same `tradeGroupId`): 
+    * `tradeGroupId`      - This will only appear if account is configured to a `tradeGroupId` and if there was a prevented match.
+    * `preventedQuantity` - Only appears if there was a prevented match
+    * An array `preventedMatches` with the following fields:
+        * `preventedMatchId`
+        * `makerOrderId`
+        * `price`
+        * `takerPreventedQuantity` - This will only appear if `selfTradePreventionMode` set is `EXPIRE_TAKER` or `EXPIRE_BOTH`.
+        * `makerPreventedQuantity` - This will only appear if `selfTradePreventionMode` set is `EXPIRE_MAKER` or `EXPIRE_BOTH`.
+* New fields `preventedMatchId` and `preventedQuantity` that can appear in the order query endpoints if the order had expired due to an STP trigger: 
+    * `GET /api/v3/order`
+    * `GET /api/v3/openOrders`
+    * `GET /api/v3/allOrders`
+
+WEBSOCKET API
+
+* New order status: `EXPIRED_IN_MATCH` - This means that the order expired due to STP being triggered.
+* New optional parameter `selfTradePreventionMode` has been added to the following requests:
+    * `order.place`
+    * `orderList.place`
+    * `order.cancelReplace`
+* New request: `myPreventedMatches` - This queries the orders that expired due to STP being triggered.
+* New responses that will appear for all order placement endpoints if there was a prevented match (i.e. if an order could have matched with an order of the same account, or the accounts are in the same `tradeGroupId`): 
+    * `tradeGroupId`      - This will only appear if account is configured to a `tradeGroupId` and if there was a prevented match.
+    * `preventedQuantity` - Only appears if there was a prevented match
+    * An array `preventedMatches` with the following fields:
+        * `preventedMatchId`
+        * `makerOrderId`
+        * `price`
+        * `takerPreventedQuantity` - This will only appear if `selfTradePreventionMode` set is `EXPIRE_TAKER` or `EXPIRE_BOTH`.
+        * `makerPreventedQuantity` - This will only appear if `selfTradePreventionMode` set is `EXPIRE_MAKER` or `EXPIRE_BOTH`.
+* New fields `preventedMatchId` and `preventedQuantity` that can appear in the order query requests if the order had expired due to STP trigger: 
+    * `order.status`
+    * `openOrders.status`
+    * `allOrders`
+
+
+USER DATA STREAM
+
+* New execution Type: `TRADE_PREVENTION`
+* New fields for `executionReport` (These fields will only appear if the order has expired due to STP trigger)
+    * `u` - `tradeGroupId` 
+    * `v` - `preventedMatchId`
+    * `U` - `counterOrderId`
+    * `A` - `preventedQuantity`
+    * `B` - `lastPreventedQuantity`
+
+---
 
 ## 2022-12-28
 
 * SPOT WebSocket API documentation has been updated to show how to sign a request using an RSA key.
+
+---
 
 ## 2022-12-26
 

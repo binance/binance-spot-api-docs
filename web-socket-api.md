@@ -55,6 +55,7 @@
     - [Account order history (USER_DATA)](#account-order-history-user_data)
     - [Account OCO history (USER_DATA)](#account-oco-history-user_data)
     - [Account trade history (USER_DATA)](#account-trade-history-user_data)
+    - [Account prevented matches (USER_DATA)](#account-prevented-matches-user_data)
   - [User Data Stream requests](#user-data-stream-requests)
     - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
     - [Ping user data stream (USER_STREAM)](#ping-user-data-stream-user_stream)
@@ -62,7 +63,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public WebSocket API for Binance (2022-12-28)
+# Public WebSocket API for Binance (2023-01-18)
 
 ## General API Information
 
@@ -828,6 +829,7 @@ Status | Description
 `PENDING_CANCEL` | Currently unused
 `REJECTED`       | The order was not accepted by the engine and not processed.
 `EXPIRED` | The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) <br> or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance)
+`EXPIRED_IN_MATCH` | The order was canceled by the exchange due to STP trigger. (e.g. an order with `EXPIRE_TAKER` will match with existing orders on the book with the same account or same `tradeGroupId`)
 
 **OCO Status (listStatusType):**
 
@@ -2369,6 +2371,7 @@ Name                | Type    | Mandatory | Description
 `icebergQty`        | DECIMAL | NO        |
 `strategyId`        | INT     | NO        | Arbitrary numeric value identifying the order within an order strategy.
 `strategyType`      | INT     | NO        | <p>Arbitrary numeric value identifying the order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
+`selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`. 
 `apiKey`            | STRING  | YES       |
 `recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
@@ -3306,6 +3309,15 @@ Cancel an existing order and immediately place a new order instead of the cancel
         </td>
     </tr>
     <tr>
+        <td><code>selfTradePreventionMode</code></td>
+        <td>ENUM</td>
+        <td>NO</td>
+        <td>
+            <p>The allowed enums is dependent on what is configured on the symbol.</p>
+            <p>The possible supported values are <tt>EXPIRE_TAKER</tt>, <tt>EXPIRE_MAKER</tt>, <tt>EXPIRE_BOTH</tt>, <tt>NONE</tt>.</p>
+        </td>
+    </tr>
+    <tr>
         <td><code>apiKey</code></td>
         <td>STRING</td>
         <td>YES</td>
@@ -3989,6 +4001,7 @@ Name                | Type    | Mandatory | Description
 `stopStrategyId`    | INT     | NO        | Arbitrary numeric value identifying the stop order within an order strategy.
 `stopStrategyType`  | INT     | NO        | <p>Arbitrary numeric value identifying the stop order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
 `newOrderRespType`  | ENUM    | NO        | Select response format: `ACK`, `RESULT`, `FULL` (default)
+`selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`. 
 `apiKey`            | STRING  | YES       |
 `recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
@@ -4926,6 +4939,87 @@ Memory => Database
       "isBuyer": false,
       "isMaker": true,
       "isBestMatch": true
+    }
+  ],
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 1200,
+      "count": 10
+    }
+  ]
+}
+```
+
+
+### Account prevented matches (USER_DATA)
+
+```javascript
+{
+  "id": "g4ce6a53-a39d-4f71-823b-4ab5r391d6y8",
+  "method": "myPreventedMatches",
+  "params": {
+    "symbol": "BTCUSDT",
+    "orderId": 35,
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "c5a5ffb79fd4f2e10a92f895d488943a57954edf5933bde3338dfb6ea6d6eefc",
+    "timestamp": 1673923281052
+  }
+}
+```
+
+Displays the list of orders that were expired because of STP trigger.
+
+These are the combinations supported:
+
+* `symbol` + `preventedMatchId`
+* `symbol` + `orderId`
+* `symbol` + `orderId` + `fromPreventedMatchId` (`limit` will default to 500)
+* `symbol` + `orderId` + `fromPreventedMatchId` + `limit` 
+
+**Parameters:**
+
+Name                | Type   | Mandatory    | Description
+------------        | ----   | ------------ | ------------
+symbol              | STRING | YES          |
+preventedMatchId    |LONG    | NO           | 
+orderId             |LONG    | NO           |
+fromPreventedMatchId|LONG    | NO           |
+limit               |INT     | NO           | Default: `500`; Max: `1000`
+recvWindow          | LONG   | NO           | The value cannot be greater than `60000`
+timestamp           | LONG   | YES          |
+
+**Weight**
+
+Case                            | Weight
+----                            | -----
+If `symbol` is invalid          | 1
+Querying by `preventedMatchId`  | 1
+Querying by `orderId`           | 10 
+
+**Data Source:**
+
+Database
+
+**Response:**
+
+```javascript
+{
+  "id": "g4ce6a53-a39d-4f71-823b-4ab5r391d6y8",
+  "status": 200,
+  "result": [
+    {
+      "symbol": "BTCUSDT",
+      "preventedMatchId": 1,
+      "takerOrderId": 5,
+      "makerOrderId": 3,
+      "tradeGroupId": 1,
+      "selfTradePreventionMode": "EXPIRE_MAKER",
+      "price": "1.100000",
+      "makerPreventedQuantity": "1.300000",
+      "transactTime": 1669101687094
     }
   ],
   "rateLimits": [

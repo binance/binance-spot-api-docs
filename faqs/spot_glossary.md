@@ -77,6 +77,9 @@ Data Source
 `EXPIRED`
 * Order `status` indicating the order was canceled according to the order type's rules or by the exchange.
 
+`EXPIRED_IN_MATCH`
+* Order `status` indicating the order was canceled by the exchange due to STP trigger. (e.g. an order with `EXPIRE_TAKER` will match with existing orders on the book with the same account or same `tradeGroupId`)
+
 ---
 
 ## F
@@ -208,6 +211,9 @@ Order Book
 `PARTIALLY_FILLED`
 * Order `status` indicating that part of the order has been partially filled.
 
+Prevented Match
+* Order(s) that have expired due to the STP trigger.
+
 ---
 
 ## Q
@@ -246,6 +252,12 @@ Reverse `MARKET` order
 ---
 
 ## S
+
+Self Trade Prevention (STP)
+* Self Trade Prevention is a feature that prevents orders of users, or the user's `tradeGroupId` from matching against their own. 
+
+`selfTradePreventionMode`
+* A parameter used to specify what the system will do if an order could cause a self-trade.
 
 `SELL`
 * An enum in the `side` used when a user wants to sell an asset (e.g. BTC).
@@ -291,6 +303,9 @@ Reverse `MARKET` order
 `timeInForce`
 * Determines the taker behavior of an order, if an order can be a maker order, and how long the order will stay on the order book before it expires.
 * Supported enums are `GTC`, `IOC`, and `FOK`.
+
+`tradeGroupId`
+* Group of accounts that belong to the same "trade group".
 
 `TRADING`
 * Trading status where orders can be placed.
