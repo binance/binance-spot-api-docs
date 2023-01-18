@@ -154,6 +154,7 @@ Orders are updated with the `executionReport` event.
   "N": null,                     // Commission asset
   "T": 1499405658657,            // Transaction time
   "t": -1,                       // Trade ID
+  "v": 3,                        // Prevented Match Id; This is only visible if the order expire due to STP trigger
   "I": 8641984,                  // Ignore
   "w": true,                     // Is the order on the book?
   "m": false,                    // Is this trade the maker side?
@@ -161,12 +162,16 @@ Orders are updated with the `executionReport` event.
   "O": 1499405658657,            // Order creation time
   "Z": "0.00000000",             // Cumulative quote asset transacted quantity
   "Y": "0.00000000",             // Last quote asset transacted quantity (i.e. lastPrice * lastQty)
-  "Q": "0.00000000",             // Quote Order Qty
+  "Q": "0.00000000",             // Quote Order Quantity
   "D": 1668680518494,            // Trailing Time; This is only visible if the trailing stop order has been activated.
   "j": 1,                        // Strategy ID; This is only visible if the strategyId parameter was provided upon order placement
-  "J": 1000000                   // Strategy Type; This is only visible if the strategyType parameter was provided upon order placement
+  "J": 1000000,                  // Strategy Type; This is only visible if the strategyType parameter was provided upon order placement
   "W": 1499405658657,            // Working Time; This is only visible if the order has been placed on the book.
   "V": "NONE"                    // SelfTradePreventionMode
+  "u":1,                         // TradeGroupId; This is only visible if the account is part of a trade group and the order expired due to STP trigger.
+  "U":37,                        // CounterOrderId; This is only visible if the order expired due to STP trigger.
+  "A":"3.000000",                // Prevented Quantity; This is only visible if the order expired due to STP trigger.
+  "B":"3.000000"                 // Last Prevented Quantity; This is only visible if the order expired due to STP trigger.
 }
 ```
 
@@ -210,5 +215,6 @@ If the order is an OCO, an event will be displayed named `ListStatus` in additio
 * REJECTED - The order has been rejected and was not processed (This message appears only with Cancel Replace Orders wherein the new order placement is rejected but the request to cancel request succeeds.)
 * TRADE - Part of the order or all of the order's quantity has filled.
 * EXPIRED - The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance).
+* TRADE_PREVENTION - The order has expired due to STP trigger.
 
 Check the [Rest API Documentation](./rest-api.md#enum-definitions) for more relevant enum definitions.
