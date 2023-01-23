@@ -29,7 +29,7 @@
 ------------ | ------------
 [spot_glossary_cn.md](./faqs/spot_glossary_cn.md) | 现货交易API术语表
 [trailing-stop-faq-cn.md](./faqs/trailing-stop-faq-cn.md)   | 追踪止盈止损订单(Trailing Stop)详细信息和常见问题
-
+[stp-faq_cn.md](./faqs/stp_faq_cn.md) | 关于 Self Trade Prevention (STP) 的详细信息
 
 # 相关信息
 

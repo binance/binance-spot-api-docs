@@ -1,4 +1,80 @@
-# 更新日志 (2022-12-28)
+# 更新日志 (2023-01-23)
+
+## 实际发布日期待定
+
+**新功能**：Self-Trade Prevention（STP）会添加到系统中。此功能将阻止订单与来自同一账户或者同一 `tradeGroupId` 账户的订单交易。
+
+请使用现货 REST API 的 `GET /api/v3/exchangeInfo` 或 Websocket API 的 `exchangeInfo` 看 STP 的状态。
+
+```javascript
+"defaultSelfTradePreventionMode": "NONE",   // selfTradePreventionMode的默认值
+"allowedSelfTradePreventionModes": [        // selfTradePrevention 的可用模式
+    "NONE",
+    "EXPIRE_TAKER",
+    "EXPIRE_BOTH",
+    "EXPIRE_MAKER"
+]
+```
+
+在[STP 常见问题](./faqs/stp_faq_cn.md) 文档中可以找到更多其它关于 STP 功能的详细信息。
+
+REST API
+
+* 新的订单状态：`EXPIRED_IN_MATCH` - 订单由于 STP 触发而过期。
+* 新的接口：
+   * `GET /api/v3/myPreventedMatches` - 获取由于 STP 触发而过期的订单。
+* 新的可选参数 `selfTradePreventionMode` 已添加到以下的接口：
+    * `POST /api/v3/order`
+    * `POST /api/v3/order/oco`
+    * `POST /api/v3/cancelReplace`
+* 如果有预防自我交易(Prevented Match)，所有下单相关的接口会出现新字段：
+    * `tradeGroupId`      - 仅当账户配置为 `tradeGroupId` 时才会出现。
+    * `preventedQuantity` - 被防止交易的订单数量。
+    * `preventedMatches` 数组会有以下的字段：
+        * `preventedMatchId`
+        * `makerOrderId`
+        * `price`
+        * `takerPreventedQuantity` - 仅当 `selfTradePreventionMode` 设置为 `EXPIRE_TAKER` 或 `EXPIRE_BOTH` 时才会出现。
+        * `makerPreventedQuantity` - 仅当 `selfTradePreventionMode` 设置为 `EXPIRE_MAKER` 或 `EXPIRE_BOTH` 时才会出现。
+* 如果订单因 STP 触发而过期，以下查询订单接口的响应中可以出现新的字段 `preventedMatchId` 和 `preventedQuantity`：
+    * `GET /api/v3/order`
+    * `GET /api/v3/openOrders`
+    * `GET /api/v3/allOrders`
+
+WEBSOCKET API
+
+* 新的订单状态：`EXPIRED_IN_MATCH` - 订单由于 STP 触发而过期。
+* 新的请求：`myPreventedMatches` - 获取由于 STP 触发而过期的订单。
+* 新的可选参数 `selfTradePreventionMode` 已添加到以下的请求：
+    * `order.place`
+    * `orderList.place`
+    * `order.cancelReplace`
+* 如果有防止自我交易，将为所有下订单的请求会出现的新响应：
+    * `tradeGroupId`      - 仅当账户配置为 `tradeGroupId` 时才会出现。
+    * `preventedQuantity` - 被防止交易的订单数量。
+    * `preventedMatches` 数组会有以下的字段：
+        * `preventedMatchId`
+        * `makerOrderId`
+        * `price`
+        * `takerPreventedQuantity` - 仅当 `selfTradePreventionMode` 设置为 `EXPIRE_TAKER` 或 `EXPIRE_BOTH` 时才会出现。
+        * `makerPreventedQuantity` - 仅当 `selfTradePreventionMode` 设置为 `EXPIRE_MAKER` 或 `EXPIRE_BOTH` 时才会出现。
+* 如果订单因 STP 触发而过期，以下查询订单接口的响应中可以出现新的字段 `preventedMatchId` 和 `preventedQuantity`：
+    * `order.status`
+    * `openOrders.status`
+    * `allOrders`
+
+
+USER DATA STREAM
+
+* 新的执行类型：`TRADE_PREVENTION`。
+* `executionReport` 的新字段（这些字段只会在订单因 STP 触发而过期时出现）：
+    * `u` - `tradeGroupId`
+    * `v` - `preventedMatchId`
+    * `U` - `counterOrderId`
+    * `A` - `preventedQuantity`
+    * `B` - `lastPreventedQuantity`
+
+---
 
 ## 2022-12-28
 
@@ -122,7 +198,7 @@ REST API
     * `GET /api/v3/order`
     * `GET /api/v3/openOrders`
     * `GET /api/v3/allOrders`
-* 如果`trailingDelta`作为参数提供给了`TAKE_PROFIT`，`TAKE_PROFIT_LIMIT`，`STOP_LOSS`或 `STOP_LOSS_LIMIT`的订单，那么下面接口中会出现`trailingTime`, 用来表示追踪单被激活和跟踪价格变化的时间: 
+* 如果`trailingDelta`作为参数提供给了`TAKE_PROFIT`，`TAKE_PROFIT_LIMIT`，`STOP_LOSS`或 `STOP_LOSS_LIMIT`的订单，那么下面接口中会出现`trailingTime`, 用来表示追踪单被激活和跟踪价格变化的时间:
     * `POST /api/v3/order`
     * `GET /api/v3/order`
     * `GET /api/v3/openOrders`
@@ -135,7 +211,7 @@ REST API
 USER DATA STREAM
 
 * eventType `executionReport` 有新的字段
-    * `V` - `selfTradePreventionMode` 
+    * `V` - `selfTradePreventionMode`
     * `D` - `trailing_time`  (追踪单被激活时会出现)
     * `W` - `workingTime`   (如果 `isWorking`=`true` 会出现)
 
@@ -201,7 +277,7 @@ REST API
 
 * 接口 `POST /api/v3/order` 与 `POST /api/v3/order/cancelReplace` 变动
     * 添加新可选参数 `strategyId` 与 `strategyType`
-        * `strategyId` 是用于将订单标识为某策略的参数。 
+        * `strategyId` 是用于将订单标识为某策略的参数。
         * `strategyType` 是用于标识在执行的策略。(例如：如果所有订单属于现货网格策略，订单可设置为`strategyType=1000000`)
 * 接口 `POST /api/v3/order/oco` 变动
     * 添加新可选参数  `limitStrategyId`, `limitStrategyType`, `stopStrategyId`, `stopStrategyType`
@@ -232,7 +308,7 @@ USER DATA STREAM
     ```json
     {
      "code": -1101,
-     "msg": "Too many values sent for parameter 'symbols', maximum allowed up to 100." 
+     "msg": "Too many values sent for parameter 'symbols', maximum allowed up to 100."
     }
     ```
 * 单请求的权重上限为100.
@@ -247,7 +323,7 @@ USER DATA STREAM
 
 SPOT API
 
-* 添加新接口 `GET /api/v3/ticker` 
+* 添加新接口 `GET /api/v3/ticker`
     * 基于 `windowSize` 返回最近的价格变动。
     * 无需像 `GET /api/v3/ticker/24hr` 提供symbols参数。
     * 如果不提供 `windowSize` 参数，默认值是`1d`。
@@ -255,7 +331,7 @@ SPOT API
 * 添加新接口 `POST /api/v3/order/cancelReplace`
     * 撤消当前的挂单并在同样的交易对上下新订单。
     * 过滤器会在**撤单前**做判断。
-        * 例如，`MAX_NUM_ORDERS` 是 10，如果目前挂单也是10，调用 `POST /api/v3/order/cancelReplace`会失败。撤单与下单的操作都不会被执行。 
+        * 例如，`MAX_NUM_ORDERS` 是 10，如果目前挂单也是10，调用 `POST /api/v3/order/cancelReplace`会失败。撤单与下单的操作都不会被执行。
     * 更新将在几天后上线，升级完毕后才会开启此功能。
 * `GET /api/v3/exchangeInfo` 在`symbols`列表里返回新数据`cancelReplaceAllowed`。
 * 添加新的过滤器 `NOTIONAL`
@@ -300,7 +376,7 @@ WEBSOCKETS
 ```json
 {
 "code": -1102,
-"msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed." 
+"msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed."
 }
 ```
 * 下面的接口提供参数 `symbols` 用于查询多个symbol.
@@ -499,9 +575,9 @@ WEB SOCKET 连接限制
   * /api/v3/ticker/price 无symbol参数时，权重增加到2。
   * /api/v3/ticker/bookTicker 无symbol参数时，权重增加到2。
   * DELETE /api/v3/order 现在会返回订单撤销前所处的末次状态。
-  * `MIN_NOTIONAL` 新增两个参数: `applyToMarket` (是否对市价单生效) and `avgPriceMins` (对市价单生效时，估算金额时使用过去几分钟的平均价格?). 
+  * `MIN_NOTIONAL` 新增两个参数: `applyToMarket` (是否对市价单生效) and `avgPriceMins` (对市价单生效时，估算金额时使用过去几分钟的平均价格?).
   *  /api/v1/exchangeInfo 中的限制增加了`intervalNum`. `intervalNum`表示该限制针对多少时间间隔进行统计. 例如: `intervalNum`= 5, `interval` = minute, 表示该限制对每5分钟内的行为进行统计。
-  
+
 #### 如何计算过去n分钟平均价格:
   1. [对过去n分钟所有订单的数量\*价格求和] / 过去n分钟所有订单的数量
   2. 如果过去n分钟没有交易发生，则继续向前追溯，直到找到第一个交易，以此价格作为过去n分钟平均价格。
@@ -529,9 +605,9 @@ WEB SOCKET 连接限制
   *  `REQUESTS` 限制更名为 `REQUEST_WEIGHT`. 避免名字造成的误解。
 
 ### User data stream
-  *  订单报告与成交报告中增加`cummulativeQuoteQty` 字段 (`Z`). 表示已经成交的金额， 即已经花费的金额(买入订单)或已经收到的金额(卖出订单)，均未计算手续费. 此功能增加之前成交的订单在历史订单接口中查询到的该字段可能小于零. 
+  *  订单报告与成交报告中增加`cummulativeQuoteQty` 字段 (`Z`). 表示已经成交的金额， 即已经花费的金额(买入订单)或已经收到的金额(卖出订单)，均未计算手续费. 此功能增加之前成交的订单在历史订单接口中查询到的该字段可能小于零.
   *  `cummulativeQuoteQty`/`cummulativeQty` 可以用来计算该订单已经成交部分的平均价格。
-  *  成交报告中增加了 `O`字段 (订单创建时间) 
+  *  成交报告中增加了 `O`字段 (订单创建时间)
 
 
 ## 2018-01-23
