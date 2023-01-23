@@ -29,6 +29,12 @@ The STP event will occur depending on the STP mode of the **taker order**. <br> 
 
 Different accounts with the same `tradeGroupId` are considered part of the same "trade group". Orders submitted by members of a trade group are eligible for STP according to the taker-order's STP mode.
 
+A user can confirm if their accounts are under the same `tradeGroupId` from the API either from `GET /api/v3/account` (REST API) or `account.status` (Websocket API) for each account.
+
+The field is also present in the response for `GET /api/v3/preventedMatches` (Rest API) or `myPreventedMatches` (Websocket API).
+
+If the value is `-1`, then the `tradeGroupId` has not been set for that account, so the STP may only take place between orders of the same account.
+
 ## What is a Prevented Match?
 
 When one or more orders are expired due to STP, this creates a prevented match. 
@@ -504,7 +510,7 @@ Maker Order: symbol=BTCUSDT side=BUY type=LIMIT quantity=1 price=1 selfTradePrev
 Taker Order: symbol=BTCUSDT side=SELL type=LIMIT quantity=1 price=1 selfTradePreventionMode=EXPIRE_TAKER
 ```
 
-**Result**: The taker order's STP mode will be used, so the take order will be expired.
+**Result**: The taker order's STP mode will be used, so the taker order will be expired.
 
 Maker Order
 ```json
