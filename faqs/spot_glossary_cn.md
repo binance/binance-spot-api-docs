@@ -77,6 +77,9 @@ Data Source
 `EXPIRED`
 * 订单的一个状态, 用来表示订单因为交易规则而取消, 也可能是直接被交易所取消.
 
+`EXPIRED_IN_MATCH`
+* 订单的一个状态，用来表示订单由于 STP 触发而过期 （e.g. 带有 `EXPIRE_TAKER` 的订单与订单簿上属于同账户或同 `tradeGroupId` 的订单撮合）。
+
 ---
 
 ## F
@@ -216,7 +219,7 @@ Order Book
 * 订单量; 买卖订单时候基本资产(`base asset`)的数量.
 
 `quoteAsset`
-* 定价资产; 在交易对中的第二个资产, 比如交易对`BTCUSDT`中的`USDT`; 
+* 定价资产; 在交易对中的第二个资产, 比如交易对`BTCUSDT`中的`USDT`;
 
 `quoteAssetPrecision`
 * 接口 `GET /api/v3/exchangeInfo` 中用来指明`quoteAsset`允许的最多小数位数.
@@ -246,6 +249,12 @@ Reverse `MARKET` order
 ---
 
 ## S
+
+Self Trade Prevention (STP)
+* 自我交易预防; 此功能能阻止订单与来自同一账户或者同一 `tradeGroupId` 下的账户的订单撮合交易。
+
+`selfTradePreventionMode`
+* 如果发生自我交易情况，此参数用来通知系统如何处理订单。
 
 `SELL`
 * 方向(`side`)的一个枚举值, 用于用户希望卖出某一资产.
@@ -291,6 +300,9 @@ Reverse `MARKET` order
 `timeInForce`
 * 定义订单的时效性, 用以表明订单会在orderbook中的时长.
 * 支持的值包括了:  `GTC`, `IOC`, 和 `FOK`.
+
+`tradeGroupId`
+* 属于同一个交易组的账户组。
 
 `TRADING`
 * 一种交易状态, 表明某交易对可以进行交易.
