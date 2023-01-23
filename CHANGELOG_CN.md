@@ -1,5 +1,11 @@
 # 更新日志 (2023-01-23)
 
+## 2023-01-23 
+
+* 添加了新的 API 集群 https://api4.binance.com
+
+---
+
 ## 实际发布日期待定
 
 **新功能**：Self-Trade Prevention（STP）会添加到系统中。此功能将阻止订单与来自同一账户或者同一 `tradeGroupId` 账户的订单交易。
@@ -7,7 +13,7 @@
 请使用现货 REST API 的 `GET /api/v3/exchangeInfo` 或 Websocket API 的 `exchangeInfo` 看 STP 的状态。
 
 ```javascript
-"defaultSelfTradePreventionMode": "NONE",   // selfTradePreventionMode的默认值
+"defaultSelfTradePreventionMode": "NONE",   // selfTradePreventionMode 的默认值
 "allowedSelfTradePreventionModes": [        // selfTradePrevention 的可用模式
     "NONE",
     "EXPIRE_TAKER",
