@@ -1,78 +1,74 @@
-# Self Trade Prevention (STP) FAQ
+# 自我交易预防 (Self Trade Prevention - STP) 常见问题
 
-## What is Self Trade Prevention?
+## 什么是 Self Trade Prevention - STP?
 
-Self Trade Prevention (or STP) prevents orders of users, or the user's `tradeGroupId` to match against their own. 
+自我交易预防是指阻止订单与来自同一账户或者同一 `tradeGroupId` 账户的订单交易。
 
-## What defines a self-trade?
+## 什么是自我交易（self-trade）?
 
-A self-trade can occur in either scenario:
+在以下任一情况下都可能发生自我交易：
 
-* The order traded against the same account.
-* The order traded against an account with the same `tradeGroupId`.
+* 属于同一账户的订单之间交易。
+* 属于相同 `tradeGroupId` 的账户的订单之间交易。
 
-## What happens when STP is triggered?
+## STP 触发时会发生什么？
 
-There are four possible modes for what the system will do if an order could create a self-trade.
+如果订单会触发自我交易，系统将执行四种可能的模式：
 
-`NONE` - This mode exempts the order from self-trade prevention. Accounts or Trade group IDs will not be compared, no orders will be expired, and the trade will occur.
+`NONE` - 此模式使订单免于自我交易预防。
 
-`EXPIRE_TAKER` - This mode prevents a trade by immediately expiring the taker order's remaining quantity. 
+`EXPIRE_TAKER` - 此模式通过立即使吃单者(taker)的剩余数量过期来预防交易。
 
-`EXPIRE_MAKER` - This mode prevents a trade by immediately expiring the potential maker order's remaining quantity.
+`EXPIRE_MAKER` - 此模式通过立即使潜在挂单者(maker)的剩余数量过期来预防交易。
 
-`EXPIRE_BOTH` - This mode prevents a trade by immediately expiring both the taker and the potential maker orders' remaining quantities.
+`EXPIRE_BOTH` - 此模式通过立即同时使吃单和挂单者的剩余数量过期来预防交易。
 
-The STP event will occur depending on the STP mode of the **taker order**. <br> Thus, the STP mode of an order that goes on the book is no longer relevant and will be ignored for all future order processing.
+STP 的发生取决于 **Taker 订单** 的 STP 模式。 <br> 因此，订单薄上的订单的 STP 模式不再有效果，并且将在所有未来的订单处理中被忽略。
 
-## What is a Trade Group Id?
+## 什么是交易组 Id（Trade Group Id）?
 
-Different accounts with the same `tradeGroupId` are considered part of the same "trade group". Orders submitted by members of a trade group are eligible for STP according to the taker-order's STP mode.
+属于同一 `tradeGroupId` 的账户被视为同一交易组。相同交易组成员提交的订单有 STP 资格。
 
-A user can confirm if their accounts are under the same `tradeGroupId` from the API either from `GET /api/v3/account` (REST API) or `account.status` (Websocket API) for each account.
+每个账户可以从 `GET /api/v3/account`（REST API）或 `account.status`（Websocket API）确认账户是否属于同一个 `tradeGroupId`。
 
-The field is also present in the response for `GET /api/v3/preventedMatches` (Rest API) or `myPreventedMatches` (Websocket API).
+`tradeGroupId` 也存在 `GET /api/v3/preventedMatches`（Rest API）或 `myPreventedMatches`（Websocket API）的响应中。
 
-If the value is `-1`, then the `tradeGroupId` has not been set for that account, so the STP may only take place between orders of the same account.
+如果该值为 `-1`，这表示账户未设置 `tradeGroupId`，因此 STP 只能发生在同一账户的订单之间。
 
-## What is a Prevented Match?
+## 什么是 Prevented Match?
 
-When one or more orders are expired due to STP, this creates a prevented match. 
+当一个或多个订单因 STP 而过期时，这会创建一个被阻止的撮合交易事务。
 
-This is not to be confused with a trade, as no orders will match. 
+通过 Rest API 的 `GET /api/v3/preventedMatches` 或 Websocket API 的 `myPreventedMatches` 可以查询到有哪些被阻止的撮合交易。
 
-This is a record of what orders could have self-traded. 
-
-This can be queried through the endpoint `GET /api/v3/preventedMatches` on the Rest API or `myPreventedMatches` on the Websocket API.
-
-This is a sample of the output request for reference: 
+请求的响应示例：
 
 ```javascript
 [
   {
-    "symbol": "BTCDUSDT",                       //Symbol of the orders
-    "preventedMatchId": 8,                      //Identifies the prevented match of the expired order(s) for the symbol.
-    "takerOrderId": 12,                         //Order Id of the Taker Order
-    "makerOrderId": 10,                         //Order Id of the Maker Order
-    "tradeGroupId": 1,                          //Identifies the Trade Group Id. (If the account is not part of a trade group, this will be -1.)
-    "selfTradePreventionMode": "EXPIRE_BOTH",   //STP mode that expired the order(s).
-    "price": "50.00000000",                     //Price at which the match occurred.
-    "takerPreventedQuantity": "1.00000000",     //Taker's remaining quantity. Only appears if the STP mode is EXPIRE_TAKER or EXPIRE_BOTH.
-    "makerPreventedQuantity": "10.00000000",    //Maker's remaining quantity. Only appears if the STP mode is EXPIRE_MAKER or EXPIRE_BOTH.
-    "transactTime": 1663190634060               //Time the order(s) expired due to STP.
+    "symbol": "BTCDUSDT",                       //交易对
+    "preventedMatchId": 8,                      //被阻止撮合交易的Id
+    "takerOrderId": 12,                         //吃单者的订单Id
+    "makerOrderId": 10,                         //挂单者的订单Id
+    "tradeGroupId": 1,                          //交易组的Id。（如果账户不属于交易组，则为 -1）
+    "selfTradePreventionMode": "EXPIRE_BOTH",   //订单过期的 STP 模式。
+    "price": "50.00000000",                     //撮合交易的价格。
+    "takerPreventedQuantity": "1.00000000",     //吃单者的剩余数量。 仅在 STP 模式为 EXPIRE_TAKER 或 EXPIRE_BOTH 时出现。
+    "makerPreventedQuantity": "10.00000000",    //挂单者的剩余数量。 仅在 STP 模式为 EXPIRE_MAKER 或 EXPIRE_BOTH 时出现。
+    "transactTime": 1663190634060               //订单因 STP 而过期的时间。
   }
 ]
 ```
 
-## How do I know which symbol uses STP? 
+## 如何知道有那些交易对支持 STP?
 
-Symbols may be configured to allow different sets of STP modes and take different default STP modes.
+交易对可以配置为允许不同的 STP 模式集并采用不同的默认 STP 模式。
 
-`defaultSelfTradePreventionMode` - Orders will use this STP mode if the user does not provide one on order placement.
+`defaultSelfTradePreventionMode` - 如果用户在下单时不提供，订单将使用此 STP 模式。
 
-`allowedSelfTradePreventionModes` - Defines the allowed set of STP modes for order placement on that symbol.
+`allowedSelfTradePreventionModes` - 交易对允许的下单 STP 模式集。
 
-For example, if a symbol has the following configuration:
+例如，如果交易对有以下配置：
 
 ```json
 "defaultSelfTradePreventionMode": "NONE",
@@ -83,11 +79,11 @@ For example, if a symbol has the following configuration:
   ]
 ```
 
-Then that means if a user sends an order with no `selfTradePreventionMode` provided, then the order sent will have the value of `NONE`.
+这表示如果用户在没有提供 `selfTradePreventionMode` 的情况下发送订单，发送的订单有 `NONE` 的值。
 
-If a user wants to explicitly mention the mode they can pass the enum `NONE`, `EXPIRE_TAKER`, or `EXPIRE_BOTH`.
+如果用户想明确提及模式，可以传 `NONE`，`EXPIRE_TAKER`，或 `EXPIRE_BOTH`。
 
-If a user tries to specify `EXPIRE_MAKER` for orders on this symbol, they will receive an error:
+如果用户尝试为此交易对的订单指定 `EXPIRE_MAKER`，将会收到错误消息：
 
 ```json
 {
@@ -96,24 +92,25 @@ If a user tries to specify `EXPIRE_MAKER` for orders on this symbol, they will r
 }
 ```
 
-## How do I know if an order expired due to STP?
+## 如何知道订单因为 STP 而过期？
 
-The order will have the status `EXPIRED_IN_MATCH`.
+订单的状态会是 `EXPIRED_IN_MATCH`.
 
-## STP Examples:
+## STP 的一些示例:
 
-For all these cases, assume that all orders for these examples are made on the same account.
+假设以下示例的所有订单都是在同一个账户下发送。
 
-**Scenario A- A user sends a new order with selfTradePreventionMode:`NONE` that will match with another order of theirs that is already on the book.**
+**情况 A - 用户发送一个带有 selfTradePreventionMode:`NONE` 的新订单，该订单将与订单薄上已有的另一个订单撮合。**
+
 
 ```
-Maker Order: symbol=BTCUSDT side=BUY type=LIMIT quantity=1 price=1 selfTradePreventionMode=NONE
-Taker Order: symbol=BTCUSDT side=SELL type=LIMIT quantity=1 price=1 selfTradePreventionMode=NONE
+Maker 订单: symbol=BTCUSDT side=BUY type=LIMIT quantity=1 price=1 selfTradePreventionMode=NONE
+Taker 订单: symbol=BTCUSDT side=SELL type=LIMIT quantity=1 price=1 selfTradePreventionMode=NONE
 ```
 
-**Result**: No STP is triggered and the orders will match.
+**结果:** : 没有 STP 被触发，订单会撮合。
 
-Order Status of the Maker Order
+Maker 订单的状态
 
 ```json
 {
@@ -140,7 +137,7 @@ Order Status of the Maker Order
 }
 ```
 
-Order Status of the Taker Order
+Taker 订单的状态
 
 ```json
 {
@@ -172,18 +169,18 @@ Order Status of the Taker Order
 ```
 
 
-**Scenario B- A user sends an order with `EXPIRE_MAKER` that would match with their orders that are already on the book.**
+**情况 B - 用户发送带有 `EXPIRE_MAKER` 的订单，该订单将与订单薄上已有的订单撮合。**
 
 ```
-Maker Order 1: symbol=BTCUSDT side=BUY type=LIMIT quantity=1.2 price=1.2 selfTradePreventionMode=NONE
-Maker Order 2: symbol=BTCUSDT side=BUY type=LIMIT quantity=1.3 price=1.1 selfTradePreventionMode=NONE
-Maker Order 3: symbol=BTCUSDT side=BUY type=LIMIT quantity=8.1 price=1   selfTradePreventionMode=NONE
-Taker Order 1: symbol=BTCUSDT side=SELL type=LIMIT quantity=3 price=1    selfTradePreventionMode=EXPIRE_MAKER
+Maker 订单 1: symbol=BTCUSDT side=BUY type=LIMIT quantity=1.2 price=1.2 selfTradePreventionMode=NONE
+Maker 订单 2: symbol=BTCUSDT side=BUY type=LIMIT quantity=1.3 price=1.1 selfTradePreventionMode=NONE
+Maker 订单 3: symbol=BTCUSDT side=BUY type=LIMIT quantity=8.1 price=1   selfTradePreventionMode=NONE
+Taker 订单 1: symbol=BTCUSDT side=SELL type=LIMIT quantity=3 price=1    selfTradePreventionMode=EXPIRE_MAKER
 ```
 
-**Result**: The orders that were on the book will expire due to the STP trigger, and the taker order will go on the book.
+**结果:** : 由于 STP 触发，订单薄上的订单将会过期，taker 订单将继续在订单薄。
 
-Maker Order 1
+Maker 订单 1
 ```json
 {
   "symbol": "BTCUSDT",
@@ -211,7 +208,7 @@ Maker Order 1
 }
 ```
 
-Maker Order 2
+Maker 订单 2
 
 ```json
 {
@@ -240,7 +237,7 @@ Maker Order 2
 }
 ```
 
-Maker Order 3
+Maker 订单 3
 ```json
 {
   "symbol": "BTCUSDT",
@@ -268,7 +265,7 @@ Maker Order 3
 }
 ```
 
-Output of the Taker Order
+Taker 订单的响应
 
 ```json
 {
@@ -312,17 +309,17 @@ Output of the Taker Order
 ```
 
 
-**Scenario C - A user sends an order with `EXPIRE_TAKER` that would match with their orders already on the book.**
+**情况 C - 用户发送带有 `EXPIRE_TAKER` 的订单，该订单将与订单薄上已有的订单撮合。**
 
 ```
-Maker Order 1: symbol=BTCUSDT side=BUY type=LIMIT quantity=1.2 price=1.2  selfTradePreventionMode=NONE
-Maker Order 2: symbol=BTCUSDT side=BUY type=LIMIT quantity=1.3 price=1.1  selfTradePreventionMode=NONE
-Maker Order 3: symbol=BTCUSDT side=BUY type=LIMIT quantity=8.1 price=1    selfTradePreventionMode=NONE
-Taker Order 1: symbol=BTCUSDT side=SELL type=LIMIT quantity=3 price=1 selfTradePreventionMode=EXPIRE_TAKER
+Maker 订单 1: symbol=BTCUSDT side=BUY type=LIMIT quantity=1.2 price=1.2  selfTradePreventionMode=NONE
+Maker 订单 2: symbol=BTCUSDT side=BUY type=LIMIT quantity=1.3 price=1.1  selfTradePreventionMode=NONE
+Maker 订单 3: symbol=BTCUSDT side=BUY type=LIMIT quantity=8.1 price=1    selfTradePreventionMode=NONE
+Taker 订单 1: symbol=BTCUSDT side=SELL type=LIMIT quantity=3 price=1 selfTradePreventionMode=EXPIRE_TAKER
 ```
-**Result**: The orders already on the book will remain, while the taker order will expire.
+**结果:** : 已经在订单薄上的订单将保留，而taker订单将过期。
 
-Maker Order 1
+Maker 订单 1
 ```json
 {
   "symbol": "BTCUSDT",
@@ -348,7 +345,7 @@ Maker Order 1
 }
 ```
 
-Maker Order 2
+Maker 订单 2
 
 ```json
 {
@@ -375,7 +372,7 @@ Maker Order 2
 }
 ```
 
-Maker Order 3
+Maker 订单 3
 ```json
 {
   "symbol": "BTCUSDT",
@@ -401,7 +398,7 @@ Maker Order 3
 }
 ```
 
-Output of the Taker order
+Taker 订单的状态
 
 ```json
 {
@@ -431,16 +428,16 @@ Output of the Taker order
 ```
 
 
-**Scenario D- A user has an order on the book, and then sends an order with `EXPIRE_BOTH` that would match with the existing order.** 
+**情况 D - 用户发送带有 `EXPIRE_BOTH` 的订单，该订单将与订单薄上已有的订单撮合。**
 
 ```
-Maker Order: symbol=BTCUSDT side=BUY type=LIMIT quantity=1 price=1 selfTradePreventionMode=NONE
-Taker Order: symbol=BTCUSDT side=SELL type=LIMIT quantity=3 price=1 selfTradePreventionMode=EXPIRE_BOTH
+Maker 订单: symbol=BTCUSDT side=BUY type=LIMIT quantity=1 price=1 selfTradePreventionMode=NONE
+Taker 订单: symbol=BTCUSDT side=SELL type=LIMIT quantity=3 price=1 selfTradePreventionMode=EXPIRE_BOTH
 ```
 
-**Result:** Both orders will expire.
+**结果:** 两个订单都将过期。
 
-Maker Order
+Maker 订单
 
 ```json
 {
@@ -469,7 +466,7 @@ Maker Order
 }
 ```
 
-Taker Order
+Taker 订单
 
 ```json
 {
@@ -503,16 +500,17 @@ Taker Order
 }
 ```
 
-**Scenario E - A user has an order on the book with `EXPIRE_MAKER`, and then sends a new order with `EXPIRE_TAKER` which would match with the existing order.**
+**情况 E - 用户在订单薄上有一个带有 `EXPIRE_MAKER` 的订单，然后发送一个带有 `EXPIRE_TAKER` 的新订单，该订单将与订单薄上的订单撮合。**
+
 
 ```
-Maker Order: symbol=BTCUSDT side=BUY type=LIMIT quantity=1 price=1 selfTradePreventionMode=EXPIRE_MAKER
-Taker Order: symbol=BTCUSDT side=SELL type=LIMIT quantity=1 price=1 selfTradePreventionMode=EXPIRE_TAKER
+Maker 订单: symbol=BTCUSDT side=BUY type=LIMIT quantity=1 price=1 selfTradePreventionMode=EXPIRE_MAKER
+Taker 订单: symbol=BTCUSDT side=SELL type=LIMIT quantity=1 price=1 selfTradePreventionMode=EXPIRE_TAKER
 ```
 
-**Result**: The taker order's STP mode will be used, so the taker order will be expired.
+**结果:** 将使用 taker 订单的 STP 模式，因此 taker 订单将过期。
 
-Maker Order
+Maker 订单
 ```json
 {
     "symbol": "ABCDEF",
@@ -538,7 +536,7 @@ Maker Order
 }
 ```
 
-Taker Order
+Taker 订单
 ```json
 {
     "symbol": "ABCDEF",
@@ -570,17 +568,18 @@ Taker Order
 ```
 
 
-**Scenario F - A user sends a market order with `EXPIRE_MAKER` which would match with an existing order.**
+**情况 F - 用户发送带有 `EXPIRE_MAKER` 的市价订单，该订单将与订单薄上已有的订单撮合。**
+
 
 ```
-Maker Order: symbol=ABCDEF side=BUY type=LIMIT quantity=1 price=1  selfTradePreventionMode=NONE
-Taker Order: symbol=ABCDEF side=SELL type=MARKET quantity=1 selfTradePreventionMode=EXPIRE_MAKER
+Maker 订单: symbol=ABCDEF side=BUY type=LIMIT quantity=1 price=1  selfTradePreventionMode=NONE
+Taker 订单: symbol=ABCDEF side=SELL type=MARKET quantity=1 selfTradePreventionMode=EXPIRE_MAKER
 ```
 
-**Result**: The existing order expires with the status `EXPIRED_IN_MATCH`, due to the STP trigger.
-The new order also expires but with status `EXPIRED`, due to low liquidity on the order book.
+**结果:** 由于 STP 触发，订单薄上的订单会过期，状态为 `EXPIRED_IN_MATCH`。
+由于订单薄上的流动性低，新订单也已过期但状态为 `EXPIRED`。
 
-Maker Order
+Maker 订单
 
 ```json
 {
@@ -609,7 +608,7 @@ Maker Order
 }
 ```
 
-Taker Order
+Taker 订单
 ```json
 {
   "symbol": "ABCDEF",

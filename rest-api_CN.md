@@ -1,4 +1,5 @@
-# REST行情与交易接口 (2022-12-15)
+# REST行情与交易接口 (2023-01-23)
+
 ## API 基本信息
 * 本篇列出接口的baseurl: **https://api.binance.com**
 * 如果上面的baseURL访问有性能问题，请访问下面的API集群:
@@ -338,6 +339,7 @@ curl -H "X-MBX-APIKEY: $API_KEY" -X "$API_METHOD" \
 `PENDING_CANCEL` | 撤销中(目前并未使用)
 `REJECTED`       | 订单没有被交易引擎接受，也没被处理
 `EXPIRED` | 订单被交易引擎取消, 比如 <br/>LIMIT FOK 订单没有成交<br/>市价单没有完全成交<br/>强平期间被取消的订单<br/>交易所维护期间被取消的订单
+`EXPIRED_IN_MATCH` | 表示订单由于 STP 触发而过期 （e.g. 带有 `EXPIRE_TAKER` 的订单与订单簿上属于同账户或同 `tradeGroupId` 的订单撮合）
 
 **OCO 状态 (状态类型集 listStatusType):**
 
@@ -1475,6 +1477,7 @@ stopPrice | DECIMAL | NO | 仅 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `T
 trailingDelta|LONG|NO| 用于 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, 和 `TAKE_PROFIT_LIMIT` 类型的订单.
 icebergQty | DECIMAL | NO | 仅有限价单(包括条件限价单与限价做事单)可以使用该参数，含义为创建冰山订单并指定冰山订单的尺寸
 newOrderRespType | ENUM | NO | 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`, 其他默认为`ACK`.
+selfTradePreventionMode |ENUM| NO | 允许的 ENUM 取决于交易对的配置。支持的值有 `EXPIRE_TAKER`，`EXPIRE_MAKER`，`EXPIRE_BOTH`，`NONE`。
 recvWindow | LONG | NO |
 timestamp | LONG | YES |
 
@@ -1657,6 +1660,7 @@ stopPrice|DECIMAL|NO|
 trailingDelta|LONG|NO|
 icebergQty|DECIMAL|NO|
 newOrderRespType|ENUM|NO|指定响应类型: <br/> 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`, 其他默认为`ACK`.
+selfTradePreventionMode|ENUM|NO|允许的 ENUM 取决于交易对的配置。支持的值有 `EXPIRE_TAKER`，`EXPIRE_MAKER`，`EXPIRE_BOTH`，`NONE`。
 recvWindow | LONG | NO | 不能大于 `60000`
 timestamp | LONG | YES |
 
@@ -2171,6 +2175,7 @@ stopLimitPrice|DECIMAL|NO| 如果提供，须配合提交`stopLimitTimeInForce`
 stopIcebergQty|DECIMAL|NO|
 stopLimitTimeInForce|ENUM|NO| 有效值 `GTC`/`FOK`/`IOC`
 newOrderRespType|ENUM|NO| 详见枚举定义：订单返回类型
+selfTradePreventionMode |ENUM| NO | 允许的 ENUM 取决于交易对的配置。支持的值有 `EXPIRE_TAKER`，`EXPIRE_MAKER`，`EXPIRE_BOTH`，`NONE`。
 recvWindow|LONG|NO| 不能大于 `60000`
 timestamp|LONG|YES|
 
@@ -2589,6 +2594,64 @@ timestamp | LONG | YES |
     "intervalNum": 1,
     "limit": 20000,
     "count": 0
+  }
+]
+```
+
+
+### 获取 Prevented Matches (USER_DATA)
+
+```
+GET /api/v3/myPreventedMatches
+```
+
+获取因 STP 触发而过期的订单列表。
+
+这些是支持的组合：
+
+* `symbol` + `preventedMatchId`
+* `symbol` + `orderId`
+* `symbol` + `orderId` + `fromPreventedMatchId` (`limit` 默认为 500)
+* `symbol` + `orderId` + `fromPreventedMatchId` + `limit` 
+
+**参数:**
+
+名称                 | 类型   | 是否必需	     | 描述
+------------        | ----   | ------------ | ------------
+symbol              | STRING | YES          |
+preventedMatchId    |LONG    | NO           | 
+orderId             |LONG    | NO           |
+fromPreventedMatchId|LONG    | NO           |
+limit               |INT     | NO           | 默认：`500`；最大：`1000`
+recvWindow          | LONG   | NO           | 赋值不得大于 `60000`
+timestamp           | LONG   | YES          |
+
+**权重**
+
+情况                         | 权重
+----------------------------| -----
+如果 `symbol` 是无效的        | 1
+通过 `preventedMatchId` 查询 | 1
+通过 `orderId` 查询          | 10 
+
+**数据源:**
+
+数据库
+
+**响应:**
+
+```json
+[
+  {
+    "symbol": "BTCUSDT",
+    "preventedMatchId": 1,
+    "takerOrderId": 5,
+    "makerOrderId": 3,
+    "tradeGroupId": 1,
+    "selfTradePreventionMode": "EXPIRE_MAKER",
+    "price": "1.100000",
+    "makerPreventedQuantity": "1.300000",
+    "transactTime": 1669101687094
   }
 ]
 ```

@@ -1,4 +1,4 @@
-# WebSocket 账户接口(2022-12-05)
+# WebSocket 账户接口(2023-01-23)
 
 # 基本信息
 * 本篇所列出API接口的base url : **https://api.binance.com**
@@ -147,6 +147,7 @@ listenKey | STRING | YES
   "N": null,                     // 手续费资产类别
   "T": 1499405658657,            // 成交时间
   "t": -1,                       // 成交ID
+  "v": 3,                        // 被阻止撮合交易的ID; 这仅在订单因 STP 触发而过期时可见
   "I": 8641984,                  // 请忽略
   "w": true,                     // 订单是否在订单簿上？
   "m": false,                    // 该成交是作为挂单成交吗？
@@ -154,12 +155,16 @@ listenKey | STRING | YES
   "O": 1499405658657,            // 订单创建时间
   "Z": "0.00000000",             // 订单累计已成交金额
   "Y": "0.00000000",             // 订单末次成交金额
-  "Q": "0.00000000"              // Quote Order Qty
+  "Q": "0.00000000",             // Quote Order Quantity
   "D": 1668680518494,            // 追踪时间; 这仅在追踪止损订单已被激活时可见
   "j": 1,                        // Strategy ID; 下单时填上字段才会返回
-  "J": 1000000                   // Strategy Type; 下单时填上字段才会返回
+  "J": 1000000,                  // Strategy Type; 下单时填上字段才会返回
   "W": 1499405658657,            // Working Time; 订单被添加到 order book 的时间
-  "V": "NONE"                    // SelfTradePreventionMode
+  "V": "NONE",                   // SelfTradePreventionMode
+  "u":1,                         // TradeGroupId; 这仅在账户属于交易组和订单因 STP 触发而过期时可见。
+  "U":37,                        // CounterOrderId; 这仅在订单因 STP 触发而过期时可见
+  "A":"3.000000",                // 被阻止交易的数量; 这仅在订单因 STP 触发而过期时可见
+  "B":"3.000000"                 // 最后被阻止交易的数量; 这仅在订单因 STP 触发而过期时可见
 }
 ```
 
@@ -204,5 +209,6 @@ listenKey | STRING | YES
 * REJECTED - 新订单被拒绝 （这信息只会在撤消挂单再下单中发生，下新订单被拒绝但撤消挂单请求成功）。
 * TRADE - 订单有新成交。
 * EXPIRED - 订单已根据 Time In Force 参数的规则取消（e.g. 没有成交的 LIMIT FOK 订单或部分成交的 LIMIT IOC 订单）或者被交易所取消（e.g. 强平或维护期间取消的订单）。
+* TRADE_PREVENTION - 订单因 STP 触发而过期。
 
 请查阅[公开API参数](#public-api-definitions)文档获取更多枚举定义。
