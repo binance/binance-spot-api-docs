@@ -1,4 +1,12 @@
-# CHANGELOG for Binance's API (2023-01-18)
+# CHANGELOG for Binance's API (2023-01-23)
+
+## 2023-01-23 
+
+New API cluster has been added. Note that all endpoints are functionally equal, but may vary in performance.
+
+* https://api4.binance.com
+
+---
 
 ## RELEASE DATE TBD
 
@@ -51,7 +59,7 @@ WEBSOCKET API
 * New request: `myPreventedMatches` - This queries the orders that expired due to STP being triggered.
 * New responses that will appear for all order placement endpoints if there was a prevented match (i.e. if an order could have matched with an order of the same account, or the accounts are in the same `tradeGroupId`): 
     * `tradeGroupId`      - This will only appear if account is configured to a `tradeGroupId` and if there was a prevented match.
-    * `preventedQuantity` - Only appears if there was a prevented match
+    * `preventedQuantity` - Only appears if there was a prevented match.
     * An array `preventedMatches` with the following fields:
         * `preventedMatchId`
         * `makerOrderId`

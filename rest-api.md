@@ -63,14 +63,15 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2023-01-18)
+# Public Rest API for Binance (2023-01-23)
 
 ## General API Information
-* The base endpoint is: **https://api.binance.com**
-* If there are performance issues with the endpoint above, these API clusters are also available:
+* The following base endpoints are available:
   * **https://api1.binance.com**
   * **https://api2.binance.com**
   * **https://api3.binance.com**
+  * **https://api4.binance.com**
+* All endpoints are equal in functionality.<br/> Performance may vary between the base endpoints and can be freely switched between them to find which one works best for one's setup.
 * All endpoints return either a JSON object or array.
 * Data is returned in **ascending** order. Oldest first, newest last.
 * All time and timestamp related fields are in **milliseconds**.
@@ -325,6 +326,7 @@ price | 0.2
 timestamp | 1668481559918
 recvWindow | 5000
 
+
 **Step 1: Construct the payload**
 
 Arrange the list of parameters into a string. Separate each parameter with a `&`.
@@ -342,16 +344,13 @@ symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timesta
 
 ```console
 $ echo -n 'symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918&recvWindow=5000' | openssl dgst -sha256 -sign ./test-prv-key.pem
-
 ```
-
 3. Encode output as base64 string.
 
 ```console
 $  echo -n 'symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918&recvWindow=5000' | openssl dgst -sha256 -sign ./test-prv-key.pem | openssl enc -base64 -A
 HZ8HOjiJ1s/igS9JA+n7+7Ti/ihtkRF5BIWcPIEluJP6tlbFM/Bf44LfZka/iemtahZAZzcO9TnI5uaXh3++lrqtNonCwp6/245UFWkiW1elpgtVAmJPbogcAv6rSlokztAfWk296ZJXzRDYAtzGH0gq7CgSJKfH+XxaCmR0WcvlKjNQnp12/eKXJYO4tDap8UCBLuyxDnR7oJKLHQHJLP0r0EAVOOSIbrFang/1WOq+Jaq4Efc4XpnTgnwlBbWTmhWDR1pvS9iVEzcSYLHT/fNnMRxFc7u+j3qI//5yuGuu14KR0MuQKKCSpViieD+fIti46sxPTsjSemoUKp0oXA==
 ```
-
 4. Since the signature may contain `/` and `=`, this could cause issues with sending the request. So the signature has to be URL encoded.
 
 ```console
@@ -369,19 +368,16 @@ A sample Bash script below does the similar steps said above.
 ```bash
 API_KEY="put your own API Key here"
 PRIVATE_KEY_PATH="test-prv-key.pem"
-
 # Set up the request:
 API_METHOD="POST"
 API_CALL="api/v3/order"
 API_PARAMS="symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2"
-
 # Sign the request:
 timestamp=$(date +%s000)
 api_params_with_timestamp="$API_PARAMS&timestamp=$timestamp"
 signature=$(echo -n "$api_params_with_timestamp" \
             | openssl dgst -sha256 -sign "$PRIVATE_KEY_PATH" \
             | openssl enc -base64 -A)
-
 # Send the request:
 curl -H "X-MBX-APIKEY: $API_KEY" -X "$API_METHOD" \
     "https://api.binance.com/$API_CALL?$api_params_with_timestamp" \
