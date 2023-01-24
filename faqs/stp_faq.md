@@ -2,7 +2,7 @@
 
 ## What is Self Trade Prevention?
 
-Self Trade Prevention (or STP) prevents orders of users, or the user's `tradeGroupId` to match against their own. 
+Self Trade Prevention (or STP) prevents orders of users, or the user's `tradeGroupId` to match against their own.
 
 ## What defines a self-trade?
 
@@ -17,7 +17,7 @@ There are four possible modes for what the system will do if an order could crea
 
 `NONE` - This mode exempts the order from self-trade prevention. Accounts or Trade group IDs will not be compared, no orders will be expired, and the trade will occur.
 
-`EXPIRE_TAKER` - This mode prevents a trade by immediately expiring the taker order's remaining quantity. 
+`EXPIRE_TAKER` - This mode prevents a trade by immediately expiring the taker order's remaining quantity.
 
 `EXPIRE_MAKER` - This mode prevents a trade by immediately expiring the potential maker order's remaining quantity.
 
@@ -37,15 +37,15 @@ If the value is `-1`, then the `tradeGroupId` has not been set for that account,
 
 ## What is a Prevented Match?
 
-When one or more orders are expired due to STP, this creates a prevented match. 
+When one or more orders are expired due to STP, this creates a prevented match.
 
-This is not to be confused with a trade, as no orders will match. 
+This is not to be confused with a trade, as no orders will match.
 
-This is a record of what orders could have self-traded. 
+This is a record of what orders could have self-traded.
 
 This can be queried through the endpoint `GET /api/v3/preventedMatches` on the Rest API or `myPreventedMatches` on the Websocket API.
 
-This is a sample of the output request for reference: 
+This is a sample of the output request for reference:
 
 ```javascript
 [
@@ -64,7 +64,36 @@ This is a sample of the output request for reference:
 ]
 ```
 
-## How do I know which symbol uses STP? 
+## What is "prevented quantity?"
+
+STP events expire quantity from open orders. The STP modes `EXPIRE_TAKER`, `EXPIRE_MAKER`, and `EXPIRE_BOTH` expire all remaining quantity on the affected orders, resulting in the entire open order being expired.
+
+Prevented quantity is the amount of quantity that is expired due to STP events for a particular order. User stream execution reports for orders involved in STP may have these fields:
+
+```javascript
+{
+  "A":"3.000000", // Prevented Quantity
+  "B":"3.000000"  // Last Prevented Quantity
+}
+```
+
+`B` is present for execution type `TRADE_PREVENTION`, and is the quantity expired due to that individual STP event.
+
+`A` is the cumulative quantity expired due to STP over the lifetime of the order. For `EXPIRE_TAKER`, `EXPIRE_MAKER`, and `EXPIRE_BOTH` modes this will always be the same value as `B`.
+
+While an order is open, the following inequality holds true:
+
+```
+executed quantity + prevented quantity < original order quantity
+```
+
+When an order has status `EXPIRED_IN_MATCH` or `FILLED`, the followiung equation will hold true:
+
+```
+executed quantity + prevented quantity = original order quantity
+```
+
+## How do I know which symbol uses STP?
 
 Symbols may be configured to allow different sets of STP modes and take different default STP modes.
 
@@ -107,7 +136,7 @@ For all these cases, assume that all orders for these examples are made on the s
 **Scenario A- A user sends a new order with selfTradePreventionMode:`NONE` that will match with another order of theirs that is already on the book.**
 
 ```
-Maker Order: symbol=BTCUSDT side=BUY type=LIMIT quantity=1 price=1 selfTradePreventionMode=NONE
+Maker Order: symbol=BTCUSDT side=BUY  type=LIMIT quantity=1 price=1 selfTradePreventionMode=NONE
 Taker Order: symbol=BTCUSDT side=SELL type=LIMIT quantity=1 price=1 selfTradePreventionMode=NONE
 ```
 
@@ -175,10 +204,10 @@ Order Status of the Taker Order
 **Scenario B- A user sends an order with `EXPIRE_MAKER` that would match with their orders that are already on the book.**
 
 ```
-Maker Order 1: symbol=BTCUSDT side=BUY type=LIMIT quantity=1.2 price=1.2 selfTradePreventionMode=NONE
-Maker Order 2: symbol=BTCUSDT side=BUY type=LIMIT quantity=1.3 price=1.1 selfTradePreventionMode=NONE
-Maker Order 3: symbol=BTCUSDT side=BUY type=LIMIT quantity=8.1 price=1   selfTradePreventionMode=NONE
-Taker Order 1: symbol=BTCUSDT side=SELL type=LIMIT quantity=3 price=1    selfTradePreventionMode=EXPIRE_MAKER
+Maker Order 1: symbol=BTCUSDT side=BUY  type=LIMIT quantity=1.2 price=1.2 selfTradePreventionMode=NONE
+Maker Order 2: symbol=BTCUSDT side=BUY  type=LIMIT quantity=1.3 price=1.1 selfTradePreventionMode=NONE
+Maker Order 3: symbol=BTCUSDT side=BUY  type=LIMIT quantity=8.1 price=1   selfTradePreventionMode=NONE
+Taker Order 1: symbol=BTCUSDT side=SELL type=LIMIT quantity=3   price=1   selfTradePreventionMode=EXPIRE_MAKER
 ```
 
 **Result**: The orders that were on the book will expire due to the STP trigger, and the taker order will go on the book.
@@ -315,10 +344,10 @@ Output of the Taker Order
 **Scenario C - A user sends an order with `EXPIRE_TAKER` that would match with their orders already on the book.**
 
 ```
-Maker Order 1: symbol=BTCUSDT side=BUY type=LIMIT quantity=1.2 price=1.2  selfTradePreventionMode=NONE
-Maker Order 2: symbol=BTCUSDT side=BUY type=LIMIT quantity=1.3 price=1.1  selfTradePreventionMode=NONE
-Maker Order 3: symbol=BTCUSDT side=BUY type=LIMIT quantity=8.1 price=1    selfTradePreventionMode=NONE
-Taker Order 1: symbol=BTCUSDT side=SELL type=LIMIT quantity=3 price=1 selfTradePreventionMode=EXPIRE_TAKER
+Maker Order 1: symbol=BTCUSDT side=BUY  type=LIMIT quantity=1.2 price=1.2  selfTradePreventionMode=NONE
+Maker Order 2: symbol=BTCUSDT side=BUY  type=LIMIT quantity=1.3 price=1.1  selfTradePreventionMode=NONE
+Maker Order 3: symbol=BTCUSDT side=BUY  type=LIMIT quantity=8.1 price=1    selfTradePreventionMode=NONE
+Taker Order 1: symbol=BTCUSDT side=SELL type=LIMIT quantity=3   price=1    selfTradePreventionMode=EXPIRE_TAKER
 ```
 **Result**: The orders already on the book will remain, while the taker order will expire.
 
@@ -431,10 +460,10 @@ Output of the Taker order
 ```
 
 
-**Scenario D- A user has an order on the book, and then sends an order with `EXPIRE_BOTH` that would match with the existing order.** 
+**Scenario D- A user has an order on the book, and then sends an order with `EXPIRE_BOTH` that would match with the existing order.**
 
 ```
-Maker Order: symbol=BTCUSDT side=BUY type=LIMIT quantity=1 price=1 selfTradePreventionMode=NONE
+Maker Order: symbol=BTCUSDT side=BUY  type=LIMIT quantity=1 price=1 selfTradePreventionMode=NONE
 Taker Order: symbol=BTCUSDT side=SELL type=LIMIT quantity=3 price=1 selfTradePreventionMode=EXPIRE_BOTH
 ```
 
@@ -506,7 +535,7 @@ Taker Order
 **Scenario E - A user has an order on the book with `EXPIRE_MAKER`, and then sends a new order with `EXPIRE_TAKER` which would match with the existing order.**
 
 ```
-Maker Order: symbol=BTCUSDT side=BUY type=LIMIT quantity=1 price=1 selfTradePreventionMode=EXPIRE_MAKER
+Maker Order: symbol=BTCUSDT side=BUY  type=LIMIT quantity=1 price=1 selfTradePreventionMode=EXPIRE_MAKER
 Taker Order: symbol=BTCUSDT side=SELL type=LIMIT quantity=1 price=1 selfTradePreventionMode=EXPIRE_TAKER
 ```
 
@@ -573,8 +602,8 @@ Taker Order
 **Scenario F - A user sends a market order with `EXPIRE_MAKER` which would match with an existing order.**
 
 ```
-Maker Order: symbol=ABCDEF side=BUY type=LIMIT quantity=1 price=1  selfTradePreventionMode=NONE
-Taker Order: symbol=ABCDEF side=SELL type=MARKET quantity=1 selfTradePreventionMode=EXPIRE_MAKER
+Maker Order: symbol=ABCDEF side=BUY  type=LIMIT  quantity=1 price=1  selfTradePreventionMode=NONE
+Taker Order: symbol=ABCDEF side=SELL type=MARKET quantity=1          selfTradePreventionMode=EXPIRE_MAKER
 ```
 
 **Result**: The existing order expires with the status `EXPIRED_IN_MATCH`, due to the STP trigger.

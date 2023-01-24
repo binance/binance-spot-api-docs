@@ -60,6 +60,39 @@ STP 的发生取决于 **Taker 订单** 的 STP 模式。 <br> 因此，订单�
 ]
 ```
 
+## 什么是 "prevented quantity"?
+
+STP事件会导致挂单的数量失效; STP的模式 `EXPIRE_TAKER`, `EXPIRE_MAKER` 以及 `EXPIRE_BOTH` 会使挂单中剩余的数量全部失效，从而使整个订单失效。
+
+
+`Prevented quantity` 表示订单中因为STP事件失效的数量. 用户WebSocket数据流中可能有如下两个字段:
+
+```javascript
+{
+  "A":"3.000000", // Prevented Quantity
+  "B":"3.000000"  // Last Prevented Quantity
+}
+```
+
+`B` 代表着 `TRADE_PREVENTION` 交易类型, 其值表示本次STP事件导致失效的订单数量.
+
+`A` 代表着某订单因为STP事件导致的累计失效订单数量. 对于 `EXPIRE_TAKER`, `EXPIRE_MAKER` 以及 `EXPIRE_BOTH` 模式, 其值总是和 `B` 一样.
+
+如果订单是处于挂单状态, 如下的公式成立:
+
+```
+executed quantity + prevented quantity < original order quantity
+执行的订单数量 + 被过期的数量 < 订单的原始数量
+```
+
+如果订单状态是 `EXPIRED_IN_MATCH` 或者 `FILLED`, 如下的等式成立:
+
+```
+executed quantity + prevented quantity = original order quantity
+执行的订单数量 + 被过期的数量 = 订单的原始数量
+```
+
+
 ## 如何知道有那些交易对支持 STP?
 
 交易对可以配置为允许不同的 STP 模式集并采用不同的默认 STP 模式。

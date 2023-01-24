@@ -209,12 +209,12 @@ If the order is an OCO, an event will be displayed named `ListStatus` in additio
 
 ### Execution types
 
-* NEW - The order has been accepted into the engine.
-* CANCELED - The order has been canceled by the user. 
-* REPLACED (currently unused)
-* REJECTED - The order has been rejected and was not processed (This message appears only with Cancel Replace Orders wherein the new order placement is rejected but the request to cancel request succeeds.)
-* TRADE - Part of the order or all of the order's quantity has filled.
-* EXPIRED - The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance).
-* TRADE_PREVENTION - The order has expired due to STP trigger.
+* `NEW` - The order has been accepted into the engine.
+* `CANCELED` - The order has been canceled by the user. 
+* `REPLACED` (currently unused)
+* `REJECTED` - The order has been rejected and was not processed (This message appears only with Cancel Replace Orders wherein the new order placement is rejected but the request to cancel request succeeds.)
+* `TRADE` - Part of the order or all of the order's quantity has filled.
+* `EXPIRED` - The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance).
+* `TRADE_PREVENTION` - The order has expired due to STP trigger.
 
 Check the [Rest API Documentation](./rest-api.md#enum-definitions) for more relevant enum definitions.

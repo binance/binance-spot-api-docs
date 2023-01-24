@@ -211,6 +211,9 @@ Order Book
 `PARTIALLY_FILLED`
 * Order `status` indicating that part of the order has been partially filled.
 
+`preventedQuantity`
+* Order quantity expired due to STP events.
+
 Prevented Match
 * Order(s) that have expired due to the STP trigger.
 
@@ -254,7 +257,7 @@ Reverse `MARKET` order
 ## S
 
 Self Trade Prevention (STP)
-* Self Trade Prevention is a feature that prevents orders of users, or the user's `tradeGroupId` from matching against their own. 
+* Self Trade Prevention is a feature that prevents orders of users, or the user's `tradeGroupId` from matching against their own.
 
 `selfTradePreventionMode`
 * A parameter used to specify what the system will do if an order could cause a self-trade.
