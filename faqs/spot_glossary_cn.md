@@ -211,6 +211,9 @@ Order Book
 `PARTIALLY_FILLED`
 * 订单的一种状态, 表示订单被部分成交.
 
+`preventedQuantity`
+* 因为STP导致订单失效的数量.
+
 ---
 
 ## Q

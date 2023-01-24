@@ -2,7 +2,7 @@
 
 ## What is Self Trade Prevention?
 
-Self Trade Prevention (or STP) prevents orders of users, or the user's `tradeGroupId` to match against their own. 
+Self Trade Prevention (or STP) prevents orders of users, or the user's `tradeGroupId` to match against their own.
 
 ## What defines a self-trade?
 
@@ -17,7 +17,7 @@ There are four possible modes for what the system will do if an order could crea
 
 `NONE` - This mode exempts the order from self-trade prevention. Accounts or Trade group IDs will not be compared, no orders will be expired, and the trade will occur.
 
-`EXPIRE_TAKER` - This mode prevents a trade by immediately expiring the taker order's remaining quantity. 
+`EXPIRE_TAKER` - This mode prevents a trade by immediately expiring the taker order's remaining quantity.
 
 `EXPIRE_MAKER` - This mode prevents a trade by immediately expiring the potential maker order's remaining quantity.
 
@@ -37,15 +37,15 @@ If the value is `-1`, then the `tradeGroupId` has not been set for that account,
 
 ## What is a Prevented Match?
 
-When one or more orders are expired due to STP, this creates a prevented match. 
+When one or more orders are expired due to STP, this creates a prevented match.
 
-This is not to be confused with a trade, as no orders will match. 
+This is not to be confused with a trade, as no orders will match.
 
-This is a record of what orders could have self-traded. 
+This is a record of what orders could have self-traded.
 
 This can be queried through the endpoint `GET /api/v3/preventedMatches` on the Rest API or `myPreventedMatches` on the Websocket API.
 
-This is a sample of the output request for reference: 
+This is a sample of the output request for reference:
 
 ```javascript
 [
@@ -66,7 +66,7 @@ This is a sample of the output request for reference:
 
 ## What is "prevented quantity?"
 
-STP events expire quantity from open orders. The STP modes `EXPIRE_TAKER`, `EXPIRE_MAKER`, and `EXPIRE_BOTH` expire all remaining quantity on the affected orders, resulting in the entire oprder being expired.
+STP events expire quantity from open orders. The STP modes `EXPIRE_TAKER`, `EXPIRE_MAKER`, and `EXPIRE_BOTH` expire all remaining quantity on the affected orders, resulting in the entire open order being expired.
 
 Prevented quantity is the amount of quantity that is expired due to STP events for a particular order. User stream execution reports for orders involved in STP may have these fields:
 
@@ -93,7 +93,7 @@ When an order has status `EXPIRED_IN_MATCH` or `FILLED`, the followiung equation
 executed quantity + prevented quantity = original order quantity
 ```
 
-## How do I know which symbol uses STP? 
+## How do I know which symbol uses STP?
 
 Symbols may be configured to allow different sets of STP modes and take different default STP modes.
 
