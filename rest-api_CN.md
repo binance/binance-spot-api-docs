@@ -309,25 +309,25 @@ curl -H "X-MBX-APIKEY: $API_KEY" -X "$API_METHOD" \
 ## 枚举定义
 **交易对状态 (status):**
 
-* PRE_TRADING 盘前交易
-* TRADING 正常交易中
-* POST_TRADING 盘后交易
-* END_OF_DAY 收盘
-* HALT 交易终止(该交易对已下线)
-* AUCTION_MATCH 集合竞价
-* BREAK 交易暂停
+* `PRE_TRADING` 盘前交易
+* `TRADING` 正常交易中
+* `POST_TRADING` 盘后交易
+* `END_OF_DAY` 收盘
+* `HALT` 交易终止(该交易对已下线)
+* `AUCTION_MATCH` 集合竞价
+* `BREAK` 交易暂停
 
 **账户与交易对权限(权限):**
 
-* SPOT 现货
-* MARGIN 杠杆
-* LEVERAGED 杠杆代币
-* TRD_GRP_002 交易组 002
-* TRD_GRP_003 交易组 003
-* TRD_GRP_004 交易组 004
-* TRD_GRP_005 交易组 005
-* TRD_GRP_006 交易组 006
-* TRD_GRP_007 交易组 007
+* `SPOT` 现货
+* `MARGIN` 杠杆
+* `LEVERAGED` 杠杆代币
+* `TRD_GRP_002` 交易组 002
+* `TRD_GRP_003` 交易组 003
+* `TRD_GRP_004` 交易组 004
+* `TRD_GRP_005` 交易组 005
+* `TRD_GRP_006` 交易组 006
+* `TRD_GRP_007` 交易组 007
 
 
 **订单状态 (status):**
@@ -341,7 +341,7 @@ curl -H "X-MBX-APIKEY: $API_KEY" -X "$API_METHOD" \
 `PENDING_CANCEL` | 撤销中(目前并未使用)
 `REJECTED`       | 订单没有被交易引擎接受，也没被处理
 `EXPIRED` | 订单被交易引擎取消, 比如 <br/>LIMIT FOK 订单没有成交<br/>市价单没有完全成交<br/>强平期间被取消的订单<br/>交易所维护期间被取消的订单
-`EXPIRED_IN_MATCH` | 表示订单由于 STP 触发而过期 （e.g. 带有 `EXPIRE_TAKER` 的订单与订单簿上属于同账户或同 `tradeGroupId` 的订单撮合）
+`EXPIRED_IN_MATCH` | 表示订单由于 STP 而过期 （e.g. 带有 `EXPIRE_TAKER` 的订单与订单簿上属于同账户或同 `tradeGroupId` 的订单撮合）
 
 **OCO 状态 (状态类型集 listStatusType):**
 
@@ -363,28 +363,28 @@ curl -H "X-MBX-APIKEY: $API_KEY" -X "$API_METHOD" \
 
 **指定订单的类型**
 
-* OCO 选择性委托订单
+* `OCO` 选择性委托订单
 
 **订单种类 (orderTypes, type):**
 
-* LIMIT 限价单
-* MARKET  市价单
-* STOP_LOSS 止损单
-* STOP_LOSS_LIMIT 限价止损单
-* TAKE_PROFIT 止盈单
-* TAKE_PROFIT_LIMIT 限价止盈单
-* LIMIT_MAKER 限价做市单
+* `LIMIT` 限价单
+* `MARKET`  市价单
+* `STOP_LOSS` 止损单
+* `STOP_LOSS_LIMIT` 限价止损单
+* `TAKE_PROFIT` 止盈单
+* `TAKE_PROFIT_LIMIT` 限价止盈单
+* `LIMIT_MAKER` 限价做市单
 
 **订单返回类型 (newOrderRespType):**
 
-* ACK
-* RESULT
-* FULL
+* `ACK`
+* `RESULT`
+* `FULL`
 
 **订单方向 (side):**
 
-* BUY - 买入
-* SELL - 卖出
+* `BUY` - 买入
+* `SELL` - 卖出
 
 **Time in force (timeInForce):**
 
@@ -2039,11 +2039,18 @@ timestamp | LONG | YES |
   "type": "LIMIT", // 订单类型， 比如市价单，现价单等
   "side": "BUY", // 订单方向，买还是卖
   "stopPrice": "0.0", // 止损价格
+  "trailingDelta": 100, // 仅在是追踪止损订单(Trailing Stop Order)时才会显示
+  "trailingTime": -1,  // 仅在是追踪止损订单(Trailing Stop Order)时才会显示
   "icebergQty": "0.0", // 冰山数量
   "time": 1499827319559, // 订单时间
   "updateTime": 1499827319559, // 最后更新时间
   "isWorking": true, // 订单是否出现在orderbook中
-  "origQuoteOrderQty": "0.000000" // 原始的交易金额
+  "origQuoteOrderQty": "0.000000", // 原始的交易金额
+  "strategyId": 1,                  // 只有下单的时候提供了strategyId才会显示
+  "strategyType": 1000001,          // 只有下单的时候提供了strategyType才会显示
+  "selfTradePreventionMode": "NONE",
+  "preventedMatchId": 0,            // 这仅在订单因 STP 而过期时可见
+  "preventedQuantity": "1.200000"   // 这仅在订单因 STP 而过期时可见
 }
 ```
 
@@ -2607,14 +2614,14 @@ timestamp | LONG | YES |
 GET /api/v3/myPreventedMatches
 ```
 
-获取因 STP 触发而过期的订单列表。
+获取因 STP 而过期的订单列表。
 
 这些是支持的组合：
 
 * `symbol` + `preventedMatchId`
 * `symbol` + `orderId`
 * `symbol` + `orderId` + `fromPreventedMatchId` (`limit` 默认为 500)
-* `symbol` + `orderId` + `fromPreventedMatchId` + `limit` 
+* `symbol` + `orderId` + `fromPreventedMatchId` + `limit`
 
 **参数:**
 

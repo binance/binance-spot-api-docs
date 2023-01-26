@@ -709,27 +709,27 @@ OJJaf8C/3VGrU4ATTR4GiUDqL2FboSE1Qw7UnnoYNfXTXHubIl1iaePGuGyfct4NPu5oVEZCH4Q6ZStf
 ## ENUM 定义
 **交易对状态 (status):**
 
-* PRE_TRADING
-* TRADING
-* POST_TRADING
-* END_OF_DAY
-* HALT
-* AUCTION_MATCH
-* BREAK
+* `PRE_TRADING`
+* `TRADING`
+* `POST_TRADING`
+* `END_OF_DAY`
+* `HALT`
+* `AUCTION_MATCH`
+* `BREAK`
 
 <a id="permissions"></a>
 
 **账户和交易对权限 (permissions):**
 
-* SPOT
-* MARGIN
-* LEVERAGED
-* TRD_GRP_002
-* TRD_GRP_003
-* TRD_GRP_004
-* TRD_GRP_005
-* TRD_GRP_006
-* TRD_GRP_007
+* `SPOT`
+* `MARGIN`
+* `LEVERAGED`
+* `TRD_GRP_002`
+* `TRD_GRP_003`
+* `TRD_GRP_004`
+* `TRD_GRP_005`
+* `TRD_GRP_006`
+* `TRD_GRP_007`
 
 **订单状态 (status):**
 
@@ -742,7 +742,7 @@ OJJaf8C/3VGrU4ATTR4GiUDqL2FboSE1Qw7UnnoYNfXTXHubIl1iaePGuGyfct4NPu5oVEZCH4Q6ZStf
 `PENDING_CANCEL` | 撤销中(目前并未使用)
 `REJECTED`       | 订单没有被交易引擎接受，也没被处理
 `EXPIRED` | 订单被交易引擎取消 （比如 LIMIT FOK 订单没有成交，LIMIT IOC 或者 市价单 没有完全成交）</br> 强平期间被取消的订单 （交易所维护期间被取消的订单）
-`EXPIRED_IN_MATCH` | 表示订单由于 STP 触发而过期（e.g. 带有 `EXPIRE_TAKER` 的订单与订单簿上属于同账户或同 `tradeGroupId` 的订单撮合）
+`EXPIRED_IN_MATCH` | 表示订单由于 STP 而过期（e.g. 带有 `EXPIRE_TAKER` 的订单与订单簿上属于同账户或同 `tradeGroupId` 的订单撮合）
 
 **OCO 状态 (listStatusType):**
 
@@ -761,7 +761,7 @@ OJJaf8C/3VGrU4ATTR4GiUDqL2FboSE1Qw7UnnoYNfXTXHubIl1iaePGuGyfct4NPu5oVEZCH4Q6ZStf
 `REJECT` | 当订单状态响应失败(订单完成或取消订单)
 
 **指定订单的类型**
-* OCO
+* `OCO`
 
 ## 常用请求信息
 
@@ -2821,7 +2821,9 @@ days    | `1d`, `2d` ... `7d`
     "origQuoteOrderQty": "0.00000000"   // 始终存在，如果订单类型不使用 quoteOrderQty，则为零
     "strategyId": 37463720,             // 如果订单设置了 strategyId  会出现
     "strategyType": 1000000,            // 如果订单设置了 strategyType 会出现
-    "selfTradePreventionMode": "NONE"
+    "selfTradePreventionMode": "NONE",
+    "preventedMatchId": 0,              // 这仅在订单因 STP 而过期时可见
+    "preventedQuantity": "1.200000"     // 这仅在订单因 STP 而过期时可见
   },
   "rateLimits": [
     {
@@ -4616,7 +4618,10 @@ days    | `1d`, `2d` ... `7d`
       "time": 1660801715639,
       "updateTime": 1660801717945,
       "isWorking": true,
-      "origQuoteOrderQty": "0.00000000"
+      "origQuoteOrderQty": "0.00000000",
+      "selfTradePreventionMode": "NONE",
+      "preventedMatchId": 0,              // 这仅在订单因 STP 而过期时可见
+      "preventedQuantity": "1.200000"     // 这仅在订单因 STP 而过期时可见
     }
   ],
   "rateLimits": [
@@ -4842,7 +4847,7 @@ OCO 的状态报告与 [`orderList.status`](#查询-OCO-user_data) 相同。
 }
 ```
 
-获取因 STP 触发而过期的订单列表。
+获取因 STP 而过期的订单列表。
 
 这些是支持的组合：
 

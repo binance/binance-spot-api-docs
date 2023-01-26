@@ -78,7 +78,7 @@ Data Source
 * 订单的一个状态, 用来表示订单因为交易规则而取消, 也可能是直接被交易所取消.
 
 `EXPIRED_IN_MATCH`
-* 订单的一个状态，用来表示订单由于 STP 触发而过期 （e.g. 带有 `EXPIRE_TAKER` 的订单与订单簿上属于同账户或同 `tradeGroupId` 的订单撮合）。
+* 订单的一个状态，用来表示订单由于 STP 而过期 （e.g. 带有 `EXPIRE_TAKER` 的订单与订单簿上属于同账户或同 `tradeGroupId` 的订单撮合）。
 
 ---
 

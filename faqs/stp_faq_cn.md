@@ -78,6 +78,8 @@ STP事件会导致挂单的数量失效; STP的模式 `EXPIRE_TAKER`, `EXPIRE_MA
 
 `A` 代表着某订单因为STP事件导致的累计失效订单数量. 对于 `EXPIRE_TAKER`, `EXPIRE_MAKER` 以及 `EXPIRE_BOTH` 模式, 其值总是和 `B` 一样.
 
+由于 STP 而过期的订单的 API 响应也将有一个 `preventedQuantity` 字段，指示在订单由于 STP 而过期的累计数量。
+
 如果订单是处于挂单状态, 如下的公式成立:
 
 ```
@@ -211,7 +213,7 @@ Maker 订单 3: symbol=BTCUSDT side=BUY type=LIMIT quantity=8.1 price=1   selfTr
 Taker 订单 1: symbol=BTCUSDT side=SELL type=LIMIT quantity=3 price=1    selfTradePreventionMode=EXPIRE_MAKER
 ```
 
-**结果:** : 由于 STP 触发，订单薄上的订单将会过期，taker 订单将继续在订单薄。
+**结果:** : 由于 STP，订单薄上的订单将会过期，taker 订单将继续在订单薄。
 
 Maker 订单 1
 ```json
@@ -609,7 +611,7 @@ Maker 订单: symbol=ABCDEF side=BUY type=LIMIT quantity=1 price=1  selfTradePre
 Taker 订单: symbol=ABCDEF side=SELL type=MARKET quantity=1 selfTradePreventionMode=EXPIRE_MAKER
 ```
 
-**结果:** 由于 STP 触发，订单薄上的订单会过期，状态为 `EXPIRED_IN_MATCH`。
+**结果:** 由于 STP，订单薄上的订单会过期，状态为 `EXPIRED_IN_MATCH`。
 由于订单薄上的流动性低，新订单也已过期但状态为 `EXPIRED`。
 
 Maker 订单
