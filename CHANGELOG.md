@@ -1,4 +1,12 @@
-# CHANGELOG for Binance's API (2023-01-23)
+# CHANGELOG for Binance's API (2023-01-26)
+
+## 2023-01-26
+
+As per the [announcement](https://www.binance.com/en/support/announcement/binance-spot-launches-self-trade-prevention-stp-function-on-api-312fd0112fb44635b397c116e56d8f84), Self Trade Prevention will be enabled at **2023-01-26 08:00 UTC**.
+
+Please refer to `GET /api/v3/exchangeInfo` from the Rest API or `exchangeInfo` from the Websocket API on the default and allowed modes.
+
+---
 
 ## 2023-01-23 
 
@@ -37,7 +45,7 @@ REST API
     * `POST /api/v3/cancelReplace`
 * New responses that will appear for all order placement endpoints if there was a prevented match (i.e. if an order could have matched with an order of the same account, or the accounts are in the same `tradeGroupId`): 
     * `tradeGroupId`      - This will only appear if account is configured to a `tradeGroupId` and if there was a prevented match.
-    * `preventedQuantity` - Only appears if there was a prevented match
+    * `preventedQuantity` - Only appears if there was a prevented match.
     * An array `preventedMatches` with the following fields:
         * `preventedMatchId`
         * `makerOrderId`
@@ -81,6 +89,7 @@ USER DATA STREAM
     * `U` - `counterOrderId`
     * `A` - `preventedQuantity`
     * `B` - `lastPreventedQuantity`
+
 
 ---
 

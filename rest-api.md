@@ -398,25 +398,25 @@ These terms will be used throughout the documentation, so it is recommended espe
 ## ENUM definitions
 **Symbol status (status):**
 
-* PRE_TRADING
-* TRADING
-* POST_TRADING
-* END_OF_DAY
-* HALT
-* AUCTION_MATCH
-* BREAK
+* `PRE_TRADING`
+* `TRADING`
+* `POST_TRADING`
+* `END_OF_DAY`
+* `HALT`
+* `AUCTION_MATCH`
+* `BREAK`
 
 **Account and Symbol Permissions (permissions):**
 
-* SPOT
-* MARGIN
-* LEVERAGED
-* TRD_GRP_002
-* TRD_GRP_003
-* TRD_GRP_004
-* TRD_GRP_005
-* TRD_GRP_006
-* TRD_GRP_007
+* `SPOT`
+* `MARGIN`
+* `LEVERAGED`
+* `TRD_GRP_002`
+* `TRD_GRP_003`
+* `TRD_GRP_004`
+* `TRD_GRP_005`
+* `TRD_GRP_006`
+* `TRD_GRP_007`
 
 
 **Order status (status):**
@@ -430,7 +430,7 @@ Status | Description
 `PENDING_CANCEL` | Currently unused
 `REJECTED`       | The order was not accepted by the engine and not processed.
 `EXPIRED` | The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) <br/> or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance)
-`EXPIRED_IN_MATCH` | The order was canceled by the exchange due to STP trigger. (e.g. an order with `EXPIRE_TAKER` will match with existing orders on the book with the same account or same `tradeGroupId`)
+`EXPIRED_IN_MATCH` | The order was expired by the exchange due to STP. (e.g. an order with `EXPIRE_TAKER` will match with existing orders on the book with the same account or same `tradeGroupId`)
 
 **OCO Status (listStatusType):**
 
@@ -449,28 +449,28 @@ Status | Description
 `REJECT` | The List Status is responding to a failed action either during order placement or order canceled
 
 **ContingencyType**
-* OCO
+* `OCO`
 
 **Order types (orderTypes, type):**
 
-* LIMIT
-* MARKET
-* STOP_LOSS
-* STOP_LOSS_LIMIT
-* TAKE_PROFIT
-* TAKE_PROFIT_LIMIT
-* LIMIT_MAKER
+* `LIMIT`
+* `MARKET`
+* `STOP_LOSS`
+* `STOP_LOSS_LIMIT`
+* `TAKE_PROFIT`
+* `TAKE_PROFIT_LIMIT`
+* `LIMIT_MAKER`
 
 **Order Response Type (newOrderRespType):**
 
-* ACK
-* RESULT
-* FULL
+* `ACK`
+* `RESULT`
+* `FULL`
 
 **Order side (side):**
 
-* BUY
-* SELL
+* `BUY`
+* `SELL`
 
 **Time in force (timeInForce):**
 
@@ -1718,7 +1718,7 @@ Memory => Database
 {
   "symbol": "LTCBTC",
   "orderId": 1,
-  "orderListId": -1 //Unless part of an OCO, the value will always be -1.
+  "orderListId": -1                 // This field will always have a value of -1 if not an OCO.
   "clientOrderId": "myOrder1",
   "price": "0.1",
   "origQty": "1.0",
@@ -1729,13 +1729,19 @@ Memory => Database
   "type": "LIMIT",
   "side": "BUY",
   "stopPrice": "0.0",
+  "trailingDelta": 100,             // This field only appear for Trailing Stop Orders.
+  "trailingTime": -1,               // This field only appears for Trailing Stop Orders.
   "icebergQty": "0.0",
   "time": 1499827319559,
   "updateTime": 1499827319559,
   "isWorking": true,
   "workingTime":1499827319559,
   "origQuoteOrderQty": "0.000000",
-  "selfTradePreventionMode": "NONE"
+  "strategyId": 1,                  // This field only appears if the parameter was provided in the request.
+  "strategyType": 1000001,          // This field only appears if the parameter was provided in the request.
+  "selfTradePreventionMode": "NONE",
+  "preventedMatchId": 0,            // This field only appears if the order expired due to STP.
+  "preventedQuantity": "1.200000"   // This field only appears if the order expired due to STP.
 }
 ```
 
@@ -2189,7 +2195,9 @@ timestamp | LONG | YES |
     "isWorking": true,
     "origQuoteOrderQty": "0.000000",
     "workingTime": 1499827319559,
-    "selfTradePreventionMode": "NONE"
+    "selfTradePreventionMode": "NONE",
+    "preventedMatchId": 0,            //This field only appears if the order expired due to STP.
+    "preventedQuantity": "1.200000"   //This field only appears if the order expired due to STP.
   }
 ]
 ```
@@ -2731,21 +2739,21 @@ Memory
 GET /api/v3/myPreventedMatches
 ```
 
-Displays the list of orders that were expired because of STP trigger.
+Displays the list of orders that were expired due to STP.
 
 These are the combinations supported:
 
 * `symbol` + `preventedMatchId`
 * `symbol` + `orderId`
 * `symbol` + `orderId` + `fromPreventedMatchId` (`limit` will default to 500)
-* `symbol` + `orderId` + `fromPreventedMatchId` + `limit` 
+* `symbol` + `orderId` + `fromPreventedMatchId` + `limit`
 
 **Parameters:**
 
 Name                | Type   | Mandatory    | Description
 ------------        | ----   | ------------ | ------------
 symbol              | STRING | YES          |
-preventedMatchId    |LONG    | NO           | 
+preventedMatchId    |LONG    | NO           |
 orderId             |LONG    | NO           |
 fromPreventedMatchId|LONG    | NO           |
 limit               |INT     | NO           | Default: `500`; Max: `1000`
@@ -2758,7 +2766,7 @@ Case                            | Weight
 ----                            | -----
 If `symbol` is invalid          | 1
 Querying by `preventedMatchId`  | 1
-Querying by `orderId`           | 10 
+Querying by `orderId`           | 10
 
 **Data Source:**
 

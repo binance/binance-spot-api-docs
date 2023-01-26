@@ -78,7 +78,7 @@ Data Source
 * Order `status` indicating the order was canceled according to the order type's rules or by the exchange.
 
 `EXPIRED_IN_MATCH`
-* Order `status` indicating the order was canceled by the exchange due to STP trigger. (e.g. an order with `EXPIRE_TAKER` will match with existing orders on the book with the same account or same `tradeGroupId`)
+* Order `status` indicating the order was canceled by the exchange due to STP. (e.g. an order with `EXPIRE_TAKER` will match with existing orders on the book with the same account or same `tradeGroupId`)
 
 ---
 
@@ -215,7 +215,7 @@ Order Book
 * Order quantity expired due to STP events.
 
 Prevented Match
-* Order(s) that have expired due to the STP trigger.
+* When order(s) expire due to the STP, a "prevented match" records the event.
 
 ---
 
