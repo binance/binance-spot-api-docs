@@ -727,7 +727,7 @@ apiKey=CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ&newOrder
 
 1. Encode signature payload as ASCII data.
 2. Sign payload using RSASSA-PKCS1-v1_5 algorithm with SHA-256 hash function.
-3. Encode output as base64 string. 
+3. Encode output as base64 string.
 
 Note that `apiKey`, the payload, and the resulting `signature` are **case-sensitive**.
 
@@ -796,27 +796,27 @@ These terms will be used throughout the documentation, so it is recommended espe
 ## ENUM definitions
 **Symbol status (status):**
 
-* PRE_TRADING
-* TRADING
-* POST_TRADING
-* END_OF_DAY
-* HALT
-* AUCTION_MATCH
-* BREAK
+* `PRE_TRADING`
+* `TRADING`
+* `POST_TRADING`
+* `END_OF_DAY`
+* `HALT`
+* `AUCTION_MATCH`
+* `BREAK`
 
 <a id="permissions"></a>
 
 **Account and Symbol Permissions (permissions):**
 
-* SPOT
-* MARGIN
-* LEVERAGED
-* TRD_GRP_002
-* TRD_GRP_003
-* TRD_GRP_004
-* TRD_GRP_005
-* TRD_GRP_006
-* TRD_GRP_007
+* `SPOT`
+* `MARGIN`
+* `LEVERAGED`
+* `TRD_GRP_002`
+* `TRD_GRP_003`
+* `TRD_GRP_004`
+* `TRD_GRP_005`
+* `TRD_GRP_006`
+* `TRD_GRP_007`
 
 **Order status (status):**
 
@@ -829,7 +829,7 @@ Status | Description
 `PENDING_CANCEL` | Currently unused
 `REJECTED`       | The order was not accepted by the engine and not processed.
 `EXPIRED` | The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) <br> or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance)
-`EXPIRED_IN_MATCH` | The order was canceled by the exchange due to STP trigger. (e.g. an order with `EXPIRE_TAKER` will match with existing orders on the book with the same account or same `tradeGroupId`)
+`EXPIRED_IN_MATCH` | The order was expired by the exchange due to STP. (e.g. an order with `EXPIRE_TAKER` will match with existing orders on the book with the same account or same `tradeGroupId`)
 
 **OCO Status (listStatusType):**
 
@@ -844,11 +844,11 @@ Status | Description
 Status | Description
 -----------| --------------
 `EXECUTING` | Either an order list has been placed or there is an update to the status of the list.
-`ALL_DONE`| An order list has completed execution and thus no longer active. 
+`ALL_DONE`| An order list has completed execution and thus no longer active.
 `REJECT` | The List Status is responding to a failed action either during order placement or order canceled
 
 **ContingencyType**
-* OCO
+* `OCO`
 
 ## General requests
 
@@ -1621,7 +1621,7 @@ Memory
   "id": "ddbfb65f-9ebf-42ec-8240-8f0f91de0867",
   "status": 200,
   "result": {
-    "mins": 5,              // Price averaging interval in minutes 
+    "mins": 5,              // Price averaging interval in minutes
     "price": "0.01378135"
   },
   "rateLimits": [
@@ -2371,7 +2371,7 @@ Name                | Type    | Mandatory | Description
 `icebergQty`        | DECIMAL | NO        |
 `strategyId`        | INT     | NO        | Arbitrary numeric value identifying the order within an order strategy.
 `strategyType`      | INT     | NO        | <p>Arbitrary numeric value identifying the order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
-`selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`. 
+`selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
 `apiKey`            | STRING  | YES       |
 `recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
@@ -2924,11 +2924,13 @@ Memory => Database
     "time": 1660801715639,              // time when the order was placed
     "updateTime": 1660801717945,        // time of the last update to the order
     "isWorking": true,
-    "workingTime": 1660801715639,       
+    "workingTime": 1660801715639,
     "origQuoteOrderQty": "0.00000000"   // always present, zero if order type does not use quoteOrderQty
     "strategyId": 37463720,             // present only if strategyId set for the order
     "strategyType": 1000000,            // present only if strategyType set for the order
-    "selfTradePreventionMode": "NONE"
+    "selfTradePreventionMode": "NONE",
+    "preventedMatchId": 0,              // present only if the order expired due to STP
+    "preventedQuantity": "1.200000"     // present only if the order expired due to STP
   },
   "rateLimits": [
     {
@@ -4001,7 +4003,7 @@ Name                | Type    | Mandatory | Description
 `stopStrategyId`    | INT     | NO        | Arbitrary numeric value identifying the stop order within an order strategy.
 `stopStrategyType`  | INT     | NO        | <p>Arbitrary numeric value identifying the stop order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
 `newOrderRespType`  | ENUM    | NO        | Select response format: `ACK`, `RESULT`, `FULL` (default)
-`selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`. 
+`selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
 `apiKey`            | STRING  | YES       |
 `recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
@@ -4743,7 +4745,9 @@ Note that some fields are optional and included only for orders that set them.
       "isWorking": true,
       "workingTime": 1660801715639,
       "origQuoteOrderQty": "0.00000000",
-      "selfTradePreventionMode": "NONE"
+      "selfTradePreventionMode": "NONE",
+      "preventedMatchId": 0,            // This field only appears if the order expired due to STP.
+      "preventedQuantity": "1.200000"   // This field only appears if the order expired due to STP.
     }
   ],
   "rateLimits": [
@@ -4970,21 +4974,21 @@ Memory => Database
 }
 ```
 
-Displays the list of orders that were expired because of STP trigger.
+Displays the list of orders that were expired due to STP.
 
 These are the combinations supported:
 
 * `symbol` + `preventedMatchId`
 * `symbol` + `orderId`
 * `symbol` + `orderId` + `fromPreventedMatchId` (`limit` will default to 500)
-* `symbol` + `orderId` + `fromPreventedMatchId` + `limit` 
+* `symbol` + `orderId` + `fromPreventedMatchId` + `limit`
 
 **Parameters:**
 
 Name                | Type   | Mandatory    | Description
 ------------        | ----   | ------------ | ------------
 symbol              | STRING | YES          |
-preventedMatchId    |LONG    | NO           | 
+preventedMatchId    |LONG    | NO           |
 orderId             |LONG    | NO           |
 fromPreventedMatchId|LONG    | NO           |
 limit               |INT     | NO           | Default: `500`; Max: `1000`
@@ -4997,7 +5001,7 @@ Case                            | Weight
 ----                            | -----
 If `symbol` is invalid          | 1
 Querying by `preventedMatchId`  | 1
-Querying by `orderId`           | 10 
+Querying by `orderId`           | 10
 
 **Data Source:**
 
@@ -5067,7 +5071,7 @@ Name                | Type    | Mandatory | Description
 `apiKey`            | STRING  | YES       |
 
 
-**Data Source:** 
+**Data Source:**
 Memory
 
 **Response:**
