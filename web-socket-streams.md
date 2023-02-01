@@ -187,17 +187,17 @@ The Aggregate Trade Streams push trade information that is aggregated for a sing
 **Payload:**
 ```javascript
 {
-  "e": "aggTrade",  // Event type
-  "E": 123456789,   // Event time
-  "s": "BNBBTC",    // Symbol
-  "a": 12345,       // Aggregate trade ID
-  "p": "0.001",     // Price
-  "q": "100",       // Quantity
-  "f": 100,         // First trade ID
-  "l": 105,         // Last trade ID
-  "T": 123456785,   // Trade time
-  "m": true,        // Is the buyer the market maker?
-  "M": true         // Ignore
+  "e": "aggTrade",    // Event type
+  "E": 1672515782136, // Event time
+  "s": "BNBBTC",      // Symbol
+  "a": 12345,         // Aggregate trade ID
+  "p": "0.001",       // Price
+  "q": "100",         // Quantity
+  "f": 100,           // First trade ID
+  "l": 105,           // Last trade ID
+  "T": 1672515782136, // Trade time
+  "m": true,          // Is the buyer the market maker?
+  "M": true           // Ignore
 }
 ```
 
@@ -211,17 +211,17 @@ The Trade Streams push raw trade information; each trade has a unique buyer and 
 **Payload:**
 ```javascript
 {
-  "e": "trade",     // Event type
-  "E": 123456789,   // Event time
-  "s": "BNBBTC",    // Symbol
-  "t": 12345,       // Trade ID
-  "p": "0.001",     // Price
-  "q": "100",       // Quantity
-  "b": 88,          // Buyer order ID
-  "a": 50,          // Seller order ID
-  "T": 123456785,   // Trade time
-  "m": true,        // Is the buyer the market maker?
-  "M": true         // Ignore
+  "e": "trade",       // Event type
+  "E": 1672515782136, // Event time
+  "s": "BNBBTC",      // Symbol
+  "t": 12345,         // Trade ID
+  "p": "0.001",       // Price
+  "q": "100",         // Quantity
+  "b": 88,            // Buyer order ID
+  "a": 50,            // Seller order ID
+  "T": 1672515782136, // Trade time
+  "m": true,          // Is the buyer the market maker?
+  "M": true           // Ignore
 }
 ```
 
@@ -292,7 +292,7 @@ s-> seconds; m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
 ```javascript
   {
     "e": "24hrMiniTicker",  // Event type
-    "E": 123456789,         // Event time
+    "E": 1672515782136,     // Event time
     "s": "BNBBTC",          // Symbol
     "c": "0.0025",          // Close price
     "o": "0.0010",          // Open price
@@ -330,7 +330,7 @@ s-> seconds; m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
 ```javascript
 {
   "e": "24hrTicker",  // Event type
-  "E": 123456789,     // Event time
+  "E": 1672515782136, // Event time
   "s": "BNBBTC",      // Symbol
   "p": "0.0015",      // Price change
   "P": "250.00",      // Price change percent
@@ -390,7 +390,7 @@ As such, the effective window might be up to 59999ms wider that \<window_size\>.
 ```javascript
 {
   "e": "1hTicker",    // Event type
-  "E": 123456789,     // Event time
+  "E": 1672515782136, // Event time
   "s": "BNBBTC",      // Symbol
   "p": "0.0015",      // Price change
   "P": "250.00",      // Price change percent
@@ -402,7 +402,7 @@ As such, the effective window might be up to 59999ms wider that \<window_size\>.
   "v": "10000",       // Total traded base asset volume
   "q": "18",          // Total traded quote asset volume
   "O": 0,             // Statistics open time
-  "C": 86400000,      // Statistics close time
+  "C": 1675216573749, // Statistics close time
   "F": 0,             // First trade ID
   "L": 18150,         // Last trade Id
   "n": 18151          // Total number of trades
@@ -434,7 +434,7 @@ Note that only tickers that have changed will be present in the array.
 
 ## Individual Symbol Book Ticker Streams
 Pushes any update to the best bid or ask's price or quantity in real-time for a specified symbol.
-Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection. 
+Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection.
 
 **Stream Name:** \<symbol\>@bookTicker
 
@@ -489,7 +489,7 @@ Order book price and quantity depth updates used to locally manage an order book
 ```javascript
 {
   "e": "depthUpdate", // Event type
-  "E": 123456789,     // Event time
+  "E": 1672515782136, // Event time
   "s": "BNBBTC",      // Symbol
   "U": 157,           // First update ID in event
   "u": 160,           // Final update ID in event
@@ -519,5 +519,5 @@ Order book price and quantity depth updates used to locally manage an order book
 8. If the quantity is 0, **remove** the price level.
 9. Receiving an event that removes a price level that is not in your local order book can happen and is normal.
 
-Note: 
+Note:
 Due to depth snapshots having a limit on the number of price levels, a price level outside of the initial snapshot that doesn't have a quantity change won't have an update in the Diff. Depth Stream. Consequently, those price levels will not be visible in the local order book even when applying all updates from the Diff. Depth Stream correctly and cause the local order book to have some slight differences with the real order book. However, for most use cases the depth limit of 5000 is enough to understand the market and trade effectively.
