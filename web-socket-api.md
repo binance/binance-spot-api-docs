@@ -4171,20 +4171,14 @@ For execution status of individual orders, use [`order.status`](#query-order-use
 </thead>
 <tbody>
     <tr>
-        <td><code>symbol</code></td>
-        <td>STRING</td>
-        <td>YES</td>
-        <td></td>
-    </tr>
-    <tr>
         <td><code>origClientOrderId</code></td>
-        <td>INT</td>
+        <td>STRING</td>
         <td rowspan="2">YES</td>
         <td>Query OCO by <code>listClientOrderId</code></td>
     </tr>
     <tr>
         <td><code>orderListId</code></td>
-        <td>STRING</td>
+        <td>INT</td>
         <td>Query OCO by <code>orderListId</code></td>
     </tr>
     <tr>

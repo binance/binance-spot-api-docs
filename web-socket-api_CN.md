@@ -4049,20 +4049,14 @@ days    | `1d`, `2d` ... `7d`
 </thead>
 <tbody>
     <tr>
-        <td><code>symbol</code></td>
-        <td>STRING</td>
-        <td>YES</td>
-        <td></td>
-    </tr>
-    <tr>
         <td><code>origClientOrderId</code></td>
-        <td>INT</td>
+        <td>STRING</td>
         <td rowspan="2">YES</td>
         <td>通过 <code>listClientOrderId</code> 获取 OCO </td>
     </tr>
     <tr>
         <td><code>orderListId</code></td>
-        <td>STRING</td>
+        <td>INT</td>
         <td>通过 <code>orderListId</code> 获取 OCO</td>
     </tr>
     <tr>
