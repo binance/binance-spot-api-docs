@@ -4020,7 +4020,6 @@ days    | `1d`, `2d` ... `7d`
   "id": "b53fd5ff-82c7-4a04-bd64-5f9dc42c2100",
   "method": "orderList.status",
   "params": {
-    "symbol": "BTCUSDT",
     "origClientOrderId": "08985fedd9ea2cf6b28996"
     "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
     "signature": "d12f4e8892d46c0ddfbd43d556ff6d818581b3be22a02810c2c20cb719aed6a4",
