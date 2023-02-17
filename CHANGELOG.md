@@ -1,4 +1,17 @@
-# CHANGELOG for Binance's API (2023-01-26)
+# CHANGELOG for Binance's API (2023-02-17)
+
+## 2023-02-17
+
+**Changes to Websocket Limits**
+
+The WS-API and Websocket Stream now only allows 300 connections requests every 5 minutes.
+
+This limit is **per IP address**.
+
+Please be careful when trying to open multiple connections or reconnecting to the Websocket API.
+
+
+---
 
 ## 2023-01-26
 
@@ -8,7 +21,7 @@ Please refer to `GET /api/v3/exchangeInfo` from the Rest API or `exchangeInfo` f
 
 ---
 
-## 2023-01-23 
+## 2023-01-23
 
 New API cluster has been added. Note that all endpoints are functionally equal, but may vary in performance.
 
@@ -18,9 +31,9 @@ New API cluster has been added. Note that all endpoints are functionally equal, 
 
 ## RELEASE DATE TBD
 
-**New Feature**: Self-Trade Prevention (aka STP) will be added to the system at a later date. This will prevent orders from matching with orders from the same account, or accounts under the same `tradeGroupId`. 
+**New Feature**: Self-Trade Prevention (aka STP) will be added to the system at a later date. This will prevent orders from matching with orders from the same account, or accounts under the same `tradeGroupId`.
 
-Please refer to `GET /api/v3/exchangeInfo` from the Rest API or `exchangeInfo` from the Websocket API on the status. 
+Please refer to `GET /api/v3/exchangeInfo` from the Rest API or `exchangeInfo` from the Websocket API on the status.
 
 ```javascript
 "defaultSelfTradePreventionMode": "NONE",   //If selfTradePreventionMode not provided, this will be the value passed to the engine
@@ -43,7 +56,7 @@ REST API
     * `POST /api/v3/order`
     * `POST /api/v3/order/oco`
     * `POST /api/v3/cancelReplace`
-* New responses that will appear for all order placement endpoints if there was a prevented match (i.e. if an order could have matched with an order of the same account, or the accounts are in the same `tradeGroupId`): 
+* New responses that will appear for all order placement endpoints if there was a prevented match (i.e. if an order could have matched with an order of the same account, or the accounts are in the same `tradeGroupId`):
     * `tradeGroupId`      - This will only appear if account is configured to a `tradeGroupId` and if there was a prevented match.
     * `preventedQuantity` - Only appears if there was a prevented match.
     * An array `preventedMatches` with the following fields:
@@ -52,7 +65,7 @@ REST API
         * `price`
         * `takerPreventedQuantity` - This will only appear if `selfTradePreventionMode` set is `EXPIRE_TAKER` or `EXPIRE_BOTH`.
         * `makerPreventedQuantity` - This will only appear if `selfTradePreventionMode` set is `EXPIRE_MAKER` or `EXPIRE_BOTH`.
-* New fields `preventedMatchId` and `preventedQuantity` that can appear in the order query endpoints if the order had expired due to an STP trigger: 
+* New fields `preventedMatchId` and `preventedQuantity` that can appear in the order query endpoints if the order had expired due to an STP trigger:
     * `GET /api/v3/order`
     * `GET /api/v3/openOrders`
     * `GET /api/v3/allOrders`
@@ -65,7 +78,7 @@ WEBSOCKET API
     * `orderList.place`
     * `order.cancelReplace`
 * New request: `myPreventedMatches` - This queries the orders that expired due to STP being triggered.
-* New responses that will appear for all order placement endpoints if there was a prevented match (i.e. if an order could have matched with an order of the same account, or the accounts are in the same `tradeGroupId`): 
+* New responses that will appear for all order placement endpoints if there was a prevented match (i.e. if an order could have matched with an order of the same account, or the accounts are in the same `tradeGroupId`):
     * `tradeGroupId`      - This will only appear if account is configured to a `tradeGroupId` and if there was a prevented match.
     * `preventedQuantity` - Only appears if there was a prevented match.
     * An array `preventedMatches` with the following fields:
@@ -74,7 +87,7 @@ WEBSOCKET API
         * `price`
         * `takerPreventedQuantity` - This will only appear if `selfTradePreventionMode` set is `EXPIRE_TAKER` or `EXPIRE_BOTH`.
         * `makerPreventedQuantity` - This will only appear if `selfTradePreventionMode` set is `EXPIRE_MAKER` or `EXPIRE_BOTH`.
-* New fields `preventedMatchId` and `preventedQuantity` that can appear in the order query requests if the order had expired due to STP trigger: 
+* New fields `preventedMatchId` and `preventedQuantity` that can appear in the order query requests if the order had expired due to STP trigger:
     * `order.status`
     * `openOrders.status`
     * `allOrders`
@@ -84,7 +97,7 @@ USER DATA STREAM
 
 * New execution Type: `TRADE_PREVENTION`
 * New fields for `executionReport` (These fields will only appear if the order has expired due to STP trigger)
-    * `u` - `tradeGroupId` 
+    * `u` - `tradeGroupId`
     * `v` - `preventedMatchId`
     * `U` - `counterOrderId`
     * `A` - `preventedQuantity`
@@ -127,7 +140,7 @@ USER DATA STREAM
 
 REST API
 
-Some error messages on error code `-1003` have changed. 
+Some error messages on error code `-1003` have changed.
 * Previous error message: `Too much request weight used; current limit is %s request weight per %s %s. Please use the websocket for live updates to avoid polling the API.` has been updated to:
 ```
 Too much request weight used; current limit is %s request weight per %s. Please use WebSocket Streams for live updates to avoid polling the API.
@@ -183,7 +196,7 @@ REST API
             }
         ```
     * Added a new combination of supported parameters: `symbol` + `orderId` + `fromId`.
-    * The following combinations of parameters were previously supported but no longer accepted, as these combinations were only taking `fromId` into consideration, ignoring `startTime` and `endTime`: 
+    * The following combinations of parameters were previously supported but no longer accepted, as these combinations were only taking `fromId` into consideration, ignoring `startTime` and `endTime`:
         * `symbol` + `fromId` + `startTime`
         * `symbol` + `fromId` + `endTime`
         * `symbol` + `fromId` + `startTime` + `endTime`
@@ -219,7 +232,7 @@ REST API
     * `GET /api/v3/order`
     * `GET /api/v3/openOrders`
     * `GET /api/v3/allOrders`
-* Field `trailingTime`, indicating the time when the trailing order is active and tracking price changes, will appear for the following order types  (`TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`, `STOP_LOSS`, `STOP_LOSS_LIMIT` if `trailingDelta` parameter was provided) for the following endpoints: 
+* Field `trailingTime`, indicating the time when the trailing order is active and tracking price changes, will appear for the following order types  (`TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`, `STOP_LOSS`, `STOP_LOSS_LIMIT` if `trailingDelta` parameter was provided) for the following endpoints:
     * `POST /api/v3/order`
     * `GET /api/v3/order`
     * `GET /api/v3/openOrders`
@@ -232,7 +245,7 @@ REST API
 USER DATA STREAM
 
 * eventType `executionReport` has new fields
-    * `V` - `selfTradePreventionMode` 
+    * `V` - `selfTradePreventionMode`
     * `D` - `trailing_time`  (Appears if the trailing stop order is active)
     * `W` - `workingTime`   (Appears if `isWorking`=`true`)
 
@@ -253,7 +266,7 @@ Scheduled changes to the removal of `!bookTicker` around November 2022.
 * The All Book Tickers stream (`!bookTicker`) is set to be removed in **November 2022**.
 * More details of the actual removal date will be announced at a later time.
 * Please use the Individual Book Ticker Streams instead. (`<symbol>@bookTicker`).
-* Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection. 
+* Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection.
     * Example: wss://stream.binance.com:9443/stream?streams=btcusdt@bookTicker/bnbbtc@bookTicker
 
 ---
@@ -280,7 +293,7 @@ Note that these are rolling changes, so it may take a few days for it to rollout
     * Supported values for parameter `type` are `FULL` and `MINI`
         * `FULL` is the default value and the response that is currently being returned from the endpoint
         * `MINI` omits the following fields from the response: `priceChangePercent`, `weightedAvgPrice`, `bidPrice`, `bidQty`, `askPrice`, `askQty`, and `lastQty`
-* New error code `-1008` 
+* New error code `-1008`
     * This is sent whenever the servers are overloaded with requests.
 * New field `brokered` has been added to `GET /api/v3/account`
 * New kline interval: `1s`
@@ -292,9 +305,9 @@ Note that these are rolling changes, so it may take a few days for it to rollout
 
 REST API
 
-* Changes to `POST /api/v3/order` and `POST /api/v3/order/cancelReplace` 
+* Changes to `POST /api/v3/order` and `POST /api/v3/order/cancelReplace`
     * New optional fields `strategyId` and `strategyType`
-        * `strategyId` is a parameter used to identify an order as part of a strategy. 
+        * `strategyId` is a parameter used to identify an order as part of a strategy.
         * `strategyType` is a parameter used to identify what strategy was running. (E.g. If all the orders are part of spot grid strategy, it can be set to `strategyType=1000000`)
             * Note that the minimum value allowed for `strategyType` is `1000000`.
 * Changes to `POST /api/v3/order/oco`
@@ -320,13 +333,13 @@ USER DATA STREAM
 
 Changes to `GET /api/v3/ticker`
 
-* Weight has been reduced from 5 to 2 per symbol, regardless of `windowSize`. 
+* Weight has been reduced from 5 to 2 per symbol, regardless of `windowSize`.
 * The max number of symbols that can be processed in a request is 100.
     * If the number of `symbols` sent is more than 100, the error will be as follows:
     ```json
     {
      "code": -1101,
-     "msg": "Too many values sent for parameter 'symbols', maximum allowed up to 100." 
+     "msg": "Too many values sent for parameter 'symbols', maximum allowed up to 100."
     }
     ```
 * The max Weight for this endpoint will cap at 100.
@@ -345,7 +358,7 @@ SPOT API
     * Contrary to `GET /api/v3/ticker/24hr` the list of symbols cannot be omitted.
     * If `windowSize` not specified, the value will default to `1d`.
     * Response is similar to `GET /api/v3/ticker/24hr`, minus the following fields: `prevClosePrice`, `lastQty`, `bidPrice`, `bidQty`, `askPrice`, `askQty`
-* `GET /api/v3/exchangeInfo` returns new field `cancelReplaceAllowed` in `symbols` list. 
+* `GET /api/v3/exchangeInfo` returns new field `cancelReplaceAllowed` in `symbols` list.
 * `POST /api/v3/order/cancelReplace` added
     * Cancels an existing order and places a new order on the same symbol.
     * The filters are evaluated **before** the cancel order is placed.
@@ -366,7 +379,7 @@ SPOT API
     * When the fix has been applied, a change in the order book at the affected price level is required for the changes to be visible.
 * What does this affect?
     * SPOT API
-        * `GET /api/v3/depth` 
+        * `GET /api/v3/depth`
     * Websocket Streams
         * `<symbol>@depth`
         * `<symbol>@depth@100ms`
@@ -385,7 +398,7 @@ SPOT API
 ```json
 {
 "code": -1102,
-"msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed." 
+"msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed."
 }
 ```
 *  The following endpoints now support multi-symbol querying using the parameter `symbols`.

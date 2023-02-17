@@ -63,7 +63,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public WebSocket API for Binance (2023-01-18)
+# Public WebSocket API for Binance (2023-02-17)
 
 ## General API Information
 
@@ -276,6 +276,12 @@ Here are some common status codes that you might encounter:
 See [Error codes for Binance](errors.md) for a list of error codes and messages.
 
 # Rate limits
+
+## Connection limits
+
+There is a limit of **300 connections per attempt every 5 minutes**.
+
+The connection is per **IP address**.
 
 ## General information on rate limits
 
