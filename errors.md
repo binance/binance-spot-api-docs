@@ -1,4 +1,4 @@
-# Error codes for Binance (2022-12-13)
+# Error codes for Binance (2023-03-13)
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
 ```javascript
@@ -11,7 +11,7 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 ## 10xx - General Server or Network issues
 #### -1000 UNKNOWN
- * An unknown error occured while processing the request.
+ * An unknown error occurred while processing the request.
 
 #### -1001 DISCONNECTED
  * Internal error; unable to process your request. Please try again.
@@ -138,6 +138,9 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * Invalid JSON Request
  * JSON sent for parameter '%s' is not valid
 
+#### -1145 INVALID_CANCEL_RESTRICTIONS
+ * `cancelRestrictions` has to be either `ONLY_NEW` or `ONLY_PARTIALLY_FILLED`.
+
 #### -2010 NEW_ORDER_REJECTED
  * NEW_ORDER_REJECTED
 
@@ -156,36 +159,43 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 #### -2016 NO_TRADING_WINDOW
  * No trading window could be found for the symbol. Try ticker/24hrs instead.
 
+#### -2026 ORDER_ARCHIVED
+  * Order was canceled or expired with no executed qty over 90 days ago and has been archived.
+
 
 ## Messages for -1010 ERROR_MSG_RECEIVED, -2010 NEW_ORDER_REJECTED, and -2011 CANCEL_REJECTED
 This code is sent when an error has been returned by the matching engine.
 The following messages which will indicate the specific error:
 
 
-Error message | Description
------------- | ------------
-"Unknown order sent." | The order (by either `orderId`, `clOrdId`, `origClOrdId`) could not be found
-"Duplicate order sent." | The `clOrdId` is already in use
-"Market is closed." | The symbol is not trading
-"Account has insufficient balance for requested action." | Not enough funds to complete the action
-"Market orders are not supported for this symbol." | `MARKET` is not enabled on the symbol
-"Iceberg orders are not supported for this symbol." | `icebergQty` is not enabled on the symbol
-"Stop loss orders are not supported for this symbol." | `STOP_LOSS` is not enabled on the symbol
-"Stop loss limit orders are not supported for this symbol." | `STOP_LOSS_LIMIT` is not enabled on the symbol
-"Take profit orders are not supported for this symbol." | `TAKE_PROFIT` is not enabled on the symbol
-"Take profit limit orders are not supported for this symbol." | `TAKE_PROFIT_LIMIT` is not enabled on the symbol
-"Price * QTY is zero or less." | `price` * `quantity` is too low
-"IcebergQty exceeds QTY." | `icebergQty` must be less than the order quantity
-"This action is disabled on this account." | Contact customer support; some actions have been disabled on the account.
-"Unsupported order combination" | The `orderType`, `timeInForce`, `stopPrice`, and/or `icebergQty` combination isn't allowed.
-"Order would trigger immediately." | The order's stop price is not valid when compared to the last traded price.
-"Cancel order is invalid. Check origClOrdId and orderId." | No `origClOrdId` or `orderId` was sent in.
-"Order would immediately match and take." | `LIMIT_MAKER` order type would immediately match and trade, and not be a pure maker order.
+Error message                                                   | Description
+------------                                                    | ------------
+"Unknown order sent."                                           | The order (by either `orderId`, `clOrdId`, `origClOrdId`) could not be found
+"Duplicate order sent."                                         | The `clOrdId` is already in use.
+"Market is closed."                                             | The symbol is not trading.
+"Account has insufficient balance for requested action."        | Not enough funds to complete the action.
+"Market orders are not supported for this symbol."              | `MARKET` is not enabled on the symbol.
+"Iceberg orders are not supported for this symbol."             | `icebergQty` is not enabled on the symbol.
+"Stop loss orders are not supported for this symbol."           | `STOP_LOSS` is not enabled on the symbol.
+"Stop loss limit orders are not supported for this symbol."     | `STOP_LOSS_LIMIT` is not enabled on the symbol.
+"Take profit orders are not supported for this symbol."         | `TAKE_PROFIT` is not enabled on the symbol.
+"Take profit limit orders are not supported for this symbol."   | `TAKE_PROFIT_LIMIT` is not enabled on the symbol.
+"Price * QTY is zero or less."                                  | `price` * `quantity` is too low.
+"IcebergQty exceeds QTY."                                       | `icebergQty` must be less than the order quantity.
+"This action is disabled on this account."                      | Contact customer support; some actions have been disabled on the account.
+"This account may not place or cancel orders."                  | Contact customer support; the account has trading ability disabled.
+"Unsupported order combination"                                 | The `orderType`, `timeInForce`, `stopPrice`, and/or `icebergQty` combination isn't allowed.
+"Order would trigger immediately."                              | The order's stop price is not valid when compared to the last traded price.
+"Cancel order is invalid. Check origClOrdId and orderId."       | No `origClOrdId` or `orderId` was sent in.
+"Order would immediately match and take."                       | `LIMIT_MAKER` order type would immediately match and trade, and not be a pure maker order.
 "The relationship of the prices for the orders is not correct." | The prices set in the `OCO` is breaking the Price rules. <br/> The rules are: <br/> `SELL Orders`: Limit Price > Last Price > Stop Price <br/>`BUY Orders`: Limit Price < Last Price < Stop Price
-"OCO orders are not supported for this symbol" | `OCO` is not enabled on the symbol
+"OCO orders are not supported for this symbol"                  | `OCO` is not enabled on the symbol.
 "Quote order qty market orders are not support for this symbol."| `MARKET` orders using the parameter `quoteOrderQty` are not enabled on the symbol.
-"Trailing stop orders are not supported for this symbol."   | Orders using `trailingDelta` are not enabled on the symbol.
-"Order cancel-replace is not supported for this symbol."  | `POST /api/v3/order/cancelReplace` is not enabled for the symbol.
+"Trailing stop orders are not supported for this symbol."       | Orders using `trailingDelta` are not enabled on the symbol.
+"Order cancel-replace is not supported for this symbol."        | `POST /api/v3/order/cancelReplace` is not enabled for the symbol.
+"This symbol is not permitted for this account."                | Account does not have permission to trade on this symbol.
+"This symbol is restricted for this account."                   | Account does not have permission to trade on this symbol.
+"Order was not canceled due to cancel restrictions."            | Either `cancelRestrictions` was set to `ONLY_NEW` but the order status was not `NEW` <br/> or <br/> `cancelRestrictions` was set to `ONLY_PARTIALLY_FILLED` but the order status was not `PARTIALLY_FILLED`. 
 
 ## Errors regarding POST /api/v3/order/cancelReplace
 
