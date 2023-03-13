@@ -104,6 +104,17 @@ WEBSOCKET API
 
 ---
 
+# 更新日志 (2023-02-17)
+
+## 2023-02-17
+
+**WebSocket频率限制变动**
+
+`WS-API` 和 `Websocket Stream` 现在限制每个IP地址、每5分钟可以发送连接请求的上限是300次。
+
+
+---
+
 ## 2023-01-26
 
 根据此[公告](https://www.binance.com/zh-CN/support/announcement/%E5%B9%A3%E5%AE%89%E7%8F%BE%E8%B2%A8%E6%8E%A8%E5%87%BAapi%E8%87%AA%E6%88%90%E4%BA%A4%E9%A0%90%E9%98%B2-stp-%E5%8A%9F%E8%83%BD-312fd0112fb44635b397c116e56d8f84)，Self-Trade Prevention 将在 **2023-01-26 08:00 UTC** 发布。
