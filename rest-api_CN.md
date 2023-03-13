@@ -1,4 +1,4 @@
-# REST行情与交易接口 (2023-01-23)
+# REST行情与交易接口 (2023-03-13)
 
 ## API 基本信息
 * 本篇列出接口的 base URL 有:
@@ -668,7 +668,7 @@ GET /api/v3/trades
 
 **参数:**
 
-Name | Type | Mandatory | Description
+名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
 limit | INT | NO | Default 500; max 1000.
@@ -700,7 +700,7 @@ GET /api/v3/historicalTrades
 
 **参数:**
 
-Name | Type | Mandatory | Description
+名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
 limit | INT | NO | Default 500; max 1000.
@@ -736,7 +736,7 @@ GET /api/v3/aggTrades
 
 **参数:**
 
-Name | Type | Mandatory | Description
+名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
 fromId | LONG | NO | 从包含fromID的成交开始返回结果
@@ -776,7 +776,7 @@ GET /api/v3/klines
 
 **参数:**
 
-Name | Type | Mandatory | Description
+名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
 interval | ENUM | YES | 详见枚举定义：K线间隔
@@ -867,7 +867,7 @@ GET /api/v3/avgPrice
 **权重:**
 1
 **参数:**
-Name | Type | Mandatory | Description
+名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
 
@@ -1463,7 +1463,7 @@ POST /api/v3/order  (HMAC SHA256)
 
 **参数:**
 
-Name | Type | Mandatory | Description
+名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
 side | ENUM | YES | 详见枚举定义：订单方向
@@ -1607,9 +1607,11 @@ Type | 强制要求的参数 | 其他信息
 ```
 
 ### 测试下单接口 (TRADE)
+
 ```
 POST /api/v3/order/test (HMAC SHA256)
 ```
+
 用于测试订单请求，但不会提交到撮合引擎
 
 **权重:**
@@ -1627,6 +1629,246 @@ POST /api/v3/order/test (HMAC SHA256)
 {}
 ```
 
+### 查询订单 (USER_DATA)
+```
+GET /api/v3/order (HMAC SHA256)
+```
+查询订单状态
+
+**权重:**
+2
+
+**参数:**
+
+名称 | 类型 | 是否必需 | 描述
+------------ | ------------ | ------------ | ------------
+symbol | STRING | YES |
+orderId | LONG | NO |
+origClientOrderId | STRING | NO |
+recvWindow | LONG | NO |
+timestamp | LONG | YES |
+
+注意:
+* 至少需要发送 `orderId` 与 `origClientOrderId`中的一个
+* 某些订单中`cummulativeQuoteQty`<0，是由于这些订单是cummulativeQuoteQty功能上线之前的订单。
+
+**数据源:**
+缓存 => 数据库
+
+**响应:**
+```javascript
+{
+  "symbol": "LTCBTC", // 交易对
+  "orderId": 1, // 系统的订单ID
+  "orderListId": -1, // OCO订单的ID，不然就是-1
+  "clientOrderId": "myOrder1", // 客户自己设置的ID
+  "price": "0.1", // 订单价格
+  "origQty": "1.0", // 用户设置的原始订单数量
+  "executedQty": "0.0", // 交易的订单数量
+  "cummulativeQuoteQty": "0.0", // 累计交易的金额
+  "status": "NEW", // 订单状态
+  "timeInForce": "GTC", // 订单的时效方式
+  "type": "LIMIT", // 订单类型， 比如市价单，现价单等
+  "side": "BUY", // 订单方向，买还是卖
+  "stopPrice": "0.0", // 止损价格
+  "trailingDelta": 100, // 仅在是追踪止损订单(Trailing Stop Order)时才会显示
+  "trailingTime": -1,  // 仅在是追踪止损订单(Trailing Stop Order)时才会显示
+  "icebergQty": "0.0", // 冰山数量
+  "time": 1499827319559, // 订单时间
+  "updateTime": 1499827319559, // 最后更新时间
+  "isWorking": true, // 订单是否出现在orderbook中
+  "workingTime":1499827319559, // 订单添加到 order book 的时间
+  "origQuoteOrderQty": "0.000000", // 原始的交易金额
+  "strategyId": 1,                  // 只有下单的时候提供了strategyId才会显示
+  "strategyType": 1000001,          // 只有下单的时候提供了strategyType才会显示
+  "selfTradePreventionMode": "NONE",
+  "preventedMatchId": 0,            // 这仅在订单因 STP 而过期时可见
+  "preventedQuantity": "1.200000"   // 这仅在订单因 STP 而过期时可见
+}
+```
+
+### 撤销订单 (TRADE)
+```
+DELETE /api/v3/order  (HMAC SHA256)
+```
+
+**权重:**
+1
+
+**Parameters:**
+
+名称 | 类型 | 是否必需 | 描述
+------------ | ------------ | ------------ | ------------
+symbol | STRING | YES |
+orderId | LONG | NO |
+origClientOrderId | STRING | NO |
+newClientOrderId | STRING | NO |  用户自定义的本次撤销操作的ID(注意不是被撤销的订单的自定义ID)。如无指定会自动赋值。
+cancelRestrictions| ENUM | NO | 支持的值: <br>`ONLY_NEW` - 如果订单状态为 `NEW`，撤销将成功。<br> `ONLY_PARTIALLY_FILLED` - 如果订单状态为 `PARTIALLY_FILLED`，撤销将成功。
+recvWindow | LONG | NO |
+timestamp | LONG | YES |
+
+* `orderId` 与 `origClientOrderId` 必须至少发送一个.
+* 如果两个参数一起发送, `orderId`优先被考虑.
+
+**数据源:**
+撮合引擎
+
+**响应:**
+```javascript
+{
+  "symbol": "LTCBTC",
+  "orderId": 28,
+  "origClientOrderId": "myOrder1",
+  "clientOrderId": "cancelMyOrder1",
+  "transactTime": 1507725176595,
+  "price": "1.00000000",
+  "origQty": "10.00000000",
+  "executedQty": "8.00000000",
+  "cummulativeQuoteQty": "8.00000000",
+  "status": "CANCELED",
+  "timeInForce": "GTC",
+  "type": "LIMIT",
+  "side": "SELL",
+  "selfTradePreventionMode": "NONE"
+}
+```
+
+#### 关于 `cancelRestrictions`
+
+* 如果 `cancelRestrictions` 值不是任何受支持的值，则错误将是：
+```json
+{
+    "code": -1145,
+    "msg": "Invalid cancelRestrictions"
+}
+```
+* 如果订单没有通过 `cancelRestrictions` 的条件，错误将是：
+```json
+{
+    "code": -2011,
+    "msg": "Order was not canceled due to cancel restrictions."
+}
+```
+
+### 撤销单一交易对的所有挂单 (TRADE)
+
+```
+DELETE /api/v3/openOrders
+```
+
+撤销单一交易对下所有挂单, 包括OCO的挂单。
+
+**权重(IP):**
+1
+
+**参数:**
+
+名称 | 类型 | 是否必需 | 描述
+------------ | ------------ | ------------ | ------------
+symbol | STRING | YES |
+recvWindow | LONG | NO | 不能大于 ```60000```
+timestamp | LONG | YES |
+
+**数据源:**
+撮合引擎
+
+
+**响应**
+
+```json
+[
+  {
+    "symbol": "BTCUSDT",
+    "origClientOrderId": "E6APeyTJvkMvLMYMqu1KQ4",
+    "orderId": 11,
+    "orderListId": -1,
+    "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+    "price": "0.089853",
+    "origQty": "0.178622",
+    "executedQty": "0.000000",
+    "cummulativeQuoteQty": "0.000000",
+    "status": "CANCELED",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "selfTradePreventionMode": "NONE"
+  },
+  {
+    "symbol": "BTCUSDT",
+    "origClientOrderId": "A3EF2HCwxgZPFMrfwbgrhv",
+    "orderId": 13,
+    "orderListId": -1,
+    "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+    "price": "0.090430",
+    "origQty": "0.178622",
+    "executedQty": "0.000000",
+    "cummulativeQuoteQty": "0.000000",
+    "status": "CANCELED",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "selfTradePreventionMode": "NONE"
+  },
+  {
+    "orderListId": 1929,
+    "contingencyType": "OCO",
+    "listStatusType": "ALL_DONE",
+    "listOrderStatus": "ALL_DONE",
+    "listClientOrderId": "2inzWQdDvZLHbbAmAozX2N",
+    "transactionTime": 1585230948299,
+    "symbol": "BTCUSDT",
+    "orders": [
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 20,
+        "clientOrderId": "CwOOIPHSmYywx6jZX77TdL"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 21,
+        "clientOrderId": "461cPg51vQjV3zIMOXNz39"
+      }
+    ],
+    "orderReports": [
+      {
+        "symbol": "BTCUSDT",
+        "origClientOrderId": "CwOOIPHSmYywx6jZX77TdL",
+        "orderId": 20,
+        "orderListId": 1929,
+        "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+        "price": "0.668611",
+        "origQty": "0.690354",
+        "executedQty": "0.000000",
+        "cummulativeQuoteQty": "0.000000",
+        "status": "CANCELED",
+        "timeInForce": "GTC",
+        "type": "STOP_LOSS_LIMIT",
+        "side": "BUY",
+        "stopPrice": "0.378131",
+        "icebergQty": "0.017083",
+        "selfTradePreventionMode": "NONE"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "origClientOrderId": "461cPg51vQjV3zIMOXNz39",
+        "orderId": 21,
+        "orderListId": 1929,
+        "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+        "price": "0.008791",
+        "origQty": "0.690354",
+        "executedQty": "0.000000",
+        "cummulativeQuoteQty": "0.000000",
+        "status": "CANCELED",
+        "timeInForce": "GTC",
+        "type": "LIMIT_MAKER",
+        "side": "BUY",
+        "icebergQty": "0.639962",
+        "selfTradePreventionMode": "NONE"
+      }
+    ]
+  }
+]
+```
 
 ### 撤消挂单再下单 (TRADE)
 
@@ -1642,7 +1884,7 @@ POST /api/v3/order/cancelReplace
 **Weight(IP):** 1
 
 **Parameters:**
-Name | Type | Mandatory | Description
+名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
 side   |ENUM| YES|
@@ -1657,12 +1899,13 @@ cancelOrigClientOrderId|STRING| NO| 必须提供`cancelOrigClientOrderId` 或者
 cancelOrderId|LONG|NO| 必须提供`cancelOrigClientOrderId` 或者 `cancelOrderId`。 如果两个参数都提供, `cancelOrderId` 会占优先。
 newClientOrderId |STRING|NO| 用于辨识新订单。
 strategyId |INT| NO|
-strategyType |INT| NO| 不能低于 `1000000`.
+strategyType |INT| NO| 不能低于 `1000000`。
 stopPrice|DECIMAL|NO|
 trailingDelta|LONG|NO|
 icebergQty|DECIMAL|NO|
-newOrderRespType|ENUM|NO|指定响应类型: <br/> 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`, 其他默认为`ACK`.
+newOrderRespType|ENUM|NO|指定响应类型: <br/> 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`, 其他默认为`ACK`。
 selfTradePreventionMode|ENUM|NO|允许的 ENUM 取决于交易对的配置。支持的值有 `EXPIRE_TAKER`，`EXPIRE_MAKER`，`EXPIRE_BOTH`，`NONE`。
+cancelRestrictions| ENUM | NO | 支持的值: <br>`ONLY_NEW` - 如果订单状态为 `NEW`，撤销将成功。<br> `ONLY_PARTIALLY_FILLED` - 如果订单状态为 `PARTIALLY_FILLED`，撤销将成功。
 recvWindow | LONG | NO | 不能大于 `60000`
 timestamp | LONG | YES |
 
@@ -1805,256 +2048,6 @@ timestamp | LONG | YES |
 }
 ```
 
-
-### 查询订单 (USER_DATA)
-```
-GET /api/v3/order (HMAC SHA256)
-```
-查询订单状态
-
-**权重:**
-2
-
-**参数:**
-
-Name | Type | Mandatory | Description
------------- | ------------ | ------------ | ------------
-symbol | STRING | YES |
-orderId | LONG | NO |
-origClientOrderId | STRING | NO |
-recvWindow | LONG | NO |
-timestamp | LONG | YES |
-
-注意:
-* 至少需要发送 `orderId` 与 `origClientOrderId`中的一个
-* 某些订单中`cummulativeQuoteQty`<0，是由于这些订单是cummulativeQuoteQty功能上线之前的订单。
-
-**数据源:**
-缓存 => 数据库
-
-**响应:**
-```javascript
-{
-  "symbol": "LTCBTC",
-  "orderId": 1,
-  "clientOrderId": "myOrder1",
-  "price": "0.1",
-  "origQty": "1.0",
-  "executedQty": "0.0",
-  "cummulativeQuoteQty": "0.0",
-  "status": "NEW",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "BUY",
-  "stopPrice": "0.0",
-  "icebergQty": "0.0",
-  "time": 1499827319559,
-  "updateTime": 1499827319559,
-  "isWorking": true,
-  "workingTime":1499827319559,
-  "origQuoteOrderQty": "0.000000",
-  "selfTradePreventionMode": "NONE"
-}
-```
-
-### 撤销订单 (TRADE)
-```
-DELETE /api/v3/order  (HMAC SHA256)
-```
-
-**权重:**
-1
-
-**Parameters:**
-
-Name | Type | Mandatory | Description
------------- | ------------ | ------------ | ------------
-symbol | STRING | YES |
-orderId | LONG | NO |
-origClientOrderId | STRING | NO |
-newClientOrderId | STRING | NO |  用户自定义的本次撤销操作的ID(注意不是被撤销的订单的自定义ID)。如无指定会自动赋值。
-recvWindow | LONG | NO |
-timestamp | LONG | YES |
-
-* `orderId` 与 `origClientOrderId` 必须至少发送一个.
-* 如果两个参数一起发送, `orderId`优先被考虑.
-
-**数据源:**
-撮合引擎
-
-**响应:**
-```javascript
-{
-  "symbol": "LTCBTC",
-  "orderId": 28,
-  "origClientOrderId": "myOrder1",
-  "clientOrderId": "cancelMyOrder1",
-  "transactTime": 1507725176595,
-  "price": "1.00000000",
-  "origQty": "10.00000000",
-  "executedQty": "8.00000000",
-  "cummulativeQuoteQty": "8.00000000",
-  "status": "CANCELED",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "SELL",
-  "selfTradePreventionMode": "NONE"
-}
-```
-
-``
-DELETE /api/v3/openOrders
-``
-
-撤销单一交易对下所有挂单, 包括OCO的挂单。
-
-**权重(IP):**
-1
-
-**参数:**
-
-Name | Type | Mandatory | Description
------------- | ------------ | ------------ | ------------
-symbol | STRING | YES |
-recvWindow | LONG | NO | 不能大于 ```60000```
-timestamp | LONG | YES |
-
-**数据源:**
-撮合引擎
-
-
-**响应**
-
-```json
-[
-  {
-    "symbol": "BTCUSDT",
-    "origClientOrderId": "E6APeyTJvkMvLMYMqu1KQ4",
-    "orderId": 11,
-    "orderListId": -1,
-    "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
-    "price": "0.089853",
-    "origQty": "0.178622",
-    "executedQty": "0.000000",
-    "cummulativeQuoteQty": "0.000000",
-    "status": "CANCELED",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "BUY",
-    "selfTradePreventionMode": "NONE"
-  },
-  {
-    "symbol": "BTCUSDT",
-    "origClientOrderId": "A3EF2HCwxgZPFMrfwbgrhv",
-    "orderId": 13,
-    "orderListId": -1,
-    "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
-    "price": "0.090430",
-    "origQty": "0.178622",
-    "executedQty": "0.000000",
-    "cummulativeQuoteQty": "0.000000",
-    "status": "CANCELED",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "BUY",
-    "selfTradePreventionMode": "NONE"
-  },
-  {
-    "orderListId": 1929,
-    "contingencyType": "OCO",
-    "listStatusType": "ALL_DONE",
-    "listOrderStatus": "ALL_DONE",
-    "listClientOrderId": "2inzWQdDvZLHbbAmAozX2N",
-    "transactionTime": 1585230948299,
-    "symbol": "BTCUSDT",
-    "orders": [
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 20,
-        "clientOrderId": "CwOOIPHSmYywx6jZX77TdL"
-      },
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 21,
-        "clientOrderId": "461cPg51vQjV3zIMOXNz39"
-      }
-    ],
-    "orderReports": [
-      {
-        "symbol": "BTCUSDT",
-        "origClientOrderId": "CwOOIPHSmYywx6jZX77TdL",
-        "orderId": 20,
-        "orderListId": 1929,
-        "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
-        "price": "0.668611",
-        "origQty": "0.690354",
-        "executedQty": "0.000000",
-        "cummulativeQuoteQty": "0.000000",
-        "status": "CANCELED",
-        "timeInForce": "GTC",
-        "type": "STOP_LOSS_LIMIT",
-        "side": "BUY",
-        "stopPrice": "0.378131",
-        "icebergQty": "0.017083",
-        "selfTradePreventionMode": "NONE"
-      },
-      {
-        "symbol": "BTCUSDT",
-        "origClientOrderId": "461cPg51vQjV3zIMOXNz39",
-        "orderId": 21,
-        "orderListId": 1929,
-        "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
-        "price": "0.008791",
-        "origQty": "0.690354",
-        "executedQty": "0.000000",
-        "cummulativeQuoteQty": "0.000000",
-        "status": "CANCELED",
-        "timeInForce": "GTC",
-        "type": "LIMIT_MAKER",
-        "side": "BUY",
-        "icebergQty": "0.639962",
-        "selfTradePreventionMode": "NONE"
-      }
-    ]
-  }
-]
-```
-
-## 查询订单 (USER_DATA)
-
-
-**响应**
-```javascript
-{
-  "symbol": "LTCBTC", // 交易对
-  "orderId": 1, // 系统的订单ID
-  "orderListId": -1, // OCO订单的ID，不然就是-1
-  "clientOrderId": "myOrder1", // 客户自己设置的ID
-  "price": "0.1", // 订单价格
-  "origQty": "1.0", // 用户设置的原始订单数量
-  "executedQty": "0.0", // 交易的订单数量
-  "cummulativeQuoteQty": "0.0", // 累计交易的金额
-  "status": "NEW", // 订单状态
-  "timeInForce": "GTC", // 订单的时效方式
-  "type": "LIMIT", // 订单类型， 比如市价单，现价单等
-  "side": "BUY", // 订单方向，买还是卖
-  "stopPrice": "0.0", // 止损价格
-  "trailingDelta": 100, // 仅在是追踪止损订单(Trailing Stop Order)时才会显示
-  "trailingTime": -1,  // 仅在是追踪止损订单(Trailing Stop Order)时才会显示
-  "icebergQty": "0.0", // 冰山数量
-  "time": 1499827319559, // 订单时间
-  "updateTime": 1499827319559, // 最后更新时间
-  "isWorking": true, // 订单是否出现在orderbook中
-  "origQuoteOrderQty": "0.000000", // 原始的交易金额
-  "strategyId": 1,                  // 只有下单的时候提供了strategyId才会显示
-  "strategyType": 1000001,          // 只有下单的时候提供了strategyType才会显示
-  "selfTradePreventionMode": "NONE",
-  "preventedMatchId": 0,            // 这仅在订单因 STP 而过期时可见
-  "preventedQuantity": "1.200000"   // 这仅在订单因 STP 而过期时可见
-}
-```
-
-
 ### 查看账户当前挂单 (USER_DATA)
 ```
 GET /api/v3/openOrders  (HMAC SHA256)
@@ -2067,7 +2060,7 @@ GET /api/v3/openOrders  (HMAC SHA256)
 
 **参数:**
 
-Name | Type | Mandatory | Description
+名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | NO |
 recvWindow | LONG | NO |
@@ -2112,7 +2105,7 @@ GET /api/v3/allOrders (HMAC SHA256)
 
 **Parameters:**
 
-Name | Type | Mandatory | Description
+名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
 orderId | LONG | NO | 只返回此orderID之后的订单，缺省返回最近的订单
@@ -2153,11 +2146,12 @@ timestamp | LONG | YES |
   }
 ]
 ```
-``
-POST /api/v3/order/oco (HMAC SHA256)
-``
 
 ## 发送新 OCO 订单
+
+```
+POST /api/v3/order/oco (HMAC SHA256)
+```
 
 **权重(UID)**: 2
 **权重(IP)**: 1
@@ -2471,7 +2465,7 @@ GET /api/v3/account (HMAC SHA256)
 
 **参数:**
 
-Name | Type | Mandatory | Description
+名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
 recvWindow | LONG | NO |
 timestamp | LONG | YES |
@@ -2524,7 +2518,7 @@ GET /api/v3/myTrades  (HMAC SHA256)
 
 **参数:**
 
-Name | Type | Mandatory | Description
+名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
 orderId|LONG|NO| 必须要和参数`symbol`一起使用.
@@ -2702,7 +2696,7 @@ PUT /api/v3/userDataStream
 
 **参数:**
 
-Name | Type | Mandatory | Description
+名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
 listenKey | STRING | YES
 
@@ -2725,7 +2719,7 @@ DELETE /api/v3/userDataStream
 
 **参数:**
 
-Name | Type | Mandatory | Description
+名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
 listenKey | STRING | YES
 

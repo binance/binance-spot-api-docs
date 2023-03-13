@@ -1,4 +1,4 @@
-# Binance 的公共 WebSocket API (2023-02-17)
+# Binance 的公共 WebSocket API (2023-03-13)
 
 ## API 基本信息
 
@@ -324,7 +324,7 @@ API 有多种频率限制间隔。
 * 如果超多限制，客服端会收到 `429`。
   * 这错误代码表示您有责任停止发送请求，不得滥用API。
   * 响应会包含一个 `retryAfter` 字段，指示在什么时候您能重试。
-* **屡次违反速率限制或者在收到429后未能退缩将导致自动 IP 封禁。**
+* **屡次违反速率限制或者在收到429后未能退缩将导致自动 IP 封禁和断开连接。**
   * 被禁止 IP 地址的请求失败，状态为 `418`。
   * `retryAfter` 字段表示解除禁令的timestamp。
 * 频繁违反限制的封禁时间会**逐渐延长**，**从最短2分钟到最长3天**。
@@ -2898,6 +2898,12 @@ days    | `1d`, `2d` ... `7d`
         <td>已取消订单的新 ID。如果未发送，则自动生成</td>
     </tr>
     <tr>
+      <td><code>cancelRestrictions</code></td>
+      <td>ENUM</td>
+      <td>NO</td>
+      <td>支持的值: <br><code>ONLY_NEW</code> - 如果订单状态为 <code>NEW</code>，撤销将成功。<br> <code>ONLY_PARTIALLY_FILLED</code> - 如果订单状态为 <code>PARTIALLY_FILLED</code>，撤销将成功。</td>
+    </tr>
+    <tr>
         <td><code>apiKey</code></td>
         <td>STRING</td>
         <td>YES</td>
@@ -3048,6 +3054,23 @@ days    | `1d`, `2d` ... `7d`
       "count": 1
     }
   ]
+}
+```
+
+#### 关于 `cancelRestrictions`
+
+* 如果 `cancelRestrictions` 值不是任何受支持的值，则错误将是：
+```json
+{
+    "code": -1145,
+    "msg": "Invalid cancelRestrictions"
+}
+```
+* 如果订单没有通过 `cancelRestrictions` 的条件，错误将是：
+```json
+{
+    "code": -2011,
+    "msg": "Order was not canceled due to cancel restrictions."
 }
 ```
 
@@ -3214,6 +3237,12 @@ days    | `1d`, `2d` ... `7d`
             <p>允许的 ENUM 取决于交易对的配置。</p>
             <p>支持的值有 <tt>EXPIRE_TAKER</tt>, <tt>EXPIRE_MAKER</tt>, <tt>EXPIRE_BOTH</tt>, <tt>NONE</tt>.</p>
         </td>
+    </tr>
+    <tr>
+        <td><code>cancelRestrictions</code></td>
+        <td>ENUM</td>
+        <td>NO</td>
+        <td>支持的值: <br><code>ONLY_NEW</code> - 如果订单状态为 <code>NEW</code>，撤销将成功。<br> <code>ONLY_PARTIALLY_FILLED</code> - 如果订单状态为 <code>PARTIALLY_FILLED</code>，撤销将成功。</td>
     </tr>
     <tr>
         <td><code>apiKey</code></td>
