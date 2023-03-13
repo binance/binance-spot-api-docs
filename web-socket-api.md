@@ -281,7 +281,7 @@ See [Error codes for Binance](errors.md) for a list of error codes and messages.
 
 ## Connection limits
 
-There is a limit of **300 connections per attempt every 5 minutes**. 
+There is a limit of **300 connections per attempt every 5 minutes**.
 
 The connection is per **IP address**.
 
