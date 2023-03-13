@@ -1,4 +1,108 @@
-# 更新日志 (2023-01-26)
+# 更新日志 (2023-03-13)
+
+## 2023-03-13
+
+**注意:** 所有更改都将逐步推出到我们的所有服务器，并可能需要一周时间才能完成。
+
+* 某些问题的错误消息已经改进，以便更轻松地进行解决。
+
+<table>
+    <tr>
+        <th>情况</th>
+        <th>之前的错误消息</th>
+        <th>新错误消息</th>
+    </tr>
+    <tr>
+        <td>由于交易权限被禁用，账户无法下订单或取消订单。</td>
+        <td rowspan="3">This action is disabled on this account.</td>
+        <td>This account may not place or cancel orders.</td>
+    </tr>
+    <tr>
+        <td>当配置在交易对上的权限与账户上的权限不匹配时。</td>
+        <td>This symbol is not permitted for this account.</td>
+    </tr>
+    <tr>
+        <td>当账户在其没有权限的交易对上下订单时。</td>
+        <td>This symbol is restricted for this account.</td>
+    </tr>
+    <tr>
+        <td>当 <tt>symbol</tt> 不在 <tt>TRADING</tt> 时下订单。</td>
+        <td rowspan="2">Unsupported order combination.</td>
+        <td>This order type is not possible in this trading phase.</td>
+    </tr>
+    <tr>
+        <td>在不支持 <tt>IOC</tt> 或 <tt>FOK</tt> 的交易阶段上使用 <tt>timeinForce</tt> = <tt>IOC</tt> 或 <tt>FOK</tt> 下订单时。</td>
+        <td>Limit orders require GTC for this phase.</td>
+    </tr>
+</table>
+
+* 更正了查询归档订单的错误消息：
+    * 之前，如果查询了一个归档订单（即状态为 `CANCELED` 或 `EXPIRED`，`executedQty` == 0 而且最后的更新在 90 天以前），错误消息将是：
+    ```json
+    {
+        "code": -2013,
+        "msg": "Order does not exist." 
+    }
+    ```
+    * 现在，错误消息为：
+    ```json
+    {
+        "code": -2026,
+        "msg": "Order was canceled or expired with no executed qty over 90 days ago and has been archived." 
+    }
+    ```
+* API 请求使用 `startTime` 和 `endTime` 的行为：
+    * 之前，如果 `startTime` == `endTime`，一些请求会失败。
+    * 现在，所有接受 `startTime` 和 `endTime` 的 API 请求会允许这些参数相等。这适用于以下接口：
+        * Rest API
+            * `GET /api/v3/aggTrades`
+            * `GET /api/v3/klines`
+            * `GET /api/v3/allOrderList`
+            * `GET /api/v3/allOrders`
+            * `GET /api/v3/myTrades`
+        * Websocket API
+            * `trades.aggregate`
+            * `klines`
+            * `allOrderList`
+            * `allOrders`
+            * `myTrades`
+
+* 如果用户的IP地址因违反 IP 速率限制（状态码为 `418`）而被禁止，那么连接到 WebSocket API 的用户将被断开连接。
+
+虽然以下更改将在发布日期后 **大约一周内生效**，但是与其相关的文档已经被更改了：
+
+* 过滤器评估的更改：
+    * 之前的行为: `LOT_SIZE` 和 `MARKET_LOT_SIZE` 要求 (`quantity` - `minQty`) % `stepSize` == 0。
+    * 新行为: 现在已更改为 (`quantity` % `stepSize`) == 0。
+* 使用 `quoteOrderQty` 的 `MARKET`订单的错误修复：
+    * 之前的行为: 订单的状态将始终为 `FILLED`，即使订单没有完全成交。
+    * 新行为: 如果订单由于流动性不足而没有完全成交，则订单状态将为 `EXPIRED`，仅当订单完全成交时状态为 `FILLED`。
+
+REST API
+
+* `DELETE /api/v3/order` 和 `POST /api/v3/order/cancelReplace` 的更改:
+    * 新的可选参数 `cancelRestrictions`，该参数用于决定是否能成功取消状态为 `NEW` 或 `PARTIALLY_FILLED` 的订单。
+    * 如果由于 `cancelRestrictions` 而取消订单失败，错误将是：
+    ```json
+    {
+        "code": -2011, 
+        "msg": "Order was not canceled due to cancel restrictions."
+    }
+    ```
+
+WEBSOCKET API
+
+* `order.cancel` 和 `order.cancelReplace` 的更改:
+    * 新的可选参数 `cancelRestrictions`，该参数用于决定是否能成功取消状态为 `NEW` 或 `PARTIALLY_FILLED` 的订单。
+    * 如果由于 `cancelRestrictions` 而取消订单失败，错误将是：
+    ```json
+    {
+        "code": -2011, 
+        "msg": "Order was not canceled due to cancel restrictions."
+    }
+    ```
+
+---
 
 ## 2023-01-26
 
@@ -119,11 +223,11 @@ USER DATA STREAM
 REST API
 
 错误代码 `-1003` 的一些错误消息已更改
-* 之前错误消息: `Too much request weight used; current limit is %s request weight per %s %s. Please use the websocket for live updates to avoid polling the API.` 改成了：
+* 之前的错误消息: `Too much request weight used; current limit is %s request weight per %s %s. Please use the websocket for live updates to avoid polling the API.` 改成了：
 ```
 Too much request weight used; current limit is %s request weight per %s. Please use WebSocket Streams for live updates to avoid polling the API.
 ```
-* 之前错误消息: `Way too much request weight used; IP banned until %s. Please use the websocket for live updates to avoid bans.` 改成了：
+* 之前的错误消息: `Way too much request weight used; IP banned until %s. Please use the websocket for live updates to avoid bans.` 改成了：
 ```
 Way too much request weight used; IP banned until %s Please use WebSocket Streams for live updates to avoid bans.
 ```
