@@ -1,4 +1,4 @@
-# 错误代码汇总 (2022-12-13)
+# 错误代码汇总 (2023-03-13)
 币安Rest接口(包括wapi)返回的错误包含两部分，错误码与错误信息. 错误码是大类，一个错误码可能对应多个不同的错误信息。
 以下是一个完整错误码实例
 ```javascript
@@ -137,7 +137,10 @@
  * Invalid JSON Request
  * JSON sent for parameter '%s' is not valid
 
-#### -2010 订单被拒绝
+#### -1145 无效的取消限制
+ * `cancelRestrictions` has to be either `ONLY_NEW` or `ONLY_PARTIALLY_FILLED`.
+
+#### -2010 新订单被拒绝
  * NEW_ORDER_REJECTED
 
 #### -2011 订单取消被拒绝
@@ -152,36 +155,43 @@
 #### -2015 API Key权限，例如该Key不存在、请求并非来自允许的IP范围、或者该接口对应权限未开放
  * Invalid API-key, IP, or permissions for action.
 
-#### -2016 NO_TRADING_WINDOW
+#### -2016 非交易窗口
  * No trading window could be found for the symbol. Try ticker/24hrs instead.
+
+#### -2026 交易被归档
+  * Order was canceled or expired with no executed qty over 90 days ago and has been archived.
 
 ## -1010 收到了错误消息
 这个错误代码是由撮合引擎抛出的，引擎还会抛出2010和2011，具体原因需要参考下面列出的具体消息
 
-错误消息 | 描述
------------- | ------------
-"Unknown order sent." |找不到订单， (根据请求里发送的 `orderId`, `clOrdId`, `origClOrdId`) 
-"Duplicate order sent." | 客户自定义的订单号重复了
-"Market is closed." | 该交易对交易关闭了
-"Account has insufficient balance for requested action." | 账户金额不足。
-"Market orders are not supported for this symbol." | 该交易对无法发起市价单
-"Iceberg orders are not supported for this symbol." | 该交易对无法发起冰山订单
-"Stop loss orders are not supported for this symbol." | 该交易对无法发起止损单
-"Stop loss limit orders are not supported for this symbol." | 该交易对无法发起止损限价单
-"Take profit orders are not supported for this symbol." | 该交易对无法发起止盈单
-"Take profit limit orders are not supported for this symbol." | 该交易对无法发起止盈限价单
-"Price * QTY is zero or less." | 订单金额必须大于0
-"IcebergQty exceeds QTY." |冰山订单中小订单的Quantity必须小于总的Quantity
-"This action is disabled on this account." | 联系客户支持； 该帐户已禁用了某些操作。
-"Unsupported order combination" | `orderType`, `timeInForce`, `stopPrice`, `icebergQty` 某些参数取某些值的时候另一些参数必须/不得提供。
-"Order would trigger immediately." | 止盈、止损单必须在未来触发，如果条件太弱现在的市场行情就可以触发（通常是误操作填错了条件），就会报这个错误。
-"Cancel order is invalid. Check origClOrdId and orderId." | 撤销订单必须提供`origClOrdId`或者`orderId`中的一个。 
-"Order would immediately match and take." | `LIMIT_MAKER` 订单如果按照规则会成为Taker，就会报此错。
-"The relationship of the prices for the orders is not correct." | `OCO`订单中设置的价格不符合报价规则：<br/> The rules are: <br/> `SELL Orders`: Limit Price > Last Price > Stop Price <br/>`BUY Orders`: Limit Price < Last Price < Stop Price
-"OCO orders are not supported for this symbol" | `OCO`订单不支持该交易对
-"Quote order qty market orders are not support for this symbol."| 这个交易对，市价单不支持参数`quoteOrderQty`
-"Trailing stop orders are not supported for this symbol."         | 此symbol不支持 `trailingDelta`
-"Order cancel-replace is not supported for this symbol."          | 此symbol不支持 `POST /api/v3/order/cancelReplace` 
+错误消息                                                          | 描述
+------------                                                     | ------------
+"Unknown order sent."                                            | 找不到订单， (根据请求里发送的 `orderId`, `clOrdId`, `origClOrdId`) 
+"Duplicate order sent."                                          | 客户自定义的订单号重复了
+"Market is closed."                                              | 该交易对交易关闭了
+"Account has insufficient balance for requested action."         | 账户金额不足。
+"Market orders are not supported for this symbol."               | 该交易对无法发起市价单
+"Iceberg orders are not supported for this symbol."              | 该交易对无法发起冰山订单
+"Stop loss orders are not supported for this symbol."            | 该交易对无法发起止损单
+"Stop loss limit orders are not supported for this symbol."      | 该交易对无法发起止损限价单
+"Take profit orders are not supported for this symbol."          | 该交易对无法发起止盈单
+"Take profit limit orders are not supported for this symbol."    | 该交易对无法发起止盈限价单
+"Price * QTY is zero or less."                                   | 订单金额必须大于0
+"IcebergQty exceeds QTY."                                        | 冰山订单中小订单的Quantity必须小于总的Quantity
+"This action is disabled on this account."                       | 联系客户支持； 该账户已禁用了某些操作。
+"This account may not place or cancel orders."                   | 联系客户支持： 该账户已被禁用了交易操作。
+"Unsupported order combination"                                  | `orderType`, `timeInForce`, `stopPrice`, `icebergQty` 某些参数取某些值的时候另一些参数必须/不得提供。
+"Order would trigger immediately."                               | 止盈、止损单必须在未来触发，如果条件太弱现在的市场行情就可以触发（通常是误操作填错了条件），就会报这个错误。
+"Cancel order is invalid. Check origClOrdId and orderId."        | 撤销订单必须提供 `origClOrdId` 或者 `orderId` 中的一个。 
+"Order would immediately match and take."                        | `LIMIT_MAKER` 订单如果按照规则会成为Taker，就会报此错。
+"The relationship of the prices for the orders is not correct."  | `OCO`订单中设置的价格不符合报价规则：<br/> The rules are: <br/> `SELL Orders`: Limit Price > Last Price > Stop Price <br/>`BUY Orders`: Limit Price < Last Price < Stop Price
+"OCO orders are not supported for this symbol"                   | `OCO`订单不支持该交易对。
+"Quote order qty market orders are not support for this symbol." | 这个交易对，市价单不支持参数 `quoteOrderQty`
+"Trailing stop orders are not supported for this symbol."        | 此symbol不支持 `trailingDelta`
+"Order cancel-replace is not supported for this symbol."         | 此symbol不支持 `POST /api/v3/order/cancelReplace` 
+"This symbol is not permitted for this account."                 | 账户没有权限在此交易对交易。
+"This symbol is restricted for this account."                    | 账户没有权限在此交易对交易。
+"Order was not canceled due to cancel restrictions."             | `cancelRestrictions` 设置为 `ONLY_NEW` 但订单状态不是 `NEW` <br/> 或 <br/> `cancelRestrictions` 设置为 `ONLY_PARTIALLY_FILLED` 但订单状态不是 `PARTIALLY_FILLED`。
 
 ## 关于 POST /api/v3/order/cancelReplace 的错误
 
@@ -190,7 +200,6 @@
 
 ### -2022 Order cancel-replace failed.
 收到该错误码代表撤单**和**下单都失败。
-
 
 ## 订单未能通过过滤器
 错误信息 | 描述
