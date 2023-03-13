@@ -7,6 +7,7 @@
   - [Response format](#response-format)
     - [Status codes](#status-codes)
 - [Rate limits](#rate-limits)
+  - [Connection limits](#connection-limits)
   - [General information on rate limits](#general-information-on-rate-limits)
     - [How to interpret rate limits](#how-to-interpret-rate-limits)
     - [How to show/hide rate limit information](#how-to-showhide-rate-limit-information)
@@ -42,6 +43,7 @@
     - [Test new order (TRADE)](#test-new-order-trade)
     - [Query order (USER_DATA)](#query-order-user_data)
     - [Cancel order (TRADE)](#cancel-order-trade)
+      - [Regarding `cancelRestrictions`](#regarding-cancelrestrictions)
     - [Cancel and replace order (TRADE)](#cancel-and-replace-order-trade)
     - [Current open orders (USER_DATA)](#current-open-orders-user_data)
     - [Cancel open orders (TRADE)](#cancel-open-orders-trade)
@@ -63,7 +65,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public WebSocket API for Binance (2023-01-18)
+# Public WebSocket API for Binance (2023-03-13)
 
 ## General API Information
 
@@ -277,6 +279,12 @@ See [Error codes for Binance](errors.md) for a list of error codes and messages.
 
 # Rate limits
 
+## Connection limits
+
+There is a limit of **300 connections per attempt every 5 minutes**. 
+
+The connection is per **IP address**.
+
 ## General information on rate limits
 
 * Current API rate limits can be queried using the [`exchangeInfo`](#exchange-information) request.
@@ -393,7 +401,7 @@ the `rateLimits` field can be omitted from responses to reduce their size.
 * If you go over the weight limit, requests fail with status `429`.
   * This status code indicates you should back off and stop spamming the API.
   * Rate-limited responses include a `retryAfter` field, indicating when you can retry the request.
-* **Repeatedly violating rate limits and/or failing to back off after receiving 429s will result in an automated IP ban.**
+* **Repeatedly violating rate limits and/or failing to back off after receiving 429s will result in an automated IP ban and you will be disconnected.**
   * Requests from a banned IP address fail with status `418`.
   * `retryAfter` field indicates the timestamp when the ban will be lifted.
 * IP bans are tracked and **scale in duration** for repeat offenders, **from 2 minutes to 3 days**.
@@ -3001,6 +3009,12 @@ Cancel an active order.
         <td>New ID for the canceled order. Automatically generated if not sent</td>
     </tr>
     <tr>
+      <td><code>cancelRestrictions</code></td>
+      <td>ENUM</td>
+      <td>NO</td>
+      <td>Supported values: <br><code>ONLY_NEW</code> - Cancel will succeed if the order status is <code>NEW</code>.<br> <code>ONLY_PARTIALLY_FILLED</code> - Cancel will succeed if order status is <code>PARTIALLY_FILLED</code>.</td>
+    </tr>
+    <tr>
         <td><code>apiKey</code></td>
         <td>STRING</td>
         <td>YES</td>
@@ -3152,6 +3166,23 @@ When an OCO is canceled:
       "count": 1
     }
   ]
+}
+```
+
+#### Regarding `cancelRestrictions`
+
+* If the `cancelRestrictions` value is not any of the supported values, the error will be: 
+```json
+{
+    "code": -1145,
+    "msg": "Invalid cancelRestrictions"
+}
+```
+* If the order did not pass the conditions for `cancelRestrictions`, the error will be:
+```json
+{
+    "code": -2011,
+    "msg": "Order was not canceled due to cancel restrictions."
 }
 ```
 
@@ -3318,6 +3349,12 @@ Cancel an existing order and immediately place a new order instead of the cancel
             <p>The allowed enums is dependent on what is configured on the symbol.</p>
             <p>The possible supported values are <tt>EXPIRE_TAKER</tt>, <tt>EXPIRE_MAKER</tt>, <tt>EXPIRE_BOTH</tt>, <tt>NONE</tt>.</p>
         </td>
+    </tr>
+    <tr>
+      <td><code>cancelRestrictions</code></td>
+      <td>ENUM</td>
+      <td>NO</td>
+      <td>Supported values: <br><code>ONLY_NEW</code> - Cancel will succeed if the order status is <code>NEW</code>.<br> <code>ONLY_PARTIALLY_FILLED</code> - Cancel will succeed if order status is <code>PARTIALLY_FILLED</code>. For more information please refer to <a href="#regarding-cancelrestrictions">Regarding <code>cancelRestrictions</code></a>.</td>
     </tr>
     <tr>
         <td><code>apiKey</code></td>
