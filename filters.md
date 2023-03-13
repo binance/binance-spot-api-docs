@@ -81,7 +81,7 @@ In order to pass the `lot size`, the following must be true for `quantity`/`iceb
 
 * `quantity` >= `minQty`
 * `quantity` <= `maxQty`
-* (`quantity`-`minQty`) % `stepSize` == 0
+* `quantity` % `stepSize` == 0
 
 **/exchangeInfo format:**
 ```javascript
@@ -158,7 +158,7 @@ In order to pass the `market lot size`, the following must be true for `quantity
 
 * `quantity` >= `minQty`
 * `quantity` <= `maxQty`
-* (`quantity`-`minQty`) % `stepSize` == 0
+* `quantity` % `stepSize` == 0
 
 **/exchangeInfo format:**
 ```javascript
