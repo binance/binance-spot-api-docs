@@ -73,7 +73,7 @@
 ```
 
 ### LOT_SIZE 订单尺寸
-lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参数进行合法性检查。包含三个部分：
+"lots" 是拍卖术语，这个过滤器对订单中的 `quantity` 也就是数量参数进行合法性检查。包含三个部分：
 
 * `minQty` 表示 `quantity`/`icebergQty` 允许的最小值.
 * `maxQty` 表示 `quantity`/`icebergQty` 允许的最大值
@@ -83,7 +83,7 @@ lots是拍卖术语，这个过滤器对订单中的`quantity`也就是数量参
 
 * `quantity` >= `minQty`
 * `quantity` <= `maxQty`
-* (`quantity`-`minQty`) % `stepSize` == 0
+* `quantity` % `stepSize` == 0
 
 **/exchangeInfo 响应中的格式:**
 ```javascript
@@ -161,11 +161,11 @@ MIN_NOTIONAL过滤器定义了交易对订单所允许的最小名义价值(成�
 * `maxQty`定义了允许的最大数量。
 * `stepSize`定义了可以增加/减少数量的间隔。
 
-为了通过`market lot size`，`quantity`必须满足以下条件：
+为了通过 `market lot size`，`quantity` 必须满足以下条件：
 
 * `quantity` >= `minQty`
 * `quantity` <= `maxQty`
-* (`quantity`-`minQty`) % `stepSize` == 0
+* `quantity` % `stepSize` == 0
 
 **/exchangeInfo 响应中的格式:**
 ```javascript
