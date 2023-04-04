@@ -11,6 +11,7 @@
   - [Account Update](#account-update)
   - [Balance Update](#balance-update)
   - [Order Update](#order-update)
+    - [Conditional Fields in Execution Report](#conditional-fields-in-execution-report)
     - [Execution types](#execution-types)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -139,7 +140,6 @@ Orders are updated with the `executionReport` event.
   "q": "1.00000000",             // Order quantity
   "p": "0.10264410",             // Order price
   "P": "0.00000000",             // Stop price
-  "d": 4,                        // Trailing Delta; This is only visible if the order was a trailing stop order.
   "F": "0.00000000",             // Iceberg quantity
   "g": -1,                       // OrderListId
   "C": "",                       // Original client order ID; This is the ID of the order being canceled
@@ -154,7 +154,7 @@ Orders are updated with the `executionReport` event.
   "N": null,                     // Commission asset
   "T": 1499405658657,            // Transaction time
   "t": -1,                       // Trade ID
-  "v": 3,                        // Prevented Match Id; This is only visible if the order expire due to STP trigger
+  "v": 3,                        // Prevented Match Id; This is only visible if the order expired due to STP
   "I": 8641984,                  // Ignore
   "w": true,                     // Is the order on the book?
   "m": false,                    // Is this trade the maker side?
@@ -163,19 +163,76 @@ Orders are updated with the `executionReport` event.
   "Z": "0.00000000",             // Cumulative quote asset transacted quantity
   "Y": "0.00000000",             // Last quote asset transacted quantity (i.e. lastPrice * lastQty)
   "Q": "0.00000000",             // Quote Order Quantity
-  "D": 1668680518494,            // Trailing Time; This is only visible if the trailing stop order has been activated.
-  "j": 1,                        // Strategy ID; This is only visible if the strategyId parameter was provided upon order placement
-  "J": 1000000,                  // Strategy Type; This is only visible if the strategyType parameter was provided upon order placement
   "W": 1499405658657,            // Working Time; This is only visible if the order has been placed on the book.
   "V": "NONE"                    // SelfTradePreventionMode
-  "u":1,                         // TradeGroupId; This is only visible if the account is part of a trade group and the order expired due to STP trigger.
-  "U":37,                        // CounterOrderId; This is only visible if the order expired due to STP trigger.
-  "A":"3.000000",                // Prevented Quantity; This is only visible if the order expired due to STP trigger.
-  "B":"3.000000"                 // Last Prevented Quantity; This is only visible if the order expired due to STP trigger.
 }
 ```
 
 **Note:** Average price can be found by doing `Z` divided by `z`.
+
+### Conditional Fields in Execution Report
+
+These are fields that appear in the payload only if certain conditions are met.
+
+For additional information on these parameters, please refer to the [Spot Glossary](./faqs/spot_glossary.md).
+
+<table>
+  <tr>
+    <th>Field</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Examples</th>
+  </tr>
+  <tr>
+    <td><code>d</code></td>
+    <td>Trailing Delta</td>
+    <td rowspan="2">Appears only for trailing stop orders.</td>
+    <td><code>"d": 4</code></td>
+  </tr>
+  <tr>
+    <td><code>D</code></td>
+    <td>Trailing Time</td>
+    <td><code>"D": 1668680518494</code></td>
+  </tr>
+  <tr>
+    <td><code>j</code></td>
+    <td>Strategy Id</td>
+    <td>Appears only if the <code>strategyId</code> parameter was provided upon order placement.</td>
+    <td><code>"j": 1</code></td>
+  </tr>
+  <tr>
+    <td><code>J</code></td>
+    <td>Strategy Type</td>
+    <td>Appears only if the <code>strategyType</code> parameter was provided upon order placement.</td>
+    <td><code>"J": 1000000</code></td>
+  </tr>
+  <tr>
+    <td><code>v</code></td>
+    <td>Prevented Match Id</td>
+    <td rowspan="5">Appears only for orders that expired due to STP.</td>
+    <td><code>"v": 3</code></td>
+  </tr>
+  <tr>
+    <td><code>A</code>
+    <td>Prevented Quantity</td>
+    <td><code>"A":"3.000000"</code></td>
+  </tr>
+  <tr>
+    <td><code>B</code></td>
+    <td>Last Prevented Quantity</td>
+    <td><code>"B":"3.000000"</code></td>
+  </tr>
+  <tr>
+    <td><code>u</code></td>
+    <td>Trade Group Id</td>
+    <td><code>"u":1</code></td>
+  </tr>
+  <tr>
+    <td><code>U</code></td>
+    <td>Counter Order Id</td>
+    <td><code>"U":37</code></td>
+  </tr>
+</table>
 
 If the order is an OCO, an event will be displayed named `ListStatus` in addition to the `executionReport` event.
 
@@ -210,11 +267,11 @@ If the order is an OCO, an event will be displayed named `ListStatus` in additio
 ### Execution types
 
 * `NEW` - The order has been accepted into the engine.
-* `CANCELED` - The order has been canceled by the user. 
+* `CANCELED` - The order has been canceled by the user.
 * `REPLACED` (currently unused)
 * `REJECTED` - The order has been rejected and was not processed (This message appears only with Cancel Replace Orders wherein the new order placement is rejected but the request to cancel request succeeds.)
 * `TRADE` - Part of the order or all of the order's quantity has filled.
 * `EXPIRED` - The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance).
-* `TRADE_PREVENTION` - The order has expired due to STP trigger.
+* `TRADE_PREVENTION` - The order has expired due to STP.
 
 Check the [Rest API Documentation](./rest-api.md#enum-definitions) for more relevant enum definitions.
