@@ -210,10 +210,6 @@
 
 # 速率限制
 
-## 连接数量限制
-
-每IP地址、每5分钟最多可以发送300次连接请求。
-
 ## 速率限制基本信息
 
 * [`exchangeInfo`](#交易规范信息) 有包含与速率限制相关的信息。
@@ -2557,12 +2553,6 @@ days    | `1d`, `2d` ... `7d`
     "timeInForce": "GTC",
     "type": "LIMIT",
     "side": "SELL",
-    "stopPrice": "23500.00000000",      // 如果订单设置了 stopPrice 会出现
-    "trailingDelta": 10,                // 如果订单设置了 trailingDelta 会出现
-    "trailingTime": -1,                 // 如果订单设置了 trailingDelta 会出现
-    "icebergQty": "0.00000000",         // 如果订单设置了 icebergQty 会出现
-    "strategyId": 37463720,             // 如果订单设置了 strategyId  会出现
-    "strategyType": 1000000,            // 如果订单设置了 strategyType 会出现
     "workingTime": 1660801715639,
     "selfTradePreventionMode": "NONE"
   },
@@ -2657,6 +2647,23 @@ days    | `1d`, `2d` ... `7d`
   ]
 }
 ```
+
+## 订单响应中的特定条件时才会出现的字段
+
+订单响应中的有一些字段仅在满足特定条件时才会出现。这些订单响应可以来自下订单，查询订单或取消订单，并且可以包括 OCO 订单类型。
+下面列出了这些字段：
+
+名称           | 描述                                                           |显示的条件                                          | 示例 |
+----           | -----                                                         | ---                                               | ---|
+`icebergQty`   |  冰山订单的数量。                                                | 只有在请求中发送 `icebergQty` 参数时才会出现。         | `"icebergQty": "0.00000000"` |
+`preventedMatchId` | 与 `symbol` 结合使用时，可用于查询因为 STP 导致订单失效的过期订单。| 只有在因为 STP 导致订单失效时可见。                    | `"preventedMatchId": 0` |
+`preventedQuantity` | 因为 STP 导致订单失效的数量。                                | 只有在因为 STP 导致订单失效时可见。                    | `"preventedQuantity": "1.200000"` |
+`stopPrice`    | 用于设置逻辑订单中的触发价。                                       | `STOP_LOSS`，`TAKE_PROFIT`，`STOP_LOSS_LIMIT` 和 `TAKE_PROFIT_LIMIT` 订单时可见。| `"stopPrice": "23500.00000000"` |
+`strategyId`   | 策略单ID; 用以关联此订单对应的交易策略。                            | 如果在请求中添加了参数，则会出现。                      | `"strategyId": 37463720` |
+`strategyType` | 策略单类型; 用以显示此订单对应的交易策略。                           | 如果在请求中添加了参数，则会出现。                      | `"strategyType": 1000000` |
+`trailingDelta`| 用以定义追踪止盈止损订单被触发的价格差。                             | 出现在追踪止损订单中。                                | `"trailingDelta": 10` |
+`trailingTime` | 追踪单被激活和跟踪价格变化的时间。                                  | 出现在追踪止损订单中。                                 | `"trailingTime": -1`|
+
 
 ### 测试下单 (TRADE)
 
@@ -2840,6 +2847,7 @@ days    | `1d`, `2d` ... `7d`
   ]
 }
 ```
+**注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 "订单响应中的特定条件时才会出现的字段" 部分。
 
 ### 撤销订单 (TRADE)
 
@@ -3056,6 +3064,7 @@ days    | `1d`, `2d` ... `7d`
   ]
 }
 ```
+**注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 "订单响应中的特定条件时才会出现的字段" 部分。
 
 #### 关于 `cancelRestrictions`
 
@@ -3644,6 +3653,8 @@ days    | `1d`, `2d` ... `7d`
 }
 ```
 
+**注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 "订单响应中的特定条件时才会出现的字段" 部分。
+
 ### 当前挂单 (USER_DATA)
 
 ```javascript
@@ -3735,6 +3746,8 @@ days    | `1d`, `2d` ... `7d`
   ]
 }
 ```
+
+**注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 "订单响应中的特定条件时才会出现的字段" 部分。
 
 ### 撤销单一交易对的所有挂单 (TRADE)
 
@@ -3867,6 +3880,8 @@ days    | `1d`, `2d` ... `7d`
   ]
 }
 ```
+
+**注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 "订单响应中的特定条件时才会出现的字段" 部分。
 
 ### OCO下单 (TRADE)
 
