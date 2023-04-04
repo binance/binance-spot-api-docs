@@ -1472,13 +1472,13 @@ timeInForce | ENUM | NO | 详见枚举定义：Time in force
 quantity | DECIMAL | NO |
 quoteOrderQty | DECIMAL | NO |
 price | DECIMAL | NO |
-newClientOrderId | STRING | NO | 用户自定义的orderid，如空缺系统会自动赋值
+newClientOrderId | STRING | NO | 用户自定义的orderid，如空缺系统会自动赋值。
 strategyId |INT| NO|
 strategyType |INT| NO| 不能低于 `1000000`.
-stopPrice | DECIMAL | NO | 仅 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` 需要此参数
-trailingDelta|LONG|NO| 用于 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, 和 `TAKE_PROFIT_LIMIT` 类型的订单.
-icebergQty | DECIMAL | NO | 仅有限价单(包括条件限价单与限价做事单)可以使用该参数，含义为创建冰山订单并指定冰山订单的尺寸
-newOrderRespType | ENUM | NO | 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`, 其他默认为`ACK`.
+stopPrice | DECIMAL | NO | 仅 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` 需要此参数。
+trailingDelta|LONG|NO| 用于 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, 和 `TAKE_PROFIT_LIMIT` 类型的订单。
+icebergQty | DECIMAL | NO | 仅有限价单(包括条件限价单与限价做事单)可以使用该参数，含义为创建冰山订单并指定冰山订单的数量。
+newOrderRespType | ENUM | NO | 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`, 其他默认为`ACK`。
 selfTradePreventionMode |ENUM| NO | 允许的 ENUM 取决于交易对的配置。支持的值有 `EXPIRE_TAKER`，`EXPIRE_MAKER`，`EXPIRE_BOTH`，`NONE`。
 recvWindow | LONG | NO |
 timestamp | LONG | YES |
@@ -1539,8 +1539,6 @@ Type | 强制要求的参数 | 其他信息
   "timeInForce": "GTC",
   "type": "MARKET",
   "side": "SELL"
-  "strategyId": 1,               // 下单填了参数才会返回
-  "strategyType": 1000000,        // 下单填了参数才会返回
   "workingTime": 1507725176595,
   "selfTradePreventionMode": "NONE"
 }
@@ -1562,8 +1560,6 @@ Type | 强制要求的参数 | 其他信息
   "timeInForce": "GTC",
   "type": "MARKET",
   "side": "SELL",
-  "strategyId": 1,               // 下单填了参数才会返回
-  "strategyType": 1000000,        // 下单填了参数才会返回
   "workingTime": 1507725176595,
   "selfTradePreventionMode": "NONE",
   "fills": [
@@ -1605,6 +1601,22 @@ Type | 强制要求的参数 | 其他信息
   ]
 }
 ```
+
+## 订单响应中的特定条件时才会出现的字段
+
+订单响应中的有一些字段仅在满足特定条件时才会出现。这些订单响应可以来自下订单，查询订单或取消订单，并且可以包括 OCO 订单类型。
+下面列出了这些字段：
+
+名称           | 描述                                                           |显示的条件                                          | 示例 |
+----           | -----                                                         | ---                                               | ---|
+`icebergQty`   |  冰山订单的数量。                                                | 只有在请求中发送 `icebergQty` 参数时才会出现。         | `"icebergQty": "0.00000000"` |
+`preventedMatchId` | 与 `symbol` 结合使用时，可用于查询因为 STP 导致订单失效的过期订单。| 只有在因为 STP 导致订单失效时可见。                    | `"preventedMatchId": 0` |
+`preventedQuantity` | 因为 STP 导致订单失效的数量。                                | 只有在因为 STP 导致订单失效时可见。                    | `"preventedQuantity": "1.200000"` |
+`stopPrice`    | 用于设置逻辑订单中的触发价。                                       | `STOP_LOSS`，`TAKE_PROFIT`，`STOP_LOSS_LIMIT` 和 `TAKE_PROFIT_LIMIT` 订单时可见。| `"stopPrice": "23500.00000000"` |
+`strategyId`   | 策略单ID; 用以关联此订单对应的交易策略。                            | 如果在请求中添加了参数，则会出现。                      | `"strategyId": 37463720` |
+`strategyType` | 策略单类型; 用以显示此订单对应的交易策略。                           | 如果在请求中添加了参数，则会出现。                      | `"strategyType": 1000000` |
+`trailingDelta`| 用以定义追踪止盈止损订单被触发的价格差。                             | 出现在追踪止损订单中。                                | `"trailingDelta": 10` |
+`trailingTime` | 追踪单被激活和跟踪价格变化的时间。                                  | 出现在追踪止损订单中。                                 | `"trailingTime": -1`|
 
 ### 测试下单接口 (TRADE)
 
@@ -1671,21 +1683,17 @@ timestamp | LONG | YES |
   "type": "LIMIT", // 订单类型， 比如市价单，现价单等
   "side": "BUY", // 订单方向，买还是卖
   "stopPrice": "0.0", // 止损价格
-  "trailingDelta": 100, // 仅在是追踪止损订单(Trailing Stop Order)时才会显示
-  "trailingTime": -1,  // 仅在是追踪止损订单(Trailing Stop Order)时才会显示
   "icebergQty": "0.0", // 冰山数量
   "time": 1499827319559, // 订单时间
   "updateTime": 1499827319559, // 最后更新时间
   "isWorking": true, // 订单是否出现在orderbook中
   "workingTime":1499827319559, // 订单添加到 order book 的时间
   "origQuoteOrderQty": "0.000000", // 原始的交易金额
-  "strategyId": 1,                  // 只有下单的时候提供了strategyId才会显示
-  "strategyType": 1000001,          // 只有下单的时候提供了strategyType才会显示
-  "selfTradePreventionMode": "NONE",
-  "preventedMatchId": 0,            // 这仅在订单因 STP 而过期时可见
-  "preventedQuantity": "1.200000"   // 这仅在订单因 STP 而过期时可见
+  "selfTradePreventionMode": "NONE" // 如何处理自我交易模式
 }
 ```
+
+**注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 "订单响应中的特定条件时才会出现的字段" 部分。
 
 ### 撤销订单 (TRADE)
 ```
@@ -1732,6 +1740,8 @@ timestamp | LONG | YES |
   "selfTradePreventionMode": "NONE"
 }
 ```
+
+**注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 "订单响应中的特定条件时才会出现的字段" 部分。
 
 #### 关于 `cancelRestrictions`
 
@@ -2028,7 +2038,8 @@ timestamp | LONG | YES |
   }
 }
 ```
->**响应：撤单和下单失败**
+
+**响应：撤单和下单失败**
 ```javascript
 {
   "code": -2022,
@@ -2047,6 +2058,8 @@ timestamp | LONG | YES |
   }
 }
 ```
+
+**注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 "订单响应中的特定条件时才会出现的字段" 部分。
 
 ### 查看账户当前挂单 (USER_DATA)
 ```
@@ -2077,6 +2090,7 @@ timestamp | LONG | YES |
   {
     "symbol": "LTCBTC",
     "orderId": 1,
+    "orderListId": -1,
     "clientOrderId": "myOrder1",
     "price": "0.1",
     "origQty": "1.0",
@@ -2090,10 +2104,15 @@ timestamp | LONG | YES |
     "icebergQty": "0.0",
     "time": 1499827319559,
     "updateTime": 1499827319559,
-    "isWorking": true
+    "isWorking": true,
+    "origQuoteOrderQty": "0.000000",
+    "workingTime": 1499827319559,
+    "selfTradePreventionMode": "NONE"
   }
 ]
 ```
+
+**注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 "订单响应中的特定条件时才会出现的字段" 部分。
 
 ### 查询所有订单（包括历史订单） (USER_DATA)
 ```
@@ -2142,10 +2161,15 @@ timestamp | LONG | YES |
     "icebergQty": "0.0",
     "time": 1499827319559,
     "updateTime": 1499827319559,
-    "isWorking": true
+    "isWorking": true,
+    "origQuoteOrderQty": "0.000000",
+    "workingTime": 1499827319559,
+    "selfTradePreventionMode": "NONE"
   }
 ]
 ```
+
+**注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 "订单响应中的特定条件时才会出现的字段" 部分。
 
 ## 发送新 OCO 订单
 
