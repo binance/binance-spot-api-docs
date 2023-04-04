@@ -132,7 +132,6 @@ listenKey | STRING | YES
   "q": "1.00000000",             // 订单原始数量
   "p": "0.10264410",             // 订单原始价格
   "P": "0.00000000",             // 止盈止损单触发价格
-  "d": 4,                        // 追踪止损(Trailing Delta) 只有在追踪止损订单中才会推送.
   "F": "0.00000000",             // 冰山订单数量
   "g": -1,                       // OCO订单 OrderListId
   "C": "",                       // 原始订单自定义ID(原始订单，指撤单操作的对象。撤单本身被视为另一个订单)
@@ -146,8 +145,6 @@ listenKey | STRING | YES
   "n": "0",                      // 手续费数量
   "N": null,                     // 手续费资产类别
   "T": 1499405658657,            // 成交时间
-  "t": -1,                       // 成交ID
-  "v": 3,                        // 被阻止撮合交易的ID; 这仅在订单因 STP 触发而过期时可见
   "I": 8641984,                  // 请忽略
   "w": true,                     // 订单是否在订单簿上？
   "m": false,                    // 该成交是作为挂单成交吗？
@@ -157,18 +154,74 @@ listenKey | STRING | YES
   "Y": "0.00000000",             // 订单末次成交金额
   "Q": "0.00000000",             // Quote Order Quantity
   "D": 1668680518494,            // 追踪时间; 这仅在追踪止损订单已被激活时可见
-  "j": 1,                        // Strategy ID; 下单时填上字段才会返回
-  "J": 1000000,                  // Strategy Type; 下单时填上字段才会返回
   "W": 1499405658657,            // Working Time; 订单被添加到 order book 的时间
-  "V": "NONE",                   // SelfTradePreventionMode
-  "u":1,                         // TradeGroupId; 这仅在账户属于交易组和订单因 STP 触发而过期时可见。
-  "U":37,                        // CounterOrderId; 这仅在订单因 STP 触发而过期时可见
-  "A":"3.000000",                // 被阻止交易的数量; 这仅在订单因 STP 触发而过期时可见
-  "B":"3.000000"                 // 最后被阻止交易的数量; 这仅在订单因 STP 触发而过期时可见
+  "V": "NONE"                    // SelfTradePreventionMode
 }
 ```
 
 **备注:** 通过将`Z`除以`z`可以找到平均价格。
+
+### `executionReport` 中的特定条件时才会出现的字段
+
+这些字段仅在满足特定条件时才会出现。有关这些参数的更多信息，请参阅 [现货交易API术语表](./faqs/spot_glossary_cn.md)。
+
+<table>
+  <tr>
+    <th>字段</th>
+    <th>名称</th>
+    <th>描述</th>
+    <th>示例</th>
+  </tr>
+  <tr>
+    <td><code>d</code></td>
+    <td>Trailing Delta</td>
+    <td rowspan="2">出现在追踪止损订单中。</td>
+    <td><code>"d": 4</code></td>
+  </tr>
+  <tr>
+    <td><code>D</code></td>
+    <td>Trailing Time</td>
+    <td><code>"D": 1668680518494</code></td>
+  </tr>
+  <tr>
+    <td><code>j</code></td>
+    <td>Strategy Id</td>
+    <td>如果在请求中添加了<code>strategyId</code>参数，则会出现。</td>
+    <td><code>"j": 1</code></td>
+  </tr>
+  <tr>
+    <td><code>J</code></td>
+    <td>Strategy Type</td>
+    <td>如果在请求中添加了<code>strategyType</code>参数，则会出现。</td>
+    <td><code>"J": 1000000</code></td>
+  </tr>
+  <tr>
+    <td><code>v</code></td>
+    <td>Prevented Match Id</td>
+    <td rowspan="5">只有在因为 STP 导致订单失效时可见。</td>
+    <td><code>"v": 3</code></td>
+  </tr>
+  <tr>
+    <td><code>A</code>
+    <td>Prevented Quantity</td>
+    <td><code>"A":"3.000000"</code></td>
+  </tr>
+  <tr>
+    <td><code>B</code></td>
+    <td>Last Prevented Quantity</td>
+    <td><code>"B":"3.000000"</code></td>
+  </tr>
+  <tr>
+    <td><code>u</code></td>
+    <td>Trade Group Id</td>
+    <td><code>"u":1</code></td>
+  </tr>
+  <tr>
+    <td><code>U</code></td>
+    <td>Counter Order Id</td>
+    <td><code>"U":37</code></td>
+  </tr>
+</table>
 
 如果订单是OCO，则除了显示`executionReport`事件外，还将显示一个名为`ListStatus`的事件。
 
