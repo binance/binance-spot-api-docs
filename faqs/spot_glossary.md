@@ -140,6 +140,9 @@ Data Source
 
 ## L
 
+Last Prevented Quantity
+* Order quantity that expired due to STP.
+
 `LIMIT`
 * a `type` of order where the execution price will be no worse than the order's set price. The execution price is limited to be the set price or better.
 
@@ -216,6 +219,9 @@ Order Book
 
 Prevented Match
 * When order(s) expire due to the STP, a "prevented match" records the event.
+
+`preventedMatchId`
+* When used in combination with `symbol`, can be used to query a prevented match of the expired order.
 
 ---
 
