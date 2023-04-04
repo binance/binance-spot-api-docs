@@ -41,6 +41,7 @@
     - [Rolling window price change statistics](#rolling-window-price-change-statistics)
   - [Account endpoints](#account-endpoints)
     - [New order  (TRADE)](#new-order--trade)
+      - [Conditional fields in Order Responses](#conditional-fields-in-order-responses)
     - [Test new order (TRADE)](#test-new-order-trade)
     - [Query order (USER_DATA)](#query-order-user_data)
     - [Cancel order (TRADE)](#cancel-order-trade)
@@ -1600,8 +1601,6 @@ Matching Engine
   "timeInForce": "GTC",
   "type": "MARKET",
   "side": "SELL",
-  "strategyId": 1,               // This is only visible if the field was populated on order placement.
-  "strategyType": 1000000,       // This is only visible if the field was populated on order placement.
   "workingTime": 1507725176595,
   "selfTradePreventionMode": "NONE"
 }
@@ -1623,8 +1622,6 @@ Matching Engine
   "timeInForce": "GTC",
   "type": "MARKET",
   "side": "SELL",
-  "strategyId": 1,               // This is only visible if the field was populated on order placement.
-  "strategyType": 1000000,       // This is only visible if the field was populated on order placement.
   "workingTime": 1507725176595,
   "selfTradePreventionMode": "NONE",
   "fills": [
@@ -1666,6 +1663,25 @@ Matching Engine
   ]
 }
 ```
+
+#### Conditional fields in Order Responses
+
+There are fields in the order responses (e.g. order placement, order query, order cancellation) that appear only if certain conditions are met. 
+
+These fields can apply to OCO Orders.
+
+The fields are listed below:
+
+Field          |Description                                                      |Visibility conditions                                           | Examples |
+----           | -----                                                           | ---                                                            |---       |
+`icebergQty`   | Quantity for the iceberg order | Appears only if the parameter `icebergQty` was sent in the request.| `"icebergQty": "0.00000000"`
+`preventedMatchId` |  When used in combination with `symbol`, can be used to query a prevented match. | Appears only if the order expired due to STP.| `"preventedMatchId": 0`
+`preventedQuantity` | Order quantity that expired due to STP | Appears only if the order expired due to STP. | `"preventedQuantity": "1.200000"`
+`stopPrice`    | Price when the algorithmic order will be triggered | Appears for `STOP_LOSS`. `TAKE_PROFIT`, `STOP_LOSS_LIMIT` and `TAKE_PROFIT_LIMIT` orders.|`"stopPrice": "23500.00000000"`
+`strategyId`   | Can be used to label an order that's part of an order strategy. |Appears if the parameter was populated in the request.| `"strategyId": 37463720`
+`strategyType` | Can be used to label an order that is using an order strategy.|Appears if the parameter was populated in the request.| `"strategyType": 1000000`
+`trailingDelta`| Delta price change required before order activation| Appears for Trailing Stop Orders.|`"trailingDelta": 10`
+`trailingTime` | Time when the trailing order is now active and tracking price changes| Appears only for Trailing Stop Orders.| `"trailingTime": -1`
 
 ### Test new order (TRADE)
 ```
@@ -1731,21 +1747,17 @@ Memory => Database
   "type": "LIMIT",
   "side": "BUY",
   "stopPrice": "0.0",
-  "trailingDelta": 100,             // This field only appear for Trailing Stop Orders.
-  "trailingTime": -1,               // This field only appears for Trailing Stop Orders.
   "icebergQty": "0.0",
   "time": 1499827319559,
   "updateTime": 1499827319559,
   "isWorking": true,
   "workingTime":1499827319559,
   "origQuoteOrderQty": "0.000000",
-  "strategyId": 1,                  // This field only appears if the parameter was provided in the request.
-  "strategyType": 1000001,          // This field only appears if the parameter was provided in the request.
-  "selfTradePreventionMode": "NONE",
-  "preventedMatchId": 0,            // This field only appears if the order expired due to STP.
-  "preventedQuantity": "1.200000"   // This field only appears if the order expired due to STP.
+  "selfTradePreventionMode": "NONE"
 }
 ```
+
+**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 ### Cancel order (TRADE)
 ```
@@ -1793,6 +1805,8 @@ Matching Engine
   "selfTradePreventionMode": "NONE"
 }
 ```
+
+**Note:** The payload above does not show all fields that can appear in the order response. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 #### Regarding `cancelRestrictions`
 
@@ -2113,6 +2127,7 @@ Matching Engine
 }
 ```
 
+**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 ### Current open orders (USER_DATA)
 ```
@@ -2163,6 +2178,8 @@ Memory => Database
   }
 ]
 ```
+
+**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 ### All orders (USER_DATA)
 ```
@@ -2217,11 +2234,11 @@ timestamp | LONG | YES |
     "origQuoteOrderQty": "0.000000",
     "workingTime": 1499827319559,
     "selfTradePreventionMode": "NONE",
-    "preventedMatchId": 0,            //This field only appears if the order expired due to STP.
-    "preventedQuantity": "1.200000"   //This field only appears if the order expired due to STP.
   }
 ]
 ```
+
+**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 ### New OCO (TRADE)
 

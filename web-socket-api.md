@@ -40,6 +40,7 @@
     - [Symbol order book ticker](#symbol-order-book-ticker)
   - [Trading requests](#trading-requests)
     - [Place new order (TRADE)](#place-new-order-trade)
+      - [Conditional fields in Order Responses](#conditional-fields-in-order-responses)
     - [Test new order (TRADE)](#test-new-order-trade)
     - [Query order (USER_DATA)](#query-order-user_data)
     - [Cancel order (TRADE)](#cancel-order-trade)
@@ -2664,12 +2665,6 @@ Response format is selected by using the `newOrderRespType` parameter.
     "timeInForce": "GTC",
     "type": "LIMIT",
     "side": "SELL",
-    "stopPrice": "23500.00000000",      // present only if stopPrice set for the order
-    "trailingDelta": 10,                // present only if trailingDelta set for the order
-    "trailingTime": -1,                 // present only if trailingDelta set for the order
-    "icebergQty": "0.00000000",         // present only if icebergQty set for the order
-    "strategyId": 37463720,             // present only if strategyId set for the order
-    "strategyType": 1000000,            // present only if strategyType set for the order
     "workingTime": 1660801715639,
     "selfTradePreventionMode": "NONE"
   },
@@ -2765,6 +2760,25 @@ Response format is selected by using the `newOrderRespType` parameter.
   ]
 }
 ```
+
+#### Conditional fields in Order Responses
+
+There are fields in the order responses (e.g. order placement, order query, order cancellation) that appear only if certain conditions are met. 
+
+These fields can apply to OCO Orders.
+
+The fields are listed below:
+
+Field          |Description                                                      |Visibility conditions                                           | Examples |
+----           | -----                                                           | ---                                                            |---       |
+`icebergQty`   | Quantity for the iceberg order | Appears only if the parameter `icebergQty` was sent in the request.| `"icebergQty": "0.00000000"`
+`preventedMatchId` |  When used in combination with `symbol`, can be used to query a prevented match. | Appears only if the order expired due to STP.| `"preventedMatchId": 0`
+`preventedQuantity` | Order quantity that expired due to STP | Appears only if the order expired due to STP. | `"preventedQuantity": "1.200000"`
+`stopPrice`    | Price when the algorithmic order will be triggered | Appears for `STOP_LOSS`. `TAKE_PROFIT`, `STOP_LOSS_LIMIT` and `TAKE_PROFIT_LIMIT` orders.|`"stopPrice": "23500.00000000"`
+`strategyId`   | Can be used to label an order that's part of an order strategy. |Appears if the parameter was populated in the request.| `"strategyId": 37463720`
+`strategyType` | Can be used to label an order that is using an order strategy.|Appears if the parameter was populated in the request.| `"strategyType": 1000000`
+`trailingDelta`| Delta price change required before order activation| Appears for Trailing Stop Orders.|`"trailingDelta": 10`
+`trailingTime` | Time when the trailing order is now active and tracking price changes| Appears only for Trailing Stop Orders.| `"trailingTime": -1`
 
 ### Test new order (TRADE)
 
@@ -2951,6 +2965,8 @@ Memory => Database
   ]
 }
 ```
+
+**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 ### Cancel order (TRADE)
 
@@ -3168,6 +3184,8 @@ When an OCO is canceled:
   ]
 }
 ```
+
+**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 #### Regarding `cancelRestrictions`
 
@@ -3763,6 +3781,8 @@ If both operations fail, response will have `"status": 400`:
 }
 ```
 
+**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+
 ### Current open orders (USER_DATA)
 
 ```javascript
@@ -3854,6 +3874,8 @@ If all symbols are requested, use the `symbol` field to tell which symbol the or
   ]
 }
 ```
+
+**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 ### Cancel open orders (TRADE)
 
@@ -3988,6 +4010,8 @@ Cancellation reports for orders and OCOs have the same format as in [`order.canc
   ]
 }
 ```
+
+**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 ### Place new OCO (TRADE)
 
