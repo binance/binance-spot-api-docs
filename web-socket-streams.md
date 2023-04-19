@@ -252,7 +252,7 @@ s-> seconds; m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
 
 **Stream Name:** \<symbol\>@kline_\<interval\>
 
-**Update Speed:** 2000ms
+**Update Speed:** 1000ms for `1s`, 2000ms for the other intervals
 
 **Payload:**
 ```javascript
