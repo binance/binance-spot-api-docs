@@ -28,6 +28,8 @@
 
 **Stream 名称:** \<symbol\>@aggTrade
 
+**更新速度:** 实时
+
 **Payload:**
 ```javascript
 {
@@ -49,6 +51,8 @@
 逐笔交易推送每一笔成交的信息。**成交**，或者说交易的定义是仅有一个吃单者与一个挂单者相互交易。
 
 **Stream 名称:** \<symbol\>@trade
+
+**更新速度:** 实时
 
 **Payload:**
 ```javascript
@@ -92,6 +96,8 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 
 **Stream 名称:** \<symbol\>@kline_\<interval\>
 
+**更新速度:** `1s` 1000ms，其它间隔 2000ms
+
 **Payload:**
 ```javascript
 {
@@ -125,6 +131,8 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 
 **Stream 名称:** \<symbol\>@miniTicker
 
+**更新速度:** 1000ms
+
 **Payload:**
 ```javascript
   {
@@ -145,6 +153,8 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 
 **Stream名称:** !miniTicker@arr
 
+**更新速度:** 1000ms
+
 **Payload:**
 ```javascript
 [
@@ -158,6 +168,8 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 按Symbol逐秒刷新的24小时完整ticker信息
 
 **Stream 名称:** \<symbol\>@ticker
+
+**更新速度:** 1000ms
 
 **Payload:**
 ```javascript
@@ -191,7 +203,9 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 ## 全市场所有交易对的完整Ticker
 同上，只是推送所有交易对
 
-**Stream名称:** !ticker@arr
+**Stream 名称:** !ticker@arr
+
+**更新速度:** 1000ms
 
 **Payload:**
 ```javascript
@@ -207,7 +221,9 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 实时推送指定交易对最优挂单信息
 多个 `<symbol>@bookTicker` 可以订阅在一个WebSocket连接上
 
-**Stream Name:** \<symbol\>@bookTicker
+**Stream 名称:** \<symbol\>@bookTicker
+
+**更新速度:** 实时
 
 **Payload:**
 ```javascript
@@ -222,9 +238,11 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 ```
 
 ## 有限档深度信息
-每秒推送有限档深度信息。levels表示几档买卖单信息, 可选 5/10/20档
+每秒推送有限档深度信息。levels 表示几档买卖单信息, 可选 5/10/20档
 
-**Stream 名称:** \<symbol\>@depth\<levels\>
+**Stream 名称:** \<symbol\>@depth\<levels\> 或者 \<symbol\>@depth\<levels\>@100ms
+
+**更新速度:** 1000ms 或者 100ms
 
 **Payload:**
 ```javascript
@@ -250,7 +268,9 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 ## 增量深度信息stream
 每秒推送orderbook的变化部分（如果有）
 
-**Stream 名称:** \<symbol\>@depth
+**Stream 名称:** \<symbol\>@depth 或者 \<symbol\>@depth@100ms
+
+**更新速度:** 1000ms 或者 100ms
 
 **Payload:**
 ```javascript
