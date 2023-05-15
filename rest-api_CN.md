@@ -57,13 +57,13 @@
 
 # 访问限制
 ## 访问限制基本信息
-* 以下是`intervalLetter` 作为头部值:
+* 以下是 `intervalLetter` 作为头部值:
   * SECOND => S
   * MINUTE => M
   * HOUR => H
   * DAY => D
 * 在 `/api/v3/exchangeInfo`接口中`rateLimits`数组里包含有REST接口(不限于本篇的REST接口)的访问限制。包括带权重的访问频次限制、下单速率限制。本篇`枚举定义`章节有限制类型的进一步说明。
-* 违反任何一个速率限制时，将返回429。
+* 违反任何一个速率限制时（访问频次限制或下单速率限制），将返回429。
 
 ## IP 访问限制
 * 每个请求将包含一个`X-MBX-USED-WEIGHT-(intervalNum)(intervalLetter)`的头，其中包含当前IP所有请求的已使用权重。
