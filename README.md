@@ -28,6 +28,7 @@ Name | Description
 [spot_glossary.md](./faqs/spot_glossary.md) | Definition of terms used in the API
 [trailing-stop-faq.md](./faqs/trailing-stop-faq.md)   | Detailed Information on the behavior of Trailing Stops on the API
 [stp-faq.md](./faqs/stp_faq.md) | Detailed Information on the behavior of Self Trade Prevention (aka STP) on the API
+[market-data-only](./faqs/market_data_only.md) | Information on our market data only API and websocket streams.
 
 
 # Useful Resources
