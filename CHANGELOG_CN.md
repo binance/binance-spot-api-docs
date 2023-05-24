@@ -1,4 +1,12 @@
-# 更新日志 (2023-03-13)
+# 更新日志 (2023-05-24)
+
+## 2023-05-24
+
+* **以前的市场数据 URL 已不建议使用。请立即更新您的代码，以防止来自我们的服务被中断**
+    * 来自 `data.binance.com` 的 API 市场数据现在可以从 `data-api.binance.vision` 访问。
+    * 来自 `data-stream.binance.com` 的 Websocket 市场数据现在可以从 `data-stream.binance.vision` 访问。
+
+---
 
 ## 2023-03-13
 

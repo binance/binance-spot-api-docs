@@ -66,7 +66,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2023-03-13)
+# Public Rest API for Binance (2023-05-24)
 
 ## General API Information
 * The following base endpoints are available:
@@ -79,20 +79,7 @@
 * All endpoints return either a JSON object or array.
 * Data is returned in **ascending** order. Oldest first, newest last.
 * All time and timestamp related fields are in **milliseconds**.
-* The base endpoint **https://data.binance.com** can be used to access the following API endpoints that have `NONE` as security type:
-  * GET /api/v3/aggTrades
-  * GET /api/v3/avgPrice
-  * GET /api/v3/depth
-  * GET /api/v3/exchangeInfo
-  * GET /api/v3/klines
-  * GET /api/v3/ping
-  * GET /api/v3/ticker
-  * GET /api/v3/ticker/24hr
-  * GET /api/v3/ticker/bookTicker
-  * GET /api/v3/ticker/price
-  * GET /api/v3/time
-  * GET /api/v3/trades
-  * GET /api/v3/uiKlines
+* For APIs that only send public market data, you use the base endpoint **https://data-api.binance.vision**. Please refer to [Market Data Only](.faqs/market_data_only.md) page.
 
 ## HTTP Return Codes
 

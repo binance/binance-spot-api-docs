@@ -1,4 +1,12 @@
-# CHANGELOG for Binance's API (2023-03-13)
+# CHANGELOG for Binance's API (2023-05-24)
+
+## 2023-05-24
+
+* **The previous market data URLs have been deprecated. Please update your code immediately to prevent interruption of our services.**
+    * API Market data from `data.binance.com` can now be accessed from `data-api.binance.vision`.
+    * Websocket Market Data from `data-stream.binance.com` can now be accessed from `data-stream.binance.vision`.
+
+---
 
 ## 2023-03-13
 
