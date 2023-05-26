@@ -1,4 +1,16 @@
-# CHANGELOG for Binance's API (2023-05-24)
+# CHANGELOG for Binance's API (2023-05-26)
+
+## 2023-05-26
+
+**Notice:** The change below are being rolled out, and will take approximately a week to complete.
+
+* The following base endpoints may give better performance but have less stability than **https://api.binance.com**:
+  * **https://api1.binance.com**
+  * **https://api2.binance.com**
+  * **https://api3.binance.com**
+  * **https://api4.binance.com**
+
+---
 
 ## 2023-05-24
 

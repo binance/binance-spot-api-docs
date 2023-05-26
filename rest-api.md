@@ -66,7 +66,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2023-05-24)
+# Public Rest API for Binance (2023-05-26)
 
 ## General API Information
 * The following base endpoints are available:
@@ -75,11 +75,11 @@
   * **https://api2.binance.com**
   * **https://api3.binance.com**
   * **https://api4.binance.com**
-* All endpoints are equal in functionality.<br/> Performance may vary between the base endpoints and can be freely switched between them to find which one works best for one's setup.
+* The last 4 endpoints in the point above (`api1`-`api4`) might give better performance but have less stability. Please use whichever works best for your setup.
 * All endpoints return either a JSON object or array.
 * Data is returned in **ascending** order. Oldest first, newest last.
 * All time and timestamp related fields are in **milliseconds**.
-* For APIs that only send public market data, you use the base endpoint **https://data-api.binance.vision**. Please refer to [Market Data Only](.faqs/market_data_only.md) page.
+* For APIs that only send public market data, please use the base endpoint **https://data-api.binance.vision**. Please refer to [Market Data Only](.faqs/market_data_only.md) page.
 
 ## HTTP Return Codes
 
