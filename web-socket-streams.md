@@ -473,7 +473,7 @@ Top **\<levels\>** bids and asks, pushed every second. Valid **\<levels\>** are 
   "asks": [             // Asks to be updated
     [
       "0.0026",         // Price level to be updated
-      "100"            // Quantity
+      "100"             // Quantity
     ]
   ]
 }
