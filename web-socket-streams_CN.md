@@ -317,7 +317,7 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 ```javascript
 {
   "e": "1hTicker",    // Event type
-  "E": 1672515782136,     // Event time
+  "E": 1672515782136, // Event time
   "s": "BNBBTC",      // Symbol
   "p": "0.0015",      // Price change
   "P": "250.00",      // Price change percent
