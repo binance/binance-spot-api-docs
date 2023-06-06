@@ -613,13 +613,13 @@ Memory
   "serverTime": 1565246363776,
   "rateLimits": [
     {
-      //These are defined in the `ENUM definitions` section under `Rate Limiters (rateLimitType)`.
-      //All limits are optional
+      // These are defined in the `ENUM definitions` section under `Rate Limiters (rateLimitType)`.
+      // All limits are optional
     }
   ],
   "exchangeFilters": [
-    //These are the defined filters in the `Filters` section.
-    //All filters are optional.
+    // These are the defined filters in the `Filters` section.
+    // All filters are optional.
   ],
   "symbols": [
     {
@@ -649,8 +649,8 @@ Memory
       "isSpotTradingAllowed": true,
       "isMarginTradingAllowed": true,
       "filters": [
-        //These are defined in the Filters section.
-        //All filters are optional
+        // These are defined in the Filters section.
+        // All filters are optional
       ],
       "permissions": [
         "SPOT",
@@ -1566,7 +1566,7 @@ Matching Engine
 {
   "symbol": "BTCUSDT",
   "orderId": 28,
-  "orderListId": -1, //Unless OCO, value will be -1
+  "orderListId": -1, // Unless OCO, value will be -1
   "clientOrderId": "6gCrw2kRUAF9CvJDGP16IP",
   "transactTime": 1507725176595
 }
@@ -1577,7 +1577,7 @@ Matching Engine
 {
   "symbol": "BTCUSDT",
   "orderId": 28,
-  "orderListId": -1, //Unless OCO, value will be -1
+  "orderListId": -1, // Unless OCO, value will be -1
   "clientOrderId": "6gCrw2kRUAF9CvJDGP16IP",
   "transactTime": 1507725176595,
   "price": "0.00000000",
@@ -1598,7 +1598,7 @@ Matching Engine
 {
   "symbol": "BTCUSDT",
   "orderId": 28,
-  "orderListId": -1, //Unless OCO, value will be -1
+  "orderListId": -1, // Unless OCO, value will be -1
   "clientOrderId": "6gCrw2kRUAF9CvJDGP16IP",
   "transactTime": 1507725176595,
   "price": "0.00000000",
@@ -1653,7 +1653,7 @@ Matching Engine
 
 #### Conditional fields in Order Responses
 
-There are fields in the order responses (e.g. order placement, order query, order cancellation) that appear only if certain conditions are met. 
+There are fields in the order responses (e.g. order placement, order query, order cancellation) that appear only if certain conditions are met.
 
 These fields can apply to OCO Orders.
 
@@ -1779,7 +1779,7 @@ Matching Engine
   "symbol": "LTCBTC",
   "origClientOrderId": "myOrder1",
   "orderId": 4,
-  "orderListId": -1, //Unless part of an OCO, the value will always be -1.
+  "orderListId": -1, // Unless part of an OCO, the value will always be -1.
   "clientOrderId": "cancelMyOrder1",
   "price": "2.00000000",
   "origQty": "1.00000000",
@@ -1797,7 +1797,7 @@ Matching Engine
 
 #### Regarding `cancelRestrictions`
 
-* If the `cancelRestrictions` value is not any of the supported values, the error will be: 
+* If the `cancelRestrictions` value is not any of the supported values, the error will be:
 ```json
 {
     "code": -1145,
@@ -1979,7 +1979,7 @@ Matching Engine
 **Response SUCCESS:**
 
 ```javascript
-//Both the cancel order placement and new order placement succeeded.
+// Both the cancel order placement and new order placement succeeded.
 {
   "cancelResult": "SUCCESS",
   "newOrderResult": "SUCCESS",
@@ -2144,7 +2144,7 @@ Memory => Database
   {
     "symbol": "LTCBTC",
     "orderId": 1,
-    "orderListId": -1, //Unless OCO, the value will always be -1
+    "orderListId": -1, // Unless OCO, the value will always be -1
     "clientOrderId": "myOrder1",
     "price": "0.1",
     "origQty": "1.0",
@@ -2203,7 +2203,7 @@ timestamp | LONG | YES |
   {
     "symbol": "LTCBTC",
     "orderId": 1,
-    "orderListId": -1, //Unless OCO, the value will always be -1
+    "orderListId": -1, // Unless OCO, the value will always be -1
     "clientOrderId": "myOrder1",
     "price": "0.1",
     "origQty": "1.0",

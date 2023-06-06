@@ -106,17 +106,17 @@ listenKey | STRING | YES
 
 ```javascript
 {
-  "e": "balanceUpdate",         //Event Type
-  "E": 1573200697110,           //Event Time
-  "a": "ABC",                   //Asset
-  "d": "100.00000000",          //Balance Delta
-  "T": 1573200697068            //Clear Time
+  "e": "balanceUpdate",         // Event Type
+  "E": 1573200697110,           // Event Time
+  "a": "ABC",                   // Asset
+  "d": "100.00000000",          // Balance Delta
+  "T": 1573200697068            // Clear Time
 }
 ```
 
-  
+
 ## 订单更新
-订单通过`executionReport`事件进行更新。 
+订单通过`executionReport`事件进行更新。
 
 
 **Payload:**
@@ -239,7 +239,7 @@ listenKey | STRING | YES
   "r": "NONE",                      // List 被拒绝的原因
   "C": "F4QN4G8DlFATFlIUQ0cjdD",    // List Client Order ID
   "T": 1564035303625,               // 成交时间
-  "O": [                           
+  "O": [
     {
       "s": "ETHBTC",                // 交易对
       "i": 17,                      // orderId

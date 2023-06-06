@@ -528,25 +528,25 @@ GET /api/v3/exchangeInfo
       "rateLimitType": "REQUESTS_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200 //每分钟调用的所有接口权重之和不得超过1200
+      "limit": 1200 // 每分钟调用的所有接口权重之和不得超过1200
     },
     {
       "rateLimitType": "ORDERS",
       "interval": "SECOND",
       "intervalNum": 1,
-      "limit": 10 //每秒钟所有订单/撤单次数不得超过10
+      "limit": 10 // 每秒钟所有订单/撤单次数不得超过10
     },
     {
       "rateLimitType": "ORDERS",
       "interval": "DAY",
       "intervalNum": 1,
-      "limit": 100000 //每天订单/撤单不得超过10万
+      "limit": 100000 // 每天订单/撤单不得超过10万
     },
     {
       "rateLimitType": "RAW_REQUESTS",
       "interval": "MINUTE",
       "intervalNum": 5,
-      "limit": 5000 //每5分钟调用订单次数不得超过5000
+      "limit": 5000 // 每5分钟调用订单次数不得超过5000
     }
   ],
   "exchangeFilters": [],
@@ -841,7 +841,7 @@ limit     | INT    | NO           | 默认 500; 最大 1000.
     308,                // 成交笔数
     "1756.87402397",    // 主动买入成交量
     "28.46694368",      // 主动买入成交额
-    "0" // 请忽略该参数
+    "0"                 // 请忽略该参数
   ]
 ]
 ```
@@ -1238,10 +1238,10 @@ GET /api/v3/ticker/bookTicker
 ```javascript
 {
   "symbol": "LTCBTC",
-  "bidPrice": "4.00000000",//最优买单价
-  "bidQty": "431.00000000",//挂单量
-  "askPrice": "4.00000200",//最优卖单价
-  "askQty": "9.00000000"//挂单量
+  "bidPrice": "4.00000000", // 最优买单价
+  "bidQty": "431.00000000", // 挂单量
+  "askPrice": "4.00000200", // 最优卖单价
+  "askQty": "9.00000000"    // 挂单量
 }
 ```
 OR
@@ -1657,25 +1657,25 @@ timestamp | LONG | YES |
 **响应:**
 ```javascript
 {
-  "symbol": "LTCBTC", // 交易对
-  "orderId": 1, // 系统的订单ID
-  "orderListId": -1, // OCO订单的ID，不然就是-1
-  "clientOrderId": "myOrder1", // 客户自己设置的ID
-  "price": "0.1", // 订单价格
-  "origQty": "1.0", // 用户设置的原始订单数量
-  "executedQty": "0.0", // 交易的订单数量
-  "cummulativeQuoteQty": "0.0", // 累计交易的金额
-  "status": "NEW", // 订单状态
-  "timeInForce": "GTC", // 订单的时效方式
-  "type": "LIMIT", // 订单类型， 比如市价单，现价单等
-  "side": "BUY", // 订单方向，买还是卖
-  "stopPrice": "0.0", // 止损价格
-  "icebergQty": "0.0", // 冰山数量
-  "time": 1499827319559, // 订单时间
-  "updateTime": 1499827319559, // 最后更新时间
-  "isWorking": true, // 订单是否出现在orderbook中
-  "workingTime":1499827319559, // 订单添加到 order book 的时间
-  "origQuoteOrderQty": "0.000000", // 原始的交易金额
+  "symbol": "LTCBTC",               // 交易对
+  "orderId": 1,                     // 系统的订单ID
+  "orderListId": -1,                // OCO订单的ID，不然就是-1
+  "clientOrderId": "myOrder1",      // 客户自己设置的ID
+  "price": "0.1",                   // 订单价格
+  "origQty": "1.0",                 // 用户设置的原始订单数量
+  "executedQty": "0.0",             // 交易的订单数量
+  "cummulativeQuoteQty": "0.0",     // 累计交易的金额
+  "status": "NEW",                  // 订单状态
+  "timeInForce": "GTC",             // 订单的时效方式
+  "type": "LIMIT",                  // 订单类型， 比如市价单，现价单等
+  "side": "BUY",                    // 订单方向，买还是卖
+  "stopPrice": "0.0",               // 止损价格
+  "icebergQty": "0.0",              // 冰山数量
+  "time": 1499827319559,            // 订单时间
+  "updateTime": 1499827319559,      // 最后更新时间
+  "isWorking": true,                // 订单是否出现在orderbook中
+  "workingTime":1499827319559,      // 订单添加到 order book 的时间
+  "origQuoteOrderQty": "0.000000",  // 原始的交易金额
   "selfTradePreventionMode": "NONE" // 如何处理自我交易模式
 }
 ```
@@ -2552,7 +2552,7 @@ timestamp | LONG | YES |
   * `symbol` + `fromId`
   * `symbol` + `startTime` + `endTime`
   * `symbol`+ `orderId` + `fromId`
-  
+
 **数据源:**
 数据库
 
@@ -2633,7 +2633,7 @@ GET /api/v3/myPreventedMatches
 名称                 | 类型   | 是否必需	     | 描述
 ------------        | ----   | ------------ | ------------
 symbol              | STRING | YES          |
-preventedMatchId    |LONG    | NO           | 
+preventedMatchId    |LONG    | NO           |
 orderId             |LONG    | NO           |
 fromPreventedMatchId|LONG    | NO           |
 limit               |INT     | NO           | 默认：`500`；最大：`1000`
@@ -2646,7 +2646,7 @@ timestamp           | LONG   | YES          |
 ----------------------------| -----
 如果 `symbol` 是无效的        | 1
 通过 `preventedMatchId` 查询 | 1
-通过 `orderId` 查询          | 10 
+通过 `orderId` 查询          | 10
 
 **数据源:**
 
@@ -2692,7 +2692,7 @@ NONE
 **响应:**
 ```javascript
 {
-  "listenKey": "pqia91ma19a5s61cv6a81va65sdf19v8a65a1a5s61cv6a81va65sdf19v8a65a1" //用于订阅的数据流名
+  "listenKey": "pqia91ma19a5s61cv6a81va65sdf19v8a65a1a5s61cv6a81va65sdf19v8a65a1" // 用于订阅的数据流名
 }
 ```
 
