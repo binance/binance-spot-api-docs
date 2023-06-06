@@ -94,14 +94,14 @@ listenKey | STRING | YES
 
 ```javascript
 {
-  "e": "outboundAccountPosition", //Event type
-  "E": 1564034571105,             //Event Time
-  "u": 1564034571073,             //Time of last account update
-  "B": [                          //Balances Array
+  "e": "outboundAccountPosition", // Event type
+  "E": 1564034571105,             // Event Time
+  "u": 1564034571073,             // Time of last account update
+  "B": [                          // Balances Array
     {
-      "a": "ETH",                 //Asset
-      "f": "10000.000000",        //Free
-      "l": "0.000000"             //Locked
+      "a": "ETH",                 // Asset
+      "f": "10000.000000",        // Free
+      "l": "0.000000"             // Locked
     }
   ]
 }
@@ -116,11 +116,11 @@ Balance Update occurs during the following:
 **Payload**
 ```javascript
 {
-  "e": "balanceUpdate",         //Event Type
-  "E": 1573200697110,           //Event Time
-  "a": "BTC",                   //Asset
-  "d": "100.00000000",          //Balance Delta
-  "T": 1573200697068            //Clear Time
+  "e": "balanceUpdate",         // Event Type
+  "E": 1573200697110,           // Event Time
+  "a": "BTC",                   // Asset
+  "d": "100.00000000",          // Balance Delta
+  "T": 1573200697068            // Clear Time
 }
 ```
 
@@ -239,21 +239,21 @@ If the order is an OCO, an event will be displayed named `ListStatus` in additio
 **Payload**
 ```javascript
 {
-  "e": "listStatus",                //Event Type
-  "E": 1564035303637,               //Event Time
-  "s": "ETHBTC",                    //Symbol
-  "g": 2,                           //OrderListId
-  "c": "OCO",                       //Contingency Type
-  "l": "EXEC_STARTED",              //List Status Type
-  "L": "EXECUTING",                 //List Order Status
-  "r": "NONE",                      //List Reject Reason
-  "C": "F4QN4G8DlFATFlIUQ0cjdD",    //List Client Order ID
-  "T": 1564035303625,               //Transaction Time
-  "O": [                            //An array of objects
+  "e": "listStatus",                // Event Type
+  "E": 1564035303637,               // Event Time
+  "s": "ETHBTC",                    // Symbol
+  "g": 2,                           // OrderListId
+  "c": "OCO",                       // Contingency Type
+  "l": "EXEC_STARTED",              // List Status Type
+  "L": "EXECUTING",                 // List Order Status
+  "r": "NONE",                      // List Reject Reason
+  "C": "F4QN4G8DlFATFlIUQ0cjdD",    // List Client Order ID
+  "T": 1564035303625,               // Transaction Time
+  "O": [                            // An array of objects
     {
-      "s": "ETHBTC",                //Symbol
-      "i": 17,                      // orderId
-      "c": "AJYsMjErWJesZvqlJCTUgL" //ClientOrderId
+      "s": "ETHBTC",                // Symbol
+      "i": 17,                      // OrderId
+      "c": "AJYsMjErWJesZvqlJCTUgL" // ClientOrderId
     },
     {
       "s": "ETHBTC",
