@@ -66,16 +66,17 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2023-05-26)
+# Public Rest API for Binance (2023-06-06)
 
 ## General API Information
-* The following base endpoints are available:
+* The following base endpoints are available. Please use whichever works best for your setup:
   * **https://api.binance.com**
+  * **https://api-gcp.binance.com**
   * **https://api1.binance.com**
   * **https://api2.binance.com**
   * **https://api3.binance.com**
   * **https://api4.binance.com**
-* The last 4 endpoints in the point above (`api1`-`api4`) might give better performance but have less stability. Please use whichever works best for your setup.
+* The last 4 endpoints in the point above (`api1`-`api4`) might give better performance but have less stability. 
 * All endpoints return either a JSON object or array.
 * Data is returned in **ascending** order. Oldest first, newest last.
 * All time and timestamp related fields are in **milliseconds**.
