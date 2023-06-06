@@ -1,4 +1,12 @@
-# CHANGELOG for Binance's API (2023-05-26)
+# CHANGELOG for Binance's API (2023-06-06)
+
+
+## 2023-06-06
+
+* A new endpoint is now available for redundancy: **https://api-gcp.binance.com/**
+    * This is using the GCP (Google Cloud Platform) CDN and may have slower performance compared to `api1`-`api4` endpoints.
+
+---
 
 ## 2023-05-26
 
