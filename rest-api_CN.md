@@ -1,4 +1,4 @@
-# REST行情与交易接口 (2023-06-06)
+# REST行情与交易接口 (2023-06-07)
 
 ## API 基本信息
 * 本篇列出接口的 base URL 有:
@@ -316,7 +316,12 @@ curl -H "X-MBX-APIKEY: $API_KEY" -X "$API_METHOD" \
 * `TRD_GRP_005` 交易组 005
 * `TRD_GRP_006` 交易组 006
 * `TRD_GRP_007` 交易组 007
-
+* `TRD_GRP_008` 交易组 008
+* `TRD_GRP_009` 交易组 009
+* `TRD_GRP_010` 交易组 010
+* `TRD_GRP_011` 交易组 011
+* `TRD_GRP_012` 交易组 012
+* `TRD_GRP_013` 交易组 013
 
 **订单状态 (status):**
 

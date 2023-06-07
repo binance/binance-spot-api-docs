@@ -66,7 +66,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public WebSocket API for Binance (2023-03-13)
+# Public WebSocket API for Binance (2023-06-07)
 
 ## General API Information
 
@@ -826,6 +826,12 @@ These terms will be used throughout the documentation, so it is recommended espe
 * `TRD_GRP_005`
 * `TRD_GRP_006`
 * `TRD_GRP_007`
+* `TRD_GRP_008`
+* `TRD_GRP_009`
+* `TRD_GRP_010`
+* `TRD_GRP_011`
+* `TRD_GRP_012`
+* `TRD_GRP_013`
 
 **Order status (status):**
 
