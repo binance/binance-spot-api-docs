@@ -1,4 +1,4 @@
-# Binance 的公共 WebSocket API (2023-03-13)
+# Binance 的公共 WebSocket API (2023-06-07)
 
 ## API 基本信息
 
@@ -734,6 +734,13 @@ OJJaf8C/3VGrU4ATTR4GiUDqL2FboSE1Qw7UnnoYNfXTXHubIl1iaePGuGyfct4NPu5oVEZCH4Q6ZStf
 * `TRD_GRP_005`
 * `TRD_GRP_006`
 * `TRD_GRP_007`
+* `TRD_GRP_008`
+* `TRD_GRP_009`
+* `TRD_GRP_010`
+* `TRD_GRP_011`
+* `TRD_GRP_012`
+* `TRD_GRP_013`
+
 
 **订单状态 (status):**
 

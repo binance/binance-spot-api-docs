@@ -66,7 +66,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2023-06-06)
+# Public Rest API for Binance (2023-06-07)
 
 ## General API Information
 * The following base endpoints are available. Please use whichever works best for your setup:
@@ -408,6 +408,12 @@ These terms will be used throughout the documentation, so it is recommended espe
 * `TRD_GRP_005`
 * `TRD_GRP_006`
 * `TRD_GRP_007`
+* `TRD_GRP_008`
+* `TRD_GRP_009`
+* `TRD_GRP_010`
+* `TRD_GRP_011`
+* `TRD_GRP_012`
+* `TRD_GRP_013`
 
 
 **Order status (status):**
@@ -602,7 +608,7 @@ There are 4 possible options:
 * `permissions` can support single or multiple values (e.g. `SPOT`, `["MARGIN","LEVERAGED"]`)
 * If `permissions` parameter not provided, the default values will be `["SPOT","MARGIN","LEVERAGED"]`.
   * If one wants to view all symbols on `GET /api/v3/exchangeInfo`, then one has to search with all permissions explicitly specified
-  (i.e. `permissions=["SPOT","MARGIN","LEVERAGED","TRD_GRP_002","TRD_GRP_003","TRD_GRP_004","TRD_GRP_005","TRD_GRP_006","TRD_GRP_007"])`
+  (i.e. `permissions=["SPOT","MARGIN","LEVERAGED","TRD_GRP_002","TRD_GRP_003","TRD_GRP_004","TRD_GRP_005","TRD_GRP_006","TRD_GRP_007","TRD_GRP_008","TRD_GRP_009","TRD_GRP_010","TRD_GRP_011","TRD_GRP_012","TRD_GRP_013"]`)
 
 **Data Source:**
 Memory
