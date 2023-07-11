@@ -1,5 +1,60 @@
-# CHANGELOG for Binance's API (2023-06-06)
+# CHANGELOG for Binance's API (2023-07-11)
 
+## 2023-07-11
+
+**Notice:** The change below are being rolled out, and will take approximately a week to complete.
+
+General Changes:
+
+* Changes to error messages:
+    * Previously, when duplicate symbols were passed to requests that do not allow it, the error would be "Mandatory parameter symbols was not sent, was empty/null, or malformed."
+    * Now, the error message is "Symbol is present multiple times in the list", with a new error code `-1151`
+    * This affects the following requests:
+        * `GET /api/v3/exchangeInfo`
+        * `GET /api/v3/ticker/24hr`
+        * `GET /api/v3/ticker/price`
+        * `GET/api/v3/ticker/bookTicker`
+        * `exchangeInfo`
+        * `ticker.24hr` 
+        * `ticker.price`
+        * `ticker.book`
+* Fixed a bug where some non-archived orders being queried would receive the error code that their order was archived.
+
+Rest API
+
+* Changes to `GET /api/v3/account`:
+    * New field `preventSor` will appear in the response.
+    * New field `uid` that shows the User Id/Account will appear in the response.
+* Changes to `GET /api/v3/historicalTrades`:
+    * Changed security type from `MARKET_DATA` to `NONE`.
+    * This means that the `X-MBX-APIKEY` header is no longer necessary and is now ignored.
+
+Websocket API
+
+* Changes to `account.status`:
+    * New field `preventSor` will appear in the response.
+    * New field `uid` that shows the User Id/Account will appear in the response.
+* Changes to `trades.historical`:
+    * Changed security type from `MARKET_DATA` to `NONE`.
+    * This means that the `apiKey` parameter is no longer necessary and is now ignored.
+
+**The following changes will take effect _approximately a week from the release date_:**: 
+
+* Fixed multiple bugs with orders that use `type=MARKET` and `quoteOrderQty`, also known as “reverse market orders”:
+    * Reverse market orders are no longer partially filled, or filled for zero or negative quantity under extreme market conditions.
+    * `MARKET_LOT_SIZE` filter now correctly rejects reverse market orders that go over the symbol's `maxQty`.
+* Fixed a bug where OCO orders using `trailingDelta` could have an incorrect `trailingTime` value after either leg of the OCO is touched. 
+* New field `transactTime` will appear in order cancellation responses. This affects the following requests:
+    * `DELETE /api/v3/order`
+    * `POST /api/v3/order/cancelReplace`
+    * `DELETE /api/v3/openOrders`
+    * `DELETE /api/v3/orderList`
+    * `order.cancel`
+    * `order.cancelReplace`
+    * `openOrders.cancelAll`
+    * `orderList.cancel`
+
+---
 
 ## 2023-06-06
 

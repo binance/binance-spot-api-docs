@@ -683,7 +683,7 @@ limit | INT | NO | Default 500; max 1000.
 ]
 ```
 
-### 查询历史成交(MARKET_DATA)
+### 查询历史成交
 ```
 GET /api/v3/historicalTrades
 ```
@@ -1786,6 +1786,7 @@ timestamp | LONG | YES |
     "orderId": 11,
     "orderListId": -1,
     "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+    "transactTime": 1684804350068,
     "price": "0.089853",
     "origQty": "0.178622",
     "executedQty": "0.000000",
@@ -1802,6 +1803,7 @@ timestamp | LONG | YES |
     "orderId": 13,
     "orderListId": -1,
     "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+    "transactTime": 1684804350068,
     "price": "0.090430",
     "origQty": "0.178622",
     "executedQty": "0.000000",
@@ -1839,6 +1841,7 @@ timestamp | LONG | YES |
         "orderId": 20,
         "orderListId": 1929,
         "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+        "transactTime": 1684804350068,
         "price": "0.668611",
         "origQty": "0.690354",
         "executedQty": "0.000000",
@@ -1857,6 +1860,7 @@ timestamp | LONG | YES |
         "orderId": 21,
         "orderListId": 1929,
         "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+        "transactTime": 1684804350068,
         "price": "0.008791",
         "origQty": "0.690354",
         "executedQty": "0.000000",
@@ -1933,6 +1937,7 @@ timestamp | LONG | YES |
     "orderId": 9,
     "orderListId": -1,
     "clientOrderId": "osxN3JXAtJvKvCqGeMWMVR",
+    "transactTime": 1684804350068,
     "price": "0.01000000",
     "origQty": "0.000100",
     "executedQty": "0.00000000",
@@ -2275,6 +2280,7 @@ timestamp|LONG|YES|
       "orderId": 2,
       "orderListId": 0,
       "clientOrderId": "unfWT8ig8i0uj6lPuYLez6",
+      "transactTime": 1688005070874,
       "price": "1.00000000",
       "origQty": "10.00000000",
       "executedQty": "0.00000000",
@@ -2291,6 +2297,7 @@ timestamp|LONG|YES|
       "orderId": 3,
       "orderListId": 0,
       "clientOrderId": "unfWT8ig8i0uj6lPuYLez6",
+      "transactTime": 1688005070874,
       "price": "3.00000000",
       "origQty": "10.00000000",
       "executedQty": "0.00000000",
@@ -2508,6 +2515,7 @@ timestamp | LONG | YES |
   "canDeposit": true,
   "brokered": false,
   "requireSelfTradePrevention": false,
+  "preventSor": false,
   "updateTime": 123456789,
   "balances": [
     {
@@ -2519,7 +2527,11 @@ timestamp | LONG | YES |
       "asset": "LTC",
       "free": "4763368.68006011",
       "locked": "0.00000000"
-    }
+    },
+    "permissions": [
+      "SPOT"
+    ],
+    "uid": 354937868
   ]
 }
 ```

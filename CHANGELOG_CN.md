@@ -1,4 +1,56 @@
-# 更新日志 (2023-06-06)
+# 更新日志 (2023-07-11)
+
+## 2023-07-11
+
+**注意:** 所有更改都将逐步推出，可能需要一周时间才能完成。
+
+* 错误消息的变动:
+    * 之前当发送重复交易对时，会返回错误信息: "Mandatory parameter symbols was not sent, was empty/null, or malformed."
+    * 现在则返回消息: "Symbol is present multiple times in the list", with a new error code `-1151`
+    * 受影响的接口:
+        * `GET /api/v3/exchangeInfo`
+        * `GET /api/v3/ticker/24hr`
+        * `GET /api/v3/ticker/price`
+        * `GET/api/v3/ticker/bookTicker`
+        * `exchangeInfo`
+        * `ticker.24hr`
+        * `ticker.price`
+        * `ticker.book`
+* 修复一个bug，当查询没有被存档的订单时候，可能返回错误消息称已经被存档。
+
+Rest API
+
+* `GET /api/v3/account` 变动：
+    * 返回数据中添加新字段 `preventSor`.
+    * 返回数据中添加用户ID的新字段 `uid`.
+* `GET /api/v3/historicalTrades` 变动：
+    * 鉴权类型从 `MARKET_DATA` 变更为 `NONE`.
+    * 不需要设置 `X-MBX-APIKEY` 到请求的header中.
+
+Websocket API
+
+* `account.status` 变动：
+    * 返回数据中添加新字段 `preventSor`.
+    * 返回数据中添加用户ID的新字段 `uid`.
+* `trades.historical` 变动：
+    * 鉴权类型从 `MARKET_DATA` 变更为 `NONE`.
+    * 请求中不需要设置 `apiKey`.
+
+* 修改了几个bugs: 当下单时设置 `type=MARKET` 和 `quoteOrderQty`, 也被称为“反向市价单”:
+    * 当处于极端市场情况下, 订单不会返回部分成交，或者成交的数量为0甚至是负数.
+    * 当这种反向市价单的成交数量超过交易对的 `maxQty`, 订单会因为违反`MARKET_LOT_SIZE` 过滤器而被拒绝.
+* 修复一个OCO订单的bug: 当使用 `trailingDelta` 时候, 当任何leg被触发时, `trailingTime` 值可能不正确.
+* 这些接口的返回数据中添加新字段 `transactTime` :
+    * `DELETE /api/v3/order`
+    * `POST /api/v3/order/cancelReplace`
+    * `DELETE /api/v3/openOrders`
+    * `DELETE /api/v3/orderList`
+    * `order.cancel`
+    * `order.cancelReplace`
+    * `openOrders.cancelAll`
+    * `orderList.cancel`
+
+
 
 
 ## 2023-06-06

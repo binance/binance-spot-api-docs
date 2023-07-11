@@ -30,7 +30,7 @@
   - [Market Data endpoints](#market-data-endpoints)
     - [Order book](#order-book)
     - [Recent trades list](#recent-trades-list)
-    - [Old trade lookup (MARKET_DATA)](#old-trade-lookup-market_data)
+    - [Old trade lookup](#old-trade-lookup)
     - [Compressed/Aggregate trades list](#compressedaggregate-trades-list)
     - [Kline/Candlestick data](#klinecandlestick-data)
     - [UIKlines](#uiklines)
@@ -66,7 +66,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2023-06-07)
+# Public Rest API for Binance (2023-07-11)
 
 ## General API Information
 * The following base endpoints are available. Please use whichever works best for your setup:
@@ -174,7 +174,6 @@ NONE | Endpoint can be accessed freely.
 TRADE | Endpoint requires sending a valid API-Key and signature.
 USER_DATA | Endpoint requires sending a valid API-Key and signature.
 USER_STREAM | Endpoint requires sending a valid API-Key.
-MARKET_DATA | Endpoint requires sending a valid API-Key.
 
 
 * `TRADE` and `USER_DATA` endpoints are `SIGNED` endpoints.
@@ -752,7 +751,7 @@ Memory
 ]
 ```
 
-### Old trade lookup (MARKET_DATA)
+### Old trade lookup 
 ```
 GET /api/v3/historicalTrades
 ```
@@ -1788,6 +1787,7 @@ Matching Engine
   "orderId": 4,
   "orderListId": -1, // Unless part of an OCO, the value will always be -1.
   "clientOrderId": "cancelMyOrder1",
+  "transactTime": 1684804350068,
   "price": "2.00000000",
   "origQty": "1.00000000",
   "executedQty": "0.00000000",
@@ -1847,6 +1847,7 @@ Matching Engine
     "orderId": 11,
     "orderListId": -1,
     "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+    "transactTime": 1684804350068,
     "price": "0.089853",
     "origQty": "0.178622",
     "executedQty": "0.000000",
@@ -1863,6 +1864,7 @@ Matching Engine
     "orderId": 13,
     "orderListId": -1,
     "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+    "transactTime": 1684804350069,
     "price": "0.090430",
     "origQty": "0.178622",
     "executedQty": "0.000000",
@@ -1900,6 +1902,7 @@ Matching Engine
         "orderId": 20,
         "orderListId": 1929,
         "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+        "transactTime": 1688005070874,
         "price": "0.668611",
         "origQty": "0.690354",
         "executedQty": "0.000000",
@@ -1918,6 +1921,7 @@ Matching Engine
         "orderId": 21,
         "orderListId": 1929,
         "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
+        "transactTime": 1688005070874,
         "price": "0.008791",
         "origQty": "0.690354",
         "executedQty": "0.000000",
@@ -1996,6 +2000,7 @@ Matching Engine
     "orderId": 9,
     "orderListId": -1,
     "clientOrderId": "osxN3JXAtJvKvCqGeMWMVR",
+    "transactTime": 1684804350068,
     "price": "0.01000000",
     "origQty": "0.000100",
     "executedQty": "0.00000000",
@@ -2406,6 +2411,7 @@ Matching Engine
       "orderId": 2,
       "orderListId": 0,
       "clientOrderId": "unfWT8ig8i0uj6lPuYLez6",
+      "transactTime": 1688005070874,
       "price": "1.00000000",
       "origQty": "10.00000000",
       "executedQty": "0.00000000",
@@ -2423,6 +2429,7 @@ Matching Engine
       "orderId": 3,
       "orderListId": 0,
       "clientOrderId": "unfWT8ig8i0uj6lPuYLez6",
+      "transactTime": 1688005070874,
       "price": "3.00000000",
       "origQty": "10.00000000",
       "executedQty": "0.00000000",
@@ -2641,8 +2648,9 @@ Memory => Database
   "canTrade": true,
   "canWithdraw": true,
   "canDeposit": true,
-  "brokered":false,
+  "brokered": false,
   "requireSelfTradePrevention": false,
+  "preventSor": false,
   "updateTime": 123456789,
   "accountType": "SPOT",
   "balances": [
@@ -2657,9 +2665,10 @@ Memory => Database
       "locked": "0.00000000"
     }
   ],
-    "permissions": [
+  "permissions": [
     "SPOT"
-  ]
+  ],
+  "uid": 354937868
 }
 ```
 

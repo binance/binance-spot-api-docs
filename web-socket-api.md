@@ -29,7 +29,7 @@
   - [Market data requests](#market-data-requests)
     - [Order book](#order-book)
     - [Recent trades](#recent-trades)
-    - [Historical trades (MARKET_DATA)](#historical-trades-market_data)
+    - [Historical trades](#historical-trades)
     - [Aggregate trades](#aggregate-trades)
     - [Klines](#klines)
     - [UI Klines](#ui-klines)
@@ -66,7 +66,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public WebSocket API for Binance (2023-06-07)
+# Public WebSocket API for Binance (2023-07-11)
 
 ## General API Information
 
@@ -525,7 +525,6 @@ Security type | API key  | Signature | Description
 `TRADE`       | required | required  | Trading on the exchange, placing and canceling orders
 `USER_DATA`   | required | required  | Private account information, such as order status and your trading history
 `USER_STREAM` | required |           | Managing User Data Stream subscriptions
-`MARKET_DATA` | required |           | Historical market data access
 
 * Secure methods require a valid API key to be specified and authenticated.
   * API keys can be created on the [API Management](https://www.binance.com/en/support/faq/360002502072) page of your Binance account.
@@ -1292,7 +1291,7 @@ Memory
 }
 ```
 
-### Historical trades (MARKET_DATA)
+### Historical trades 
 
 ```javascript
 {
@@ -1301,8 +1300,7 @@ Memory
   "params": {
     "symbol": "BNBBTC",
     "fromId": 0,
-    "limit": 1,
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A"
+    "limit": 1
   }
 }
 ```
@@ -1319,7 +1317,6 @@ Name      | Type    | Mandatory | Description
 `symbol`  | STRING  | YES       |
 `fromId`  | INT     | NO        | Trade ID to begin at
 `limit`   | INT     | NO        | Default 500; max 1000
-`apiKey`  | STRING  | YES       |
 
 Notes:
 
@@ -3089,6 +3086,7 @@ When an individual order is canceled:
     "orderId": 12569099453,
     "orderListId": -1,                              // set only for legs of an OCO
     "clientOrderId": "91fe37ce9e69c90d6358c0",      // newClientOrderId from request
+    "transactTime": 1684804350068,
     "price": "23416.10000000",
     "origQty": "0.00847000",
     "executedQty": "0.00001000",
@@ -3150,6 +3148,7 @@ When an OCO is canceled:
         "orderId": 12569099453,
         "orderListId": 19431,
         "clientOrderId": "OFFXQtxVFZ6Nbcg4PgE2DA",
+        "transactTime": 1684804350068,
         "price": "23450.50000000",
         "origQty": "0.00850000"
         "executedQty": "0.00000000",
@@ -3167,6 +3166,7 @@ When an OCO is canceled:
         "orderId": 12569099454,
         "orderListId": 19431,
         "clientOrderId": "OFFXQtxVFZ6Nbcg4PgE2DA",
+        "transactTime": 1684804350068,
         "price": "23400.00000000",
         "origQty": "0.00850000"
         "executedQty": "0.00000000",
@@ -3516,6 +3516,7 @@ If both cancel and placement succeed, you get the following response with `"stat
       "orderId": 125690984230,
       "orderListId": -1,
       "clientOrderId": "91fe37ce9e69c90d6358c0",      // cancelNewClientOrderId from request
+      "transactTime": 1684804350068,
       "price": "23450.00000000",
       "origQty": "0.00847000",
       "executedQty": "0.00001000",
@@ -3932,6 +3933,7 @@ Cancellation reports for orders and OCOs have the same format as in [`order.canc
       "orderId": 12569099453,
       "orderListId": -1,
       "clientOrderId": "91fe37ce9e69c90d6358c0",
+      "transactTime": 1684804350068,
       "price": "23416.10000000",
       "origQty": "0.00847000",
       "executedQty": "0.00001000",
@@ -3975,6 +3977,7 @@ Cancellation reports for orders and OCOs have the same format as in [`order.canc
           "orderId": 12569099453,
           "orderListId": 19431,
           "clientOrderId": "OFFXQtxVFZ6Nbcg4PgE2DA",
+          "transactTime": 1684804350068,
           "price": "23450.50000000",
           "origQty": "0.00850000",
           "executedQty": "0.00000000",
@@ -3992,6 +3995,7 @@ Cancellation reports for orders and OCOs have the same format as in [`order.canc
           "orderId": 12569099454,
           "orderListId": 19431,
           "clientOrderId": "OFFXQtxVFZ6Nbcg4PgE2DA",
+          "transactTime": 1684804350068,
           "price": "23400.00000000",
           "origQty": "0.00850000",
           "executedQty": "0.00000000",
@@ -4621,6 +4625,7 @@ Memory => Database
     },
     "brokered": false,
     "requireSelfTradePrevention": false,
+    "preventSor": false,
     "updateTime": 1660801833000,
     "accountType": "SPOT",
     "balances": [
@@ -4642,7 +4647,8 @@ Memory => Database
     ],
     "permissions": [
       "SPOT"
-    ]
+    ],
+    "uid": 354937868
   },
   "rateLimits": [
     {
