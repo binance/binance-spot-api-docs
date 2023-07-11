@@ -141,6 +141,9 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 #### -1145 INVALID_CANCEL_RESTRICTIONS
  * `cancelRestrictions` has to be either `ONLY_NEW` or `ONLY_PARTIALLY_FILLED`.
 
+#### -1151 DUPLICATE_SYMBOLS
+ * Symbol is present multiple times in the list.
+
 #### -2010 NEW_ORDER_REJECTED
  * NEW_ORDER_REJECTED
 

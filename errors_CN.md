@@ -140,6 +140,9 @@
 #### -1145 无效的取消限制
  * `cancelRestrictions` has to be either `ONLY_NEW` or `ONLY_PARTIALLY_FILLED`.
 
+#### -1151 重复的交易对
+ * Symbol is present multiple times in the list.
+
 #### -2010 新订单被拒绝
  * NEW_ORDER_REJECTED
 
