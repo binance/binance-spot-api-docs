@@ -684,6 +684,66 @@ OJJaf8C/3VGrU4ATTR4GiUDqL2FboSE1Qw7UnnoYNfXTXHubIl1iaePGuGyfct4NPu5oVEZCH4Q6ZStf
 }
 ```
 
+### SIGNED 请求示例 (Ed25519)
+
+**我们建议使用 Ed25519 API keys**，因为它在所有受支持的 API key 类型中提供最佳性能和安全性。
+
+参数           | 取值
+------------  | ------------
+`symbol`      | BTCUSDT
+`side`        | SELL
+`type`        | LIMIT
+`timeInForce` | GTC
+`quantity`    | 1
+`price`       | 0.2
+`timestamp`   | 1668481559918
+
+下面的 Python 示例代码能说明如何使用 Ed25519 key 对 payload 进行签名。
+
+```python
+#!/usr/bin/env python3
+import base64
+import time
+import json
+from cryptography.hazmat.primitives.serialization import load_pem_private_key
+from websocket import create_connection
+
+# 设置身份验证：
+API_KEY='替换成您的 API Key'
+PRIVATE_KEY_PATH='test-prv-key.pem'
+# 加载 private key。
+# 在这个例子中，private key 没有加密，但我们建议使用强密码以提高安全性。
+with open(PRIVATE_KEY_PATH, 'rb') as f:
+    private_key = load_pem_private_key(data=f.read(), password=None)
+# 设置请求参数：
+params = {
+    'apiKey':        API_KEY,	
+    'symbol':       'BTCUSDT',
+    'side':         'SELL',
+    'type':         'LIMIT',
+    'timeInForce':  'GTC',
+    'quantity':     '1.0000000',
+    'price':        '0.20'
+}
+# 参数中加时间戳：
+timestamp = int(time.time() * 1000) # 以毫秒为单位的 UNIX 时间戳
+params['timestamp'] = timestamp
+# 参数中加签名：
+payload = '&'.join([f'{param}={value}' for param, value in sorted(params.items())])
+signature = base64.b64encode(private_key.sign(payload.encode('ASCII')))
+params['signature'] = signature.decode('ASCII')
+# 发送请求：
+request = {	
+    'id': 'my_new_order',	
+    'method': 'order.place',	
+    'params': params
+}
+ws = create_connection('wss://ws-api.binance.com:443/ws-api/v3')	
+ws.send(json.dumps(request))	
+result =  ws.recv()	
+ws.close()	
+print(result)
+```
 
 # 数据源
 

@@ -18,6 +18,7 @@
   - [Timing security](#timing-security)
   - [SIGNED request example (HMAC)](#signed-request-example-hmac)
   - [SIGNED request example (RSA)](#signed-request-example-rsa)
+  - [SIGNED Request Example (Ed25519)](#signed-request-example-ed25519)
 - [Data sources](#data-sources)
 - [Public API requests](#public-api-requests)
     - [Terminology](#terminology)
@@ -66,7 +67,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public WebSocket API for Binance (2023-07-11)
+# Public WebSocket API for Binance (2023-07-18)
 
 ## General API Information
 
@@ -771,6 +772,79 @@ Finally, complete the request by adding the `signature` parameter with the signa
     "signature":        "OJJaf8C/3VGrU4ATTR4GiUDqL2FboSE1Qw7UnnoYNfXTXHubIl1iaePGuGyfct4NPu5oVEZCH4Q6ZStfB1w4ssgu0uiB/Bg+fBrRFfVgVaLKBdYHMvT+ljUJzqVaeoThG9oXlduiw8PbS9U8DYAbDvWN3jqZLo4Z2YJbyovyDAvDTr/oC0+vssLqP7NmlNb3fF3Bj7StmOwJvQJTbRAtzxK5PP7OQe+0mbW+D7RqVkUiSswR8qJFWTeSe4nXXNIdZdueYhF/Xf25L+KitJS5IHdIHcKfEw3MQzHFb2ZsGWkjDQwxkwr7Noi0Zaa+gFtxCuatGFm9dFIyx217pmSHtA=="
   }
 }
+```
+
+## SIGNED Request Example (Ed25519)
+
+**Note: It is highly recommended to use Ed25519 API keys as it should provide the best performance and security out of all supported key types.**
+
+Parameter     | Value
+------------  | ------------
+`symbol`      | BTCUSDT
+`side`        | SELL
+`type`        | LIMIT
+`timeInForce` | GTC
+`quantity`    | 1
+`price`       | 0.2
+`timestamp`   | 1668481559918
+
+This is a sample code in Python to show how to sign the payload with an Ed25519 key. 
+
+```python
+#!/usr/bin/env python3
+
+import base64
+import time
+import json
+from cryptography.hazmat.primitives.serialization import load_pem_private_key
+from websocket import create_connection
+
+# Set up authentication
+API_KEY='put your own API Key here'
+PRIVATE_KEY_PATH='test-prv-key.pem'
+
+# Load the private key.
+# In this example the key is expected to be stored without encryption,
+# but we recommend using a strong password for improved security.
+with open(PRIVATE_KEY_PATH, 'rb') as f:
+    private_key = load_pem_private_key(data=f.read(),
+                                       password=None)
+
+# Set up the request parameters
+params = {
+    'apiKey':        API_KEY,
+    'symbol':       'BTCUSDT',
+    'side':         'SELL',
+    'type':         'LIMIT',
+    'timeInForce':  'GTC',
+    'quantity':     '1.0000000',
+    'price':        '0.20'
+}
+
+# Timestamp the request
+timestamp = int(time.time() * 1000) # UNIX timestamp in milliseconds
+params['timestamp'] = timestamp
+
+# Sign the request
+payload = '&'.join([f'{param}={value}' for param, value in sorted(params.items())])
+
+signature = base64.b64encode(private_key.sign(payload.encode('ASCII')))
+params['signature'] = signature.decode('ASCII')
+
+# Send the request
+request = {
+    'id': 'my_new_order',
+    'method': 'order.place',
+    'params': params
+}
+
+ws = create_connection("wss://ws-api.binance.com:443/ws-api/v3")
+ws.send(json.dumps(request))
+result =  ws.recv()
+ws.close()
+
+print(result)
+
 ```
 
 

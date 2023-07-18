@@ -20,6 +20,7 @@
       - [Example 2: As a query string](#example-2-as-a-query-string)
       - [Example 3: Mixed query string and request body](#example-3-mixed-query-string-and-request-body)
     - [RSA Keys](#rsa-keys)
+    - [Ed25519 Keys](#ed25519-keys)
 - [Public API Endpoints](#public-api-endpoints)
     - [Terminology](#terminology)
   - [ENUM definitions](#enum-definitions)
@@ -66,7 +67,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2023-07-11)
+# Public Rest API for Binance (2023-07-18)
 
 ## General API Information
 * The following base endpoints are available. Please use whichever works best for your setup:
@@ -221,20 +222,20 @@ Linux command line using `echo`, `openssl`, and `curl`.
 
 Key | Value
 ------------ | ------------
-apiKey | vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A
-secretKey | NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j
+`apiKey` | vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A
+`secretKey` | NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j
 
 
 Parameter | Value
 ------------ | ------------
-symbol | LTCBTC
-side | BUY
-type | LIMIT
-timeInForce | GTC
-quantity | 1
-price | 0.1
-recvWindow | 5000
-timestamp | 1499827319559
+`symbol` | LTCBTC
+`side` | BUY
+`type` | LIMIT
+`timeInForce` | GTC
+`quantity` | 1
+`price` | 0.1
+`recvWindow` | 5000
+`timestamp` | 1499827319559
 
 #### Example 1: As a request body
 * **requestBody:** symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559
@@ -304,18 +305,18 @@ For this example, the private key will be referenced as `./test-prv-key.pem`
 
 Key | Value
 ------------ | ------------
-apiKey | CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ
+`apiKey` | CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ
 
 Parameter | Value
 ------------ | ------------
-symbol | BTCUSDT
-side | SELL
-type | LIMIT
-timeInForce | GTC
-quantity | 1
-price | 0.2
-timestamp | 1668481559918
-recvWindow | 5000
+`symbol` | BTCUSDT
+`side` | SELL
+`type` | LIMIT
+`timeInForce` | GTC
+`quantity` | 1
+`price` | 0.2
+`timestamp` | 1668481559918
+`recvWindow` | 5000
 
 
 **Step 1: Construct the payload**
@@ -375,6 +376,71 @@ curl -H "X-MBX-APIKEY: $API_KEY" -X "$API_METHOD" \
     --data-urlencode "signature=$signature"
 ```
 
+### Ed25519 Keys 
+
+**Note: It is highly recommended to use Ed25519 API keys as it should provide the best performance and security out of all supported key types.**
+
+Parameter     | Value
+------------  | ------------
+`symbol`      | BTCUSDT
+`side`        | SELL
+`type`        | LIMIT
+`timeInForce` | GTC
+`quantity`    | 1
+`price`       | 0.2
+`timestamp`   | 1668481559918
+
+This is a sample code in Python to show how to sign the payload with an Ed25519 key. 
+
+```python
+#!/usr/bin/env python3
+
+import base64
+import requests
+import time
+from cryptography.hazmat.primitives.serialization import load_pem_private_key
+
+# Set up authentication
+API_KEY='put your own API Key here'
+PRIVATE_KEY_PATH='test-prv-key.pem'
+
+# Load the private key.
+# In this example the key is expected to be stored without encryption,
+# but we recommend using a strong password for improved security.
+with open(PRIVATE_KEY_PATH, 'rb') as f:
+    private_key = load_pem_private_key(data=f.read(),
+                                       password=None)
+
+# Set up the request parameters
+params = {
+    'symbol':       'BTCUSDT',
+    'side':         'SELL',
+    'type':         'LIMIT',
+    'timeInForce':  'GTC',
+    'quantity':     '1.0000000',
+    'price':        '0.20',
+}
+
+# Timestamp the request
+timestamp = int(time.time() * 1000) # UNIX timestamp in milliseconds
+params['timestamp'] = timestamp
+
+# Sign the request
+payload = '&'.join([f'{param}={value}' for param, value in params.items()])
+signature = base64.b64encode(private_key.sign(payload.encode('ASCII')))
+params['signature'] = signature
+
+# Send the request
+headers = {
+    'X-MBX-APIKEY': API_KEY,
+}
+response = requests.post(
+    'https://api.binance.com/api/v3/order',
+    headers=headers,
+    data=params,
+)
+print(response.json())
+```
 
 # Public API Endpoints
 ### Terminology
