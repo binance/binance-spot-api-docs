@@ -18,6 +18,7 @@
   - [Timing security](#timing-security)
   - [SIGNED request example (HMAC)](#signed-request-example-hmac)
   - [SIGNED request example (RSA)](#signed-request-example-rsa)
+  - [SIGNED Request Example (Ed25519)](#signed-request-example-ed25519)
 - [Data sources](#data-sources)
 - [Public API requests](#public-api-requests)
     - [Terminology](#terminology)
