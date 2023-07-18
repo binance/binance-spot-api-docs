@@ -1,4 +1,15 @@
-# 更新日志 (2023-07-11)
+# 更新日志 (2023-07-18)
+
+
+## 2023-07-18
+
+* 现在支持使用 Ed25519 类型的 API key。(UI 会在本周发布更新支持)
+    * Ed25519 API keys 是 RSA API keys 的替代品，使用非对称加密技术来验证您的 API 请求。
+    * **我们建议切换到 Ed25519** 以提高性能和安全性。 <br>
+        详情请参考[API Key 类型](./faqs/api_key_types_cn.md)。
+* 文档已更新，包括了有关如何使用 Ed25519 key 对有效载荷进行签名的说明。
+
+---
 
 ## 2023-07-11
 
@@ -51,14 +62,14 @@ Websocket API
     * `orderList.cancel`
 
 
-
+---
 
 ## 2023-06-06
 
 * 为了提供系统的冗余能力，新加一个API接入网址: **https://api-gcp.binance.com/**
     * 此网址利用了 GCP (Google Cloud Platform) 的CDN，可能在性能上比`api1`-`api4`要慢.
 
-
+---
 
 ## 2023-05-26
 
