@@ -2,7 +2,7 @@
 
 ## 2023-07-18
 
-* New API key type – Ed25519 – is now supported. (UI support will be released on July 19, 2023.)
+* New API key type – Ed25519 – is now supported. (UI support will be released this week.)
   * Ed25519 API keys are an alternative to RSA API keys, using asymmetric cryptography to authenticate your requests on the API.
   * **We recommend switching to Ed25519** for improved performance and security. <br>
     For more information, please refer to the [API Key Types](./faqs/api_key_types.md).
