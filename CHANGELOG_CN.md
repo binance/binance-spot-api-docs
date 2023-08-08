@@ -2,6 +2,8 @@
 
 ## 2023-08-08
 
+智能订单路由(Smart Order Routing：SOR）添加到 API 中。您可以在[SOR 常见问题](./faqs/sor_faq_cn.md) 文档中找到更多详细信息。具体上线时间请关注相关公告。
+
 REST API
 
 * `GET /api/v3/exchangeInfo` 变动：
