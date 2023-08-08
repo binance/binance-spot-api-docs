@@ -1,4 +1,4 @@
-# REST行情与交易接口 (2023-06-07)
+# REST行情与交易接口 (2023-08-08)
 
 ## API 基本信息
 * 本篇列出接口的 base URL 有:
@@ -415,6 +415,10 @@ print(response.json())
 
 * `OCO` 选择性委托订单
 
+**分配类型 (allocationtype, type):**
+
+* `SOR` 智能订单路由
+
 **订单种类 (orderTypes, type):**
 
 * `LIMIT` 限价单
@@ -430,6 +434,11 @@ print(response.json())
 * `ACK`
 * `RESULT`
 * `FULL`
+
+**工作平台**
+
+* `EXCHANGE` - 常规交易
+* `SOR` - 智能订单路由
 
 **订单方向 (side):**
 
@@ -653,6 +662,15 @@ GET /api/v3/exchangeInfo
       "defaultSelfTradePreventionMode": "NONE",
       "allowedSelfTradePreventionModes": [
         "NONE"
+      ]
+    }
+  ],
+  "sors": [
+    {
+      "baseAsset": "BTC",
+      "symbols": [
+        "BTCUSDT",
+        "BTCUSDC"
       ]
     }
   ]
@@ -1667,6 +1685,7 @@ Type | 强制要求的参数 | 其他信息
 `strategyType` | 策略单类型; 用以显示此订单对应的交易策略。                           | 如果在请求中添加了参数，则会出现。                      | `"strategyType": 1000000` |
 `trailingDelta`| 用以定义追踪止盈止损订单被触发的价格差。                             | 出现在追踪止损订单中。                                | `"trailingDelta": 10` |
 `trailingTime` | 追踪单被激活和跟踪价格变化的时间。                                  | 出现在追踪止损订单中。                                 | `"trailingTime": -1`|
+`workingFloor` | 用以定义订单是通过 SOR 还是由订单提交到的订单薄（order book）成交的。   |出现在使用了 SOR 的订单中。                             |`"workingFloor": "SOR"`|
 
 ### 测试下单接口 (TRADE)
 
@@ -2536,6 +2555,101 @@ timestamp|LONG|YES|
 ]
 ```
 
+### 下 SOR 订单 (TRADE)
+
+```
+POST /api/v3/sor/order
+```
+发送使用智能订单路由 (SOR) 的新订单。
+
+**权重(IP):**
+1
+
+**参数**
+
+名称| 类型|是否必需| 描述
+------------            | -----  | ------------ | ------------
+symbol                  | STRING | YES |
+side                    | ENUM   | YES |
+type                    | ENUM   | YES |
+timeInForce             | ENUM   | NO |
+quantity                | DECIMAL| YES |
+price                   | DECIMAL| NO |
+newClientOrderId        | STRING | NO | 用户自定义的orderid，如空缺系统会自动赋值。如果几个订单具有相同的 `newClientOrderID` 赋值，<br/>那么只有在前一个订单成交后才可以接受下一个订单，否则该订单将被拒绝。
+strategyId              |INT     | NO|
+strategyType            |INT     | NO| 赋值不能小于 `1000000`.
+icebergQty              | DECIMAL| NO | 仅有限价单可以使用该参数，含义为创建冰山订单并指定冰山订单的数量。
+newOrderRespType        | ENUM   | NO | 指定响应类型:
+指定响应类型 `ACK`, `RESULT` 或 `FULL`; 默认为 `FULL`。
+selfTradePreventionMode |ENUM    | NO | 允许的 ENUM 取决于交易对的配置。支持的值有 `EXPIRE_TAKER`，`EXPIRE_MAKER`，`EXPIRE_BOTH`，`NONE`。
+recvWindow              | LONG   | NO | 赋值不能大于 `60000`
+timestamp               | LONG | YES |
+
+**请注意:** `POST /api/v3/sor/order` 只支持 `限价` 和 `市场` 单， 并不支持 `quoteOrderQty`。
+
+**数据源:**
+撮合引擎
+
+**响应:**
+
+```javascript
+{
+  "symbol": "BTCUSDT",
+  "orderId": 2,
+  "orderListId": -1,
+  "clientOrderId": "sBI1KM6nNtOfj5tccZSKly",
+  "transactTime": 1689149087774,
+  "price": "31000.00000000",
+  "origQty": "0.50000000",
+  "executedQty": "0.50000000",
+  "cummulativeQuoteQty": "14000.00000000",
+  "status": "FILLED",
+  "timeInForce": "GTC",
+  "type": "LIMIT",
+  "side": "BUY",
+  "workingTime": 1689149087774,
+  "fills": [
+    {
+      "matchType": "ONE_PARTY_TRADE_REPORT",
+      "price": "28000.00000000",
+      "qty": "0.50000000",
+      "commission": "0.00000000",
+      "commissionAsset": "BTC",
+      "tradeId": -1,
+      "allocId": 0
+    }
+  ],
+  "workingFloor": "SOR",              
+  "selfTradePreventionMode": "NONE",
+  "usedSor": true
+}
+```
+
+### 测试 SOR 下单接口 (TRADE)
+
+```
+POST /api/v3/sor/order/test
+```
+
+用于测试使用智能订单路由 (SOR) 的订单请求，但不会提交到撮合引擎
+
+**参数:**
+
+参考 `POST /api/v3/sor/order`
+
+**数据源:**
+缓存
+
+**响应:**
+
+```
+{}
+```
+
+
+
+## 账户接口
+
 ### 账户信息 (USER_DATA)
 ```
 GET /api/v3/account (HMAC SHA256)
@@ -2735,12 +2849,77 @@ timestamp           | LONG   | YES          |
     "symbol": "BTCUSDT",
     "preventedMatchId": 1,
     "takerOrderId": 5,
+    "makerSymbol": "BTCUSDT",
     "makerOrderId": 3,
     "tradeGroupId": 1,
     "selfTradePreventionMode": "EXPIRE_MAKER",
     "price": "1.100000",
     "makerPreventedQuantity": "1.300000",
     "transactTime": 1669101687094
+  }
+]
+```
+
+### 查询分配结果 (USER_DATA)
+
+```
+GET /api/v3/myAllocations
+```
+
+检索由 SOR 订单生成引起的分配结果。
+
+**权重:*
+10
+
+**参数:**
+
+名称                 | 类型   | 是否必需         | 描述
+------------        | ----   | ------------ | ------------
+symbol                   |STRING |Yes        |
+startTime                |LONG   |No        |
+endTime                  |LONG   |No        |
+fromAllocationId         |INT    |No        |
+limit                    |INT    |No        |默认值 500； 最大值 1000
+orderId                  |LONG   |No        |
+recvWindow               |LONG   |No        |不能大于 `60000`
+timestamp                |LONG   |No        |
+
+支持的参数组合:
+
+参数                                  | 响应 |
+------------------------------------------- | -------- |
+`symbol`                                    | 按从最旧到最新排序的分配 |
+`symbol` + `startTime`                      | 从 `startTime` 开始的最旧的分配 |
+`symbol` + `endTime`                        | 到 `endTime` 为止的最新的分配 |
+`symbol` + `startTime` + `endTime`          | 在指定时间范围内的分配 |
+`symbol` + `fromAllocationId`               | 从指定 `AllocationId` 开始的分配  |
+`symbol` + `orderId`                        | 按从最旧到最新排序并和特定订单关联的分配 |
+`symbol` + `orderId` + `fromAllocationId`   | 从指定 `AllocationId` 开始并和特定订单关联的分配 |
+
+**注意:** `startTime` 和 `endTime` 之间的时间不能超过 24 小时。
+
+**数据源:**
+数据库
+
+**响应:*
+
+```javascript
+[
+  {
+    "symbol": "BTCUSDT",
+    "allocationId": 0,
+    "allocationType": "SOR",
+    "orderId": 1,
+    "orderListId": -1,
+    "price": "1.00000000",
+    "qty": "5.00000000",
+    "quoteQty": "5.00000000",
+    "commission": "0.00000000",
+    "commissionAsset": "BTC",
+    "time": 1687506878118,
+    "isBuyer": true,
+    "isMaker": false,
+    "isAllocator": false
   }
 ]
 ```

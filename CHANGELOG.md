@@ -1,4 +1,42 @@
-# CHANGELOG for Binance's API (2023-07-18)
+# CHANGELOG for Binance's API (2023-08-08)
+
+## 2023-08-08
+
+Smart Order Routing (SOR) will be enabled for the APIs on August 9, 2023. For more information please refer to our [FAQ](./faqs/sor_faq.md)).
+
+REST API
+
+* Changes to `GET /api/v3/exchangeInfo`:
+    * New field in response: `sors`, describing SORs enabled on the exchange.
+* Changes to `GET /api/v3/myPreventedMatches`
+    * New field `makerSymbol` will appear in the response for all prevented matches.
+* New endpoints for order placement using SOR:
+    * `POST /api/v3/sor/order`
+    * `POST /api/v3/sor/order/test`
+* New endpoint `GET /api/v3/myAllocations`
+
+WEBSOCKET API
+
+* Changes to `exchangeInfo`:
+    * New field in response: `sors`, describing SORs enabled on the exchange.
+* Changes to `myPreventedMatches`:
+    * New field `makerSymbol` will appear in the response for all prevented matches.
+* New requests for order placement using SOR:
+    * `sor.order.place`
+    * `sor.order.test`
+* New request `myAllocations`
+
+USER DATA STREAM
+
+* Changes to `executionReport`:
+    * These fields are only relevant for orders placed using SOR:
+        * New field `b` for `matchType` 
+        * New field `a` for `allocId` 
+        * New field `k` for `workingFloor`
+    * This field is only relevant for orders expiring due to STP:
+        * New field `Cs` for `counterSymbol`
+
+---
 
 ## 2023-07-18
 

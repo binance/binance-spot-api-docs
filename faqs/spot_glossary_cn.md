@@ -7,14 +7,23 @@
 `ACK`
 * `newOrderRespType`的枚举值, 设置时下单的返回值只包括下面的字段: `symbol`, `orderId`, `orderListId`, `clientOrderId`, 和 `transactTime`。
 
-`avgPrice`
-* 表示相应N分钟之内的平均价格。
-
 `aggTrade`
-* 归集交易信息; 此交易信息归集了在同一个时间同一个`taker`的订单生成的相同价格的交易信息。
+* 归集交易信息; 此交易信息归集了在同一个时间同一个 `taker` 的订单生成的相同价格的交易信息。
+
+allocation
+* 在这里，分配指的是将资产从交易所转移到个人账户的过程（e.g. 当一个订单通过 SOR 成交而不是直接交易）。
+
+`allocationId`
+* 此字段是一个唯一识别码，用来标识针对某个交易对上进行的分配(allocation)。
+
+`allocationType`
+* 参考 [ 分配类型 ](../rest-api_CN.md#allocationtype) 
 
 `asks`
 * 卖单
+
+`avgPrice`
+* 表示相应N分钟之内的平均价格。
 
 ---
 
@@ -268,6 +277,9 @@ Self Trade Prevention (STP)
 `SELL`
 * 方向(`side`)的一个枚举值, 用于用户希望卖出某一资产。
 
+Smart Order Routing (SOR)
+* 智能订单路由; 使用可互换的定价资产(`quote asset`)来提高流动性. [请阅读 SOR 常见问题](./sor_faq_cn.md) 来了解更多详情。
+
 `SPOT`
 * 现货交易; 此种交易时候，买卖相应的资产会立刻到账。
 
@@ -323,7 +335,7 @@ Self Trade Prevention (STP)
 * 追踪单被激活和跟踪价格变化的时间。
 
 `transactTime`
-* 订单生产的时间, 单位为毫秒。
+* 订单的更新时间： 下单， 成交或者取消。此字段（和所有时间戳有关的字段一样）的单位为毫秒++
 
 ---
 
@@ -344,6 +356,9 @@ User Data Stream
 
 `weightedAveragePrice`
 * 成交量加权平均价; 将过去N分钟内所有交易的价格按各自的成交量加权而算出的平均价。
+
+`workingFloor`
+* 工作平台； 该字段用于定义订单是通过 SOR 还是由订单提交到的订单薄（order book）成交的。
 
 `workingTime`
 * 指示订单何时添加到了 order book。

@@ -40,7 +40,7 @@
     - [Symbol price ticker](#symbol-price-ticker)
     - [Symbol order book ticker](#symbol-order-book-ticker)
     - [Rolling window price change statistics](#rolling-window-price-change-statistics)
-  - [Account endpoints](#account-endpoints)
+  - [Trading endpoints](#trading-endpoints)
     - [New order  (TRADE)](#new-order--trade)
       - [Conditional fields in Order Responses](#conditional-fields-in-order-responses)
     - [Test new order (TRADE)](#test-new-order-trade)
@@ -56,10 +56,14 @@
     - [Query OCO (USER_DATA)](#query-oco-user_data)
     - [Query all OCO (USER_DATA)](#query-all-oco-user_data)
     - [Query Open OCO (USER_DATA)](#query-open-oco-user_data)
+    - [New order using SOR (TRADE)](#new-order-using-sor-trade)
+    - [Test new order using SOR (TRADE)](#test-new-order-using-sor-trade)
+  - [Account Endpoints](#account-endpoints)
     - [Account information (USER_DATA)](#account-information-user_data)
     - [Account trade list (USER_DATA)](#account-trade-list-user_data)
     - [Query Current Order Count Usage (TRADE)](#query-current-order-count-usage-trade)
     - [Query Prevented Matches (USER_DATA)](#query-prevented-matches-user_data)
+    - [Query Allocations (USER_DATA)](#query-allocations-user_data)
   - [User data stream endpoints](#user-data-stream-endpoints)
     - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
     - [Keepalive user data stream (USER_STREAM)](#keepalive-user-data-stream-user_stream)
@@ -67,7 +71,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2023-07-18)
+# Public Rest API for Binance (2023-08-08)
 
 ## General API Information
 * The following base endpoints are available. Please use whichever works best for your setup:
@@ -511,7 +515,14 @@ Status | Description
 `REJECT` | The List Status is responding to a failed action either during order placement or order canceled
 
 **ContingencyType**
+
 * `OCO`
+
+<a id="allocationtype"></a>
+
+**AllocationType**
+
+* `SOR`
 
 **Order types (orderTypes, type):**
 
@@ -528,6 +539,11 @@ Status | Description
 * `ACK`
 * `RESULT`
 * `FULL`
+
+**Working Floor**
+
+* `EXCHANGE`
+* `SOR`
 
 **Order side (side):**
 
@@ -731,6 +747,15 @@ Memory
       "defaultSelfTradePreventionMode": "NONE",
       "allowedSelfTradePreventionModes": [
         "NONE"
+      ]
+    }
+  ],
+  "sors": [
+    {
+      "baseAsset": "BTC",
+      "symbols": [
+        "BTCUSDT",
+        "BTCUSDC"
       ]
     }
   ]
@@ -1574,7 +1599,8 @@ When using `symbols`:
 ]
 ```
 
-## Account endpoints
+## Trading endpoints
+
 ### New order  (TRADE)
 ```
 POST /api/v3/order  (HMAC SHA256)
@@ -1741,6 +1767,7 @@ Field          |Description                                                     
 `strategyType` | Can be used to label an order that is using an order strategy.|Appears if the parameter was populated in the request.| `"strategyType": 1000000`
 `trailingDelta`| Delta price change required before order activation| Appears for Trailing Stop Orders.|`"trailingDelta": 10`
 `trailingTime` | Time when the trailing order is now active and tracking price changes| Appears only for Trailing Stop Orders.| `"trailingTime": -1`
+`workingFloor` | Field that determines whether the order is being filled by the SOR or by the order book the order was submitted to.|Appears when placing orders using SOR|`"workingFloor": "SOR"`|
 
 ### Test new order (TRADE)
 ```
@@ -2679,6 +2706,101 @@ Database
 ]
 ```
 
+### New order using SOR (TRADE)
+
+```
+POST /api/v3/sor/order
+```
+Places an order using smart order routing (SOR).
+
+**Weight:**
+1
+
+**Parameters:**
+
+Name                    | Type   | Mandatory | Description
+------------            | -----  | ------------ | ------------
+symbol                  | STRING | YES |
+side                    | ENUM   | YES |
+type                    | ENUM   | YES |
+timeInForce             | ENUM   | NO |
+quantity                | DECIMAL| YES |
+price                   | DECIMAL| NO |
+newClientOrderId        | STRING | NO | A unique id among open orders. Automatically generated if not sent.<br/> Orders with the same `newClientOrderID` can be accepted only when the previous one is filled, otherwise the order will be rejected.
+strategyId              |INT     | NO|
+strategyType            |INT     | NO| The value cannot be less than `1000000`.
+icebergQty              | DECIMAL| NO | Used with `LIMIT` to create an iceberg order.
+newOrderRespType        | ENUM   | NO | Set the response JSON. `ACK`, `RESULT`, or `FULL`. Default to `FULL`
+selfTradePreventionMode |ENUM    | NO | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
+recvWindow              | LONG   | NO |The value cannot be greater than `60000`
+timestamp               | LONG | YES |
+
+**Note:** `POST /api/v3/sor/order` only supports `LIMIT` and `MARKET` orders. `quoteOrderQty` is not supported.
+
+**Data Source:**
+Matching Engine
+
+**Response:**
+
+```javascript
+{
+  "symbol": "BTCUSDT",
+  "orderId": 2,
+  "orderListId": -1,
+  "clientOrderId": "sBI1KM6nNtOfj5tccZSKly",
+  "transactTime": 1689149087774,
+  "price": "31000.00000000",
+  "origQty": "0.50000000",
+  "executedQty": "0.50000000",
+  "cummulativeQuoteQty": "14000.00000000",
+  "status": "FILLED",
+  "timeInForce": "GTC",
+  "type": "LIMIT",
+  "side": "BUY",
+  "workingTime": 1689149087774,
+  "fills": [
+    {
+      "matchType": "ONE_PARTY_TRADE_REPORT",
+      "price": "28000.00000000",
+      "qty": "0.50000000",
+      "commission": "0.00000000",
+      "commissionAsset": "BTC",
+      "tradeId": -1,
+      "allocId": 0
+    }
+  ],
+  "workingFloor": "SOR",              
+  "selfTradePreventionMode": "NONE",
+  "usedSor": true
+}
+```
+
+### Test new order using SOR (TRADE)
+
+```
+POST /api/v3/sor/order/test
+```
+
+Test new order creation and signature/recvWindow using smart order routing (SOR).
+Creates and validates a new order but does not send it into the matching engine.
+
+**Parameters:**
+
+Same as `POST /api/v3/sor/order`
+
+**Data Source:**
+Memory
+
+**Response:**
+
+```
+{}
+```
+
+
+
+## Account Endpoints
+
 ### Account information (USER_DATA)
 ```
 GET /api/v3/account (HMAC SHA256)
@@ -2887,6 +3009,7 @@ Database
     "symbol": "BTCUSDT",
     "preventedMatchId": 1,
     "takerOrderId": 5,
+    "makerSymbol": "BTCUSDT",
     "makerOrderId": 3,
     "tradeGroupId": 1,
     "selfTradePreventionMode": "EXPIRE_MAKER",
@@ -2897,6 +3020,69 @@ Database
 ]
 ```
 
+### Query Allocations (USER_DATA)
+
+```
+GET /api/v3/myAllocations
+```
+
+Retrieves allocations resulting from SOR order placement.
+
+**Weight:**
+10
+
+**Parameters:**
+
+Name                     | Type  |Mandatory | Description
+-----                    | ---   |----      | ---------
+symbol                   |STRING |Yes        |
+startTime                |LONG   |No        |
+endTime                  |LONG   |No        |
+fromAllocationId         |INT    |No        |
+limit                    |INT    |No        |Default 500;Max 1000
+orderId                  |LONG   |No        |
+recvWindow               |LONG   |No        |The value cannot be greater than `60000`.
+timestamp                |LONG   |No        |
+
+Supported parameter combinations:
+
+Parameters                                  | Response |
+------------------------------------------- | -------- |
+`symbol`                                    | allocations from oldest to newest |
+`symbol` + `startTime`                      | oldest allocations since `startTime` |
+`symbol` + `endTime`                        | newest allocations until `endTime` |
+`symbol` + `startTime` + `endTime`          | allocations within the time range |
+`symbol` + `fromAllocationId`               | allocations by allocation ID |
+`symbol` + `orderId`                        | allocations related to an order starting with oldest |
+`symbol` + `orderId` + `fromAllocationId`   | allocations related to an order by allocation ID |
+
+**Note:** The time between `startTime` and `endTime` can't be longer than 24 hours.
+
+**Data Source:**
+Database
+
+**Response:**
+
+```javascript
+[
+  {
+    "symbol": "BTCUSDT",
+    "allocationId": 0,
+    "allocationType": "SOR",
+    "orderId": 1,
+    "orderListId": -1,
+    "price": "1.00000000",
+    "qty": "5.00000000",
+    "quoteQty": "5.00000000",
+    "commission": "0.00000000",
+    "commissionAsset": "BTC",
+    "time": 1687506878118,
+    "isBuyer": true,
+    "isMaker": false,
+    "isAllocator": false
+  }
+]
+```
 
 ## User data stream endpoints
 Specifics on how user data streams work can be found [here.](https://github.com/binance/binance-spot-api-docs/blob/master/user-data-stream.md)

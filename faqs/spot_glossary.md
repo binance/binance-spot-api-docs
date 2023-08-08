@@ -7,14 +7,23 @@
 `ACK`
 * `newOrderRespType` enum. Stands for a type of order response in JSON where only the following fields are emitted: `symbol`, `orderId`, `orderListId`, `clientOrderId`, and `transactTime`.
 
-`avgPrice`
-* Represents the volume weighted average price for a set interval of minutes.
-
 `aggTrade`/Aggregate trade
 * Aggregation of one or more individual trades from the same taker order that got filled at the same time and price.
 
+allocation
+* Transfer of asset from the exchange to your account (e.g., when an order is filled by SOR instead of trading directly).
+
+`allocationId`
+* Unique identifier of an allocation on a symbol.
+
+`allocationType`
+* See [AllocationType](../rest-api.md#allocationtype) 
+
 `asks`
 * Orders on the `SELL` side.
+
+`avgPrice`
+* Represents the volume-weighted average price for a set interval of minutes.
 
 ---
 
@@ -271,6 +280,9 @@ Self Trade Prevention (STP)
 `SELL`
 * An enum in the `side` used when a user wants to sell an asset (e.g. BTC).
 
+Smart Order Routing (SOR)
+* Smart Order Routing uses interchangeable quote assets to improve liquidity. [Read SOR FAQ](./sor_faq.md) to learn more.
+
 `SPOT`
 * This is to distinguish a type of trading, where the purchase and delivery of a asset is made immediately.
 
@@ -326,7 +338,7 @@ Self Trade Prevention (STP)
 * The time when the trailing order is now active and tracking price changes.
 
 `transactTime`
-* The time when the order occurred. This field (as well as all timestamp related fields) will be in milliseconds.
+* The time when the order was updated: placed, filled, or canceled. This field (as well as all timestamp related fields) will be in milliseconds.
 
 ---
 
@@ -347,6 +359,9 @@ User Data Stream
 
 `weightedAveragePrice`
 * The volume weighted average price in the last x minutes.
+
+`workingFloor`
+* A field that determines whether the order is being filled by the SOR or by the order book the order was submitted to.
 
 `workingTime`
 * The time when the order started working on the order book.
