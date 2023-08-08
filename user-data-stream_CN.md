@@ -1,4 +1,4 @@
-# WebSocket 账户接口(2023-01-23)
+# WebSocket 账户接口(2023-07-21)
 
 # 基本信息
 * 本篇所列出API接口的base url : **https://api.binance.com**
@@ -198,7 +198,7 @@ listenKey | STRING | YES
   <tr>
     <td><code>v</code></td>
     <td>Prevented Match Id</td>
-    <td rowspan="5">只有在因为 STP 导致订单失效时可见。</td>
+    <td rowspan="6">只有在因为 STP 导致订单失效时可见。</td>
     <td><code>"v": 3</code></td>
   </tr>
   <tr>
@@ -220,6 +220,40 @@ listenKey | STRING | YES
     <td><code>U</code></td>
     <td>Counter Order Id</td>
     <td><code>"U":37</code></td>
+  </tr>
+  <tr>
+    <td><code>Cs</code></td>
+    <td>Counter Symbol</td>
+    <td><code>"Cs": "BTCUSDT"</code></td>
+  </tr>
+  <tr>
+    <td><code>W</code></td>
+    <td>Working Time</td>
+    <td>只有在订单在订单簿上时可见</td>
+    <td><code>"W": 1668683798379</code></td>
+  </tr>
+  <tr>
+    <td><code>b</code></td>
+    <td>Match Type</td>
+    <td rowspan="2">只有在订单有分配时可见</td>
+    <td><code>"b":"ONE_PARTY_TRADE_REPORT"</code></td>
+  </tr>
+  <tr>
+    <td><code>a</code></td>
+    <td>Allocation ID</td>
+    <td><code>"a":1234</code></td>
+  </tr>
+  <tr>
+    <td><code>k</code></td>
+    <td>Working Floor</td>
+    <td>只有在订单可能有分配时可见</td>
+    <td><code>"k":"SOR"</code></td>
+  </tr>
+  <tr>
+    <td><code>uS</code></td>
+    <td>UsedSor</td>
+    <td>只有在订单使用 SOR 时可见</td>
+    <td><code>"uS":true</code></td>
   </tr>
 </table>
 

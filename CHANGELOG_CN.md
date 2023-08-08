@@ -1,5 +1,42 @@
-# 更新日志 (2023-07-18)
+# 更新日志 (2023-07-21)
 
+## 2023-07-21
+
+智能订单路由(Smart Order Routing：SOR）已经启用。您可以在[SOR 常见问题](./faqs/sor_faq_cn.md) 文档中找到更多详细信息。
+
+REST API
+
+* `GET /api/v3/exchangeInfo` 变动：
+    * 返回数据中添加新字段: `sors`, 用于描述交易中是否使用了 SOR。
+* `GET /api/v3/myPreventedMatches` 变动：
+    * 对于所有的 Prevented Matches， 返回数据中添加新字段 `makerSymbol` 。
+* 为了在下单时使用 SOR 而添加的新接口：
+    * `POST /api/v3/sor/order`
+    * `POST /api/v3/sor/order/test`
+* 添加新接口: `GET /api/v3/myAllocations`
+
+WEBSOCKET API
+
+* `exchangeInfo` 变动：
+    *  返回数据中添加新字段: `sors` , 用于描述交易中是否使用了 SOR。
+* `myPreventedMatches` 变动：
+    * 对于所有的 Prevented Matches， 返回数据中添加新字段 `makerSymbol`。
+* 为了在下单时使用 SOR 而添加的新请求：
+    * `sor.order.place`
+    * `sor.order.test`
+* 添加新请求 `myAllocations`
+
+USER DATA STREAM
+
+* `executionReport` 变动：
+    * 以下这些字段只适用于下单时使用 SOR 的情况：
+        * 新字段 `b` 代表 `matchType` 
+        * 新字段 `a` 代表 `allocId` 
+        * 新字段 `k` 代表 `workingFloor`
+    * 这个字段只适用于订单因为触发 STP 而将过期的情况：
+        * 新字段 `Cs` 代表 `counterSymbol`
+
+---
 
 ## 2023-07-18
 

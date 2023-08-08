@@ -1,4 +1,4 @@
-# Binance 的公共 WebSocket API (2023-06-07)
+# Binance 的公共 WebSocket API (2023-07-21)
 
 ## API 基本信息
 
@@ -832,7 +832,18 @@ print(result)
 `REJECT` | 当订单状态响应失败(订单完成或取消订单)
 
 **指定订单的类型**
+
 * `OCO`
+
+**分配类型**
+
+* `SOR`
+
+**工作平台**
+
+* `EXCHANGE`
+* `SOR`
+
 
 ## 常用请求信息
 
@@ -1073,6 +1084,15 @@ NONE
         "defaultSelfTradePreventionMode": "NONE",
         "allowedSelfTradePreventionModes": [
           "NONE"
+        ]
+      }
+    ],
+    "sors": [
+      {
+        "baseAsset": "BTC",
+        "symbols": [
+          "BTCUSDT",
+          "BTCUSDC"
         ]
       }
     ]
@@ -2732,6 +2752,7 @@ days    | `1d`, `2d` ... `7d`
 `strategyType` | 策略单类型; 用以显示此订单对应的交易策略。                           | 如果在请求中添加了参数，则会出现。                      | `"strategyType": 1000000` |
 `trailingDelta`| 用以定义追踪止盈止损订单被触发的价格差。                             | 出现在追踪止损订单中。                                | `"trailingDelta": 10` |
 `trailingTime` | 追踪单被激活和跟踪价格变化的时间。                                  | 出现在追踪止损订单中。                                 | `"trailingTime": -1`|
+`workingFloor` | 用以定义订单是通过 SOR 还是由订单提交到的订单薄（order book）成交的。   |出现在使用了 SOR 的订单中。                             |`"workingFloor": "SOR"`|
 
 
 ### 测试下单 (TRADE)
@@ -4275,7 +4296,7 @@ days    | `1d`, `2d` ... `7d`
 
 取消整个订单列表。
 
-**Weight**:
+**权重:**
 1
 
 **参数:**
@@ -4444,7 +4465,7 @@ days    | `1d`, `2d` ... `7d`
 * [`userDataStream.start`](#Websocket-账户信息) 请求
 * [`executionReport`](./user-data-stream_CN.md#订单更新) 更新
 
-**Weight**:
+**权重:**
 3
 
 **参数:**
@@ -4495,6 +4516,160 @@ days    | `1d`, `2d` ... `7d`
       "intervalNum": 1,
       "limit": 1200,
       "count": 3
+    }
+  ]
+}
+```
+
+### 下 SOR 订单 (TRADE)o
+
+```javascript
+{
+  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+  "method": "sor.order.place",
+  "params":
+  {
+    "symbol": "BTCUSDT",
+    "side": "BUY",
+    "type": "LIMIT",
+    "quantity": 0.5,
+    "timeInForce": "GTC",
+    "price": 31000,
+    "timestamp": 1687485436575,
+    "apiKey": "u5lgqJb97QWXWfgeV4cROuHbReSJM9rgQL0IvYcYc7BVeA5lpAqqc3a5p2OARIFk",
+    "signature": "fd301899567bc9472ce023392160cdc265ad8fcbbb67e0ea1b2af70a4b0cd9c7"
+  }
+}
+```
+
+下使用智能订单路由 (SOR) 的新订单。
+
+**权重:**
+1
+
+**参数:**
+
+名称                | 类型    | 是否必需   | 描述
+------------------- | ------- | --------- | ------------
+`symbol`            | STRING  | YES       |
+`side`              | ENUM    | YES       | `BUY` 或 `SELL`
+`type`              | ENUM    | YES       |
+`timeInForce`       | ENUM    | NO        | 只适用于`限价`订单类型
+`price`             | DECIMAL | NO        | 只适用于`限价`订单类型
+`quantity`          | DECIMAL | YES       |
+`newClientOrderId`  | STRING  | NO        | 用户自定义的任意唯一值orderid，如空缺系统会自动赋值
+`newOrderRespType`  | ENUM    | NO        | <p>可选的响应格式: `ACK`，`RESULT`，`FULL` Select response format: `ACK`, `RESULT`, `FULL`.</p><p>`市场`和`限价`单默认使用`FULL` </p>
+`icebergQty`        | DECIMAL | NO        |
+`strategyId`        | INT     | NO        | 用于标识订单策略中订单的任意数字值。
+`strategyType`      | INT     | NO        | <p>用于标识订单策略的任意数字值。</p><p>小于 `1000000` 是保留值，应此不能被使用。</p>
+`selfTradePreventionMode` |ENUM | NO      | 允许的 ENUM 取决于交易对的配置。支持的值有 `EXPIRE_TAKER`，`EXPIRE_MAKER`，`EXPIRE_BOTH`，`NONE`。
+`apiKey`            | STRING  | YES       |
+`timestamp`         | INT     | YES       |
+`recvWindow`        | INT     | NO        | 赋值不能大于 `60000`
+`signature`         | STRING  | YES       |
+
+**注意:** `sor.order.place` 只支持 `限价` 和 `市场` 单， 并不支持 `quoteOrderQty`。
+
+**数据源:**
+撮合引擎
+
+**响应:***
+
+```javascript
+{
+  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+  "status": 200,
+  "result": [
+    {
+      "symbol": "BTCUSDT",
+      "orderId": 2,
+      "orderListId": -1,
+      "clientOrderId": "sBI1KM6nNtOfj5tccZSKly",
+      "transactTime": 1689149087774,
+      "price": "31000.00000000",
+      "origQty": "0.50000000",
+      "executedQty": "0.50000000",
+      "cummulativeQuoteQty": "14000.00000000",
+      "status": "FILLED",
+      "timeInForce": "GTC",
+      "type": "LIMIT",
+      "side": "BUY",
+      "workingTime": 1689149087774,
+      "fills": [
+        {
+          "matchType": "ONE_PARTY_TRADE_REPORT",
+          "price": "28000.00000000",
+          "qty": "0.50000000",
+          "commission": "0.00000000",
+          "commissionAsset": "BTC",
+          "tradeId": -1,
+          "allocId": 0
+        }
+      ],
+      "workingFloor": "SOR",
+      "selfTradePreventionMode": "NONE",
+      "usedSor": true
+    }
+  ],
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 1200,
+      "count": 1
+    }
+  ]
+}
+```
+
+### 测试 SOR 下单接口 (TRADE)
+
+```javascript
+{
+  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+  "method": "sor.order.test",
+  "params":
+  {
+    "symbol": "BTCUSDT",
+    "side": "BUY",
+    "type": "LIMIT",
+    "quantity": 0.1,
+    "timeInForce": "GTC",
+    "price": 0.1,
+    "timestamp": 1687485436575,
+    "apiKey": "u5lgqJb97QWXWfgeV4cROuHbReSJM9rgQL0IvYcYc7BVeA5lpAqqc3a5p2OARIFk",
+    "signature": "fd301899567bc9472ce023392160cdc265ad8fcbbb67e0ea1b2af70a4b0cd9c7"
+  }
+}
+```
+
+用于测试使用智能订单路由 (SOR) 的订单请求，但不会提交到撮合引擎。
+
+**权重:**
+1
+
+**参数:**
+
+参考 `sor.order.place`
+
+**数据源:**
+缓存
+
+**响应:**
+
+```javascript
+{
+  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+  "status": 200,
+  "result": {},
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 1200,
+      "count": 1
     }
   ]
 }
@@ -4987,7 +5162,7 @@ limit               |INT     | NO           | 默认：`500`；最大：`1000`
 recvWindow          | LONG   | NO           | 赋值不得大于 `60000`
 timestamp           | LONG   | YES          |
 
-**权重**
+**权重:**
 
 情况                             | 权重
 --------------------------------| -----
@@ -5010,12 +5185,100 @@ Querying by `orderId`           | 10
       "symbol": "BTCUSDT",
       "preventedMatchId": 1,
       "takerOrderId": 5,
+      "makerSymbol": "BTCUSDT",
       "makerOrderId": 3,
       "tradeGroupId": 1,
       "selfTradePreventionMode": "EXPIRE_MAKER",
       "price": "1.100000",
       "makerPreventedQuantity": "1.300000",
       "transactTime": 1669101687094
+    }
+  ],
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 1200,
+      "count": 10
+    }
+  ]
+}
+```
+
+### 查询分配结果 (USER_DATA)
+
+```javascript
+{
+  "id": "g4ce6a53-a39d-4f71-823b-4ab5r391d6y8",
+  "method": "myAllocations",
+  "params": {
+    "symbol": "BTCUSDT",
+    "orderId": 500,
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "c5a5ffb79fd4f2e10a92f895d488943a57954edf5933bde3338dfb6ea6d6eefc",
+    "timestamp": 1673923281052
+  }
+}
+```
+
+检索由 SOR 订单生成引起的分配结果。
+
+**权重:**
+10
+
+**参数:**
+
+名称                       | 类型   | 是否必需         | 描述
+-----                      | ---   |----      | ---------
+`symbol`                   |STRING |Yes        |
+`startTime`                |LONG   |No        |
+`endTime`                  |LONG   |No        |
+`fromAllocationId`         |INT    |No        |
+`limit`                    |INT    |No        |默认值 500； 最大值 1000
+`orderId`                  |LONG   |No        |
+`recvWindow`               |LONG   |No        |不能大于 `60000`
+`timestamp`                |LONG   |No        |
+
+支持的参数组合:
+
+参数                                        | 响应      |
+------------------------------------------- | -------- |
+`symbol`                                    | 按从最旧到最新排序的分配 |
+`symbol` + `startTime`                      | 从 `startTime` 开始的最旧的分配 |
+`symbol` + `endTime`                        | 到 `endTime` 为止的最新的分配 |
+`symbol` + `startTime` + `endTime`          | 在指定时间范围内的分配  |
+`symbol` + `fromAllocationId`               | 从指定 `AllocationId` 开始的分配  |
+`symbol` + `orderId`                        | 按从最旧到最新排序并和特定订单关联的分配 |
+`symbol` + `orderId` + `fromAllocationId`   | 从指定 `AllocationId` 开始并和特定订单关联的分配 |
+
+**注意:** `startTime` 和 `endTime` 之间的时间不能超过 24 小时。
+
+**数据源:**
+数据库
+
+**响应:**
+
+```javascript
+{
+  "id": "g4ce6a53-a39d-4f71-823b-4ab5r391d6y8",
+  "status": 200,
+  "result": [
+    {
+      "symbol": "BTCUSDT",
+      "allocationId": 0,
+      "allocationType": "SOR",
+      "orderId": 500,
+      "orderListId": -1,
+      "price": "1.00000000",
+      "qty": "0.10000000",
+      "quoteQty": "0.10000000",
+      "commission": "0.00000000",
+      "commissionAsset": "BTC",
+      "time": 1687319487614,
+      "isBuyer": false,
+      "isMaker": false,
+      "isAllocator": false
     }
   ],
   "rateLimits": [
