@@ -16,7 +16,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# User Data Streams for Binance (2023-01-18)
+# User Data Streams for Binance (2023-08-08)
 # General WSS information
 * The base API endpoint is: **https://api.binance.com**
 * A User Data Stream `listenKey` is valid for 60 minutes after creation.
@@ -209,7 +209,7 @@ For additional information on these parameters, please refer to the [Spot Glossa
   <tr>
     <td><code>v</code></td>
     <td>Prevented Match Id</td>
-    <td rowspan="5">Appears only for orders that expired due to STP.</td>
+    <td rowspan="6">Appears only for orders that expired due to STP.</td>
     <td><code>"v": 3</code></td>
   </tr>
   <tr>
@@ -231,6 +231,40 @@ For additional information on these parameters, please refer to the [Spot Glossa
     <td><code>U</code></td>
     <td>Counter Order Id</td>
     <td><code>"U":37</code></td>
+  </tr>
+  <tr>
+    <td><code>Cs</code></td>
+    <td>Counter Symbol</td>
+    <td><code>"Cs": "BTCUSDT"</code></td>
+  </tr>
+  <tr>
+    <td><code>W</code></td>
+    <td>Working Time</td>
+    <td>Appears when the order is working on the book</td>
+    <td><code>"W": 1668683798379</code></td>
+  </tr>
+  <tr>
+    <td><code>b</code></td>
+    <td>Match Type</td>
+    <td rowspan="2">Appears for orders that have allocations</td>
+    <td><code>"b":"ONE_PARTY_TRADE_REPORT"</code></td>
+  </tr>
+  <tr>
+    <td><code>a</code></td>
+    <td>Allocation ID</td>
+    <td><code>"a":1234</code></td>
+  </tr>
+  <tr>
+    <td><code>k</code></td>
+    <td>Working Floor</td>
+    <td>Appears for orders that potentially have allocations</td>
+    <td><code>"k":"SOR"</code></td>
+  </tr>
+  <tr>
+    <td><code>uS</code></td>
+    <td>UsedSor</td>
+    <td>Appears for orders that used SOR</td>
+    <td><code>"uS":true</code></td>
   </tr>
 </table>
 
