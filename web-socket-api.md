@@ -53,6 +53,8 @@
     - [Query OCO (USER_DATA)](#query-oco-user_data)
     - [Cancel OCO (TRADE)](#cancel-oco-trade)
     - [Current open OCOs (USER_DATA)](#current-open-ocos-user_data)
+    - [Place new order using SOR (TRADE)](#place-new-order-using-sor-trade)
+    - [Test new order using SOR (TRADE)](#test-new-order-using-sor-trade)
   - [Account requests](#account-requests)
     - [Account information (USER_DATA)](#account-information-user_data)
     - [Account order rate limits (USER_DATA)](#account-order-rate-limits-user_data)
@@ -60,6 +62,7 @@
     - [Account OCO history (USER_DATA)](#account-oco-history-user_data)
     - [Account trade history (USER_DATA)](#account-trade-history-user_data)
     - [Account prevented matches (USER_DATA)](#account-prevented-matches-user_data)
+    - [Account allocations (USER_DATA)](#account-allocations-user_data)
   - [User Data Stream requests](#user-data-stream-requests)
     - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
     - [Ping user data stream (USER_STREAM)](#ping-user-data-stream-user_stream)
@@ -67,7 +70,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public WebSocket API for Binance (2023-07-18)
+# Public WebSocket API for Binance (2023-08-08)
 
 ## General API Information
 
@@ -936,7 +939,17 @@ Status | Description
 `REJECT` | The List Status is responding to a failed action either during order placement or order canceled
 
 **ContingencyType**
+
 * `OCO`
+
+**AllocationType**
+
+* `SOR`
+
+**Working Floor**
+
+* `EXCHANGE`
+* `SOR`
 
 ## General requests
 
@@ -1176,6 +1189,15 @@ Memory
         "defaultSelfTradePreventionMode": "NONE",
         "allowedSelfTradePreventionModes": [
           "NONE"
+        ]
+      }
+    ],
+    "sors": [
+      {
+        "baseAsset": "BTC",
+        "symbols": [
+          "BTCUSDT",
+          "BTCUSDC"
         ]
       }
     ]
@@ -2856,6 +2878,7 @@ Field          |Description                                                     
 `strategyType` | Can be used to label an order that is using an order strategy.|Appears if the parameter was populated in the request.| `"strategyType": 1000000`
 `trailingDelta`| Delta price change required before order activation| Appears for Trailing Stop Orders.|`"trailingDelta": 10`
 `trailingTime` | Time when the trailing order is now active and tracking price changes| Appears only for Trailing Stop Orders.| `"trailingTime": -1`
+`workingFloor` | Field that determines whether the order is being filled by the SOR or by the order book the order was submitted to.|Appears when placing orders using SOR|`"workingFloor": "SOR"`
 
 ### Test new order (TRADE)
 
@@ -4645,6 +4668,161 @@ Database
 }
 ```
 
+### Place new order using SOR (TRADE)
+
+```javascript
+{
+  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+  "method": "sor.order.place",
+  "params":
+  {
+    "symbol": "BTCUSDT",
+    "side": "BUY",
+    "type": "LIMIT",
+    "quantity": 0.5,
+    "timeInForce": "GTC",
+    "price": 31000,
+    "timestamp": 1687485436575,
+    "apiKey": "u5lgqJb97QWXWfgeV4cROuHbReSJM9rgQL0IvYcYc7BVeA5lpAqqc3a5p2OARIFk",
+    "signature": "fd301899567bc9472ce023392160cdc265ad8fcbbb67e0ea1b2af70a4b0cd9c7"
+  }
+}
+```
+
+Places an order using smart order routing (SOR).
+
+**Weight:**
+1
+
+**Parameters:**
+
+Name                | Type    | Mandatory | Description
+------------------- | ------- | --------- | ------------
+`symbol`            | STRING  | YES       |
+`side`              | ENUM    | YES       | `BUY` or `SELL`
+`type`              | ENUM    | YES       |
+`timeInForce`       | ENUM    | NO        | Applicable only to `LIMIT` order type
+`price`             | DECIMAL | NO        | Applicable only to `LIMIT` order type
+`quantity`          | DECIMAL | YES       |
+`newClientOrderId`  | STRING  | NO        | Arbitrary unique ID among open orders. Automatically generated if not sent
+`newOrderRespType`  | ENUM    | NO        | <p>Select response format: `ACK`, `RESULT`, `FULL`.</p><p>`MARKET` and `LIMIT` orders use `FULL` by default.</p>
+`icebergQty`        | DECIMAL | NO        |
+`strategyId`        | INT     | NO        | Arbitrary numeric value identifying the order within an order strategy.
+`strategyType`      | INT     | NO        | <p>Arbitrary numeric value identifying the order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
+`selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
+`apiKey`            | STRING  | YES       |
+`timestamp`         | INT     | YES       |
+`recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
+`signature`         | STRING  | YES       |
+
+**Note:** `sor.order.place` only supports `LIMIT` and `MARKET` orders. `quoteOrderQty` is not supported.
+
+**Data Source:**
+Matching Engine
+
+**Response:**
+
+```javascript
+{
+  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+  "status": 200,
+  "result": [
+    {
+      "symbol": "BTCUSDT",
+      "orderId": 2,
+      "orderListId": -1,
+      "clientOrderId": "sBI1KM6nNtOfj5tccZSKly",
+      "transactTime": 1689149087774,
+      "price": "31000.00000000",
+      "origQty": "0.50000000",
+      "executedQty": "0.50000000",
+      "cummulativeQuoteQty": "14000.00000000",
+      "status": "FILLED",
+      "timeInForce": "GTC",
+      "type": "LIMIT",
+      "side": "BUY",
+      "workingTime": 1689149087774,
+      "fills": [
+        {
+          "matchType": "ONE_PARTY_TRADE_REPORT",
+          "price": "28000.00000000",
+          "qty": "0.50000000",
+          "commission": "0.00000000",
+          "commissionAsset": "BTC",
+          "tradeId": -1,
+          "allocId": 0
+        }
+      ],
+      "workingFloor": "SOR",
+      "selfTradePreventionMode": "NONE",
+      "usedSor": true
+    }
+  ],
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 1200,
+      "count": 1
+    }
+  ]
+}
+```
+
+### Test new order using SOR (TRADE)
+
+```javascript
+{
+  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+  "method": "sor.order.test",
+  "params":
+  {
+    "symbol": "BTCUSDT",
+    "side": "BUY",
+    "type": "LIMIT",
+    "quantity": 0.1,
+    "timeInForce": "GTC",
+    "price": 0.1,
+    "timestamp": 1687485436575,
+    "apiKey": "u5lgqJb97QWXWfgeV4cROuHbReSJM9rgQL0IvYcYc7BVeA5lpAqqc3a5p2OARIFk",
+    "signature": "fd301899567bc9472ce023392160cdc265ad8fcbbb67e0ea1b2af70a4b0cd9c7"
+  }
+}
+```
+
+Test new order creation and signature/recvWindow using smart order routing (SOR).
+Creates and validates a new order but does not send it into the matching engine.
+
+**Weight:**
+1
+
+**Parameters:**
+
+Same as `sor.order.place`
+
+**Data Source:**
+Memory
+
+**Response:**
+
+```javascript
+{
+  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+  "status": 200,
+  "result": {},
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 1200,
+      "count": 1
+    }
+  ]
+}
+```
+
 ## Account requests
 
 ### Account information (USER_DATA)
@@ -5158,12 +5336,100 @@ Database
       "symbol": "BTCUSDT",
       "preventedMatchId": 1,
       "takerOrderId": 5,
+      "makerSymbol": "BTCUSDT", 
       "makerOrderId": 3,
       "tradeGroupId": 1,
       "selfTradePreventionMode": "EXPIRE_MAKER",
       "price": "1.100000",
       "makerPreventedQuantity": "1.300000",
       "transactTime": 1669101687094
+    }
+  ],
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 1200,
+      "count": 10
+    }
+  ]
+}
+```
+
+### Account allocations (USER_DATA)
+
+```javascript
+{
+  "id": "g4ce6a53-a39d-4f71-823b-4ab5r391d6y8",
+  "method": "myAllocations",
+  "params": {
+    "symbol": "BTCUSDT",
+    "orderId": 500,
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "c5a5ffb79fd4f2e10a92f895d488943a57954edf5933bde3338dfb6ea6d6eefc",
+    "timestamp": 1673923281052
+  }
+}
+```
+
+Retrieves allocations resulting from SOR order placement.
+
+**Weight:**
+10
+
+**Parameters:**
+
+Name                       | Type  |Mandatory | Description
+-----                      | ---   |----      | ---------
+`symbol`                   |STRING |Yes        |
+`startTime`                |LONG   |No        |
+`endTime`                  |LONG   |No        |
+`fromAllocationId`         |INT    |No        |
+`limit`                    |INT    |No        |Default 500;Max 1000
+`orderId`                  |LONG   |No        |
+`recvWindow`               |LONG   |No        |The value cannot be greater than `60000`
+`timestamp`                |LONG   |No        |
+
+Supported parameter combinations:
+
+Parameters                                  | Response |
+------------------------------------------- | -------- |
+`symbol`                                    | allocations from oldest to newest |
+`symbol` + `startTime`                      | oldest allocations since `startTime` |
+`symbol` + `endTime`                        | newest allocations until `endTime` |
+`symbol` + `startTime` + `endTime`          | allocations within the time range |
+`symbol` + `fromAllocationId`               | allocations by allocation ID |
+`symbol` + `orderId`                        | allocations related to an order starting with oldest |
+`symbol` + `orderId` + `fromAllocationId`   | allocations related to an order by allocation ID |
+
+**Note:** The time between `startTime` and `endTime` can't be longer than 24 hours.
+
+**Data Source:**
+Database
+
+**Response:**
+
+```javascript
+{
+  "id": "g4ce6a53-a39d-4f71-823b-4ab5r391d6y8",
+  "status": 200,
+  "result": [
+    {
+      "symbol": "BTCUSDT",
+      "allocationId": 0,
+      "allocationType": "SOR",
+      "orderId": 500,
+      "orderListId": -1,
+      "price": "1.00000000",
+      "qty": "0.10000000",
+      "quoteQty": "0.10000000",
+      "commission": "0.00000000",
+      "commissionAsset": "BTC",
+      "time": 1687319487614,
+      "isBuyer": false,
+      "isMaker": false,
+      "isAllocator": false
     }
   ],
   "rateLimits": [
