@@ -2,7 +2,7 @@
 
 ## 2023-08-08
 
-Smart Order Routing (SOR) will be enabled for the APIs on August 9, 2023. For more information please refer to our [FAQ](./faqs/sor_faq.md)).
+Smart Order Routing (SOR) has been added to the APIs. For more information please refer to our [FAQ](./faqs/sor_faq.md). Please wait for future announcements on when the feature will be enabled.
 
 REST API
 
