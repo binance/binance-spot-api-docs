@@ -1,4 +1,4 @@
-# Binance 的公共 WebSocket API (2023-07-21)
+# Binance 的公共 WebSocket API (2023-08-08)
 
 ## API 基本信息
 
