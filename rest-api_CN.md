@@ -1523,7 +1523,7 @@ GET /api/v3/ticker
 ## 账户接口
 ### 下单  (TRADE)
 ```
-POST /api/v3/order  (HMAC SHA256)
+POST /api/v3/order 
 ```
 
 **权重:**
@@ -1690,7 +1690,7 @@ Type | 强制要求的参数 | 其他信息
 ### 测试下单接口 (TRADE)
 
 ```
-POST /api/v3/order/test (HMAC SHA256)
+POST /api/v3/order/test 
 ```
 
 用于测试订单请求，但不会提交到撮合引擎
@@ -1712,7 +1712,7 @@ POST /api/v3/order/test (HMAC SHA256)
 
 ### 查询订单 (USER_DATA)
 ```
-GET /api/v3/order (HMAC SHA256)
+GET /api/v3/order
 ```
 查询订单状态
 
@@ -1766,7 +1766,7 @@ timestamp | LONG | YES |
 
 ### 撤销订单 (TRADE)
 ```
-DELETE /api/v3/order  (HMAC SHA256)
+DELETE /api/v3/order 
 ```
 
 **权重:**
@@ -2137,7 +2137,7 @@ timestamp | LONG | YES |
 
 ### 查看账户当前挂单 (USER_DATA)
 ```
-GET /api/v3/openOrders  (HMAC SHA256)
+GET /api/v3/openOrders 
 ```
 请小心使用不带symbol参数的调用
 
@@ -2190,7 +2190,7 @@ timestamp | LONG | YES |
 
 ### 查询所有订单（包括历史订单） (USER_DATA)
 ```
-GET /api/v3/allOrders (HMAC SHA256)
+GET /api/v3/allOrders 
 ```
 
 **权重:**
@@ -2248,7 +2248,7 @@ timestamp | LONG | YES |
 ## 发送新 OCO 订单
 
 ```
-POST /api/v3/order/oco (HMAC SHA256)
+POST /api/v3/order/oco 
 ```
 
 **权重(UID)**: 2
@@ -2299,7 +2299,7 @@ timestamp|LONG|YES|
 ## 取消 OCO 订单(TRADE)
 
 ``
-DELETE /api/v3/orderList (HMAC SHA256)
+DELETE /api/v3/orderList 
 ``
 
 取消整个订单列表。
@@ -2390,7 +2390,7 @@ timestamp|LONG|YES|
 ## 查询 OCO (USER_DATA)
 
 ``
-GET /api/v3/orderList (HMAC SHA256)
+GET /api/v3/orderList 
 ``
 
 根据提供的可选参数检索特定的OCO。
@@ -2438,7 +2438,7 @@ timestamp|LONG|YES|
 ## 查询所有 OCO (USER_DATA)
 
 ``
-GET /api/v3/allOrderList (HMAC SHA256)
+GET /api/v3/allOrderList 
 ``
 
 根据提供的可选参数检索所有的OCO。
@@ -2511,7 +2511,7 @@ timestamp|LONG|YES|
 ## 查询 OCO 挂单 (USER_DATA)
 
 ``
-GET /api/v3/openOrderList (HMAC SHA256)
+GET /api/v3/openOrderList
 ``
 
 **权重(IP)**: 3
@@ -2652,7 +2652,7 @@ POST /api/v3/sor/order/test
 
 ### 账户信息 (USER_DATA)
 ```
-GET /api/v3/account (HMAC SHA256)
+GET /api/v3/account 
 ```
 
 **权重:**
@@ -2709,7 +2709,7 @@ timestamp | LONG | YES |
 
 ### 账户成交历史 (USER_DATA)
 ```
-GET /api/v3/myTrades  (HMAC SHA256)
+GET /api/v3/myTrades  
 ```
 获取某交易对的成交历史
 
