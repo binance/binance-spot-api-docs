@@ -19,6 +19,12 @@ allocation
 `allocationType`
 * See [AllocationType](../rest-api.md#allocationtype) 
 
+`askPrice`
+* In ticker responses: the lowest price on the `SELL` side.
+
+`askQty`
+* In ticker responses: total quantity offered at the lowest price on the `SELL` side.
+
 `asks`
 * Orders on the `SELL` side.
 
@@ -37,6 +43,12 @@ allocation
 
 `baseCommissionPrecision`
 * A field found in `GET /api/v3/exchangeInfo` that represents the number of decimals base asset commission will be calculated to.
+
+`bidPrice`
+* In ticker responses: the highest price on the `BUY` side.
+
+`bidQty`
+* In ticker responses: total quantity offered at the highest price on the `BUY` side.
 
 `bids`
 * Orders on the `BUY` side.
@@ -151,6 +163,12 @@ Data Source
 
 Last Prevented Quantity
 * Order quantity that expired due to STP.
+
+`lastPrice`
+* Price of the latest trade.
+
+`lastQty`
+* Quantity filled by the last trade.
 
 `LIMIT`
 * a `type` of order where the execution price will be no worse than the order's set price. The execution price is limited to be the set price or better.
@@ -320,6 +338,10 @@ Smart Order Routing (SOR)
 
 `ticker`
 * Reports the price change, and other maker data, of a symbol within a certain rolling interval.
+
+`time`
+* For trade/allocation queries: the time when trades/allocations were executed.
+* For order queries: the time when orders were created.
 
 `timeInForce`
 * Determines the taker behavior of an order, if an order can be a maker order, and how long the order will stay on the order book before it expires.
