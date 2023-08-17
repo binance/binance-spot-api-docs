@@ -1603,7 +1603,7 @@ When using `symbols`:
 
 ### New order  (TRADE)
 ```
-POST /api/v3/order 
+POST /api/v3/order  (HMAC SHA256)
 ```
 Send in a new order.
 
@@ -1771,7 +1771,7 @@ Field          |Description                                                     
 
 ### Test new order (TRADE)
 ```
-POST /api/v3/order/test
+POST /api/v3/order/test (HMAC SHA256)
 ```
 Test new order creation and signature/recvWindow long.
 Creates and validates a new order but does not send it into the matching engine.
@@ -1793,7 +1793,7 @@ Memory
 
 ### Query order (USER_DATA)
 ```
-GET /api/v3/order 
+GET /api/v3/order (HMAC SHA256)
 ```
 Check an order's status.
 
@@ -1847,7 +1847,7 @@ Memory => Database
 
 ### Cancel order (TRADE)
 ```
-DELETE /api/v3/order 
+DELETE /api/v3/order  (HMAC SHA256)
 ```
 Cancel an active order.
 
@@ -1914,7 +1914,7 @@ Matching Engine
 
 ### Cancel All Open Orders on a Symbol (TRADE)
 ```
-DELETE /api/v3/openOrders 
+DELETE /api/v3/openOrders (HMAC SHA256)
 ```
 Cancels all active orders on a symbol.
 This includes OCO orders.
@@ -2223,7 +2223,7 @@ Matching Engine
 
 ### Current open orders (USER_DATA)
 ```
-GET /api/v3/openOrders
+GET /api/v3/openOrders  (HMAC SHA256)
 ```
 Get all open orders on a symbol. **Careful** when accessing this with no symbol.
 
@@ -2275,7 +2275,7 @@ Memory => Database
 
 ### All orders (USER_DATA)
 ```
-GET /api/v3/allOrders
+GET /api/v3/allOrders (HMAC SHA256)
 ```
 Get all account orders; active, canceled, or filled.
 
@@ -2335,7 +2335,7 @@ timestamp | LONG | YES |
 ### New OCO (TRADE)
 
 ```
-POST /api/v3/order/oco 
+POST /api/v3/order/oco (HMAC SHA256)
 ```
 
 **Weight**: 1
@@ -2449,7 +2449,7 @@ Matching Engine
 ### Cancel OCO (TRADE)
 
 ```
-DELETE /api/v3/orderList 
+DELETE /api/v3/orderList (HMAC SHA256)
 ```
 
 **Weight**: 1
@@ -2541,7 +2541,7 @@ Matching Engine
 ### Query OCO (USER_DATA)
 
 ```
-GET /api/v3/orderList 
+GET /api/v3/orderList (HMAC SHA256)
 ```
 
 **Weight**: 2
@@ -2590,7 +2590,7 @@ Database
 ### Query all OCO (USER_DATA)
 
 ```
-GET /api/v3/allOrderList
+GET /api/v3/allOrderList (HMAC SHA256)
 ```
 
 **Weight**: 10
@@ -2663,7 +2663,7 @@ Database
 ### Query Open OCO (USER_DATA)
 
 ```
-GET /api/v3/openOrderList 
+GET /api/v3/openOrderList (HMAC SHA256)
 ```
 
 Weight: 3
@@ -2803,7 +2803,7 @@ Memory
 
 ### Account information (USER_DATA)
 ```
-GET /api/v3/account 
+GET /api/v3/account (HMAC SHA256)
 ```
 Get current account information.
 
@@ -2862,7 +2862,7 @@ Memory => Database
 
 ### Account trade list (USER_DATA)
 ```
-GET /api/v3/myTrades 
+GET /api/v3/myTrades  (HMAC SHA256)
 ```
 Get trades for a specific account and symbol.
 
