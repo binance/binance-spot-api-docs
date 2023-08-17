@@ -49,7 +49,7 @@ Please refer to the table for more details:
 |`GET /api/v3/ticker` <br> `ticker` - Maximum weight for this request|100|200|
 |`POST /api/v3/userDataStream` <br> `userDataStream.start`|1|2|
 |`PUT /api/v3/userDataStream` <br> `userDataStream.ping`|1|2|
-|`DELETE /api/v3/userDataStream`<br> `userDataStream.stop`|1|2
+|`DELETE /api/v3/userDataStream`<br> `userDataStream.stop`|1|2|
 
 
 ---
