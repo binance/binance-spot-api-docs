@@ -19,6 +19,12 @@ allocation
 `allocationType`
 * 参考 [ 分配类型 ](../rest-api_CN.md#allocationtype) 
 
+`askPrice`
+* `ticker` 请求返回的来自“卖"方的最低价格。
+
+`askQty`
+* `ticker` 请求返回的“卖"方以最低价格提供的总数量。
+
 `asks`
 * 卖单
 
@@ -37,6 +43,12 @@ allocation
 
 `baseCommissionPrecision`
 * 接口 `GET /api/v3/exchangeInfo` 中用来表示基准资产手续费可以允许的最多小数位数。
+
+`bidPrice`
+* `ticker` 请求返回的来自“买"方的最高价格。
+
+`bidQty`
+* `ticker` 请求返回的“买"方以最高价格提供的总数量。
 
 `bids`
 * 买单。
@@ -151,6 +163,12 @@ Data Source
 
 Last Prevented Quantity
 * 最后被阻止交易的数量。这仅在订单因 STP 触发而过期时可见。
+
+`lastPrice`
+* 最新一笔交易的成交价格。
+
+`lastQty`
+* 最新一笔交易的成交量。
 
 `LIMIT`
 * 限价; 一种订单形式，其订单的成交价格会是指定价格，或者更好的价格。
@@ -317,6 +335,10 @@ Smart Order Routing (SOR)
 
 `ticker`
 * 用以汇报过去一段时间内的价格变动等市场信息。
+
+`time`
+* 对于交易/分配查询：交易/分配执行的时间。
+* 订单查询：订单创建时间。
 
 `timeInForce`
 * 定义订单的时效性, 用以表明订单会在orderbook中的时长。
