@@ -1,4 +1,53 @@
-# 更新日志 (2023-08-08)
+# 更新日志 (2023-08-25)
+
+## 2023-08-25
+
+* Websocket API 的 `exchangeInfo` 中的 `RAW REQUESTS` 被移除，新增了用于表示WebSocket连接数限制的 `CONNECTIONS`.
+
+**下面的变更会在UTC时间 2023-08-25 00:00 上线**
+* WebSocket API 的 `CONNECTIONS` 被调整为每5分钟300.
+* REST API 中的 `RAW_REQUESTS` 调整为每5分钟61,000.
+* 之前连接到 WebSocket API 的权重为1. **现权重调整到 2**.
+* 下表的 REST API 和 WebSocket API 请求的权重被调整:
+
+|请求接口|之前请求权重| 新请求权重|
+|`GET /api/v3/order` <br> `order.status` |2 | 4|
+|`GET /api/v3/orderList` <br> orderList.status| 2|4|
+|`GET /api/v3/openOrders` <br> `openOrders.status` - **带 `symbol`**|3|6|
+|`GET /api/v3/openOrders` <br> `openOrders.status` - **不带 `symbol`**|40|80|
+|`GET /api/v3/openOrderList` <br>`openOrderLists.status`|3|6|
+|`GET /api/v3/allOrders` <br>`allOrders`  |10|20
+|`GET /api/v3/allOrderList` <br> `allOrderLists` |10|20
+|`GET /api/v3/myTrades`  <br> `myTrades`|10|20|
+|`GET /api/v3/myAllocations`  <br> `myAllocations` |10|20|
+|`GET /api/v3/myPreventedMatches`  <br> `myPreventedMatches`  - **使用 `preventedMatchId`** | 1 | 2
+|`GET /api/v3/myPreventedMatches`  <br> `myPreventedMatches`  - **使用 `orderId`**|10|20|
+|`GET /api/v3/account` <br> `account.status` |10 |20|
+|`GET /api/v3/rateLimit/order` <br> `account.rateLimits.orders`|20|40|
+|`GET /api/v3/exchangeInfo` <br> `exchangeInfo`|10|20|
+|`GET /api/v3/depth`<br> `depth`  - **Limit 1-100**|1|2|
+|`GET /api/v3/depth` <br> `depth` - **Limit 101-500**|5|10|
+|`GET /api/v3/depth` <br>`depth`  - **Limit 501-1000**|10|20|
+|`GET /api/v3/depth` <br> `depth`  - **Limit 1001-5000**|50|100|
+|`GET /api/v3/aggTrades`  <br> `trades.aggregate` |1|2|
+|`GET /api/v3/trades` <br> `trades.recent`  |1|2|
+|`GET /api/v3/historicalTrades`  <br> `trades.historical` |5|10|
+|`GET /api/v3/klines` <br> `klines`  |1|2|
+|`GET /api/v3/uiKlines` <br> `uiKlines` |1|2|
+|`GET /api/v3/ticker/bookTicker` <br> `ticker.book` - **带 `symbol`**|1|2|
+|`GET /api/v3/ticker/bookTicker` <br> `ticker.book` - **不带 `symbol`** 或者 **带 `symbols`**|2|4|
+|`GET /api/v3/ticker/price`<br> `ticker.price` - **带 `symbol`**|1|2|
+|`GET /api/v3/ticker/price`<br> `ticker.price` - **不带 `symbol`** 或者 **带 `symbols`**|2|4|
+|`GET /api/v3/ticker/24hr` <br> `ticker.24hr` - **带 `symbol`** 或者 ** `symbols` 带 1-20 交易对** |1|2|
+|`GET /api/v3/ticker/24hr` <br> `ticker.24hr` - **带 `symbols` 21-100 交易对**|20|40|
+|`GET /api/v3/ticker/24hr` <br> `ticker.24hr` - **不带 `symbol` 或者 `symbols` 带 101 个或者更多交易对**|40|80|
+|`GET /api/v3/avgPrice` <br>`avgPrice`|1|2|
+|`GET /api/v3/ticker` <br> `ticker`|2|4|
+|`GET /api/v3/ticker` <br> `ticker` - 请求的最大权重|100|200|
+|`POST /api/v3/userDataStream` <br> `userDataStream.start`|1|2|
+|`PUT /api/v3/userDataStream` <br> `userDataStream.ping`|1|2|
+|`DELETE /api/v3/userDataStream`<br> `userDataStream.stop`|1|2|
+
 
 ## 2023-08-08
 
