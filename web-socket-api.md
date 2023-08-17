@@ -70,7 +70,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public WebSocket API for Binance (2023-08-25)
+# Public WebSocket API for Binance (2023-08-08)
 
 ## General API Information
 
@@ -396,9 +396,9 @@ the `rateLimits` field can be omitted from responses to reduce their size.
 
 ## IP limits
 
-* Every request has a certain **weight**, added to your limit as you perform requests. 
-  * The heavier the request (e.g. querying data from multiple symbols), the more weight the request will cost.
-  * Connecting to WebSocket API costs 2 weight.
+* Every request has a certain **weight**, added to your limit as you perform requests.
+  * Most requests cost 1 unit of weight, heavier requests acting on multiple symbols cost more.
+  * Connecting to WebSocket API costs 1 weight.
 * Current weight usage is indicated by the `REQUEST_WEIGHT` rate limit type.
 * Use the [`exchangeInfo`](#exchange-information) request
   to keep track of the current weight limits.
@@ -1051,7 +1051,7 @@ Memory
 Query current exchange trading rules, rate limits, and symbol information.
 
 **Weight:**
-20
+10
 
 **Parameters:**
 
@@ -1111,7 +1111,7 @@ Memory
     // Global rate limits. See "Rate limits" section.
     "rateLimits": [
       {
-        "rateLimitType": "REQUEST_WEIGHT",    // Rate limit type: REQUEST_WEIGHT, ORDERS, CONNECTIONS
+        "rateLimitType": "REQUEST_WEIGHT",    // Rate limit type: REQUEST_WEIGHT, ORDERS, RAW_REQUESTS
         "interval": "MINUTE",                 // Rate limit interval: SECOND, MINUTE, DAY
         "intervalNum": 1,                     // Rate limit interval multiplier (i.e., "1 minute")
         "limit": 1200                         // Rate limit per interval
@@ -1129,10 +1129,10 @@ Memory
         "limit": 160000
       },
       {
-        "rateLimitType": "CONNECTIONS",
+        "rateLimitType": "RAW_REQUESTS",
         "interval": "MINUTE",
         "intervalNum": 5,
-        "limit": 300
+        "limit": 6100
       }
     ],
     // Exchange filters are explained on the "Filters" page:
@@ -1245,10 +1245,10 @@ Adjusted based on the limit:
 
 |  Limit    | Weight |
 |:---------:|:------:|
-|     1–100 |      2 |
-|   101–500 |      10|
-|  501–1000 |     20 |
-| 1001–5000 |     100 |
+|     1–100 |      1 |
+|   101–500 |      5 |
+|  501–1000 |     10 |
+| 1001–5000 |     50 |
 
 **Parameters:**
 
@@ -1347,7 +1347,7 @@ If you need access to real-time trading activity, please consider using WebSocke
 * [`<symbol>@trade`](web-socket-streams.md#trade-streams)
 
 **Weight:**
-2
+1
 
 **Parameters:**
 
@@ -1404,7 +1404,7 @@ Memory
 Get historical trades.
 
 **Weight:**
-10
+5
 
 **Parameters:**
 
@@ -1477,7 +1477,7 @@ If you need historical aggregate trade data,
 please consider using [data.binance.vision](https://github.com/binance/binance-public-data/#aggtrades).
 
 **Weight:**
-2
+1
 
 **Parameters:**
 
@@ -1560,7 +1560,7 @@ If you need historical kline data,
 please consider using [data.binance.vision](https://github.com/binance/binance-public-data/#klines).
 
 **Weight:**
-2
+1
 
 **Parameters:**
 
@@ -1645,7 +1645,7 @@ This request is similar to [`klines`](#klines), having the same parameters and r
 `uiKlines` return modified kline data, optimized for presentation of candlestick charts.
 
 **Weight:**
-2
+1
 
 **Parameters:**
 
@@ -1712,7 +1712,7 @@ Database
 Get current average price for a symbol.
 
 **Weight:**
-2
+1
 
 **Parameters:**
 
@@ -1771,10 +1771,10 @@ Adjusted based on the number of requested symbols:
 
 | Symbols     | Weight |
 |:-----------:|:------:|
-|        1–20 |      2 |
-|      21–100 |     40 |
-| 101 or more |     80 |
-| all symbols |     80 |
+|        1–20 |      1 |
+|      21–100 |     20 |
+| 101 or more |     40 |
+| all symbols |     40 |
 
 **Parameters:**
 
@@ -2009,8 +2009,8 @@ Adjusted based on the number of requested symbols:
 
 | Symbols | Weight |
 |:-------:|:------:|
-|    1–50 | 4 per symbol |
-|  51–100 |    200 |
+|    1–50 | 2 per symbol |
+|  51–100 |    100 |
 
 **Parameters:**
 
@@ -2062,7 +2062,7 @@ Notes:
 
 * Either `symbol` or `symbols` must be specified.
 
-* Maximum number of symbols in one request: 200.
+* Maximum number of symbols in one request: 100.
 
 * Window size units cannot be combined.
   E.g., <code>1d 2h</code> is not supported.
@@ -2217,9 +2217,9 @@ Adjusted based on the number of requested symbols:
 
 | Parameter | Weight |
 | --------- |:------:|
-| `symbol`  |      2 |
-| `symbols` |      4 |
-| none      |      4 |
+| `symbol`  |      1 |
+| `symbols` |      2 |
+| none      |      2 |
 
 **Parameters:**
 
@@ -2336,9 +2336,9 @@ Adjusted based on the number of requested symbols:
 
 | Parameter | Weight |
 | --------- |:------:|
-| `symbol`  |      2 |
-| `symbols` |      4 |
-| none      |      4 |
+| `symbol`  |      1 |
+| `symbols` |      2 |
+| none      |      2 |
 
 **Parameters:**
 
@@ -2952,7 +2952,7 @@ Memory
 Check execution status of an order.
 
 **Weight:**
-4
+2
 
 **Parameters:**
 
@@ -3914,8 +3914,8 @@ Adjusted based on the number of requested symbols:
 
 | Parameter | Weight |
 | --------- | ------ |
-| `symbol`  |      6 |
-| none      |     80 |
+| `symbol`  |      3 |
+| none      |     40 |
 
 **Parameters:**
 
@@ -4323,7 +4323,7 @@ Check execution status of an OCO.
 For execution status of individual orders, use [`order.status`](#query-order-user_data).
 
 **Weight:**
-4
+2
 
 **Parameters**:
 
@@ -4613,7 +4613,7 @@ If you need to continuously monitor order status updates, please consider using 
 * [`executionReport`](./user-data-stream.md#order-update) user data stream event
 
 **Weight**:
-6
+3
 
 **Parameters:**
 
@@ -4842,7 +4842,7 @@ Memory
 Query information about your account.
 
 **Weight:**
-20
+10
 
 **Parameters:**
 
@@ -4931,7 +4931,7 @@ Memory => Database
 Query your current order rate limit.
 
 **Weight:**
-40
+20
 
 **Parameters:**
 
@@ -5000,7 +5000,7 @@ Memory
 Query information about all your orders – active, canceled, filled – filtered by time range.
 
 **Weight:**
-20
+10
 
 **Parameters:**
 
@@ -5100,7 +5100,7 @@ Note that some fields are optional and included only for orders that set them.
 Query information about all your OCOs, filtered by time range.
 
 **Weight:**
-20
+10
 
 **Parameters:**
 
@@ -5191,7 +5191,7 @@ Status reports for OCOs are identical to [`orderList.status`](#query-oco-user_da
 Query information about all your trades, filtered by time range.
 
 **Weight:**
-20
+10
 
 **Parameters:**
 
@@ -5317,9 +5317,9 @@ timestamp           | LONG   | YES          |
 
 Case                            | Weight
 ----                            | -----
-If `symbol` is invalid          | 2
-Querying by `preventedMatchId`  | 2
-Querying by `orderId`           | 20
+If `symbol` is invalid          | 1
+Querying by `preventedMatchId`  | 1
+Querying by `orderId`           | 10
 
 **Data Source:**
 
@@ -5376,7 +5376,7 @@ Database
 Retrieves allocations resulting from SOR order placement.
 
 **Weight:**
-20
+10
 
 **Parameters:**
 
@@ -5468,7 +5468,7 @@ Start a new user data stream.
 unless [`userDataStream.ping`](#ping-user-data-stream-user_stream) requests are sent regularly.
 
 **Weight:**
-2
+1
 
 **Parameters:**
 
@@ -5526,7 +5526,7 @@ In order to keep the stream open, you have to regularly send pings using the `us
 It is recommended to send a ping once every 30 minutes.
 
 **Weight:**
-2
+1
 
 **Parameters:**
 
@@ -5573,7 +5573,7 @@ Memory
 Explicitly stop and close the user data stream.
 
 **Weight:**
-2
+1
 
 **Parameters:**
 

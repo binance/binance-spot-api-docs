@@ -1,4 +1,4 @@
-# REST行情与交易接口 (2023-08-25)
+# REST行情与交易接口 (2023-08-08)
 
 ## API 基本信息
 * 本篇列出接口的 base URL 有:
@@ -480,36 +480,35 @@ s -> 秒; m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 
 * REQUESTS_WEIGHT - 单位时间请求权重之和上限
 
-```json
+    ```json
     {
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 1200
     }
-```
+    ```
 
 * ORDERS - 单位时间下单(撤单)次数上限
 
-```json
+    ```json
     {
       "rateLimitType": "ORDERS",
       "interval": "SECOND",
       "intervalNum": 1,
       "limit": 10
     }
-```
 
 * RAW_REQUESTS - 单位时间请求次数上限
 
-```json
+    ```json
     {
       "rateLimitType": "RAW_REQUESTS",
       "interval": "MINUTE",
       "intervalNum": 5,
-      "limit": 61000
+      "limit": 5000
     }
-```
+    ```
 
 **限制间隔 (interval):**
 
@@ -567,7 +566,7 @@ GET /api/v3/exchangeInfo
 获取此时的交易规范信息
 
 **权重:**
-20
+10
 
 
 **参数:**
@@ -688,10 +687,10 @@ GET /api/v3/depth
 
 限制 | 权重
 ------------ | ------------
-1-100 | 2
-101-500 | 10
-501-1000 | 20
-1001-5000 | 100
+1-100 | 1
+101-500 | 5
+501-1000 | 10
+1001-5000 | 50
 
 **参数:**
 
@@ -733,7 +732,7 @@ GET /api/v3/trades
 获取近期成交
 
 **权重:**
-2
+1
 
 **参数:**
 
@@ -765,7 +764,7 @@ GET /api/v3/historicalTrades
 ```
 
 **权重:**
-10
+5
 
 **参数:**
 
@@ -801,7 +800,7 @@ GET /api/v3/aggTrades
 与trades的区别是，同一个taker在同一时间同一价格与多个maker的成交会被合并为一条记录
 
 **权重:**
-2
+1
 
 **参数:**
 
@@ -841,7 +840,7 @@ GET /api/v3/klines
 每根K线的开盘时间可视为唯一ID
 
 **权重:**
-2
+1
 
 **参数:**
 
@@ -891,7 +890,7 @@ GET /api/v3/uiKlines
 ```
 
 **权重:**
-2
+1
 
 **参数:**
 
@@ -934,8 +933,7 @@ limit     | INT    | NO           | 默认 500; 最大 1000.
 GET /api/v3/avgPrice
 ```
 **权重:**
-2
-
+1
 **参数:**
 名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
@@ -973,28 +971,28 @@ GET /api/v3/ticker/24hr
     <tr>
         <td rowspan="2">symbol</td>
         <td>1</td>
-        <td>2</td>
+        <td>1</td>
     </tr>
     <tr>
         <td>不提供symbol</td>
-        <td>80</td>
+        <td>40</td>
     </tr>
     <tr>
         <td rowspan="4">symbols</td>
         <td>1-20</td>
-        <td>2</td>
+        <td>1</td>
     </tr>
     <tr>
         <td>21-100</td>
-        <td>40</td>
+        <td>20</td>
     </tr>
     <tr>
         <td> >= 101</td>
-        <td>80</td>
+        <td>40</td>
     </tr>
     <tr>
         <td>不提供symbol</td>
-        <td>80</td>
+        <td>40</td>
     </tr>
 </tbody>
 </table>
@@ -1170,16 +1168,16 @@ GET /api/v3/ticker/price
     <tr>
         <td rowspan="2">symbol</td>
         <td>1</td>
-        <td>2</td>
+        <td>1</td>
     </tr>
     <tr>
         <td>不提供symbol</td>
-        <td>4</td>
+        <td>2</td>
     </tr>
     <tr>
         <td>symbols</td>
         <td>不限</td>
-        <td>4</td>
+        <td>2</td>
     </tr>
 </tbody>
 </table>
@@ -1264,16 +1262,16 @@ GET /api/v3/ticker/bookTicker
     <tr>
         <td rowspan="2">symbol</td>
         <td>1</td>
-        <td>2</td>
+        <td>1</td>
     </tr>
     <tr>
         <td>不提供symbol</td>
-        <td>4</td>
+        <td>2</td>
     </tr>
     <tr>
         <td>symbols</td>
         <td>不限</td>
-        <td>4</td>
+        <td>2</td>
     </tr>
 </tbody>
 </table>
@@ -1363,7 +1361,7 @@ GET /api/v3/ticker
 
 比如, 结束时间 `closeTime` 是 1641287867099 (January 04, 2022 09:17:47:099 UTC) , `windowSize` 为 `1d`. 那么开始时间 `openTime` 则为 1641201420000 (January 3, 2022, 09:17:00 UTC)
 
-**权重(IP):** 4/交易对. <br/><br/> 如果`symbols`请求的交易对超过50, 上限是200.
+**权重(IP):** 2/交易对. <br/><br/> 如果`symbols`请求的交易对超过50, 上限是100.
 
 **参数**
 <table>
@@ -1719,7 +1717,7 @@ GET /api/v3/order
 查询订单状态
 
 **权重:**
-4
+2
 
 **参数:**
 
@@ -2144,8 +2142,8 @@ GET /api/v3/openOrders
 请小心使用不带symbol参数的调用
 
 **权重:**
-带symbol: 6
-不带: 80
+带symbol 3
+不带40
 
 **参数:**
 
@@ -2196,7 +2194,7 @@ GET /api/v3/allOrders
 ```
 
 **权重:**
-20
+10
 
 **Parameters:**
 
@@ -2397,7 +2395,7 @@ GET /api/v3/orderList
 
 根据提供的可选参数检索特定的OCO。
 
-**权重(IP)**: 4
+**权重(IP)**: 2
 
 **参数**:
 
@@ -2445,7 +2443,7 @@ GET /api/v3/allOrderList
 
 根据提供的可选参数检索所有的OCO。
 
-**权重(IP)**: 20
+**权重(IP)**: 10
 
 **参数**
 
@@ -2516,7 +2514,7 @@ timestamp|LONG|YES|
 GET /api/v3/openOrderList
 ``
 
-**权重(IP)**: 6
+**权重(IP)**: 3
 
 **参数**
 
@@ -2658,7 +2656,7 @@ GET /api/v3/account
 ```
 
 **权重:**
-20
+10
 
 **参数:**
 
@@ -2716,7 +2714,7 @@ GET /api/v3/myTrades
 获取某交易对的成交历史
 
 **权重:**
-20
+10
 
 **参数:**
 
@@ -2772,7 +2770,7 @@ GET /api/v3/rateLimit/order
 获取用户在当前时间区间内的下单总数。
 
 **权重(IP):**
-40
+20
 
 **参数:**
 名称 | 类型| 是否必需 | 描述
@@ -2835,9 +2833,9 @@ timestamp           | LONG   | YES          |
 
 情况                         | 权重
 ----------------------------| -----
-如果 `symbol` 是无效的        | 2
-通过 `preventedMatchId` 查询 | 2
-通过 `orderId` 查询          | 20
+如果 `symbol` 是无效的        | 1
+通过 `preventedMatchId` 查询 | 1
+通过 `orderId` 查询          | 10
 
 **数据源:**
 
@@ -2870,8 +2868,8 @@ GET /api/v3/myAllocations
 
 检索由 SOR 订单生成引起的分配结果。
 
-**权重:**
-20
+**权重:*
+10
 
 **参数:**
 
@@ -2903,7 +2901,7 @@ timestamp                |LONG   |No        |
 **数据源:**
 数据库
 
-**响应:**
+**响应:*
 
 ```javascript
 [
@@ -2936,7 +2934,7 @@ POST /api/v3/userDataStream
 从创建起60分钟有效
 
 **权重:**
-2
+1
 
 **Parameters:**
 NONE
@@ -2959,7 +2957,7 @@ PUT /api/v3/userDataStream
 延长用户数据流有效期到60分钟之后。 建议每30分钟调用一次
 
 **权重:**
-2
+1
 
 **参数:**
 
@@ -2982,7 +2980,7 @@ DELETE /api/v3/userDataStream
 关闭用户数据流。
 
 **权重:**
-2
+1
 
 **参数:**
 

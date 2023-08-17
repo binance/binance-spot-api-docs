@@ -71,7 +71,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2023-08-25)
+# Public Rest API for Binance (2023-08-08)
 
 ## General API Information
 * The following base endpoints are available. Please use whichever works best for your setup:
@@ -584,35 +584,35 @@ s-> seconds; m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
 **Rate limiters (rateLimitType)**
 * REQUEST_WEIGHT
 
-```json
+    ```json
     {
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 1200
     }
-```
+    ```
 
 * ORDERS
 
-```json
+    ```json
     {
       "rateLimitType": "ORDERS",
       "interval": "SECOND",
       "intervalNum": 1,
       "limit": 10
     }
-```
+    ```
 * RAW_REQUESTS
 
-```json
+    ```json
     {
       "rateLimitType": "RAW_REQUESTS",
       "interval": "MINUTE",
       "intervalNum": 5,
-      "limit": 61000
+      "limit": 5000
     }
-```
+    ```
 
 **Rate limit intervals (interval)**
 
@@ -670,7 +670,7 @@ GET /api/v3/exchangeInfo
 Current exchange trading rules and symbol information
 
 **Weight:**
-20
+10
 
 **Parameters:**
 
@@ -773,10 +773,10 @@ Adjusted based on the limit:
 
 |Limit|Request Weight
 ------|-------
-1-100|  2
-101-500| 10
-501-1000| 20
-1001-5000| 100
+1-100|  1
+101-500| 5
+501-1000| 10
+1001-5000| 50
 
 **Parameters:**
 
@@ -815,7 +815,7 @@ GET /api/v3/trades
 Get recent trades.
 
 **Weight:**
-2
+1
 
 **Parameters:**
 
@@ -849,7 +849,7 @@ GET /api/v3/historicalTrades
 Get older trades.
 
 **Weight:**
-10
+5
 
 **Parameters:**
 
@@ -884,7 +884,7 @@ GET /api/v3/aggTrades
 Get compressed, aggregate trades. Trades that fill at the time, from the same taker order, with the same price will have the quantity aggregated.
 
 **Weight:**
-2
+1
 
 **Parameters:**
 
@@ -925,7 +925,7 @@ Kline/candlestick bars for a symbol.
 Klines are uniquely identified by their open time.
 
 **Weight:**
-2
+1
 
 **Parameters:**
 
@@ -973,7 +973,7 @@ GET /api/v3/uiKlines
 ```
 
 **Weight:**
-2
+1
 
 **Parameters:**
 
@@ -1016,7 +1016,7 @@ Current average price for a symbol.
 GET /api/v3/avgPrice
 ```
 **Weight:**
-2
+1
 
 **Parameters:**
 
@@ -1056,28 +1056,28 @@ GET /api/v3/ticker/24hr
     <tr>
         <td rowspan="2">symbol</td>
         <td>1</td>
-        <td>2</td>
+        <td>1</td>
     </tr>
     <tr>
         <td>symbol parameter is omitted</td>
-        <td>80</td>
+        <td>40</td>
     </tr>
     <tr>
         <td rowspan="4">symbols</td>
         <td>1-20</td>
-        <td>2</td>
+        <td>1</td>
     </tr>
     <tr>
         <td>21-100</td>
-        <td>40</td>
+        <td>20</td>
     </tr>
     <tr>
         <td>101 or more</td>
-        <td>80</td>
+        <td>40</td>
     </tr>
     <tr>
         <td>symbols parameter is omitted</td>
-        <td>80</td>
+        <td>40</td>
     </tr>
 </tbody>
 </table>
@@ -1252,16 +1252,16 @@ Latest price for a symbol or symbols.
     <tr>
         <td rowspan="2">symbol</td>
         <td>1</td>
-        <td>2</td>
+        <td>1</td>
     </tr>
     <tr>
         <td>symbol parameter is omitted</td>
-        <td>4</td>
+        <td>2</td>
     </tr>
     <tr>
         <td>symbols</td>
         <td>Any</td>
-        <td>4</td>
+        <td>2</td>
     </tr>
 </tbody>
 </table>
@@ -1341,16 +1341,16 @@ Best price/qty on the order book for a symbol or symbols.
     <tr>
         <td rowspan="2">symbol</td>
         <td>1</td>
-        <td>2</td>
+        <td>1</td>
     </tr>
     <tr>
         <td>symbol parameter is omitted</td>
-        <td>4</td>
+        <td>2</td>
     </tr>
     <tr>
         <td>symbols</td>
         <td>Any</td>
-        <td>4</td>
+        <td>2</td>
     </tr>
 </tbody>
 </table>
@@ -1436,7 +1436,7 @@ E.g. If the `closeTime` is 1641287867099 (January 04, 2022 09:17:47:099 UTC) , a
 
 **Weight:**
 
-4 for each requested <tt>symbol</tt> regardless of <tt>windowSize</tt>. <br/><br/> The weight for this request will cap at 200 once the number of `symbols` in the request is more than 50.
+2 for each requested <tt>symbol</tt> regardless of <tt>windowSize</tt>. <br/><br/> The weight for this request will cap at 100 once the number of `symbols` in the request is more than 50.
 
 **Parameters**
 
@@ -1798,7 +1798,7 @@ GET /api/v3/order
 Check an order's status.
 
 **Weight:**
-4
+2
 
 **Parameters:**
 
@@ -2228,7 +2228,7 @@ GET /api/v3/openOrders
 Get all open orders on a symbol. **Careful** when accessing this with no symbol.
 
 **Weight:**
-6 for a single symbol; **80** when the symbol parameter is omitted
+3 for a single symbol; **40** when the symbol parameter is omitted
 
 **Parameters:**
 
@@ -2280,7 +2280,7 @@ GET /api/v3/allOrders
 Get all account orders; active, canceled, or filled.
 
 **Weight:**
-20 
+10 with symbol
 
 **Data Source:**
 Database
@@ -2544,7 +2544,7 @@ Matching Engine
 GET /api/v3/orderList 
 ```
 
-**Weight**: 4
+**Weight**: 2
 
 Retrieves a specific OCO based on provided optional parameters
 
@@ -2593,7 +2593,7 @@ Database
 GET /api/v3/allOrderList
 ```
 
-**Weight**: 20
+**Weight**: 10
 
 Retrieves all OCO based on provided optional parameters
 
@@ -2666,7 +2666,7 @@ Database
 GET /api/v3/openOrderList 
 ```
 
-Weight: 6
+Weight: 3
 
 **Parameters**
 
@@ -2784,9 +2784,6 @@ POST /api/v3/sor/order/test
 Test new order creation and signature/recvWindow using smart order routing (SOR).
 Creates and validates a new order but does not send it into the matching engine.
 
-**Weight:**
-1
-
 **Parameters:**
 
 Same as `POST /api/v3/sor/order`
@@ -2811,7 +2808,7 @@ GET /api/v3/account
 Get current account information.
 
 **Weight:**
-20
+10
 
 **Parameters:**
 
@@ -2870,7 +2867,7 @@ GET /api/v3/myTrades
 Get trades for a specific account and symbol.
 
 **Weight:**
-20 
+10 with symbol
 
 **Parameters:**
 
@@ -2931,7 +2928,7 @@ Displays the user's current order count usage for all intervals.
 
 
 **Weight:**
-40
+20
 
 **Parameters:**
 
@@ -2996,9 +2993,9 @@ timestamp           | LONG   | YES          |
 
 Case                            | Weight
 ----                            | -----
-If `symbol` is invalid          | 2
-Querying by `preventedMatchId`  | 2
-Querying by `orderId`           | 20
+If `symbol` is invalid          | 1
+Querying by `preventedMatchId`  | 1
+Querying by `orderId`           | 10
 
 **Data Source:**
 
@@ -3032,7 +3029,7 @@ GET /api/v3/myAllocations
 Retrieves allocations resulting from SOR order placement.
 
 **Weight:**
-20
+10
 
 **Parameters:**
 
@@ -3097,7 +3094,7 @@ POST /api/v3/userDataStream
 Start a new user data stream. The stream will close after 60 minutes unless a keepalive is sent.
 
 **Weight:**
-2
+1
 
 **Parameters:**
 NONE
@@ -3119,7 +3116,7 @@ PUT /api/v3/userDataStream
 Keepalive a user data stream to prevent a time out. User data streams will close after 60 minutes. It's recommended to send a ping about every 30 minutes.
 
 **Weight:**
-2
+1
 
 **Data Source"**
 Memory
@@ -3142,7 +3139,7 @@ DELETE /api/v3/userDataStream
 Close out a user data stream.
 
 **Weight:**
-2
+1
 
 **Parameters:**
 
