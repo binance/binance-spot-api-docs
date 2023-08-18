@@ -2272,7 +2272,7 @@ Memory
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -2303,9 +2303,8 @@ If more than one symbol is requested, response returns an array:
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 6000
-,
-      "count": 2
+      "limit": 6000,
+      "count": 4
     }
   ]
 }
@@ -5273,7 +5272,7 @@ Memory => Database
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 10
+      "count": 20
     }
   ]
 }
