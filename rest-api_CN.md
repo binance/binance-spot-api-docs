@@ -485,7 +485,7 @@ s -> 秒; m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200
+      "limit": 6000
     }
 ```
 

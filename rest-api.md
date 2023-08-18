@@ -589,7 +589,7 @@ s-> seconds; m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200
+      "limit": 6000
     }
 ```
 

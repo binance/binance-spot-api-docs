@@ -174,7 +174,7 @@ Example of successful response:
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 321
     }
   ]
@@ -210,7 +210,7 @@ Example of failed response:
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 322
     }
   ]
@@ -313,7 +313,7 @@ A response with rate limit status may look like this:
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 70
     }
   ]

@@ -100,7 +100,7 @@
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 321
     }
   ]
@@ -136,7 +136,7 @@
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 322
     }
   ]
@@ -237,7 +237,7 @@
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 70
     }
   ]
