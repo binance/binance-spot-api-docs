@@ -174,7 +174,7 @@ Example of successful response:
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 321
     }
   ]
@@ -210,7 +210,7 @@ Example of failed response:
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 322
     }
   ]
@@ -313,7 +313,7 @@ A response with rate limit status may look like this:
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 70
     }
   ]
@@ -365,7 +365,7 @@ the `rateLimits` field can be omitted from responses to reduce their size.
   ```
 
   ```json
-  {"id":1,"status":200,"result":{"serverTime":1656400526260},"rateLimits":[{"rateLimitType":"REQUEST_WEIGHT","interval":"MINUTE","intervalNum":1,"limit":1200,"count":70}]}
+  {"id":1,"status":200,"result":{"serverTime":1656400526260},"rateLimits":[{"rateLimitType":"REQUEST_WEIGHT","interval":"MINUTE","intervalNum":1,"limit":6000,"count":70}]}
   ```
 
   Request and response without rate limit status:
@@ -411,7 +411,7 @@ the `rateLimits` field can be omitted from responses to reduce their size.
   * `retryAfter` field indicates the timestamp when the ban will be lifted.
 * IP bans are tracked and **scale in duration** for repeat offenders, **from 2 minutes to 3 days**.
 
-Successful response indicating that in 1 minute you have used 70 weight out of your 1200 limit:
+Successful response indicating that in 1 minute you have used 70 weight out of your 6000 limit:
 
 ```json
 {
@@ -423,7 +423,7 @@ Successful response indicating that in 1 minute you have used 70 weight out of y
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 70
     }
   ]
@@ -449,7 +449,7 @@ Failed response indicating that you are banned and the ban will last until epoch
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 2411
     }
   ]
@@ -509,7 +509,7 @@ Successful response indicating that you have placed 12 orders in 10 seconds, and
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 321
     }
   ]
@@ -989,7 +989,7 @@ Memory
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -1029,7 +1029,7 @@ Memory
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -1114,7 +1114,7 @@ Memory
         "rateLimitType": "REQUEST_WEIGHT",    // Rate limit type: REQUEST_WEIGHT, ORDERS, CONNECTIONS
         "interval": "MINUTE",                 // Rate limit interval: SECOND, MINUTE, DAY
         "intervalNum": 1,                     // Rate limit interval multiplier (i.e., "1 minute")
-        "limit": 1200                         // Rate limit per interval
+        "limit": 6000                         // Rate limit per interval
       },
       {
         "rateLimitType": "ORDERS",
@@ -1207,7 +1207,7 @@ Memory
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 10
     }
   ]
@@ -1319,7 +1319,7 @@ Memory
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -1380,7 +1380,7 @@ Memory
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -1442,7 +1442,7 @@ Database
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 5
     }
   ]
@@ -1526,7 +1526,7 @@ Database
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -1617,7 +1617,7 @@ Database
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -1690,7 +1690,7 @@ Database
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -1737,7 +1737,7 @@ Memory
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -1853,7 +1853,7 @@ Memory
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -1885,7 +1885,7 @@ Memory
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -1951,7 +1951,7 @@ If more than one symbol is requested, response returns an array:
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -2100,7 +2100,7 @@ Database
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 2
     }
   ]
@@ -2132,7 +2132,7 @@ Database
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 2
     }
   ]
@@ -2186,7 +2186,7 @@ If more than one symbol is requested, response returns an array:
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 4
     }
   ]
@@ -2271,7 +2271,7 @@ Memory
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -2303,7 +2303,8 @@ If more than one symbol is requested, response returns an array:
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000
+,
       "count": 2
     }
   ]
@@ -2393,7 +2394,7 @@ Memory
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -2427,7 +2428,7 @@ If more than one symbol is requested, response returns an array:
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 2
     }
   ]
@@ -2737,7 +2738,7 @@ Response format is selected by using the `newOrderRespType` parameter.
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -2786,7 +2787,8 @@ Response format is selected by using the `newOrderRespType` parameter.
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000
+,
       "count": 1
     }
   ]
@@ -2853,7 +2855,7 @@ Response format is selected by using the `newOrderRespType` parameter.
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -2926,7 +2928,7 @@ Memory
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -3059,7 +3061,7 @@ Memory => Database
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 2
     }
   ]
@@ -3204,7 +3206,7 @@ When an individual order is canceled:
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -3281,7 +3283,7 @@ When an OCO is canceled:
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -3662,7 +3664,7 @@ If both cancel and placement succeed, you get the following response with `"stat
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -3708,7 +3710,7 @@ and returns the following response with `"status": 400`:
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -3770,7 +3772,7 @@ and the `"data"` field detailing which operation succeeded, which failed, and wh
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -3830,7 +3832,7 @@ and the `"data"` field detailing which operation succeeded, which failed, and wh
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -3878,7 +3880,7 @@ If both operations fail, response will have `"status": 400`:
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -3972,7 +3974,8 @@ If all symbols are requested, use the `symbol` field to tell which symbol the or
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000
+,
       "count": 3
     }
   ]
@@ -4111,7 +4114,7 @@ Cancellation reports for orders and OCOs have the same format as in [`order.canc
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -4296,7 +4299,7 @@ See [`order.place`](#place-new-order-trade) for more examples.
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -4417,7 +4420,7 @@ Database
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 2
     }
   ]
@@ -4584,7 +4587,7 @@ Matching Engine
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -4661,7 +4664,7 @@ Database
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 3
     }
   ]
@@ -4763,7 +4766,7 @@ Matching Engine
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -4816,7 +4819,8 @@ Memory
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000
+,
       "count": 1
     }
   ]
@@ -4907,7 +4911,8 @@ Memory => Database
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000
+,
       "count": 10
     }
   ]
@@ -4972,7 +4977,7 @@ Memory
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 20
     }
   ]
@@ -5073,7 +5078,7 @@ Note that some fields are optional and included only for orders that set them.
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 10
     }
   ]
@@ -5164,7 +5169,7 @@ Status reports for OCOs are identical to [`orderList.status`](#query-oco-user_da
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 10
     }
   ]
@@ -5268,7 +5273,7 @@ Memory => Database
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 10
     }
   ]
@@ -5350,7 +5355,7 @@ Database
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 10
     }
   ]
@@ -5437,7 +5442,7 @@ Database
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 10
     }
   ]
@@ -5497,7 +5502,7 @@ Subscribe to the received listen key on WebSocket Stream afterwards.
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -5550,7 +5555,7 @@ Memory
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -5596,7 +5601,7 @@ Memory
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
