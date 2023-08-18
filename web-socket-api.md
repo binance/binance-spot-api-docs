@@ -1208,7 +1208,7 @@ Memory
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 10
+      "count": 20
     }
   ]
 }
@@ -1320,7 +1320,7 @@ Memory
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -1381,7 +1381,7 @@ Memory
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -1443,7 +1443,7 @@ Database
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 5
+      "count": 10
     }
   ]
 }
@@ -1527,7 +1527,7 @@ Database
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -1618,7 +1618,7 @@ Database
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -1691,7 +1691,7 @@ Database
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -1738,7 +1738,7 @@ Memory
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -1854,7 +1854,7 @@ Memory
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -1886,7 +1886,7 @@ Memory
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -1952,7 +1952,7 @@ If more than one symbol is requested, response returns an array:
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -2101,7 +2101,7 @@ Database
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 2
+      "count": 4
     }
   ]
 }
@@ -2133,7 +2133,7 @@ Database
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 2
+      "count": 4
     }
   ]
 }
@@ -2187,7 +2187,7 @@ If more than one symbol is requested, response returns an array:
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 4
+      "count": 8
     }
   ]
 }
@@ -2395,7 +2395,7 @@ Memory
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -2429,7 +2429,7 @@ If more than one symbol is requested, response returns an array:
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 2
+      "count": 4
     }
   ]
 }
@@ -3062,7 +3062,7 @@ Memory => Database
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 2
+      "count": 4
     }
   ]
 }
@@ -3974,9 +3974,8 @@ If all symbols are requested, use the `symbol` field to tell which symbol the or
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 6000
-,
-      "count": 3
+      "limit": 6000,
+      "count": 6
     }
   ]
 }
@@ -4421,7 +4420,7 @@ Database
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 2
+      "count": 4
     }
   ]
 }
@@ -4665,7 +4664,7 @@ Database
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 3
+      "count": 6
     }
   ]
 }
@@ -4913,7 +4912,7 @@ Memory => Database
       "intervalNum": 1,
       "limit": 6000
 ,
-      "count": 10
+      "count": 20
     }
   ]
 }
@@ -4978,7 +4977,7 @@ Memory
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 20
+      "count": 40
     }
   ]
 }
@@ -5079,7 +5078,7 @@ Note that some fields are optional and included only for orders that set them.
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 10
+      "count": 20
     }
   ]
 }
@@ -5170,7 +5169,7 @@ Status reports for OCOs are identical to [`orderList.status`](#query-oco-user_da
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 10
+      "count": 20
     }
   ]
 }
@@ -5356,7 +5355,7 @@ Database
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 10
+      "count": 20
     }
   ]
 }
@@ -5443,7 +5442,7 @@ Database
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 10
+      "count": 20
     }
   ]
 }
@@ -5503,7 +5502,7 @@ Subscribe to the received listen key on WebSocket Stream afterwards.
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -5556,7 +5555,7 @@ Memory
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -5602,7 +5601,7 @@ Memory
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
