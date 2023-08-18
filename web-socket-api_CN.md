@@ -285,7 +285,7 @@ API 有多种频率限制间隔。
   ```
 
   ```json
-  {"id":1,"status":200,"result":{"serverTime":1656400526260},"rateLimits":[{"rateLimitType":"REQUEST_WEIGHT","interval":"MINUTE","intervalNum":1,"limit":1200,"count":70}]}
+  {"id":1,"status":200,"result":{"serverTime":1656400526260},"rateLimits":[{"rateLimitType":"REQUEST_WEIGHT","interval":"MINUTE","intervalNum":1,"limit":6000,"count":70}]}
   ```
 
   没有频率限制状态的请求和响应：
@@ -341,7 +341,7 @@ API 有多种频率限制间隔。
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 70
     }
   ]
@@ -367,7 +367,7 @@ API 有多种频率限制间隔。
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 2411
     }
   ]
@@ -426,7 +426,7 @@ API 有多种频率限制间隔。
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 321
     }
   ]
@@ -884,7 +884,7 @@ NONE
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -924,7 +924,7 @@ NONE
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -1009,7 +1009,7 @@ NONE
         "rateLimitType": "REQUEST_WEIGHT",    // 速率限制类型: REQUEST_WEIGHT，ORDERS，CONNECTIONS
         "interval": "MINUTE",                 // 速率限制间隔: SECOND，MINUTE，DAY
         "intervalNum": 1,                     // 速率限制间隔乘数 (i.e.，"1 minute")
-        "limit": 1200                         // 每个间隔的速率限制
+        "limit": 6000                         // 每个间隔的速率限制
       },
       {
         "rateLimitType": "ORDERS",
@@ -1102,7 +1102,7 @@ NONE
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 10
     }
   ]
@@ -1214,7 +1214,7 @@ NONE
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -1275,7 +1275,7 @@ NONE
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -1337,7 +1337,7 @@ NONE
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 5
     }
   ]
@@ -1419,7 +1419,7 @@ NONE
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -1509,7 +1509,7 @@ months    | `1M`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -1580,7 +1580,7 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -1627,7 +1627,7 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -1741,7 +1741,7 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -1773,7 +1773,7 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -1839,7 +1839,7 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -1986,7 +1986,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 2
     }
   ]
@@ -2018,7 +2018,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 2
     }
   ]
@@ -2072,7 +2072,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 4
     }
   ]
@@ -2157,7 +2157,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -2189,7 +2189,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 2
     }
   ]
@@ -2279,7 +2279,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -2313,7 +2313,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 2
     }
   ]
@@ -2615,7 +2615,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -2664,7 +2664,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -2730,7 +2730,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -2800,7 +2800,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -2931,7 +2931,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 2
     }
   ]
@@ -3074,7 +3074,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 2
     }
   ]
@@ -3151,7 +3151,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -3529,7 +3529,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -3574,7 +3574,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -3635,7 +3635,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -3693,7 +3693,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -3741,7 +3741,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -3835,7 +3835,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 3
     }
   ]
@@ -3971,7 +3971,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -4151,7 +4151,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -4271,7 +4271,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 2
     }
   ]
@@ -4437,7 +4437,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -4514,7 +4514,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 3
     }
   ]
@@ -4616,7 +4616,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -4668,7 +4668,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -4759,7 +4759,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 10
     }
   ]
@@ -4824,7 +4824,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 20
     }
   ]
@@ -4923,7 +4923,7 @@ days    | `1d`, `2d` ... `7d`
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 10
     }
   ]
@@ -5014,7 +5014,7 @@ OCO 的状态报告与 [`orderList.status`](#查询-OCO-user_data) 相同。
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 10
     }
   ]
@@ -5118,7 +5118,7 @@ OCO 的状态报告与 [`orderList.status`](#查询-OCO-user_data) 相同。
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 10
     }
   ]
@@ -5199,7 +5199,7 @@ timestamp           | LONG   | YES          |
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 10
     }
   ]
@@ -5286,7 +5286,7 @@ timestamp           | LONG   | YES          |
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 10
     }
   ]
@@ -5346,7 +5346,7 @@ timestamp           | LONG   | YES          |
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -5394,7 +5394,7 @@ timestamp           | LONG   | YES          |
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
@@ -5440,7 +5440,7 @@ timestamp           | LONG   | YES          |
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 1200,
+      "limit": 6000,
       "count": 1
     }
   ]
