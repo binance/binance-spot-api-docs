@@ -6,7 +6,7 @@
 
 **下面的变更会在UTC时间 2023-08-25 00:00 上线**
 * WebSocket API 的 `CONNECTIONS` 被调整为每5分钟300.
-* REST API 中的 `REQUEST_WEIGHT` 调整为每分钟6,000.
+* REST API 和 WebSocket API 的 `REQUEST_WEIGHT` 调整为每分钟6,000.
 * REST API 中的 `RAW_REQUESTS` 调整为每5分钟61,000.
 * 之前连接到 WebSocket API 的权重为1. **现权重调整到 2**.
 * 下表的 REST API 和 WebSocket API 请求的权重被调整:
