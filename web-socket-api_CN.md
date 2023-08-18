@@ -1103,7 +1103,7 @@ NONE
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 10
+      "count": 20
     }
   ]
 }
@@ -1215,7 +1215,7 @@ NONE
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -1276,7 +1276,7 @@ NONE
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -1338,7 +1338,7 @@ NONE
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 5
+      "count": 10
     }
   ]
 }
@@ -1420,7 +1420,7 @@ NONE
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -1510,7 +1510,7 @@ months    | `1M`
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -1581,7 +1581,7 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -1742,7 +1742,7 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -1774,7 +1774,7 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -1840,7 +1840,7 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -1987,7 +1987,7 @@ days    | `1d`, `2d` ... `7d`
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 2
+      "count": 4
     }
   ]
 }
@@ -2019,7 +2019,7 @@ days    | `1d`, `2d` ... `7d`
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 2
+      "count": 4
     }
   ]
 }
@@ -2073,7 +2073,7 @@ days    | `1d`, `2d` ... `7d`
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 4
+      "count": 8
     }
   ]
 }
@@ -2158,7 +2158,7 @@ days    | `1d`, `2d` ... `7d`
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -2190,7 +2190,7 @@ days    | `1d`, `2d` ... `7d`
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 2
+      "count": 4
     }
   ]
 }
@@ -2280,7 +2280,7 @@ days    | `1d`, `2d` ... `7d`
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -2314,7 +2314,7 @@ days    | `1d`, `2d` ... `7d`
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 2
+      "count": 4
     }
   ]
 }
@@ -2932,7 +2932,7 @@ days    | `1d`, `2d` ... `7d`
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 2
+      "count": 4
     }
   ]
 }
@@ -3836,7 +3836,7 @@ days    | `1d`, `2d` ... `7d`
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 3
+      "count": 6
     }
   ]
 }
@@ -4272,7 +4272,7 @@ days    | `1d`, `2d` ... `7d`
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 2
+      "count": 4
     }
   ]
 }
@@ -4515,7 +4515,7 @@ days    | `1d`, `2d` ... `7d`
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 3
+      "count": 6
     }
   ]
 }
@@ -4760,7 +4760,7 @@ days    | `1d`, `2d` ... `7d`
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 10
+      "count": 20
     }
   ]
 }
@@ -4825,7 +4825,7 @@ days    | `1d`, `2d` ... `7d`
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 20
+      "count": 40
     }
   ]
 }
@@ -4924,7 +4924,7 @@ days    | `1d`, `2d` ... `7d`
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 10
+      "count": 20
     }
   ]
 }
@@ -5015,7 +5015,7 @@ OCO 的状态报告与 [`orderList.status`](#查询-OCO-user_data) 相同。
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 10
+      "count": 20
     }
   ]
 }
@@ -5119,7 +5119,7 @@ OCO 的状态报告与 [`orderList.status`](#查询-OCO-user_data) 相同。
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 10
+      "count": 20
     }
   ]
 }
@@ -5200,7 +5200,7 @@ timestamp           | LONG   | YES          |
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 10
+      "count": 20
     }
   ]
 }
@@ -5287,7 +5287,7 @@ timestamp           | LONG   | YES          |
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 10
+      "count": 20
     }
   ]
 }
@@ -5347,7 +5347,7 @@ timestamp           | LONG   | YES          |
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -5395,7 +5395,7 @@ timestamp           | LONG   | YES          |
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
@@ -5441,7 +5441,7 @@ timestamp           | LONG   | YES          |
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 1
+      "count": 2
     }
   ]
 }
