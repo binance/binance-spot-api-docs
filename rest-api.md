@@ -483,6 +483,7 @@ These terms will be used throughout the documentation, so it is recommended espe
 * `TRD_GRP_011`
 * `TRD_GRP_012`
 * `TRD_GRP_013`
+* `TRD_GRP_014`
 
 
 **Order status (status):**
@@ -689,7 +690,7 @@ There are 4 possible options:
 * `permissions` can support single or multiple values (e.g. `SPOT`, `["MARGIN","LEVERAGED"]`)
 * If `permissions` parameter not provided, the default values will be `["SPOT","MARGIN","LEVERAGED"]`.
   * If one wants to view all symbols on `GET /api/v3/exchangeInfo`, then one has to search with all permissions explicitly specified
-  (i.e. `permissions=["SPOT","MARGIN","LEVERAGED","TRD_GRP_002","TRD_GRP_003","TRD_GRP_004","TRD_GRP_005","TRD_GRP_006","TRD_GRP_007","TRD_GRP_008","TRD_GRP_009","TRD_GRP_010","TRD_GRP_011","TRD_GRP_012","TRD_GRP_013"]`)
+  (i.e. `permissions=["SPOT","MARGIN","LEVERAGED","TRD_GRP_002","TRD_GRP_003","TRD_GRP_004","TRD_GRP_005","TRD_GRP_006","TRD_GRP_007","TRD_GRP_008","TRD_GRP_009","TRD_GRP_010","TRD_GRP_011","TRD_GRP_012","TRD_GRP_013","TRD_GRP_014"]`)
 
 **Data Source:**
 Memory
