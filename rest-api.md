@@ -165,12 +165,9 @@ This means that the endpoint will check the first Data Source, and if it cannot 
 * Each endpoint has a security type that determines how you will
   interact with it. This is stated next to the NAME of the endpoint.
 * If no security type is stated, assume the security type is NONE.
-* API-keys are passed into the Rest API via the `X-MBX-APIKEY`
-  header.
+* API-keys are passed into the Rest API via the `X-MBX-APIKEY` header.
 * API-keys and secret-keys **are case sensitive**.
-* API-keys can be configured to only access certain types of secure endpoints.
- For example, one API-key could be used for TRADE only, while another API-key
- can access everything except for TRADE routes.
+* API-keys can be configured to only access certain types of secure endpoints.<br> For example, one API-key could be used for TRADE only, <br> while another API-key can access everything except for TRADE routes.
 * By default, API-keys can access all secure routes.
 
 Security Type | Description
@@ -184,13 +181,10 @@ USER_STREAM | Endpoint requires sending a valid API-Key.
 * `TRADE` and `USER_DATA` endpoints are `SIGNED` endpoints.
 
 # SIGNED (TRADE and USER_DATA) Endpoint security
-* `SIGNED` endpoints require an additional parameter, `signature`, to be
-  sent in the  `query string` or `request body`.
-* Endpoints use `HMAC SHA256` signatures. The `HMAC SHA256 signature` is a keyed `HMAC SHA256` operation.
-  Use your `secretKey` as the key and `totalParams` as the value for the HMAC operation.
+* `SIGNED` endpoints require an additional parameter, `signature`, to be sent in the  `query string` or `request body`.
 * The `signature` is **not case sensitive**.
-* `totalParams` is defined as the `query string` concatenated with the
-  `request body`.
+* Please consult the [examples](#signed-endpoint-examples-for-post-apiv3order) below on how to compute signature, depending on which API key type you are using.
+
 
 ## Timing security
 * A `SIGNED` endpoint also requires a parameter, `timestamp`, to be sent which
@@ -466,6 +460,8 @@ These terms will be used throughout the documentation, so it is recommended espe
 * `AUCTION_MATCH`
 * `BREAK`
 
+<a id="account-and-symbol-permissions"></a>
+
 **Account and Symbol Permissions (permissions):**
 
 * `SPOT`
@@ -689,8 +685,7 @@ There are 4 possible options:
 * All parameters are optional.
 * `permissions` can support single or multiple values (e.g. `SPOT`, `["MARGIN","LEVERAGED"]`)
 * If `permissions` parameter not provided, the default values will be `["SPOT","MARGIN","LEVERAGED"]`.
-  * If one wants to view all symbols on `GET /api/v3/exchangeInfo`, then one has to search with all permissions explicitly specified
-  (i.e. `permissions=["SPOT","MARGIN","LEVERAGED","TRD_GRP_002","TRD_GRP_003","TRD_GRP_004","TRD_GRP_005","TRD_GRP_006","TRD_GRP_007","TRD_GRP_008","TRD_GRP_009","TRD_GRP_010","TRD_GRP_011","TRD_GRP_012","TRD_GRP_013","TRD_GRP_014"]`)
+  * To display all permissions you need to specify them explicitly: (e.g. `["SPOT","MARGIN",...]`.). See [Account and Symbol Permissions](#account-and-symbol-permissions) for the full list.
 
 **Data Source:**
 Memory

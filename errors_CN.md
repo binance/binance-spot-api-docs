@@ -191,9 +191,9 @@
 "OCO orders are not supported for this symbol"                   | `OCO`订单不支持该交易对。
 "Quote order qty market orders are not support for this symbol." | 这个交易对，市价单不支持参数 `quoteOrderQty`
 "Trailing stop orders are not supported for this symbol."        | 此symbol不支持 `trailingDelta`
-"Order cancel-replace is not supported for this symbol."         | 此symbol不支持 `POST /api/v3/order/cancelReplace` 
-"This symbol is not permitted for this account."                 | 账户没有权限在此交易对交易。
-"This symbol is restricted for this account."                    | 账户没有权限在此交易对交易。
+"Order cancel-replace is not supported for this symbol."         | 此symbol不支持 `POST /api/v3/order/cancelReplace` 或者 `order.cancelReplace` (WebSocket API)
+"This symbol is not permitted for this account."                 | 账户和交易对的权限不一致 (比如 `SPOT`, `MARGIN` 等)。
+"This symbol is restricted for this account."                    | 账户没有权限在此交易对交易 (比如账户只拥有 `ISOLATED_MARGIN`权限，则无法下`SPOT` 订单)。
 "Order was not canceled due to cancel restrictions."             | `cancelRestrictions` 设置为 `ONLY_NEW` 但订单状态不是 `NEW` <br/> 或 <br/> `cancelRestrictions` 设置为 `ONLY_PARTIALLY_FILLED` 但订单状态不是 `PARTIALLY_FILLED`。
 
 ## 关于 POST /api/v3/order/cancelReplace 的错误

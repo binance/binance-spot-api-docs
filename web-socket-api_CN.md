@@ -459,7 +459,8 @@ API 有多种频率限制间隔。
 ## SIGNED (TRADE 和 USER_DATA) 请求鉴权
 
 * 为了授权请求，`SIGNED` 请求必须带 `signature` 参数。
-* 请参考 [签名请求示例（HMAC）](#SIGNED-请求示例-HMAC)和 [签名请求示例（RSA）](#SIGNED-请求示例-RSA)理解如何计算签名。
+* 请参考 [签名请求示例（HMAC）](#SIGNED-请求示例-HMAC), [签名请求示例（RSA）](#SIGNED-请求示例-RSA) 和 [SIGNED 请求示例 (Ed25519)](#signed-请求示例-ed25519) 理解如何计算签名。
+
 
 ## 时间同步安全
 
