@@ -543,7 +543,7 @@ Security type | API key  | Signature | Description
 ## SIGNED (TRADE and USER_DATA) request security
 
 * `SIGNED` requests require an additional parameter: `signature`, authorizing the request.
-* Please consult [SIGNED request example (HMAC)](#signed-request-example-hmac) and [SIGNED request example (RSA)](#signed-request-example-rsa) on how to compute signature.
+* Please consult [SIGNED request example (HMAC)](#signed-request-example-hmac), [SIGNED request example (RSA)](#signed-request-example-rsa), and [SIGNED request example (Ed25519)](#signed-request-example-ed25519) on how to compute signature, depending on which API key type you are using.
 
 ## Timing security
 

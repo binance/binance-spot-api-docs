@@ -86,7 +86,7 @@
 * 如果需要 API-keys，应当在HTTP头中以 `X-MBX-APIKEY`字段传递。
 * API-keys 与 secret-keys **是大小写敏感的**。
 * API-keys可以被配置为只拥有访问一些接口的权限。
- 例如, 一个 API-key 仅可用于发送交易指令, 而另一个 API-key 则可访问除交易指令外的所有路径。
+ <br>例如, 一个 API-key 仅可用于发送交易指令, 而另一个 API-key 则可访问除交易指令外的所有路径。
 * 默认 API-keys 可访问所有鉴权路径.
 
 鉴权类型 | 描述
@@ -101,9 +101,8 @@ MARKET_DATA | 需要有效的API-KEY
 
 # 需要签名的接口 (TRADE 与 USER_DATA)
 * 调用`SIGNED` 接口时，除了接口本身所需的参数外，还需要在`query string` 或 `request body`中传递 `signature`, 即签名参数。
-* 签名使用`HMAC SHA256`算法. API-KEY所对应的API-Secret作为 `HMAC SHA256` 的密钥，其他所有参数作为`HMAC SHA256`的操作对象，得到的输出即为签名。
 * `签名` **大小写不敏感**.
-* `totalParams`定义为与`request body`串联的`query string`。
+* 请参考下面 [签名示例](#post-apiv3order-%E7%9A%84%E7%A4%BA%E4%BE%8B) 以了解具体如何做计算签名。
 
 ## 时间同步安全
 * 签名接口均需要传递 `timestamp`参数，其值应当是请求发送时刻的unix时间戳(毫秒)。
@@ -362,6 +361,8 @@ print(response.json())
 * `AUCTION_MATCH` 集合竞价
 * `BREAK` 交易暂停
 
+<a id="account-and-symbol-permissions-cn"></a>
+
 **账户与交易对权限(权限):**
 
 * `SPOT` 现货
@@ -587,7 +588,7 @@ GET /api/v3/exchangeInfo
 * 所有的参数都是可选的.
 * `permissions` 支持单个或者多个值, 比如 `SPOT`, `["MARGIN","LEVERAGED"]`.
 * 如果`permissions`值没有提供, 其默认值为 `["SPOT","MARGIN","LEVERAGED"]`.
-  * 如果想取接口 `GET /api/v3/exchangeInfo` 的所有交易对, 则需要设置此参数的所有可能交易权限值, 比如 `permissions=["SPOT","MARGIN","LEVERAGED","TRD_GRP_002","TRD_GRP_003","TRD_GRP_004","TRD_GRP_005","TRD_GRP_006","TRD_GRP_007","TRD_GRP_008","TRD_GRP_009","TRD_GRP_010","TRD_GRP_011","TRD_GRP_012","TRD_GRP_013","TRD_GRP_014"]`)
+  * 如果想显示所有交易权限，需要分别指定(比如，`["SPOT","MARGIN",...]`). 从 [账户与交易对权限](#account-and-symbol-permissions-cn) 查看交易权限列表.
 
 **数据源:**
 缓存
