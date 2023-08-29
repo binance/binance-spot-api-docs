@@ -195,9 +195,9 @@ Error message                                                   | Description
 "OCO orders are not supported for this symbol"                  | `OCO` is not enabled on the symbol.
 "Quote order qty market orders are not support for this symbol."| `MARKET` orders using the parameter `quoteOrderQty` are not enabled on the symbol.
 "Trailing stop orders are not supported for this symbol."       | Orders using `trailingDelta` are not enabled on the symbol.
-"Order cancel-replace is not supported for this symbol."        | `POST /api/v3/order/cancelReplace` is not enabled for the symbol.
-"This symbol is not permitted for this account."                | Account does not have permission to trade on this symbol.
-"This symbol is restricted for this account."                   | Account does not have permission to trade on this symbol.
+"Order cancel-replace is not supported for this symbol."        | `POST /api/v3/order/cancelReplace` (REST API) or `order.cancelReplace` (WebSocket API) is not enabled on the symbol.
+"This symbol is not permitted for this account."                | Account and symbol do not have the same permissions. (e.g. `SPOT`, `MARGIN`, etc)
+"This symbol is restricted for this account."                   | Account is unable to trade on that symbol. (e.g. An `ISOLATED_MARGIN` account cannot place `SPOT` orders.)
 "Order was not canceled due to cancel restrictions."            | Either `cancelRestrictions` was set to `ONLY_NEW` but the order status was not `NEW` <br/> or <br/> `cancelRestrictions` was set to `ONLY_PARTIALLY_FILLED` but the order status was not `PARTIALLY_FILLED`. 
 
 ## Errors regarding POST /api/v3/order/cancelReplace
