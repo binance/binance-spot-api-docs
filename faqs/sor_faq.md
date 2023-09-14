@@ -173,7 +173,7 @@ BTCUSDP quantity 1 price 35,000
 BTCUSDP quantity 1 price 29,000
 ```
 
-If you send the a `MARKET BUY` order for `BTCUSDT` _using SOR_ with `quantity=11`, there is only 10 BTC in total available across all eligible order books. Once all the order books in SOR configuration have been exhausted, the remaining quantity of 1 expires.
+If you send a `MARKET BUY` order for `BTCUSDT` _using SOR_ with `quantity=11`, there is only 10 BTC in total available across all eligible order books. Once all the order books in SOR configuration have been exhausted, the remaining quantity of 1 expires.
 
 ```javascript
 {
