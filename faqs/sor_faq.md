@@ -360,7 +360,7 @@ When your order is filled by SOR, you will see `matchType: ONE_PARTY_TRADE_REPOR
 
 ## What are allocations?
 
-**An allocation** is transfer of asset from the exchange to your account. For example, when SOR takes liquidity from eligible order books, your order is filled by allocations. In this case you don't trade directly, but rather receive allocations from SOR corresponding to the trades made by SOR on your behalf.
+**An allocation** is a transfer of an asset from the exchange to your account. For example, when SOR takes liquidity from eligible order books, your order is filled by allocations. In this case you don't trade directly, but rather receive allocations from SOR corresponding to the trades made by SOR on your behalf.
 
 ```javascript
 [
