@@ -377,27 +377,25 @@ curl -H "X-MBX-APIKEY: $API_KEY" -X "$API_METHOD" \
 ### Ed25519 Keys 
 
 **Note: It is highly recommended to use Ed25519 API keys as it should provide the best performance and security out of all supported key types.**
-
-Parameter     | Value
-------------  | ------------
-`symbol`      | BTCUSDT
-`side`        | SELL
-`type`        | LIMIT
-`timeInForce` | GTC
-`quantity`    | 1
-`price`       | 0.2
-`timestamp`   | 1668481559918
-'strategy':      'MeanReversion',  
-'indicator':     'RSI',          
-'indicator_period': 14,            
-'stop_loss':     '0.18',
-'take_profit':   '0.22',         
-  'position_size': '2',              
-  'risk_per_trade': '2%',            # Maximum risk per trade
-  'entry_condition': 'RSI < 30',     # Entry condition for the strategy
-  'exit_condition':  'RSI > 70',     # Exit condition for the strategy
-  'trading_interval': '1H',          
-  'order_id':       '123456',        # Unique order identifier
+params = {
+    'symbol':        'BTCUSDT',      # Trading pair symbol
+    'side':          'SELL',         # Order side (BUY or SELL)
+    'type':          'LIMIT',        # Order type (LIMIT, MARKET, etc.)
+    'timeInForce':   'GTC',          # Time in force (GTC, IOC, FOK, etc.)
+    'quantity':      '1.0000000',    # Quantity of the asset to trade
+    'price':         '0.20',         # Price at which to execute the order
+    'strategy':      'MeanReversion', 
+    'indicator':     'RSI',            # Technical indicator used
+    'indicator_period': 14,            # Indicator period 
+    'stop_loss':     '0.18',           # Stop-loss price
+    'take_profit':   '0.22',           # Take-profit price
+    'position_size': '2',              # Size of the trading position
+    'risk_per_trade': '2%',            # Maximum risk per trade
+    'entry_condition': 'RSI < 30',     # Entry condition for the strategy
+    'exit_condition':  'RSI > 70',     # Exit condition for the strategy
+    'trading_interval': '1H',          # Trading interval (e.g., 1H, 15M)
+    'order_id':       '123456',        # Unique order identifier
+    }
 
 
 This is a sample code in Python to show how to sign the payload with an Ed25519 key. 
