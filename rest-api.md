@@ -387,6 +387,18 @@ Parameter     | Value
 `quantity`    | 1
 `price`       | 0.2
 `timestamp`   | 1668481559918
+'strategy':      'MeanReversion',  
+'indicator':     'RSI',          
+'indicator_period': 14,            
+'stop_loss':     '0.18',
+'take_profit':   '0.22',         
+  'position_size': '2',              
+  'risk_per_trade': '2%',            # Maximum risk per trade
+  'entry_condition': 'RSI < 30',     # Entry condition for the strategy
+  'exit_condition':  'RSI > 70',     # Exit condition for the strategy
+  'trading_interval': '1H',          
+  'order_id':       '123456',        # Unique order identifier
+
 
 This is a sample code in Python to show how to sign the payload with an Ed25519 key. 
 
