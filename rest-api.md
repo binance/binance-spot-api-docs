@@ -71,7 +71,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2023-08-25)
+# Public Rest API for Binance (2023-09-22)
 
 ## General API Information
 * The following base endpoints are available. Please use whichever works best for your setup:
@@ -480,6 +480,8 @@ These terms will be used throughout the documentation, so it is recommended espe
 * `TRD_GRP_012`
 * `TRD_GRP_013`
 * `TRD_GRP_014`
+* `TRD_GRP_015`
+* `TRD_GRP_016`
 
 
 **Order status (status):**
