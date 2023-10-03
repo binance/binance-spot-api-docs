@@ -1,4 +1,11 @@
-# CHANGELOG for Binance's API (2023-08-25)
+# CHANGELOG for Binance's API (2023-10-03)
+
+## 2023-10-03
+
+* **Order decrement feature went live at 06:15 UTC**.
+* For more information on this feature, please refer to our [FAQ](./faqs/order_count_decrement.md)
+
+---
 
 ## 2023-08-25
 
