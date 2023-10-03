@@ -25,11 +25,16 @@ Name | Description
 
 Name | Description
 ------------ | ------------
-[spot_glossary.md](./faqs/spot_glossary.md) | Definition of terms used in the API
-[trailing-stop-faq.md](./faqs/trailing-stop-faq.md)   | Detailed Information on the behavior of Trailing Stops on the API
-[stp-faq.md](./faqs/stp_faq.md) | Detailed Information on the behavior of Self Trade Prevention (aka STP) on the API
+[spot_glossary](./faqs/spot_glossary.md) | Definition of terms used in the API
+[trailing-stop-faq](./faqs/trailing-stop-faq.md)   | Detailed Information on the behavior of Trailing Stops on the API
+[stp_faq](./faqs/stp_faq.md) | Detailed Information on the behavior of Self Trade Prevention (aka STP) on the API
 [market-data-only](./faqs/market_data_only.md) | Information on our market data only API and websocket streams.
+[sor_faq](./faqs/sor_faq.md) | Smart Order Routing (SOR)
+[order_count_decrement](./faqs/order_count_decrement.md) | Updates to the Spot Order Count Limit Rules.
 
+# Change log
+
+Please refer to [CHANGELOG](./CHANGELOG.md) for latest changes on our APIs (both REST and WebSocket) and Streamers.
 
 # Useful Resources
 

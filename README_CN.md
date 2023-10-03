@@ -27,10 +27,17 @@
 
 名称 | 描述
 ------------ | ------------
-[spot_glossary_cn.md](./faqs/spot_glossary_cn.md) | 现货交易API术语表
-[trailing-stop-faq-cn.md](./faqs/trailing-stop-faq-cn.md)   | 追踪止盈止损订单(Trailing Stop)详细信息和常见问题
-[stp-faq_cn.md](./faqs/stp_faq_cn.md) | 关于 Self Trade Prevention (STP) 的详细信息
-[market-data-only_cn.md](./faqs/market_data_only_cn.md) | 仅提供市场数据的 API 和 Websocket Streams
+[spot_glossary_cn](./faqs/spot_glossary_cn.md) | 现货交易API术语表
+[trailing_stop_faq_cn](./faqs/trailing-stop-faq-cn.md)   | 追踪止盈止损订单(Trailing Stop)详细信息和常见问题
+[stp_faq_cn](./faqs/stp_faq_cn.md) | 关于 Self Trade Prevention (STP) 的详细信息
+[market_data_only_cn](./faqs/market_data_only_cn.md) | 仅提供市场数据的 API 和 Websocket Streams
+[sor_faq](./faqs/sor_faq_cn.md) | 智能指令路由 (SOR)
+[order_count_decrement](./faqs/order_count_decrement_cn.md) | 现货下单频率限制的更新
+
+# 更新日志
+
+关于API(包括REST和WebSocket)方面的最新变动, 请参考 [更新日志](./CHANGELOG_CN.md).
+
 
 # 相关信息
 
