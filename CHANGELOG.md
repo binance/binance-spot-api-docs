@@ -2,7 +2,7 @@
 
 ## 2023-10-03
 
-* **Order decrement feature went live at 06:35 UTC**.
+* **Order decrement feature went live at 06:05 UTC**.
 * For more information on this feature, please refer to our [FAQ](./faqs/order_count_decrement.md)
 
 ---
@@ -11,7 +11,7 @@
 
 * For WebSocket API, removed `RAW REQUESTS` rate limit in `exchangeInfo`, replaced it with `CONNECTIONS` rate limit, which is the limit for new Websocket connections.
 
-**The following changes will be effective from 2023-08-25 at UTC 00:00.**
+**The following changes will be effective from 2023-08-25 at UTC 00:00s.**
 * The `CONNECTIONS` rate limit for WebSocket API has been adjusted to 300 every 5 minutes.
 * The `REQUEST_WEIGHT` rate limit for both REST and WebSocket API has been adjusted to 6,000 every minute.
 * The `RAW_REQUESTS` rate limit for REST API has been adjusted to 61,000 every 5 minutes.
