@@ -2,7 +2,7 @@
 
 ## 2023-10-03
 
-* **Order decrement feature went live at 06:05 UTC**.
+* **Order decrement feature went live at 06:15 UTC**.
 * For more information on this feature, please refer to our [FAQ](./faqs/order_count_decrement.md)
 
 ---
