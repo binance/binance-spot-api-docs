@@ -51,6 +51,7 @@ Please refer to [CHANGELOG](./CHANGELOG.md) for latest changes on our APIs (both
     * [Rust](https://github.com/binance/binance-spot-connector-rust)
     * [PHP](https://github.com/binance/binance-connector-php)
     * [Go](https://github.com/binance/binance-connector-go)
+    * [TypeScript](https://github.com/binance/binance-connector-typescript)
 * [Swagger](https://github.com/binance/binance-api-swagger)
     * A YAML file with OpenApi specification on the RESTful API is available to be used, as well as a Swagger UI page for the consulting.
 * [Spot Testnet](https://testnet.binance.vision/)
