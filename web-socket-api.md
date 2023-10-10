@@ -80,7 +80,8 @@
 * A single connection to the API is only valid for 24 hours; expect to be disconnected after the 24-hour mark.
 * WebSocket server will send a **ping frame** every 3 minutes.
   * If the server does not receive a **pong frame** response within 10 minutes, you will be disconnected.
-  * Unsolicited pong frames are allowed and will prevent disconnection.
+  * Unsolicited pong frames are allowed and interpreted as unidirectional heartbeat:
+    WebSocket server will not send you ping frames if you regularly send unsolicited pongs.
 * Lists are returned in **chronological order**, unless noted otherwise.
 * All timestamps are in **milliseconds** in UTC, unless noted otherwise.
 * All field names and values are **case-sensitive**, unless noted otherwise.
