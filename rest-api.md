@@ -71,7 +71,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2023-09-23)
+# Public Rest API for Binance (2023-10-19)
 
 ## General API Information
 * The following base endpoints are available. Please use whichever works best for your setup:
@@ -85,7 +85,7 @@
 * All endpoints return either a JSON object or array.
 * Data is returned in **ascending** order. Oldest first, newest last.
 * All time and timestamp related fields are in **milliseconds**.
-* For APIs that only send public market data, please use the base endpoint **https://data-api.binance.vision**. Please refer to [Market Data Only](./faqs/market_data_only.md) page.
+* For APIs that only send public market data, please use the base endpoint **https://data-api.binance.vision**. Please refer to [Market Data Only](.faqs/market_data_only.md) page.
 
 ## HTTP Return Codes
 
@@ -778,10 +778,10 @@ Adjusted based on the limit:
 
 |Limit|Request Weight
 ------|-------
-1-100|  2
-101-500| 10
-501-1000| 20
-1001-5000| 100
+1-100|  5
+101-500| 25
+501-1000| 50
+1001-5000| 250
 
 **Parameters:**
 
@@ -820,7 +820,7 @@ GET /api/v3/trades
 Get recent trades.
 
 **Weight:**
-2
+10
 
 **Parameters:**
 

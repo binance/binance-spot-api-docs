@@ -1,5 +1,49 @@
 # 更新日志 (2023-10-03)
 
+## 2023-10-19
+
+**从 2023-10-19 00:00 UTC 开始生效**
+
+* 调高如下接口的请求权重:
+
+<table>
+    <tr>
+        <th>REST API</th>
+        <th>WebSocket API</th>
+        <th>条件 </th>
+        <th>之前的权重</th>
+        <th>调整后权重</th>
+    </tr>
+    <tr>
+        <td width="200px"><code>GET /api/v3/trades</code></td>
+        <td><code>trades.recent</code></td>
+        <td>N/A</td>
+        <td>2</td>
+        <td>10</td>
+    </tr>
+    <tr >
+       <td rowspan="4"><code>GET /api/v3/depth</code></td>
+       <td rowspan="4"><code>depth</code></td>
+       <td><b>Limit 1-100</b></td>
+       <td>2</td>
+       <td>5</td>
+    </tr>
+    <tr>
+        <td width="100px"><b>Limit 101-500</b></td>
+        <td>10</td>
+        <td>25</td>
+    </tr>
+    <tr>
+        <td><b>Limit 501-1000</b></td>
+        <td>20</td>
+        <td>50</td>
+    </tr>
+    <tr>
+        <td><b>Limit 1001-5000</b></td>
+        <td>100</td>
+        <td>250</td>
+    </tr>
+</table>
 
 ## 2023-10-03
 

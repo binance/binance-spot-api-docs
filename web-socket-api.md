@@ -70,7 +70,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public WebSocket API for Binance (2023-09-23)
+# Public WebSocket API for Binance (2023-10-19)
 
 ## General API Information
 
@@ -1256,10 +1256,10 @@ Adjusted based on the limit:
 
 |  Limit    | Weight |
 |:---------:|:------:|
-|     1–100 |      2 |
-|   101–500 |      10|
-|  501–1000 |     20 |
-| 1001–5000 |     100 |
+|     1–100 |      5 |
+|   101–500 |      25|
+|  501–1000 |     50 |
+| 1001–5000 |     250 |
 
 **Parameters:**
 
@@ -1358,7 +1358,7 @@ If you need access to real-time trading activity, please consider using WebSocke
 * [`<symbol>@trade`](web-socket-streams.md#trade-streams)
 
 **Weight:**
-2
+10
 
 **Parameters:**
 
