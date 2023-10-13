@@ -1,4 +1,4 @@
-# Binance 的公共 WebSocket API (2023-09-23)
+# Binance 的公共 WebSocket API (2023-10-19)
 
 ## API 基本信息
 
@@ -1151,10 +1151,10 @@ NONE
 
 | 限制    | 重量 |
 |:---------:|:------:|
-|     1–100 |      2 |
-|   101–500 |      10 |
-|  501–1000 |     20 |
-| 1001–5000 |     100 |
+|     1–100 |      5 |
+|   101–500 |      25 |
+|  501–1000 |     50 |
+| 1001–5000 |     250 |
 
 **参数:**
 
@@ -1226,7 +1226,7 @@ NONE
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 2
+      "count": 5
     }
   ]
 }
@@ -1253,7 +1253,7 @@ NONE
 * [`<symbol>@trade`](web-socket-streams_CN.md#逐笔交易)
 
 **权重:**
-2
+10
 
 **参数:**
 
@@ -1287,7 +1287,7 @@ NONE
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 2
+      "count": 10
     }
   ]
 }
