@@ -811,6 +811,8 @@ print(result)
 * `TRD_GRP_021`
 * `TRD_GRP_022`
 * `TRD_GRP_023`
+* `TRD_GRP_024`
+* `TRD_GRP_025`
 
 
 **订单状态 (status):**
