@@ -390,6 +390,8 @@ print(response.json())
 * `TRD_GRP_021` 交易组 021
 * `TRD_GRP_022` 交易组 022
 * `TRD_GRP_023` 交易组 023
+* `TRD_GRP_024` 交易组 024
+* `TRD_GRP_025` 交易组 025
 
 **订单状态 (status):**
 
