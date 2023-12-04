@@ -1,4 +1,4 @@
-# Error codes for Binance (2023-03-13)
+# Error codes for Binance (2023-12-04)
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
 ```javascript
@@ -88,7 +88,7 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * Parameter '%s' overflowed.
 
 #### -1111 BAD_PRECISION
- * Precision is over the maximum defined for this asset.
+ * Parameter '%s' has too much precision.
 
 #### -1112 NO_DEPTH
  * No orders on book for symbol.
