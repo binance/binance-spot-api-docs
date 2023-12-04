@@ -1,4 +1,4 @@
-# 更新日志 (2023-10-03)
+# 更新日志 (2023-12-04)
 
 ## 2023-10-19
 
@@ -44,6 +44,78 @@
         <td>250</td>
     </tr>
 </table>
+
+## 2023-12-04
+
+**注意**： 以下的变更将逐步推出，并预计需要大约一周的时间完成。
+
+* 错误消息 `Precision is over the maximum defined for this asset.` 被改为 `Parameter '%s' has too much precision.`
+    * 当参数的精度超出允许范围时，将返回此错误消息。例如，如果“基础资产”（`base asset`）精度为6，但是设置“quantity=0.1234567”，则会出现此错误消息。
+    * 这会影响所有具有以下参数的请求:
+        * `quantity`
+        * `quoteOrderQty`
+        * `icebergQty`
+        * `limitIcebergQty`
+        * `stopIcebergQty`
+        * `price`
+        * `stopPrice`
+        * `stopLimitPrice`
+* 现在，请求查询OCO开单时会正确返回**升序**的结果。这会影响以下请求：
+    * REST API: `GET /api/v3/openOrderList`
+    * WebSocket API: `openOrderList.status`
+* 现在，当指定`startTime`或`fromId`时，请求查询所有 OCO 订单会正确返回**升序**的结果。这会影响以下请求：
+    * REST API: `GET /api/v3/allOrderList`
+    * WebSocket API: `allOrderLists`
+* 修复了一个错误。订单查询请求不再会对新下的订单错误返回[`-2026 ORDER_ARCHIVED`](./errors.md#-2026-order_archived)错误。
+    * REST API: `GET /api/v3/order`
+    * WebSocket API: `order.status`
+
+
+REST API
+
+* 新接口 `GET /api/v3/account/commission`
+* 新接口 `GET /api/v3/ticker/tradingDay`
+* `GET /api/v3/avgPrice` 新加字段 `closeTime`, 用于显示最后交易时间。
+* `GET /api/v3/klines` 和 `/api/v3/uiKlines` 新加可选参数 `timeZone`.
+* `POST /api/v3/order/test` 和 `POST /api/v3/sor/order/test` 新加可选参数 `computeCommissionRates`.
+* 关于发送无效接口的变动：
+    * 以前，如果查询一个不存在的端点（例如 `curl -X GET "https://api.binance.com/api/v3/exchangie"`），你会收到 HTTP 404 状态码，以及响应 "`<html><body><h2>404 Not found</h2></body></html>`"。
+    * 从现在开始，只有当接受请求头中包含`text/html`时，HTML响应才会出现在这种情况下。HTTP状态码将保持不变。
+
+WebSocket API
+
+* 新请求 `account.commission`
+* 新增请求以允许会话身份验证: **(请注意，这些请求只能使用Ed25519密钥。)**
+    * `session.logon`
+    * `session.logout`
+    * `session.status`
+* 新请求 `ticker.tradingDay`
+* 方法 `avgPrice` 新加字段 `closeTime`, 用于显示最后交易时间。
+* 方法 `klines` 和 `uiKlines` 新加可选参数 `timeZone`。
+* 方法 `order.test` 和 `sor.order.test` 新加可选参数 `computeCommissionRates`.
+* 修复了一个错误。之前在发送 ping 之前未经请求发送的 pongs 会导致断开连接。
+
+WebSocket Streams
+
+* 新数据流 `<symbol>@avgPrice`
+* 请求中的`id`现在支持和 WebSocket API 里`id`一样的值:
+    * 64位有符号整数 (之前是无符号整数)
+    * 字母数字字符串；最大长度36
+    * `null`
+* 修复了一个错误，之前在发送 ping 之前未经请求发送的 pongs 会导致断开连接。
+
+User Data Streams
+
+* 当事件类型为executionReport，而执行类型（x）为`TRADE_PREVENTION`时，字段`l`、`L`和`Y`现在将始终为0。新增字段`pl`、`pL`和`pY`将描述被阻止执行的数量、被阻止执行的价格和被阻止执行的名义金额。这些新字段显示了如果接收方订单没有启用自成交防止功能时，`l`、`L`和`Y`会是什么值。
+
+
+**以下将在发布日期后_大约_一周后生效:**
+
+* 交易对权限将仅影响下单，而不影响取消订单。
+    * `permissions`仍然适用于撤消挂单再下单（Cancel-Replace orders）（比如，如果您的账户有使用此请求下单的权限，则将不允许取消操作）。
+
+
+---
 
 ## 2023-10-03
 

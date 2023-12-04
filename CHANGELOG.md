@@ -1,4 +1,77 @@
-# CHANGELOG for Binance's API (2023-10-19)
+# CHANGELOG for Binance's API (2023-12-04)
+
+## 2023-12-04
+
+**Notice:** The changes below are being rolled out gradually, and will take approximately a week to complete.
+
+General Changes:
+
+* Error message `Precision is over the maximum defined for this asset.` has been changed to `Parameter '%s' has too much precision.`
+    * This error message is returned when a parameter has more precision than allowed:
+      e.g. if `base asset` precision is 6 and `quantity=0.1234567` then this error message will appear.
+    * This affects all requests with the following parameters:
+        * `quantity`
+        * `quoteOrderQty`
+        * `icebergQty`
+        * `limitIcebergQty`
+        * `stopIcebergQty`
+        * `price`
+        * `stopPrice`
+        * `stopLimitPrice`
+* Requests for open OCO now correctly return results in **ascending order**. This affects the following requests:
+    * REST API: `GET /api/v3/openOrderList`
+    * WebSocket API: `openOrderList.status`
+* Requests for all OCO now correctly return results in **ascending order** when `startTime` or `fromId` are specified. This affects the following requests:
+    * REST API: `GET /api/v3/allOrderList`
+    * WebSocket API: `allOrderLists`
+* Fixed a bug where order query requests would incorrectly return [`-2026 ORDER_ARCHIVED`](./errors.md#-2026-order_archived) error for newly placed orders.
+    * REST API: `GET /api/v3/order`
+    * WebSocket API: `order.status`
+
+REST API
+
+* New endpoint `GET /api/v3/account/commission`
+* New endpoint `GET /api/v3/ticker/tradingDay`
+* `GET /api/v3/avgPrice` response has a new field `closeTime`, indicating the last trade time.
+* `GET /api/v3/klines` and `/api/v3/uiKlines` have a new optional parameter `timeZone`.
+* `POST /api/v3/order/test` and `POST /api/v3/sor/order/test` have a new optional parameter `computeCommissionRates`.
+* Changes regarding invalid endpoints being sent:
+    * Previously, if you query an non-existing endpoint (e.g. `curl -X GET "https://api.binance.com/api/v3/exchangie`) you would get a HTTP 404 code with the response `<html><body><h2>404 Not found</h2></body></html>`
+    * From now on the HTML response will only appear if the Accept request header has `text/html` for this situation. The HTTP code will remain the same.
+
+WebSocket API
+
+* New request `account.commission`
+* New requests to allow session authentication: **(Note that these requests can only be used with Ed25519 keys.)**
+    * `session.logon`
+    * `session.logout`
+    * `session.status`
+* New request `ticker.tradingDay`
+* `avgPrice` response has a new field `closeTime`, indicating the last trade time.
+* `klines` and `uiKlines` have a new optional parameter `timeZone`.
+* `order.test` and `sor.order.test` have a new optional parameter `computeCommissionRates`.
+* Fixed a bug where unsolicited pongs sent before the ping would cause disconnection.
+
+WebSocket Streams
+
+* New stream `<symbol>@avgPrice`
+* `id` now supports the same values as used for `id` in the WebSocket API:
+    * 64-bit signed integers (previously this was unsigned)
+    * Alphanumeric strings, max of 36 in length
+    * `null`
+* Fixed a bug where unsolicited pongs sent before the ping would cause disconnection.
+
+User Data Streams
+
+* When an event of type `executionReport` has an execution type (`x`) of `TRADE_PREVENTION`, fields `l`, `L` and `Y` will now always be 0. New fields `pl`, `pL` and `pY` will describe the prevented execution quantity, prevented execution price, and prevented execution notional instead. These new fields show the values of what would `l`, `L` and `Y` have been if the taker order didn't have self-trade prevention enabled.
+
+
+**The following will take effect _approximately_ a week after the release date:**
+
+* Symbol Permissions will only affect order placement, not cancellation.
+    * `permissions` still apply to Cancel-Replace orders (i.e. The cancellation won't be allowed if your account does have the permission to place an order using this request.)
+
+----
 
 ## 2023-10-19
 
@@ -44,7 +117,6 @@
         <td>250</td>
     </tr>
 </table>
-
 
 ---
 
