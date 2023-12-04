@@ -6,9 +6,10 @@
   * 如果使用标准443端口时遇到问题，可以使用替代端口9443。
   * [现货测试网](https://testnet.binance.vision)的 base URL 是 `wss://testnet.binance.vision/ws-api/v3`。
 * 每个到 base URL 的链接有效期不超过24小时，请妥善处理断线重连。
-* WebSocket 服务器将在每3分钟发送一个 **ping 帧**。
-  * 如果服务器在10分钟内没有收到 **pong 帧** 响应，会主动断开链接。
-  * 允许客户端发送不成对的 **pong 帧**，以防止断开连接。对于不成对的Pong帧, 服务器不会返回Ping帧。
+* Websocket 服务器每3分钟发送Ping消息。
+    * 如果Websocket服务器在10分钟之内没有收到Pong消息应答，连接会被断开。
+    * 当客户收到ping消息，必需尽快回复pong消息，同时payload需要和ping消息一致。
+    * 未经请求的pong消息是被允许的，但是不会保证连接不断开。**对于这些pong消息，建议payload为空**
 * 响应中如有数组，数组元素以时间**时间顺序**排列，越早的数据越提前。
 * 除非另有说明，所有与时间戳相关的字段均以UTC的**毫秒**为单位。
 * 除非另有说明，所有字段名称和值都**大小写敏感**。
@@ -303,7 +304,7 @@ API 有多种频率限制间隔。
   如果您希望在默认情况下从所有响应中省略 `rateLimits`，可以在 query string 中使用 `returnRateLimits` 参数：
 
   ```
-  wss://ws-api.binance.com/ws-api/v3?returnRateLimits=false
+  wss://ws-api.binance.com:443/ws-api/v3?returnRateLimits=false
   ```
 
   这将使通过此连接发出的所有请求的行为就像您已传了 `"returnRateLimits"：false` 一样。
@@ -745,6 +746,51 @@ result =  ws.recv()
 ws.close()	
 print(result)
 ```
+
+
+## 会话身份验证
+
+**注意：** 仅支持 _Ed25519_ 密钥用于此功能。
+
+如果你不想在每个单独的请求中指定`apiKey`和`signature`，你可以为有效的WebSocket会话进行API密钥身份验证。
+
+一旦完成身份验证，你将不需在需要它们的请求中指定`apiKey`和`signature`。
+这些请求将代表拥有已验证API密钥的帐户执行。
+
+**注意：** 对于`SIGNED`请求，你仍需要指定`timestamp`参数。
+
+### 连接后进行身份验证
+
+你可以使用会话身份验证请求对已经建立的连接进行身份验证：
+
+* [`session.logon`](#log-in-with-api-key-signed) – 进行身份验证，或更改与连接相关联的API密钥。
+* [`session.status`](#query-session-status) – 检查连接状态和当前API密钥。
+* [`session.logout`](#log-out-of-the-session) – 忘记与连接关联的API密钥。
+
+
+**关于吊销API密钥:**
+
+如果在活动会话期间，由于 _任何_ 原因（例如IP地址未被加入白名单、API密钥被删除、API密钥没有正确的权限等），在下一个请求后，会话将被吊销，并显示以下错误消息:
+
+```javascript
+{
+  "id": null,
+  "status": 401,
+  "error": {
+    "code": -2015,
+    "msg": "Invalid API-key, IP, or permissions for action." 
+  }
+}
+```
+
+### 授权 _临时_ 请求
+
+WebSocket连接只能通过一个API密钥进行身份验证。
+默认情况下，经过身份验证的API密钥将用于需要`apiKey`参数的请求。
+但是，你始终可以为单个请求明确指定`apiKey`和`signature`，覆盖已认证的API密钥，以使用不同的API密钥授权特定请求。
+
+例如，你可能希望用默认密钥来验证 `USER_DATA`，但在下单时使用`TRADE`密钥来签名。
+
 
 # 数据源
 
@@ -1475,6 +1521,7 @@ Klines 由其开盘时间和收盘时间为唯一标识。
 `interval`  | ENUM    | YES       |
 `startTime` | INT     | NO        |
 `endTime`   | INT     | NO        |
+`timeZone` |STRING | NO | 默认: 0 (UTC)
 `limit`     | INT     | NO        | 默认 500; 最大值 1000
 
 <a id="kline-intervals"></a>
@@ -1492,6 +1539,12 @@ months    | `1M`
 备注:
 
 * 如果没有指定 `startTime`，`endTime`，则返回最近的klines。
+* `timeZone`支持的值包括：
+  * 小时和分钟（例如 `-1:00`，`05:45`）
+  * 仅小时（例如 `0`，`8，`4）
+  * 接受的值范围严格为 [-12:00 到 +14:00]（包括边界）
+* 如果提供了`timeZone`，K线间隔将在该时区中解释，而不是在UTC中。
+* 请注意，无论`timeZone`如何，`startTime`和`endTime`始终以UTC时区解释。
 
 **数据源:**
 数据库
@@ -1558,11 +1611,18 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
 `interval`  | ENUM    | YES       | 请看 [`k线`](#kline-intervals)
 `startTime` | INT     | NO        |
 `endTime`   | INT     | NO        |
+`timeZone` |STRING | NO | 默认: 0 (UTC)
 `limit`     | INT     | NO        | 默认 500; 最大值 1000
 
 备注:
 
 * 如果没有指定 `startTime`，`endTime`，则返回最近的klines。
+* `timeZone`支持的值包括：
+  * 小时和分钟（例如 `-1:00`，`05:45`）
+  * 仅小时（例如 `0`，`8，`4）
+  * 接受的值范围严格为 [-12:00 到 +14:00]（包括边界）
+* 如果提供了`timeZone`，K线间隔将在该时区中解释，而不是在UTC中。
+* 请注意，无论`timeZone`如何，`startTime`和`endTime`始终以UTC时区解释。
 
 **数据源:**
 数据库
@@ -1633,7 +1693,8 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
   "status": 200,
   "result": {
     "mins": 5,              // 以分钟为单位的价格平均间隔 
-    "price": "0.01378135"
+    "price": "0.01378135",
+    "closeTime": 1694061154503
   },
   "rateLimits": [
     {
@@ -1858,6 +1919,247 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
   ]
 }
 ```
+
+
+### 交易日行情(Ticker)
+
+```javascript
+{
+  "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
+  "method": "ticker.tradingDay",
+  "params": {
+    "symbols": [
+      "BNBBTC",
+      "BTCUSDT"
+    ],
+    "timeZone": "00:00"
+  }
+}
+```
+
+交易日价格变动统计。
+
+**权重:**
+
+每个<tt>交易对</tt>占用4个权重. <br/><br/> 
+当请求中的交易对数量超过50，此请求的权重将限制在200。
+
+**参数:**
+
+<table>
+  <tr>
+    <th>参数名</th>
+    <th>类型</th>
+    <th>是否必需</th>
+    <th>描述</th>
+  </tr>
+  <tr>
+    <td><code>symbol</code></td>
+    <td>STRING</td>
+    <td rowspan="2" align="center">YES</td>
+    <td>查询单交易对的行情</td>
+  </tr>
+  <tr>
+    <td><code>symbols</code></td>
+    <td>ARRAY of STRING</td>
+    <td>查询多交易对行情</td>
+  </tr>
+  <tr>
+     <td><code>timeZone</code></td>
+     <td>STRING</td>
+     <td>NO</td>
+     <td>默认: 0 (UTC)</td>
+  </tr>
+  <tr>
+      <td><code>type</code></td>
+      <td>ENUM</td>
+      <td>NO</td>
+      <td>可接受值: <tt>FULL</tt> or <tt>MINI</tt>. <br/>默认值: <tt>FULL</tt></td>
+  </tr>
+</table>
+
+**注意:**
+
+* `timeZone`支持的值包括：
+    * 小时和分钟（例如 `-1:00`，`05:45`）
+    * 仅小时（例如 `0`，`8`，`4`）
+
+**数据源:**
+数据库
+
+**响应 - FULL**
+
+有 `symbol`:
+
+```javascript
+{
+  "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
+  "status": 200,
+  "result": {
+    "symbol": "BTCUSDT",
+    "priceChange": "-83.13000000",                // 绝对价格变动
+    "priceChangePercent": "-0.317",               // 相对价格变动百分比
+    "weightedAvgPrice": "26234.58803036",         // 报价成交量 / 成交量
+    "openPrice": "26304.80000000",
+    "highPrice": "26397.46000000",
+    "lowPrice": "26088.34000000",
+    "lastPrice": "26221.67000000",
+    "volume": "18495.35066000",                   // 基础资产的成交量
+    "quoteVolume": "485217905.04210480",
+    "openTime": 1695686400000,
+    "closeTime": 1695772799999,
+    "firstId": 3220151555,
+    "lastId": 3220849281,
+    "count": 697727
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 4
+    }
+  ]
+}
+```
+
+有 `symbols`:
+
+```javascript
+{
+  "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
+  "status": 200,
+  "result": [
+    {
+      "symbol": "BTCUSDT",
+      "priceChange": "-83.13000000",
+      "priceChangePercent": "-0.317",
+      "weightedAvgPrice": "26234.58803036",
+      "openPrice": "26304.80000000",
+      "highPrice": "26397.46000000",
+      "lowPrice": "26088.34000000",
+      "lastPrice": "26221.67000000",
+      "volume": "18495.35066000",
+      "quoteVolume": "485217905.04210480",
+      "openTime": 1695686400000,
+      "closeTime": 1695772799999,
+      "firstId": 3220151555,
+      "lastId": 3220849281,
+      "count": 697727
+    },
+    {
+      "symbol": "BNBUSDT",
+      "priceChange": "2.60000000",
+      "priceChangePercent": "1.238",
+      "weightedAvgPrice": "211.92276958",
+      "openPrice": "210.00000000",
+      "highPrice": "213.70000000",
+      "lowPrice": "209.70000000",
+      "lastPrice": "212.60000000",
+      "volume": "280709.58900000",
+      "quoteVolume": "59488753.54750000",
+      "openTime": 1695686400000,
+      "closeTime": 1695772799999,
+      "firstId": 672397461,
+      "lastId": 672496158,
+      "count": 98698
+    }
+  ],
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 8
+    }
+  ]
+}
+```
+
+**相应: - MINI**
+
+有 `symbol`:
+
+```javascript
+{
+  "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
+  "status": 200,
+  "result": {
+    "symbol": "BTCUSDT",
+    "openPrice": "26304.80000000",
+    "highPrice": "26397.46000000",
+    "lowPrice": "26088.34000000",
+    "lastPrice": "26221.67000000",
+    "volume": "18495.35066000",                  // 基础资产的成交量
+    "quoteVolume": "485217905.04210480",         // 报价资产的成交量
+    "openTime": 1695686400000,
+    "closeTime": 1695772799999,
+    "firstId": 3220151555,                       // 区间内的第一个交易的交易ID
+    "lastId": 3220849281,                        // 区间内的最后一个交易的交易ID
+    "count": 697727                              // 区间内的交易数量
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 4
+    }
+  ]
+}
+```
+
+With `symbols`:
+
+```javascript
+{
+  "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
+  "status": 200,
+  "result": [
+    {
+      "symbol": "BTCUSDT",
+      "openPrice": "26304.80000000",
+      "highPrice": "26397.46000000",
+      "lowPrice": "26088.34000000",
+      "lastPrice": "26221.67000000",
+      "volume": "18495.35066000",
+      "quoteVolume": "485217905.04210480",
+      "openTime": 1695686400000,
+      "closeTime": 1695772799999,
+      "firstId": 3220151555,
+      "lastId": 3220849281,
+      "count": 697727
+    },
+    {
+      "symbol": "BNBUSDT",
+      "openPrice": "210.00000000",
+      "highPrice": "213.70000000",
+      "lowPrice": "209.70000000",
+      "lastPrice": "212.60000000",
+      "volume": "280709.58900000",
+      "quoteVolume": "59488753.54750000",
+      "openTime": 1695686400000,
+      "closeTime": 1695772799999,
+      "firstId": 672397461,
+      "lastId": 672496158,
+      "count": 98698
+    }
+  ],
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 8
+    }
+  ]
+}
+```
+
 
 ### 滚动窗口价格变动统计
 
@@ -2333,6 +2635,140 @@ days    | `1d`, `2d` ... `7d`
 }
 ```
 
+## 身份验证请求
+
+**注意：** 仅支持 _Ed25519_ 密钥用于此功能。
+
+### 用API key登录 (SIGNED)
+
+```javascript
+{
+  "id": "c174a2b1-3f51-4580-b200-8528bd237cb7",
+  "method": "session.logon",
+  "params": {
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "1cf54395b336b0a9727ef27d5d98987962bc47aca6e13fe978612d0adee066ed",
+    "timestamp": 1649729878532
+  }
+}
+```
+
+使用提供的API密钥进行WebSocket连接身份验证。
+
+在调用`session.logon`后，将来的需要`apiKey`和`signature`参数的请求可以省略它们。
+
+请注意，只能认证一个API密钥。
+多次调用`session.logon`将更改当前已认证的API密钥。
+
+**权重:**
+2
+
+**参数:**
+
+参数名          | 类型    | 是否必需 | 描述
+------------- | ------- | --------- | ------------
+`apiKey`      | STRING  | YES       |
+`recvWindow`  | INT     | NO        | The value cannot be greater than `60000`
+`signature`   | STRING  | YES       |
+`timestamp`   | INT     | YES       |
+
+**数据源:**
+缓存
+
+**响应:**
+
+```javascript
+{
+  "id": "c174a2b1-3f51-4580-b200-8528bd237cb7",
+  "status": 200,
+  "result": {
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "authorizedSince": 1649729878532,
+    "connectedSince": 1649729873021,
+    "returnRateLimits": false,
+    "serverTime": 1649729878630
+  }
+}
+```
+
+### 查询会话状态
+
+```javascript
+{
+  "id": "b50c16cd-62c9-4e29-89e4-37f10111f5bf",
+  "method": "session.status"
+}
+```
+
+查询WebSocket连接的状态，检查用于授权请求的API密钥（如果有的话）。
+
+**权重:**
+2
+
+**参数:**
+NONE
+
+**数据源:**
+缓存
+
+**响应:**
+
+```javascript
+{
+  "id": "b50c16cd-62c9-4e29-89e4-37f10111f5bf",
+  "status": 200,
+  "result": {
+    // 如果连接未经身份验证，"apiKey" 和 "authorizedSince" 将显示为 null。
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "authorizedSince": 1649729878532,
+    "connectedSince": 1649729873021,
+    "returnRateLimits": false,
+    "serverTime": 1649730611671
+  }
+}
+```
+
+### 退出会话
+
+```javascript
+{
+  "id": "c174a2b1-3f51-4580-b200-8528bd237cb7",
+  "method": "session.logout"
+}
+```
+
+忘记之前认证的API密钥。
+如果连接未经身份验证，此请求不会有任何作用。
+
+请注意，`session.logout`请求后，WebSocket连接仍然保持打开状态。
+你可以继续使用连接，但现在必须在需要的地方明确提供`apiKey`和`signature`参数。
+
+**权重:**
+2
+
+**参数:**
+NONE
+
+**数据源:**
+缓存
+
+**响应:**
+
+```javascript
+{
+  "id": "c174a2b1-3f51-4580-b200-8528bd237cb7",
+  "status": 200,
+  "result": {
+    "apiKey": null,
+    "authorizedSince": null,
+    "connectedSince": 1649729873021,
+    "returnRateLimits": false,
+    "serverTime": 1649730611671
+  }
+}
+```
+
+
 ## 交易请求
 
 ### 下新的订单 (TRADE)
@@ -2765,6 +3201,7 @@ days    | `1d`, `2d` ... `7d`
 `strategyType` | 策略单类型; 用以显示此订单对应的交易策略。                           | 如果在请求中添加了参数，则会出现。                      | `"strategyType": 1000000` |
 `trailingDelta`| 用以定义追踪止盈止损订单被触发的价格差。                             | 出现在追踪止损订单中。                                | `"trailingDelta": 10` |
 `trailingTime` | 追踪单被激活和跟踪价格变化的时间。                                  | 出现在追踪止损订单中。                                 | `"trailingTime": -1`|
+`usedSor` | 用于确定订单是否使用`SOR`的字段 | 在使用`SOR`下单时出现 |`"usedSor": true`
 `workingFloor` | 用以定义订单是通过 SOR 还是由订单提交到的订单薄（order book）成交的。   |出现在使用了 SOR 的订单中。                             |`"workingFloor": "SOR"`|
 
 
@@ -2793,16 +3230,29 @@ days    | `1d`, `2d` ... `7d`
 验证新订单参数并验证您的签名但不会将订单发送到撮合引擎。
 
 **权重:**
-1
+
+|条件| 请求权重 |
+|------------           | ------------ |
+|没有 `computeCommissionRates`| 1|
+|有 `computeCommissionRates`|20|
 
 **参数:**
 
-与 [`order.place`](##下新的订单-trade) 相同。
+除了 [`order.place`](##下新的订单-trade) 的所有参数,
+下面参数也有效:
+
+参数名                   |类型          | 是否必需    | 描述
+------------           | ------------ | ------------ | ------------
+`computeCommissionRates` | BOOLEAN      | NO         | 默认: `false`
+
 
 **数据源:**
 缓存
 
 **响应:**
+
+没有 `computeCommissionRates`:
+
 ```javascript
 {
   "id": "6ffebe91-01d9-43ac-be99-57cf062e0e30",
@@ -2815,6 +3265,41 @@ days    | `1d`, `2d` ... `7d`
       "intervalNum": 1,
       "limit": 6000,
       "count": 1
+    }
+  ]
+}
+```
+
+
+有 `computeCommissionRates`:
+
+```javascript
+{
+  "id": "6ffebe91-01d9-43ac-be99-57cf062e0e30",
+  "status": 200,
+  "result": {
+    "standardCommissionForOrder": {           // 根据订单的角色（例如，Maker或Taker）确定的佣金费率。
+      "maker": "0.00000112",
+      "taker": "0.00000114"
+    },
+    "taxCommissionForOrder": {                 // 根据订单的角色（例如，Maker或Taker）确定的税收扣除率。
+      "maker": "0.00000112",
+      "taker": "0.00000114"
+    },  
+    "discount": {                              // 以BNB支付时的标准佣金折扣。
+      "enabledForAccount": true,
+      "enabledForSymbol": true,
+      "discountAsset": "BNB",
+      "discount": "0.25"                       // 以BNB支付时，标准佣金按此比率折扣。
+    }
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 20
     }
   ]
 }
@@ -4660,16 +5145,27 @@ days    | `1d`, `2d` ... `7d`
 用于测试使用智能订单路由 (SOR) 的订单请求，但不会提交到撮合引擎。
 
 **权重:**
-1
+
+| 条件                       | 请求权重 |
+|------------                    | ------------ |
+|没有 `computeCommissionRates`| 1            |
+|有 `computeCommissionRates`   |20            |
 
 **参数:**
 
-参考 `sor.order.place`
+除了 [`sor.order.place`](#place-new-order-using-sor-trade) 所有参数,
+下面参数也有效:
+
+参数名                   |类型          | 是否必需    | 描述
+------------           | ------------ | ------------ | ------------
+`computeCommissionRates` | BOOLEAN      | NO           | 默认: `false`
 
 **数据源:**
 缓存
 
 **响应:**
+
+没有 `computeCommissionRates`:
 
 ```javascript
 {
@@ -4683,6 +5179,40 @@ days    | `1d`, `2d` ... `7d`
       "intervalNum": 1,
       "limit": 6000,
       "count": 1
+    }
+  ]
+}
+```
+
+有 `computeCommissionRates`:
+
+```javascript
+{
+  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+  "status": 200,
+  "result": {
+    "standardCommissionForOrder": {                // 根据订单的角色（例如，Maker或Taker）确定的佣金费率。
+      "maker": "0.00000112",
+      "taker": "0.00000114"
+    },
+    "taxCommissionForOrder": {                     // 根据订单的角色（例如，Maker或Taker）确定的税收扣除率。
+      "maker": "0.00000112",
+      "taker": "0.00000114"
+    },
+    "discount": {                                  // 以BNB支付时的标准佣金折扣。
+      "enabledForAccount": true,
+      "enabledForSymbol": true,
+      "discountAsset": "BNB",
+      "discount": "0.25"                           // 以BNB支付时，标准佣金按此比率减少。
+    }
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 20
     }
   ]
 }
@@ -5305,6 +5835,84 @@ timestamp           | LONG   | YES          |
   ]
 }
 ```
+
+
+### 账户佣金费率 (USER_DATA)
+
+```javascript
+{
+  "id": "d3df8a61-98ea-4fe0-8f4e-0fcea5d418b0",
+  "method": "account.commission",
+  "params": {
+    "symbol": "BTCUSDT",
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "c5a5ffb79fd4f2e10a92f895d488943a57954edf5933bde3338dfb6ea6d6eefc",
+    "timestamp": 1673923281052
+  }
+}
+```
+
+获取当前账户的佣金费率。
+
+**参数:**
+
+参数名                       | 类型  |是否必需 | 描述
+-----                      | ---   |----      | ---------
+`symbol`                   |STRING |YES        |
+
+**权重:**
+20
+
+**数据源:**
+数据库
+
+
+**响应:**
+
+```javascript
+{
+  "id": "d3df8a61-98ea-4fe0-8f4e-0fcea5d418b0",
+  "status": 200,
+  "result":
+  [
+    {
+      "symbol": "BTCUSDT",
+      "standardCommission":               // 根据订单的角色（例如，Maker或Taker）确定的佣金费率。
+      {
+        "maker": "0.00000010",
+        "taker": "0.00000020",
+        "buyer": "0.00000030",
+        "seller": "0.00000040"
+      },
+      "taxCommission":                   // 根据订单的角色（例如，Maker或Taker）确定的税收扣除率。
+      {
+        "maker": "0.00000112",
+        "taker": "0.00000114",
+        "buyer": "0.00000118",
+        "seller": "0.00000116"
+      },
+      "discount":                        // 以BNB支付时的标准佣金折扣。
+      {
+        "enabledForAccount": true,
+        "enabledForSymbol": true,
+        "discountAsset": "BNB",
+        "discount": "0.25"               // 以BNB支付时，标准佣金按此比率减少。
+      }
+    }
+  ],
+  "rateLimits":
+  [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 20
+    }
+  ]
+}
+```
+
 
 ## Websocket 账户信息
 
