@@ -3414,7 +3414,7 @@ With `computeCommissionRates`:
       "maker": "0.00000112",
       "taker": "0.00000114"
     },
-    "taxCommissionForOrder": {                 //Tax deduction rates for the order depending on its role (e.g. maker or taker)
+    "taxCommissionForOrder": {                 //Tax rates for the order depending on its role (e.g. maker or taker)
       "maker": "0.00000112",
       "taker": "0.00000114"
     },  
