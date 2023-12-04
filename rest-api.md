@@ -3385,7 +3385,7 @@ Database
     "buyer": "0.00000030",
     "seller": "0.00000040" 
   },
-  "taxCommission": {              //Tax deduction rates for the order depending on its role
+  "taxCommission": {              //Tax rates for the order depending on its role
     "maker": "0.00000112",
     "taker": "0.00000114",
     "buyer": "0.00000118",
