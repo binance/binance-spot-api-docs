@@ -87,7 +87,7 @@
  * Parameter '%s' overflowed.
 
 #### -1111 精度过高
- * Precision is over the maximum defined for this asset.
+ * Parameter '%s' has too much precision.
 
 #### -1112 空白的orderbook
  * No orders on book for symbol.

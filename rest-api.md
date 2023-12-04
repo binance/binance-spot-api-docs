@@ -37,6 +37,7 @@
     - [UIKlines](#uiklines)
     - [Current average price](#current-average-price)
     - [24hr ticker price change statistics](#24hr-ticker-price-change-statistics)
+    - [Trading Day Ticker](#trading-day-ticker)
     - [Symbol price ticker](#symbol-price-ticker)
     - [Symbol order book ticker](#symbol-order-book-ticker)
     - [Rolling window price change statistics](#rolling-window-price-change-statistics)
@@ -64,6 +65,7 @@
     - [Query Current Order Count Usage (TRADE)](#query-current-order-count-usage-trade)
     - [Query Prevented Matches (USER_DATA)](#query-prevented-matches-user_data)
     - [Query Allocations (USER_DATA)](#query-allocations-user_data)
+    - [Query Commission Rates (USER_DATA)](#query-commission-rates-user_data)
   - [User data stream endpoints](#user-data-stream-endpoints)
     - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
     - [Keepalive user data stream (USER_STREAM)](#keepalive-user-data-stream-user_stream)
@@ -71,7 +73,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2023-10-19)
+# Public Rest API for Binance (2023-12-04)
 
 ## General API Information
 * The following base endpoints are available. Please use whichever works best for your setup:
@@ -942,9 +944,16 @@ symbol | STRING | YES |
 interval | ENUM | YES |
 startTime | LONG | NO |
 endTime | LONG | NO |
+timeZone |STRING| NO| Default: 0 (UTC)
 limit | INT | NO | Default 500; max 1000.
 
-* If startTime and endTime are not sent, the most recent klines are returned.
+* If `startTime` and `endTime` are not sent, the most recent klines are returned.
+* Supported values for `timeZone`:
+  * Hours and minutes (e.g. `-1:00`, `05:45`)
+  * Only hours (e.g. `0`, `8`, `4`)
+  * Accepted range is strictly [-12:00 to +14:00] inclusive
+* If `timeZone` provided, kline intervals are interpreted in that timezone instead of UTC.
+* Note that `startTime` and `endTime` are always interpreted in UTC, regardless of `timeZone`.
 
 **Data Source:**
 Database
@@ -990,9 +999,16 @@ symbol    | STRING | YES          |
 interval  | ENUM   | YES          |
 startTime | LONG   | NO           |
 endTime   | LONG   | NO           |
+timeZone  |STRING  | NO           | Default: 0 (UTC)
 limit     | INT    | NO           | Default 500; max 1000.
 
 * If `startTime` and `endTime` are not sent, the most recent klines are returned.
+* Supported values for `timeZone`:
+  * Hours and minutes (e.g. `-1:00`, `05:45`)
+  * Only hours (e.g. `0`, `8`, `4`)
+  * Accepted range is strictly [-12:00 to +14:00] inclusive
+* If `timeZone` provided, kline intervals are interpreted in that timezone instead of UTC.
+* Note that `startTime` and `endTime` are always interpreted in UTC, regardless of `timeZone`.
 
 **Data Source:**
 Database
@@ -1037,8 +1053,9 @@ Memory
 **Response:**
 ```javascript
 {
-  "mins": 5,
-  "price": "9.35751834"
+  "mins": 5,                    // Average price interval (in minutes)
+  "price": "9.35751834",        // Average price
+  "closeTime": 1694061154503    // Last trade time
 }
 ```
 
@@ -1238,6 +1255,181 @@ OR
 ]
 ```
 
+
+### Trading Day Ticker
+
+```
+GET /api/v3/ticker/tradingDay
+```
+Price change statistics for a trading day.
+
+**Weight:**
+
+4 for each requested <tt>symbol</tt>. <br/><br/> The weight for this request will cap at 200 once the number of `symbols` in the request is more than 50.
+
+**Parameters:**
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Mandatory</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>symbol</td>
+    <td rowspan="2">STRING</td>
+    <td rowspan="2">YES</td>
+    <td rowspan="2">Either <tt>symbol</tt> or <tt>symbols</tt> must be provided <br/><br/> Examples of accepted format for the <tt>symbols</tt> parameter: <br/> ["BTCUSDT","BNBUSDT"] <br/>or <br/>%5B%22BTCUSDT%22,%22BNBUSDT%22%5D <br/><br/> The maximum number of <tt>symbols</tt> allowed in a request is 100.
+    </td>
+  </tr>
+  <tr>
+     <td>symbols</td>
+  </tr>
+  <tr>
+     <td>timeZone</td>
+     <td>STRING</td>
+     <td>NO</td>
+     <td>Default: 0 (UTC)</td>
+  </tr>
+  <tr>
+      <td>type</td>
+      <td>ENUM</td>
+      <td>NO</td>
+      <td>Supported values: <tt>FULL</tt> or <tt>MINI</tt>. <br/>If none provided, the default is <tt>FULL</tt> </td>
+  </tr>
+</table>
+
+**Notes:**
+
+* Supported values for `timeZone`:
+  * Hours and minutes (e.g. `-1:00`, `05:45`)
+  * Only hours (e.g. `0`, `8`, `4`)
+
+**Data Source:**
+Database
+
+**Response: - FULL**
+
+With `symbol`:
+
+```javascript
+{
+  "symbol":             "BTCUSDT",
+  "priceChange":        "-83.13000000",         // Absolute price change
+  "priceChangePercent": "-0.317",               // Relative price change in percent
+  "weightedAvgPrice":   "26234.58803036",       // quoteVolume / volume
+  "openPrice":          "26304.80000000",
+  "highPrice":          "26397.46000000",
+  "lowPrice":           "26088.34000000",
+  "lastPrice":          "26221.67000000",
+  "volume":             "18495.35066000",       // Volume in base asset
+  "quoteVolume":        "485217905.04210480",   // Volume in quote asset
+  "openTime":           1695686400000,
+  "closeTime":          1695772799999,
+  "firstId":            3220151555,             // Trade ID of the first trade in the interval
+  "lastId":             3220849281,             // Trade ID of the last trade in the interval
+  "count":              697727                  // Number of trades in the interval
+}
+
+```
+
+With `symbols`:
+
+```javascript
+[
+  {
+    "symbol": "BTCUSDT",
+    "priceChange": "-83.13000000",
+    "priceChangePercent": "-0.317",
+    "weightedAvgPrice": "26234.58803036",
+    "openPrice": "26304.80000000",
+    "highPrice": "26397.46000000",
+    "lowPrice": "26088.34000000",
+    "lastPrice": "26221.67000000",
+    "volume": "18495.35066000",
+    "quoteVolume": "485217905.04210480",
+    "openTime": 1695686400000,
+    "closeTime": 1695772799999,
+    "firstId": 3220151555,
+    "lastId": 3220849281,
+    "count": 697727
+  },
+  {
+    "symbol": "BNBUSDT",
+    "priceChange": "2.60000000",
+    "priceChangePercent": "1.238",
+    "weightedAvgPrice": "211.92276958",
+    "openPrice": "210.00000000",
+    "highPrice": "213.70000000",
+    "lowPrice": "209.70000000",
+    "lastPrice": "212.60000000",
+    "volume": "280709.58900000",
+    "quoteVolume": "59488753.54750000",
+    "openTime": 1695686400000,
+    "closeTime": 1695772799999,
+    "firstId": 672397461,
+    "lastId": 672496158,
+    "count": 98698
+  }
+]
+```
+
+**Response: - MINI**
+
+With `symbol`:
+
+```javascript
+{
+  "symbol":         "BTCUSDT",
+  "openPrice":      "26304.80000000",
+  "highPrice":      "26397.46000000",
+  "lowPrice":       "26088.34000000",
+  "lastPrice":      "26221.67000000",
+  "volume":         "18495.35066000",       // Volume in base asset
+  "quoteVolume":    "485217905.04210480",   // Volume in quote asset
+  "openTime":       1695686400000,
+  "closeTime":      1695772799999,
+  "firstId":        3220151555,             // Trade ID of the first trade in the interval
+  "lastId":         3220849281,             // Trade ID of the last trade in the interval
+  "count":          697727                  // Number of trades in the interval
+}
+```
+
+With `symbols`:
+
+```javascript
+[
+  {
+    "symbol": "BTCUSDT",
+    "openPrice": "26304.80000000",
+    "highPrice": "26397.46000000",
+    "lowPrice": "26088.34000000",
+    "lastPrice": "26221.67000000",
+    "volume": "18495.35066000",
+    "quoteVolume": "485217905.04210480",
+    "openTime": 1695686400000,
+    "closeTime": 1695772799999,
+    "firstId": 3220151555,
+    "lastId": 3220849281,
+    "count": 697727
+  },
+  {
+    "symbol": "BNBUSDT",
+    "openPrice": "210.00000000",
+    "highPrice": "213.70000000",
+    "lowPrice": "209.70000000",
+    "lastPrice": "212.60000000",
+    "volume": "280709.58900000",
+    "quoteVolume": "59488753.54750000",
+    "openTime": 1695686400000,
+    "closeTime": 1695772799999,
+    "firstId": 672397461,
+    "lastId": 672496158,
+    "count": 98698
+  }
+]
+```
 
 ### Symbol price ticker
 ```
@@ -1774,6 +1966,7 @@ Field          |Description                                                     
 `strategyType` | Can be used to label an order that is using an order strategy.|Appears if the parameter was populated in the request.| `"strategyType": 1000000`
 `trailingDelta`| Delta price change required before order activation| Appears for Trailing Stop Orders.|`"trailingDelta": 10`
 `trailingTime` | Time when the trailing order is now active and tracking price changes| Appears only for Trailing Stop Orders.| `"trailingTime": -1`
+`usedSor`      | Field that determines whether order used SOR | Appears when placing orders using SOR|`"usedSor": true`
 `workingFloor` | Field that determines whether the order is being filled by the SOR or by the order book the order was submitted to.|Appears when placing orders using SOR|`"workingFloor": "SOR"`|
 
 ### Test new order (TRADE)
@@ -1784,18 +1977,51 @@ Test new order creation and signature/recvWindow long.
 Creates and validates a new order but does not send it into the matching engine.
 
 **Weight:**
-1
+
+|Condition| Request Weight|
+|------------           | ------------ |
+|Without `computeCommissionRates`| 1|
+|With `computeCommissionRates`|20|
 
 **Parameters:**
 
-Same as `POST /api/v3/order`
+In addition to all parameters accepted by [`POST /api/v3/order`](#new-order--trade),
+the following optional parameters are also accepted:
+
+Name                   |Type          | Mandatory    | Description
+------------           | ------------ | ------------ | ------------
+computeCommissionRates | BOOLEAN      | NO           | Default: `false`
 
 **Data Source:**
 Memory
 
 **Response:**
+
+Without `computeCommissionRates`
+
 ```javascript
 {}
+```
+
+With `computeCommissionRates`
+
+```javascript
+{
+  "standardCommissionForOrder": {   //Commission rates for the order depending on its role (e.g. maker or taker)
+    "maker": "0.00000112",
+    "taker": "0.00000114",
+  },
+  "taxCommissionForOrder": {        //Tax deduction rates for the order depending on its role (e.g. maker or taker)
+    "maker": "0.00000112",
+    "taker": "0.00000114",
+  },
+  "discount": {                     //Discount on standard commissions when paying in BNB.
+    "enabledForAccount": true,
+    "enabledForSymbol": true,
+    "discountAsset": "BNB",
+    "discount": "0.25"             //Standard commission is reduced by this rate when paying in BNB.
+  }
+}
 ```
 
 ### Query order (USER_DATA)
@@ -2792,19 +3018,52 @@ Test new order creation and signature/recvWindow using smart order routing (SOR)
 Creates and validates a new order but does not send it into the matching engine.
 
 **Weight:**
-1
+| Condition | Request Weight |
+| --------- | -------------- |
+| Without `computeCommissionRates`  |  1 |
+| With `computeCommissionRates`     | 20 |
 
 **Parameters:**
 
-Same as `POST /api/v3/sor/order`
+In addition to all parameters accepted by [`POST /api/v3/sor/order`](#new-order-using-sor-trade),
+the following optional parameters are also accepted:
+
+Name                   |Type          | Mandatory    | Description
+------------           | ------------ | ------------ | ------------
+computeCommissionRates | BOOLEAN      | NO            | Default: `false`
+
 
 **Data Source:**
 Memory
 
 **Response:**
 
+Without `computeCommissionRates`
+
 ```
 {}
+```
+
+With `computeCommissionRates`
+
+
+```javascript
+{
+  "standardCommissionForOrder": {  //Commission rates for the order depending on its role (e.g. maker or taker)
+    "maker": "0.00000112",
+    "taker": "0.00000114",
+  },
+  "taxCommissionForOrder": {       //Tax deduction rates for the order depending on its role (e.g. maker or taker)
+    "maker": "0.00000112",
+    "taker": "0.00000114",
+  },
+  "discount": {                    //Discount on standard commissions when paying in BNB.
+    "enabledForAccount": true,
+    "enabledForSymbol": true,
+    "discountAsset": "BNB",
+    "discount": "0.25"             //Standard commission is reduced by this rate when paying in BNB.
+  }
+}
 ```
 
 
@@ -3093,6 +3352,54 @@ Database
   }
 ]
 ```
+
+### Query Commission Rates (USER_DATA)
+
+```
+GET /api/v3/account/commission
+```
+
+Get current account commission rates.
+
+
+**Weight:**
+20
+
+**Parameters:**
+
+Name         | Type    | Mandatory | Description
+------------ | -----   | ------------ | ------------
+symbol        | STRING | YES          |
+
+**Data Source:**
+Database
+
+**Response:**
+
+```javascript
+{
+  "symbol": "BTCUSDT",
+  "standardCommission": {          //Commission rates for the order depending on its role
+    "maker": "0.00000010",
+    "taker": "0.00000020",
+    "buyer": "0.00000030",
+    "seller": "0.00000040" 
+  },
+  "taxCommission": {              //Tax rates for the order depending on its role
+    "maker": "0.00000112",
+    "taker": "0.00000114",
+    "buyer": "0.00000118",
+    "seller": "0.00000116" 
+  },
+  "discount": {                   //Discount commission when paying in BNB
+    "enabledForAccount": true,
+    "enabledForSymbol": true,
+    "discountAsset": "BNB",
+    "discount": "0.25"            //Standard commission is reduced by this rate when paying in BNB.
+  }
+}
+```
+
 
 ## User data stream endpoints
 Specifics on how user data streams work can be found [here.](https://github.com/binance/binance-spot-api-docs/blob/master/user-data-stream.md)

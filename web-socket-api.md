@@ -19,6 +19,9 @@
   - [SIGNED request example (HMAC)](#signed-request-example-hmac)
   - [SIGNED request example (RSA)](#signed-request-example-rsa)
   - [SIGNED Request Example (Ed25519)](#signed-request-example-ed25519)
+  - [Session Authentication](#session-authentication)
+    - [Authenticate after connection](#authenticate-after-connection)
+    - [Authorize _ad hoc_ requests](#authorize-_ad-hoc_-requests)
 - [Data sources](#data-sources)
 - [Public API requests](#public-api-requests)
     - [Terminology](#terminology)
@@ -36,9 +39,14 @@
     - [UI Klines](#ui-klines)
     - [Current average price](#current-average-price)
     - [24hr ticker price change statistics](#24hr-ticker-price-change-statistics)
+    - [Trading Day Ticker](#trading-day-ticker)
     - [Rolling window price change statistics](#rolling-window-price-change-statistics)
     - [Symbol price ticker](#symbol-price-ticker)
     - [Symbol order book ticker](#symbol-order-book-ticker)
+  - [Authentication requests](#authentication-requests)
+    - [Log in with API key (SIGNED)](#log-in-with-api-key-signed)
+    - [Query session status](#query-session-status)
+    - [Log out of the session](#log-out-of-the-session)
   - [Trading requests](#trading-requests)
     - [Place new order (TRADE)](#place-new-order-trade)
       - [Conditional fields in Order Responses](#conditional-fields-in-order-responses)
@@ -63,6 +71,7 @@
     - [Account trade history (USER_DATA)](#account-trade-history-user_data)
     - [Account prevented matches (USER_DATA)](#account-prevented-matches-user_data)
     - [Account allocations (USER_DATA)](#account-allocations-user_data)
+    - [Account Commission Rates (USER_DATA)](#account-commission-rates-user_data)
   - [User Data Stream requests](#user-data-stream-requests)
     - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
     - [Ping user data stream (USER_STREAM)](#ping-user-data-stream-user_stream)
@@ -70,7 +79,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public WebSocket API for Binance (2023-10-19)
+# Public WebSocket API for Binance (2023-12-04)
 
 ## General API Information
 
@@ -78,10 +87,10 @@
   * If you experience issues with the standard 443 port, alternative port 9443 is also available.
   * The base endpoint for [testnet](https://testnet.binance.vision/) is: `wss://testnet.binance.vision/ws-api/v3`
 * A single connection to the API is only valid for 24 hours; expect to be disconnected after the 24-hour mark.
-* WebSocket server will send a **ping frame** every 3 minutes.
-  * If the server does not receive a **pong frame** response within 10 minutes, you will be disconnected.
-  * Unsolicited pong frames are allowed and interpreted as unidirectional heartbeat:
-    WebSocket server will not send you ping frames if you regularly send unsolicited pongs.
+* Websocket server will send a `ping frame` every 3 minutes. 
+  * If the websocket server does not receive a `pong frame` back from the connection within a 10 minute period, the connection will be disconnected. 
+  * When you receive a ping, you must send a pong with a copy of ping's payload as soon as possible.
+  * Unsolicited `pong frames` are allowed, but will not prevent disconnection. **It is recommended that the payload for these pong frames are empty.**
 * Lists are returned in **chronological order**, unless noted otherwise.
 * All timestamps are in **milliseconds** in UTC, unless noted otherwise.
 * All field names and values are **case-sensitive**, unless noted otherwise.
@@ -385,7 +394,7 @@ the `rateLimits` field can be omitted from responses to reduce their size.
   use `returnRateLimits` parameter in the query string instead:
 
   ```
-  wss://ws-api.binance.com/ws-api/v3?returnRateLimits=false
+  wss://ws-api.binance.com:443/ws-api/v3?returnRateLimits=false
   ```
 
   This will make all requests made through this connection behave as if you have passed `"returnRateLimits": false`.
@@ -851,6 +860,50 @@ print(result)
 
 ```
 
+## Session Authentication
+
+**Note:** Only _Ed25519_ keys are supported for this feature. 
+
+If you do not want to specify `apiKey` and `signature` in each individual request,
+you can authenticate your API key for the active WebSocket session.
+
+Once authenticated, you no longer have to specify `apiKey` and `signature` for those requests that need them.
+Requests will be performed on behalf of the account owning the authenticated API key.
+
+**Note:** You still have to specify the `timestamp` parameter for `SIGNED` requests.
+
+### Authenticate after connection
+
+You can authenticate an already established connection using session authentication requests:
+
+* [`session.logon`](#log-in-with-api-key-signed) – authenticate, or change the API key associated with the connection
+* [`session.status`](#query-session-status) – check connection status and the current API key
+* [`session.logout`](#log-out-of-the-session) – forget the API key associated with the connection
+
+**Regarding API key revocation:**
+
+If during an active session the API key becomes invalid for _any reason_ (e.g. IP address is not whitelisted, API key was deleted, API key doesn't have correct permissions, etc), after the next request the session will be revoked with the following error message:
+
+```javascript
+{
+  "id": null,
+  "status": 401,
+  "error": {
+    "code": -2015,
+    "msg": "Invalid API-key, IP, or permissions for action." 
+  }
+}
+```
+
+### Authorize _ad hoc_ requests
+
+Only one API key can be authenticated with the WebSocket connection.
+The authenticated API key is used by default for requests that require an `apiKey` parameter.
+However, you can always specify the `apiKey` and `signature` explicitly for individual requests,
+overriding the authenticated API key and using a different one to authorize a specific request.
+
+For example, you might want to authenticate your `USER_DATA` key to be used by default,
+but specify the `TRADE` key with an explicit signature when placing orders.
 
 # Data sources
 
@@ -1583,7 +1636,9 @@ Name        | Type    | Mandatory | Description
 `interval`  | ENUM    | YES       |
 `startTime` | INT     | NO        |
 `endTime`   | INT     | NO        |
+`timeZone`   |STRING  | NO        | Default: 0 (UTC)
 `limit`     | INT     | NO        | Default 500; max 1000
+
 
 <a id="kline-intervals"></a>
 Supported kline intervals (case-sensitive):
@@ -1600,6 +1655,12 @@ months    | `1M`
 Notes:
 
 * If `startTime`, `endTime` are not specified, the most recent klines are returned.
+* Supported values for `timeZone`:
+  * Hours and minutes (e.g. `-1:00`, `05:45`)
+  * Only hours (e.g. `0`, `8`, `4`)
+  * Accepted range is strictly [-12:00 to +14:00] inclusive
+* If `timeZone` provided, kline intervals are interpreted in that timezone instead of UTC.
+* Note that `startTime` and `endTime` are always interpreted in UTC, regardless of timeZone.
 
 **Data Source:**
 Database
@@ -1668,11 +1729,18 @@ Name        | Type    | Mandatory | Description
 `interval`  | ENUM    | YES       | See [`klines`](#kline-intervals)
 `startTime` | INT     | NO        |
 `endTime`   | INT     | NO        |
+`timeZone`   |STRING  | NO        | Default: 0 (UTC)
 `limit`     | INT     | NO        | Default 500; max 1000
 
 Notes:
 
 * If `startTime`, `endTime` are not specified, the most recent klines are returned.
+* Supported values for `timeZone`:
+  * Hours and minutes (e.g. `-1:00`, `05:45`)
+  * Only hours (e.g. `0`, `8`, `4`)
+  * Accepted range is strictly [-12:00 to +14:00] inclusive
+* If `timeZone` provided, kline intervals are interpreted in that timezone instead of UTC.
+* Note that `startTime` and `endTime` are always interpreted in UTC, regardless of timeZone.
 
 **Data Source:**
 Database
@@ -1742,8 +1810,9 @@ Memory
   "id": "ddbfb65f-9ebf-42ec-8240-8f0f91de0867",
   "status": 200,
   "result": {
-    "mins": 5,              // Price averaging interval in minutes
-    "price": "0.01378135"
+    "mins": 5,                    // Average price interval (in minutes)
+    "price": "9.35751834",        // Average price
+    "closeTime": 1694061154503    // Last trade time
   },
   "rateLimits": [
     {
@@ -1966,6 +2035,244 @@ If more than one symbol is requested, response returns an array:
       "intervalNum": 1,
       "limit": 6000,
       "count": 2
+    }
+  ]
+}
+```
+
+### Trading Day Ticker
+
+```javascript
+{
+  "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
+  "method": "ticker.tradingDay",
+  "params": {
+    "symbols": [
+      "BNBBTC",
+      "BTCUSDT"
+    ],
+    "timeZone": "00:00"
+  }
+}
+```
+
+Price change statistics for a trading day.
+
+**Weight:**
+
+4 for each requested <tt>symbol</tt>. <br/><br/> The weight for this request will cap at 200 once the number of `symbols` in the request is more than 50.
+
+**Parameters:**
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Mandatory</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><code>symbol</code></td>
+    <td>STRING</td>
+    <td rowspan="2" align="center">YES</td>
+    <td>Query ticker of a single symbol</td>
+  </tr>
+  <tr>
+    <td><code>symbols</code></td>
+    <td>ARRAY of STRING</td>
+    <td>Query ticker for multiple symbols</td>
+  </tr>
+  <tr>
+     <td><code>timeZone</code></td>
+     <td>STRING</td>
+     <td>NO</td>
+     <td>Default: 0 (UTC)</td>
+  </tr>
+  <tr>
+      <td><code>type</code></td>
+      <td>ENUM</td>
+      <td>NO</td>
+      <td>Supported values: <tt>FULL</tt> or <tt>MINI</tt>. <br/>If none provided, the default is <tt>FULL</tt> </td>
+  </tr>
+</table>
+
+**Notes:**
+
+* Supported values for `timeZone`:
+  * Hours and minutes (e.g. `-1:00`, `05:45`)
+  * Only hours (e.g. `0`, `8`, `4`)
+
+**Data Source:**
+Database
+
+**Response: - FULL**
+
+With `symbol`:
+
+```javascript
+{
+  "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
+  "status": 200,
+  "result": {
+    "symbol": "BTCUSDT",
+    "priceChange": "-83.13000000",                // Absolute price change
+    "priceChangePercent": "-0.317",               // Relative price change in percent
+    "weightedAvgPrice": "26234.58803036",         // quoteVolume / volume
+    "openPrice": "26304.80000000",
+    "highPrice": "26397.46000000",
+    "lowPrice": "26088.34000000",
+    "lastPrice": "26221.67000000",
+    "volume": "18495.35066000",                   // Volume in base asset
+    "quoteVolume": "485217905.04210480",
+    "openTime": 1695686400000,
+    "closeTime": 1695772799999,
+    "firstId": 3220151555,
+    "lastId": 3220849281,
+    "count": 697727
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 4
+    }
+  ]
+}
+```
+
+With `symbols`:
+
+```javascript
+{
+  "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
+  "status": 200,
+  "result": [
+    {
+      "symbol": "BTCUSDT",
+      "priceChange": "-83.13000000",
+      "priceChangePercent": "-0.317",
+      "weightedAvgPrice": "26234.58803036",
+      "openPrice": "26304.80000000",
+      "highPrice": "26397.46000000",
+      "lowPrice": "26088.34000000",
+      "lastPrice": "26221.67000000",
+      "volume": "18495.35066000",
+      "quoteVolume": "485217905.04210480",
+      "openTime": 1695686400000,
+      "closeTime": 1695772799999,
+      "firstId": 3220151555,
+      "lastId": 3220849281,
+      "count": 697727
+    },
+    {
+      "symbol": "BNBUSDT",
+      "priceChange": "2.60000000",
+      "priceChangePercent": "1.238",
+      "weightedAvgPrice": "211.92276958",
+      "openPrice": "210.00000000",
+      "highPrice": "213.70000000",
+      "lowPrice": "209.70000000",
+      "lastPrice": "212.60000000",
+      "volume": "280709.58900000",
+      "quoteVolume": "59488753.54750000",
+      "openTime": 1695686400000,
+      "closeTime": 1695772799999,
+      "firstId": 672397461,
+      "lastId": 672496158,
+      "count": 98698
+    }
+  ],
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 8
+    }
+  ]
+}
+```
+
+**Response: - MINI**
+
+With `symbol`:
+
+```javascript
+{
+  "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
+  "status": 200,
+  "result": {
+    "symbol": "BTCUSDT",
+    "openPrice": "26304.80000000",
+    "highPrice": "26397.46000000",
+    "lowPrice": "26088.34000000",
+    "lastPrice": "26221.67000000",
+    "volume": "18495.35066000",                  // Volume in base asset
+    "quoteVolume": "485217905.04210480",         // Volume in quote asset
+    "openTime": 1695686400000,
+    "closeTime": 1695772799999,
+    "firstId": 3220151555,                       // Trade ID of the first trade in the interval
+    "lastId": 3220849281,                        // Trade ID of the last trade in the interval
+    "count": 697727                              // Number of trades in the interval
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 4
+    }
+  ]
+}
+```
+
+With `symbols`:
+
+```javascript
+{
+  "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
+  "status": 200,
+  "result": [
+    {
+      "symbol": "BTCUSDT",
+      "openPrice": "26304.80000000",
+      "highPrice": "26397.46000000",
+      "lowPrice": "26088.34000000",
+      "lastPrice": "26221.67000000",
+      "volume": "18495.35066000",
+      "quoteVolume": "485217905.04210480",
+      "openTime": 1695686400000,
+      "closeTime": 1695772799999,
+      "firstId": 3220151555,
+      "lastId": 3220849281,
+      "count": 697727
+    },
+    {
+      "symbol": "BNBUSDT",
+      "openPrice": "210.00000000",
+      "highPrice": "213.70000000",
+      "lowPrice": "209.70000000",
+      "lastPrice": "212.60000000",
+      "volume": "280709.58900000",
+      "quoteVolume": "59488753.54750000",
+      "openTime": 1695686400000,
+      "closeTime": 1695772799999,
+      "firstId": 672397461,
+      "lastId": 672496158,
+      "count": 98698
+    }
+  ],
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 8
     }
   ]
 }
@@ -2447,6 +2754,142 @@ If more than one symbol is requested, response returns an array:
 }
 ```
 
+## Authentication requests
+
+**Note:** Only _Ed25519_ keys are supported for this feature. 
+
+### Log in with API key (SIGNED)
+
+```javascript
+{
+  "id": "c174a2b1-3f51-4580-b200-8528bd237cb7",
+  "method": "session.logon",
+  "params": {
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "1cf54395b336b0a9727ef27d5d98987962bc47aca6e13fe978612d0adee066ed",
+    "timestamp": 1649729878532
+  }
+}
+```
+
+Authenticate WebSocket connection using the provided API key.
+
+After calling `session.logon`, you can omit `apiKey` and `signature` parameters for future requests that require them.
+
+Note that only one API key can be authenticated.
+Calling `session.logon` multiple times changes the current authenticated API key.
+
+**Weight:**
+2
+
+**Parameters:**
+
+Name          | Type    | Mandatory | Description
+------------- | ------- | --------- | ------------
+`apiKey`      | STRING  | YES       |
+`recvWindow`  | INT     | NO        | The value cannot be greater than `60000`
+`signature`   | STRING  | YES       |
+`timestamp`   | INT     | YES       |
+
+**Data Source:**
+Memory
+
+**Response:**
+
+```javascript
+{
+  "id": "c174a2b1-3f51-4580-b200-8528bd237cb7",
+  "status": 200,
+  "result": {
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "authorizedSince": 1649729878532,
+    "connectedSince": 1649729873021,
+    "returnRateLimits": false,
+    "serverTime": 1649729878630
+  }
+}
+```
+
+
+### Query session status
+
+```javascript
+{
+  "id": "b50c16cd-62c9-4e29-89e4-37f10111f5bf",
+  "method": "session.status"
+}
+```
+
+Query the status of the WebSocket connection,
+inspecting which API key (if any) is used to authorize requests.
+
+**Weight:**
+2
+
+**Parameters:**
+NONE
+
+**Data Source:**
+Memory
+
+**Response:**
+
+```javascript
+{
+  "id": "b50c16cd-62c9-4e29-89e4-37f10111f5bf",
+  "status": 200,
+  "result": {
+    // if the connection is not authenticated, "apiKey" and "authorizedSince" will be shown as null
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "authorizedSince": 1649729878532,
+    "connectedSince": 1649729873021,
+    "returnRateLimits": false,
+    "serverTime": 1649730611671
+  }
+}
+```
+
+### Log out of the session
+
+```javascript
+{
+  "id": "c174a2b1-3f51-4580-b200-8528bd237cb7",
+  "method": "session.logout"
+}
+```
+
+Forget the API key previously authenticated.
+If the connection is not authenticated, this request does nothing.
+
+Note that the WebSocket connection stays open after `session.logout` request.
+You can continue using the connection,
+but now you will have to explicitly provide the `apiKey` and `signature` parameters where needed.
+
+**Weight:**
+2
+
+**Parameters:**
+NONE
+
+**Data Source:**
+Memory
+
+**Response:**
+
+```javascript
+{
+  "id": "c174a2b1-3f51-4580-b200-8528bd237cb7",
+  "status": 200,
+  "result": {
+    "apiKey": null,
+    "authorizedSince": null,
+    "connectedSince": 1649729873021,
+    "returnRateLimits": false,
+    "serverTime": 1649730611671
+  }
+}
+```
+
 ## Trading requests
 
 ### Place new order (TRADE)
@@ -2892,6 +3335,7 @@ Field          |Description                                                     
 `strategyType` | Can be used to label an order that is using an order strategy.|Appears if the parameter was populated in the request.| `"strategyType": 1000000`
 `trailingDelta`| Delta price change required before order activation| Appears for Trailing Stop Orders.|`"trailingDelta": 10`
 `trailingTime` | Time when the trailing order is now active and tracking price changes| Appears only for Trailing Stop Orders.| `"trailingTime": -1`
+`usedSor`      | Field that determines whether order used SOR | Appears when placing orders using SOR|`"usedSor": true`
 `workingFloor` | Field that determines whether the order is being filled by the SOR or by the order book the order was submitted to.|Appears when placing orders using SOR|`"workingFloor": "SOR"`
 
 ### Test new order (TRADE)
@@ -2920,16 +3364,28 @@ Validates new order parameters and verifies your signature
 but does not send the order into the matching engine.
 
 **Weight:**
-1
+
+|Condition| Request Weight|
+|------------           | ------------ |
+|Without `computeCommissionRates`| 1|
+|With `computeCommissionRates`|20|
 
 **Parameters:**
 
-Same as for [`order.place`](#place-new-order-trade).
+In addition to all parameters accepted by [`order.place`](#place-new-order-trade),
+the following optional parameters are also accepted:
+
+Name                   |Type          | Mandatory    | Description
+------------           | ------------ | ------------ | ------------
+`computeCommissionRates` | BOOLEAN      | NO         | Default: `false`
 
 **Data Source:**
 Memory
 
 **Response:**
+
+Without `computeCommissionRates`:
+
 ```javascript
 {
   "id": "6ffebe91-01d9-43ac-be99-57cf062e0e30",
@@ -2942,6 +3398,40 @@ Memory
       "intervalNum": 1,
       "limit": 6000,
       "count": 1
+    }
+  ]
+}
+```
+
+With `computeCommissionRates`:
+
+```javascript
+{
+  "id": "6ffebe91-01d9-43ac-be99-57cf062e0e30",
+  "status": 200,
+  "result": {
+    "standardCommissionForOrder": {           //Commission rates for the order depending on its role (e.g. maker or taker)
+      "maker": "0.00000112",
+      "taker": "0.00000114"
+    },
+    "taxCommissionForOrder": {                 //Tax deduction rates for the order depending on its role (e.g. maker or taker)
+      "maker": "0.00000112",
+      "taker": "0.00000114"
+    },  
+    "discount": {                              //Discount on standard commissions when paying in BNB.
+      "enabledForAccount": true,
+      "enabledForSymbol": true,
+      "discountAsset": "BNB",
+      "discount": "0.25"                       //Standard commission is reduced by this rate when paying in BNB.
+    }
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 20
     }
   ]
 }
@@ -4809,16 +5299,27 @@ Test new order creation and signature/recvWindow using smart order routing (SOR)
 Creates and validates a new order but does not send it into the matching engine.
 
 **Weight:**
-1
+
+|Condition                       | Request Weight|
+|------------                    | ------------ |
+|Without `computeCommissionRates`| 1            |
+|With `computeCommissionRates`   |20            |
 
 **Parameters:**
 
-Same as `sor.order.place`
+In addition to all parameters accepted by [`sor.order.place`](#place-new-order-using-sor-trade),
+the following optional parameters are also accepted:
+
+Name                   |Type          | Mandatory    | Description
+------------           | ------------ | ------------ | ------------
+`computeCommissionRates` | BOOLEAN      | NO           | Default: `false`
 
 **Data Source:**
 Memory
 
 **Response:**
+
+Without `computeCommissionRates`:
 
 ```javascript
 {
@@ -4830,9 +5331,42 @@ Memory
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
       "intervalNum": 1,
-      "limit": 6000
-,
+      "limit": 6000,
       "count": 1
+    }
+  ]
+}
+```
+
+With `computeCommissionRates`:
+
+```javascript
+{
+  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+  "status": 200,
+  "result": {
+    "standardCommissionForOrder": {                //Commission rates for the order depending on its role (e.g. maker or taker)
+      "maker": "0.00000112",
+      "taker": "0.00000114"
+    },
+    "taxCommissionForOrder": {                     //Tax deduction rates for the order depending on its role (e.g. maker or taker)
+      "maker": "0.00000112",
+      "taker": "0.00000114"
+    },
+    "discount": {                                  //Discount on standard commissions when paying in BNB.
+      "enabledForAccount": true,
+      "enabledForSymbol": true,
+      "discountAsset": "BNB",
+      "discount": "0.25"                           //Standard commission is reduced by this rate when paying in BNB.
+    }
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 20
     }
   ]
 }
@@ -5459,6 +5993,82 @@ Database
   ]
 }
 ```
+
+### Account Commission Rates (USER_DATA)
+
+```javascript
+{
+  "id": "d3df8a61-98ea-4fe0-8f4e-0fcea5d418b0",
+  "method": "account.commission",
+  "params": {
+    "symbol": "BTCUSDT",
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "c5a5ffb79fd4f2e10a92f895d488943a57954edf5933bde3338dfb6ea6d6eefc",
+    "timestamp": 1673923281052
+  }
+}
+```
+
+Get current account commission rates.
+
+**Parameters:**
+
+Name                       | Type  |Mandatory | Description
+-----                      | ---   |----      | ---------
+`symbol`                   |STRING |YES        |
+
+**Weight:**
+20
+
+**Data Source:**
+Database
+
+**Response:**
+
+```javascript
+{
+  "id": "d3df8a61-98ea-4fe0-8f4e-0fcea5d418b0",
+  "status": 200,
+  "result":
+  [
+    {
+      "symbol": "BTCUSDT",
+      "standardCommission":               //Commission rates for the order depending on its role (e.g. maker or taker)
+      {
+        "maker": "0.00000010",
+        "taker": "0.00000020",
+        "buyer": "0.00000030",
+        "seller": "0.00000040"
+      },
+      "taxCommission":                   //Tax deduction rates for the order depending on its role (e.g. maker or taker)
+      {
+        "maker": "0.00000112",
+        "taker": "0.00000114",
+        "buyer": "0.00000118",
+        "seller": "0.00000116"
+      },
+      "discount":                        //Discount on standard commissions when paying in BNB.
+      {
+        "enabledForAccount": true,
+        "enabledForSymbol": true,
+        "discountAsset": "BNB",
+        "discount": "0.25"               //Standard commission is reduced by this rate when paying in BNB.
+      }
+    }
+  ],
+  "rateLimits":
+  [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 20
+    }
+  ]
+}
+```
+
 
 ## User Data Stream requests
 

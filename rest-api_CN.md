@@ -1,4 +1,4 @@
-# REST行情与交易接口 (2023-10-19)
+# REST行情与交易接口 (2023-12-04)
 
 ## API 基本信息
 * 本篇列出接口的 base URL 有:
@@ -864,9 +864,16 @@ symbol | STRING | YES |
 interval | ENUM | YES | 详见枚举定义：K线间隔
 startTime | LONG | NO |
 endTime | LONG | NO |
+timeZone |STRING| NO| 默认: 0 (UTC)
 limit | INT | NO | Default 500; max 1000.
 
-* 缺省返回最近的数据
+* 如果未发送`startTime`和`endTime`，将返回最近的K线数据。
+* `timeZone`支持的值包括：
+    * 小时和分钟（例如 `-1:00`，`05:45`）
+    * 仅小时（例如 `0`，`8`，`4`）
+    * 接受的值范围严格为 [-12:00 到 +14:00]（包括边界）
+* 如果提供了`timeZone`，K线间隔将在该时区中解释，而不是在UTC中。
+* 请注意，无论`timeZone`如何，`startTime`和`endTime`始终以UTC时区解释。
 
 **数据源:**
 数据库
@@ -914,9 +921,16 @@ symbol    | STRING | YES          |
 interval  | ENUM   | YES          |
 startTime | LONG   | NO           |
 endTime   | LONG   | NO           |
+timeZone  | STRING | NO           | Default: 0 (UTC)
 limit     | INT    | NO           | 默认 500; 最大 1000.
 
-* 如果未发送 startTime 和 endTime ，默认返回最近的交易。
+* 如果未发送 `startTime` 和 `endTime`，默认返回最近的交易。
+* `timeZone`支持的值包括：
+    * 小时和分钟（例如 `-1:00`，`05:45`）
+    * 仅小时（例如 `0`，`8`，`4`）
+    * 接受的值范围严格为 [-12:00 到 +14:00]（包括边界）
+* 如果提供了`timeZone`，K线间隔将在该时区中解释，而不是在UTC中。
+* 请注意，无论`timeZone`如何，`startTime`和`endTime`始终以UTC时区解释。
 
 **数据源:**
 数据库
@@ -962,7 +976,8 @@ symbol | STRING | YES |
 ```javascript
 {
   "mins": 5,
-  "price": "9.35751834"
+  "price": "9.35751834",
+  "closeTime": 1694061154503
 }
 ```
 
@@ -1158,6 +1173,182 @@ OR
     "firstId": 0,
     "lastId": 10,
     "count": 11
+  }
+]
+```
+
+### 交易日行情(Ticker)
+
+```
+GET /api/v3/ticker/tradingDay
+```
+交易日价格变动统计。
+
+**权重:**
+
+每个<tt>交易对</tt>占用4个权重. <br/><br/> 
+当请求中的交易对数量超过50，此请求的权重将限制在200。
+
+**参数:**
+
+<table>
+  <tr>
+    <th>参数名</th>
+    <th>类型</th>
+    <th>是否必需</th>
+    <th>描述</th>
+  </tr>
+  <tr>
+    <td>symbol</td>
+    <td rowspan="2">STRING</td>
+    <td rowspan="2">YES</td>
+    <td rowspan="2"> <tt>symbol</tt> 或者 <tt>symbols</tt> 必须提供之一 <br/><br/> <tt>symbols</tt> 可以接受的格式: <br/> ["BTCUSDT","BNBUSDT"] <br/>或者 <br/>%5B%22BTCUSDT%22,%22BNBUSDT%22%5D <br/><br/>  <tt>symbols</tt> 最多可以发送100个.
+    </td>
+  </tr>
+  <tr>
+     <td>symbols</td>
+  </tr>
+  <tr>
+     <td>timeZone</td>
+     <td>STRING</td>
+     <td>NO</td>
+     <td>Default: 0 (UTC)</td>
+  </tr>
+  <tr>
+      <td>type</td>
+      <td>ENUM</td>
+      <td>NO</td>
+      <td>可接受值: <tt>FULL</tt> or <tt>MINI</tt>. <br/>默认值: <tt>FULL</tt> </td>
+  </tr>
+</table>
+
+**注意:**
+
+* `timeZone`支持的值包括：
+    * 小时和分钟（例如 `-1:00`，`05:45`）
+    * 仅小时（例如 `0`，`8`，`4`）
+
+**数据源:**
+数据库
+
+**响应 - FULL**
+
+有 `symbol`:
+
+```javascript
+{
+  "symbol":             "BTCUSDT",
+  "priceChange":        "-83.13000000",         // 绝对价格变动
+  "priceChangePercent": "-0.317",               // 相对价格变动百分比
+  "weightedAvgPrice":   "26234.58803036",       // 报价成交量 / 成交量
+  "openPrice":          "26304.80000000",
+  "highPrice":          "26397.46000000",
+  "lowPrice":           "26088.34000000",
+  "lastPrice":          "26221.67000000",
+  "volume":             "18495.35066000",       // 基础资产的成交量
+  "quoteVolume":        "485217905.04210480",   // 报价资产的成交量
+  "openTime":           1695686400000,
+  "closeTime":          1695772799999,
+  "firstId":            3220151555,             // 区间内的第一个交易的交易ID
+  "lastId":             3220849281,             // 区间内的最后一个交易的交易ID
+  "count":              697727                  // 区间内的交易数量
+}
+
+```
+
+有 `symbols`:
+
+```javascript
+[
+  {
+    "symbol": "BTCUSDT",
+    "priceChange": "-83.13000000",
+    "priceChangePercent": "-0.317",
+    "weightedAvgPrice": "26234.58803036",
+    "openPrice": "26304.80000000",
+    "highPrice": "26397.46000000",
+    "lowPrice": "26088.34000000",
+    "lastPrice": "26221.67000000",
+    "volume": "18495.35066000",
+    "quoteVolume": "485217905.04210480",
+    "openTime": 1695686400000,
+    "closeTime": 1695772799999,
+    "firstId": 3220151555,
+    "lastId": 3220849281,
+    "count": 697727
+  },
+  {
+    "symbol": "BNBUSDT",
+    "priceChange": "2.60000000",
+    "priceChangePercent": "1.238",
+    "weightedAvgPrice": "211.92276958",
+    "openPrice": "210.00000000",
+    "highPrice": "213.70000000",
+    "lowPrice": "209.70000000",
+    "lastPrice": "212.60000000",
+    "volume": "280709.58900000",
+    "quoteVolume": "59488753.54750000",
+    "openTime": 1695686400000,
+    "closeTime": 1695772799999,
+    "firstId": 672397461,
+    "lastId": 672496158,
+    "count": 98698
+  }
+]
+```
+
+**响应: - MINI**
+
+有 `symbol`:
+
+```javascript
+{
+  "symbol":         "BTCUSDT",
+  "openPrice":      "26304.80000000",
+  "highPrice":      "26397.46000000",
+  "lowPrice":       "26088.34000000",
+  "lastPrice":      "26221.67000000",
+  "volume":         "18495.35066000",       // 基础资产的成交量
+  "quoteVolume":    "485217905.04210480",   // 报价资产的成交量
+  "openTime":       1695686400000,
+  "closeTime":      1695772799999,
+  "firstId":        3220151555,             // 区间内的第一个交易的交易ID
+  "lastId":         3220849281,             // 区间内的最后一个交易的交易ID
+  "count":          697727                  // 区间内的交易数量
+}
+```
+
+有 `symbols`:
+
+```javascript
+[
+  {
+    "symbol": "BTCUSDT",
+    "openPrice": "26304.80000000",
+    "highPrice": "26397.46000000",
+    "lowPrice": "26088.34000000",
+    "lastPrice": "26221.67000000",
+    "volume": "18495.35066000",
+    "quoteVolume": "485217905.04210480",
+    "openTime": 1695686400000,
+    "closeTime": 1695772799999,
+    "firstId": 3220151555,
+    "lastId": 3220849281,
+    "count": 697727
+  },
+  {
+    "symbol": "BNBUSDT",
+    "openPrice": "210.00000000",
+    "highPrice": "213.70000000",
+    "lowPrice": "209.70000000",
+    "lastPrice": "212.60000000",
+    "volume": "280709.58900000",
+    "quoteVolume": "59488753.54750000",
+    "openTime": 1695686400000,
+    "closeTime": 1695772799999,
+    "firstId": 672397461,
+    "lastId": 672496158,
+    "count": 98698
   }
 ]
 ```
@@ -1699,7 +1890,8 @@ Type | 强制要求的参数 | 其他信息
 `strategyId`   | 策略单ID; 用以关联此订单对应的交易策略。                            | 如果在请求中添加了参数，则会出现。                      | `"strategyId": 37463720` |
 `strategyType` | 策略单类型; 用以显示此订单对应的交易策略。                           | 如果在请求中添加了参数，则会出现。                      | `"strategyType": 1000000` |
 `trailingDelta`| 用以定义追踪止盈止损订单被触发的价格差。                             | 出现在追踪止损订单中。                                | `"trailingDelta": 10` |
-`trailingTime` | 追踪单被激活和跟踪价格变化的时间。                                  | 出现在追踪止损订单中。                                 | `"trailingTime": -1`|
+`trailingTime` | 追踪单被激活和跟踪价格变化的时间。                                  | 出现在追踪止损订单中。                               | `"trailingTime": -1`|
+`usedSor` | 用于确定订单是否使用SOR的字段 | 在使用SOR下单时出现 |`"usedSor": true` ｜
 `workingFloor` | 用以定义订单是通过 SOR 还是由订单提交到的订单薄（order book）成交的。   |出现在使用了 SOR 的订单中。                             |`"workingFloor": "SOR"`|
 
 ### 测试下单接口 (TRADE)
@@ -1711,19 +1903,51 @@ POST /api/v3/order/test
 用于测试订单请求，但不会提交到撮合引擎
 
 **权重:**
-1
+
+| 条件 | 权重 |
+|------------           | ------------ |
+|没有 `computeCommissionRates`| 1|
+|有 `computeCommissionRates`|20|
 
 **参数:**
 
-参考 `POST /api/v3/order`
+除了 [`POST /api/v3/order`](#new-order--trade) 所有参数,
+下面参数也支持:
+
+参数名                   |类型          | 是否必需    | 描述
+------------           | ------------ | ------------ | ------------
+computeCommissionRates | BOOLEAN      | NO           | 默认值: `false`
 
 **数据源:**
 缓存
 
 **响应:**
+
+没有 `computeCommissionRates`
+
 ```javascript
 {}
 ```
+
+有 `computeCommissionRates`
+
+```javascript
+{
+  "standardCommissionForOrder": {   // 根据订单的角色（例如，Maker或Taker）确定的佣金费率
+    "maker": "0.00000112",
+    "taker": "0.00000114",
+  },
+  "taxCommissionForOrder": {        // 根据订单的角色（例如，Maker或Taker）确定的税收扣除率
+    "maker": "0.00000112",
+    "taker": "0.00000114",
+  },
+  "discount": {                     // 以BNB支付时的标准佣金折扣。
+    "enabledForAccount": true,
+    "enabledForSymbol": true,
+    "discountAsset": "BNB",
+    "discount": "0.25"             // 以BNB支付时，标准佣金按此比率折扣。
+  }
+}
 
 ### 查询订单 (USER_DATA)
 ```
@@ -2648,19 +2872,55 @@ POST /api/v3/sor/order/test
 
 用于测试使用智能订单路由 (SOR) 的订单请求，但不会提交到撮合引擎
 
+
+**权重:**
+| 条件 | 请求权重 |
+| --------- | -------------- |
+| 没有 `computeCommissionRates`  |  1 |
+| 有 `computeCommissionRates`     | 20 |
+
+
 **参数:**
 
-参考 `POST /api/v3/sor/order`
+除了 [`POST /api/v3/sor/order`](#new-order-using-sor-trade) 所有参数,
+如下参数也接受:
+
+参数名                   |类型          | 是否必需    | 描述
+------------           | ------------ | ------------ | ------------
+computeCommissionRates | BOOLEAN      | NO            | 默认值: `false`
 
 **数据源:**
 缓存
 
 **响应:**
 
+没有 `computeCommissionRates`
+
 ```
 {}
 ```
 
+有 `computeCommissionRates`
+
+
+```javascript
+{
+  "standardCommissionForOrder": {  // 根据订单的角色（例如，Maker或Taker）确定的佣金费率。
+    "maker": "0.00000112",
+    "taker": "0.00000114",
+  },
+  "taxCommissionForOrder": {       // 根据订单的角色（例如，Maker或Taker）确定的税收扣除率。
+    "maker": "0.00000112",
+    "taker": "0.00000114",
+  },
+  "discount": {                    // 以BNB支付时的标准佣金折扣。
+    "enabledForAccount": true,
+    "enabledForSymbol": true,
+    "discountAsset": "BNB",
+    "discount": "0.25"             // 以BNB支付时，标准佣金按此比率折扣。
+  }
+}
+```
 
 
 ## 账户接口
@@ -2938,6 +3198,55 @@ timestamp                |LONG   |No        |
   }
 ]
 ```
+
+
+### 查询佣金费率 (USER_DATA)
+
+```
+GET /api/v3/account/commission
+```
+
+获取当前账户的佣金费率。
+
+
+**权重:**
+20
+
+**参数:**
+
+参数名         | 类型    | 是否必需 | 描述
+------------ | -----   | ------------ | ------------
+symbol        | STRING | YES          |
+
+**数据源:**
+数据库
+
+**响应:**
+
+```javascript
+{
+  "symbol": "BTCUSDT",
+  "standardCommission": {          // 根据订单角色的不同，订单的佣金费率。
+    "maker": "0.00000010",
+    "taker": "0.00000020",
+    "buyer": "0.00000030",
+    "seller": "0.00000040" 
+  },
+  "taxCommission": {              // 根据订单的角色，订单的税收扣除率。
+    "maker": "0.00000112",
+    "taker": "0.00000114",
+    "buyer": "0.00000118",
+    "seller": "0.00000116" 
+  },
+  "discount": {                   // 使用BNB支付时的佣金折扣。
+    "enabledForAccount": true,
+    "enabledForSymbol": true,
+    "discountAsset": "BNB",
+    "discount": "0.25"            // 以BNB支付时，标准佣金按此比率折扣。
+  }
+}
+```
+
 
 ## 用户数据流订阅接口
 此处仅列出如何得到数据流名称及如何维持有效期的接口，具体订阅方式参考另一篇websocket接口文档
