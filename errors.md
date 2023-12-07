@@ -173,7 +173,7 @@ The following messages which will indicate the specific error:
 
 Error message                                                   | Description
 ------------                                                    | ------------
-"Unknown order sent."                                           | The order (by either `orderId`, `clOrdId`, `origClOrdId`) could not be found
+"Unknown order sent."                                           | The order (by either `orderId`, `clOrdId`, `origClOrdId`) could not be found.
 "Duplicate order sent."                                         | The `clOrdId` is already in use.
 "Market is closed."                                             | The symbol is not trading.
 "Account has insufficient balance for requested action."        | Not enough funds to complete the action.
@@ -199,6 +199,7 @@ Error message                                                   | Description
 "This symbol is not permitted for this account."                | Account and symbol do not have the same permissions. (e.g. `SPOT`, `MARGIN`, etc)
 "This symbol is restricted for this account."                   | Account is unable to trade on that symbol. (e.g. An `ISOLATED_MARGIN` account cannot place `SPOT` orders.)
 "Order was not canceled due to cancel restrictions."            | Either `cancelRestrictions` was set to `ONLY_NEW` but the order status was not `NEW` <br/> or <br/> `cancelRestrictions` was set to `ONLY_PARTIALLY_FILLED` but the order status was not `PARTIALLY_FILLED`. 
+"Rest API trading is not enabled." / "WebSocket API trading is not enabled." | Order is being placed or a server that is not configured to allow access to `TRADE` endpoints.
 
 ## Errors regarding POST /api/v3/order/cancelReplace
 

@@ -195,6 +195,7 @@
 "This symbol is not permitted for this account."                 | 账户和交易对的权限不一致 (比如 `SPOT`, `MARGIN` 等)。
 "This symbol is restricted for this account."                    | 账户没有权限在此交易对交易 (比如账户只拥有 `ISOLATED_MARGIN`权限，则无法下`SPOT` 订单)。
 "Order was not canceled due to cancel restrictions."             | `cancelRestrictions` 设置为 `ONLY_NEW` 但订单状态不是 `NEW` <br/> 或 <br/> `cancelRestrictions` 设置为 `ONLY_PARTIALLY_FILLED` 但订单状态不是 `PARTIALLY_FILLED`。
+"Rest API trading is not enabled." / "WebSocket API trading is not enabled." | 下单时，服务器没有设置为允许访问 `TRADE` 的接口。
 
 ## 关于 POST /api/v3/order/cancelReplace 的错误
 
