@@ -22,13 +22,14 @@
   - [Individual Symbol Rolling Window Statistics Streams](#individual-symbol-rolling-window-statistics-streams)
   - [All Market Rolling Window Statistics Streams](#all-market-rolling-window-statistics-streams)
   - [Individual Symbol Book Ticker Streams](#individual-symbol-book-ticker-streams)
+  - [Average Price](#average-price)
   - [Partial Book Depth Streams](#partial-book-depth-streams)
   - [Diff. Depth Stream](#diff-depth-stream)
   - [How to manage a local order book correctly](#how-to-manage-a-local-order-book-correctly)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Web Socket Streams for Binance (2023-05-24)
+# Web Socket Streams for Binance (2023-12-04)
 
 # General WSS information
 * The base endpoint is: **wss://stream.binance.com:9443** or **wss://stream.binance.com:443**
@@ -38,7 +39,10 @@
 * Combined stream events are wrapped as follows: **{"stream":"\<streamName\>","data":\<rawPayload\>}**
 * All symbols for streams are **lowercase**
 * A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark
-* The websocket server will send a `ping frame` every 3 minutes. If the websocket server does not receive a `pong frame` back from the connection within a 10 minute period, the connection will be disconnected. Unsolicited `pong frames` are allowed.
+* Websocket server will send a `ping frame` every 3 minutes. 
+  * If the websocket server does not receive a `pong frame` back from the connection within a 10 minute period, the connection will be disconnected. 
+  * When you receive a ping, you must send a pong with a copy of ping's payload as soon as possible.
+  * Unsolicited `pong frames` are allowed, but will not prevent disconnection. **It is recommended that the payload for these pong frames are empty.**
 * The base endpoint **wss://data-stream.binance.vision** can be subscribed to receive **only** market data messages. <br> User data stream is **NOT** available from this URL.
 
 ## Websocket Limits
@@ -53,7 +57,10 @@
 ## Live Subscribing/Unsubscribing to streams
 
 * The following data can be sent through the websocket instance in order to subscribe/unsubscribe from streams. Examples can be seen below.
-* The `id` used in the JSON payloads is an unsigned INT used as an identifier to uniquely identify the messages going back and forth.
+* The `id` is used as an identifier to uniquely identify the messages going back and forth. The following formats are accepted:
+  * 64-bit signed integer
+  * alphanumeric strings; max length 36
+  * `null`
 * In the response, if the `result` received is `null` this means the request sent was a success for non-query requests (e.g. Subscribing/Unsubscribing).
 
 ### Subscribe to a stream
@@ -450,6 +457,27 @@ Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection.
   "B":"31.21000000", // best bid qty
   "a":"25.36520000", // best ask price
   "A":"40.66000000"  // best ask qty
+}
+```
+
+## Average Price
+
+Average price streams push changes in the average price over a fixed time interval.
+
+**Stream Name:** \<symbol\>@avgPrice
+
+**Update Speed:** 1000ms
+
+**Payload:**
+
+```javascript
+{
+  "e": "avgPrice",          // Event type
+  "E": 1693907033000,       // Event time
+  "s": "BTCUSDT",           // Symbol
+  "i": "5m",                // Average price interval
+  "w": "25776.86000000",    // Average price
+  "T": 1693907032213        // Last trade time
 }
 ```
 
