@@ -1,4 +1,4 @@
-# Error codes for Binance (2023-12-04)
+# Error codes for Binance (2023-12-08)
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
 ```javascript
