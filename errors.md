@@ -144,6 +144,12 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 #### -1151 DUPLICATE_SYMBOLS
  * Symbol is present multiple times in the list.
 
+#### -1152 INVALID_SBE_HEADER
+* Invalid `X-MBX-SBE` header; expected `<SCHEMA_ID>:<VERSION>`.
+
+#### -1153 UNSUPPORTED_SCHEMA_ID
+* Unsupported SBE schema ID or version specified in the `X-MBX-SBE` header.
+
 #### -2010 NEW_ORDER_REJECTED
  * NEW_ORDER_REJECTED
 

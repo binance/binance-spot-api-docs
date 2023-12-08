@@ -143,6 +143,12 @@
 #### -1151 重复的交易对
  * Symbol is present multiple times in the list.
 
+ #### -1152 无效的SBE报文头部
+* Invalid `X-MBX-SBE` header; expected `<SCHEMA_ID>:<VERSION>`.
+
+#### -1153 不支持的SCHEMA_ID
+* Unsupported SBE schema ID or version specified in the `X-MBX-SBE` header.
+
 #### -2010 新订单被拒绝
  * NEW_ORDER_REJECTED
 
