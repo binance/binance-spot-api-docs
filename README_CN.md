@@ -14,6 +14,7 @@
 [web-socket-api_CN.md](./web-socket-api_CN.md)         | 现货 Websocket API
 [web-socket-streams_CN.md](./web-socket-streams_CN.md) | 现货行情数据流接口的描述
 [user-data-stream_CN.md](./user-data-stream_CN.md)     | 现货用户数据流接口的描述
+[sbe_schemas](./sbe/schemas/) | 现货API的简单二进制编码 (SBE)模式 (Schema)
 &#x0020; |
 [Wallet, Sub-account](https://binance-docs.github.io/apidocs/spot/cn) | 钱包，子账户接口的描述(`/sapi`)
 [Margin, BLVT](https://binance-docs.github.io/apidocs/spot/cn) | 杠杆，杠杆代币接口的描述(`/sapi`)
@@ -33,6 +34,7 @@
 [market_data_only_cn](./faqs/market_data_only_cn.md) | 仅提供市场数据的 API 和 Websocket Streams
 [sor_faq](./faqs/sor_faq_cn.md) | 智能指令路由 (SOR)
 [order_count_decrement](./faqs/order_count_decrement_cn.md) | 现货下单频率限制的更新
+[sbe_faq](./faqs/sbe_faq_cn.md) | 关于在 API 上实施简单二进制编码 (SBE) 的信息
 
 # 更新日志
 
