@@ -1,4 +1,14 @@
-# CHANGELOG for Binance's API (2023-12-04)
+# CHANGELOG for Binance's API (2023-12-08)
+
+### 2023-12-08 (DATE TENTATIVE)
+
+Simple Binary Encoding (SBE) has been added to [SPOT Testnet](https://testnet.binance.vision). 
+
+This will be added to the live exchange at a later date.
+
+For more information on what SBE is, please refer to the [FAQ](../faqs/sbe_faq.md)
+
+---
 
 ## 2023-12-04
 
@@ -71,7 +81,8 @@ User Data Streams
 * Symbol Permissions will only affect order placement, not cancellation.
     * `permissions` still apply to Cancel-Replace orders (i.e. The cancellation won't be allowed if your account does have the permission to place an order using this request.)
 
-----
+
+---
 
 ## 2023-10-19
 
