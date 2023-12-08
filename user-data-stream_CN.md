@@ -1,4 +1,4 @@
-# WebSocket 账户接口(2023-08-08)
+# WebSocket 账户接口(2023-12-04)
 
 # 基本信息
 * 本篇所列出API接口的base url : **https://api.binance.com**
@@ -198,7 +198,7 @@ listenKey | STRING | YES
   <tr>
     <td><code>v</code></td>
     <td>Prevented Match Id</td>
-    <td rowspan="6">只有在因为 STP 导致订单失效时可见。</td>
+    <td rowspan="9">只有在因为 STP 导致订单失效时可见。</td>
     <td><code>"v": 3</code></td>
   </tr>
   <tr>
@@ -226,6 +226,21 @@ listenKey | STRING | YES
     <td>Counter Symbol</td>
     <td><code>"Cs": "BTCUSDT"</code></td>
   </tr>
+  <tr>
+    <td><code>pl</code></td>
+    <td>Prevented Execution Quantity</td>
+    <td><code>"pl":"2.123456"</code></td>
+  </tr>
+  <tr>
+    <td><code>pL</code></td>
+    <td>Prevented Execution Price</td>
+    <td><code>"pL":"0.10000001"</code></td>
+  </tr>
+  <tr>
+    <td><code>pY</code></td>
+    <td>Prevented Execution Quote Qty</td>
+    <td><code>"pY":"0.21234562"</code></td>
+  </tr>  
   <tr>
     <td><code>W</code></td>
     <td>Working Time</td>
