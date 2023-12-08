@@ -5,7 +5,7 @@
 
 简单二进制编码 (SBE) 已经在[现货测试网](https://testnet.binance.vision)上线。
 生产系统会在随后支持。
-更多关于SBE的信息, 请参考[常见问题解答 (FAQ)](../faqs/sbe_faq_cn.md)
+更多关于SBE的信息, 请参考[常见问题解答 (FAQ)](./faqs/sbe_faq_cn.md)
 
 ---
 
