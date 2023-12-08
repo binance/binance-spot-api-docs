@@ -16,7 +16,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# User Data Streams for Binance (2023-08-08)
+# User Data Streams for Binance (2023-12-04)
 # General WSS information
 * The base API endpoint is: **https://api.binance.com**
 * A User Data Stream `listenKey` is valid for 60 minutes after creation.
@@ -209,7 +209,7 @@ For additional information on these parameters, please refer to the [Spot Glossa
   <tr>
     <td><code>v</code></td>
     <td>Prevented Match Id</td>
-    <td rowspan="6">Appears only for orders that expired due to STP.</td>
+    <td rowspan="9">Appears only for orders that expired due to STP.</td>
     <td><code>"v": 3</code></td>
   </tr>
   <tr>
@@ -237,6 +237,21 @@ For additional information on these parameters, please refer to the [Spot Glossa
     <td>Counter Symbol</td>
     <td><code>"Cs": "BTCUSDT"</code></td>
   </tr>
+  <tr>
+    <td><code>pl</code></td>
+    <td>Prevented Execution Quantity</td>
+    <td><code>"pl":"2.123456"</code></td>
+  </tr>
+  <tr>
+    <td><code>pL</code></td>
+    <td>Prevented Execution Price</td>
+    <td><code>"pL":"0.10000001"</code></td>
+  </tr>
+  <tr>
+    <td><code>pY</code></td>
+    <td>Prevented Execution Quote Qty</td>
+    <td><code>"pY":"0.21234562"</code></td>
+  </tr>  
   <tr>
     <td><code>W</code></td>
     <td>Working Time</td>
