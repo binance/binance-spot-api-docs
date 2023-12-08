@@ -6,7 +6,7 @@ Simple Binary Encoding (SBE) has been added to [SPOT Testnet](https://testnet.bi
 
 This will be added to the live exchange at a later date.
 
-For more information on what SBE is, please refer to the [FAQ](../faqs/sbe_faq.md)
+For more information on what SBE is, please refer to the [FAQ](./faqs/sbe_faq.md)
 
 ---
 
