@@ -12,6 +12,7 @@ Name | Description
 [web-socket-api.md](./web-socket-api.md)          | Spot WebSocket API
 [web-socket-streams.md](./web-socket-streams.md)  | Spot Market Data WebSocket streams
 [user-data-stream.md](./user-data-stream.md)      | Spot User Data WebSocket streams
+[sbe_schemas](./sbe/schemas/)   | Spot Simple Binary Encoding (SBE) schemas
 &#x0020; |
 [Wallet, Sub-account](https://binance-docs.github.io/apidocs/spot/en) | Details on Wallet and sub-accounts endpoints(`/sapi`)
 [Margin, BLVT](https://binance-docs.github.io/apidocs/spot/en) | Details on Margin and BLVT endpoints(`/sapi`)
@@ -31,6 +32,7 @@ Name | Description
 [market-data-only](./faqs/market_data_only.md) | Information on our market data only API and websocket streams.
 [sor_faq](./faqs/sor_faq.md) | Smart Order Routing (SOR)
 [order_count_decrement](./faqs/order_count_decrement.md) | Updates to the Spot Order Count Limit Rules.
+[sbe_faq](./faqs/sbe_faq.md) | Information on the implementation of Simple Binary Encoding (SBE) on the API
 
 # Change log
 

@@ -1,4 +1,4 @@
-# 错误代码汇总 (2023-03-13)
+# 错误代码汇总 (2023-12-08)
 币安Rest接口(包括wapi)返回的错误包含两部分，错误码与错误信息. 错误码是大类，一个错误码可能对应多个不同的错误信息。
 以下是一个完整错误码实例
 ```javascript
@@ -142,6 +142,12 @@
 
 #### -1151 重复的交易对
  * Symbol is present multiple times in the list.
+
+ #### -1152 无效的SBE报文头部
+* Invalid `X-MBX-SBE` header; expected `<SCHEMA_ID>:<VERSION>`.
+
+#### -1153 不支持的SCHEMA_ID
+* Unsupported SBE schema ID or version specified in the `X-MBX-SBE` header.
 
 #### -2010 新订单被拒绝
  * NEW_ORDER_REJECTED

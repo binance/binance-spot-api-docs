@@ -1,0 +1,10 @@
+{
+  "environment": "TESTNET",
+  "latestSchema": {
+    "id": 1,
+    "version": 0,
+    "releaseDate": "2023-12-08"
+  },
+  "deprecatedSchemas": [],
+  "retiredSchemas": []
+}

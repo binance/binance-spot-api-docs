@@ -1,49 +1,13 @@
-# 更新日志 (2023-12-04)
+# 更新日志 (2023-12-08)
 
-## 2023-10-19
 
-**从 2023-10-19 00:00 UTC 开始生效**
+## 2023-12-08
 
-* 调高如下接口的请求权重:
+简单二进制编码 (SBE) 已经在[现货测试网](https://testnet.binance.vision)上线。
+生产系统会在随后支持。
+更多关于SBE的信息, 请参考[常见问题解答 (FAQ)](../faqs/sbe_faq_cn.md)
 
-<table>
-    <tr>
-        <th>REST API</th>
-        <th>WebSocket API</th>
-        <th>条件 </th>
-        <th>之前的权重</th>
-        <th>调整后权重</th>
-    </tr>
-    <tr>
-        <td width="200px"><code>GET /api/v3/trades</code></td>
-        <td><code>trades.recent</code></td>
-        <td>N/A</td>
-        <td>2</td>
-        <td>10</td>
-    </tr>
-    <tr >
-       <td rowspan="4"><code>GET /api/v3/depth</code></td>
-       <td rowspan="4"><code>depth</code></td>
-       <td><b>Limit 1-100</b></td>
-       <td>2</td>
-       <td>5</td>
-    </tr>
-    <tr>
-        <td width="100px"><b>Limit 101-500</b></td>
-        <td>10</td>
-        <td>25</td>
-    </tr>
-    <tr>
-        <td><b>Limit 501-1000</b></td>
-        <td>20</td>
-        <td>50</td>
-    </tr>
-    <tr>
-        <td><b>Limit 1001-5000</b></td>
-        <td>100</td>
-        <td>250</td>
-    </tr>
-</table>
+---
 
 ## 2023-12-04
 
@@ -113,6 +77,54 @@ User Data Streams
 
 * 交易对权限将仅影响下单，而不影响取消订单。
     * `permissions`仍然适用于撤消挂单再下单（Cancel-Replace orders）（比如，如果您的账户有使用此请求下单的权限，则将不允许取消操作）。
+
+
+---
+
+## 2023-10-19
+
+**从 2023-10-19 00:00 UTC 开始生效**
+
+* 调高如下接口的请求权重:
+
+<table>
+    <tr>
+        <th>REST API</th>
+        <th>WebSocket API</th>
+        <th>条件 </th>
+        <th>之前的权重</th>
+        <th>调整后权重</th>
+    </tr>
+    <tr>
+        <td width="200px"><code>GET /api/v3/trades</code></td>
+        <td><code>trades.recent</code></td>
+        <td>N/A</td>
+        <td>2</td>
+        <td>10</td>
+    </tr>
+    <tr >
+       <td rowspan="4"><code>GET /api/v3/depth</code></td>
+       <td rowspan="4"><code>depth</code></td>
+       <td><b>Limit 1-100</b></td>
+       <td>2</td>
+       <td>5</td>
+    </tr>
+    <tr>
+        <td width="100px"><b>Limit 101-500</b></td>
+        <td>10</td>
+        <td>25</td>
+    </tr>
+    <tr>
+        <td><b>Limit 501-1000</b></td>
+        <td>20</td>
+        <td>50</td>
+    </tr>
+    <tr>
+        <td><b>Limit 1001-5000</b></td>
+        <td>100</td>
+        <td>250</td>
+    </tr>
+</table>
 
 
 ---
