@@ -39,7 +39,7 @@ curl -sX GET -H "Accept: application/sbe" -H "X-MBX-SBE: 1:0" 'https://api.binan
 
 ## SBE 模式
 
-* 将被使用的模式 (schema) 会被保存在此仓库 (repository) 中。
+* 将被使用的模式 (schema) 会被保存在此仓库 (repository) 中，[请看这里](https://github.com/binance/binance-spot-api-docs/tree/master/sbe/schemas)。
 * 对于模式的任何更新将会被记录在[更改日志](../CHANGELOG_CN.md)中。
 
 **关于对旧版本的支持：**
@@ -62,7 +62,7 @@ curl -sX GET -H "Accept: application/sbe" -H "X-MBX-SBE: 1:0" 'https://api.binan
 		* 模式 id 2 version 0 此时已被废止，但还可以再被使用至少另外6个月。
 * HTTP将在针对 `X-MBX-SBE header` 中已被废止的 `SBE` 模式版本请求的响应中包含一个 `X-MBX-SBE-DEPRECATED` 报文头 。
 * 如果请求指定的 `<ID>:<VERSION>` 已被停用，请求将以 `HTTP 400` 失败而告终。
-* 关于模式生命周期的 `JSON` 文件将被保存在此仓库中。这个文件包含了关于实时交易所和现货测试网的最新、被废止和被停用模式的具体发生日期。<br> 以下是一个基于上述假设时间线的 `JSON` 示例：
+* 关于模式生命周期的 `JSON` 文件将被保存在此仓库中，[请看这里](https://github.com/binance/binance-spot-api-docs/tree/master/sbe/schemas)。这个文件包含了关于实时交易所和现货测试网的最新、被废止和被停用模式的具体发生日期。<br> 以下是一个基于上述假设时间线的 `JSON` 示例：
 
 ```json
 {
@@ -117,8 +117,8 @@ curl -sX GET -H "Accept: application/sbe" -H "X-MBX-SBE: 1:0" 'https://api.binan
 ### 模式文件中的自定义字段属性
 
 在模式文件中添加了一些以 `mbx:` 为前缀的字段属性，供文档使用：
-- `mbx:jsonPath`：包含了 `JSON` 响应中相应字段的名称
 - `mbx:exponent`：指向对应于尾数字段的指数域
+- `mbx:jsonPath`：包含了 `JSON` 响应中相应字段的名称
 - `mbx:jsonValue`: 包含了 `JSON` 响应中等价 `ENUM` 值的名称
 
 

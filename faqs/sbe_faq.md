@@ -39,7 +39,7 @@ Currently only REST API for SPOT supports SBE.
 
 ## SBE Schema
 
-* The schema to use both for the live exchange and SPOT Testnet will be saved in this repository. 
+* The schema to use both for the live exchange and SPOT Testnet will be saved in this repository [here](https://github.com/binance/binance-spot-api-docs/tree/master/sbe/schemas). 
 * Any updates to the schema will be noted in the [CHANGELOG](../CHANGELOG.md). 
 
 **Regarding Legacy support:**
@@ -62,7 +62,7 @@ Currently only REST API for SPOT supports SBE.
 		* Schema id 2 version 0 is deprecated, but can still be used for at least another 6 months.
 * HTTP responses will contain a `X-MBX-SBE-DEPRECATED` header for requests specifying a deprecated `<ID>:<VERSION>` in their `X-MBX-SBE` header.
 * Requests specifying a retired `<ID>:<VERSION>` will fail with HTTP 400.
-* JSON file regarding the schema life-cycle with the dates of the latest, deprecated, and retired schemas for both the live exchange and SPOT Testnet will be saved in this repository. <br> Below is an example JSON based on the hypothetical timeline above:
+* JSON file regarding the schema life-cycle with the dates of the latest, deprecated, and retired schemas for both the live exchange and SPOT Testnet will be saved in this repository [here](https://github.com/binance/binance-spot-api-docs/tree/master/sbe/schemas). <br> Below is an example JSON based on the hypothetical timeline above:
 
 ```json
 {
@@ -117,8 +117,8 @@ Unlike the FIX SBE specification, decimal fields have their mantissa and exponen
 ### Custom field attributes in the schema file
 
 A few field attributes prefixed with `mbx:` were added to the schema file for documentation purposes:
-- `mbx:jsonPath`: Contains the name of the equivalent field in the JSON response
 - `mbx:exponent`: Points to the exponent field corresponding to the mantissa field
+- `mbx:jsonPath`: Contains the name of the equivalent field in the JSON response
 - `mbx:jsonValue`: Contains the name of the equivalent ENUM value in the JSON response
 
 
