@@ -1933,11 +1933,11 @@ computeCommissionRates | BOOLEAN      | NO           | 默认值: `false`
 
 ```javascript
 {
-  "standardCommissionForOrder": {   // 根据订单的角色（例如，Maker或Taker）确定的佣金费率
+  "standardCommissionForOrder": {   // 订单交易的标准佣金率
     "maker": "0.00000112",
     "taker": "0.00000114",
   },
-  "taxCommissionForOrder": {        // 根据订单的角色（例如，Maker或Taker）确定的税收扣除率
+  "taxCommissionForOrder": {        // 订单交易的税率
     "maker": "0.00000112",
     "taker": "0.00000114",
   },
@@ -1945,7 +1945,7 @@ computeCommissionRates | BOOLEAN      | NO           | 默认值: `false`
     "enabledForAccount": true,
     "enabledForSymbol": true,
     "discountAsset": "BNB",
-    "discount": "0.25"             // 以BNB支付时，标准佣金按此比率折扣。
+    "discount": "0.25000000"        // 当用BNB支付佣金时，在标准佣金上按此比率打折
   }
 }
 
@@ -2905,11 +2905,11 @@ computeCommissionRates | BOOLEAN      | NO            | 默认值: `false`
 
 ```javascript
 {
-  "standardCommissionForOrder": {  // 根据订单的角色（例如，Maker或Taker）确定的佣金费率。
+  "standardCommissionForOrder": {  // 订单交易的标准佣金率。
     "maker": "0.00000112",
     "taker": "0.00000114",
   },
-  "taxCommissionForOrder": {       // 根据订单的角色（例如，Maker或Taker）确定的税收扣除率。
+  "taxCommissionForOrder": {       // 订单交易的税率。
     "maker": "0.00000112",
     "taker": "0.00000114",
   },
@@ -2917,7 +2917,7 @@ computeCommissionRates | BOOLEAN      | NO            | 默认值: `false`
     "enabledForAccount": true,
     "enabledForSymbol": true,
     "discountAsset": "BNB",
-    "discount": "0.25"             // 以BNB支付时，标准佣金按此比率折扣。
+    "discount": "0.25000000"       // 当用BNB支付佣金时，在标准佣金上按此比率打折。
   }
 }
 ```
@@ -3226,13 +3226,13 @@ symbol        | STRING | YES          |
 ```javascript
 {
   "symbol": "BTCUSDT",
-  "standardCommission": {          // 根据订单角色的不同，订单的佣金费率。
+  "standardCommission": {          // 订单交易的标准佣金率。
     "maker": "0.00000010",
     "taker": "0.00000020",
     "buyer": "0.00000030",
     "seller": "0.00000040" 
   },
-  "taxCommission": {              // 根据订单的角色，订单的税收扣除率。
+  "taxCommission": {              // 订单交易的税率。
     "maker": "0.00000112",
     "taker": "0.00000114",
     "buyer": "0.00000118",
@@ -3242,7 +3242,7 @@ symbol        | STRING | YES          |
     "enabledForAccount": true,
     "enabledForSymbol": true,
     "discountAsset": "BNB",
-    "discount": "0.25"            // 以BNB支付时，标准佣金按此比率折扣。
+    "discount": "0.2500000"       // 当用BNB支付佣金时，在标准佣金上按此比率打折。
   }
 }
 ```
