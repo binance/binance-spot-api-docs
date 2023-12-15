@@ -27,6 +27,7 @@ Name | Description
 Name | Description
 ------------ | ------------
 [spot_glossary](./faqs/spot_glossary.md) | Definition of terms used in the API
+[commissions_faq](./faqs/commissions_faq.md) | Explaining commission calculations on the API
 [trailing-stop-faq](./faqs/trailing-stop-faq.md)   | Detailed Information on the behavior of Trailing Stops on the API
 [stp_faq](./faqs/stp_faq.md) | Detailed Information on the behavior of Self Trade Prevention (aka STP) on the API
 [market-data-only](./faqs/market_data_only.md) | Information on our market data only API and websocket streams.
