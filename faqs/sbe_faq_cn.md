@@ -108,7 +108,7 @@ curl -sX GET -H "Accept: application/sbe" -H "X-MBX-SBE: 1:0" 'https://api.binan
  $ cd simple-binary-encoding
  $ ./gradlew
 ```
-3. 运行 `SbeTool` 代码生成器。（请参考这里分别使用[Java](https://github.com/binance/binance-sbe-java-sample-app) 和 [C++](https://github.com/binance/binance-sbe-cpp-sample-app) 解码交易所信息 payload 的样本。）
+3. 运行 `SbeTool` 代码生成器。（请参考这里分别使用[Java](https://github.com/binance/binance-sbe-java-sample-app), [C++](https://github.com/binance/binance-sbe-cpp-sample-app) 和 [Rust](https://github.com/binance/binance-sbe-rust-sample-app) 解码交易所信息 payload 的样本。）
 
 ### 十进制字段编码
 
