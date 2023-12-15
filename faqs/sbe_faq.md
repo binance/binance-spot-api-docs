@@ -108,7 +108,7 @@ Currently only REST API for SPOT supports SBE.
  $ cd simple-binary-encoding
  $ ./gradlew
 ```
-3. Run the SbeTool code generator. (Here are samples for [Java](https://github.com/binance/binance-sbe-java-sample-app) and [C++](https://github.com/binance/binance-sbe-cpp-sample-app) decoding the payload from Exchange Information.)
+3. Run the SbeTool code generator. (Here are samples for [Java](https://github.com/binance/binance-sbe-java-sample-app), [C++](https://github.com/binance/binance-sbe-cpp-sample-app) and [Rust](https://github.com/binance/binance-sbe-rust-sample-app) decoding the payload from Exchange Information.)
 
 ### Decimal field encoding
 
