@@ -428,7 +428,7 @@ params['timestamp'] = timestamp
 # Sign the request
 payload = '&'.join([f'{param}={value}' for param, value in params.items()])
 signature = base64.b64encode(private_key.sign(payload.encode('ASCII')))
-params['signature'] = signature
+params['signature'] = signature.decode()
 
 # Send the request
 headers = {
