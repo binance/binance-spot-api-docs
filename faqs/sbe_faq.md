@@ -114,6 +114,10 @@ Currently only REST API for SPOT supports SBE.
 
 Unlike the FIX SBE specification, decimal fields have their mantissa and exponent fields encoded separately as primitive fields in order to minimize payload size and the number of encoded fields within messages.
 
+### Timestamp field encoding
+
+Timestamps in SBE responses are in microseconds. This differs from JSON responses, which contain millisecond timestamps.
+
 ### Custom field attributes in the schema file
 
 A few field attributes prefixed with `mbx:` were added to the schema file for documentation purposes:
