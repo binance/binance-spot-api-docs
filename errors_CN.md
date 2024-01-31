@@ -137,6 +137,9 @@
  * Invalid JSON Request
  * JSON sent for parameter '%s' is not valid
 
+#### -1139 无效的Ticker类型
+ * Invalid ticker type.
+
 #### -1145 无效的取消限制
  * `cancelRestrictions` has to be either `ONLY_NEW` or `ONLY_PARTIALLY_FILLED`.
 

@@ -138,6 +138,9 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * Invalid JSON Request
  * JSON sent for parameter '%s' is not valid
 
+#### -1139 INVALID_TICKER_TYPE
+ * Invalid ticker type.
+
 #### -1145 INVALID_CANCEL_RESTRICTIONS
  * `cancelRestrictions` has to be either `ONLY_NEW` or `ONLY_PARTIALLY_FILLED`.
 
