@@ -13,29 +13,61 @@ This implementation is based on the FIX SBE specification.
 
 ## How to get an SBE response
 
+### For REST API:
+
 * The `Accept` header must include `application/sbe`.
 * Provide the schema ID and version in the `X-MBX-SBE` header as `<ID>:<VERSION>`.
 
-Sample request:
+Sample request (REST):
 
 ```
 curl -sX GET -H "Accept: application/sbe" -H "X-MBX-SBE: 1:0" 'https://api.binance.com/api/v3/exchangeInfo?symbol=BTCUSDT'
 ```
-
 **Notes:**
 
 * If you provide only `application/sbe` in the Accept header:
-	* If SBE is not enabled in the exchange, you will receive an HTTP **406 Not Acceptable**.
-	* If the `<ID>:<VERSION>` provided in the `X-MBX-SBE` header is malformed or invalid, the response will be an SBE-encoded error.
-	* If the `X-MBX-SBE` header is missing, the response will be an SBE-encoded error.
+    * If SBE is not enabled in the exchange, you will receive an HTTP **406 Not Acceptable**.
+    * If the `<ID>:<VERSION>` provided in the `X-MBX-SBE` header is malformed or invalid, the response will be an SBE-encoded error.
+    * If the `X-MBX-SBE` header is missing, the response will be an SBE-encoded error.
 * If you provide both `application/sbe` and `application/json` in the Accept header:
-	* If SBE is not enabled in the exchange, the response will fall back to JSON.
-	* If the `<ID>:<VERSION>` provided in the `X-MBX-SBE` header is malformed or invalid, the response will fall back to JSON.
-	* If the `X-MBX-SBE` header is missing, the response will fall back to JSON.
+    * If SBE is not enabled in the exchange, the response will fall back to JSON.
+    * If the `<ID>:<VERSION>` provided in the `X-MBX-SBE` header is malformed or invalid, the response will fall back to JSON.
+    * If the `X-MBX-SBE` header is missing, the response will fall back to JSON.
+
+### For WebSocket API:
+
+* In the connection URL, add `responseFormat=sbe`.
+* Provide the schema ID and version in the parameters `sbeSchemaId=<SCHEMA_ID>` and `sbeSchemaVersion=<SCHEMA_VERSION>` respectively. 
+
+Sample request (WebSocket):
+
+```bash
+method="exchangeInfo"
+params='{"symbol":"BTCUSDT"}'
+
+request=$( jq -n \
+        --arg id "$id" \
+        --arg method "$method" \
+        --argjson params "$params" \
+        '{id: $id, method: $method, params: $params}' )
+
+response=$(echo $request | websocat -n1 'wss://ws-api.binance.com:443/ws-api/v3?responseFormat=sbe&sbeSchemaId=1&sbeSchemaVersion=0')
+```
+
+**Notes:**
+
+* If you provide only `responseFormat=sbe` in the connection URL:
+    * If SBE is not enabled in the exchange, the response will be HTTP 400.
+    * If the `sbeSchemaId=<SCHEMA_ID>` or `sbeSchemaVersion=<SCHEMA_VERSION>` are malformed or invalid, the response will be HTTP 400.
+* If you provide both `responseFormat=sbe` and `responseFormat=json`, the response will be HTTP 400.
+* All error responses during the HTTP handshake are encoded as JSON with the `Content-Type` header set to `application/json;charset=UTF-8`.
+* Once a WebSocket session has been successfully established with SBE enabled, all method responses within that session are encoded in SBE, even in the event SBE becomes disabled. 
+    * This means that if SBE is disabled while your WebSocket connection is active, you will receive an SBE-encoded "SBE is not enabled" error in response to any subsequent request..
+* As of writing, we do not recommend using `websocat` to send any request as we have observed issues in how it decodes binary frames. The sample above is only used for reference to show the URL to get an SBE response.
 
 ## Supported APIs
 
-Currently only REST API for SPOT supports SBE.
+REST API and WebSocket API for SPOT support SBE.
 
 ## SBE Schema
 
@@ -61,7 +93,8 @@ Currently only REST API for SPOT supports SBE.
 		* Schema id 1 version 1 is retired.
 		* Schema id 2 version 0 is deprecated, but can still be used for at least another 6 months.
 * HTTP responses will contain a `X-MBX-SBE-DEPRECATED` header for requests specifying a deprecated `<ID>:<VERSION>` in their `X-MBX-SBE` header.
-* Requests specifying a retired `<ID>:<VERSION>` will fail with HTTP 400.
+* For WebSocket responses, the field `sbeSchemaIdVersionDeprecated` will be set to `true` for requests specifying a deprecated `sbeSchemaId` and `sbeSchemaVersion` in their connection URL.
+* Requests specifying a retired `<ID>:<VERSION>` (REST API) or `sbeSchemaId` and `sbeSchemaVersion`  (WebSocket API) will fail with HTTP 400.
 * JSON file regarding the schema life-cycle with the dates of the latest, deprecated, and retired schemas for both the live exchange and SPOT Testnet will be saved in this repository [here](https://github.com/binance/binance-spot-api-docs/tree/master/sbe/schemas). <br> Below is an example JSON based on the hypothetical timeline above:
 
 ```json

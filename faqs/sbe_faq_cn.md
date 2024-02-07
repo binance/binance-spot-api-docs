@@ -13,10 +13,12 @@ SBE 是一种用于实现低延迟的序列化格式。
 
 ## 如何获取 SBE 响应
 
+### REST API:
+
 * `Accept` 报文头必须包含 `application/sbe`。
 * 在 `X-MBX-SBE` 报文头中以 `<ID>:<VERSION>` 的形式提供 `schema ID` 和 `version`。
 
-样本请求：
+样本请求(REST):
 
 ```
 curl -sX GET -H "Accept: application/sbe" -H "X-MBX-SBE: 1:0" 'https://api.binance.com/api/v3/exchangeInfo?symbol=BTCUSDT'
@@ -33,9 +35,42 @@ curl -sX GET -H "Accept: application/sbe" -H "X-MBX-SBE: 1:0" 'https://api.binan
 	* 如果在 `X-MBX-SBE` 报文头中提供的 XML 模式是属于格式错误或不正确的情况，那么响应将会被回退到 `JSON`。
 	* 如果 `X-MBX-SBE` 报文头缺失，那么响应将会被回退到 `JSON`。	
 
+
+### WebSocket API:
+
+* 在请求的URL中添加 `responseFormat=sbe`。
+* 添加schema ID 和 version 到参数 `sbeSchemaId=<SCHEMA_ID>` 和 `sbeSchemaVersion=<SCHEMA_VERSION>`。
+
+样本请求 (WebSocket):
+
+```bash
+method="exchangeInfo"
+params='{"symbol":"BTCUSDT"}'
+
+request=$( jq -n \
+        --arg id "$id" \
+        --arg method "$method" \
+        --argjson params "$params" \
+        '{id: $id, method: $method, params: $params}' )
+
+response=$(echo $request | websocat -n1 'wss://ws-api.binance.com:443/ws-api/v3?responseFormat=sbe&sbeSchemaId=1&sbeSchemaVersion=0')
+```
+
+**注意：**
+
+* 如果你只在连接URL中添加 `responseFormat=sbe` :
+    * 如果交易所没有开启 SBE，请求返回 HTTP 400.
+    * 如果 `sbeSchemaId=<SCHEMA_ID>` 或者 `sbeSchemaVersion=<SCHEMA_VERSION>` 格式不正确或者无效，请求返回 HTTP 400.
+* 如果你同时提供 `responseFormat=sbe` 和 `responseFormat=json`, 请求返回 HTTP 400.
+* 在HTTP握手期间的所有错误响应都编码为JSON，`Content-Type`头设置为`application/json;charset=UTF-8`.
+* 一旦成功建立了启用了SBE的WebSocket会话，在该会话中的所有方法响应都编码为SBE，即使在SBE被禁用的情况下也是如此。
+    * 这意味着，如果在您的WebSocket连接处于活动状态时禁用了SBE，那么在对您的后续请求做出响应时，您将会收到一个被SBE编码了的“SBE未启用”错误。
+* 就目前而言，我们不建议使用`websocat`发送任何请求，因为我们观察到了它解码二进制帧的问题。上面的样本仅用作参考，显示获取SBE响应的URL。
+
+
 ## 支持的 APIs
 
-目前只有用于现货交易的 REST API 支持 `SBE`。
+目前现货交易的 REST API 和 WebSocket API 支持 `SBE`。
 
 ## SBE 模式
 
@@ -61,7 +96,8 @@ curl -sX GET -H "Accept: application/sbe" -H "X-MBX-SBE: 1:0" 'https://api.binan
 		* 模式 id 1 version 1 已被停用。
 		* 模式 id 2 version 0 此时已被废止，但还可以再被使用至少另外6个月。
 * HTTP将在针对 `X-MBX-SBE header` 中已被废止的 `SBE` 模式版本请求的响应中包含一个 `X-MBX-SBE-DEPRECATED` 报文头 。
-* 如果请求指定的 `<ID>:<VERSION>` 已被停用，请求将以 `HTTP 400` 失败而告终。
+* 对于WebSocket响应，如果在其连接URL中指定了已弃用的`sbeSchemaId`和`sbeSchemaVersion`，`sbeSchemaIdVersionDeprecated`字段将被设置为`true`。
+* 指定已废止的`<ID>:<VERSION>`（REST API）或`sbeSchemaId`和`sbeSchemaVersion` （WebSocket API）的请求将会返回HTTP 400错误。
 * 关于模式生命周期的 `JSON` 文件将被保存在此仓库中，[请看这里](https://github.com/binance/binance-spot-api-docs/tree/master/sbe/schemas)。这个文件包含了关于实时交易所和现货测试网的最新、被废止和被停用模式的具体发生日期。<br> 以下是一个基于上述假设时间线的 `JSON` 示例：
 
 ```json
