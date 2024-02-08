@@ -44,6 +44,7 @@ curl -sX GET -H "Accept: application/sbe" -H "X-MBX-SBE: 1:0" 'https://api.binan
 样本请求 (WebSocket):
 
 ```bash
+id=$(date +%s%3N)
 method="exchangeInfo"
 params='{"symbol":"BTCUSDT"}'
 

@@ -42,6 +42,7 @@ curl -sX GET -H "Accept: application/sbe" -H "X-MBX-SBE: 1:0" 'https://api.binan
 Sample request (WebSocket):
 
 ```bash
+id=$(date +%s%3N)
 method="exchangeInfo"
 params='{"symbol":"BTCUSDT"}'
 
@@ -62,7 +63,7 @@ response=$(echo $request | websocat -n1 'wss://ws-api.binance.com:443/ws-api/v3?
 * If you provide both `responseFormat=sbe` and `responseFormat=json`, the response will be HTTP 400.
 * All error responses during the HTTP handshake are encoded as JSON with the `Content-Type` header set to `application/json;charset=UTF-8`.
 * Once a WebSocket session has been successfully established with SBE enabled, all method responses within that session are encoded in SBE, even in the event SBE becomes disabled. 
-    * This means that if SBE is disabled while your WebSocket connection is active, you will receive an SBE-encoded "SBE is not enabled" error in response to any subsequent request..
+    * This means that if SBE is disabled while your WebSocket connection is active, you will receive an SBE-encoded "SBE is not enabled" error in response to any subsequent request.
 * As of writing, we do not recommend using `websocat` to send any request as we have observed issues in how it decodes binary frames. The sample above is only used for reference to show the URL to get an SBE response.
 
 ## Supported APIs

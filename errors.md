@@ -1,4 +1,4 @@
-# Error codes for Binance (2023-12-08)
+# Error codes for Binance (2024-02-08)
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
 ```javascript
@@ -138,9 +138,6 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * Invalid JSON Request
  * JSON sent for parameter '%s' is not valid
 
-#### -1139 INVALID_TICKER_TYPE
- * Invalid ticker type.
-
 #### -1145 INVALID_CANCEL_RESTRICTIONS
  * `cancelRestrictions` has to be either `ONLY_NEW` or `ONLY_PARTIALLY_FILLED`.
 
@@ -152,6 +149,9 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 #### -1153 UNSUPPORTED_SCHEMA_ID
 * Unsupported SBE schema ID or version specified in the `X-MBX-SBE` header.
+
+#### -1155 SBE_DISABLED
+* SBE is not enabled.
 
 #### -2010 NEW_ORDER_REJECTED
  * NEW_ORDER_REJECTED

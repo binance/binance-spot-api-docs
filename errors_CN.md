@@ -1,4 +1,4 @@
-# 错误代码汇总 (2023-12-08)
+# 错误代码汇总 (2024-02-08)
 币安Rest接口(包括wapi)返回的错误包含两部分，错误码与错误信息. 错误码是大类，一个错误码可能对应多个不同的错误信息。
 以下是一个完整错误码实例
 ```javascript
@@ -137,9 +137,6 @@
  * Invalid JSON Request
  * JSON sent for parameter '%s' is not valid
 
-#### -1139 无效的Ticker类型
- * Invalid ticker type.
-
 #### -1145 无效的取消限制
  * `cancelRestrictions` has to be either `ONLY_NEW` or `ONLY_PARTIALLY_FILLED`.
 
@@ -151,6 +148,9 @@
 
 #### -1153 不支持的SCHEMA_ID
 * Unsupported SBE schema ID or version specified in the `X-MBX-SBE` header.
+
+#### -1155 SBE 没有开启
+* SBE is not enabled.
 
 #### -2010 新订单被拒绝
  * NEW_ORDER_REJECTED
