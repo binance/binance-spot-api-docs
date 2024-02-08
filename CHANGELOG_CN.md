@@ -1,6 +1,6 @@
 # 更新日志 (2024-02-08)
 
-## 2024-02-07 
+## 2024-02-08
 
 现货的 WebSocket API 现在在[测试网](https://testnet.binance.vision)上支持简单二进制编码(SBE)。
 
