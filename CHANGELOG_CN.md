@@ -1,5 +1,18 @@
-# 更新日志 (2023-12-08)
+# 更新日志 (2024-02-08)
 
+## 2024-02-07 
+
+现货的 WebSocket API 现在在[测试网](https://testnet.binance.vision)上支持简单二进制编码(SBE)。
+
+SBE 模式已经更新了 WebSocket API 元数据，但并没有增加 `schemaId` 或者 `version`。
+
+* 仅使用 REST API 的用户可以继续使用带有 git 提交哈希[`128b94b2591944a536ae427626b795000100cf1d`](https://github.com/binance/binance-spot-api-docs/commit/128b94b2591944a536ae427626b795000100cf1d/sbe/schemas/spot_1_0.xml)的SBE模式，或者更新到新提交的SBE模式。
+
+* 希望使用 WebSocket API 的用户，需要更新到最新的 SBE 模式，git 提交哈希 [`becd4d44a09d94821d2dc761ba9197aae8b495c3`](https://github.com/binance/binance-spot-api-docs/blob/becd4d44a09d94821d2dc761ba9197aae8b495c3/sbe/schemas/spot_1_0.xml)。
+
+SBE 的 [FAQ](./faqs/sbe_faq_cn.md) 已经更新。
+
+---
 
 ## 2023-12-08
 

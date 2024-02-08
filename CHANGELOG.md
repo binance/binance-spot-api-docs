@@ -1,4 +1,18 @@
-# CHANGELOG for Binance's API (2023-12-08)
+# CHANGELOG for Binance's API (2024-02-08)
+
+## 2024-02-07
+
+The SPOT WebSocket API can now support SBE on [SPOT Testnet](https://testnet.binance.vision).
+
+The SBE schema has been updated with WebSocket API metadata without incrementing either `schemaId` or `version`.
+
+Users using only the REST API may continue to use the SBE schema with git commit hash [`128b94b2591944a536ae427626b795000100cf1d`](https://github.com/binance/binance-spot-api-docs/blob/128b94b2591944a536ae427626b795000100cf1d/sbe/schemas/spot_1_0.xml) or update to the newly-committed SBE schema.
+
+Users who want to use the WebSocket API must use the [newly-committed SBE schema](https://github.com/binance/binance-spot-api-docs/blob/becd4d44a09d94821d2dc761ba9197aae8b495c3/sbe/schemas/spot_1_0.xml).
+
+The [FAQ](./faqs/sbe_faq.md) for SBE has been updated.
+
+---
 
 ## 2023-12-08 
 
