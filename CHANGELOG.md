@@ -1,6 +1,6 @@
 # CHANGELOG for Binance's API (2024-02-08)
 
-## 2024-02-07
+## 2024-02-08
 
 The SPOT WebSocket API can now support SBE on [SPOT Testnet](https://testnet.binance.vision).
 
