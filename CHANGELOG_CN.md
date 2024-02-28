@@ -6,7 +6,7 @@
 
 **将于 2024 年 3 月 5 日生效。**
 
-简单二进制编码 (SBE) 已经部署到现货的Rest API 和  WebSocket API 生产系统上。
+简单二进制编码 (SBE) 将部署到现货的 Rest API 和  WebSocket API 生产系统上。
 
 更多关于SBE的信息, 请参考[常见问题解答 (FAQ)](./faqs/sbe_faq_cn.md)
 
