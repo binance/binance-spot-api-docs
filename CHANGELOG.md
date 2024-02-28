@@ -1,4 +1,15 @@
-# CHANGELOG for Binance's API (2024-02-08)
+
+# CHANGELOG for Binance's API (2024-02-28)
+
+## 2024-02-28
+
+**This will take effect on March 5, 2024.** 
+
+Simple Binary Encoding (SBE) will be added to the live exchange, both for the Rest API and WebSocket API.
+
+For more information on SBE, please refer to the [FAQ](./faqs/sbe_faq.md)
+
+---
 
 ## 2024-02-08
 
