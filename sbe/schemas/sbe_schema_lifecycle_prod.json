@@ -1,10 +1,6 @@
 {
   "environment": "PROD",
-  "latestSchema": {
-    "id": 1,
-    "version": 0,
-    "releaseDate": "2024-03-05"
-  },
+  "latestSchema": null,
   "deprecatedSchemas": [],
   "retiredSchemas": []
 }
