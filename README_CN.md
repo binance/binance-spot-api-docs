@@ -28,8 +28,7 @@
 
 名称 | 描述
 ------------ | ------------
-[spot_glossary_cn](./faqs/spot_glossary_cn.md) | 现货交易 API 术语表
-[commissions_faq_cn](./faqs/commissions_faq_cn.md) | 解释 API 上所使用的佣金计算方式
+[spot_glossary_cn](./faqs/spot_glossary_cn.md) | 现货交易API术语表
 [trailing_stop_faq_cn](./faqs/trailing-stop-faq-cn.md)   | 追踪止盈止损订单(Trailing Stop)详细信息和常见问题
 [stp_faq_cn](./faqs/stp_faq_cn.md) | 关于 Self Trade Prevention (STP) 的详细信息
 [market_data_only_cn](./faqs/market_data_only_cn.md) | 仅提供市场数据的 API 和 Websocket Streams
