@@ -6,8 +6,8 @@
 
 General changes:
 
-- `GET /api/v3/account` has a new optional parameter `omitZeroBalances`, allowing to hide all non-zero balances
-- `account.status` has a new optional parameter `omitZeroBalances` allowing to hide all non-zero balances.
+* `GET /api/v3/account` has a new optional parameter `omitZeroBalances`, allowing to hide all non-zero balances
+* `account.status` has a new optional parameter `omitZeroBalances` allowing to hide all non-zero balances.
 
 
 User Data Stream:
