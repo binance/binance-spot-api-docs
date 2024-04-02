@@ -135,7 +135,9 @@ REST API and WebSocket API for SPOT support SBE.
 
 ## Generate SBE decoders:
 
-1. Download the schema ([`spot_latest.xml`](../sbe/schemas/spot_latest.xml))
+1. Download the schema:
+    * [`spot_prod_latest.xml`](../sbe/schemas/spot_prod_latest.xml) for the live exchange.
+    * [`spot_testnet_latest.xml`](../sbe/schemas/spot_testnet_latest.xml) for [SPOT Testnet](https://testnet.binance.vision).
 2. Clone and build [`simple-binary-encoding`](https://github.com/real-logic/simple-binary-encoding):
 ```shell
  $ git clone https://github.com/real-logic/simple-binary-encoding.git

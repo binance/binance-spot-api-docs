@@ -1,4 +1,4 @@
-# WebSocket 账户接口(2023-12-04)
+# WebSocket 账户接口(2024-04-02)
 
 # 基本信息
 * 本篇所列出API接口的base url : **https://api.binance.com**
@@ -314,3 +314,19 @@ listenKey | STRING | YES
 * TRADE_PREVENTION - 订单因 STP 触发而过期。
 
 请查阅[公开API参数](#public-api-definitions)文档获取更多枚举定义。
+
+## Listen Key 已过期
+
+当监听 listen key 过期时会发送此事件。此后不会再发送任何事件，直到创建新的 `listenKey`。
+
+正常关闭流时不会推送该事件。
+
+**Payload:**
+
+```javascript
+{
+  "e": "listenKeyExpired",  // 事件类型
+  "E": "1699596037418",     // 事件时间
+  "listenKey": "OfYGbUzi3PraNagEkdKuFwUHn48brFsItTdsuiIXrucEvD0rhRXZ7I6URWfE8YE8" 
+}
+```

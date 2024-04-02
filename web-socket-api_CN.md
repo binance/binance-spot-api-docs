@@ -1,4 +1,4 @@
-# Binance 的公共 WebSocket API (2023-10-19)
+# Binance 的公共 WebSocket API (2024-04-02)
 
 ## API 基本信息
 
@@ -1050,6 +1050,11 @@ NONE
 
 * [可用权限](#permissions)
 
+### 解释响应中的 `permissionSets`：
+
+* `[["A","B"]]` - 有权限"A"**或**权限"B"的账户可以下订单。
+* `[["A"],["B"]]` - 有权限"A"**和**权限"B"的账户可以下订单。
+* `[["A"],["B","C"]]` - 有权限"A"**和**权限"B"或权限"C"的账户可以下订单。（此处应用的是包含或，而不是排除或，因此账户可以同时拥有权限"B"和权限"C"。）
 
 **数据源:**
 缓存
@@ -1135,10 +1140,13 @@ NONE
             "stepSize": "0.00100000"
           }
         ],
-        "permissions": [
-          "SPOT",
-          "MARGIN",
-          "TRD_GRP_004"
+        "permissions": [],
+        "permissionSets": [
+          [
+            "SPOT",
+            "MARGIN",
+            "TRD_GRP_004"
+          ]
         ],
         "defaultSelfTradePreventionMode": "NONE",
         "allowedSelfTradePreventionModes": [
@@ -1301,7 +1309,7 @@ NONE
 * [`<symbol>@trade`](web-socket-streams_CN.md#逐笔交易)
 
 **权重:**
-10
+25
 
 **参数:**
 
@@ -1358,7 +1366,7 @@ NONE
 获取历史交易。
 
 **权重:**
-10
+25
 
 **参数:**
 
@@ -4478,7 +4486,7 @@ NONE
 
 **注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 "订单响应中的特定条件时才会出现的字段" 部分。
 
-### OCO下单 (TRADE)
+### OCO下单 - 已弃用 (TRADE)
 
 ```javascript
 {
@@ -4631,6 +4639,173 @@ NONE
     ]
   },
   "rateLimits": [
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "SECOND",
+      "intervalNum": 10,
+      "limit": 50,
+      "count": 2
+    },
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "DAY",
+      "intervalNum": 1,
+      "limit": 160000,
+      "count": 2
+    },
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 1
+    }
+  ]
+}
+```
+
+### 发送新 OCO 订单 (TRADE)
+
+```javascript
+{
+  "id": "56374a46-3261-486b-a211-99ed972eb648",
+  "method": "orderList.place.oco",
+  "params":
+  {
+    "symbol": "LTCBNB",
+    "side": "BUY",
+    "quantity": 1,
+    "timestamp": 1711062760647,
+    "aboveType": "STOP_LOSS_LIMIT",
+    "abovePrice": "1.5",
+    "aboveStopPrice": "1.50000001",
+    "aboveTimeInForce": "GTC",
+    "belowType": "LIMIT_MAKER",
+    "belowPrice": "1.49999999",
+    "apiKey": "duwNf97YPLqhFIk7kZF0dDdGYVAXStA7BeEz0fIT9RAhUbixJtyS6kJ3hhzJsRXC",
+    "signature": "64614cfd8dd38260d4fd86d3c455dbf4b9d1c8a8170ea54f700592a986c30ddb"
+  }
+}
+```
+
+**权重:** 1
+
+发送新 one-cancels-the-other (OCO) 订单，激活其中一个订单会立即取消另一个订单。
+
+* OCO 有 2 legs，称为 **上方 leg** 和 **下方 leg**。
+* 其中一条 leg 必须是 `LIMIT_MAKER` 订单，另一条 leg 必须是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 订单。
+* 针对价格限制：
+  * 如果 OCO 订单方向是 `SELL`：`LIMIT_MAKER` `price` > 最后交易价格 > `stopPrice`
+  * 如果 OCO 订单方向是 `BUY`：`LIMIT_MAKER` `price` < 最后交易价格 < `stopPrice`
+* 在订单率限制中，OCO 计为 **2** 个订单。
+
+**参数:**
+
+名称                      | 类型   | 是否必需 | 描述
+----                     |------  | -----     |----
+`symbol`                 |STRING  |YES        |
+`listClientOrderId`      |STRING  |NO         |整个 OCO order list 的唯一ID。 如果未发送则自动生成。 <br> 仅当前一个订单已填满或完全过期时，才会接受具有相同的`listClientOrderId`。 <br> `listClientOrderId` 与 `aboveClientOrderId` 和 `belowCLientOrderId` 不同。
+`side`                   |ENUM    |YES        |订单方向：`BUY` or `SELL`
+`quantity`               |DECIMAL |YES        |两个 legs 的数量。
+`aboveType`              |ENUM    |YES        |支持值：`STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`。
+`aboveClientOrderId`     |STRING  |NO         |上方 leg 的唯一ID。 如果未发送则自动生成。
+`aboveIcebergQty`        |LONG    |NO         |请注意，只有当 `aboveTimeInForce` 为 `GTC` 时才能使用。
+`abovePrice`             |DECIMAL |NO         |
+`aboveStopPrice`         |DECIMAL |NO         |如果 `aboveType` 是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 才能使用。<br> 必须指定 `aboveStopPrice` 或 `aboveTrailingDelta` 或两者。
+`aboveTrailingDelta`     |LONG    |NO         |请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq-cn.md).
+`aboveTimeInForce`       |DECIMAL |NO         |如果 `aboveType` 是 `STOP_LOSS_LIMIT`，则为必填项。
+`aboveStrategyId`        |INT     |NO         |订单策略中上方 leg 订单的 ID。
+`aboveStrategyType`      |INT     |NO         |上方 leg 订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
+`belowType`              |ENUM    |YES        |支持值：`STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`
+`belowClientOrderId`     |STRING  |NO         |
+`belowIcebergQty`        |LONG    |NO         |请注意，只有当 `belowTimeInForce` 为 `GTC` 时才能使用。
+`belowPrice`             |DECIMAL |NO         |
+`belowStopPrice`         |DECIMAL |NO         |如果 `belowType` 是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 才能使用 <br> 必须指定 `belowStopPrice` 或 `belowTrailingDelta` 或两者。
+`belowTrailingDelta`     |LONG    |NO         |请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq-cn.md)。
+`belowTimeInForce`       |ENUM    |NO         |如果`belowType` 是 `STOP_LOSS_LIMIT`，则为必须配合提交的值。
+`belowStrategyId`        |INT     |NO          |订单策略中下方 leg 订单的 ID。
+`belowStrategyType`      |INT     |NO         |下方 leg 订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
+`newOrderRespType`       |ENUM    |NO         |响应格式可选值: `ACK`, `RESULT`, `FULL`。
+`selfTradePreventionMode`|ENUM    |NO         |允许的 ENUM 取决于交易对上的配置。 可能支持的值为 `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`。
+`apiKey`                 |STRING  |YES        |
+`recvWindow`             |LONG    |NO         |不能大于 `60000`。
+`signature`              |STRING  |YES        |
+`timestamp`              |LONG    |YES        | 
+
+**数据源:**
+撮合引擎
+
+**响应:**
+
+使用 `newOrderRespType` 参数来选择 `orderReports` 的响应格式。以下示例适用于 `RESULT` 响应类型。 请参阅 [`order.place`](##下新的订单-trade)了解更多 `orderReports` 的响应类型。
+
+```javascript
+{
+  "id": "56374a46-3261-486b-a211-99ed972eb648",
+  "status": 200,
+  "result":
+  {
+    "orderListId": 2,
+    "contingencyType": "OCO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "cKPMnDCbcLQILtDYM4f4fX",
+    "transactionTime": 1711062760648,
+    "symbol": "LTCBNB",
+    "orders":
+    [
+      {
+        "symbol": "LTCBNB",
+        "orderId": 2,
+        "clientOrderId": "0m6I4wfxvTUrOBSMUl0OPU"
+      },
+      {
+        "symbol": "LTCBNB",
+        "orderId": 3,
+        "clientOrderId": "Z2IMlR79XNY5LU0tOxrWyW"
+      }
+    ],
+    "orderReports":
+    [
+      {
+        "symbol": "LTCBNB",
+        "orderId": 2,
+        "orderListId": 2,
+        "clientOrderId": "0m6I4wfxvTUrOBSMUl0OPU",
+        "transactTime": 1711062760648,
+        "price": "1.50000000",
+        "origQty": "1.000000",
+        "executedQty": "0.000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "STOP_LOSS_LIMIT",
+        "side": "BUY",
+        "stopPrice": "1.50000001",
+        "workingTime": -1,
+        "selfTradePreventionMode": "NONE"
+      },
+      {
+        "symbol": "LTCBNB",
+        "orderId": 3,
+        "orderListId": 2,
+        "clientOrderId": "Z2IMlR79XNY5LU0tOxrWyW",
+        "transactTime": 1711062760648,
+        "price": "1.49999999",
+        "origQty": "1.000000",
+        "executedQty": "0.000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT_MAKER",
+        "side": "BUY",
+        "workingTime": 1711062760648,
+        "selfTradePreventionMode": "NONE"
+      }
+    ]
+  },
+  "rateLimits":
+  [
     {
       "rateLimitType": "ORDERS",
       "interval": "SECOND",
@@ -5019,7 +5194,7 @@ NONE
 }
 ```
 
-### 下 SOR 订单 (TRADE)o
+### 下 SOR 订单 (TRADE)
 
 ```javascript
 {
@@ -5244,6 +5419,7 @@ NONE
 名称                | 类型    | 是否必需 | 描述
 ------------------- | ------- | --------- | ------------
 `apiKey`            | STRING  | YES       |
+`omitZeroBalances`  | BOOLEAN | NO        | 如果`true`，将隐藏所有零余额。<br>默认值：`false`。
 `recvWindow`        | INT     | NO        | 值不能大于 `60000`
 `signature`         | STRING  | YES       |
 `timestamp`         | INT     | YES       |
@@ -5774,14 +5950,14 @@ timestamp           | LONG   | YES          |
 
 名称                       | 类型   | 是否必需         | 描述
 -----                      | ---   |----      | ---------
-`symbol`                   |STRING |Yes        |
-`startTime`                |LONG   |No        |
-`endTime`                  |LONG   |No        |
-`fromAllocationId`         |INT    |No        |
-`limit`                    |INT    |No        |默认值 500； 最大值 1000
-`orderId`                  |LONG   |No        |
-`recvWindow`               |LONG   |No        |不能大于 `60000`
-`timestamp`                |LONG   |No        |
+`symbol`                   |STRING |YES        |
+`startTime`                |LONG   |NO        |
+`endTime`                  |LONG   |NO        |
+`fromAllocationId`         |INT    |NO        |
+`limit`                    |INT    |NO        |默认值 500； 最大值 1000
+`orderId`                  |LONG   |NO        |
+`recvWindow`               |LONG   |NO        |不能大于 `60000`
+`timestamp`                |LONG   |NO        |
 
 支持的参数组合:
 

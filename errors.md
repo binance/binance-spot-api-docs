@@ -1,4 +1,4 @@
-# Error codes for Binance (2024-02-08)
+# Error codes for Binance (2024-04-02)
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
 ```javascript
@@ -138,6 +138,9 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * Invalid JSON Request
  * JSON sent for parameter '%s' is not valid
 
+#### -1139 INVALID_TICKER_TYPE
+ * Invalid ticker type.
+
 #### -1145 INVALID_CANCEL_RESTRICTIONS
  * `cancelRestrictions` has to be either `ONLY_NEW` or `ONLY_PARTIALLY_FILLED`.
 
@@ -152,6 +155,14 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 #### -1155 SBE_DISABLED
 * SBE is not enabled.
+
+#### -1158 OCO_ORDER_TYPE_REJECTED
+* Order type not supported in OCO. 
+* If the order type provided in the `aboveType` and/or `belowType` is not supported.
+
+#### -1160 OCO_ICEBERGQTY_TIMEINFORCE
+* Parameter '%s' is not supported if `aboveTimeInForce`/`belowTimeInForce` is not GTC.
+* If the order type for the above or below leg is `STOP_LOSS_LIMIT`, and `icebergQty` is provided for that leg, the `timeInForce` has to be `GTC` else it will throw an error.
 
 #### -2010 NEW_ORDER_REJECTED
  * NEW_ORDER_REJECTED
@@ -200,7 +211,8 @@ Error message                                                   | Description
 "Order would trigger immediately."                              | The order's stop price is not valid when compared to the last traded price.
 "Cancel order is invalid. Check origClOrdId and orderId."       | No `origClOrdId` or `orderId` was sent in.
 "Order would immediately match and take."                       | `LIMIT_MAKER` order type would immediately match and trade, and not be a pure maker order.
-"The relationship of the prices for the orders is not correct." | The prices set in the `OCO` is breaking the Price rules. <br/> The rules are: <br/> `SELL Orders`: Limit Price > Last Price > Stop Price <br/>`BUY Orders`: Limit Price < Last Price < Stop Price
+"The relationship of the prices for the orders is not correct." | The prices set in the `OCO` is breaking the Price restrictions. <br/> For reference: <br/> `BUY` : `LIMIT_MAKER` `price` < Last Traded Price < `stopPrice` <br>
+ `SELL` : `LIMIT_MAKER` `price` > Last Traded Price > `stopPrice`
 "OCO orders are not supported for this symbol"                  | `OCO` is not enabled on the symbol.
 "Quote order qty market orders are not support for this symbol."| `MARKET` orders using the parameter `quoteOrderQty` are not enabled on the symbol.
 "Trailing stop orders are not supported for this symbol."       | Orders using `trailingDelta` are not enabled on the symbol.
