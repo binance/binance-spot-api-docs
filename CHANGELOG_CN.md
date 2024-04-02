@@ -7,7 +7,7 @@
 
 * `GET /api/v3/account` 新加可选参数 `omitZeroBalances`，如果启用，则会隐藏所有零余额。
 * `account.status` 新加可选参数 `omitZeroBalances`，如果启用，则会隐藏所有零余额。
-* **以下请求的权重已从 10 增加到 25**：
+* **以下请求的权重已从 10 增加到 25 （该规定将于2024年4月4日生效）**：
     * `GET /api/v3/trades`
     * `GET /api/v3/historicalTrades`
     * `trades.recent`

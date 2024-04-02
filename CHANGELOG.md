@@ -8,7 +8,7 @@ General changes:
 
 * `GET /api/v3/account` has a new optional parameter `omitZeroBalances`, which if enabled hides all zero balances.
 * `account.status` has a new optional parameter `omitZeroBalances` which if enabled hides all zero balances.
-* **The weight of the following requests has been increased from 10 to 25**:
+* **The weight of the following requests has been increased from 10 to 25 (This will take effect on April 4, 2024)**:
     * `GET /api/v3/trades`
     * `GET /api/v3/historicalTrades`
     * `trades.recent`
