@@ -1,4 +1,4 @@
-# 错误代码汇总 (2024-02-08)
+# 错误代码汇总 (2024-04-02)
 币安Rest接口(包括wapi)返回的错误包含两部分，错误码与错误信息. 错误码是大类，一个错误码可能对应多个不同的错误信息。
 以下是一个完整错误码实例
 ```javascript
@@ -137,6 +137,9 @@
  * Invalid JSON Request
  * JSON sent for parameter '%s' is not valid
 
+#### -1139 无效的Ticker类型
+ * Invalid ticker type.
+
 #### -1145 无效的取消限制
  * `cancelRestrictions` has to be either `ONLY_NEW` or `ONLY_PARTIALLY_FILLED`.
 
@@ -151,6 +154,14 @@
 
 #### -1155 SBE 没有开启
 * SBE is not enabled.
+
+#### -1158 OCO 订单类型被拒绝
+* Order type not supported in OCO. 
+* If the order type provided in the `aboveType` and/or `belowType` is not supported.
+
+#### -1160 OCO 订单类型的冰山数量参数与 time in force 参数的组合有问题
+* Parameter '%s' is not supported if `aboveTimeInForce`/`belowTimeInForce` is not GTC.
+* If the order type for the above or below leg is `STOP_LOSS_LIMIT`, and `icebergQty` is provided for that leg, the `timeInForce` has to be `GTC` else it will throw an error.
 
 #### -2010 新订单被拒绝
  * NEW_ORDER_REJECTED
@@ -178,29 +189,29 @@
 
 错误消息                                                          | 描述
 ------------                                                     | ------------
-"Unknown order sent."                                            | 找不到订单， (根据请求里发送的 `orderId`, `clOrdId`, `origClOrdId`) 
-"Duplicate order sent."                                          | 客户自定义的订单号重复了
-"Market is closed."                                              | 该交易对交易关闭了
+"Unknown order sent."                                            | 找不到订单， (根据请求里发送的 `orderId`, `clOrdId`, `origClOrdId`)。
+"Duplicate order sent."                                          | 客户自定义的订单号重复了。
+"Market is closed."                                              | 该交易对交易关闭了。
 "Account has insufficient balance for requested action."         | 账户金额不足。
-"Market orders are not supported for this symbol."               | 该交易对无法发起市价单
-"Iceberg orders are not supported for this symbol."              | 该交易对无法发起冰山订单
-"Stop loss orders are not supported for this symbol."            | 该交易对无法发起止损单
-"Stop loss limit orders are not supported for this symbol."      | 该交易对无法发起止损限价单
-"Take profit orders are not supported for this symbol."          | 该交易对无法发起止盈单
-"Take profit limit orders are not supported for this symbol."    | 该交易对无法发起止盈限价单
-"Price * QTY is zero or less."                                   | 订单金额必须大于0
-"IcebergQty exceeds QTY."                                        | 冰山订单中小订单的Quantity必须小于总的Quantity
+"Market orders are not supported for this symbol."               | 该交易对无法发起市价单。
+"Iceberg orders are not supported for this symbol."              | 该交易对无法发起冰山订单。
+"Stop loss orders are not supported for this symbol."            | 该交易对无法发起止损单。
+"Stop loss limit orders are not supported for this symbol."      | 该交易对无法发起止损限价单。
+"Take profit orders are not supported for this symbol."          | 该交易对无法发起止盈单。
+"Take profit limit orders are not supported for this symbol."    | 该交易对无法发起止盈限价单。
+"Price * QTY is zero or less."                                   | 订单金额必须大于0。
+"IcebergQty exceeds QTY."                                        | 冰山订单中小订单的Quantity必须小于总的Quantity。
 "This action is disabled on this account."                       | 联系客户支持； 该账户已禁用了某些操作。
 "This account may not place or cancel orders."                   | 联系客户支持： 该账户已被禁用了交易操作。
 "Unsupported order combination"                                  | `orderType`, `timeInForce`, `stopPrice`, `icebergQty` 某些参数取某些值的时候另一些参数必须/不得提供。
 "Order would trigger immediately."                               | 止盈、止损单必须在未来触发，如果条件太弱现在的市场行情就可以触发（通常是误操作填错了条件），就会报这个错误。
 "Cancel order is invalid. Check origClOrdId and orderId."        | 撤销订单必须提供 `origClOrdId` 或者 `orderId` 中的一个。 
 "Order would immediately match and take."                        | `LIMIT_MAKER` 订单如果按照规则会成为Taker，就会报此错。
-"The relationship of the prices for the orders is not correct."  | `OCO`订单中设置的价格不符合报价规则：<br/> The rules are: <br/> `SELL Orders`: Limit Price > Last Price > Stop Price <br/>`BUY Orders`: Limit Price < Last Price < Stop Price
+"The relationship of the prices for the orders is not correct."  | `OCO`订单中设置的价格不符合报价规则：<br/> 请参考以下示例： <br/> `BUY`：`LIMIT_MAKER` `price` < Last Traded Price < `stopPrice` <br/> `SELL`：`LIMIT_MAKER` `price` > Last Traded Price > `stopPrice` <br/>
 "OCO orders are not supported for this symbol"                   | `OCO`订单不支持该交易对。
-"Quote order qty market orders are not support for this symbol." | 这个交易对，市价单不支持参数 `quoteOrderQty`
-"Trailing stop orders are not supported for this symbol."        | 此symbol不支持 `trailingDelta`
-"Order cancel-replace is not supported for this symbol."         | 此symbol不支持 `POST /api/v3/order/cancelReplace` 或者 `order.cancelReplace` (WebSocket API)
+"Quote order qty market orders are not support for this symbol." | 这个交易对，市价单不支持参数 `quoteOrderQty`。
+"Trailing stop orders are not supported for this symbol."        | 此symbol不支持 `trailingDelta`。
+"Order cancel-replace is not supported for this symbol."         | 此symbol不支持 `POST /api/v3/order/cancelReplace` 或者 `order.cancelReplace` (WebSocket API)。
 "This symbol is not permitted for this account."                 | 账户和交易对的权限不一致 (比如 `SPOT`, `MARGIN` 等)。
 "This symbol is restricted for this account."                    | 账户没有权限在此交易对交易 (比如账户只拥有 `ISOLATED_MARGIN`权限，则无法下`SPOT` 订单)。
 "Order was not canceled due to cancel restrictions."             | `cancelRestrictions` 设置为 `ONLY_NEW` 但订单状态不是 `NEW` <br/> 或 <br/> `cancelRestrictions` 设置为 `ONLY_PARTIALLY_FILLED` 但订单状态不是 `PARTIALLY_FILLED`。
@@ -223,10 +234,13 @@
 "Filter failure: MIN_NOTIONAL" | `price` * `quantity`，也就是订单金额，是否超过了最小值。
 "Filter failure: ICEBERG_PARTS" | 冰山订单只能被分割成有限个小订单。
 "Filter failure: MARKET_LOT_SIZE" | 与LOT_SIZE含义一致，只是对市价单生效。
+"Filter failure: MAX_POSITION" | 账户的仓位已达到定义的最大限额。<br/> 它是由基础资产余额的总和以及所有未平仓买入订单的数量之和组成的。
 "Filter failure: MAX_NUM_ORDERS" | 账户在该交易对下最多挂单数。
 "Filter failure: MAX_NUM_ALGO_ORDERS" | 账户在该交易对下最多的止盈/止损挂单数。
 "Filter failure: MAX_NUM_ICEBERG_ORDERS" | 账户在该交易对下最多的冰山订单数。
-"Filter failure: EXCHANGE_MAX_NUM_ORDERS" | 账户在全交易所最多的挂单数。
-"Filter failure: EXCHANGE_MAX_NUM_ALGO_ORDERS" | 账户在全交易所最多的止盈/止损挂单数。
+"Filter failure: TRAILING_DELTA" | `trailingDelta` 不在该订单类型的筛选器的定义范围内。
+"Filter failure: EXCHANGE_MAX_NUM_ORDERS" | 账户在交易所有太多未结订单。
+"Filter failure: EXCHANGE_MAX_NUM_ALGO_ORDERS" | 账户在交易所有太多的未平仓止损和/或止盈订单。
+"Filter failure: EXCHANGE_MAX_NUM_ICEBERG_ORDERS" | 账户在交易所有太多未平仓的冰山订单。
 
 

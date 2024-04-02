@@ -13,10 +13,11 @@
   - [Order Update](#order-update)
     - [Conditional Fields in Execution Report](#conditional-fields-in-execution-report)
     - [Execution types](#execution-types)
+  - [Listen Key Expired](#listen-key-expired)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# User Data Streams for Binance (2023-12-04)
+# User Data Streams for Binance (2024-04-02)
 # General WSS information
 * The base API endpoint is: **https://api.binance.com**
 * A User Data Stream `listenKey` is valid for 60 minutes after creation.
@@ -324,3 +325,22 @@ If the order is an OCO, an event will be displayed named `ListStatus` in additio
 * `TRADE_PREVENTION` - The order has expired due to STP.
 
 Check the [Rest API Documentation](./rest-api.md#enum-definitions) for more relevant enum definitions.
+
+## Listen Key Expired 
+
+This event is sent when the listen key expires.
+
+No more events will be sent after this until a new `listenKey` is created.
+
+This event will not be pushed when the stream is closed normally.
+
+**Payload:**
+
+```javascript
+{
+  "e": "listenKeyExpired",  // Event type
+  "E": "1699596037418",     // Event time
+  "listenKey": "OfYGbUzi3PraNagEkdKuFwUHn48brFsItTdsuiIXrucEvD0rhRXZ7I6URWfE8YE8" 
+}
+```
+

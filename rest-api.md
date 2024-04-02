@@ -28,6 +28,7 @@
     - [Test connectivity](#test-connectivity)
     - [Check server time](#check-server-time)
     - [Exchange information](#exchange-information)
+      - [Examples of Symbol Permissions Interpretation from the Response:](#examples-of-symbol-permissions-interpretation-from-the-response)
   - [Market Data endpoints](#market-data-endpoints)
     - [Order book](#order-book)
     - [Recent trades list](#recent-trades-list)
@@ -42,7 +43,7 @@
     - [Symbol order book ticker](#symbol-order-book-ticker)
     - [Rolling window price change statistics](#rolling-window-price-change-statistics)
   - [Trading endpoints](#trading-endpoints)
-    - [New order  (TRADE)](#new-order--trade)
+    - [New order (TRADE)](#new-order-trade)
       - [Conditional fields in Order Responses](#conditional-fields-in-order-responses)
     - [Test new order (TRADE)](#test-new-order-trade)
     - [Query order (USER_DATA)](#query-order-user_data)
@@ -52,7 +53,8 @@
     - [Cancel an Existing Order and Send a New Order (TRADE)](#cancel-an-existing-order-and-send-a-new-order-trade)
     - [Current open orders (USER_DATA)](#current-open-orders-user_data)
     - [All orders (USER_DATA)](#all-orders-user_data)
-    - [New OCO (TRADE)](#new-oco-trade)
+    - [New OCO - Deprecated (TRADE)](#new-oco---deprecated-trade)
+    - [New Order list - OCO (TRADE)](#new-order-list---oco-trade)
     - [Cancel OCO (TRADE)](#cancel-oco-trade)
     - [Query OCO (USER_DATA)](#query-oco-user_data)
     - [Query all OCO (USER_DATA)](#query-all-oco-user_data)
@@ -73,7 +75,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2023-12-04)
+# Public Rest API for Binance (2023-04-02)
 
 ## General API Information
 * The following base endpoints are available. Please use whichever works best for your setup:
@@ -700,6 +702,12 @@ There are 4 possible options:
 * If `permissions` parameter not provided, the default values will be `["SPOT","MARGIN","LEVERAGED"]`.
   * To display all permissions you need to specify them explicitly: (e.g. `["SPOT","MARGIN",...]`.). See [Account and Symbol Permissions](#account-and-symbol-permissions) for the full list.
 
+#### Examples of Symbol Permissions Interpretation from the Response: 
+
+* `[["A","B"]]` means you may place an order if your account has either permission "A" **or** permission "B". 
+* `[["A"],["B"]]` means you can place an order if your account has permission "A" **and** permission "B". 
+* `[["A"],["B","C"]]` means you can place an order if your account has permission "A" **and** permission "B" or permission "C". (Inclusive or is applied here, not exclusive or, so your account may have both permission "B" and permission "C".)
+
 **Data Source:**
 Memory
 
@@ -749,9 +757,12 @@ Memory
         // These are defined in the Filters section.
         // All filters are optional
       ],
-      "permissions": [
-        "SPOT",
-        "MARGIN"
+      "permissions": [],
+      "permissionSets": [
+        [
+          "SPOT",
+          "MARGIN"
+        ]
       ],
       "defaultSelfTradePreventionMode": "NONE",
       "allowedSelfTradePreventionModes": [
@@ -824,7 +835,7 @@ GET /api/v3/trades
 Get recent trades.
 
 **Weight:**
-10
+25
 
 **Parameters:**
 
@@ -858,7 +869,7 @@ GET /api/v3/historicalTrades
 Get older trades.
 
 **Weight:**
-10
+25
 
 **Parameters:**
 
@@ -1800,7 +1811,7 @@ When using `symbols`:
 
 ## Trading endpoints
 
-### New order  (TRADE)
+### New order (TRADE)
 ```
 POST /api/v3/order 
 ```
@@ -1952,7 +1963,7 @@ Matching Engine
 
 There are fields in the order responses (e.g. order placement, order query, order cancellation) that appear only if certain conditions are met.
 
-These fields can apply to OCO Orders.
+These fields can apply to OCOs.
 
 The fields are listed below:
 
@@ -1985,7 +1996,7 @@ Creates and validates a new order but does not send it into the matching engine.
 
 **Parameters:**
 
-In addition to all parameters accepted by [`POST /api/v3/order`](#new-order--trade),
+In addition to all parameters accepted by [`POST /api/v3/order`](#new-order-trade),
 the following optional parameters are also accepted:
 
 Name                   |Type          | Mandatory    | Description
@@ -2565,7 +2576,7 @@ timestamp | LONG | YES |
 
 **Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
-### New OCO (TRADE)
+### New OCO - Deprecated (TRADE)
 
 ```
 POST /api/v3/order/oco 
@@ -2678,6 +2689,123 @@ Matching Engine
 }
 ```
 
+### New Order list - OCO (TRADE)
+
+```
+POST /api/v3/orderList/oco
+```
+
+**Weight:** 
+1
+
+Send in an one-cancels-the-other (OCO) pair, where activation of one order immediately cancels the other.
+
+* An OCO has 2 legs called the **above leg** and **below leg**.
+* One of the legs must be a `LIMIT_MAKER` order and the other leg must be `STOP_LOSS` or `STOP_LOSS_LIMIT` order.
+* Price restrictions:     
+  * If the OCO is on the `SELL` side: `LIMIT_MAKER` `price` > Last Traded Price > `stopPrice`
+  * If the OCO is on the `BUY` side: `LIMIT_MAKER` `price` < Last Traded Price < `stopPrice`
+* OCO counts as **2** orders against the order rate limit.
+
+**Parameters:**
+
+Name                   |Type    | Mandatory | Description
+-----                  |------  | -----     |----
+symbol                 |STRING  |Yes        |
+listClientOrderId      |STRING  |No         |Arbitrary unique ID among open OCOs. Automatically generated if not sent. <br> A new order list with the same `listClientOrderId` is accepted only when the previous one is filled or completely expired. <br> `listClientOrderId` is distinct from the `aboveClientOrderId` and the `belowCLientOrderId`.
+side                   |ENUM    |Yes        |`BUY` or `SELL`
+quantity               |DECIMAL |Yes        |Quantity for both legs of the order list.
+aboveType              |ENUM    |Yes        |Supported values : `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`
+aboveClientOrderId     |STRING  |No         |Arbitrary unique ID among open orders for the above leg order. Automatically generated if not sent
+aboveIcebergQty        |LONG    |No         |Note that this can only be used if `aboveTimeInForce` is `GTC`.
+abovePrice             |DECIMAL |No         |
+aboveStopPrice         |DECIMAL |No         |Can be used if `aboveType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`. <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
+aboveTrailingDelta     |LONG    |No         |See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md).
+aboveTimeInForce       |DECIMAL |No         |Required if the `aboveType` is `STOP_LOSS_LIMIT`. 
+aboveStrategyId        |INT     |No         |Arbitrary numeric value identifying the above leg order within an order strategy. 
+aboveStrategyType      |INT     |No         |Arbitrary numeric value identifying the above leg order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
+belowType              |ENUM    |Yes        |Supported values : `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`
+belowClientOrderId     |STRING  |No         |
+belowIcebergQty        |LONG    |No         |Note that this can only be used if `belowTimeInForce` is `GTC`.
+belowPrice             |DECIMAL |No         |
+belowStopPrice         |DECIMAL |No         |Can be used if `belowType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`. <br>Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
+belowTrailingDelta     |LONG    |No         |See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md). 
+belowTimeInForce       |ENUM    |No         |Required if the `belowType` is `STOP_LOSS_LIMIT`.
+belowStrategyId        |INT    |No          |Arbitrary numeric value identifying the below leg order within an order strategy. 
+belowStrategyType      |INT     |No         |Arbitrary numeric value identifying the below leg order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
+newOrderRespType       |ENUM    |No         |Select response format: `ACK`, `RESULT`, `FULL`
+selfTradePreventionMode|ENUM    |No         |The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
+recvWindow             |LONG   |No          |The value cannot be greater than `60000`.
+timestamp              |LONG   |Yes          | 
+
+**Data Source:**
+Matching Engine
+
+**Response:**
+
+Response format for `orderReports` is selected using the `newOrderRespType` parameter. The following example is for the `RESULT` response type. See [`POST /api/v3/order`](#new-order-trade) for more examples. 
+
+```javascript
+{
+    "orderListId": 1,
+    "contingencyType": "OCO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "lH1YDkuQKWiXVXHPSKYEIp",
+    "transactionTime": 1710485608839,
+    "symbol": "LTCBTC",
+    "orders": [
+        {
+            "symbol": "LTCBTC",
+            "orderId": 10,
+            "clientOrderId": "44nZvqpemY7sVYgPYbvPih"
+        },
+        {
+            "symbol": "LTCBTC",
+            "orderId": 11,
+            "clientOrderId": "NuMp0nVYnciDiFmVqfpBqK"
+        }
+    ],
+    "orderReports": [
+        {
+            "symbol": "LTCBTC",
+            "orderId": 10,
+            "orderListId": 1,
+            "clientOrderId": "44nZvqpemY7sVYgPYbvPih",
+            "transactTime": 1710485608839,
+            "price": "1.00000000",
+            "origQty": "5.00000000",
+            "executedQty": "0.00000000",
+            "cummulativeQuoteQty": "0.00000000",
+            "status": "NEW",
+            "timeInForce": "GTC",
+            "type": "STOP_LOSS_LIMIT",
+            "side": "SELL",
+            "stopPrice": "1.00000000",
+            "workingTime": -1,
+            "icebergQty": "1.00000000",
+            "selfTradePreventionMode": "NONE"
+        },
+        {
+            "symbol": "LTCBTC",
+            "orderId": 11,
+            "orderListId": 1,
+            "clientOrderId": "NuMp0nVYnciDiFmVqfpBqK",
+            "transactTime": 1710485608839,
+            "price": "3.00000000",
+            "origQty": "5.00000000",
+            "executedQty": "0.00000000",
+            "cummulativeQuoteQty": "0.00000000",
+            "status": "NEW",
+            "timeInForce": "GTC",
+            "type": "LIMIT_MAKER",
+            "side": "SELL",
+            "workingTime": 1710485608839,
+            "selfTradePreventionMode": "NONE"
+        }
+    ]
+}
+```
 
 ### Cancel OCO (TRADE)
 
@@ -3083,7 +3211,8 @@ Get current account information.
 
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
-recvWindow | LONG | NO | The value cannot be greater than ```60000```
+omitZeroBalances |BOOLEAN| NO | When set to `true`, emits only the non-zero balances of an account. <br>Default value: `false`
+recvWindow | LONG | NO | The value cannot be greater than `60000`
 timestamp | LONG | YES |
 
 **Data Source:**
