@@ -30,6 +30,7 @@
     - [Test connectivity](#test-connectivity)
     - [Check server time](#check-server-time)
     - [Exchange information](#exchange-information)
+      - [Examples of Symbol Permissions Interpretation from the Response:](#examples-of-symbol-permissions-interpretation-from-the-response)
   - [Market data requests](#market-data-requests)
     - [Order book](#order-book)
     - [Recent trades](#recent-trades)
@@ -57,7 +58,7 @@
     - [Cancel and replace order (TRADE)](#cancel-and-replace-order-trade)
     - [Current open orders (USER_DATA)](#current-open-orders-user_data)
     - [Cancel open orders (TRADE)](#cancel-open-orders-trade)
-    - [Place new OCO (TRADE)](#place-new-oco-trade)
+    - [Place new Order list - OCO (TRADE)](#place-new-order-list---oco-trade)
     - [Query OCO (USER_DATA)](#query-oco-user_data)
     - [Cancel OCO (TRADE)](#cancel-oco-trade)
     - [Current open OCOs (USER_DATA)](#current-open-ocos-user_data)
@@ -79,7 +80,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public WebSocket API for Binance SPOT Testnet (2024-03-13)
+# Public WebSocket API for Binance SPOT Testnet (2024-04-04)
 
 ## General API Information
 
@@ -947,32 +948,6 @@ These terms will be used throughout the documentation, so it is recommended espe
 **Account and Symbol Permissions (permissions):**
 
 * `SPOT`
-* `MARGIN`
-* `LEVERAGED`
-* `TRD_GRP_002`
-* `TRD_GRP_003`
-* `TRD_GRP_004`
-* `TRD_GRP_005`
-* `TRD_GRP_006`
-* `TRD_GRP_007`
-* `TRD_GRP_008`
-* `TRD_GRP_009`
-* `TRD_GRP_010`
-* `TRD_GRP_011`
-* `TRD_GRP_012`
-* `TRD_GRP_013`
-* `TRD_GRP_014`
-* `TRD_GRP_015`
-* `TRD_GRP_016`
-* `TRD_GRP_017`
-* `TRD_GRP_018`
-* `TRD_GRP_019`
-* `TRD_GRP_020`
-* `TRD_GRP_021`
-* `TRD_GRP_022`
-* `TRD_GRP_023`
-* `TRD_GRP_024`
-* `TRD_GRP_025`
 
 **Order status (status):**
 
@@ -1161,6 +1136,11 @@ Notes:
 
 * [Available Permissions](#permissions)
 
+#### Examples of Symbol Permissions Interpretation from the Response: 
+
+* `[["A","B"]]` means you may place an order if your account has either permission "A" **or** permission "B". 
+* `[["A"],["B"]]` means you can place an order if your account has permission "A" **and** permission "B". 
+* `[["A"],["B","C"]]` means you can place an order if your account has permission "A" **and** permission "B" or permission "C". (Inclusive or is applied here, not exclusive or, so your account may have both permission "B" and permission "C".)
 
 **Data Source:**
 Memory
@@ -1224,6 +1204,7 @@ Memory
         ],
         "icebergAllowed": true,
         "ocoAllowed": true,
+        "otoAllowed": true,
         "quoteOrderQtyMarketAllowed": true,
         "allowTrailingStop": true,
         "cancelReplaceAllowed": true,
@@ -1246,10 +1227,13 @@ Memory
             "stepSize": "0.00100000"
           }
         ],
-        "permissions": [
-          "SPOT",
-          "MARGIN",
-          "TRD_GRP_004"
+        "permissions": [],
+        "permissionSets": [
+          [
+            "SPOT",
+            "MARGIN",
+            "TRD_GRP_004"
+          ]
         ],
         "defaultSelfTradePreventionMode": "NONE",
         "allowedSelfTradePreventionModes": [
@@ -1412,7 +1396,7 @@ If you need access to real-time trading activity, please consider using WebSocke
 * [`<symbol>@trade`](web-socket-streams.md#trade-streams)
 
 **Weight:**
-10
+25
 
 **Parameters:**
 
@@ -1469,7 +1453,7 @@ Memory
 Get historical trades.
 
 **Weight:**
-10
+25
 
 **Parameters:**
 
@@ -4623,93 +4607,79 @@ Cancellation reports for orders and OCOs have the same format as in [`order.canc
 
 **Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
-### Place new OCO (TRADE)
+### Place new Order list - OCO (TRADE)
 
 ```javascript
 {
-  "id": "56374a46-3061-486b-a311-99ee972eb648",
-  "method": "orderList.place",
-  "params": {
-    "symbol": "BTCUSDT",
-    "side": "SELL",
-    "price": "23420.00000000",
-    "quantity": "0.00650000",
-    "stopPrice": "23410.00000000",
-    "stopLimitPrice": "23405.00000000",
-    "stopLimitTimeInForce": "GTC",
-    "newOrderRespType": "RESULT",
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "6689c2a36a639ff3915c2904871709990ab65f3c7a9ff13857558fd350315c35",
-    "timestamp": 1660801713767
+  "id": "56374a46-3261-486b-a211-99ed972eb648",
+  "method": "orderList.place.oco",
+  "params":
+  {
+    "symbol": "LTCBNB",
+    "side": "BUY",
+    "quantity": 1,
+    "timestamp": 1711062760647,
+    "aboveType": "STOP_LOSS_LIMIT",
+    "abovePrice": "1.5",
+    "aboveStopPrice": "1.50000001",
+    "aboveTimeInForce": "GTC",
+    "belowType": "LIMIT_MAKER",
+    "belowPrice": "1.49999999",
+    "apiKey": "duwNf97YPLqhFIk7kZF0dDdGYVAXStA7BeEz0fIT9RAhUbixJtyS6kJ3hhzJsRXC",
+    "signature": "64614cfd8dd38260d4fd86d3c455dbf4b9d1c8a8170ea54f700592a986c30ddb"
   }
 }
 ```
 
-Send in a new one-cancels-the-other (OCO) pair:
-`LIMIT_MAKER` + `STOP_LOSS`/`STOP_LOSS_LIMIT` orders (called *legs*),
-where activation of one order immediately cancels the other.
-
 **Weight:**
 1
 
+Send in an one-cancels-the-other (OCO) pair, where activation of one order immediately cancels the other.
+
+* An OCO has 2 legs called the **above leg** and **below leg**.
+* One of the legs must be a `LIMIT_MAKER` order and the other leg must be `STOP_LOSS` or `STOP_LOSS_LIMIT` order.
+* Price restriction on the legs:     
+    * If the `aboveType` is `LIMIT_MAKER` and the `belowType` is either a `STOP_LOSS` or `STOP_LOSS_LIMIT`: 
+        * `abovePrice` > Last Traded Price > `belowStopPrice`
+    * If the `aboveType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`, and the `belowType` is `LIMIT_MAKER`:
+        *  `aboveStopPrice` > Last Traded Price > `belowPrice`
+* OCO counts as **2** orders against the order rate limit.
+
 **Parameters:**
 
-Name                | Type    | Mandatory | Description
-------------------- | ------- | --------- | ------------
-`symbol`            | STRING  | YES       |
-`side`              | ENUM    | YES       | `BUY` or `SELL`
-`price`             | DECIMAL | YES       | Price for the limit order
-`quantity`          | DECIMAL | YES       |
-`listClientOrderId` | STRING  | NO        | Arbitrary unique ID among open OCOs. Automatically generated if not sent
-`limitClientOrderId`| STRING  | NO        | Arbitrary unique ID among open orders for the limit order. Automatically generated if not sent
-`limitIcebergQty`   | DECIMAL | NO        |
-`limitStrategyId`   | INT     | NO        | Arbitrary numeric value identifying the limit order within an order strategy.
-`limitStrategyType` | INT     | NO        | <p>Arbitrary numeric value identifying the limit order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
-`stopPrice`         | DECIMAL | YES *     | Either `stopPrice` or `trailingDelta`, or both must be specified
-`trailingDelta`     | INT     | YES *     | See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md)
-`stopClientOrderId` | STRING  | NO        | Arbitrary unique ID among open orders for the stop order. Automatically generated if not sent
-`stopLimitPrice`    | DECIMAL | NO *      |
-`stopLimitTimeInForce` | ENUM | NO *      | See [`order.place`](#timeInForce) for available options
-`stopIcebergQty`    | DECIMAL | NO *      |
-`stopStrategyId`    | INT     | NO        | Arbitrary numeric value identifying the stop order within an order strategy.
-`stopStrategyType`  | INT     | NO        | <p>Arbitrary numeric value identifying the stop order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
-`newOrderRespType`  | ENUM    | NO        | Select response format: `ACK`, `RESULT`, `FULL` (default)
-`selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
-`apiKey`            | STRING  | YES       |
-`recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
-`signature`         | STRING  | YES       |
-`timestamp`         | INT     | YES       |
-
-Notes:
-
-* `listClientOrderId` parameter specifies `listClientOrderId` for the OCO pair.
-
-  A new OCO with the same `listClientOrderId` is accepted only when the previous one is filled or completely expired.
-
-  `listClientOrderId` is distinct from `clientOrderId` of individual orders.
-
-* `limitClientOrderId` and `stopClientOrderId` specify `clientOrderId` values for both legs of the OCO.
-
-  A new order with the same `clientOrderId` is accepted only when the previous one is filled or expired.
-
-* Price restrictions on the legs:
-
-  | `side` | Price relation |
-  | ------ | -------------- |
-  | `BUY`  | `price` < market price < `stopPrice` |
-  | `SELL` | `price` > market price > `stopPrice` |
-
-* Both legs have the same `quantity`.
-
-  However, you can set different iceberg quantity for individual legs.
-
-  If `stopIcebergQty` is used, `stopLimitTimeInForce` must be `GTC`.
-
-* `trailingDelta` applies only to the `STOP_LOSS`/`STOP_LOSS_LIMIT` leg of the OCO.
-
-* OCO counts as 2 orders against the order rate limit.
+Name                     |Type    | Mandatory | Description
+-----                    |------  | -----     |----
+`symbol`                 |STRING  |YES        |
+`listClientOrderId`      |STRING  |NO         |Arbitrary unique ID among open OCOs. Automatically generated if not sent. <br> A new order list with the same `listClientOrderId` is accepted only when the previous one is filled or completely expired. <br> `listClientOrderId` is distinct from the `aboveClientOrderId` and the `belowCLientOrderId`.
+`side`                   |ENUM    |YES        |`BUY` or `SELL`
+`quantity`               |DECIMAL |YES        |Quantity for both legs of the order list.
+`aboveType`              |ENUM    |YES        |Supported values : `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`
+`aboveClientOrderId`     |STRING  |NO        |Arbitrary unique ID among open orders for the above leg order. Automatically generated if not sent
+`aboveIcebergQty`        |LONG    |NO         |Note that this can only be used if `aboveTimeInForce` is `GTC`.
+`abovePrice`             |DECIMAL |NO         |
+`aboveStopPrice`         |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`. <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
+`aboveTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](..faqs/trailing-stop-faq.md).
+`aboveTimeInForce`       |DECIMAL |NO         |Required if the `aboveType` is `STOP_LOSS_LIMIT`. 
+`aboveStrategyId`        |INT     |NO         |Arbitrary numeric value identifying the above leg order within an order strategy. 
+`aboveStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the above leg order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
+`belowType`              |ENUM    |YES        |Supported values : `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`
+`belowClientOrderId`     |STRING  |NO         |
+`belowIcebergQty`        |LONG    |NO         |Note that this can only be used if `belowTimeInForce` is `GTC`.
+`belowPrice`             |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS_LIMIT` or `LIMIT_MAKER` to specify the limit price.
+`belowStopPrice`         |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`. <br> If `aboveType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`, either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
+`belowTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](..faqs/trailing-stop-faq.md). 
+`belowTimeInForce`       |ENUM    |NO         |Required if the `belowType` is `STOP_LOSS_LIMIT`. 
+`belowStrategyId`        |INT    |NO          |Arbitrary numeric value identifying the below leg order within an order strategy. 
+`belowStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the below leg order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
+`newOrderRespType`       |ENUM    |NO         |Select response format: `ACK`, `RESULT`, `FULL`
+`selfTradePreventionMode`|ENUM    |NO         |The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
+`apiKey`                 |STRING |YES         |
+`recvWindow`             |LONG   |NO         |The value cannot be greater than `60000`.
+`timestamp`              |LONG   |YES          | 
+`signature`              | STRING  | YES       |
 
 **Data Source:**
+
 Matching Engine
 
 **Response:**
@@ -4720,67 +4690,71 @@ See [`order.place`](#place-new-order-trade) for more examples.
 
 ```javascript
 {
-  "id": "57833dc0-e3f2-43fb-ba20-46480973b0aa",
+  "id": "56374a46-3261-486b-a211-99ed972eb648",
   "status": 200,
-  "result": {
-    "orderListId": 1274512,
+  "result":
+  {
+    "orderListId": 2,
     "contingencyType": "OCO",
     "listStatusType": "EXEC_STARTED",
     "listOrderStatus": "EXECUTING",
-    "listClientOrderId": "08985fedd9ea2cf6b28996",
-    "transactionTime": 1660801713793,
-    "symbol": "BTCUSDT",
-    "orders": [
+    "listClientOrderId": "cKPMnDCbcLQILtDYM4f4fX",
+    "transactionTime": 1711062760648,
+    "symbol": "LTCBNB",
+    "orders":
+    [
       {
-        "symbol": "BTCUSDT",
-        "orderId": 12569138901,
-        "clientOrderId": "BqtFCj5odMoWtSqGk2X9tU"
+        "symbol": "LTCBNB",
+        "orderId": 2,
+        "clientOrderId": "0m6I4wfxvTUrOBSMUl0OPU"
       },
       {
-        "symbol": "BTCUSDT",
-        "orderId": 12569138902,
-        "clientOrderId": "jLnZpj5enfMXTuhKB1d0us"
+        "symbol": "LTCBNB",
+        "orderId": 3,
+        "clientOrderId": "Z2IMlR79XNY5LU0tOxrWyW"
       }
     ],
-    "orderReports": [
+    "orderReports":
+    [
       {
-        "symbol": "BTCUSDT",
-        "orderId": 12569138901,
-        "orderListId": 1274512,
-        "clientOrderId": "BqtFCj5odMoWtSqGk2X9tU",
-        "transactTime": 1660801713793,
-        "price": "23410.00000000",
-        "origQty": "0.00650000",
-        "executedQty": "0.00000000",
+        "symbol": "LTCBNB",
+        "orderId": 2,
+        "orderListId": 2,
+        "clientOrderId": "0m6I4wfxvTUrOBSMUl0OPU",
+        "transactTime": 1711062760648,
+        "price": "1.50000000",
+        "origQty": "1.000000",
+        "executedQty": "0.000000",
         "cummulativeQuoteQty": "0.00000000",
         "status": "NEW",
         "timeInForce": "GTC",
         "type": "STOP_LOSS_LIMIT",
-        "side": "SELL",
-        "stopPrice": "23405.00000000",
+        "side": "BUY",
+        "stopPrice": "1.50000001",
         "workingTime": -1,
         "selfTradePreventionMode": "NONE"
       },
       {
-        "symbol": "BTCUSDT",
-        "orderId": 12569138902,
-        "orderListId": 1274512,
-        "clientOrderId": "jLnZpj5enfMXTuhKB1d0us",
-        "transactTime": 1660801713793,
-        "price": "23420.00000000",
-        "origQty": "0.00650000",
-        "executedQty": "0.00000000",
+        "symbol": "LTCBNB",
+        "orderId": 3,
+        "orderListId": 2,
+        "clientOrderId": "Z2IMlR79XNY5LU0tOxrWyW",
+        "transactTime": 1711062760648,
+        "price": "1.49999999",
+        "origQty": "1.000000",
+        "executedQty": "0.000000",
         "cummulativeQuoteQty": "0.00000000",
         "status": "NEW",
         "timeInForce": "GTC",
         "type": "LIMIT_MAKER",
-        "side": "SELL",
-        "workingTime": 1660801713793,
+        "side": "BUY",
+        "workingTime": 1711062760648,
         "selfTradePreventionMode": "NONE"
       }
     ]
   },
-  "rateLimits": [
+  "rateLimits":
+  [
     {
       "rateLimitType": "ORDERS",
       "interval": "SECOND",
