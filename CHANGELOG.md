@@ -1,4 +1,32 @@
-# CHANGELOG for Binance's API (2024-04-02)
+# CHANGELOG for Binance's API (2024-04-10)
+
+## 2024-04-10
+
+The following changes have been postponed to take effect on **April 25, 05:00 UTC**
+
+General changes:
+
+* Symbol permission information in Exchange Information responses has moved from field `permissions` to field `permissionSets`.
+* Field `permissions` will be empty and will be removed in a future release.
+* Previously, `"permissions":["SPOT","MARGIN"]` meant that you could place an order on the symbol if your account had `SPOT` or `MARGIN` permissions. The equivalent is `"permissionSets":[["SPOT","MARGIN"]]`. (Note the extra set of square brackets.) Each array of permissions inside the `permissionSets` array is called a "permission set".
+* Symbol permissions can now be more complex. `"permissionSets":[["SPOT","MARGIN"],["TRD_GRP_004","TRD_GRP_005"]]` means that you may place an order on the symbol if your account has SPOT or MARGIN permissions **and** `TRD_GRP_004` or `TRD_GRP_005` permissions. There may be an arbitrary number of permission sets in a symbol's `permissionSets`.
+
+REST API
+
+* `otoAllowed` will now appear on `GET /api/v3/exchangeInfo`, that indicates if One-Triggers-the-Other (OTO) orders are supported on that symbol.
+
+WebSocket API
+
+* `otoAllowed` will now appear on `exchangeInfo`, that indicates if One-Triggers-the-Other (OTO) orders are supported on that symbol.
+
+SBE
+
+* A new schema 2:0 [spot_2_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_2_0.xml) has been released. The current schema 1:0 [spot_1_0.xml](https://github.com/binance/binance-spot-api-docs/blob/becd4d44a09d94821d2dc761ba9197aae8b495c3/sbe/schemas/spot_1_0.xml) will thus be deprecated, and retired from the API in 6 months as per our schema deprecation policy.
+* When using schema 1:0 on REST API or WebSocket API, group "permissions" in message "ExchangeInfoResponse" will always be empty. Upgrade to schema 2:0 to find permission information in group "permissionSets". See General changes above for more details.
+* Deprecated OCO requests will still be supported by the latest schema.
+* Note that trying to use schema 2:0 before it is actually released will result in an error.
+
+---
 
 ## 2024-04-02
 

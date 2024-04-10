@@ -1,5 +1,32 @@
 
-# 更新日志 (2024-04-02)
+# 更新日志 (2024-04-10)
+
+
+## 2024-04-10
+
+以下更新的生效时间已被推迟到 **4月25日 05：00 UTC** 
+
+* "交易规范信息"响应中的交易对权限信息已从字段 `permissions` 移至字段 `permissionSets`。
+* 字段 `permissions` 将为空，并将在未来版本中删除。
+* 以前，`"permissions":["SPOT","MARGIN"]` 代表如果您的账户具有 `SPOT` 或 `MARGIN` 权限，您就可以在该交易对上下订单。现在，等效项是 `"permissionSets":[["SPOT","MARGIN"]]`（请注意额外的方括号）。`permissionSets`数组中的每个权限数组称为 "permission set"。
+* 交易对的权限现在可以有更多权限类型。例如，`"permissionSets":[["SPOT","MARGIN"],["TRD_GRP_004","TRD_GRP_005"]]` 指示除了支持以上提过的权限集，也接受 `TRD_GRP_004` 或 `TRD_GRP_005`。交易对的 `permissionSets` 中可以有任意排列组合的权限集。
+
+REST API
+
+* `otoAllowed` 现在将出现在 `GET /api/v3/exchangeInfo` 上，指示该交易品种是否支持 One-Triggers-the-Other (OTO) 订单。
+
+WebSocket API
+
+* `otoAllowed` 现在将出现在 `exchangeInfo` 上，指示该交易品种是否支持 One-Triggers-the-Other (OTO) 订单。
+
+SBE
+
+* 已发布新模式 2:0 [Spot_2_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_2_0.xml)。 当前模式 1:0 [spot_1_0.xml](https://github.com/binance/binance-spot-api-docs/blob/becd4d44a09d94821d2dc761ba9197aae8b495c3/sbe/schemas/spot_1_0.xml) 将被弃用，并从根据我们模式弃用政策，会将在 6 个月内下线。
+* 在 REST API 或 WebSocket API 上使用模式 1:0 时，消息 `ExchangeInfoResponse` 中的组"权限"将始终为空。在升级到模式 2:0后， 您才可以在 `permissionSets` 组中查找权限信息。
+* 最新模式仍将支持已弃用的 OCO 请求。
+* 请注意，在模式 2:0 实际发布之前尝试使用它会导致错误。
+
+---
 
 ## 2024-04-02
 
