@@ -1,4 +1,25 @@
-# CHANGELOG for Binance's API (2024-04-02)
+# CHANGELOG for Binance's API (2024-04-10)
+
+## 2024-04-10
+
+The following changes have been postponed to take effect on **April 25, 05:00 UTC**
+
+General changes:
+
+* Symbol permission information in Exchange Information responses has moved from field `permissions` to field `permissionSets`.
+* Field `permissions` will be empty and will be removed in a future release.
+* Previously, `"permissions":["SPOT","MARGIN"]` meant that you could place an order on the symbol if your account had `SPOT` or `MARGIN` permissions. The equivalent is `"permissionSets":[["SPOT","MARGIN"]]`. (Note the extra set of square brackets.) Each array of permissions inside the `permissionSets` array is called a "permission set".
+* Symbol permissions can now be more complex. `"permissionSets":[["SPOT","MARGIN"],["TRD_GRP_004","TRD_GRP_005"]]` means that you may place an order on the symbol if your account has SPOT or MARGIN permissions **and** `TRD_GRP_004` or `TRD_GRP_005` permissions. There may be an arbitrary number of permission sets in a symbol's `permissionSets`.
+
+REST API
+
+* `otoAllowed` will now appear on `GET /api/v3/exchangeInfo`, that indicates if One-Triggers-the-Other (OTO) orders are supported on that symbol.
+
+WebSocket API
+
+* `otoAllowed` will now appear on `exchangeInfo`, that indicates if One-Triggers-the-Other (OTO) orders are supported on that symbol.
+
+---
 
 ## 2024-04-02
 

@@ -1,5 +1,25 @@
 
-# 更新日志 (2024-04-02)
+# 更新日志 (2024-04-10)
+
+
+## 2024-04-10
+
+以下更新的生效时间已被推迟到 **4月25日 05：00 UTC** 
+
+* "交易规范信息"响应中的交易对权限信息已从字段 `permissions` 移至字段 `permissionSets`。
+* 字段 `permissions` 将为空，并将在未来版本中删除。
+* 以前，`"permissions":["SPOT","MARGIN"]` 代表如果您的账户具有 `SPOT` 或 `MARGIN` 权限，您就可以在该交易对上下订单。现在，等效项是 `"permissionSets":[["SPOT","MARGIN"]]`（请注意额外的方括号）。`permissionSets`数组中的每个权限数组称为 "permission set"。
+* 交易对的权限现在可以有更多权限类型。例如，`"permissionSets":[["SPOT","MARGIN"],["TRD_GRP_004","TRD_GRP_005"]]` 指示除了支持以上提过的权限集，也接受 `TRD_GRP_004` 或 `TRD_GRP_005`。交易对的 `permissionSets` 中可以有任意排列组合的权限集。
+
+REST API
+
+* `otoAllowed` 现在将出现在 `GET /api/v3/exchangeInfo` 上，指示该交易品种是否支持 One-Triggers-the-Other (OTO) 订单。
+
+WebSocket API
+
+* `otoAllowed` 现在将出现在 `exchangeInfo` 上，指示该交易品种是否支持 One-Triggers-the-Other (OTO) 订单。
+
+---
 
 ## 2024-04-02
 

@@ -211,8 +211,7 @@ Error message                                                   | Description
 "Order would trigger immediately."                              | The order's stop price is not valid when compared to the last traded price.
 "Cancel order is invalid. Check origClOrdId and orderId."       | No `origClOrdId` or `orderId` was sent in.
 "Order would immediately match and take."                       | `LIMIT_MAKER` order type would immediately match and trade, and not be a pure maker order.
-"The relationship of the prices for the orders is not correct." | The prices set in the `OCO` is breaking the Price restrictions. <br/> For reference: <br/> `BUY` : `LIMIT_MAKER` `price` < Last Traded Price < `stopPrice` <br>
- `SELL` : `LIMIT_MAKER` `price` > Last Traded Price > `stopPrice`
+"The relationship of the prices for the orders is not correct." | The prices set in the `OCO` is breaking the Price restrictions. <br/> For reference: <br/> `BUY` : `LIMIT_MAKER` `price` < Last Traded Price < `stopPrice` <br>`SELL` : `LIMIT_MAKER` `price` > Last Traded Price > `stopPrice`
 "OCO orders are not supported for this symbol"                  | `OCO` is not enabled on the symbol.
 "Quote order qty market orders are not support for this symbol."| `MARKET` orders using the parameter `quoteOrderQty` are not enabled on the symbol.
 "Trailing stop orders are not supported for this symbol."       | Orders using `trailingDelta` are not enabled on the symbol.
