@@ -1,9 +1,9 @@
 # 关于本中文翻译版
-* 中文文档由英文文档翻译而来，当中文文档内容与英文文档冲突时，以英文文档为准
+* 中文文档由英文文档翻译而来，当中文文档内容与英文文档冲突时，以英文文档为准。
+
 # 币安API文档
-* 币安API英文Telegram群 **https://t.me/binance_api_english**
-* 币安API中文Telegram群 **https://t.me/binance_api_chinese**
-* 所有于本文档内给出定义的包括但不限于接口、数据流、参数、响应等，可认为是币安官方提供的内容。
+* 有关 API 和数据流的更改、停机等官方公告将在此处发布：**https://t.me/binance_api_announcements**
+* 所有于本文档内给出定义的包括但不限于接口，数据流，参数，响应等，可认为是币安官方提供的内容。
 * 而所有未于本文档内给出的内容，币安均不承诺提供任何支持。
 
 文档名 | 描述
@@ -39,38 +39,37 @@
 
 # 更新日志
 
-关于API(包括REST和WebSocket)方面的最新变动, 请参考 [更新日志](./CHANGELOG_CN.md).
+关于API(包括REST和WebSocket)方面的最新变动，请参考 [更新日志](./CHANGELOG_CN.md)。
 
 
 # 相关信息
 
 * [Postman Collections](https://github.com/binance/binance-api-postman)
-    * 现在你可以通过Postman collection来快速体验、使用API接口.
-* Connector
-    * 一个轻量级的代码库，提供让用户直接调用API的方法。
-    * 支持所有现货的接口.
-    * [Python](https://github.com/binance/binance-connector-python)
-    * [Node.js](https://github.com/binance/binance-connector-node)
-    * [Ruby](https://github.com/binance/binance-connector-ruby)
-    * [DotNET](https://github.com/binance/binance-connector-dotnet)
-    * [Java](https://github.com/binance/binance-connector-java)
-    * [Rust](https://github.com/binance/binance-spot-connector-rust)
-    * [PHP](https://github.com/binance/binance-connector-php)
-    * [Go](https://github.com/binance/binance-connector-go)
-    * [TypeScript](https://github.com/binance/binance-connector-typescript)
+    * 现在你可以通过使用 Postman Collections 来快速体验和使用 API 接口。
+* Connectors
+    * 以下是以不同编程语言编写的轻量代码库，可作为连接到币安公共 API 的连接器：
+        * [Python](https://github.com/binance/binance-connector-python)
+        * [Node.js](https://github.com/binance/binance-connector-node)
+        * [Ruby](https://github.com/binance/binance-connector-ruby)
+        * [DotNET C#](https://github.com/binance/binance-connector-dotnet)
+        * [Java](https://github.com/binance/binance-connector-java)
+        * [Rust](https://github.com/binance/binance-spot-connector-rust)
+        * [PHP](https://github.com/binance/binance-connector-php)
+        * [Go](https://github.com/binance/binance-connector-go)
+        * [TypeScript](https://github.com/binance/binance-connector-typescript)
 * [Swagger](https://github.com/binance/binance-api-swagger)
-    * 一个基于OpenAPI规范的RESTful API接口定义的YAML文件，还有便于交互的 Swagger UI 页面。
+    * 一个基于 OpenAPI 规范的 RESTful API 接口定义的 YAML 文件，还有便于交互的 Swagger UI 页面。
 * [Spot Testnet](https://testnet.binance.vision/)
-    * 用户可以使用现货的测试网来体验SPOT交易.
-    * 现在只能通过API来测试交易, 没有UI.
-    * 只支持以 `/api/*`开头的接口, `/sapi/*`接口不支持.
+    * 用户可以使用现货的测试网来体验 SPOT 交易。
+    * 现在只能通过 API 来测试交易，没有 UI。
+    * 只支持以 `/api/*`开头的接口，`/sapi/*`接口不支持。
 
 # 联系我们
 
-* [Binance API 中文电报群](https://t.me/Binance_api_Chinese)
-    * 适合咨询关于API或者Websocket性能方面的疑问和困扰.
-    * 可以咨询在文档上面没有的API问题.
+* [Binance API 中文电报群](https://t.me/binance_api_chinese) 或 [Binance API 英文电报群](https://t.me/binance_api_english)
+    * 适合咨询关于 API 或者 Websocket 性能方面的疑问和困扰。
+    * 可以咨询在文档上面没有的 API 问题。
 * [Binance 开发者论坛](https://dev.binance.vision/)
-    * 可以提问或者咨询关于API或者Websocket代码方面问题.
+    * 可以提问或者咨询关于 API 或者 Websocket 代码方面问题。
 * [Binance 客服](https://www.binance.com/zh-CN/support-center)
-    * 咨询关于账户, 资金， 2FA等问题.
+    * 咨询关于账户，资金，2FA 等问题。

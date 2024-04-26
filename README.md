@@ -43,21 +43,20 @@ Please refer to [CHANGELOG](./CHANGELOG.md) for latest changes on our APIs (both
 # Useful Resources
 
 * [Postman Collections](https://github.com/binance/binance-api-postman)
-    * A postman collection containing the API endpoints for quick and easy use.
-    * This is recommended for new users who want to get a quick-start into using the API.
-* Connector
-    * This is a lightweight library that works as a connector to Binance public API.
-    * [Python](https://github.com/binance/binance-connector-python)
-    * [Node.js](https://github.com/binance/binance-connector-node)
-    * [Ruby](https://github.com/binance/binance-connector-ruby)
-    * [DotNET](https://github.com/binance/binance-connector-dotnet)
-    * [Java](https://github.com/binance/binance-connector-java)
-    * [Rust](https://github.com/binance/binance-spot-connector-rust)
-    * [PHP](https://github.com/binance/binance-connector-php)
-    * [Go](https://github.com/binance/binance-connector-go)
-    * [TypeScript](https://github.com/binance/binance-connector-typescript)
+    * Postman collections are available, and they are recommended for new users seeking a quick and easy start with the API.
+* Connectors
+    * The following are lightweight libraries that work as connectors to the Binance public API, written in different languages:
+        * [Python](https://github.com/binance/binance-connector-python)
+        * [Node.js](https://github.com/binance/binance-connector-node)
+        * [Ruby](https://github.com/binance/binance-connector-ruby)
+        * [DotNET C#](https://github.com/binance/binance-connector-dotnet)
+        * [Java](https://github.com/binance/binance-connector-java)
+        * [Rust](https://github.com/binance/binance-spot-connector-rust)
+        * [PHP](https://github.com/binance/binance-connector-php)
+        * [Go](https://github.com/binance/binance-connector-go)
+        * [TypeScript](https://github.com/binance/binance-connector-typescript)
 * [Swagger](https://github.com/binance/binance-api-swagger)
-    * A YAML file with OpenApi specification on the RESTful API is available to be used, as well as a Swagger UI page for the consulting.
+    * A YAML file with OpenAPI specification for the RESTful API is available, along with a Swagger UI page for reference.
 * [Spot Testnet](https://testnet.binance.vision/)
     * Users can use the SPOT Testnet to practice SPOT trading.
     * Currently, this is only available via the API.
