@@ -1,7 +1,20 @@
-# CHANGELOG for Binance SPOT Testnet (2024-04-04)
+# CHANGELOG for Binance SPOT Testnet (2024-05-02)
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/). 
 This is not always synced with the live exchange. 
+
+## 2024-05-02
+
+* One-Triggers-the-Other (OTO) orders and One-Triggers-a-One-Cancels-The-Other (OTOCO) orders are now enabled.
+* New requests have been added:
+    * REST API:
+        * `POST /api/v3/orderList/oto`
+        * `POST /api/v3/orderList/otoco`
+    * WebSocket API:
+        * `orderList.place.oto`
+        * `orderList.place.otoco`
+
+---
 
 ## 2024-04-04 
 
