@@ -564,7 +564,9 @@ New API cluster has been added. Note that all endpoints are functionally equal, 
 
 ---
 
-## RELEASE DATE TBD
+## 2023-01-19
+
+**ACTUAL RELEASE DATE TBD**
 
 **New Feature**: Self-Trade Prevention (aka STP) will be added to the system at a later date. This will prevent orders from matching with orders from the same account, or accounts under the same `tradeGroupId`.
 
@@ -1110,7 +1112,7 @@ USER DATA STREAM
 
 ## 2020-04-25
 
-### REST API
+REST API
 
 * New field `permissions`
     * Defines the trading permissions that are allowed on accounts and symbols.
@@ -1129,7 +1131,8 @@ USER DATA STREAM
     * This endpoint will cancel all open orders including OCO orders.
 * Orders can be canceled via the API on symbols in the `BREAK` or `HALT` status.
 
-### USER DATA
+USER DATA STREAM
+
 * `OutboundAccountInfo` has new field `P` which shows the trading permissions of the account.
 
 ---
@@ -1170,7 +1173,7 @@ WEB SOCKET STREAM
 ---
 ## 2019-11-13
 
-### Rest API
+REST API
 
 * api/v3/exchangeInfo has new fields:
     * `quoteOrderQtyMarketAllowed`
@@ -1223,7 +1226,8 @@ By end of Q1 2020, the following endpoints will be removed from the API. The doc
 </tr>
 </table>
 
-### USER DATA STREAM
+USER DATA STREAM
+
 * Changes to`executionReport` event
     * If the C field is empty, it will now properly return `null`, instead of `"null"`.
     * New field Q which represents the `quoteOrderQty`.
@@ -1231,7 +1235,8 @@ By end of Q1 2020, the following endpoints will be removed from the API. The doc
 * `balanceUpdate` event type added
     * This event occurs when funds are deposited or withdrawn from your account.
 
-### WEB SOCKET STREAM
+WEB SOCKET STREAMS
+
 * WSS now supports live subscribing/unsubscribing to streams.
 
 ---
@@ -1270,7 +1275,8 @@ By end of Q1 2020, the following endpoints will be removed from the API. The doc
 
 ---
 ## 2019-08-15
-### Rest API
+
+REST API
 * New order type: OCO ("One Cancels the Other")
     * An OCO has 2 orders: (also known as legs in financial terms)
         * ```STOP_LOSS``` or ```STOP_LOSS_LIMIT``` leg
@@ -1324,18 +1330,18 @@ By end of Q1 2020, the following endpoints will be removed from the API. The doc
 * GET api/v1/depth now supports `limit` 5000 and 10000; weights are 50 and 100 respectively.
 * GET api/v1/exchangeInfo has a new parameter `ocoAllowed`.
 
-### USER DATA STREAM
+USER DATA STREAM
 * ```executionReport``` event now contains "g" which has the ```orderListId```; it will be set to -1 for non-OCO orders.
 * New Event Type ```listStatus```; ```listStatus``` is sent on an update to any OCO order.
 * New Event Type ```outboundAccountPosition```; ```outboundAccountPosition``` is sent any time an account's balance changes and contains the assets that could have changed by the event that generated the balance change (a deposit, withdrawal, trade, order placement, or cancellation).
 
-### NEW ERRORS
+NEW ERRORS
 * **-1131 BAD_RECV_WINDOW**
     * ```recvWindow``` must be less than 60000
 * **-1099 Not found, authenticated, or authorized**
     * This replaces error code -1999
 
-### NEW -2011 ERRORS
+NEW -2011 ERRORS
 * **OCO_BAD_ORDER_PARAMS**
     * A parameter for one of the orders is incorrect.
 * **OCO_BAD_PRICES**
@@ -1345,23 +1351,24 @@ By end of Q1 2020, the following endpoints will be removed from the API. The doc
 
 ---
 ## 2019-03-12
-### Rest API
+
+REST API 
 * X-MBX-USED-WEIGHT header added to Rest API responses.
 * Retry-After header added to Rest API 418 and 429 responses.
 * When canceling the Rest API can now return `errorCode` -1013 OR -2011 if the symbol's `status` isn't `TRADING`.
 * `api/v1/depth` no longer has the ignored and empty `[]`.
 * `api/v3/myTrades` now returns `quoteQty`; the price * qty of for the trade.
 
-### Websocket streams
+WEBSOCKET STREAMS
 * `<symbol>@depth` and `<symbol>@depthX` streams no longer have the ignored and empty `[]`.
 
-### System improvements
+SYSTEM IMPROVEMENTS
 * Matching Engine stability/reliability improvements.
 * Rest API performance improvements.
 
 ---
 ## 2018-11-13
-### Rest API
+REST API
 * Can now cancel orders through the Rest API during a trading ban.
 * New filters: `PERCENT_PRICE`, `MARKET_LOT_SIZE`, `MAX_NUM_ICEBERG_ORDERS`.
 * Added `RAW_REQUESTS` rate limit. Limits based on the number of requests over X minutes regardless of weight.
@@ -1384,12 +1391,12 @@ By end of Q1 2020, the following endpoints will be removed from the API. The doc
    For example:
    https://api.binance.com/api/v3/avgPrice?symbol=BNBUSDT
 
-### User data stream
+USER DATA STREAM
 * `Last quote asset transacted quantity` (as variable `Y`) added to execution reports. Represents the `lastPrice` * `lastQty` (`L` * `l`).
 
 ---
 ## 2018-07-18
-### Rest API
+REST API
 *  New filter: `ICEBERG_PARTS`
 *  `POST api/v3/order` new defaults for `newOrderRespType`. `ACK`, `RESULT`, or `FULL`; `MARKET` and `LIMIT` order types default to `FULL`, all other orders default to `ACK`.
 *  POST api/v3/order `RESULT` and `FULL` responses now have `cummulativeQuoteQty`
@@ -1403,7 +1410,7 @@ By end of Q1 2020, the following endpoints will be removed from the API. The doc
 *  Order lookup endpoints will now return `cummulativeQuoteQty`. If `cummulativeQuoteQty` is < 0, it means the data isn't available for this order at this time.
 *  `REQUESTS` rate limit type changed to `REQUEST_WEIGHT`. This limit was always logically request weight and the previous name for it caused confusion.
 
-### User data stream
+USER DATA STREAM
 *  `cummulativeQuoteQty` field added to order responses and execution reports (as variable `Z`). Represents the cummulative amount of the `quote` that has been spent (with a `BUY` order) or received (with a `SELL` order). Historical orders will have a value < 0 in this field indicating the data is not available at this time. `cummulativeQuoteQty` divided by `cummulativeQty` will give the average price for an order.
 *  `O` (order creation time) added to execution reports
 
