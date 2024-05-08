@@ -537,7 +537,9 @@ WEBSOCKET API
 
 ---
 
-## 实际发布日期待定
+## 2023-01-19
+
+实际发布日期待定
 
 **新功能**：Self-Trade Prevention（STP）会添加到系统中。此功能将阻止订单与来自同一账户或者同一 `tradeGroupId` 账户的订单交易。
 
@@ -1105,7 +1107,7 @@ WEB SOCKET 连接限制
 ---
 
 ## 2018-11-13
-### Rest API
+REST API
   * 账户交易权限被禁时允许进行撤单操作。
   * 增加了新的过滤器: `PERCENT_PRICE`, `MARKET_LOT_SIZE`, `MAX_NUM_ICEBERG_ORDERS`。
   * 增加了 `RAW_REQUESTS` 频率限制. 该限制仅统计请求次数，不统计请求权重。
@@ -1123,11 +1125,11 @@ WEB SOCKET 连接限制
      例如
      https://api.binance.com/api/v3/avgPrice?symbol=BNBUSDT
 
-### User data stream
+USER DATA STREAM
   * 成交报告中增加了 `末次成交金额` (`Y`)，等于 `末次成交量` * `末次成交价格` (`L` * `l`).
 
 ## 2018-07-18
-### Rest API
+REST API
   *  新过滤器: `ICEBERG_PARTS`
   *  `POST api/v3/order` 中 `newOrderRespType` 参数的缺省值更改; `MARKET`  `LIMIT` 默认为 `FULL`, 其他默认为 `ACK`.
   *  POST api/v3/order `RESULT` 与 `FULL` 响应中增加 `cummulativeQuoteQty`
@@ -1141,7 +1143,7 @@ WEB SOCKET 连接限制
   *  订单查询结果中增加 `cummulativeQuoteQty`字段. 负值表示尚无任何成交，该字段不可用.
   *  `REQUESTS` 限制更名为 `REQUEST_WEIGHT`. 避免名字造成的误解。
 
-### User data stream
+USER DATA STREAM
   *  订单报告与成交报告中增加`cummulativeQuoteQty` 字段 (`Z`). 表示已经成交的金额， 即已经花费的金额(买入订单)或已经收到的金额(卖出订单)，均未计算手续费. 此功能增加之前成交的订单在历史订单接口中查询到的该字段可能小于零.
   *  `cummulativeQuoteQty`/`cummulativeQty` 可以用来计算该订单已经成交部分的平均价格。
   *  成交报告中增加了 `O`字段 (订单创建时间)
