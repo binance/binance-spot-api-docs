@@ -82,7 +82,7 @@ SBE
 
 简单二进制编码 (SBE) 将部署到现货的 Rest API 和  WebSocket API 生产系统上。
 
-更多关于SBE的信息, 请参考[常见问题解答 (FAQ)](./faqs/sbe_faq_cn.md)
+更多关于SBE的信息, 请参考[常见问题解答 (FAQ)](./faqs/sbe_faq_CN.md)
 
 ---
 
@@ -96,7 +96,7 @@ SBE 模式已经更新了 WebSocket API 元数据，但并没有增加 `schemaId
 
 * 希望在 WebSocket API 上使用 SBE 的用户，需要更新到[最新的 SBE 模式](https://github.com/binance/binance-spot-api-docs/blob/becd4d44a09d94821d2dc761ba9197aae8b495c3/sbe/schemas/spot_1_0.xml)。
 
-SBE 的 [FAQ](./faqs/sbe_faq_cn.md) 已经更新。
+SBE 的 [FAQ](./faqs/sbe_faq_CN.md) 已经更新。
 
 ---
 
@@ -104,7 +104,7 @@ SBE 的 [FAQ](./faqs/sbe_faq_cn.md) 已经更新。
 
 简单二进制编码 (SBE) 已经在[现货测试网](https://testnet.binance.vision)上线。
 生产系统会在随后支持。
-更多关于SBE的信息, 请参考[常见问题解答 (FAQ)](./faqs/sbe_faq_cn.md)
+更多关于SBE的信息, 请参考[常见问题解答 (FAQ)](./faqs/sbe_faq_CN.md)
 
 ---
 
@@ -231,7 +231,7 @@ User Data Streams
 ## 2023-10-03
 
 * **下单量的退回(`Order decrement`)功能在 06:15 UTC上线.**
-* 此功能的更详细信息, 请参考 [FAQ](./faqs/order_count_decrement_cn.md)
+* 此功能的更详细信息, 请参考 [FAQ](./faqs/order_count_decrement_CN.md)
 
 ## 2023-08-25
 
@@ -285,7 +285,7 @@ User Data Streams
 
 ## 2023-08-08
 
-智能订单路由(Smart Order Routing：SOR）添加到 API 中。您可以在[SOR 常见问题](./faqs/sor_faq_cn.md) 文档中找到更多详细信息。具体上线时间请关注相关公告。
+智能订单路由(Smart Order Routing：SOR）添加到 API 中。您可以在[SOR 常见问题](./faqs/sor_faq_CN.md) 文档中找到更多详细信息。具体上线时间请关注相关公告。
 
 REST API
 
@@ -326,7 +326,7 @@ USER DATA STREAM
 * 现在支持使用 Ed25519 类型的 API key。(UI 会在本周发布更新支持)
     * Ed25519 API keys 是 RSA API keys 的替代品，使用非对称加密技术来验证您的 API 请求。
     * **我们建议切换到 Ed25519** 以提高性能和安全性。 <br>
-        详情请参考[API Key 类型](./faqs/api_key_types_cn.md)。
+        详情请参考[API Key 类型](./faqs/api_key_types_CN.md)。
 * 文档已更新，包括了有关如何使用 Ed25519 key 对有效载荷进行签名的说明。
 
 ---
@@ -555,7 +555,7 @@ WEBSOCKET API
 ]
 ```
 
-在[STP 常见问题](./faqs/stp_faq_cn.md) 文档中可以找到更多其它关于 STP 功能的详细信息。
+在[STP 常见问题](./faqs/stp_faq_CN.md) 文档中可以找到更多其它关于 STP 功能的详细信息。
 
 REST API
 

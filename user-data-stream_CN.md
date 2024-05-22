@@ -163,7 +163,7 @@ listenKey | STRING | YES
 
 ### `executionReport` 中的特定条件时才会出现的字段
 
-这些字段仅在满足特定条件时才会出现。有关这些参数的更多信息，请参阅 [现货交易API术语表](./faqs/spot_glossary_cn.md)。
+这些字段仅在满足特定条件时才会出现。有关这些参数的更多信息，请参阅 [现货交易API术语表](./faqs/spot_glossary_CN.md)。
 
 <table>
   <tr>
