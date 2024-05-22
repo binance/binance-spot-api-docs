@@ -12,7 +12,7 @@
 * 所有接口的响应都是 JSON 格式。
 * 响应中如有数组，数组元素以时间**升序**排列，越早的数据越提前。
 * 所有时间、时间戳均为UNIX时间，单位为**毫秒**。
-* 对于仅发送公开市场数据的 API，您可以使用接口的 base URL https://data-api.binance.vision 。请参考 [Market Data Only_CN](./faqs/market_data_only_cn.md) 页面。
+* 对于仅发送公开市场数据的 API，您可以使用接口的 base URL https://data-api.binance.vision 。请参考 [Market Data Only_CN](./faqs/market_data_only_CN.md) 页面。
 
 ## HTTP 返回代码
 
@@ -2638,7 +2638,7 @@ aboveClientOrderId     |STRING  |No         |上方 leg 的唯一ID。 如果未
 aboveIcebergQty        |LONG    |No         |请注意，只有当 `aboveTimeInForce` 为 `GTC` 时才能使用。
 abovePrice             |DECIMAL |No         |
 aboveStopPrice         |DECIMAL |No         |如果 `aboveType` 是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 才能使用。<br> 必须指定 `aboveStopPrice` 或 `aboveTrailingDelta` 或两者。
-aboveTrailingDelta     |LONG    |No         |请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq-cn.md)。
+aboveTrailingDelta     |LONG    |No         |请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md)。
 aboveTimeInForce       |DECIMAL |No         |如果 `aboveType` 是 `STOP_LOSS_LIMIT`，则为必填项。
 aboveStrategyId        |INT     |No         |订单策略中上方 leg 订单的 ID。
 aboveStrategyType      |INT     |No         |上方 leg 订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
@@ -2647,7 +2647,7 @@ belowClientOrderId     |STRING  |No         |
 belowIcebergQty        |LONG    |No         |请注意，只有当 `belowTimeInForce` 为 `GTC` 时才能使用。
 belowPrice             |DECIMAL |No         |
 belowStopPrice         |DECIMAL |No         |如果 `belowType` 是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 才能使用。 <br> 必须指定 `belowStopPrice` 或 `belowTrailingDelta` 或两者。
-belowTrailingDelta     |LONG    |No         |请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq-cn.md)。
+belowTrailingDelta     |LONG    |No         |请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md)。
 belowTimeInForce       |ENUM    |No         |如果`belowType` 是 `STOP_LOSS_LIMIT`，则为必须配合提交的值。
 belowStrategyId        |INT    |No          |订单策略中下方 leg 订单的 ID。
 belowStrategyType      |INT     |No         |下方 leg 订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
