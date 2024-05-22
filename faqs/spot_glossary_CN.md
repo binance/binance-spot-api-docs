@@ -296,7 +296,7 @@ Self Trade Prevention (STP)
 * 方向(`side`)的一个枚举值, 用于用户希望卖出某一资产。
 
 Smart Order Routing (SOR)
-* 智能订单路由; 使用可互换的定价资产(`quote asset`)来提高流动性. [请阅读 SOR 常见问题](./sor_faq_cn.md) 来了解更多详情。
+* 智能订单路由; 使用可互换的定价资产(`quote asset`)来提高流动性. [请阅读 SOR 常见问题](./sor_faq_CN.md) 来了解更多详情。
 
 `SPOT`
 * 现货交易; 此种交易时候，买卖相应的资产会立刻到账。
