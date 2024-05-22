@@ -2818,7 +2818,7 @@ NONE
 `newClientOrderId`  | STRING  | NO        | 客户自定义的唯一订单ID。如果未发送，则自动生成。
 `newOrderRespType`  | ENUM    | NO        | <p>可选的响应格式: `ACK`，`RESULT`，`FULL`.</p><p>`MARKET`和`LIMIT`订单默认使用`FULL`，其他订单类型默认使用`ACK`。</p>
 `stopPrice`         | DECIMAL | NO *      |
-`trailingDelta`     | INT     | NO *      | 请看 [Trailing Stop order FAQ](faqs/trailing-stop-faq-cn.md)
+`trailingDelta`     | INT     | NO *      | 请看 [Trailing Stop order FAQ](faqs/trailing-stop-faq_CN.md)
 `icebergQty`        | DECIMAL | NO        |
 `strategyId`        | INT     | NO        | 标识订单策略中订单的任意ID。
 `strategyType`      | INT     | NO        | <p>标识订单策略的任意数值。</p><p>小于`1000000`的值是保留的，不能使用。</p>
@@ -3814,7 +3814,7 @@ NONE
         <td><code>trailingDelta</code></td>
         <td>DECIMAL</td>
         <td>NO *</td>
-        <td>请看 <a href="faqs/trailing-stop-faq-cn.md">Trailing Stop order FAQ</a></td>
+        <td>请看 <a href="faqs/trailing-stop-faq_CN.md">Trailing Stop order FAQ</a></td>
     </tr>
     <tr>
         <td><code>icebergQty</code></td>
@@ -4528,7 +4528,7 @@ NONE
 `limitStrategyId`   | INT     | NO        | 标识订单策略中的 limit 订单的任意ID。
 `limitStrategyType` | INT     | NO        | <p>标识 limit 订单策略的任意数值</p><p>小于`1000000`的值是保留的，不能使用。</p>
 `stopPrice`         | DECIMAL | YES *     | 必须指定 `stopPrice` 或 `trailingDelta`，或两者都指定
-`trailingDelta`     | INT     | YES *     | 请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq-cn.md)
+`trailingDelta`     | INT     | YES *     | 请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md)
 `stopClientOrderId` | STRING  | NO        | Stop 订单的客户自定义的唯一订单ID。如果未发送，则自动生成
 `stopLimitPrice`    | DECIMAL | NO *      |
 `stopLimitTimeInForce` | ENUM | NO *      | 有关可用选项，请看 [`order.place`](#timeInForce)
@@ -4712,7 +4712,7 @@ NONE
 `aboveIcebergQty`        |LONG    |NO         |请注意，只有当 `aboveTimeInForce` 为 `GTC` 时才能使用。
 `abovePrice`             |DECIMAL |NO         |
 `aboveStopPrice`         |DECIMAL |NO         |如果 `aboveType` 是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 才能使用。<br> 必须指定 `aboveStopPrice` 或 `aboveTrailingDelta` 或两者。
-`aboveTrailingDelta`     |LONG    |NO         |请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq-cn.md).
+`aboveTrailingDelta`     |LONG    |NO         |请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md).
 `aboveTimeInForce`       |DECIMAL |NO         |如果 `aboveType` 是 `STOP_LOSS_LIMIT`，则为必填项。
 `aboveStrategyId`        |INT     |NO         |订单策略中上方 leg 订单的 ID。
 `aboveStrategyType`      |INT     |NO         |上方 leg 订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
@@ -4721,7 +4721,7 @@ NONE
 `belowIcebergQty`        |LONG    |NO         |请注意，只有当 `belowTimeInForce` 为 `GTC` 时才能使用。
 `belowPrice`             |DECIMAL |NO         |
 `belowStopPrice`         |DECIMAL |NO         |如果 `belowType` 是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 才能使用 <br> 必须指定 `belowStopPrice` 或 `belowTrailingDelta` 或两者。
-`belowTrailingDelta`     |LONG    |NO         |请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq-cn.md)。
+`belowTrailingDelta`     |LONG    |NO         |请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md)。
 `belowTimeInForce`       |ENUM    |NO         |如果`belowType` 是 `STOP_LOSS_LIMIT`，则为必须配合提交的值。
 `belowStrategyId`        |INT     |NO          |订单策略中下方 leg 订单的 ID。
 `belowStrategyType`      |INT     |NO         |下方 leg 订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。

@@ -28,14 +28,14 @@
 
 名称 | 描述
 ------------ | ------------
-[spot_glossary_cn](./faqs/spot_glossary_cn.md) | 现货交易 API 术语表
-[commissions_faq_cn](./faqs/commissions_faq_cn.md) | 解释 API 上所使用的佣金计算方式
-[trailing_stop_faq_cn](./faqs/trailing-stop-faq-cn.md)   | 追踪止盈止损订单(Trailing Stop)详细信息和常见问题
-[stp_faq_cn](./faqs/stp_faq_cn.md) | 关于 Self Trade Prevention (STP) 的详细信息
-[market_data_only_cn](./faqs/market_data_only_cn.md) | 仅提供市场数据的 API 和 Websocket Streams
-[sor_faq](./faqs/sor_faq_cn.md) | 智能指令路由 (SOR)
-[order_count_decrement](./faqs/order_count_decrement_cn.md) | 现货下单频率限制的更新
-[sbe_faq](./faqs/sbe_faq_cn.md) | 关于在 API 上实施简单二进制编码 (SBE) 的信息
+[spot_glossary_CN](./faqs/spot_glossary_CN.md) | 现货交易 API 术语表
+[commission_faq_CN](./faqs/commission_faq_CN.md) | 解释 API 上所使用的佣金计算方式
+[trailing_stop_faq_CN](./faqs/trailing-stop-faq_CN.md)   | 追踪止盈止损订单(Trailing Stop)详细信息和常见问题
+[stp_faq_CN](./faqs/stp_faq_CN.md) | 关于 Self Trade Prevention (STP) 的详细信息
+[market_data_only_CN](./faqs/market_data_only_CN.md) | 仅提供市场数据的 API 和 Websocket Streams
+[sor_faq_CN](./faqs/sor_faq_CN.md) | 智能指令路由 (SOR)
+[order_count_decrement_CN](./faqs/order_count_decrement_CN.md) | 现货下单频率限制的更新
+[sbe_faq_CN](./faqs/sbe_faq_CN.md) | 关于在 API 上实施简单二进制编码 (SBE) 的信息
 
 # 更新日志
 
