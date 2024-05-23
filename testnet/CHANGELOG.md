@@ -1,7 +1,23 @@
-# CHANGELOG for Binance SPOT Testnet (2024-05-02)
+# CHANGELOG for Binance SPOT Testnet (2024-05-23)
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/). 
 This is not always synced with the live exchange. 
+
+## 2024-05-23 
+
+REST API
+
+* `orderRateLimitExceededMode` has been added to `POST /api/v3/order/cancelReplace`
+
+WebSocket API
+
+* `orderRateLimitExceededMode` has been added to `order.cancelReplace`
+
+WebSocket Streams
+
+* Kline/Candlestick streams can now support a UTC+8:00 timezone offset. (e.g. `btcusdt@kline_1d@+08:00`)
+
+---
 
 ## 2024-05-02
 
