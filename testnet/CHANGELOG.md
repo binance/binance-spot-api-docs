@@ -1,7 +1,19 @@
-# CHANGELOG for Binance SPOT Testnet (2024-05-23)
+# CHANGELOG for Binance SPOT Testnet (2024-05-30)
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/). 
 This is not always synced with the live exchange. 
+
+## 2024-05-30 
+
+WebSocket API
+
+* `wss://ws-api.testnet.binance.vision/ws-api/v3` is now the primary URL for the Spot Testnet WebSocket API. Other URLs will be phased out over time.
+
+WebSocket Streams
+
+* `wss://stream.testnet.binance.vision/ws` and `wss://stream.testnet.binance.vision/stream` are now the primary URLs for the Spot Testnet WebSocket Streams. Other URLs will be phased out over time.
+
+---
 
 ## 2024-05-23 
 
