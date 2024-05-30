@@ -1,4 +1,12 @@
-# CHANGELOG for Binance's API (2024-04-10)
+# CHANGELOG for Binance's API (2024-05-30)
+
+## 2024-05-30
+
+WebSocket Streams:
+
+* Kline/Candlestick streams can now support a UTC+8 timezone offset. (e.g. `btcusdt@kline_1d@+08:00`)
+
+---
 
 ## 2024-04-10
 
