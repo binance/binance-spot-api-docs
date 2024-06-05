@@ -30,7 +30,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Web Socket Streams for Binance SPOT Testnet (2024-05-23)
+# Web Socket Streams for Binance SPOT Testnet (2024-06-05)
 
 # General WSS information
 * The base endpoint is: **wss://testnet.binance.vision/ws**.
@@ -225,8 +225,6 @@ The Trade Streams push raw trade information; each trade has a unique buyer and 
   "t": 12345,         // Trade ID
   "p": "0.001",       // Price
   "q": "100",         // Quantity
-  "b": 88,            // Buyer order ID
-  "a": 50,            // Seller order ID
   "T": 1672515782136, // Trade time
   "m": true,          // Is the buyer the market maker?
   "M": true           // Ignore

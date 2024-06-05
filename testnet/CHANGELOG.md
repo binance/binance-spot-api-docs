@@ -1,7 +1,16 @@
-# CHANGELOG for Binance SPOT Testnet (2024-05-30)
+# CHANGELOG for Binance SPOT Testnet (2024-06-05)
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/). 
 This is not always synced with the live exchange. 
+
+## 2024-06-05
+
+WebSocket Streams
+
+-  Buyer order ID (`b`) and Seller order ID (`a`) have been removed from the Trade streams. (i.e. `<symbol>@trade`)
+-  To monitor if your order was part of a trade, please listen to the [User Data Streams](user-data-stream.md).
+
+---
 
 ## 2024-05-30 
 
