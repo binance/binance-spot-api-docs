@@ -3998,6 +3998,12 @@ Cancel an existing order and immediately place a new order instead of the cancel
         <td></td>
     </tr>
     <tr>
+        <td><code>orderRateLimitExceededMode</code></td>
+        <td>ENUM</td>
+        <td>NO</td>
+        <td>Supported values: <br> <code>DO_NOTHING</code> (default)- will only attempt to cancel the order if account has not exceeded the order rate limit<br> <code>CANCEL_ONLY</code> - will always cancel the order.</td>
+    </tr>
+    <tr>
         <td><code>recvWindow</code></td>
         <td>INT</td>
         <td>NO</td>
@@ -4023,17 +4029,19 @@ additional mandatory parameters (*) are determined by the new order [`type`](#or
 
 Available `cancelReplaceMode` options:
 
-* `STOP_ON_FAILURE` – if cancellation request fails, new order placement will not be attempted
-* `ALLOW_FAILURE` – new order placement will be attempted even if the cancel request fails
+* `STOP_ON_FAILURE` – if cancellation request fails, new order placement will not be attempted.
+* `ALLOW_FAILURE` – new order placement will be attempted even if the cancel request fails.
 
 <table>
 <thead>
     <tr>
-        <th>Request</th>
-        <th colspan=3>Response</th>
+        <th colspan=3 align=left>Request</th>
+        <th colspan=3 align=left>Response</th>
     </tr>
     <tr>
         <th><code>cancelReplaceMode</code></th>
+        <th><code>orderRateLimitExceededMode</code></th>
+        <th>Order Count Usage</th>
         <th><code>cancelResult</code></th>
         <th><code>newOrderResult</code></th>
         <th><code>status</code></th>
@@ -4041,7 +4049,9 @@ Available `cancelReplaceMode` options:
 </thead>
 <tbody>
     <tr>
-        <td rowspan="3"><code>STOP_ON_FAILURE</code></td>
+        <td rowspan="11"><code>STOP_ON_FAILURE</code></td>
+        <td rowspan="6"><code>DO_NOTHING</code></td>
+        <td rowspan="3">Within Limits</td>
         <td>✅ <code>SUCCESS</code></td>
         <td>✅ <code>SUCCESS</code></td>
         <td align=right><code>200</code></td>
@@ -4057,7 +4067,53 @@ Available `cancelReplaceMode` options:
         <td align=right><code>409</code></td>
     </tr>
     <tr>
-        <td rowspan="4"><code>ALLOW_FAILURE</code></td>
+        <td rowspan="3">Exceeds Limits</td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right>N/A</td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>➖ <code>NOT_ATTEMPTED</code></td>
+        <td align=right>N/A</td>
+    </tr>
+    <tr>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right>N/A</td>
+    </tr>
+     <tr>
+        <td rowspan="5"><code>CANCEL_ONLY</code></td>
+        <td rowspan="3">Within Limits</td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right><code>200</code></td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>➖ <code>NOT_ATTEMPTED</code></td>
+        <td align=right><code>400</code></td>
+    </tr>
+    <tr>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>409</code></td>
+    </tr>
+    <tr>
+        <td rowspan="2">Exceeds Limits</td>
+        <td>❌ <code>FAILURE</code></td>
+        <td>➖ <code>NOT_ATTEMPTED</code></td>
+        <td align=right><code>429</code></td>
+    </tr>
+    <tr>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>429</code></td>
+    </tr>
+    <tr>
+        <td rowspan="16"><code>ALLOW_FAILURE</code></td>
+        <td rowspan="8"><code>DO_NOTHING</code></td>
+        <td rowspan="4">Within Limits</td>
         <td>✅ <code>SUCCESS</code></td>
         <td>✅ <code>SUCCESS</code></td>
         <td align=right><code>200</code></td>
@@ -4071,6 +4127,70 @@ Available `cancelReplaceMode` options:
         <td>❌ <code>FAILURE</code></td>
         <td>✅ <code>SUCCESS</code></td>
         <td align=right><code>409</code></td>
+    </tr>
+    <tr>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>409</code></td>
+    </tr>
+    <tr>
+     <td rowspan="4">Exceeds Limits</td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right>N/A</td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right>N/A</td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right>N/A</td>
+    </tr>
+    <tr>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right>N/A</td>
+    </tr>
+    <tr>
+        <td rowspan="8"><CODE>CANCEL_ONLY</CODE></td>
+        <td rowspan="4">Within Limits</td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right><code>200</code></td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>400</code></td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right><code>409</code></td>
+    </tr>
+    <tr>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>409</code></td>
+    </tr>
+    <tr>
+        <td rowspan="4">Exceeds Limits</td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right><code>200</code></td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>400</code></td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right>N/A</td>
     </tr>
     <tr>
         <td>✅ <code>SUCCESS</code></td>
@@ -4387,6 +4507,103 @@ If both operations fail, response will have `"status": 400`:
       "intervalNum": 1,
       "limit": 160000,
       "count": 1
+    },
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 1
+    }
+  ]
+}
+```
+
+If `orderRateLimitExceededMode` is `DO_NOTHING` regardless of `cancelReplaceMode`, and you have exceeded your order count usage, you will get status `429` with the following error:
+
+```javascript
+{
+  "id": "3b3ac45c-1002-4c7d-88e8-630c408ecd87",
+  "status": 429,
+  "error": {
+    "code": -1015,
+    "msg": "Too many new orders; current limit is 50 orders per 10 SECOND."
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "SECOND",
+      "intervalNum": 10,
+      "limit": 50,
+      "count": 50
+    },
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "DAY",
+      "intervalNum": 1,
+      "limit": 160000,
+      "count": 50
+    },
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 1
+    }
+  ]
+}
+```
+
+If `orderRateLimitExceededMode` is `CANCEL_ONLY` regardless of `cancelReplaceMode`, and you have exceeded your order count usage, you will get status `409` with the following error:
+
+```javascript
+{
+  "id": "3b3ac45c-1002-4c7d-88e8-630c408ecd87",
+  "status": 409,
+  "error": {
+    "code": -2021,
+    "msg": "Order cancel-replace partially failed.",
+    "data": {
+      "cancelResult": "SUCCESS",
+      "newOrderResult": "FAILURE",
+      "cancelResponse": {
+        "symbol": "LTCBNB",
+        "origClientOrderId": "GKt5zzfOxRDSQLveDYCTkc",
+        "orderId": 64,
+        "orderListId": -1,
+        "clientOrderId": "loehOJF3FjoreUBDmv739R",
+        "transactTime": 1715779007228,
+        "price": "1.00",
+        "origQty": "10.00000000",
+        "executedQty": "0.00000000",
+        "cummulativeQuoteQty": "0.00",
+        "status": "CANCELED",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "SELL",
+        "selfTradePreventionMode": "NONE"
+      },
+      "newOrderResponse": {
+        "code": -1015,
+        "msg": "Too many new orders; current limit is 50 orders per 10 SECOND."
+      }
+    }
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "SECOND",
+      "intervalNum": 10,
+      "limit": 50,
+      "count": 50
+    },
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "DAY",
+      "intervalNum": 1,
+      "limit": 160000,
+      "count": 50
     },
     {
       "rateLimitType": "REQUEST_WEIGHT",
@@ -6233,7 +6450,7 @@ Database
         "enabledForAccount": true,
         "enabledForSymbol": true,
         "discountAsset": "BNB",
-        "discount": "0.25000000"         //Standard commission is reduced by this rate when paying commission in BNB.
+        "discount": "0.75000000"         //Standard commission is reduced by this rate when paying commission in BNB.
       }
     }
   ],

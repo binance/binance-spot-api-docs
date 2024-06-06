@@ -2229,29 +2229,198 @@ quoteOrderQty |DECIMAL|NO
 price |DECIMAL|NO
 cancelNewClientOrderId|STRING|NO | 用户自定义的id，如空缺系统会自动赋值
 cancelOrigClientOrderId|STRING| NO| 必须提供`cancelOrigClientOrderId` 或者 `cancelOrderId`。 如果两个参数都提供, `cancelOrderId` 会占优先。
-cancelOrderId|LONG|NO| 必须提供`cancelOrigClientOrderId` 或者 `cancelOrderId`。 如果两个参数都提供, `cancelOrderId` 会占优先。
+cancelOrderId|LONG|NO| 必须提供`cancelOrigClientOrderId` 或者 `cancelOrderId`。 如果两个参数都提供，`cancelOrderId` 会占优先。
 newClientOrderId |STRING|NO| 用于辨识新订单。
 strategyId |INT| NO|
 strategyType |INT| NO| 不能低于 `1000000`。
 stopPrice|DECIMAL|NO|
 trailingDelta|LONG|NO|
 icebergQty|DECIMAL|NO|
-newOrderRespType|ENUM|NO|指定响应类型: <br/> 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`, 其他默认为`ACK`。
+newOrderRespType|ENUM|NO|指定响应类型: <br/> 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`， 其他默认为`ACK`。
 selfTradePreventionMode|ENUM|NO|允许的 ENUM 取决于交易对的配置。支持的值有 `EXPIRE_TAKER`，`EXPIRE_MAKER`，`EXPIRE_BOTH`，`NONE`。
 cancelRestrictions| ENUM | NO | 支持的值: <br>`ONLY_NEW` - 如果订单状态为 `NEW`，撤销将成功。<br> `ONLY_PARTIALLY_FILLED` - 如果订单状态为 `PARTIALLY_FILLED`，撤销将成功。
+orderRateLimitExceededMode| ENUM | NO | 支持的值: <br> `DO_NOTHING` （默认值）- 只有在帐户未超过订单速率限制的情况下，才会尝试取消订单。<br> `CANCEL_ONLY` - 将始终取消订单。
 recvWindow | LONG | NO | 不能大于 `60000`
 timestamp | LONG | YES |
 
 
-如同 `POST /api/v3/order` , 额外的强制参数取决于 `type` 。
+如同 `POST /api/v3/order`，额外的强制参数取决于 `type` 。
 
 响应格式根据消息的处理是成功、部分成功还是失败而有所不同。
 
 **数据来源:**
 撮合引擎
 
+<table>
+<thead>
+    <tr>
+        <th colspan=3 align=left>请求</th>
+        <th colspan=3 align=left>响应</th>
+    </tr>
+    <tr>
+        <th><code>cancelReplaceMode</code></th>
+        <th><code>orderRateLimitExceededMode</code></th>
+        <th>下单数</th>
+        <th><code>cancelResult</code></th>
+        <th><code>newOrderResult</code></th>
+        <th><code>status</code></th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td rowspan="11"><code>STOP_ON_FAILURE</code></td>
+        <td rowspan="6"><code>DO_NOTHING</code></td>
+        <td rowspan="3">在限制范围内</td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right><code>200</code></td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>➖ <code>NOT_ATTEMPTED</code></td>
+        <td align=right><code>400</code></td>
+    </tr>
+    <tr>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>409</code></td>
+    </tr>
+    <tr>
+        <td rowspan="3">超出限制范围</td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right>N/A</td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>➖ <code>NOT_ATTEMPTED</code></td>
+        <td align=right>N/A</td>
+    </tr>
+    <tr>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right>N/A</td>
+    </tr>
+     <tr>
+        <td rowspan="5"><code>CANCEL_ONLY</code></td>
+        <td rowspan="3">在限制范围内</td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right><code>200</code></td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>➖ <code>NOT_ATTEMPTED</code></td>
+        <td align=right><code>400</code></td>
+    </tr>
+    <tr>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>409</code></td>
+    </tr>
+    <tr>
+        <td rowspan="2">超出限制范围</td>
+        <td>❌ <code>FAILURE</code></td>
+        <td>➖ <code>NOT_ATTEMPTED</code></td>
+        <td align=right><code>429</code></td>
+    </tr>
+    <tr>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>429</code></td>
+    </tr>
+    <tr>
+        <td rowspan="16"><code>ALLOW_FAILURE</code></td>
+        <td rowspan="8"><code>DO_NOTHING</code></td>
+        <td rowspan="4">在限制范围内</td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right><code>200</code></td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>400</code></td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right><code>409</code></td>
+    </tr>
+    <tr>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>409</code></td>
+    </tr>
+    <tr>
+     <td rowspan="4">超出限制范围</td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right>N/A</td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right>N/A</td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right>N/A</td>
+    </tr>
+    <tr>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right>N/A</td>
+    </tr>
+    <tr>
+        <td rowspan="8"><CODE>CANCEL_ONLY</CODE></td>
+        <td rowspan="4">在限制范围内</td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right><code>200</code></td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>400</code></td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right><code>409</code></td>
+    </tr>
+    <tr>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>409</code></td>
+    </tr>
+    <tr>
+        <td rowspan="4">超出限制范围</td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right><code>200</code></td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>400</code></td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right>N/A</td>
+    </tr>
+    <tr>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>409</code></td>
+    </tr>
+</tbody>
+</table>
 
-**Response SUCCESS:**
+
+**响应：没有超出下单速率限制时的 Response SUCCESS**
 ```javascript
 // 撤单和下单都成功
 {
@@ -2292,7 +2461,7 @@ timestamp | LONG | YES |
 }
 ```
 
-**选择了STOP_ON_FAILURE, 撤单出现错误**
+**响应：选择了 `STOP_ON_FAILURE` 而且账户没有超出下单速率限制时, 撤单出现错误**
 ```javascript
 {
   "code": -2022,
@@ -2309,7 +2478,7 @@ timestamp | LONG | YES |
 }
 ```
 
-**响应：撤单成功，下单失败**
+**响应：撤单成功而且账户没有超出下单速率限制时，下单失败**
 ```javascript
 {
   "code": -2021,
@@ -2340,7 +2509,7 @@ timestamp | LONG | YES |
 }
 ```
 
-**选择ALLOW_FAILURE, 撤单出现错误**
+**响应：选择 `ALLOW_FAILURE` 而且账户没有超出下单速率限制时, 撤单出现错误**
 ```javascript
 {
   "code": -2021,
@@ -2363,7 +2532,7 @@ timestamp | LONG | YES |
 }
 ```
 
-**响应：撤单和下单失败**
+**响应：选择 `cancelReplaceMode=ALLOW_FAILURE` 而且账户没有超出下单速率限制时, 撤单和下单失败**
 ```javascript
 {
   "code": -2022,
@@ -2378,6 +2547,49 @@ timestamp | LONG | YES |
     "newOrderResponse": {
       "code": -2010,
       "msg": "Order would immediately match and take."
+    }
+  }
+}
+```
+
+**响应：选择 `orderRateLimitExceededMode=DO_NOTHING` 而且账户超出下单速率限制时**
+
+```javascript
+{
+  "code": -1015,
+  "msg": "Too many new orders; current limit is 1 orders per 10 SECOND." 
+}
+```
+
+**响应：选择 `orderRateLimitExceededMode=CANCEL_ONLY` 而且账户超出下单速率限制时**
+
+```javascript
+{
+  "code": -2021,
+  "msg": "Order cancel-replace partially failed.",
+  "data": {
+    "cancelResult": "SUCCESS",
+    "newOrderResult": "FAILURE",
+    "cancelResponse": {
+      "symbol": "LTCBNB",
+      "origClientOrderId": "GKt5zzfOxRDSQLveDYCTkc",
+      "orderId": 64,
+      "orderListId": -1,
+      "clientOrderId": "loehOJF3FjoreUBDmv739R",
+      "transactTime": 1715779007228,
+      "price": "1.00",
+      "origQty": "10.00000000",
+      "executedQty": "0.00000000",
+      "cummulativeQuoteQty": "0.00",
+      "status": "CANCELED",
+      "timeInForce": "GTC",
+      "type": "LIMIT",
+      "side": "SELL",
+      "selfTradePreventionMode": "NONE" 
+    },
+    "newOrderResponse": {
+      "code": -1015,
+      "msg": "Too many new orders; current limit is 1 orders per 10 SECOND." 
     }
   }
 }
@@ -3433,7 +3645,7 @@ symbol        | STRING | YES          |
     "enabledForAccount": true,
     "enabledForSymbol": true,
     "discountAsset": "BNB",
-    "discount": "0.2500000"       // 当用BNB支付佣金时，在标准佣金上按此比率打折。
+    "discount": "0.7500000"       // 当用BNB支付佣金时，在标准佣金上按此比率打折。
   }
 }
 ```

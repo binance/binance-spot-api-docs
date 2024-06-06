@@ -1,5 +1,19 @@
 
-# 更新日志 (2024-05-30)
+# 更新日志 (2024-06-06)
+
+## 2024-06-06
+
+此功能将在**6月6日 UTC时间11:59**前上线。
+
+REST API
+
+* `POST /api/v3/order/cancelReplace` 新加可选参数 `orderRateLimitExceededMode`。
+
+WebSocket API
+
+* `order.cancelReplace` 新加可选参数 `orderRateLimitExceededMode`。
+
+---
 
 ## 2024-05-30
 
