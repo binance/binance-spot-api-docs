@@ -1,4 +1,18 @@
-# CHANGELOG for Binance's API (2024-05-30)
+# CHANGELOG for Binance's API (2024-06-06)
+
+## 2024-06-06
+
+This will be available by **June 6, 11:59 UTC**.
+
+REST API
+
+* `orderRateLimitExceededMode` has been added to `POST /api/v3/order/cancelReplace`.
+
+WebSocket API
+
+* `orderRateLimitExceededMode` has been added to `order.cancelReplace`.
+
+---
 
 ## 2024-05-30
 
