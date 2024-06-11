@@ -4073,7 +4073,7 @@ Available `cancelReplaceMode` options:
     </tr>
     <tr>
         <td rowspan="8"><CODE>CANCEL_ONLY</CODE></td>
-        <td rowspan="4">Within LImits</td>
+        <td rowspan="4">Within Limits</td>
         <td>✅ <code>SUCCESS</code></td>
         <td>✅ <code>SUCCESS</code></td>
         <td align=right><code>200</code></td>
