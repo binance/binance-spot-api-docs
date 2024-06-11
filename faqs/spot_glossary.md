@@ -225,6 +225,9 @@ Notional value
 Order Book
 * List of the open bids and asks for a symbol.
 
+Order List
+* Multiple orders grouped together as a unit. See `OCO` and/or `OTO`
+
 `orderId`
 * A field in the order response that uniquely identifies the order on a symbol.
 
@@ -234,12 +237,30 @@ Order Book
 `origClientOrderId`
 * Field used when canceling or querying an order by providing the `clientOrderId`.
 
+`OTO`
+* One-Triggers-the-Other type of order that has a working order and a pending order.
+* When the working order fully fills, the pending order is automatically placed.
+
+`OTOCO`
+* One-Triggers-a-One-Cancels-the-Other order has a working order, and an OCO pair for the pending orders.
+* When the working order fully fills, the pending OCO pair is automatically placed.
+
+
 ---
 
 ## P
 
 `PARTIALLY_FILLED`
 * Order `status` indicating that part of the order has been partially filled.
+
+Pending order
+* An order in an order list that is only placed on the order book when the corresponding working order is fully filled.
+* A single order list can contain either a single pending order, or 2 pending orders forming an OCO.
+* In the single order case, almost any order type is supported, with the exception of `MARKET` orders using `quoteOrderQty`.
+
+
+`PENDING_NEW`
+* Order `status` indicating that the pending orders of an order list have been accepted by the engine, but are not yet placed on the order book.
 
 `preventedQuantity`
 * Order quantity expired due to STP events.
@@ -384,6 +405,10 @@ User Data Stream
 
 `workingFloor`
 * A field that determines whether the order is being filled by the SOR or by the order book the order was submitted to.
+
+Working order
+* An order in an order list that is immediately placed on the order book, and will trigger the placement of one or multiple pending order(s) when it becomes fully filled.
+* An order in an order list that always consists of a single `LIMIT` or `LIMIT_MAKER` order.
 
 `workingTime`
 * The time when the order started working on the order book.
