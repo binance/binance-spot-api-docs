@@ -30,7 +30,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Web Socket Streams for Binance (2023-12-04)
+# Web Socket Streams for Binance (2024-06-11)
 
 # General WSS information
 * The base endpoint is: **wss://stream.binance.com:9443** or **wss://stream.binance.com:443**
@@ -226,8 +226,6 @@ The Trade Streams push raw trade information; each trade has a unique buyer and 
   "t": 12345,         // Trade ID
   "p": "0.001",       // Price
   "q": "100",         // Quantity
-  "b": 88,            // Buyer order ID
-  "a": 50,            // Seller order ID
   "T": 1672515782136, // Trade time
   "m": true,          // Is the buyer the market maker?
   "M": true           // Ignore
