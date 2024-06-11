@@ -10,7 +10,6 @@
         * WebSocket API：
             * `orderList.place.oto`
             * `orderList.place.otoco`
-<<<<<<< HEAD
 * 在 **6月18日 UTC 时间 05:00**，我们将会把买方的订单 ID（`b`） 和卖方的订单 ID（`a`） 从交易流中删除（i.e. `<symbol>@trade`）。 （请注意，我们可能需要花几个小时来部署到所有服务器。）
     * [WebSocket 账户接口](websocket-streams_CN.md) 与其相关的文档已经被更改了。
     * 要监控您的订单是否是交易的一部分，请订阅 [WebSocket 账户接口](user-data-stream_CN.md)。          
