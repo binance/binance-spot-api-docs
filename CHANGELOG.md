@@ -1,4 +1,20 @@
-# CHANGELOG for Binance's API (2024-06-06)
+# CHANGELOG for Binance's API (2024-06-11)
+
+## 2024-06-11 
+
+* On **June 11, 05:00 UTC**, One-Triggers-the-Other (OTO) orders and One-Triggers-a-One-Cancels-The-Other (OTOCO) orders will be enabled. (Note this may take a few hours to be rolled out to all servers.)
+* New requests have been added:
+    * REST API:
+        * `POST /api/v3/orderList/oto`
+        * `POST /api/v3/orderList/otoco`
+    * WebSocket API:
+        * `orderList.place.oto`
+        * `orderList.place.otoco`
+* On **June 18, 05:00 UTC**, Buyer order ID `b` and Seller order ID `a` will be removed from the Trade Streams (i.e. `<symbol>@trade`).  (Note that this may take a few hours to be rolled out to all servers.)
+    * [WebSocket Streams](web-socket-streams.md) has been updated regarding this change.
+    * To monitor if your order was part of a trade, please listen to the [User Data Streams](user-data-stream.md)
+
+---
 
 ## 2024-06-06
 
@@ -47,6 +63,7 @@ SBE
 * When using schema 1:0 on REST API or WebSocket API, group "permissions" in message "ExchangeInfoResponse" will always be empty. Upgrade to schema 2:0 to find permission information in group "permissionSets". See General changes above for more details.
 * Deprecated OCO requests will still be supported by the latest schema.
 * Note that trying to use schema 2:0 before it is actually released will result in an error.
+
 
 ---
 
