@@ -3,13 +3,13 @@
 ## 2024-06-11 
 
 * On **June 11, 05:00 UTC**, One-Triggers-the-Other (OTO) orders and One-Triggers-a-One-Cancels-The-Other (OTOCO) orders will be enabled. (Note this may take a few hours to be rolled out to all servers.)
-* New requests have been added:
-    * REST API:
-        * `POST /api/v3/orderList/oto`
-        * `POST /api/v3/orderList/otoco`
-    * WebSocket API:
-        * `orderList.place.oto`
-        * `orderList.place.otoco`
+    * New requests have been added:
+        * REST API:
+            * `POST /api/v3/orderList/oto`
+            * `POST /api/v3/orderList/otoco`
+        * WebSocket API:
+            * `orderList.place.oto`
+            * `orderList.place.otoco`
 * On **June 18, 05:00 UTC**, Buyer order ID `b` and Seller order ID `a` will be removed from the Trade Streams (i.e. `<symbol>@trade`).  (Note that this may take a few hours to be rolled out to all servers.)
     * [WebSocket Streams](web-socket-streams.md) has been updated regarding this change.
     * To monitor if your order was part of a trade, please listen to the [User Data Streams](user-data-stream.md)
