@@ -326,7 +326,7 @@ listenKey | STRING | YES
 ```javascript
 {
   "e": "listenKeyExpired",  // 事件类型
-  "E": "1699596037418",     // 事件时间
+  "E": 1699596037418,      // 事件时间
   "listenKey": "OfYGbUzi3PraNagEkdKuFwUHn48brFsItTdsuiIXrucEvD0rhRXZ7I6URWfE8YE8" 
 }
 ```
