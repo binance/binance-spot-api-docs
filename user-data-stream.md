@@ -339,7 +339,7 @@ This event will not be pushed when the stream is closed normally.
 ```javascript
 {
   "e": "listenKeyExpired",  // Event type
-  "E": "1699596037418",     // Event time
+  "E": 1699596037418,      // Event time
   "listenKey": "OfYGbUzi3PraNagEkdKuFwUHn48brFsItTdsuiIXrucEvD0rhRXZ7I6URWfE8YE8" 
 }
 ```
