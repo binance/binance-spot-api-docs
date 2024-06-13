@@ -80,13 +80,13 @@
 * `OCO`
 * `OTO`
 
-<a id=“allocationtype”></a>
+<a id="allocationtype"></a>
 
 **分配类型：**
 
 * `SOR`
 
-<a id=“ordertypes”></a>
+<a id="ordertypes"></a>
 
 **订单类型（orderTypes, type）:**
 
@@ -98,7 +98,7 @@
 * `TAKE_PROFIT_LIMIT` - 限价止盈单
 * `LIMIT_MAKER` - 限价做市单
 
-<a id=“orderresponsetype”></a>
+<a id="orderresponsetype"></a>
 
 **订单返回类型 （newOrderRespType）:**
 
@@ -111,14 +111,14 @@
 * `EXCHANGE` - 常规交易
 * `SOR` - 智能订单路由
 
-<a id=“side”></a>
+<a id="side"></a>
 
 **订单方向 (side):**
 
 * `BUY` - 买入
 * `SELL` - 卖出
 
-<a id=“timeinforce”></a>
+<a id="timeinforce"></a>
 
 **生效时间 （timeInForce）:**
 
@@ -172,7 +172,7 @@
 * MINUTE
 * DAY
 
-<a id=“stpmodes”></a>
+<a id="stpmodes"></a>
 
 **STP 模式：**
 
