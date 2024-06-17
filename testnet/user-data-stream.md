@@ -284,7 +284,7 @@ For additional information on these parameters, please refer to the [Spot Glossa
   </tr>
 </table>
 
-If it's an order list, an event will be displayed named `ListStatus` in addition to the `executionReport` event.
+If the order is an order list, an event named `ListStatus` will be sent in addition to the `executionReport` event.
 
 **Payload**
 ```javascript
