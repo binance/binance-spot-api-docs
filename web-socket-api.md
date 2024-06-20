@@ -1080,7 +1080,7 @@ Notes:
 
 * `permissions` accepts either a list of permissions, or a single permission name. E.g. `"SPOT"`.
 
-* [Available Permissions](./enums.md#permissions)
+* [Available Permissions](./enums.md#account-and-symbol-permissions)
 
 #### Examples of Symbol Permissions Interpretation from the Response: 
 

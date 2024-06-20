@@ -961,7 +961,7 @@ NONE
 
 * `permissions` 接受多个权限或单个权限名称, 比如 `"SPOT"`。
 
-* [可用权限](./enums_CN.md#permissions)
+* [可用权限](./enums_CN.md#account-and-symbol-permissions)
 
 ### 解释响应中的 `permissionSets`：
 
