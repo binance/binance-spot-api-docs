@@ -419,7 +419,7 @@ GET /api/v3/exchangeInfo
 * 所有的参数都是可选的.
 * `permissions` 支持单个或者多个值, 比如 `SPOT`, `["MARGIN","LEVERAGED"]`.
 * 如果`permissions`值没有提供, 其默认值为 `["SPOT","MARGIN","LEVERAGED"]`.
-  * 如果想显示所有交易权限，需要分别指定(比如，`["SPOT","MARGIN",...]`). 从 [账户与交易对权限](#account-and-symbol-permissions-cn) 查看交易权限列表.
+  * 如果想显示所有交易权限，需要分别指定(比如，`["SPOT","MARGIN",...]`). 从 [账户与交易对权限](enums_CN.md#account-and-symbol-permissions) 查看交易权限列表.
 
 ### 解释响应中的 `permissionSets`：
 

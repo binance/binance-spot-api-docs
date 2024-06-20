@@ -6,6 +6,7 @@
 
 Name | Description
 ------------ | ------------
+[enums.md](./enums.md)      | Details on the enums used by REST and WebSocket API
 [errors.md](./errors.md)    | Error codes and messages of Spot API
 [filters.md](./filters.md)  | Details on the filters used by Spot API
 [rest-api.md](./rest-api.md)                      | Spot REST API (`/api`)
@@ -15,12 +16,30 @@ Name | Description
 [sbe_schemas](./sbe/schemas/)   | Spot Simple Binary Encoding (SBE) schemas
 [testnet](./testnet/)           | API docs for features available only on SPOT Testnet
 &#x0020; |
-[Wallet, Sub-account](https://binance-docs.github.io/apidocs/spot/en) | Details on Wallet and sub-accounts endpoints(`/sapi`)
-[Margin, BLVT](https://binance-docs.github.io/apidocs/spot/en) | Details on Margin and BLVT endpoints(`/sapi`)
-[Mining](https://binance-docs.github.io/apidocs/spot/en) | Details on Mining endpoints(`/sapi`)
-[BSwap, Savings](https://binance-docs.github.io/apidocs/spot/en) | Details on BSwap and Savings endpoints(`/sapi`)
-[USDT-M Futures](https://binance-docs.github.io/apidocs/futures/en/)  | Details on USDT-M Futures API (`/fapi`)
-[COIN-M Futures](https://binance-docs.github.io/apidocs/delivery/en/) | Details on COIN-M Futures API (`/dapi`)
+[Margin Trading](https://developers.binance.com/docs/margin_trading) | Details on Margin Trading
+[Derivative UM Futures](https://developers.binance.com/docs/derivatives/usds-margined-futures/general-info) | Details on Derivative UM Futures (`/fapi`)
+[Derivative CM Futures](https://developers.binance.com/docs/derivatives/coin-margined-futures/general-info) | Details on Derivative CM Futures (`/dapi`)
+[Derivative Options](https://developers.binance.com/docs/derivatives/option/general-info) | Details on Derivative European Options (`/eapi`)
+[Derivative Portfolio Margin](https://developers.binance.com/docs/derivatives/portfolio-margin/general-info)| Details on Derivative Portfolio Margin (`/papi`)
+[Wallet](https://developers.binance.com/docs/wallet) | Details on Wallet endpoints (`/sapi`)
+[Sub Account](https://developers.binance.com/docs/sub_account/general-info)  | Details on Sub-Account requests (`/sapi`) 
+[Simple Earn](https://developers.binance.com/docs/simple_earn/general-info) | Details on Simple Earn
+[Dual Investment](https://developers.binance.com/docs/dual_investment) | Details on Dual Investment 
+[Auto Invest](https://developers.binance.com/docs/auto_invest) | Details on Auto Invest
+[Staking](https://developers.binance.com/docs/staking) | Details on Staking
+[Mining](https://developers.binance.com/docs/mining) |Details on Mining
+[Algo Trading](https://developers.binance.com/docs/algo) |Details on Algo Trading
+[Copy Trading](https://developers.binance.com/docs/copy_trading) |Details on Copy Trading
+[Porfolio Margin Pro](https://developers.binance.com/docs/derivatives/portfolio-margin-pro/general-info) |Details on Portfolio Margin Pro
+[Fiat](https://developers.binance.com/docs/fiat) |Details on Fiat|
+[C2C](https://developers.binance.com/docs/c2c) |Details on C2C|
+[VIP Loan](https://developers.binance.com/docs/vip_loan) |Details on VIP Loan
+[Crypto Loan](https://developers.binance.com/docs/crypto_loan) |Details on Crypto Loan
+[Pay](https://developers.binance.com/docs/binance-pay) |Details on Binance Pay
+[Convert](https://developers.binance.com/docs/convert) |Details on Convert API
+[Rebate](https://developers.binance.com/docs/rebate) |Details on Spot Rebate
+[NFT](https://developers.binance.com/docs/nft) |Details on NFT requests
+[Gift Card](https://developers.binance.com/docs/gift_card) | Details on Gift Card API
 
 # FAQ
 

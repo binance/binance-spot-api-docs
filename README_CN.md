@@ -8,6 +8,7 @@
 
 文档名 | 描述
 ------------ | ------------
+[enums_CN.md](./enums_CN.md)      | 适用于 Rest API 和 WebSocket API 的枚举定义
 [errors_CN.md](./errors_CN.md)     | 现货 API 的错误代码及含义
 [filters_CN.md](./filters_CN.md)   | 现货 API 使用的过滤器的详细信息
 [rest-api_CN.md](./rest-api_CN.md) | 现货 Rest API 接口定义 (`/api`)
@@ -16,12 +17,30 @@
 [user-data-stream_CN.md](./user-data-stream_CN.md)     | 现货用户数据流接口的描述
 [sbe_schemas](./sbe/schemas/) | 现货API的简单二进制编码 (SBE)模式 (Schema)
 &#x0020; |
-[Wallet, Sub-account](https://binance-docs.github.io/apidocs/spot/cn) | 钱包，子账户接口的描述(`/sapi`)
-[Margin, BLVT](https://binance-docs.github.io/apidocs/spot/cn) | 杠杆，杠杆代币接口的描述(`/sapi`)
-[Mining](https://binance-docs.github.io/apidocs/spot/cn) | 矿池接口的描述(`/sapi`)
-[BSwap, Savings](https://binance-docs.github.io/apidocs/spot/cn) | 流动性挖矿，币安宝接口的描述(`/sapi`)
-[USDT-M Futures](https://binance-docs.github.io/apidocs/futures/cn/) | U本位合约相关API (`/fapi`)
-[COIN-M Futures](https://binance-docs.github.io/apidocs/delivery/cn/) | 币本位合约相关API (`/dapi`)
+[Margin Trading](https://developers.binance.com/docs/zh-CN/margin_trading/Introduction) | 关于杠杆交易的描述
+[Derivative UM Futures](https://developers.binance.com/docs/zh-CN/derivatives/usds-margined-futures/general-info) | 关于U本位合约相关接口的描述 (`/fapi`)
+[Derivative CM Futures](https://developers.binance.com/docs/zh-CN/derivatives/coin-margined-futures/general-info) | 关于币本位合约相关接口的描述 (`/dapi`)
+[Derivative Options](https://developers.binance.com/docs/zh-CN/derivatives/option/general-info) | 关于欧式期权的描述 (`/eapi`)
+[Derivative Portfolio Margin](https://developers.binance.com/docs/zh-CN/derivatives/portfolio-margin/general-info)| 关于统一账户的描述 (`/papi`)
+[Wallet](https://developers.binance.com/docs/zh-CN/wallet/Introduction) | 关于钱包的描述 (`/sapi`)
+[Sub Account](https://developers.binance.com/docs/zh-CN/sub_account/Introduction)  | 关于子母账户接口的描述 (`/sapi`)
+[Simple Earn](https://developers.binance.com/docs/zh-CN/simple_earn/Introduction) | 关于赚币的描述 
+[Dual Investment](https://developers.binance.com/docs/binance-spot-api-docs/CHANGELOG) | 关于双币投资接口的描述 
+[Auto Invest](https://developers.binance.com/docs/zh-CN/auto_invest/Introduction) | 关于定投接口的描述
+[Staking](https://developers.binance.com/docs/zh-CN/staking/Introduction) | 关于ETH质押接口的描述
+[Mining](https://developers.binance.com/docs/zh-CN/mining/Introduction) | 关于矿池接口的描述
+[Algo Trading](https://developers.binance.com/docs/zh-CN/algo/Introduction) | 关于策略交易的描述
+[Copy Trading](https://developers.binance.com/docs/zh-CN/copy_trading/Introduction) | 关于跟单交易的描述
+[Porfolio Margin Pro](https://developers.binance.com/docs/zh-CN/derivatives/portfolio-margin-pro/general-info) | 关于统一账户专业版的描述
+[Fiat](https://developers.binance.com/docs/zh-CN/fiat/Introduction) | 关于法币的描述|
+[C2C](https://developers.binance.com/docs/zh-CN/c2c/Introduction) | 关于 C2C 接口的描述|
+[VIP Loan](https://developers.binance.com/docs/zh-CN/vip_loan/Introduction) | 关于 VIP 借币的描述
+[Crypto Loan](https://developers.binance.com/docs/zh-CN/crypto_loan/Introduction) | 关于质押借币的描述
+[Pay](https://developers.binance.com/docs/zh-CN/binance-pay/introduction) |关于币安 Pay 的描述
+[Convert](https://developers.binance.com/docs/zh-CN/convert/Introduction) | 关于闪兑接口的描述
+[Rebate](https://developers.binance.com/docs/zh-CN/rebate/Introduction) | 关于返佣的描述
+[NFT](https://developers.binance.com/docs/zh-CN/nft/Introduction) | 关于 NFT 的描述
+[Gift Card](https://developers.binance.com/docs/zh-CN/gift_card/Introduction) | 关于礼品卡的描述
 
 # 常见问题
 
