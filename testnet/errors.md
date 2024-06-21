@@ -1,8 +1,6 @@
-# Error codes for Binance SPOT Testnet (2024-04-04)
+# Error codes for Binance SPOT Testnet (2024-06-21)
 Errors consist of two parts: an error code and a message. Codes are universal,
- but messages can vary. Here is an example of error JSON payload:
-
-
+ but messages can vary. Here is the error JSON payload when using the REST API:
 ```javascript
 {
   "code":-1121,
@@ -55,6 +53,14 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 #### -1022 INVALID_SIGNATURE
  * Signature for this request is not valid.
 
+#### -1033 COMP_ID_IN_USE
+ * `SenderCompId(49)` is currently in use. Concurrent use of the same SenderCompId within one account is not allowed.
+
+#### -1034 TOO_MANY_CONNECTIONS
+ * Too many concurrent connections; current limit is '%d'.
+
+#### -1035 LOGGED_OUT
+ * Please send [Logout`<5>`](fix-api.md#logout) message to close the session.
 
 ## 11xx - Request issues
 #### -1100 ILLEGAL_CHARS
@@ -70,9 +76,12 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * A mandatory parameter was not sent, was empty/null, or malformed.
  * Mandatory parameter '%s' was not sent, was empty/null, or malformed.
  * Param '%s' or '%s' must be sent, but both were empty/null!
+ * Required tag '%s' missing.
+ * Field value was empty or malformed.
 
 #### -1103 UNKNOWN_PARAM
  * An unknown parameter was sent.
+ * Undefined Tag.
 
 #### -1104 UNREAD_PARAMETERS
  * Not all sent parameters were read.
@@ -85,6 +94,7 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 #### -1106 PARAM_NOT_REQUIRED
  * A parameter was sent when not required.
  * Parameter '%s' sent when not required.
+ * A tag '%s' was sent when not required.
 
 #### -1108 PARAM_OVERFLOW
  * Parameter '%s' overflowed.
@@ -128,6 +138,8 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 #### -1128 OPTIONAL_PARAMS_BAD_COMBO
  * Combination of optional parameters invalid.
+ * Combination of optional fields invalid. Recommendation: '%s' and '%s' must both be sent.
+* Fields [%s] must be sent together or omitted entirely.
 
 #### -1130 INVALID_PARAMETER
  * Invalid data sent for a parameter.
@@ -135,9 +147,10 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 #### -1134 BAD_STRATEGY_TYPE
  * `strategyType` was less than 1000000. 
+ * `TargetStrategy (847)` was less than 1000000.
 
 #### -1135 INVALID_JSON
- * Invalid JSON Request
+ * Invalid JSON Request.
  * JSON sent for parameter '%s' is not valid
 
 #### -1139 INVALID_TICKER_TYPE
@@ -150,21 +163,68 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * Symbol is present multiple times in the list.
 
 #### -1152 INVALID_SBE_HEADER
-* Invalid `X-MBX-SBE` header; expected `<SCHEMA_ID>:<VERSION>`.
+ * Invalid `X-MBX-SBE` header; expected `<SCHEMA_ID>:<VERSION>`.
 
 #### -1153 UNSUPPORTED_SCHEMA_ID
-* Unsupported SBE schema ID or version specified in the `X-MBX-SBE` header.
+ * Unsupported SBE schema ID or version specified in the `X-MBX-SBE` header.
 
 #### -1155 SBE_DISABLED
-* SBE is not enabled.
+ * SBE is not enabled.
 
 #### -1158 OCO_ORDER_TYPE_REJECTED
-* Order type not supported in OCO. 
-* If the order type provided in the `aboveType` and/or `belowType` is not supported.
+ * Order type not supported in OCO. 
+ * If the order type provided in the `aboveType` and/or `belowType` is not supported.
 
 #### -1160 OCO_ICEBERGQTY_TIMEINFORCE
-* Parameter '%s' is not supported if `aboveTimeInForce`/`belowTimeInForce` is not GTC.
-* If the order type for the above or below leg is `STOP_LOSS_LIMIT`, and `icebergQty` is provided for that leg, the `timeInForce` has to be `GTC` else it will throw an error.
+ * Parameter '%s' is not supported if `aboveTimeInForce`/`belowTimeInForce` is not GTC.
+ * If the order type for the above or below leg is `STOP_LOSS_LIMIT`, and `icebergQty` is provided for that leg, the `timeInForce` has to be `GTC` else it will throw an error.
+ * `TimeInForce (59)` must be `GTC (1)` when `MaxFloor (111)` is used.
+
+#### -1169 INVALID_TAG_NUMBER
+ * Invalid tag number.
+
+#### -1170 TAG_NOT_DEFINED_IN_MESSAGE
+ * Tag '%s' not defined for this message type.
+
+#### -1171 TAG_APPEARS_MORE_THAN_ONCE
+ * Tag '%s' appears more than once.
+
+#### -1172 TAG_OUT_OF_ORDER
+ * Tag '%s' specified out of required order.
+
+#### -1173 GROUP_FIELDS_OUT_OF_ORDER
+ * Repeating group '%s' fields out of order.
+
+#### -1174 INVALID_COMPONENT
+ * Component '%s' is incorrectly populated on '%s' order. Recommendation: '%s'
+
+#### -1175 RESET_SEQ_NUM_SUPPORT
+ * Continuation of sequence numbers to new session is currently unsupported. Sequence numbers must be reset for each new session.
+
+#### -1176 ALREADY_LOGGED_IN
+ * [Logon`<A>`](fix-api.md#logon-main) should only be sent once.
+
+#### -1177 GARBLED_MESSAGE
+ * `CheckSum(10)` contains an incorrect value.
+ * `BeginString (8)` is not the first tag in a message.
+ * `MsgType (35)` is not the third tag in a message.
+ * `BodyLength (9)` does not contain the correct byte count.
+ * Only printable ASCII characters and SOH (Start of Header) are allowed.
+
+#### -1178 BAD_SENDER_COMPID  
+ * `SenderCompId(49)` contains an incorrect value. The SenderCompID value should not change throughout the lifetime of a session.
+
+#### -1179 BAD_SEQ_NUM
+ * `MsgSeqNum(34)` contains an unexpected value. Expected: '%d'.
+
+#### -1180 EXPECTED_LOGON
+ * [Logon`<A>`](fix-api.md#logon-main) must be the first message in the session.
+
+#### -1181 TOO_MANY_MESSAGES
+ * Too many messages; current limit is '%d' messages per '%s'.
+
+#### -1182 PARAMS_BAD_COMBO
+ * Conflicting fields: [%s]
 
 #### -2010 NEW_ORDER_REJECTED
  * NEW_ORDER_REJECTED
@@ -213,7 +273,8 @@ Error message                                                   | Description
 "Order would trigger immediately."                              | The order's stop price is not valid when compared to the last traded price.
 "Cancel order is invalid. Check origClOrdId and orderId."       | No `origClOrdId` or `orderId` was sent in.
 "Order would immediately match and take."                       | `LIMIT_MAKER` order type would immediately match and trade, and not be a pure maker order.
-"The relationship of the prices for the orders is not correct." | The prices set in the `OCO` is breaking the Price restrictions. <br/> If the `aboveType` is `LIMIT_MAKER` and the `belowType` is either a `STOP_LOSS` or `STOP_LOSS_LIMIT`:  <br>`abovePrice` > Last Traded Price > `belowStopPrice` <br>If the `aboveType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`, and the `belowType` is `LIMIT_MAKER`: <br> `aboveStopPrice` > Last Traded Price > `belowPrice`
+"The relationship of the prices for the orders is not correct." | The prices set in the `OCO` is breaking the Price restrictions. <br/> If the `aboveType` is `LIMIT_MAKER` and the `belowType` is either a `STOP_LOSS` or `STOP_LOSS_LIMIT`: <br>`abovePrice` > Last Traded Price > `belowStopPrice`. <br>If the `aboveType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`, and the `belowType` is `LIMIT_MAKER`: <br> `aboveStopPrice` > Last Traded Price > `belowPrice`.
+"OCO orders are not supported for this symbol"                  | `OCO` is not enabled on the symbol.
 "Quote order qty market orders are not support for this symbol."| `MARKET` orders using the parameter `quoteOrderQty` are not enabled on the symbol.
 "Trailing stop orders are not supported for this symbol."       | Orders using `trailingDelta` are not enabled on the symbol.
 "Order cancel-replace is not supported for this symbol."        | `POST /api/v3/order/cancelReplace` (REST API) or `order.cancelReplace` (WebSocket API) is not enabled on the symbol.
@@ -221,6 +282,7 @@ Error message                                                   | Description
 "This symbol is restricted for this account."                   | Account is unable to trade on that symbol. (e.g. An `ISOLATED_MARGIN` account cannot place `SPOT` orders.)
 "Order was not canceled due to cancel restrictions."            | Either `cancelRestrictions` was set to `ONLY_NEW` but the order status was not `NEW` <br/> or <br/> `cancelRestrictions` was set to `ONLY_PARTIALLY_FILLED` but the order status was not `PARTIALLY_FILLED`. 
 "Rest API trading is not enabled." / "WebSocket API trading is not enabled." | Order is being placed or a server that is not configured to allow access to `TRADE` endpoints.
+"FIX API trading is not enabled.                                | Order is placed on a FIX server that is not TRADE enabled.
 
 ## Errors regarding placing orders via cancelReplace
 
