@@ -1,7 +1,15 @@
-# CHANGELOG for Binance SPOT Testnet (2024-06-05)
+# CHANGELOG for Binance SPOT Testnet (2024-06-21)
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/). 
 This is not always synced with the live exchange. 
+
+## 2024-06-21
+
+* [FIX API](fix-api.md) will be available today (2024-06-21) on the Spot Test Network. Please consult the Spot Test Network's [homepage](https://testnet.binance.vision/) to be informed of the release completion.
+  * Using the FIX API requires an Ed25519 API Key with the `FIX_API` permission.
+  * The release date on the live exchange has not been determined.
+
+---
 
 ## 2024-06-05
 
