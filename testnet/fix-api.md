@@ -55,9 +55,9 @@ to change this behavior.
 **Note**: ExecutionReport`<8>` push messages may be sent out of order in relation to responses.
 
 <a id="signaturecomputation"></a>
-### How to sign Logon`<A>` request
+### How to sign Logon<code>&lt;A&gt;</code> request
 
-The [Logon`<A>`](#logon-main) message authenticates your connection to the FIX API.
+The [Logon<code>&lt;A&gt;</code>](#logon-main) message authenticates your connection to the FIX API.
 This must be the first message sent by the client.
 
 * The `Username (553)` field is required to contain the API key.
@@ -72,7 +72,7 @@ separated by the SOH character:
 4. `MsgSeqNum (34)`
 5. `SendingTime (52)`
 
-Here is an example of a Logon`<A>` message with the signature payload underlined in it:
+Here is an example of a Logon<code>&lt;A&gt;</code> message with the signature payload underlined in it:
 
 ```
 8=FIX.4.4|9=248|35=A|49=5JQmUOsm|56=SPOT|34=1|52=20240612-08:52:21.613|95=88|96=KhJLbZqADWknfTAcp0ZjyNz36Kxa4ffvpNf9nTIc+K5l35h+vA1vzDRvLAEQckyl6VDOwJ53NOBnmmRYxQvQBQ==|98=0|108=30|141=Y|553=W5rcOD30c0gT4jHK8oX5d5NbzWoa0k4SFVoTHIFNJVZ3NuRpYb6ZyJznj8THyx5d|25035=1|10=000|
@@ -223,7 +223,7 @@ Appears at the end of every message.
 ## Administrative Messages
 
 <a id="heartbeat"></a>
-### Heartbeat`<0>`
+### Heartbeat <code>&lt;0&gt;</code>
 
 Sent by the server if there is no outgoing traffic during the heartbeat interval (`HeartBtInt (108)` in [Logon`<A>`](#logon-main)).
 
@@ -236,7 +236,7 @@ Sent by the client or the server in response to a [TestRequest`<1>`](#testreques
 | 112 | TestReqID | STRING | N        | When Heartbeat`<35>` is sent in response to TestRequest`<1>`, must mirror the value in TestRequest`<1>`. |
 
 <a id="testrequest"></a>
-### TestRequest`<1>`
+### TestRequest <code>&lt;1&gt;</code>
 
 Sent by the server if there is no incoming traffic during the heartbeat interval (`HeartBtInt (108)` in [Logon`<A>`](#logon-main)).
 
@@ -249,7 +249,7 @@ Sent by the client to request a [Heartbeat`<0>`](#heartbeat) response.
 | 112 | TestReqID | STRING | Y        | Arbitrary string that must be included in the Heartbeat`<0>` response. |
 
 <a id="reject"></a>
-### Reject`<3>`
+### Reject <code>&lt;3&gt;</code>
 
 Sent by the server in response to an invalid message that cannot be processed.
 
@@ -268,7 +268,7 @@ Please refer to the `Text (58)` and `ErrorCode (25016)` fields for the reject re
 | 58    | Text                | STRING | N        | Human-readable error message.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 <a id="logon-main"></a>
-### Logon`<A>`
+### Logon <code>&lt;A&gt;</code>
 
 Sent by the client to authenticate the connection.
 Logon`<A>` must be the first message sent by the client.
@@ -313,7 +313,7 @@ Sent by the server in response to a successful logon.
 ```
 
 <a id="logout"></a>
-### Logout`<5>`
+### Logout <code>&lt;5&gt;</code>
 
 Sent to initiate the process of closing the connection, and also when responding to Logout.
 
@@ -339,7 +339,7 @@ Logout Response
 
 ### Order Entry Messages 
 <a id="newordersingle"></a>
-#### NewOrderSingle`<D>`
+#### NewOrderSingle <code>&lt;D&gt;</code>
 
 Sent by the client to submit a new order for execution.
 
@@ -426,7 +426,7 @@ Required fields based on Binance OrderType:
 | `LIMIT_MAKER`       | 38, 44                          | This is a `LIMIT` order that will be rejected if the order immediately matches and trades as a taker. <br/> This is also known as a POST-ONLY order.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 
 <a id="executionreport"></a>
-#### ExecutionReport`<8>`
+#### ExecutionReport <code>&lt;8&gt;</code>
 
 Sent by the server whenever an order state changes.
 
@@ -499,7 +499,7 @@ Please see [Response Mode](#responsemode) for other behavior options.
 ```
 
 <a id="ordercancelrequest"></a>
-#### OrderCancelRequest`<F>`
+#### OrderCancelRequest <code>&lt;F&gt;</code>
 
 Sent by the client to cancel an order or an order list.
 
@@ -532,7 +532,7 @@ If the canceled order is part of an order list, the entire list will be canceled
 * [Reject`<3>`](#reject) if the message is rejected.
 
 <a id="ordercancelreject"></a>
-#### OrderCancelReject`<9>`
+#### OrderCancelReject <code>&lt;9&gt;</code>
 
 Sent by the server when [OrderCancelRequest`<F>`](#ordercancelrequest) has failed.
 
@@ -556,7 +556,7 @@ Sent by the server when [OrderCancelRequest`<F>`](#ordercancelrequest) has faile
 ```
 
 <a id="ordercancelreplace"></a>
-#### OrderCancelRequestAndNewOrderSingle`<XCN>`
+#### OrderCancelRequestAndNewOrderSingle <code>&lt;XCN&gt;</code>
 
 Sent by the client to cancel an order and submit a new one for execution.
 
@@ -607,7 +607,7 @@ Please refer to [Supported Order Types](#ordertype) for supported field combinat
 * [Reject`<3>`](#reject) if the message is rejected.
 
 <a id="ordermasscancelrequest"></a>
-#### OrderMassCancelRequest`<q>`
+#### OrderMassCancelRequest <code>&lt;q&gt;<code>
 
 Sent by the client to cancel all open orders on a symbol.
 
@@ -632,7 +632,7 @@ Sent by the client to cancel all open orders on a symbol.
 * [Reject`<3>`](#reject) if the message is rejected.
 
 <a id="ordermasscancelreport"></a>
-#### OrderMassCancelReport`<r>`
+#### OrderMassCancelReport <code>&lt;r&gt;</code>
 
 Sent by the server in response to [OrderMassCancelRequest`<q>`](#ordermasscancelrequest).
 
@@ -654,7 +654,7 @@ Sent by the server in response to [OrderMassCancelRequest`<q>`](#ordermasscancel
 ```
 
 <a id="neworderlist"></a>
-#### NewOrderList`<E>`
+#### NewOrderList <code>&lt;E&gt;</code>
 
 Sent by the client to submit a list of orders for execution.
 
@@ -710,11 +710,11 @@ Please refer to [Supported Order List Types](#order-list-types) for supported or
 | OTOCO           | `2`                     | 1. working order<br><br>2. pending below order<br><br>3. pending above order | 1. working order=`SELL` or `BUY`<br><br>2. pending below order=`BUY`<br><br>3. pending above order=`BUY`   | 1. working order=`LIMIT` or `LIMIT_MAKER`<br><br>2. pending below order=`LIMIT_MAKER`<br><br>3. pending above order=`STOP_LOSS` or `STOP_LOSS_LIMIT` | 1. working order:<br>NONE<br><br>2. pending below order:<br>`25010=2\|25011=2\|25012=0\|25013=2\|25011=1\|25012=2\|25013=2\|`<br><br>3. pending above order:<br>`25010=2\|25011=2\|25012=0\|25013=2\|25011=2\|25012=1\|25013=2\|` |
 
 <a id="liststatus"></a>
-#### ListStatus`<N>`
+#### ListStatus <code>&lt;N&gt;</code>
 
 Sent by the server whenever an order list state changes.
 
-**Note:** By default, ListStatus`<8>` is sent for all order lists of an account,
+**Note:** By default, ListStatus`<N>` is sent for all order lists of an account,
 including those submitted in different connections.
 Please see [Response Mode](#responsemode) for other behavior options.
 
@@ -750,7 +750,7 @@ Please see [Response Mode](#responsemode) for other behavior options.
 ### Limit Messages
 
 <a id="limitquery"></a>
-#### LimitQuery`<XLQ>`
+#### LimitQuery <code>&lt;XLQ&gt;</code>
 
 Sent by the client to query current limits.
 
@@ -765,7 +765,7 @@ Sent by the client to query current limits.
 ```
 
 <a id="limitresponse"></a>
-#### LimitResponse`<XLR>`
+#### LimitResponse <code>&lt;XLR&gt;</code>
 
 Sent by the server in response to [LimitQuery`<XLQ>`](#limitquery).
 
