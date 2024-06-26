@@ -607,7 +607,7 @@ Please refer to [Supported Order Types](#ordertype) for supported field combinat
 * [Reject`<3>`](#reject) if the message is rejected.
 
 <a id="ordermasscancelrequest"></a>
-#### OrderMassCancelRequest <code>&lt;q&gt;<code>
+#### OrderMassCancelRequest <code>&lt;q&gt;</code>
 
 Sent by the client to cancel all open orders on a symbol.
 
