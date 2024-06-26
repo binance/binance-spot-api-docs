@@ -27,6 +27,7 @@ To use FIX API, your API key has to be configured with the `FIX_API` permission.
 You can setup and configure your API key permissions on [Spot Test Network](https://testnet.binance.vision/).
 
 <a id="orderedmode"></a>
+
 ### On message processing order
 
 The `MessageHandling (25035)` field required in the initial [Logon`<A>`](#logon-request) message
@@ -37,6 +38,7 @@ controls whether the messages may get reordered.
 - `SEQUENTIAL(2)` guarantees that messages are processed according to their `MsgSeqNum(34)`.
 
 <a id="responsemode"></a>
+
 ### Response Mode
 
 FIX API allows multiple concurrent sessions for a single account (see [Connection Limits](#connection-limits)).
@@ -55,6 +57,7 @@ to change this behavior.
 **Note**: ExecutionReport`<8>` push messages may be sent out of order in relation to responses.
 
 <a id="signaturecomputation"></a>
+
 ### How to sign Logon<code>&lt;A&gt;</code> request
 
 The [Logon<code>&lt;A&gt;</code>](#logon-main) message authenticates your connection to the FIX API.
@@ -142,6 +145,7 @@ raw_data = logon_raw_data(private_key,
   Limits and Message Limits.
 
 <a id="connection-limits"></a>
+
 ### Connection Limits
 
 * Each Account has a limit on how many TCP connections can be established at the same time.
@@ -196,6 +200,7 @@ Client order ID fields must conform to the regex `^[a-zA-Z0-9-_]{1,36}$`:
 ## Message Components
 
 <a id="header"></a>
+
 ### Header
 
 Appears at the start of every message.
@@ -212,6 +217,7 @@ Appears at the start of every message.
 | 25000 | RecvWindow   | INT          | N        | Number of milliseconds after `SendingTime (52)` the request is valid for. <br> Defaults to `5000` milliseconds in [Logon`<A>`](#logon-request) and has a max value of `60000` milliseconds.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
 <a id="trailer"></a>
+
 ### Trailer
 
 Appears at the end of every message.
@@ -223,6 +229,7 @@ Appears at the end of every message.
 ## Administrative Messages
 
 <a id="heartbeat"></a>
+
 ### Heartbeat <code>&lt;0&gt;</code>
 
 Sent by the server if there is no outgoing traffic during the heartbeat interval (`HeartBtInt (108)` in [Logon`<A>`](#logon-main)).
@@ -236,6 +243,7 @@ Sent by the client or the server in response to a [TestRequest`<1>`](#testreques
 | 112 | TestReqID | STRING | N        | When Heartbeat`<35>` is sent in response to TestRequest`<1>`, must mirror the value in TestRequest`<1>`. |
 
 <a id="testrequest"></a>
+
 ### TestRequest <code>&lt;1&gt;</code>
 
 Sent by the server if there is no incoming traffic during the heartbeat interval (`HeartBtInt (108)` in [Logon`<A>`](#logon-main)).
@@ -249,6 +257,7 @@ Sent by the client to request a [Heartbeat`<0>`](#heartbeat) response.
 | 112 | TestReqID | STRING | Y        | Arbitrary string that must be included in the Heartbeat`<0>` response. |
 
 <a id="reject"></a>
+
 ### Reject <code>&lt;3&gt;</code>
 
 Sent by the server in response to an invalid message that cannot be processed.
@@ -268,6 +277,7 @@ Please refer to the `Text (58)` and `ErrorCode (25016)` fields for the reject re
 | 58    | Text                | STRING | N        | Human-readable error message.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 <a id="logon-main"></a>
+
 ### Logon <code>&lt;A&gt;</code>
 
 Sent by the client to authenticate the connection.
@@ -278,6 +288,7 @@ Sent by the server in response to a successful logon.
 **Note:** Logon`<A>` can only be sent once for the entirety of the session.
 
 <a id="logon-request"></a>
+
 #### Logon Request
 
 | Tag   | Name            | Type    | Required | Description                                                                                                                                        |
@@ -298,6 +309,7 @@ Sent by the server in response to a successful logon.
 ```
 
 <a id="logon-response"></a>
+
 #### Logon Response
 
 | Tag   | Name          | Type   | Required | Description                               |
@@ -313,6 +325,7 @@ Sent by the server in response to a successful logon.
 ```
 
 <a id="logout"></a>
+
 ### Logout <code>&lt;5&gt;</code>
 
 Sent to initiate the process of closing the connection, and also when responding to Logout.
@@ -338,7 +351,9 @@ Logout Response
 ## Application Messages
 
 ### Order Entry Messages 
+
 <a id="newordersingle"></a>
+
 #### NewOrderSingle <code>&lt;D&gt;</code>
 
 Sent by the client to submit a new order for execution.
@@ -384,6 +399,7 @@ Please refer to [Supported Order Types](#NewOrderSingle-required-fields).
 * [Reject`<3>`](#reject) if the message is rejected.
 
 <a id="ordertype"></a>
+
 ##### Supported Order Types
 
 | Order name                            | Binance OrderType   | Side        | required field values                    | required fields with user values |
@@ -413,6 +429,7 @@ Please refer to [Supported Order Types](#NewOrderSingle-required-fields).
 | Sell trailing take profit limit order | `TAKE_PROFIT_LIMIT` | SELL        | `40=4\|1100=4\|1101=1\|1107=2\|`         | 1109                             |
 
 <a id="NewOrderSingle-required-fields"></a>
+
 Required fields based on Binance OrderType:
 
 | Binance OrderType   | Additional mandatory parameters | Additional Information                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -426,6 +443,7 @@ Required fields based on Binance OrderType:
 | `LIMIT_MAKER`       | 38, 44                          | This is a `LIMIT` order that will be rejected if the order immediately matches and trades as a taker. <br/> This is also known as a POST-ONLY order.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 
 <a id="executionreport"></a>
+
 #### ExecutionReport <code>&lt;8&gt;</code>
 
 Sent by the server whenever an order state changes.
@@ -499,6 +517,7 @@ Please see [Response Mode](#responsemode) for other behavior options.
 ```
 
 <a id="ordercancelrequest"></a>
+
 #### OrderCancelRequest <code>&lt;F&gt;</code>
 
 Sent by the client to cancel an order or an order list.
@@ -532,6 +551,7 @@ If the canceled order is part of an order list, the entire list will be canceled
 * [Reject`<3>`](#reject) if the message is rejected.
 
 <a id="ordercancelreject"></a>
+
 #### OrderCancelReject <code>&lt;9&gt;</code>
 
 Sent by the server when [OrderCancelRequest`<F>`](#ordercancelrequest) has failed.
@@ -556,6 +576,7 @@ Sent by the server when [OrderCancelRequest`<F>`](#ordercancelrequest) has faile
 ```
 
 <a id="ordercancelreplace"></a>
+
 #### OrderCancelRequestAndNewOrderSingle <code>&lt;XCN&gt;</code>
 
 Sent by the client to cancel an order and submit a new one for execution.
@@ -607,7 +628,8 @@ Please refer to [Supported Order Types](#ordertype) for supported field combinat
 * [Reject`<3>`](#reject) if the message is rejected.
 
 <a id="ordermasscancelrequest"></a>
-#### OrderMassCancelRequest <code>&lt;q&gt;<code>
+
+#### OrderMassCancelRequest <code>&lt;q&gt;</code>
 
 Sent by the client to cancel all open orders on a symbol.
 
@@ -632,6 +654,7 @@ Sent by the client to cancel all open orders on a symbol.
 * [Reject`<3>`](#reject) if the message is rejected.
 
 <a id="ordermasscancelreport"></a>
+
 #### OrderMassCancelReport <code>&lt;r&gt;</code>
 
 Sent by the server in response to [OrderMassCancelRequest`<q>`](#ordermasscancelrequest).
@@ -654,6 +677,7 @@ Sent by the server in response to [OrderMassCancelRequest`<q>`](#ordermasscancel
 ```
 
 <a id="neworderlist"></a>
+
 #### NewOrderList <code>&lt;E&gt;</code>
 
 Sent by the client to submit a list of orders for execution.
@@ -697,6 +721,7 @@ Please refer to [Supported Order List Types](#order-list-types) for supported or
 ```
 
 <a id="order-list-types"></a>
+
 ##### Supported Order List Types
 
 **Note:** Orders must be specified in the sequence indicated in the *Order Names* column in the table below.
@@ -710,6 +735,7 @@ Please refer to [Supported Order List Types](#order-list-types) for supported or
 | OTOCO           | `2`                     | 1. working order<br><br>2. pending below order<br><br>3. pending above order | 1. working order=`SELL` or `BUY`<br><br>2. pending below order=`BUY`<br><br>3. pending above order=`BUY`   | 1. working order=`LIMIT` or `LIMIT_MAKER`<br><br>2. pending below order=`LIMIT_MAKER`<br><br>3. pending above order=`STOP_LOSS` or `STOP_LOSS_LIMIT` | 1. working order:<br>NONE<br><br>2. pending below order:<br>`25010=2\|25011=2\|25012=0\|25013=2\|25011=1\|25012=2\|25013=2\|`<br><br>3. pending above order:<br>`25010=2\|25011=2\|25012=0\|25013=2\|25011=2\|25012=1\|25013=2\|` |
 
 <a id="liststatus"></a>
+
 #### ListStatus <code>&lt;N&gt;</code>
 
 Sent by the server whenever an order list state changes.
@@ -750,6 +776,7 @@ Please see [Response Mode](#responsemode) for other behavior options.
 ### Limit Messages
 
 <a id="limitquery"></a>
+
 #### LimitQuery <code>&lt;XLQ&gt;</code>
 
 Sent by the client to query current limits.
@@ -765,6 +792,7 @@ Sent by the client to query current limits.
 ```
 
 <a id="limitresponse"></a>
+
 #### LimitResponse <code>&lt;XLR&gt;</code>
 
 Sent by the server in response to [LimitQuery`<XLQ>`](#limitquery).
