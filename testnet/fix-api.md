@@ -66,7 +66,7 @@ This must be the first message sent by the client.
 * The `Username (553)` field is required to contain the API key.
 * The `RawData (96)` field is required to contain a valid signature made with the API key.
 
-The signature payload is a text string constructed by concatenating the following fields in this exact order,
+The signature payload is a text string constructed by concatenating the values of the following fields in this exact order,
 separated by the SOH character:
 
 1. `MsgType (35)`
@@ -75,12 +75,6 @@ separated by the SOH character:
 4. `MsgSeqNum (34)`
 5. `SendingTime (52)`
 
-Here is an example of a Logon<code>&lt;A&gt;</code> message with the signature payload underlined in it:
-
-```
-8=FIX.4.4|9=248|35=A|49=5JQmUOsm|56=SPOT|34=1|52=20240612-08:52:21.613|95=88|96=KhJLbZqADWknfTAcp0ZjyNz36Kxa4ffvpNf9nTIc+K5l35h+vA1vzDRvLAEQckyl6VDOwJ53NOBnmmRYxQvQBQ==|98=0|108=30|141=Y|553=W5rcOD30c0gT4jHK8oX5d5NbzWoa0k4SFVoTHIFNJVZ3NuRpYb6ZyJznj8THyx5d|25035=1|10=000|
-                ^----------------------------------------------------^
-```
 
 Sign the payload using your private key.
 Encode the signature with **base64**.
@@ -97,17 +91,17 @@ from cryptography.hazmat.primitives.serialization import load_pem_private_key
 def logon_raw_data(private_key: Ed25519PrivateKey,
                    sender_comp_id: str,
                    target_comp_id: str,
-                   msg_seq_num: int,
+                   msg_seq_num: str,
                    sending_time: str):
     """
     Computes the value of RawData (96) field in Logon<A> message.
     """
     payload = chr(1).join([
-        f'35=A',
-        f'49={sender_comp_id}',
-        f'56={target_comp_id}',
-        f'34={msg_seq_num}'
-        f'52={sending_time}',
+        'A',
+        sender_comp_id,
+        target_comp_id,
+        msg_seq_num,
+        sending_time,
     ])
     signature = private_key.sign(payload.encode('ASCII'))
     return base64.b64encode(signature).decode('ASCII')
@@ -120,9 +114,40 @@ with open('private_key.pem', 'rb') as f:
 raw_data = logon_raw_data(private_key,
                           sender_comp_id='5JQmUOsm',
                           target_comp_id='SPOT',
-                          msg_seq_num=1,
+                          msg_seq_num='1',
                           sending_time='20240612-08:52:21.613')
 ````
+
+The values presented below can be used to validate the correctness of the signature computation implementation:
+
+| Field             | Value                   |
+|-------------------|-------------------------|
+| MsgType (35)      | `A`                     |
+| SenderCompID (49) | `EXAMPLE`               |
+| TargetCompID (56) | `SPOT`                  |
+| MsgSeqNum (34)    | `1`                     |
+| SendingTime (52)  | `20240627-11:17:25.223` |
+
+The Ed25519 private key used in the example computation is shown below:
+
+> [!CAUTION]
+> The following secret key is provided solely for illustrative purposes. Do not use this key in any real-world application as it is not secure and may compromise your cryptographic implementation. Always generate your own unique and secure keys for actual use.
+
+```
+-----BEGIN PRIVATE KEY-----
+MC4CAQAwBQYDK2VwBCIEIIJEYWtGBrhACmb9Dvy+qa8WEf0lQOl1s4CLIAB9m89u
+-----END PRIVATE KEY-----
+```
+
+Computed signature:
+```
+4MHXelVVcpkdwuLbl6n73HQUXUf1dse2PCgT1DYqW9w8AVZ1RACFGM+5UdlGPrQHrgtS3CvsRURC1oj73j8gCA==
+```
+
+Resulting Logon `<A>` message:
+```
+8=FIX.4.4|9=247|35=A|34=1|49=EXAMPLE|52=20240627-11:17:25.223|56=SPOT|95=88|96=4MHXelVVcpkdwuLbl6n73HQUXUf1dse2PCgT1DYqW9w8AVZ1RACFGM+5UdlGPrQHrgtS3CvsRURC1oj73j8gCA==|98=0|108=30|141=Y|553=sBRXrJx2DsOraMXOaUovEhgVRcjOvCtQwnWj8VxkOh1xqboS02SPGfKi2h8spZJb|25035=2|10=227|
+```
 
 ## Limits
 
