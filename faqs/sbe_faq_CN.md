@@ -138,7 +138,9 @@ response=$(echo $request | websocat -n1 'wss://ws-api.binance.com:443/ws-api/v3?
 
 ## 生成解码器：
 
-1. 下载模式 ([`spot_latest.xml`](../sbe/schemas/spot_latest.xml))
+1. 下载模式：
+    * [`spot_prod_latest.xml`](../sbe/schemas/spot_prod_latest.xml) 适用于实时交易所。
+    * [`spot_testnet_latest.xml`](../sbe/schemas/spot_testnet_latest.xml) 适用于 [现货测试网](https://testnet.binance.vision)。
 2. 克隆并构建 [`simple-binary-encoding`](https://github.com/real-logic/simple-binary-encoding)：
 ```shell
  $ git clone https://github.com/real-logic/simple-binary-encoding.git

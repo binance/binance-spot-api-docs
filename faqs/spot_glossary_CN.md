@@ -220,10 +220,15 @@ Notional value
 ## O
 
 `OCO`
-* 二选一订单(`One-Cancels-the-Other`); 订单支持用户同时提交一些列订单, 比如现价单(`LIMIT_MAKER`)和止盈止损订单(`STOP_LOSS` or `STOP_LOSS_LIMIT`)。 当执行其中一个订单时，另一个订单将自动取消。
+
+* 二选一订单(`One-Cancels-the-Other`)； 订单支持用户同时提交一系列订单, 比如现价单(`LIMIT_MAKER`)和止盈止损订单(`STOP_LOSS` or `STOP_LOSS_LIMIT`)。 当执行其中一个订单时，另一个订单将自动取消。
 
 Order Book
 * 订单薄; 包括了当前市场上买卖挂单。
+
+
+Order List
+* 订单列表；将多个订单组合为一个单元。 请参考 `OCO` 与/或 `OTO`
 
 `orderId`
 * 订单数据里用来唯一标识的ID。
@@ -234,12 +239,28 @@ Order Book
 `origClientOrderId`
 * 在查询或者取消订单请求中, 用户设置在 `clientOrderId` 的值。
 
+`OTO`
+* 一个订单触发另一个订单(`One-Triggers-the-Other`)； 这个订单列表含有一个生效订单和一个待处理订单。
+* 当生效订单完全成交时，待处理订单才会被自动下单。
+
+`OTOCO`
+* 由一个订单触发另一个二选一订单(`One-Triggers-a-One-Cancels-the-Other`)； 这个订单列表含有一个生效订单和一个待处理的 OCO 订单。
+* 当生效订单完全成交时，待处理订单才会被自动下单。
+
 ---
 
 ## P
 
 `PARTIALLY_FILLED`
 * 订单的一种状态, 表示订单被部分成交。
+
+Pending order
+* 订单列表中的订单，仅在相应的生效订单完全成交时才会被放在订单簿上。
+* 每个订单列表可以包含一个待处理订单，也可以包含2个可组成 `OCO` 的待处理订单。
+* 在单一订单的情况下，几乎支持任何订单类型，但不包括使用 `quoteOrderQty` 的 `MARKET` 的订单。
+
+`PENDING_NEW`
+* 订单 `status`； 表示引擎已接受订单列表的待处理订单，但是待处理订单并没有被放到订单簿上。
 
 `preventedQuantity`
 * 因为 STP 导致订单失效的数量。
@@ -296,7 +317,7 @@ Self Trade Prevention (STP)
 * 方向(`side`)的一个枚举值, 用于用户希望卖出某一资产。
 
 Smart Order Routing (SOR)
-* 智能订单路由; 使用可互换的定价资产(`quote asset`)来提高流动性. [请阅读 SOR 常见问题](./sor_faq_cn.md) 来了解更多详情。
+* 智能订单路由; 使用可互换的定价资产(`quote asset`)来提高流动性. [请阅读 SOR 常见问题](./sor_faq_CN.md) 来了解更多详情。
 
 `SPOT`
 * 现货交易; 此种交易时候，买卖相应的资产会立刻到账。
@@ -381,6 +402,10 @@ User Data Stream
 
 `workingFloor`
 * 工作平台； 该字段用于定义订单是通过 SOR 还是由订单提交到的订单薄（order book）成交的。
+
+Working order
+* 订单列表中的订单，该订单会立即放置在订单簿上。当此订单完全成交时，一个或多个待处理订单的自动下单会被触发。
+* 一个隶属于订单列表的订单，只能是单个 `LIMIT` 或 `LIMIT_MAKER` 类型的订单。
 
 `workingTime`
 * 指示订单何时添加到了 order book。

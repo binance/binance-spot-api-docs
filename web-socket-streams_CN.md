@@ -1,5 +1,5 @@
 
-# Web Socket 行情接口(2023-12-04)
+# Web Socket 行情接口(2024-06-11)
 # 基本信息
 * 本篇所列出的所有wss接口的baseurl为: **wss://stream.binance.com:9443** 或者 **wss://stream.binance.com:443**
 * 所有stream均可以直接访问，或者作为组合streams的一部分。
@@ -211,17 +211,16 @@
   "t": 12345,          // 交易ID
   "p": "0.001",        // 成交价格
   "q": "100",          // 成交数量
-  "b": 88,             // 买方的订单ID
-  "a": 50,             // 卖方的订单ID
   "T": 1672515782136,  // 成交时间
   "m": true,           // 买方是否是做市方。如true，则此次成交是一个主动卖出单，否则是一个主动买入单。
   "M": true            // 请忽略该字段
 }
 ```
 
-## K线
-K线stream逐秒推送所请求的K线种类(最新一根K线)的更新
+## UTC K线
+K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更新是基于 `UTC+0` 时区的。
 
+<a id="kline-intervals"></a>
 **订阅Kline需要提供间隔参数，最短为分钟线，最长为月线。支持以下间隔:**
 
 m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
@@ -270,6 +269,49 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
     "V": "500",          // 主动买入的成交量
     "Q": "0.500",        // 主动买入的成交额
     "B": "123456"        // 忽略此参数
+  }
+}
+```
+## 带有时区偏移量的K线
+K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更新是基于 `UTC+8` 时区的。
+
+**订阅Kline需要提供的间隔参数:**
+
+参考 [`Kline所支持的间隔参数`](#kline-intervals)
+
+**UTC+8 时区偏移量：**
+
+* K线间隔的开始和结束时间会基于 `UTC+8` 时区。例如， `1d` K线将在 `UTC+8` 当天开始，并在 `UTC+8` 当日完结时随之结束。
+* 请注意，Payload中的 `E`（event time），`t`（start time）和 `T`（close time）是 Unix 时间戳，它们始终以 UTC 格式解释。
+
+**Stream 名称:** \<symbol\>@kline_\<interval\>@+08:00
+
+**更新速度:** `1s` 1000ms，其它间隔 2000ms
+
+**Payload:**
+```javascript
+{
+  "e": "kline",         // Event type
+  "E": 1672515782136,   // Event time
+  "s": "BNBBTC",        // Symbol
+  "k": {
+    "t": 1672515780000, // Kline start time
+    "T": 1672515839999, // Kline close time
+    "s": "BNBBTC",      // Symbol
+    "i": "1m",          // Interval
+    "f": 100,           // First trade ID
+    "L": 200,           // Last trade ID
+    "o": "0.0010",      // Open price
+    "c": "0.0020",      // Close price
+    "h": "0.0025",      // High price
+    "l": "0.0015",      // Low price
+    "v": "1000",        // Base asset volume
+    "n": 100,           // Number of trades
+    "x": false,         // Is this kline closed?
+    "q": "1.0000",      // Quote asset volume
+    "V": "500",         // Taker buy base asset volume
+    "Q": "0.500",       // Taker buy quote asset volume
+    "B": "123456"       // Ignore
   }
 }
 ```

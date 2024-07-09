@@ -1,4 +1,4 @@
-# Binance 的公共 WebSocket API (2023-10-19)
+# Binance 的公共 WebSocket API (2024-04-02)
 
 ## API 基本信息
 
@@ -817,93 +817,6 @@ WebSocket连接只能通过一个API密钥进行身份验证。
 * `base asset` 是指作为交易对中的 `quantity` 资产。对于交易对 BTCUSDT，BTC 将是 `base asset`。
 * `quote asset` 是指作为交易对中的 `price` 资产。对于交易对 BTCUSDT，USDT 将是 `quote asset`。
 
-## ENUM 定义
-**交易对状态 (status):**
-
-* `PRE_TRADING`
-* `TRADING`
-* `POST_TRADING`
-* `END_OF_DAY`
-* `HALT`
-* `AUCTION_MATCH`
-* `BREAK`
-
-<a id="permissions"></a>
-
-**账户和交易对权限 (permissions):**
-
-* `SPOT`
-* `MARGIN`
-* `LEVERAGED`
-* `TRD_GRP_002`
-* `TRD_GRP_003`
-* `TRD_GRP_004`
-* `TRD_GRP_005`
-* `TRD_GRP_006`
-* `TRD_GRP_007`
-* `TRD_GRP_008`
-* `TRD_GRP_009`
-* `TRD_GRP_010`
-* `TRD_GRP_011`
-* `TRD_GRP_012`
-* `TRD_GRP_013`
-* `TRD_GRP_014`
-* `TRD_GRP_015`
-* `TRD_GRP_016`
-* `TRD_GRP_017`
-* `TRD_GRP_018`
-* `TRD_GRP_019`
-* `TRD_GRP_020`
-* `TRD_GRP_021`
-* `TRD_GRP_022`
-* `TRD_GRP_023`
-* `TRD_GRP_024`
-* `TRD_GRP_025`
-
-
-**订单状态 (status):**
-
-状态 | 描述
------------| --------------
-`NEW` | 订单被交易引擎接受
-`PARTIALLY_FILLED`| 部分订单被成交
-`FILLED` | 订单完全成交
-`CANCELED` | 用户撤销了订单
-`PENDING_CANCEL` | 撤销中(目前并未使用)
-`REJECTED`       | 订单没有被交易引擎接受，也没被处理
-`EXPIRED` | 订单被交易引擎取消 （比如 LIMIT FOK 订单没有成交，LIMIT IOC 或者 市价单 没有完全成交）</br> 强平期间被取消的订单 （交易所维护期间被取消的订单）
-`EXPIRED_IN_MATCH` | 表示订单由于 STP 而过期（e.g. 带有 `EXPIRE_TAKER` 的订单与订单簿上属于同账户或同 `tradeGroupId` 的订单撮合）
-
-**OCO 状态 (listStatusType):**
-
-状态 | 描述
------------| --------------
-`RESPONSE` | 当`ListStatus`响应失败的操作时使用。(订单完成或取消订单)
-`EXEC_STARTED`| 当已经下单或者订单有更新时
-`ALL_DONE` | 当订单执行结束或者不在激活状态
-
-**OCO 订单状态 (listOrderStatus):**
-
-状态 | 描述
------------| --------------
-`EXECUTING` | 当已经下单或者订单有更新时
-`ALL_DONE`| 当订单执行结束或者不在激活状态
-`REJECT` | 当订单状态响应失败(订单完成或取消订单)
-
-**指定订单的类型**
-
-* `OCO`
-
-**分配类型**
-
-* `SOR`
-
-**工作平台**
-
-* `EXCHANGE`
-* `SOR`
-
-
 ## 常用请求信息
 
 ### 测试连通性
@@ -1048,8 +961,13 @@ NONE
 
 * `permissions` 接受多个权限或单个权限名称, 比如 `"SPOT"`。
 
-* [可用权限](#permissions)
+* [可用权限](./enums_CN.md#account-and-symbol-permissions)
 
+### 解释响应中的 `permissionSets`：
+
+* `[["A","B"]]` - 有权限"A"**或**权限"B"的账户可以下订单。
+* `[["A"],["B"]]` - 有权限"A"**和**权限"B"的账户可以下订单。
+* `[["A"],["B","C"]]` - 有权限"A"**和**权限"B"或权限"C"的账户可以下订单。（此处应用的是包含或，而不是排除或，因此账户可以同时拥有权限"B"和权限"C"。）
 
 **数据源:**
 缓存
@@ -1113,6 +1031,7 @@ NONE
         ],
         "icebergAllowed": true,
         "ocoAllowed": true,
+        "otoAllowed": true,
         "quoteOrderQtyMarketAllowed": true,
         "allowTrailingStop": true,
         "cancelReplaceAllowed": true,
@@ -1135,10 +1054,13 @@ NONE
             "stepSize": "0.00100000"
           }
         ],
-        "permissions": [
-          "SPOT",
-          "MARGIN",
-          "TRD_GRP_004"
+        "permissions": [],
+        "permissionSets": [
+          [
+            "SPOT",
+            "MARGIN",
+            "TRD_GRP_004"
+          ]
         ],
         "defaultSelfTradePreventionMode": "NONE",
         "allowedSelfTradePreventionModes": [
@@ -1301,7 +1223,7 @@ NONE
 * [`<symbol>@trade`](web-socket-streams_CN.md#逐笔交易)
 
 **权重:**
-10
+25
 
 **参数:**
 
@@ -1358,7 +1280,7 @@ NONE
 获取历史交易。
 
 **权重:**
-10
+25
 
 **参数:**
 
@@ -2810,7 +2732,7 @@ NONE
 `newClientOrderId`  | STRING  | NO        | 客户自定义的唯一订单ID。如果未发送，则自动生成。
 `newOrderRespType`  | ENUM    | NO        | <p>可选的响应格式: `ACK`，`RESULT`，`FULL`.</p><p>`MARKET`和`LIMIT`订单默认使用`FULL`，其他订单类型默认使用`ACK`。</p>
 `stopPrice`         | DECIMAL | NO *      |
-`trailingDelta`     | INT     | NO *      | 请看 [Trailing Stop order FAQ](faqs/trailing-stop-faq-cn.md)
+`trailingDelta`     | INT     | NO *      | 请看 [Trailing Stop order FAQ](faqs/trailing-stop-faq_CN.md)
 `icebergQty`        | DECIMAL | NO        |
 `strategyId`        | INT     | NO        | 标识订单策略中订单的任意ID。
 `strategyType`      | INT     | NO        | <p>标识订单策略的任意数值。</p><p>小于`1000000`的值是保留的，不能使用。</p>
@@ -3188,7 +3110,7 @@ NONE
 
 ## 订单响应中的特定条件时才会出现的字段
 
-订单响应中的有一些字段仅在满足特定条件时才会出现。这些订单响应可以来自下订单，查询订单或取消订单，并且可以包括 OCO 订单类型。
+订单响应中的有一些字段仅在满足特定条件时才会出现。这些订单响应可以来自下订单，查询订单或取消订单，并且可以包括订单列表类型。
 下面列出了这些字段：
 
 名称           | 描述                                                           |显示的条件                                          | 示例 |
@@ -3399,7 +3321,7 @@ NONE
   "result": {
     "symbol": "BTCUSDT",
     "orderId": 12569099453,
-    "orderListId": -1,                  // OCO订单的ID，不然就是-1
+    "orderListId": -1,                  // 订单列表的ID，不然就是-1
     "clientOrderId": "4d96324ff9d44481926157",
     "price": "23416.10000000",
     "origQty": "0.00847000",
@@ -3532,7 +3454,7 @@ NONE
 
 * `newClientOrderId` 将替换已取消订单的 `clientOrderId`，为新订单腾出空间。
 
-* 如果您取消属于 OCO 对的订单，则整个 OCO 将被取消。
+* 如果您取消属于订单列表的订单，则整个订单列表将被取消。
 
 **数据源:**
 撮合引擎
@@ -3549,7 +3471,7 @@ NONE
     "symbol": "BTCUSDT",
     "origClientOrderId": "4d96324ff9d44481926157",  // 被取消的 clientOrderId
     "orderId": 12569099453,
-    "orderListId": -1,                              // OCO订单的ID，不然就是 -1
+    "orderListId": -1,                              // 订单列表的ID，不然就是 -1
     "clientOrderId": "91fe37ce9e69c90d6358c0",      // 请求的 newClientOrderId
     "transactTime": 1684804350068,
     "price": "23416.10000000",
@@ -3579,7 +3501,7 @@ NONE
 }
 ```
 
-取消 OCO 时：
+取消订单列表时：
 
 ```javascript
 {
@@ -3806,7 +3728,7 @@ NONE
         <td><code>trailingDelta</code></td>
         <td>DECIMAL</td>
         <td>NO *</td>
-        <td>请看 <a href="faqs/trailing-stop-faq-cn.md">Trailing Stop order FAQ</a></td>
+        <td>请看 <a href="faqs/trailing-stop-faq_CN.md">Trailing Stop order FAQ</a></td>
     </tr>
     <tr>
         <td><code>icebergQty</code></td>
@@ -3851,6 +3773,12 @@ NONE
         <td></td>
     </tr>
     <tr>
+        <td><code>orderRateLimitExceededMode</code></td>
+        <td>ENUM</td>
+        <td>NO</td>
+        <td>支持的值: <br> <code>DO_NOTHING</code> （默认值）- 只有在帐户未超过订单速率限制的情况下，才会尝试取消订单。<br> <code>CANCEL_ONLY</code> - 将始终取消订单。</td>
+    </tr>    
+    <tr>
         <td><code>recvWindow</code></td>
         <td>INT</td>
         <td>NO</td>
@@ -3875,17 +3803,19 @@ NONE
 
 可用的 `cancelReplaceMode` 选项：
 
-* `STOP_ON_FAILURE` – 如果撤销订单请求失败，将不会尝试下新订单
-* `ALLOW_FAILURE` – 即使撤销订单请求失败，也会尝试下新订单
+* `STOP_ON_FAILURE` – 如果撤销订单请求失败，将不会尝试下新订单。
+* `ALLOW_FAILURE` – 即使撤销订单请求失败，也会尝试下新订单。
 
 <table>
 <thead>
     <tr>
-        <th>Request</th>
-        <th colspan=3>Response</th>
+        <th colspan=3 align=left>请求</th>
+        <th colspan=3 align=left>响应</th>
     </tr>
     <tr>
         <th><code>cancelReplaceMode</code></th>
+        <th><code>orderRateLimitExceededMode</code></th>
+        <th>下单数</th>
         <th><code>cancelResult</code></th>
         <th><code>newOrderResult</code></th>
         <th><code>status</code></th>
@@ -3893,7 +3823,9 @@ NONE
 </thead>
 <tbody>
     <tr>
-        <td rowspan="3"><code>STOP_ON_FAILURE</code></td>
+        <td rowspan="11"><code>STOP_ON_FAILURE</code></td>
+        <td rowspan="6"><code>DO_NOTHING</code></td>
+        <td rowspan="3">在限制范围内</td>
         <td>✅ <code>SUCCESS</code></td>
         <td>✅ <code>SUCCESS</code></td>
         <td align=right><code>200</code></td>
@@ -3909,7 +3841,53 @@ NONE
         <td align=right><code>409</code></td>
     </tr>
     <tr>
-        <td rowspan="4"><code>ALLOW_FAILURE</code></td>
+        <td rowspan="3">超出限制范围</td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right>N/A</td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>➖ <code>NOT_ATTEMPTED</code></td>
+        <td align=right>N/A</td>
+    </tr>
+    <tr>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right>N/A</td>
+    </tr>
+     <tr>
+        <td rowspan="5"><code>CANCEL_ONLY</code></td>
+        <td rowspan="3">在限制范围内</td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right><code>200</code></td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>➖ <code>NOT_ATTEMPTED</code></td>
+        <td align=right><code>400</code></td>
+    </tr>
+    <tr>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>409</code></td>
+    </tr>
+    <tr>
+        <td rowspan="2">超出限制范围</td>
+        <td>❌ <code>FAILURE</code></td>
+        <td>➖ <code>NOT_ATTEMPTED</code></td>
+        <td align=right><code>429</code></td>
+    </tr>
+    <tr>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>429</code></td>
+    </tr>
+    <tr>
+        <td rowspan="16"><code>ALLOW_FAILURE</code></td>
+        <td rowspan="8"><code>DO_NOTHING</code></td>
+        <td rowspan="4">在限制范围内</td>
         <td>✅ <code>SUCCESS</code></td>
         <td>✅ <code>SUCCESS</code></td>
         <td align=right><code>200</code></td>
@@ -3923,6 +3901,70 @@ NONE
         <td>❌ <code>FAILURE</code></td>
         <td>✅ <code>SUCCESS</code></td>
         <td align=right><code>409</code></td>
+    </tr>
+    <tr>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>409</code></td>
+    </tr>
+    <tr>
+     <td rowspan="4">超出限制范围</td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right>N/A</td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right>N/A</td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right>N/A</td>
+    </tr>
+    <tr>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right>N/A</td>
+    </tr>
+    <tr>
+        <td rowspan="8"><CODE>CANCEL_ONLY</CODE></td>
+        <td rowspan="4">在限制范围内</td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right><code>200</code></td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>400</code></td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right><code>409</code></td>
+    </tr>
+    <tr>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>409</code></td>
+    </tr>
+    <tr>
+        <td rowspan="4">超出限制范围</td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right><code>200</code></td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>❌ <code>FAILURE</code></td>
+        <td align=right><code>400</code></td>
+    </tr>
+    <tr>
+        <td>❌ <code>FAILURE</code></td>
+        <td>✅ <code>SUCCESS</code></td>
+        <td align=right>N/A</td>
     </tr>
     <tr>
         <td>✅ <code>SUCCESS</code></td>
@@ -3954,7 +3996,7 @@ NONE
 
 * 如果未尝试下新订单，订单次数仍会增加。
 
-* 与 [`order.cancel`](#撤销订单-TRADE) 一样，如果您撤销 OCO 的某个边，则整个 OCO 将被撤销。
+* 与 [`order.cancel`](#撤销订单-TRADE) 一样，如果您撤销订单列表内的某个订单，则整个订单列表将被撤销。
 
 **数据源:**
 撮合引擎
@@ -4246,6 +4288,103 @@ NONE
 }
 ```
 
+如果 `orderRateLimitExceededMode` 是 `DO_NOTHING`，那么无论 `cancelReplaceMode` 的取值，当账户超出下单速率限制时，响应将有 `"status": 429`:
+
+```javascript
+{
+  "id": "3b3ac45c-1002-4c7d-88e8-630c408ecd87",
+  "status": 429,
+  "error": {
+    "code": -1015,
+    "msg": "Too many new orders; current limit is 50 orders per 10 SECOND."
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "SECOND",
+      "intervalNum": 10,
+      "limit": 50,
+      "count": 50
+    },
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "DAY",
+      "intervalNum": 1,
+      "limit": 160000,
+      "count": 50
+    },
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 1
+    }
+  ]
+}
+```
+
+如果 `orderRateLimitExceededMode` 是 `CANCEL_ONLY`，那么无论 `cancelReplaceMode` 的取值，当账户超出下单速率限制时，响应将有 `"status": 409`:
+
+```javascript
+{
+  "id": "3b3ac45c-1002-4c7d-88e8-630c408ecd87",
+  "status": 409,
+  "error": {
+    "code": -2021,
+    "msg": "Order cancel-replace partially failed.",
+    "data": {
+      "cancelResult": "SUCCESS",
+      "newOrderResult": "FAILURE",
+      "cancelResponse": {
+        "symbol": "LTCBNB",
+        "origClientOrderId": "GKt5zzfOxRDSQLveDYCTkc",
+        "orderId": 64,
+        "orderListId": -1,
+        "clientOrderId": "loehOJF3FjoreUBDmv739R",
+        "transactTime": 1715779007228,
+        "price": "1.00",
+        "origQty": "10.00000000",
+        "executedQty": "0.00000000",
+        "cummulativeQuoteQty": "0.00",
+        "status": "CANCELED",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "SELL",
+        "selfTradePreventionMode": "NONE"
+      },
+      "newOrderResponse": {
+        "code": -1015,
+        "msg": "Too many new orders; current limit is 50 orders per 10 SECOND."
+      }
+    }
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "SECOND",
+      "intervalNum": 10,
+      "limit": 50,
+      "count": 50
+    },
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "DAY",
+      "intervalNum": 1,
+      "limit": 160000,
+      "count": 50
+    },
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 1
+    }
+  ]
+}
+```
+
 **注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 "订单响应中的特定条件时才会出现的字段" 部分。
 
 ### 当前挂单 (USER_DATA)
@@ -4357,7 +4496,7 @@ NONE
 }
 ```
 
-撤销单一交易对的所有挂单,包括 OCO 订单。
+撤销单一交易对的所有挂单,包括交易组。
 
 **权重:**
 1
@@ -4377,7 +4516,7 @@ NONE
 
 **响应:**
 
-订单和 OCO 的撤销报告的格式与 [`order.cancel`](#撤销订单-TRADE) 中的格式相同。
+订单和订单列表的撤销报告的格式与 [`order.cancel`](#撤销订单-TRADE) 中的格式相同。
 
 ```javascript
 {
@@ -4478,7 +4617,7 @@ NONE
 
 **注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 "订单响应中的特定条件时才会出现的字段" 部分。
 
-### OCO下单 (TRADE)
+### OCO下单 - 已弃用 (TRADE)
 
 ```javascript
 {
@@ -4514,13 +4653,13 @@ NONE
 `side`              | ENUM    | YES       | `BUY` 或者 `SELL`
 `price`             | DECIMAL | YES       | Limit 订单的价格
 `quantity`          | DECIMAL | YES       |
-`listClientOrderId` | STRING  | NO        | OCO 挂单的客户自定义的唯一订单ID。如果未发送，则自动生成
+`listClientOrderId` | STRING  | NO        | 订单列表的客户自定义的唯一订单ID。如果未发送，则自动生成
 `limitClientOrderId`| STRING  | NO        | Limit 挂单的客户自定义的唯一订单ID。如果未发送，则自动生成
 `limitIcebergQty`   | DECIMAL | NO        |
 `limitStrategyId`   | INT     | NO        | 标识订单策略中的 limit 订单的任意ID。
 `limitStrategyType` | INT     | NO        | <p>标识 limit 订单策略的任意数值</p><p>小于`1000000`的值是保留的，不能使用。</p>
 `stopPrice`         | DECIMAL | YES *     | 必须指定 `stopPrice` 或 `trailingDelta`，或两者都指定
-`trailingDelta`     | INT     | YES *     | 请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq-cn.md)
+`trailingDelta`     | INT     | YES *     | 请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md)
 `stopClientOrderId` | STRING  | NO        | Stop 订单的客户自定义的唯一订单ID。如果未发送，则自动生成
 `stopLimitPrice`    | DECIMAL | NO *      |
 `stopLimitTimeInForce` | ENUM | NO *      | 有关可用选项，请看 [`order.place`](#timeInForce)
@@ -4656,7 +4795,542 @@ NONE
 }
 ```
 
-### 查询 OCO (USER_DATA)
+### 发送新 OCO 订单 (TRADE)
+
+```javascript
+{
+  "id": "56374a46-3261-486b-a211-99ed972eb648",
+  "method": "orderList.place.oco",
+  "params":
+  {
+    "symbol": "LTCBNB",
+    "side": "BUY",
+    "quantity": 1,
+    "timestamp": 1711062760647,
+    "aboveType": "STOP_LOSS_LIMIT",
+    "abovePrice": "1.5",
+    "aboveStopPrice": "1.50000001",
+    "aboveTimeInForce": "GTC",
+    "belowType": "LIMIT_MAKER",
+    "belowPrice": "1.49999999",
+    "apiKey": "duwNf97YPLqhFIk7kZF0dDdGYVAXStA7BeEz0fIT9RAhUbixJtyS6kJ3hhzJsRXC",
+    "signature": "64614cfd8dd38260d4fd86d3c455dbf4b9d1c8a8170ea54f700592a986c30ddb"
+  }
+}
+```
+
+**权重:** 1
+
+发送新 one-cancels-the-other (OCO) 订单，激活其中一个订单会立即取消另一个订单。
+
+* OCO 有 2 legs，称为 **上方 leg** 和 **下方 leg**。
+* 其中一条 leg 必须是 `LIMIT_MAKER` 订单，另一条 leg 必须是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 订单。
+* 针对价格限制：
+  * 如果 OCO 订单方向是 `SELL`：`LIMIT_MAKER` `price` > 最后交易价格 > `stopPrice`
+  * 如果 OCO 订单方向是 `BUY`：`LIMIT_MAKER` `price` < 最后交易价格 < `stopPrice`
+* 在订单率限制中，OCO 计为 **2** 个订单。
+
+**参数:**
+
+名称                      | 类型   | 是否必需 | 描述
+----                     |------  | -----     |----
+`symbol`                 |STRING  |YES        |
+`listClientOrderId`      |STRING  |NO         |整个订单列表的唯一ID。 如果未发送则自动生成。 <br> 仅当前一个订单已填满或完全过期时，才会接受具有相同的`listClientOrderId`。 <br> `listClientOrderId` 与 `aboveClientOrderId` 和 `belowCLientOrderId` 不同。
+`side`                   |ENUM    |YES        |订单方向：`BUY` or `SELL`
+`quantity`               |DECIMAL |YES        |两个 legs 的数量。
+`aboveType`              |ENUM    |YES        |支持值：`STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`。
+`aboveClientOrderId`     |STRING  |NO         |上方 leg 的唯一ID。 如果未发送则自动生成。
+`aboveIcebergQty`        |LONG    |NO         |请注意，只有当 `aboveTimeInForce` 为 `GTC` 时才能使用。
+`abovePrice`             |DECIMAL |NO         |
+`aboveStopPrice`         |DECIMAL |NO         |如果 `aboveType` 是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 才能使用。<br> 必须指定 `aboveStopPrice` 或 `aboveTrailingDelta` 或两者。
+`aboveTrailingDelta`     |LONG    |NO         |请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md).
+`aboveTimeInForce`       |DECIMAL |NO         |如果 `aboveType` 是 `STOP_LOSS_LIMIT`，则为必填项。
+`aboveStrategyId`        |INT     |NO         |订单策略中上方 leg 订单的 ID。
+`aboveStrategyType`      |INT     |NO         |上方 leg 订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
+`belowType`              |ENUM    |YES        |支持值：`STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`
+`belowClientOrderId`     |STRING  |NO         |
+`belowIcebergQty`        |LONG    |NO         |请注意，只有当 `belowTimeInForce` 为 `GTC` 时才能使用。
+`belowPrice`             |DECIMAL |NO         |
+`belowStopPrice`         |DECIMAL |NO         |如果 `belowType` 是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 才能使用 <br> 必须指定 `belowStopPrice` 或 `belowTrailingDelta` 或两者。
+`belowTrailingDelta`     |LONG    |NO         |请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md)。
+`belowTimeInForce`       |ENUM    |NO         |如果`belowType` 是 `STOP_LOSS_LIMIT`，则为必须配合提交的值。
+`belowStrategyId`        |INT     |NO          |订单策略中下方 leg 订单的 ID。
+`belowStrategyType`      |INT     |NO         |下方 leg 订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
+`newOrderRespType`       |ENUM    |NO         |响应格式可选值: `ACK`, `RESULT`, `FULL`。
+`selfTradePreventionMode`|ENUM    |NO         |允许的 ENUM 取决于交易对上的配置。 可能支持的值为 `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`。
+`apiKey`                 |STRING  |YES        |
+`recvWindow`             |LONG    |NO         |不能大于 `60000`。
+`signature`              |STRING  |YES        |
+`timestamp`              |LONG    |YES        | 
+
+**数据源:**
+撮合引擎
+
+**响应:**
+
+使用 `newOrderRespType` 参数来选择 `orderReports` 的响应格式。以下示例适用于 `RESULT` 响应类型。 请参阅 [`order.place`](##下新的订单-trade)了解更多 `orderReports` 的响应类型。
+
+```javascript
+{
+  "id": "56374a46-3261-486b-a211-99ed972eb648",
+  "status": 200,
+  "result":
+  {
+    "orderListId": 2,
+    "contingencyType": "OCO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "cKPMnDCbcLQILtDYM4f4fX",
+    "transactionTime": 1711062760648,
+    "symbol": "LTCBNB",
+    "orders":
+    [
+      {
+        "symbol": "LTCBNB",
+        "orderId": 2,
+        "clientOrderId": "0m6I4wfxvTUrOBSMUl0OPU"
+      },
+      {
+        "symbol": "LTCBNB",
+        "orderId": 3,
+        "clientOrderId": "Z2IMlR79XNY5LU0tOxrWyW"
+      }
+    ],
+    "orderReports":
+    [
+      {
+        "symbol": "LTCBNB",
+        "orderId": 2,
+        "orderListId": 2,
+        "clientOrderId": "0m6I4wfxvTUrOBSMUl0OPU",
+        "transactTime": 1711062760648,
+        "price": "1.50000000",
+        "origQty": "1.000000",
+        "executedQty": "0.000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "STOP_LOSS_LIMIT",
+        "side": "BUY",
+        "stopPrice": "1.50000001",
+        "workingTime": -1,
+        "selfTradePreventionMode": "NONE"
+      },
+      {
+        "symbol": "LTCBNB",
+        "orderId": 3,
+        "orderListId": 2,
+        "clientOrderId": "Z2IMlR79XNY5LU0tOxrWyW",
+        "transactTime": 1711062760648,
+        "price": "1.49999999",
+        "origQty": "1.000000",
+        "executedQty": "0.000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT_MAKER",
+        "side": "BUY",
+        "workingTime": 1711062760648,
+        "selfTradePreventionMode": "NONE"
+      }
+    ]
+  },
+  "rateLimits":
+  [
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "SECOND",
+      "intervalNum": 10,
+      "limit": 50,
+      "count": 2
+    },
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "DAY",
+      "intervalNum": 1,
+      "limit": 160000,
+      "count": 2
+    },
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 1
+    }
+  ]
+}
+```
+
+### 发送新订单列表 - OTO (TRADE)
+
+```javascript
+{
+  "id": "1712544395950",
+  "method": "orderList.place.oto",
+  "params": {
+    "signature": "3e1e5ac8690b0caf9a2afd5c5de881ceba69939cc9d817daead5386bf65d0cbb",
+    "apiKey": "Rf07JlnL9PHVxjs27O5CvKNyOsV4qJ5gXdrRfpvlOdvMZbGZbPO5Ce2nIwfRP0iA",
+    "pendingQuantity": 1,
+    "pendingSide": "BUY",
+    "pendingType": "MARKET",
+    "symbol": "LTCBNB",
+    "recvWindow": "5000",
+    "timestamp": "1712544395951",
+    "workingPrice": 1,
+    "workingQuantity": 1,
+    "workingSide": "SELL",
+    "workingTimeInForce": "GTC",
+    "workingType": "LIMIT"
+  }
+}
+```
+
+发送一个新的 OTO 订单。
+
+* 一个 OTO 订单（One-Triggers-the-Other）是一个包含了两个订单的订单列表.
+* 第一个订单被称为**生效订单**，必须为 `LIMIT` 或 `LIMIT_MAKER` 类型的订单。最初，订单簿上只有生效订单。
+* 第二个订单被称为**待处理订单**。它可以是任何订单类型，但不包括使用参数 `quoteOrderQty` 的 `MARKET` 订单。只有当生效订单**完全成交**时，待处理订单才会被自动下单。
+* 如果生效订单或者待处理订单中的任意一个被单独取消，订单列表中剩余的那个订单也会被随之取消或过期。
+* 如果生效订单在下订单列表后**立即完全成交**，则可能会得到订单响应。其中，生效订单的状态为 `FILLED` ，但待处理订单的状态为 `PENDING_NEW`。针对这类情况，如果需要检查当前状态，您可以查询相关的待处理订单。
+* `OTO` 订单对于下单速率限制、 `EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器来说，会被计为**2**个订单。
+
+**权重:** 1
+
+**参数:**
+
+名称                      | 类型   | 是否必需 | 描述
+----                   |----   |------    |------
+`symbol`                 |STRING |YES       |
+`listClientOrderId`      |STRING |NO        |整个订单列表的唯一ID。 如果未发送则自动生成。 <br> 仅当前一个订单列表已填满或完全过期时，才会接受含有相同 `listClientOrderId` 值的新订单列表。 <br> `listClientOrderId` 与 `workingClientOrderId` 和 `pendingClientOrderId` 不同。
+`newOrderRespType`       |ENUM   |NO        |用于设置JSON响应的格式。 支持的数值： [订单返回类型](./enums_CN.md#orderresponsetype)
+`selfTradePreventionMode`|ENUM   |NO        |允许的数值取决于交易对上的配置。参考 [STP 模式](./enums_CN.md#stpmodes)
+`workingType`            |ENUM   |YES       |支持的数值： `LIMIT`， `LIMIT_MAKER`
+`workingSide`            |ENUM   |YES       |支持的数值： [订单方向](./enums_CN.md#side)
+`workingClientOrderId`   |STRING |NO        |用于标识生效订单的唯一ID。 <br> 如果未发送则自动生成。
+`workingPrice`           |DECIMAL|YES       |
+`workingQuantity`        |DECIMAL|YES       |用于设置生效订单的数量。 
+`workingIcebergQty`      |DECIMAL|YES       |只有当 `workingTimeInForce` 为 `GTC` 时才能使用。
+`workingTimeInForce`     |ENUM   |NO        |支持的数值： [生效时间](#timeinforce)
+`workingStrategyId`      |INT    |NO        |订单策略中用于标识生效订单的 ID。
+`workingStrategyType`    |INT    |NO        |用于标识生效订单策略的任意数值。<br> 小于 `1000000` 的值被保留，无法使用。
+`pendingType`            |ENUM   |YES       |支持的数值： [订单类型](#order-type)<br> 请注意，系统不支持使用 `quoteOrderQty` 的 `MARKET` 订单。
+`pendingSide`            |ENUM   |YES       |支持的数值： [订单方向](./enums_CN.md#side)
+`pendingClientOrderId`   |STRING |NO        |用于标识待处理订单的唯一ID。 <br> 如果未发送则自动生成。
+`pendingPrice`           |DECIMAL|NO        |
+`pendingStopPrice`       |DECIMAL|NO        |
+`pendingTrailingDelta`   |DECIMAL|NO        |
+`pendingQuantity`        |DECIMAL|YES       |用于设置待处理订单的数量。 
+`pendingIcebergQty`      |DECIMAL|NO        |只有当 `pendingTimeInForce` 为 `GTC` 时才能使用。
+`pendingTimeInForce`     |ENUM   |NO        |支持的数值： [生效时间](#timeinforce)
+`pendingStrategyId`      |INT    |NO        |订单策略中用于标识待处理订单的 ID。
+`pendingStrategyType`    |INT    |NO        |用于标识待处理订单策略的任意数值。 <br> 小于 `1000000` 的值被保留，无法使用。
+`recvWindow`             |LONG   |NO        |不能大于 `60000`。
+`timestamp`              |LONG   |YES       |
+`signature`              |STRING |YES       |
+
+#### 根据 `pendingType` 或者`workingType`的不同值，对于某些参数的强制要求
+
+根据 `pendingType` 或者`workingType`的不同值，对于某些可选参数有强制要求，具体如下：
+
+|类型                                                   | 强制要求的参数                  | 其他信息|
+|----                                                  |----                           |------  
+|`workingType` = `LIMIT`                               |`workingTimeInForce`           | 
+|`pendingType` = `LIMIT`                                |`pendingPrice`， `pendingTimeInForce`          |
+|`pendingType` = `STOP_LOSS` 或 `TAKE_PROFIT`           |`pendingStopPrice` 与/或 `pendingTrailingDelta`|
+|`pendingType` = `STOP_LOSS_LIMIT` 或 `TAKE_PROFIT_LIMIT`|`pendingPrice`， `pendingStopPrice` 与/或 `pendingTrailingDelta`， `pendingTimeInForce`|
+
+**数据源:**
+撮合引擎
+
+**响应:**
+
+```javascript
+{
+  "id": "1712544395950",
+  "status": 200,
+  "result": {
+    "orderListId": 626,
+    "contingencyType": "OTO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "KA4EBjGnzvSwSCQsDdTrlf",
+    "transactionTime": 1712544395981,
+    "symbol": "1712544378871",
+    "orders": [
+      {
+        "symbol": "LTCBNB",
+        "orderId": 13,
+        "clientOrderId": "YiAUtM9yJjl1a2jXHSp9Ny"
+      },
+      {
+        "symbol": "LTCBNB",
+        "orderId": 14,
+        "clientOrderId": "9MxJSE1TYkmyx5lbGLve7R"
+      }
+    ],
+    "orderReports": [
+      {
+        "symbol": "LTCBNB",
+        "orderId": 13,
+        "orderListId": 626,
+        "clientOrderId": "YiAUtM9yJjl1a2jXHSp9Ny",
+        "transactTime": 1712544395981,
+        "price": "1.000000",
+        "origQty": "1.000000",
+        "executedQty": "0.000000",
+        "cummulativeQuoteQty": "0.000000",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "SELL",
+        "workingTime": 1712544395981,
+        "selfTradePreventionMode": "NONE"
+      },
+      {
+        "symbol": "LTCBNB",
+        "orderId": 14,
+        "orderListId": 626,
+        "clientOrderId": "9MxJSE1TYkmyx5lbGLve7R",
+        "transactTime": 1712544395981,
+        "price": "0.000000",
+        "origQty": "1.000000",
+        "executedQty": "0.000000",
+        "cummulativeQuoteQty": "0.000000",
+        "status": "PENDING_NEW",
+        "timeInForce": "GTC",
+        "type": "MARKET",
+        "side": "BUY",
+        "workingTime": -1,
+        "selfTradePreventionMode": "NONE"
+      }
+    ]
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 10000000,
+      "count": 10
+    },
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 1000,
+      "count": 38
+    }
+  ]
+}
+```
+
+**注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 "订单响应中的特定条件时才会出现的字段" 部分。
+
+### 发送新订单列表 - OTOCO (TRADE)
+
+```javascript
+{
+  "id": "1712544408508",
+  "method": "orderList.place.otoco",
+  "params": {
+    "signature": "c094473304374e1b9c5f7e2558358066cfa99df69f50f63d09cfee755136cb07",
+    "apiKey": "Rf07JlnL9PHVxjs27O5CvKNyOsV4qJ5gXdrRfpvlOdvMZbGZbPO5Ce2nIwfRP0iA",
+    "pendingQuantity": 5,
+    "pendingSide": "SELL",
+    "pendingBelowPrice": 5,
+    "pendingBelowType": "LIMIT_MAKER",
+    "pendingAboveStopPrice": 0.5,
+    "pendingAboveType": "STOP_LOSS",
+    "symbol": "LTCBNB",
+    "recvWindow": "5000",
+    "timestamp": "1712544408509",
+    "workingPrice": 1.5,
+    "workingQuantity": 1,
+    "workingSide": "BUY",
+    "workingTimeInForce": "GTC",
+    "workingType": "LIMIT"
+  }
+}
+```
+
+发送一个新的 OTOCO 订单。
+
+* 一个 OTOCO 订单（One-Triggers-One-Cancels-the-Other）是一个包含了三个订单的订单列表。
+* 第一个订单被称为**生效订单**，必须为 `LIMIT` 或 `LIMIT_MAKER` 类型的订单。最初，订单簿上只有生效订单。
+    * 生效订单的行为与此一致 [OTO](#new-order-list---oto-trade)
+* 一个OTOCO订单有两个待处理订单（pending above 和 pending below），它们构成了一个 OCO 订单列表。只有当生效订单**完全成交**时，待处理订单们才会被自动下单。
+    * 待处理上方(pending above)订单和待处理下方(pending below)订单都遵循与 OCO 订单列表相同的规则 [Order List OCO](#new-order-list---oco-trade)。
+* `OTOCO` 订单对于下单速率限制、 `EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器来说，会被计为**3**个订单。
+
+**权重:** 1
+
+**参数:**
+
+名称                      | 类型   | 是否必需 | 描述
+----                     |----   |------    |------
+`symbol`                   |STRING |YES       |
+`listClientOrderId`        |STRING |NO        |整个订单列表的唯一ID。 如果未发送则自动生成。 <br> 仅当前一个订单列表已填满或完全过期时，才会接受含有相同 `listClientOrderId` 值的新订单列表。 <br>  `listClientOrderId` 与 `workingClientOrderId`， `pendingAboveClientOrderId` 以及 `pendingBelowClientOrderId` 不同。
+`newOrderRespType`         |ENUM   |NO        |用于设置JSON响应的格式。 支持的数值： [订单返回类型](./enums_CN.md#orderresponsetype)
+`selfTradePreventionMode`  |ENUM   |NO        |允许的数值取决于交易对上的配置。参考 [STP 模式](./enums_CN.md#stpmodes)
+`workingType`              |ENUM   |YES       |支持的数值： `LIMIT`，`LIMIT_MAKER`
+`workingSide`              |ENUM   |YES       |支持的数值： [订单方向](./enums_CN.md#side)
+`workingClientOrderId`     |STRING |NO        |用于标识生效订单的唯一ID。 <br> 如果未发送则自动生成。
+`workingPrice`             |DECIMAL|YES       |
+`workingQuantity`          |DECIMAL|YES        |
+`workingIcebergQty`        |DECIMAL|NO        |只有当 `workingTimeInForce` 为 `GTC` 时才能使用。
+`workingTimeInForce`       |ENUM   |NO        |支持的数值： [生效时间](#timeinforce)
+`workingStrategyId`        |INT    |NO        |订单策略中用于标识生效订单的 ID。
+`workingStrategyType`      |INT    |NO        |用于标识生效订单策略的任意数值。<br> 小于 `1000000` 的值被保留，无法使用。
+`pendingSide`              |ENUM   |YES       |支持的数值： [订单方向](./enums_CN.md#side)
+`pendingQuantity`          |DECIMAL|YES       |
+`pendingAboveType`         |ENUM   |YES       |支持的数值： `LIMIT_MAKER`，`STOP_LOSS` 和 `STOP_LOSS_LIMIT`
+`pendingAboveClientOrderId`|STRING |NO        |用于标识待处理上方订单的唯一ID。 <br> 如果未发送则自动生成。
+`pendingAbovePrice`        |DECIMAL|NO        |
+`pendingAboveStopPrice`    |DECIMAL|NO        |
+`pendingAboveTrailingDelta`|DECIMAL|NO        |
+`pendingAboveIcebergQty`   |DECIMAL|NO        |只有当 `pendingAboveTimeInForce` 为 `GTC` 时才能使用。
+`pendingAboveTimeInForce`  |ENUM   |NO        |
+`pendingAboveStrategyId`   |INT    |NO        |订单策略中用于标识待处理上方订单的 ID。
+`pendingAboveStrategyType` |INT    |NO        |用于标识待处理上方订单策略的任意数值。 <br> 小于 `1000000` 的值被保留，无法使用。
+`pendingBelowType`         |ENUM   |NO        |支持的数值： `LIMIT_MAKER`，`STOP_LOSS` 和 `STOP_LOSS_LIMIT`
+`pendingBelowClientOrderId`|STRING |NO        |用于标识待处理下方订单的唯一ID。 <br> 如果未发送则自动生成。
+`pendingBelowPrice`        |DECIMAL|NO        |
+`pendingBelowStopPrice`    |DECIMAL|NO        |
+`pendingBelowTrailingDelta`|DECIMAL|NO        |
+`pendingBelowIcebergQty`   |DECIMAL|NO        |只有当 `pendingBelowTimeInForce` 为 `GTC` 时才能使用。
+`pendingBelowTimeInForce`  |ENUM   |NO        |支持的数值： [生效时间](#timeinforce)
+`pendingBelowStrategyId`   |INT    |NO        |订单策略中用于标识待处理下方订单的 ID。
+`pendingBelowStrategyType` |INT    |NO        |用于标识待处理下方订单策略的任意数值。 <br> 小于 `1000000` 的值被保留，无法使用。
+`recvWindow`               |LONG   |NO        |不能大于 `60000`。
+`timestamp`                |LONG   |YES       |
+`signature`                |STRING|YES|
+
+#### 根据 `pendingAboveType`， `pendingBelowType` 或者`workingType`的不同值，对于某些参数的强制要求
+
+根据 `pendingAboveType`， `pendingBelowType` 或者`workingType`的不同值，对于某些可选参数有强制要求，具体如下：
+
+|类型                                                        | 强制要求的参数                  | 其他信息|
+|----                                                       |----                           |------  
+|`workingType` = `LIMIT`                                    |`workingTimeInForce`           | 
+|`pendingAboveType`= `LIMIT_MAKER`                                |`pendingAbovePrice`     |
+|`pendingAboveType`= `STOP_LOSS`          |`pendingAboveStopPrice` 与/或 `pendingAboveTrailingDelta`|
+|`pendingAboveType`=`STOP_LOSS_LIMIT` |`pendingAbovePrice`， `pendingAboveStopPrice` 与/或 `pendingAboveTrailingDelta`， `pendingAboveTimeInForce`|
+|`pendingBelowType`= `LIMIT_MAKER`                                |`pendingBelowPrice`          |
+|`pendingBelowType`= `STOP_LOSS`            |`pendingBelowStopPrice` 与/或 `pendingBelowTrailingDelta`|
+|`pendingBelowType`=`STOP_LOSS_LIMIT` |`pendingBelowPrice`， `pendingBelowStopPrice` 与/或 `pendingBelowTrailingDelta`， `pendingBelowTimeInForce`|
+
+**数据源:**
+撮合引擎
+
+**响应:**
+
+```javascript
+{
+  "id": "1712544408508",
+  "status": 200,
+  "result": {
+    "orderListId": 629,
+    "contingencyType": "OTO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "GaeJHjZPasPItFj4x7Mqm6",
+    "transactionTime": 1712544408537,
+    "symbol": "1712544378871",
+    "orders": [
+      {
+        "symbol": "1712544378871",
+        "orderId": 23,
+        "clientOrderId": "OVQOpKwfmPCfaBTD0n7e7H"
+      },
+      {
+        "symbol": "1712544378871",
+        "orderId": 24,
+        "clientOrderId": "YcCPKCDMQIjNvLtNswt82X"
+      },
+      {
+        "symbol": "1712544378871",
+        "orderId": 25,
+        "clientOrderId": "ilpIoShcFZ1ZGgSASKxMPt"
+      }
+    ],
+    "orderReports": [
+      {
+        "symbol": "LTCBNB",
+        "orderId": 23,
+        "orderListId": 629,
+        "clientOrderId": "OVQOpKwfmPCfaBTD0n7e7H",
+        "transactTime": 1712544408537,
+        "price": "1.500000",
+        "origQty": "1.000000",
+        "executedQty": "0.000000",
+        "cummulativeQuoteQty": "0.000000",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "BUY",
+        "workingTime": 1712544408537,
+        "selfTradePreventionMode": "NONE"
+      },
+      {
+        "symbol": "LTCBNB",
+        "orderId": 24,
+        "orderListId": 629,
+        "clientOrderId": "YcCPKCDMQIjNvLtNswt82X",
+        "transactTime": 1712544408537,
+        "price": "0.000000",
+        "origQty": "5.000000",
+        "executedQty": "0.000000",
+        "cummulativeQuoteQty": "0.000000",
+        "status": "PENDING_NEW",
+        "timeInForce": "GTC",
+        "type": "STOP_LOSS",
+        "side": "SELL",
+        "stopPrice": "0.500000",
+        "workingTime": -1,
+        "selfTradePreventionMode": "NONE"
+      },
+      {
+        "symbol": "LTCBNB",
+        "orderId": 25,
+        "orderListId": 629,
+        "clientOrderId": "ilpIoShcFZ1ZGgSASKxMPt",
+        "transactTime": 1712544408537,
+        "price": "5.000000",
+        "origQty": "5.000000",
+        "executedQty": "0.000000",
+        "cummulativeQuoteQty": "0.000000",
+        "status": "PENDING_NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT_MAKER",
+        "side": "SELL",
+        "workingTime": -1,
+        "selfTradePreventionMode": "NONE"
+      }
+    ]
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 10000000,
+      "count": 18
+    },
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 1000,
+      "count": 65
+    }
+  ]
+}
+```
+
+**注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 "订单响应中的特定条件时才会出现的字段" 部分。
+
+### 查询订单列表 (USER_DATA)
 
 ```javascript
 {
@@ -4671,7 +5345,7 @@ NONE
 }
 ```
 
-检查 OCO 的执行状态。
+检查订单列表的执行状态。
 
 对于单个订单的执行状态，使用 [`order.status`](#查询订单-USER_DATA)。
 
@@ -4694,12 +5368,12 @@ NONE
         <td><code>origClientOrderId</code></td>
         <td>STRING</td>
         <td rowspan="2">YES</td>
-        <td>通过 <code>listClientOrderId</code> 获取 OCO </td>
+        <td>通过 <code>listClientOrderId</code> 获取订单列表 </td>
     </tr>
     <tr>
         <td><code>orderListId</code></td>
         <td>INT</td>
-        <td>通过 <code>orderListId</code> 获取 OCO</td>
+        <td>通过 <code>orderListId</code> 获取订单列表</td>
     </tr>
     <tr>
         <td><code>apiKey</code></td>
@@ -4730,7 +5404,7 @@ NONE
 
 备注：
 
-* `origClientOrderId` 指的是 OCO 本身的 `listClientOrderId`。
+* `origClientOrderId` 指的是订单列表本身的 `listClientOrderId`。
 
 * 如果同时指定了 `origClientOrderId` 和 `orderListId` 参数，仅使用 `origClientOrderId` 并忽略 `orderListId`。
 
@@ -4776,7 +5450,7 @@ NONE
 }
 ```
 
-### 撤销 OCO 订单(TRADE)
+### 撤销订单列表订单(TRADE)
 
 ```javascript
 {
@@ -4819,18 +5493,18 @@ NONE
         <td><code>orderListId</code></td>
         <td>INT</td>
         <td rowspan="2">YES</td>
-        <td>通过 <code>orderListId</code> 撤销 OCO</td>
+        <td>通过 <code>orderListId</code> 撤销订单列表</td>
     </tr>
     <tr>
         <td><code>listClientOrderId</code></td>
         <td>STRING</td>
-        <td>通过 <code>listClientId</code> 撤销 OCO</td>
+        <td>通过 <code>listClientId</code> 撤销订单列表</td>
     </tr>
     <tr>
         <td><code>newClientOrderId</code></td>
         <td>STRING</td>
         <td>NO</td>
-        <td>已取消 OCO 的新 ID。如果未发送，则自动生成</td>
+        <td>已取消订单列表的新 ID。如果未发送，则自动生成</td>
     </tr>
     <tr>
         <td><code>apiKey</code></td>
@@ -4863,7 +5537,7 @@ NONE
 
 * 如果同时指定了 `orderListId` 和 `listClientOrderId` 参数，仅使用 `orderListId` 并忽略 `listClientOrderId`。
 
-* 使用 [`order.cancel`](#撤销订单-TRADE) 取消单个 leg 也将会取消整个 OCO。
+* 使用 [`order.cancel`](#撤销订单-TRADE) 撤销订单列表内的某个订单，则整个订单列表将被撤销。
 
 **数据源:**
 撮合引擎
@@ -4942,7 +5616,7 @@ NONE
 }
 ```
 
-### 查询 OCO 挂单 (USER_DATA)
+### 查询订单列表挂单 (USER_DATA)
 
 ```javascript
 {
@@ -4956,7 +5630,7 @@ NONE
 }
 ```
 
-查询所有 OCO 挂单的执行状态。
+查询所有订单列表挂单的执行状态。
 
 如果您需要持续监控订单状态更新，请考虑使用 WebSocket Streams：
 
@@ -5019,7 +5693,7 @@ NONE
 }
 ```
 
-### 下 SOR 订单 (TRADE)o
+### 下 SOR 订单 (TRADE)
 
 ```javascript
 {
@@ -5244,6 +5918,7 @@ NONE
 名称                | 类型    | 是否必需 | 描述
 ------------------- | ------- | --------- | ------------
 `apiKey`            | STRING  | YES       |
+`omitZeroBalances`  | BOOLEAN | NO        | 如果`true`，将隐藏所有零余额。<br>默认值：`false`。
 `recvWindow`        | INT     | NO        | 值不能大于 `60000`
 `signature`         | STRING  | YES       |
 `timestamp`         | INT     | YES       |
@@ -5473,7 +6148,7 @@ NONE
 }
 ```
 
-### 账户 OCO 订单历史 (USER_DATA)
+### 账户订单列表历史 (USER_DATA)
 
 ```javascript
 {
@@ -5490,7 +6165,7 @@ NONE
 }
 ```
 
-查询所有 OCO 的信息，按时间范围过滤。
+查询所有订单列表的信息，按时间范围过滤。
 
 **权重:**
 20
@@ -5512,18 +6187,18 @@ NONE
 
 * 如果指定了 `startTime` 和/或 `endTime`，则忽略 `fromId`。
 
-  OCO 订单是按照最后一次更新的 OCO 执行状态的 `transactionTime` 过滤的。
+  订单列表是按照最后一次更新的订单列表执行状态的 `transactionTime` 过滤的。
 
-* 如果指定了 `fromId`，返回的 OCO 将是 order list ID >= `fromId`。
+* 如果指定了 `fromId`，返回的订单列表将是 order list ID >= `fromId`。
 
-* 如果不指定条件，则返回最近的 OCO 订单。
+* 如果不指定条件，则返回最近的订单列表。
 
 **数据源:**
 数据库
 
 **响应:**
 
-OCO 的状态报告与 [`orderList.status`](#查询-OCO-user_data) 相同。
+订单列表的状态报告与 [`orderList.status`](#查询-OCO-user_data) 相同。
 
 ```javascript
 {
@@ -5774,14 +6449,14 @@ timestamp           | LONG   | YES          |
 
 名称                       | 类型   | 是否必需         | 描述
 -----                      | ---   |----      | ---------
-`symbol`                   |STRING |Yes        |
-`startTime`                |LONG   |No        |
-`endTime`                  |LONG   |No        |
-`fromAllocationId`         |INT    |No        |
-`limit`                    |INT    |No        |默认值 500； 最大值 1000
-`orderId`                  |LONG   |No        |
-`recvWindow`               |LONG   |No        |不能大于 `60000`
-`timestamp`                |LONG   |No        |
+`symbol`                   |STRING |YES        |
+`startTime`                |LONG   |NO        |
+`endTime`                  |LONG   |NO        |
+`fromAllocationId`         |INT    |NO        |
+`limit`                    |INT    |NO        |默认值 500； 最大值 1000
+`orderId`                  |LONG   |NO        |
+`recvWindow`               |LONG   |NO        |不能大于 `60000`
+`timestamp`                |LONG   |NO        |
 
 支持的参数组合:
 
@@ -5896,7 +6571,7 @@ timestamp           | LONG   | YES          |
         "enabledForAccount": true,
         "enabledForSymbol": true,
         "discountAsset": "BNB",
-        "discount": "0.25000000"         // 当用BNB支付佣金时，在标准佣金上按此比率打折。
+        "discount": "0.75000000"         // 当用BNB支付佣金时，在标准佣金上按此比率打折。
       }
     }
   ],

@@ -17,9 +17,9 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# User Data Streams for Binance (2024-04-02)
+# User Data Streams for Binance Spot TESTNET(2024-03-13)
 # General WSS information
-* The base API endpoint is: **https://api.binance.com**
+* The base API endpoint is: **https://testnet.binance.vision/**
 * A User Data Stream `listenKey` is valid for 60 minutes after creation.
 * Doing a `PUT` on an active `listenKey` will extend its validity for 60 minutes.
 * Doing a `DELETE` on an active `listenKey` will close the stream and invalidate the `listenKey`.
@@ -319,12 +319,12 @@ If the order is an order list, an event named `ListStatus` will be sent in addit
 * `NEW` - The order has been accepted into the engine.
 * `CANCELED` - The order has been canceled by the user.
 * `REPLACED` (currently unused)
-* `REJECTED` - The order has been rejected and was not processed (This message appears only with Cancel Replace Orders wherein the new order placement is rejected but the request to cancel request succeeds.)
+* `REJECTED` - The order has been rejected and was not processed. (e.g. Cancel Replace orders where the new order placement was rejected even if the cancel request succeeded.)
 * `TRADE` - Part of the order or all of the order's quantity has filled.
 * `EXPIRED` - The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance).
 * `TRADE_PREVENTION` - The order has expired due to STP.
 
-Check the [Enums page](./enums.md) for more relevant enum definitions.
+Check the [Rest API Documentation](./rest-api.md#enum-definitions) for more relevant enum definitions.
 
 ## Listen Key Expired 
 
@@ -339,8 +339,7 @@ This event will not be pushed when the stream is closed normally.
 ```javascript
 {
   "e": "listenKeyExpired",  // Event type
-  "E": 1699596037418,      // Event time
+  "E": "1699596037418",     // Event time
   "listenKey": "OfYGbUzi3PraNagEkdKuFwUHn48brFsItTdsuiIXrucEvD0rhRXZ7I6URWfE8YE8" 
 }
 ```
-
