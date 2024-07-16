@@ -597,6 +597,8 @@ Memory
       ]
     }
   ],
+  // Optional field. Present only when SOR is available.
+  // https://github.com/binance/binance-spot-api-docs/blob/master/faqs/sor_faq.md
   "sors": [
     {
       "baseAsset": "BTC",

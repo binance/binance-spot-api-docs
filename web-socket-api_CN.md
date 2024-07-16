@@ -1068,6 +1068,8 @@ NONE
         ]
       }
     ],
+    // 可选字段，仅当 SOR 可用时才会被显示出来。
+    // https://github.com/binance/binance-spot-api-docs/blob/master/faqs/sor_faq_CN.md
     "sors": [
       {
         "baseAsset": "BTC",
