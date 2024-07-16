@@ -336,6 +336,9 @@ BTCUSDP quantity 5 price 28,000
   ]
 ```
 
+`sors` 字段是可选的。
+如果 SOR 不可用， 该字段在响应中会被忽略。
+
 ## 如何下SOR订单?
 
 通过Rest API接口 `POST /api/v3/sor/order`.
