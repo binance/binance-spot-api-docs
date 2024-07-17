@@ -1,7 +1,18 @@
-# CHANGELOG for Binance SPOT Testnet (2024-06-21)
+# CHANGELOG for Binance SPOT Testnet (2024-07-17)
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/). 
 This is not always synced with the live exchange. 
+
+## 2024-07-17 
+
+General changes:
+
+* Fixed a bug where klines had incorrect timestamps.
+  * REST API: `GET /api/v3/klines` and `GET /api/v3/uiKlines` with `timeZone` parameter
+  * WebSocket API: `klines` and `uiKlines` with `timeZone` parameter
+  * WebSocket Streams: `<symbol>@kline_<interval>@+08:00` streams
+
+---
 
 ## 2024-06-21
 
