@@ -429,7 +429,7 @@ Please refer to [Supported Order Types](#NewOrderSingle-required-fields).
 
 | Order name                            | Binance OrderType   | Side        | required field values                    | required fields with user values |
 |---------------------------------------|---------------------|-------------|------------------------------------------|----------------------------------|
-| Marker order                          | `MAKER`             | BUY or SELL | `40=1\|`                                 |                                  |
+| Market order                          | `MAKER`             | BUY or SELL | `40=1\|`                                 |                                  |
 | Limit order                           | `LIMIT`             | BUY or SELL | `40=2\|`                                 |                                  |
 | Limit maker order                     | `LIMIT_MAKER`       | BUY or SELL | `40=2\|18=6\|`                           |                                  |
 | Buy stop loss order                   | `STOP_LOSS`         | BUY         | `40=3\|1100=4\|1101=1\|1107=2\|1109=U\|` | 1102                             |
