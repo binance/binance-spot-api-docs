@@ -226,6 +226,15 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 #### -1182 PARAMS_BAD_COMBO
  * Conflicting fields: [%s]
 
+#### -1183 NOT_ALLOWED_IN_DROP_COPY_SESSIONS
+ * Requested operation is not allowed in DropCopy sessions.
+
+#### -1184 DROP_COPY_SESSION_NOT_ALLOWED
+ * DropCopy sessions are not supported on this server. Please reconnect to a drop copy server.
+
+#### -1185 DROP_COPY_SESSION_REQUIRED
+ * Only DropCopy sessions are supported on this server. Either reconnect to order entry server or send `DropCopyFlag (9406)` field.
+
 #### -2010 NEW_ORDER_REJECTED
  * NEW_ORDER_REJECTED
 
