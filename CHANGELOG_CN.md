@@ -11,7 +11,7 @@
 
 ---
 
-# 2024-06-11
+## 2024-06-11
 
 * 在 **6月11日 UTC 时间 05:00**，我们将开始推出新功能 `One-Triggers-the-Other` (OTO) 订单和 `One-Triggers-a-One-Cancels-The-Other` (OTOCO) 订单。（请注意，我们可能需要花几个小时来部署到所有服务器。）
     * 有关详细信息，请参阅以下页面：
