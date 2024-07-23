@@ -1,7 +1,16 @@
-# CHANGELOG for Binance SPOT Testnet (2024-07-17)
+# CHANGELOG for Binance SPOT Testnet (2024-07-23)
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/). 
 This is not always synced with the live exchange. 
+
+## 2024-07-23
+
+**Note:** This will be deployed starting around 7am UTC. Please consult the Spot Test Network's [homepage](https://testnet.binance.vision/) to be informed of the release completion.
+
+* FIX Drop Copy sessions are now supported on the Spot Test Network.
+* New API Key permission `FIX_API_READ_ONLY` has been introduced.
+
+---
 
 ## 2024-07-17 
 

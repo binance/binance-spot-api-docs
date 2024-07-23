@@ -4,25 +4,28 @@
 
 ## General Information
 
-Supported endpoint to connect to FIX:
+### FIX API order entry sessions
 
-```
-tcp+ssl://fix-oe.testnet.binance.vision:9000
-```
+- Endpoint is: `tcp+tls://fix-oe.testnet.binance.vision:9000`
+- Supports placing orders, canceling orders, and querying current limit usage.
+- Supports receiving all of the account's ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
+- Only ApiKeys with `FIX_API` are allowed to connect.
 
-In example messages, the `|` character is used to represent SOH character:
+### FIX API Drop Copy sessions
 
-```
-8=FIX.4.4|9=113|35=A|34=1|49=SPOT|52=20240612-08:52:21.636837|56=5JQmUOsm|98=0|108=30|25037=4392a152-3481-4499-921a-6d42c50702e2|10=051|
-```
+- Endpoint is: `tcp+ssl://fix-dc.testnet.binance.vision:9000`
+- Supports receiving all of the account's ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
+- Only ApiKeys with `FIX_API` or `FIX_API_READ_ONLY` are allowed to connect.
 
 QuickFix schema file can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml).
 
 ### API Key Permissions
 
-To use FIX API, your API key has to be configured with the `FIX_API` permission.
+To access the FIX API order entry sessions, your API key must be configured with the `FIX_API` permission.
 
-**Only Ed25519 keys are supported for FIX API.**
+To access the FIX Drop Copy sessions, your API key must be configured with either `FIX_API_READ_ONLY` or `FIX_API` permission.
+
+**FIX API order entry and Drop Copy sessions only support Ed25519 keys.**
 
 You can setup and configure your API key permissions on [Spot Test Network](https://testnet.binance.vision/).
 
@@ -174,11 +177,12 @@ Resulting Logon `<A>` message:
 ### Connection Limits
 
 * Each Account has a limit on how many TCP connections can be established at the same time.
-* The limit is decreased upon TCP connection going away, in case it is not reduced immediately, please allow up to 2x of
-  the value of `HeartBtInt (108)`.
+* The limit is reduced when the TCP connection is closed. If the reduction of connections is not immediate, please wait up to twice the value of `HeartBtInt (108)` for the change to take effect.
+  For example, if the current value of `HeartBtInt` is 5, please wait up to 10 seconds.
 * Upon breaching the limit a [Reject `<3>`](#reject) will be sent containing information about the connection limit
   breach and the current limit.
-* The limit is 5 concurrent TCP connections per account.
+* The limit is 5 concurrent TCP connections per account for the order entry sessions.
+* The limit is 10 concurrent TCP connections per account for the Drop Copy sessions.
 
 ## Error Handling
 
@@ -223,6 +227,14 @@ Client order ID fields must conform to the regex `^[a-zA-Z0-9-_]{1,36}$`:
 * `CancelClOrdID (25034)`
 
 ## Message Components
+
+**Note:**
+
+In example messages, the `|` character is used to represent SOH character:
+
+```
+8=FIX.4.4|9=113|35=A|34=1|49=SPOT|52=20240612-08:52:21.636837|56=5JQmUOsm|98=0|108=30|25037=4392a152-3481-4499-921a-6d42c50702e2|10=051|
+```
 
 <a id="header"></a>
 
@@ -326,6 +338,7 @@ Sent by the server in response to a successful logon.
 | 553   | Username        | STRING  | Y        | API key. **Only Ed25519 API keys are supported.**                                                                                                  |
 | 25035 | MessageHandling | INT     | Y        | Possible values: <br> `1` - UNORDERED <br> `2` - SEQUENTIAL <br> Please refer to [On message order processing](#orderedmode) for more information. |
 | 25036 | ResponseMode    | INT     | N        | Please refer to [Response Mode](#responsemode).                                                                                                    |
+| 9406  | DropCopyFlag    |BOOLEAN  | N        |Must be set to 'Y' when logging into Drop Copy sessions.|
 
 **Sample Message:**
 
@@ -392,7 +405,7 @@ Please refer to [Supported Order Types](#NewOrderSingle-required-fields).
 |-------|--------------------------|---------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 11    | ClOrdID                  | STRING  | Y        | `ClOrdID` to be assigned to the order.                                                                                                                                                                                                                                                                                       |
 | 38    | OrderQty                 | QTY     | N        | Quantity of the order                                                                                                                                                                                                                                                                                                        |
-| 40    | OrdType                  | CHAR    | Y        | See the [table](#ordertype) to understand supported order types to understand supported order types and the required fields to use them.<br>Possible values: <br> `1` - MARKET <br> `2` - LIMIT <br> `3` - STOP <br> `4` - STOP_LIMIT                                                                                        |
+| 40    | OrdType                  | CHAR    | Y        | See the [table](#ordertype) to understand supported order types and the required fields to use them.<br>Possible values: <br> `1` - MARKET <br> `2` - LIMIT <br> `3` - STOP <br> `4` - STOP_LIMIT                                                                                        |
 | 18    | ExecInst                 | CHAR    | N        | Possible values: <br> `6` - PARTICIPATE_DONT_INITIATE                                                                                                                                                                                                                                                                        |
 | 44    | Price                    | PRICE   | N        | Price of the order                                                                                                                                                                                                                                                                                                           |
 | 54    | Side                     | CHAR    | Y        | Side of the order.<br>Possible values: <br> `1` - BUY <br> `2` - SELL                                                                                                                                                                                                                                                        |
@@ -429,7 +442,7 @@ Please refer to [Supported Order Types](#NewOrderSingle-required-fields).
 
 | Order name                            | Binance OrderType   | Side        | required field values                    | required fields with user values |
 |---------------------------------------|---------------------|-------------|------------------------------------------|----------------------------------|
-| Market order                          | `MAKER`             | BUY or SELL | `40=1\|`                                 |                                  |
+| Market order                          | `MARKET`             | BUY or SELL | `40=1\|`                                 |                                  |
 | Limit order                           | `LIMIT`             | BUY or SELL | `40=2\|`                                 |                                  |
 | Limit maker order                     | `LIMIT_MAKER`       | BUY or SELL | `40=2\|18=6\|`                           |                                  |
 | Buy stop loss order                   | `STOP_LOSS`         | BUY         | `40=3\|1100=4\|1101=1\|1107=2\|1109=U\|` | 1102                             |
@@ -620,7 +633,7 @@ Please refer to [Supported Order Types](#ordertype) for supported field combinat
 | 11    | ClOrdID                                 | STRING | Y        | `ClOrdID` to be assigned to the new order.                                                                                                                                                                                                                                                                                   |
 | 25002 | CancelRestrictions                      | INT    | N        | Restrictions on the cancel. Possible values: <br> `1` - ONLY_NEW <br> `2` - ONLY_PARTIALLY_FILLED                                                                                                                                                                                                                            |
 | 38    | OrderQty                                | QTY    | N        | Quantity of the new order                                                                                                                                                                                                                                                                                                    |
-| 40    | OrdType                                 | CHAR   | Y        | See the [table](#ordertype) to understand supported order types to understand supported order types and the required fields to use them.<br>Possible values: <br> `1` - MARKET <br> `2` - LIMIT <br> `3` - STOP <br> `4` - STOP_LIMIT                                                                                        |
+| 40    | OrdType                                 | CHAR   | Y        | See the [table](#ordertype) to understand supported order types and the required fields to use them.<br>Possible values: <br> `1` - MARKET <br> `2` - LIMIT <br> `3` - STOP <br> `4` - STOP_LIMIT                                                                                        |
 | 18    | ExecInst                                | CHAR   | N        | Possible values: <br> `6` - PARTICIPATE_DONT_INITIATE                                                                                                                                                                                                                                                                        |
 | 44    | Price                                   | PRICE  | N        | Price of the new order                                                                                                                                                                                                                                                                                                       |
 | 54    | Side                                    | CHAR   | Y        | Side of the order.<br>Possible values: <br> `1` - BUY <br> `2` - SELL                                                                                                                                                                                                                                                        |
@@ -714,10 +727,10 @@ Please refer to [Supported Order List Types](#order-list-types) for supported or
 |----------|------------------------------|------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 25014    | ClListID                     | STRING     | Y        | `ClListID` to be assigned to the order list.                                                                                                                                                                                                                                                                                 |
 | 1385     | ContingencyType              | INT        | N        | Possible values: <br> `1` - ONE_CANCELS_THE_OTHER <br> `2` - ONE_TRIGGERS_THE_OTHER                                                                                                                                                                                                                                          |
-| 73       | NoOrders                     | NUMINGROUP | N        | How many `NoOrders` groups are populated. Only 2 or 3 are allowed.                                                                                                                                                                                                                                                           |
+| 73       | NoOrders                     | NUMINGROUP | N        | The length of the array for Orders. Only 2 or 3 are allowed.                                                                                                                                                                                                                                                           |
 | =>11     | ClOrdID                      | STRING     | Y        | `ClOrdID` to be assigned to the order                                                                                                                                                                                                                                                                                        |
 | =>38     | OrderQty                     | QTY        | N        | Quantity of the order                                                                                                                                                                                                                                                                                                        |
-| =>40     | OrdType                      | CHAR       | Y        | See the [table](#ordertype) to understand supported order types to understand supported order types and the required fields to use them.<br>Possible values: <br> `1` - MARKET <br> `2` - LIMIT <br> `3` - STOP <br> `4` - STOP_LIMIT                                                                                        |
+| =>40     | OrdType                      | CHAR       | Y        | See the [table](#ordertype) to understand supported order types and the required fields to use them.<br>Possible values: <br> `1` - MARKET <br> `2` - LIMIT <br> `3` - STOP <br> `4` - STOP_LIMIT                                                                                        |
 | =>18     | ExecInst                     | CHAR       | N        | Possible values: <br> `6` - PARTICIPATE_DONT_INITIATE                                                                                                                                                                                                                                                                        |
 | =>44     | Price                        | PRICE      | N        | Price of the order                                                                                                                                                                                                                                                                                                           |
 | =>54     | Side                         | CHAR       | Y        | Side of the order. Possible values: <br> `1` - BUY <br> `2` - SELL                                                                                                                                                                                                                                                           |
@@ -734,7 +747,7 @@ Please refer to [Supported Order List Types](#order-list-types) for supported or
 | =>1107   | TriggerPriceType             | CHAR       | N        | Possible values: <br> `2` - LAST_TRADE                                                                                                                                                                                                                                                                                       |
 | =>1109   | TriggerPriceDirection        | CHAR       | N        | Used to differentiate between StopLoss and TakeProfit orders. See [table](#ordertype).<br>Possible values: <br> `U` - TRIGGER_IF_THE_PRICE_OF_THE_SPECIFIED_TYPE_GOES_UP_TO_OR_THROUGH_THE_SPECIFIED_TRIGGER_PRICE <br> `D` - TRIGGER_IF_THE_PRICE_OF_THE_SPECIFIED_TYPE_GOES_DOWN_TO_OR_THROUGH_THE_SPECIFIED_TRIGGER_PRICE |
 | =>25009  | TriggerTrailingDeltaBips     | INT        | N        | Provide to create trailing orders.                                                                                                                                                                                                                                                                                           |
-| =>25010  | NoListTriggeringInstructions | NUMINGROUP | N        | How many `NoListTriggeringInstructions` groups are populated.                                                                                                                                                                                                                                                                |
+| =>25010  | NoListTriggeringInstructions | NUMINGROUP | N        | The length of the array for ListTriggeringInstructions.       |
 | ==>25011 | ListTriggerType              | CHAR       | N        | What needs to happen to the order pointed to by ListTriggerTriggerIndex in order for the action to take place. <br> Possible values: <br> `1` - ACTIVATED <br> `2` - PARTIALLY_FILLED <br> `3` - FILLED                                                                                                                      |
 | ==>25012 | ListTriggerTriggerIndex      | INT        | N        | Index of the trigger order: 0-indexed.                                                                                                                                                                                                                                                                                       |
 | ==>25013 | ListTriggerAction            | CHAR       | N        | Action to take place on this order after the ListTriggerType has been fulfilled. <br> Possible values: <br> `1` - RELEASE <br> `2` - CANCEL                                                                                                                                                                                  |
@@ -783,11 +796,11 @@ Please see [Response Mode](#responsemode) for other behavior options.
 | 60       | TransactTime                 | UTCTIMESTAMP | N        | Timestamp when this event occurred.                                                                                                                     |
 | 25016    | ErrorCode                    | INT          | N        | API error code (see [Error Codes](errors.md)).                                                                                                          |
 | 58       | Text                         | STRING       | N        | Human-readable error message.                                                                                                                           |
-| 73       | NoOrders                     | NUMINGROUP   | N        | How many `NoOrders` groups are populated.                                                                                                               |
+| 73       | NoOrders                     | NUMINGROUP   | N        | The length of the array for Orders.                                                                                                           |
 | =>55     | Symbol                       | STRING       | Y        | Symbol of the order.                                                                                                                                    |
 | =>37     | OrderID                      | INT          | Y        | `OrderID` of the order as assigned by the exchange.                                                                                                     |
 | =>11     | ClOrdID                      | STRING       | Y        | `ClOrdID` of the order as assigned on the request.                                                                                                      |
-| =>25010  | NoListTriggeringInstructions | NUMINGROUP   | N        | How many `NoListTriggeringInstructions` groups are populated.                                                                                           |
+| =>25010  | NoListTriggeringInstructions | NUMINGROUP   | N        | The length of the array for ListTriggeringInstructions.                                                                                          |
 | ==>25011 | ListTriggerType              | CHAR         | N        | Possible values: <br> `1` - ACTIVATED <br> `2` - PARTIALLY_FILLED <br> `3` - FILLED                                                                     |
 | ==>25012 | ListTriggerTriggerIndex      | INT          | N        |                                                                                                                                                         |
 | ==>25013 | ListTriggerAction            | CHAR         | N        | Possible values: <br> `1` - RELEASE <br> `2` - CANCEL                                                                                                   |
@@ -825,7 +838,7 @@ Sent by the server in response to [LimitQuery`<XLQ>`](#limitquery).
 | Tag     | Name                         | Type       | Required | Description                                                                                                            |
 |---------|------------------------------|------------|----------|------------------------------------------------------------------------------------------------------------------------|
 | 6136    | ReqID                        | STRING     | Y        | `ReqID` from the request.                                                                                              | 
-| 25003   | NoLimitIndicators            | NUMINGROUP | Y        | How many `LimitIndicator` groups are populated.                                                                        |
+| 25003   | NoLimitIndicators            | NUMINGROUP | Y        | The length of the array for LimitIndicators.                                                                      |
 | =>25004 | LimitType                    | CHAR       | Y        | Possible values: <br> `1` - ORDER_LIMIT <br> `2` - MESSAGE_LIMIT                                                       |
 | =>25005 | LimitCount                   | INT        | Y        | The current use of this limit.                                                                                         |
 | =>25006 | LimitMax                     | INT        | Y        | The maximum allowed for this limit.                                                                                    |
