@@ -8,13 +8,13 @@
 
 - Endpoint is: `tcp+tls://fix-oe.testnet.binance.vision:9000`
 - Supports placing orders, canceling orders, and querying current limit usage.
-- Supports receiving all of the account's ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
+- Supports receiving all of the account's [ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
 - Only ApiKeys with `FIX_API` are allowed to connect.
 
 ### FIX API Drop Copy sessions
 
 - Endpoint is: `tcp+tls://fix-dc.testnet.binance.vision:9000`
-- Supports receiving all of the account's ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
+- Supports receiving all of the account's [ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
 - Only ApiKeys with `FIX_API` or `FIX_API_READ_ONLY` are allowed to connect.
 
 QuickFix schema file can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml).
