@@ -111,6 +111,7 @@
    <field name='Username' required='N'/>
    <field name='MessageHandling' required='N'/>
    <field name='ResponseMode' required='N'/>
+   <field name='DropCopyFlag' required='N'/>
    <field name='UUID' required='N'/>
   </message>
   <message name='NewOrderSingle' msgcat='app' msgtype='D'>
@@ -399,6 +400,7 @@
   </field>
   <field number='6136' name='ReqID' type='STRING'/>
   <field number='7940' name='StrategyID' type='INT'/>
+  <field number='9406' name='DropCopyFlag' type='BOOLEAN'/>
   <field number='25000' name='RecvWindow' type='INT'/>
   <field number='25001' name='SelfTradePreventionMode' type='CHAR'>
    <value enum='1' description='NONE'/>
