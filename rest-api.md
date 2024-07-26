@@ -521,7 +521,7 @@ There are 4 possible options:
 |symbols| curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbols=%5B%22BNBBTC%22,%22BTCUSDT%22%5D" <br/> or <br/> curl -g -X  GET 'https://api.binance.com/api/v3/exchangeInfo?symbols=["BTCUSDT","BNBBTC"]' |
 |permissions| curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=SPOT" <br/> or <br/> curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=%5B%22MARGIN%22%2C%22LEVERAGED%22%5D" <br/> or <br/> curl -g -X GET 'https://api.binance.com/api/v3/exchangeInfo?permissions=["MARGIN","LEVERAGED"]' |
 
-**Notes**:
+**Notes:**
 * If the value provided to `symbol` or `symbols` do not exist, the endpoint will throw an error saying the symbol is invalid.
 * All parameters are optional.
 * `permissions` can support single or multiple values (e.g. `SPOT`, `["MARGIN","LEVERAGED"]`)
@@ -833,14 +833,12 @@ Database
 ```
 
 ### UIKlines
-
-The request is similar to klines having the same parameters and response.
-
-`uiKlines` return modified kline data, optimized for presentation of candlestick charts.
-
 ```
 GET /api/v3/uiKlines
 ```
+The request is similar to klines having the same parameters and response.
+
+`uiKlines` return modified kline data, optimized for presentation of candlestick charts.
 
 **Weight:**
 2
@@ -888,10 +886,11 @@ Database
 ```
 
 ### Current average price
-Current average price for a symbol.
 ```
 GET /api/v3/avgPrice
 ```
+Current average price for a symbol.
+
 **Weight:**
 2
 
@@ -1055,7 +1054,7 @@ OR
 ]
 ```
 
-**Response - MINI**
+**Response - MINI:**
 
 ```javascript
 {
@@ -1163,7 +1162,7 @@ Price change statistics for a trading day.
 **Data Source:**
 Database
 
-**Response: - FULL**
+**Response - FULL:**
 
 With `symbol`:
 
@@ -1229,7 +1228,7 @@ With `symbols`:
 ]
 ```
 
-**Response: - MINI**
+**Response - MINI:**
 
 With `symbol`:
 
@@ -1491,7 +1490,7 @@ E.g. If the `closeTime` is 1641287867099 (January 04, 2022 09:17:47:099 UTC) , a
 
 4 for each requested <tt>symbol</tt> regardless of <tt>windowSize</tt>. <br/><br/> The weight for this request will cap at 200 once the number of `symbols` in the request is more than 50.
 
-**Parameters**
+**Parameters:**
 
 <table>
   <tr>
@@ -1527,7 +1526,7 @@ E.g. If the `closeTime` is 1641287867099 (January 04, 2022 09:17:47:099 UTC) , a
 **Data Source:**
 Database
 
-**Response - FULL**
+**Response - FULL:**
 
 When using `symbol`:
 
@@ -1594,7 +1593,7 @@ When using `symbols`:
 ]
 ```
 
-**Response - MINI**
+**Response - MINI:**
 
 When using `symbol`:
 
@@ -1712,7 +1711,7 @@ Trigger order price rules against market price for both MARKET and LIMIT version
 **Data Source:**
 Matching Engine
 
-**Response ACK:**
+**Response - ACK:**
 ```javascript
 {
   "symbol": "BTCUSDT",
@@ -1723,7 +1722,7 @@ Matching Engine
 }
 ```
 
-**Response RESULT:**
+**Response - RESULT:**
 ```javascript
 {
   "symbol": "BTCUSDT",
@@ -1744,7 +1743,7 @@ Matching Engine
 }
 ```
 
-**Response FULL:**
+**Response - FULL:**
 ```javascript
 {
   "symbol": "BTCUSDT",
@@ -1897,7 +1896,7 @@ origClientOrderId | STRING | NO |
 recvWindow | LONG | NO | The value cannot be greater than ```60000```
 timestamp | LONG | YES |
 
-Notes:
+**Notes:**
 * Either `orderId` or `origClientOrderId` must be sent.
 * For some historical orders `cummulativeQuoteQty` will be < 0, meaning the data is not available at this time.
 
@@ -2006,7 +2005,7 @@ DELETE /api/v3/openOrders
 Cancels all active orders on a symbol.
 This includes orders that are part of an order list.
 
-**Weight**
+**Weight:**
 1
 
 Name | Type | Mandatory | Description
@@ -2018,7 +2017,7 @@ timestamp | LONG | YES |
 **Data Source:**
 Matching Engine
 
-**Response**
+**Response:**
 ```javascript
 [
   {
@@ -2167,6 +2166,8 @@ Response format varies depending on whether the processing of the message succee
 
 **Data Source:**
 Matching Engine
+
+**Response - SUCCESS:**
 
 <table>
 <thead>
@@ -2639,11 +2640,12 @@ timestamp | LONG | YES |
 POST /api/v3/order/oco 
 ```
 
-**Weight**: 1
+**Weight:** 
+1
 
 Send in a new OCO
 
-**Parameters**:
+**Parameters:**
 
 Name |Type| Mandatory | Description
 -----|-----|----------| -----------
@@ -3161,7 +3163,8 @@ Matching Engine
 DELETE /api/v3/orderList 
 ```
 
-**Weight**: 1
+**Weight:** 
+1
 
 Cancel an entire Order List
 
@@ -3176,14 +3179,15 @@ newClientOrderId|STRING|NO| Used to uniquely identify this cancel. Automatically
 recvWindow|LONG|NO| The value cannot be greater than ```60000```
 timestamp|LONG|YES|
 
-Additional notes:
+
+**Notes:**
 * Canceling an individual order from an order list will cancel the entire order list.
 * If both `orderListId` and `listClientOrderId` are sent, `orderListId` takes precedence.
 
 **Data Source:**
 Matching Engine
 
-**Response**
+**Response:**
 
 ```javascript
 {
@@ -3253,11 +3257,12 @@ Matching Engine
 GET /api/v3/orderList 
 ```
 
-**Weight**: 4
+**Weight:**
+4
 
 Retrieves a specific order list based on provided optional parameters.
 
-**Parameters**:
+**Parameters:**
 
 Name| Type|Mandatory| Description
 ----|-----|----|----------
@@ -3302,11 +3307,12 @@ Database
 GET /api/v3/allOrderList
 ```
 
-**Weight**: 20
+**Weight:**
+20
 
 Retrieves all order lists based on provided optional parameters.
 
-**Parameters**
+**Parameters:**
 
 Name|Type| Mandatory| Description
 ----|----|----|---------
@@ -3375,9 +3381,10 @@ Database
 GET /api/v3/openOrderList 
 ```
 
-Weight: 6
+**Weight:**
+6
 
-**Parameters**
+**Parameters:**
 
 Name| Type|Mandatory| Description
 ----|-----|---|------------------
@@ -3737,7 +3744,7 @@ limit               |INT     | NO           | Default: `500`; Max: `1000`
 recvWindow          | LONG   | NO           | The value cannot be greater than `60000`
 timestamp           | LONG   | YES          |
 
-**Weight**
+**Weight:**
 
 Case                            | Weight
 ----                            | -----
@@ -3914,7 +3921,7 @@ Keepalive a user data stream to prevent a time out. User data streams will close
 **Weight:**
 2
 
-**Data Source"**
+**Data Source:**
 Memory
 
 **Parameters:**
