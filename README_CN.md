@@ -58,7 +58,7 @@
 
 # 更新日志
 
-关于API(包括REST和WebSocket)方面的最新变动，请参考 [更新日志](./CHANGELOG_CN.md)。
+关于API方面的最新变动，请参考 [更新日志](./CHANGELOG_CN.md)。
 
 
 # 相关信息

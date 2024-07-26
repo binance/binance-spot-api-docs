@@ -128,6 +128,8 @@ Balance Update occurs during the following:
 ## Order Update
 Orders are updated with the `executionReport` event.
 
+We recommend using the [FIX API](fix-api.md) for better performance compared to using the User Data Streams.
+
 **Payload:**
 ```javascript
 {
