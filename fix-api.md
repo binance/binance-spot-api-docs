@@ -34,8 +34,7 @@ on how to set up an Ed25519 key pair.
 
 ### On message processing order
 
-The `MessageHandling (25035)` field, required in the initial [Logon`<A>`](#logon-request) message,
-controls whether the messages may get reordered.
+The `MessageHandling (25035)` field required in the initial [Logon`<A>`](#logon-request) message controls whether the messages may get reordered.
 
 - `UNORDERED(1)` should offer better performance, but there is a risk that messages may be processed in a different
   order.
@@ -229,6 +228,8 @@ Client order ID fields must conform to the regex `^[a-zA-Z0-9-_]{1,36}$`:
 
 ## Message Components
 
+**Note:**
+
 In example messages, the `|` character is used to represent SOH character:
 
 ```
@@ -247,7 +248,7 @@ Appears at the start of every message.
 | 9     | BodyLength   | LENGTH       | Y        | Message length in bytes. <br></br> Must be the second field in the message.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | 35    | MsgType      | STRING       | Y        | Must be the third field in the message. <br></br> Possible values: <br></br>`0` - [HEARTBEAT](#heartbeat) <br></br>`1` - [TEST_REQUEST](#testrequest) <br></br>`3` - [REJECT](#reject) <br></br>`5` - [LOGOUT](#logout) <br></br>`8` - [EXECUTION_REPORT](#executionreport) <br></br> `9` - [ORDER_CANCEL_REJECT](#ordercancelreject) <br></br> `A` - [LOGON](#logon-main) <br></br> `D` - [NEW_ORDER_SINGLE](#newordersingle) <br></br> `E` - [NEW_ORDER_LIST](#neworderlist) <br></br> `F` - [ORDER_CANCEL_REQUEST](#ordercancelrequest) <br></br> `N` - [LIST_STATUS](#liststatus) <br></br> `q` - [ORDER_MASS_CANCEL_REQUEST](#ordermasscancelrequest) <br></br> `r` - [ORDER_MASS_CANCEL_REPORT](#ordermasscancelreport) <br></br> `XCN` - [ORDER_CANCEL_REQUEST_AND_NEW_ORDER_SINGLE](#ordercancelrequestandnewordersingle) <br></br> `XLQ` - [LIMIT_QUERY](#limitquery) <br></br> `XLR` - [LIMIT_RESPONSE](#limitresponse) |
 | 49    | SenderCompID | STRING       | Y        | Must be unique across an account's active sessions.  <br></br> Must obey regex: `^[a-zA-Z0-9-_]{1,8}$`|
-| 56    | TargetCompID | STRING       | Y        | Must be set to `SPOT` in messages from the client.  |
+| 56    | TargetCompID | STRING       | Y        | A string identifying this TCP connection.<br></br>On messages from client required to be set to `SPOT`. <br></br>Must be unique across TCP connections. <br></br> Must conform to the regex: `^[a-zA-Z0-9-_]{1,8}$`  |
 | 34    | MsgSeqNum    | SEQNUM       | Y        | Integer message sequence number. <br></br> Values that will cause a gap will be rejected.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | 52    | SendingTime  | UTCTIMESTAMP | Y        | Time of message transmission (always expressed in UTC).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | 25000 | RecvWindow   | INT          | N        | Number of milliseconds after `SendingTime (52)` the request is valid for. <br></br> Defaults to `5000` milliseconds in [Logon`<A>`](#logon-request) and has a max value of `60000` milliseconds.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
@@ -592,7 +593,7 @@ If the canceled order is part of an order list, the entire list will be canceled
 
 <a id="ordercancelreject"></a>
 
-#### OrderCancelReject`<9>`
+#### OrderCancelReject<code>&lt;9&gt;</code>
 
 Sent by the server when [OrderCancelRequest`<F>`](#ordercancelrequest) has failed.
 
@@ -774,7 +775,6 @@ Please refer to [Supported Order List Types](#order-list-types) for supported or
 | OTOCO           | `2`                     | 1. working order<br></br><br></br>2. pending below order<br></br><br></br>3. pending above order | 1. working order=`SELL` or `BUY`<br></br><br></br>2. pending below order=`SELL`<br></br><br></br>3. pending above order=`SELL` | 1. working order=`LIMIT` or `LIMIT_MAKER`<br></br><br></br>2. pending below order=`STOP_LOSS` or `STOP_LOSS_LIMIT`<br></br><br></br>3. pending above order=`LIMIT_MAKER` | 1. working order:<br></br>NONE<br></br><br></br>2. pending below order:<br></br><code>25010=2&#124;25011=2&#124;25012=0&#124;25013=2&#124;25011=2&#124;25012=2&#124;25013=2&#124;</code><br></br><br></br>3. pending above order:<br></br><code>25010=2&#124;25011=2&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=1&#124;25013=2&#124;</code> |
 | OTOCO           | `2`                     | 1. working order<br></br><br></br>2. pending below order<br></br><br></br>3. pending above order | 1. working order=`SELL` or `BUY`<br></br><br></br>2. pending below order=`BUY`<br></br><br></br>3. pending above order=`BUY`   | 1. working order=`LIMIT` or `LIMIT_MAKER`<br></br><br></br>2. pending below order=`LIMIT_MAKER`<br></br><br></br>3. pending above order=`STOP_LOSS` or `STOP_LOSS_LIMIT` | 1. working order:<br></br>NONE<br></br><br></br>2. pending below order:<br></br><code>25010=2&#124;25011=2&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=2&#124;25013=2&#124;</code><br></br><br></br>3. pending above order:<br></br><code>25010=2&#124;25011=2&#124;25012=0&#124;25013=2&#124;25011=2&#124;25012=1&#124;25013=2&#124;</code> |
 
-
 <a id="liststatus"></a>
 
 #### ListStatus<code>&lt;N&gt;</code>
@@ -799,7 +799,7 @@ Please see [Response Mode](#responsemode) for other behavior options.
 | 60       | TransactTime                 | UTCTIMESTAMP | N        | Timestamp when this event occurred.                                                                                                                     |
 | 25016    | ErrorCode                    | INT          | N        | API error code (see [Error Codes](errors.md)).                                                                                                          |
 | 58       | Text                         | STRING       | N        | Human-readable error message.                                                                                                                           |
-| 73       | NoOrders                     | NUMINGROUP   | N        | The length of the array for Orders.                                                                                                                     |
+| 73       | NoOrders                     | NUMINGROUP   | N        | The length of the array for Orders.                                                                                                           |
 | =>55     | Symbol                       | STRING       | Y        | Symbol of the order.                                                                                                                                    |
 | =>37     | OrderID                      | INT          | Y        | `OrderID` of the order as assigned by the exchange.                                                                                                     |
 | =>11     | ClOrdID                      | STRING       | Y        | `ClOrdID` of the order as assigned on the request.                                                                                                      |
@@ -841,7 +841,7 @@ Sent by the server in response to [LimitQuery`<XLQ>`](#limitquery).
 | Tag     | Name                         | Type       | Required | Description                                                                                                            |
 |---------|------------------------------|------------|----------|------------------------------------------------------------------------------------------------------------------------|
 | 6136    | ReqID                        | STRING     | Y        | `ReqID` from the request.                                                                                              | 
-| 25003   | NoLimitIndicators            | NUMINGROUP | Y        | The length of the array for LimitIndicators.                                                                       |
+| 25003   | NoLimitIndicators            | NUMINGROUP | Y        | The length of the array for LimitIndicators.                                                                      |
 | =>25004 | LimitType                    | CHAR       | Y        | Possible values: <br></br> `1` - ORDER_LIMIT <br></br> `2` - MESSAGE_LIMIT                                                       |
 | =>25005 | LimitCount                   | INT        | Y        | The current use of this limit.                                                                                         |
 | =>25006 | LimitMax                     | INT        | Y        | The maximum allowed for this limit.                                                                                    |
