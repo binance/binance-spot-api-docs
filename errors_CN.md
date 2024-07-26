@@ -163,6 +163,15 @@
 * Parameter '%s' is not supported if `aboveTimeInForce`/`belowTimeInForce` is not GTC.
 * If the order type for the above or below leg is `STOP_LOSS_LIMIT`, and `icebergQty` is provided for that leg, the `timeInForce` has to be `GTC` else it will throw an error.
 
+#### -1183 不允许在 Drop Copy 会话中使用
+ * Requested operation is not allowed in DropCopy sessions.
+
+#### -1184 不允许使用 Drop Copy 会话
+ * DropCopy sessions are not supported on this server. Please reconnect to a drop copy server.
+
+#### -1185 需要使用 Drop Copy 会话
+ * Only DropCopy sessions are supported on this server. Either reconnect to order entry server or send `DropCopyFlag (9406)` field.
+
 #### -2010 新订单被拒绝
  * NEW_ORDER_REJECTED
 

@@ -1,10 +1,18 @@
-# 更新日志 (2024-07-22)
+
+# 更新日志 (2024-07-26)
+
+## 2024-07-26
+
+* [FIX API 和 Drop Copy 会话](fix-api_CN.md) 已添加到文档中。
+* 实时交换的发布日期尚未确定。
+
+---
 
 ## 2024-07-22
 
 常规更改：
 
-* 修复了有关于 klines 错误时间戳的 bug。
+* 修复了 klines 的时间戳不正确的 bug。
   * REST API： 带有 `timeZone` 参数的 `GET /api/v3/klines` 和 `GET /api/v3/uiKlines` 
   * WebSocket API： 带有 `timeZone` 参数的 `klines` 和 `uiKlines`
   * WebSocket Streams: `<symbol>@kline_<interval>@+08：00`

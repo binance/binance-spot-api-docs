@@ -164,6 +164,15 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 * Parameter '%s' is not supported if `aboveTimeInForce`/`belowTimeInForce` is not GTC.
 * If the order type for the above or below leg is `STOP_LOSS_LIMIT`, and `icebergQty` is provided for that leg, the `timeInForce` has to be `GTC` else it will throw an error.
 
+#### -1183 NOT_ALLOWED_IN_DROP_COPY_SESSIONS
+ * Requested operation is not allowed in DropCopy sessions.
+
+#### -1184 DROP_COPY_SESSION_NOT_ALLOWED
+ * DropCopy sessions are not supported on this server. Please reconnect to a drop copy server.
+
+#### -1185 DROP_COPY_SESSION_REQUIRED
+ * Only DropCopy sessions are supported on this server. Either reconnect to order entry server or send `DropCopyFlag (9406)` field.
+
 #### -2010 NEW_ORDER_REJECTED
  * NEW_ORDER_REJECTED
 

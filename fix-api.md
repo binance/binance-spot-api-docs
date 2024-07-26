@@ -6,14 +6,14 @@
 
 ### FIX API order entry sessions
 
-- Endpoint is: `tcp+tls://fix-oe.testnet.binance.vision:9000`
+- Endpoint is: `tcp+tls://fix-oe.binance.com:9000`
 - Supports placing orders, canceling orders, and querying current limit usage.
 - Supports receiving all of the account's [ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
 - Only API keys with `FIX_API` are allowed to connect.
 
 ### FIX API Drop Copy sessions
 
-- Endpoint is: `tcp+tls://fix-dc.testnet.binance.vision:9000`
+- Endpoint is: `tcp+tls://fix-dc.binance.com:9000`
 - Supports receiving all of the account's [ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
 - Only API keys with `FIX_API` or `FIX_API_READ_ONLY` are allowed to connect.
 
@@ -27,14 +27,14 @@ To access the FIX Drop Copy sessions, your API key must be configured with eithe
 
 **FIX API order entry and Drop Copy sessions only support Ed25519 keys.**
 
-You can setup and configure your API key permissions on [Spot Test Network](https://testnet.binance.vision/).
+Please refer to [this tutorial](https://www.binance.com/en/support/faq/how-to-generate-an-ed25519-key-pair-to-send-api-requests-on-binance-6b9a63f1e3384cf48a2eedb82767a69a)
+on how to set up an Ed25519 key pair.
 
 <a id="orderedmode"></a>
 
 ### On message processing order
 
-The `MessageHandling (25035)` field required in the initial [Logon`<A>`](#logon-request) message
-controls whether the messages may get reordered.
+The `MessageHandling (25035)` field required in the initial [Logon`<A>`](#logon-request) message controls whether the messages may get reordered.
 
 - `UNORDERED(1)` should offer better performance, but there is a risk that messages may be processed in a different
   order.
@@ -63,7 +63,7 @@ to change this behavior.
 
 ### How to sign Logon<code>&lt;A&gt;</code> request
 
-The [Logon<code>&lt;A&gt;</code>](#logon-main) message authenticates your connection to the FIX API.
+The [Logon`<A>`](#logon-main) message authenticates your connection to the FIX API.
 This must be the first message sent by the client.
 
 * The `Username (553)` field is required to contain the API key.
@@ -248,7 +248,7 @@ Appears at the start of every message.
 | 9     | BodyLength   | LENGTH       | Y        | Message length in bytes. <br></br> Must be the second field in the message.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | 35    | MsgType      | STRING       | Y        | Must be the third field in the message. <br></br> Possible values: <br></br>`0` - [HEARTBEAT](#heartbeat) <br></br>`1` - [TEST_REQUEST](#testrequest) <br></br>`3` - [REJECT](#reject) <br></br>`5` - [LOGOUT](#logout) <br></br>`8` - [EXECUTION_REPORT](#executionreport) <br></br> `9` - [ORDER_CANCEL_REJECT](#ordercancelreject) <br></br> `A` - [LOGON](#logon-main) <br></br> `D` - [NEW_ORDER_SINGLE](#newordersingle) <br></br> `E` - [NEW_ORDER_LIST](#neworderlist) <br></br> `F` - [ORDER_CANCEL_REQUEST](#ordercancelrequest) <br></br> `N` - [LIST_STATUS](#liststatus) <br></br> `q` - [ORDER_MASS_CANCEL_REQUEST](#ordermasscancelrequest) <br></br> `r` - [ORDER_MASS_CANCEL_REPORT](#ordermasscancelreport) <br></br> `XCN` - [ORDER_CANCEL_REQUEST_AND_NEW_ORDER_SINGLE](#ordercancelrequestandnewordersingle) <br></br> `XLQ` - [LIMIT_QUERY](#limitquery) <br></br> `XLR` - [LIMIT_RESPONSE](#limitresponse) |
 | 49    | SenderCompID | STRING       | Y        | Must be unique across an account's active sessions.  <br></br> Must obey regex: `^[a-zA-Z0-9-_]{1,8}$`|
-| 56    | TargetCompID | STRING       | Y        | A string identifying this TCP connection.<br></br>On messages from client required to be set to `SPOT`. <br></br>Must be unique across TCP connections. <br></br> Must conform to the regex: `^[a-zA-Z0-9-_]{1,8}$`  |                                                                                                                                                                                                                                                                                                            |
+| 56    | TargetCompID | STRING       | Y        | A string identifying this TCP connection.<br></br>On messages from client required to be set to `SPOT`. <br></br>Must be unique across TCP connections. <br></br> Must conform to the regex: `^[a-zA-Z0-9-_]{1,8}$`  |
 | 34    | MsgSeqNum    | SEQNUM       | Y        | Integer message sequence number. <br></br> Values that will cause a gap will be rejected.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | 52    | SendingTime  | UTCTIMESTAMP | Y        | Time of message transmission (always expressed in UTC).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | 25000 | RecvWindow   | INT          | N        | Number of milliseconds after `SendingTime (52)` the request is valid for. <br></br> Defaults to `5000` milliseconds in [Logon`<A>`](#logon-request) and has a max value of `60000` milliseconds.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
@@ -338,7 +338,8 @@ Sent by the server in response to a successful logon.
 | 553   | Username        | STRING  | Y        | API key. **Only Ed25519 API keys are supported.**                                                                                                  |
 | 25035 | MessageHandling | INT     | Y        | Possible values: <br></br> `1` - UNORDERED <br></br> `2` - SEQUENTIAL <br></br> Please refer to [On message order processing](#orderedmode) for more information. |
 | 25036 | ResponseMode    | INT     | N        | Please refer to [Response Mode](#responsemode).                                                                                                    |
-| 9406  | DropCopyFlag    |BOOLEAN  | N        |Must be set to 'Y' when logging into Drop Copy sessions.|
+| 9406  | DropCopyFlag    |BOOLEAN   | N |Must be set to 'Y' when logging into Drop Copy sessions.|
+
 
 **Sample Message:**
 
@@ -478,7 +479,7 @@ Required fields based on Binance OrderType:
 | `STOP_LOSS_LIMIT`   | 38, 44, 59, 1102 or 25009       |                           |
 | `TAKE_PROFIT`       | 38, 1102 or 25009               | This will execute a `MARKET` order when the conditions are met. (e.g. `TriggerPrice (1102)` is met or `TriggerTrailingDeltaBips (25009)` is activated)   |
 | `TAKE_PROFIT_LIMIT` | 38, 44, 59, 1102 or 25009       |                           
-| `LIMIT_MAKER`       | 38, 44                          | This is a `LIMIT` order that will be rejected if the order immediately matches and trades as a taker. <br/> This is also known as a POST-ONLY order. |                                                                                             |
+| `LIMIT_MAKER`       | 38, 44                          | This is a `LIMIT` order that will be rejected if the order immediately matches and trades as a taker. <br/> This is also known as a POST-ONLY order. |
 
 <a id="executionreport"></a>
 
@@ -486,9 +487,11 @@ Required fields based on Binance OrderType:
 
 Sent by the server whenever an order state changes.
 
-**Note:** By default, ExecutionReport`<8>` is sent for all orders of an account,
+**Notes:** 
+* By default, ExecutionReport`<8>` is sent for all orders of an account,
 including those submitted in different connections.
 Please see [Response Mode](#responsemode) for other behavior options.
+* FIX API should give the better performance for ExecutionReport<code>&lt;8&gt;</code> push.
 
 | Tag   | Name                     | Type         | Required | Description                                                                                                                                                                                                                                                                                                                  |
 |-------|--------------------------|--------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -727,7 +730,7 @@ Please refer to [Supported Order List Types](#order-list-types) for supported or
 |----------|------------------------------|------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 25014    | ClListID                     | STRING     | Y        | `ClListID` to be assigned to the order list.                                                                                                                                                                                                                                                                                 |
 | 1385     | ContingencyType              | INT        | N        | Possible values: <br></br> `1` - ONE_CANCELS_THE_OTHER <br></br> `2` - ONE_TRIGGERS_THE_OTHER                                                                                                                                                                                                                                          |
-| 73       | NoOrders                     | NUMINGROUP | N        | The length of the array for Orders. Only 2 or 3 are allowed.                                                                                                                                                                                                                                                           |
+| 73       | NoOrders                     | NUMINGROUP | N        | The length of the array for Orders. Only 2 or 3 are allowed.             |
 | =>11     | ClOrdID                      | STRING     | Y        | `ClOrdID` to be assigned to the order                                                                                                                                                                                                                                                                                        |
 | =>38     | OrderQty                     | QTY        | N        | Quantity of the order                                                                                                                                                                                                                                                                                                        |
 | =>40     | OrdType                      | CHAR       | Y        | See the [table](#ordertype) to understand supported order types and the required fields to use them.<br></br>Possible values: <br></br> `1` - MARKET <br></br> `2` - LIMIT <br></br> `3` - STOP <br></br> `4` - STOP_LIMIT                                                                                        |
