@@ -2243,7 +2243,7 @@ timestamp | LONG | YES |
         <td rowspan="4">超出限制范围</td>
         <td>✅ <code>SUCCESS</code></td>
         <td>✅ <code>SUCCESS</code></td>
-        <td align=right><code>200</code></td>
+        <td align=right><code>N/A</code></td>
     </tr>
     <tr>
         <td>❌ <code>FAILURE</code></td>
