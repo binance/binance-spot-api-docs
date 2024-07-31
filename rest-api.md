@@ -2317,7 +2317,7 @@ Matching Engine
         <td rowspan="4">Exceeds Limits</td>
         <td>✅ <code>SUCCESS</code></td>
         <td>✅ <code>SUCCESS</code></td>
-        <td align=right><code>200</code></td>
+        <td align=right><code>N/A</code></td>
     </tr>
     <tr>
         <td>❌ <code>FAILURE</code></td>
