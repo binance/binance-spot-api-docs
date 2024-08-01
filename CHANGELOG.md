@@ -1,4 +1,10 @@
-# CHANGELOG for Binance's API (2024-07-26)
+# CHANGELOG for Binance's API (2024-08-01)
+
+## 2024-08-01
+
+* [FIX API and Drop Copy Sessions](fix-api.md) will be available on **August 8, 05:00 UTC**.
+
+---
 
 ## 2024-07-26
 
