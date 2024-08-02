@@ -19,6 +19,8 @@
 
 QuickFix schema file can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml).
 
+FIX connections require TLS encryption. Please either use native TCP+TLS connection or set up a local proxy such as [stunnel](https://www.stunnel.org/) to handle TLS encryption.
+
 ### API Key Permissions
 
 To access the FIX API order entry sessions, your API key must be configured with the `FIX_API` permission.
