@@ -19,6 +19,8 @@
 
 关于 QuickFix 模式 (Schema) 文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
 
+FIX 连接需要 TLS 加密。请使用本地 TCP+TLS 连接或设置本地代理如 [stunnel](https://www.stunnel.org/) 来处理 TLS 加密。
+
 ### API Key 权限
 
 如果您需要使用 FIX API 的订单接入会话，您的 API key 必须配置 `FIX_API` 权限。
