@@ -1,7 +1,13 @@
-# CHANGELOG for Binance SPOT Testnet (2024-07-23)
+# CHANGELOG for Binance SPOT Testnet (2024-08-07)
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/). 
 This is not always synced with the live exchange. 
+
+## 2024-08-07
+
+* The [QuickFix schema](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml) has been modified.
+
+---
 
 ## 2024-07-23
 

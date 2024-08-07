@@ -146,9 +146,9 @@
    <field name='ListRejectReason' required='N'/>
    <field name='TransactTime' required='N'/>
    <group name='NoOrders' required='N'>
+    <field name='ClOrdID' required='Y'/>
     <field name='Symbol' required='Y'/>
     <field name='OrderID' required='N'/>
-    <field name='ClOrdID' required='Y'/>
     <component name='ListTriggeringInstruction' required='Y'/>
     <field name='OrdRejReason' required='N'/>
     <field name='ErrorCode' required='N'/>
@@ -198,9 +198,9 @@
   </component>
   <component name='ListTriggeringInstruction'>
    <group name='NoListTriggeringInstructions' required='N'>
-    <field name='ListTriggerType' required='N'/>
-    <field name='ListTriggerTriggerIndex' required='N'/>
-    <field name='ListTriggerAction' required='N'/>
+    <field name='ListTriggerType' required='Y'/>
+    <field name='ListTriggerTriggerIndex' required='Y'/>
+    <field name='ListTriggerAction' required='Y'/>
    </group>
   </component>
   <component name='NewOrder'>
