@@ -2601,6 +2601,7 @@ timestamp | LONG | YES |
 * If `orderId` is set, it will get orders >= that `orderId`. Otherwise most recent orders are returned.
 * For some historical orders `cummulativeQuoteQty` will be < 0, meaning the data is not available at this time.
 * If `startTime` and/or `endTime` provided, `orderId`  is not required.
+* The time between `startTime` and `endTime` can't be longer than 24 hours.
 
 **Response:**
 ```javascript
@@ -3311,6 +3312,8 @@ GET /api/v3/allOrderList
 20
 
 Retrieves all order lists based on provided optional parameters.
+
+Note that the time between `startTime` and `endTime` can't be longer than 24 hours.
 
 **Parameters:**
 

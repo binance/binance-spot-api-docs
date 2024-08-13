@@ -2518,6 +2518,7 @@ timestamp | LONG | YES |
 * 如设置 `orderId` , 订单量将 >=  `orderId`。否则将返回最新订单。
 * 一些历史订单 `cummulativeQuoteQty`  < 0, 是指数据此时不存在。
 * 如果设置 `startTime` 和 `endTime`, `orderId` 就不需要设置。
+* `startTime`和`endTime`之间的时间不能超过 24 小时。
 
 **数据源:**
 数据库
@@ -3223,6 +3224,8 @@ GET /api/v3/allOrderList
 ``
 
 根据提供的可选参数检索所有的订单列表。
+
+请注意，`startTime`和`endTime`之间的时间不能超过 24 小时。
 
 **权重:** 20
 
