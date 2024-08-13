@@ -6084,6 +6084,8 @@ Notes:
 * For some historical orders the `cummulativeQuoteQty` response field may be negative,
   meaning the data is not available at this time.
 
+* The time between `startTime` and `endTime` can't be longer than 24 hours.
+
 **Data Source:**
 Database
 
@@ -6179,6 +6181,8 @@ Notes:
 * If `fromId` is specified, return order lists with order list ID >= `fromId`.
 
 * If no condition is specified, the most recent order lists are returned.
+
+* The time between `startTime` and `endTime` can't be longer than 24 hours.
 
 **Data Source:**
 Database
@@ -6276,6 +6280,8 @@ Notes:
   `startTime` and `endTime` cannot be used together with `orderId`.
 
 * If no condition is specified, the most recent trades are returned.
+
+* The time between `startTime` and `endTime` can't be longer than 24 hours.
 
 **Data Source:**
 Memory => Database
