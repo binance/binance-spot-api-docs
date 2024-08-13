@@ -6100,6 +6100,8 @@ NONE
 
 * 对于某些历史订单，`cummulativeQuoteQty` 响应字段可能为负数，代表着此时数据还不可用。
 
+* `startTime`和`endTime`之间的时间不能超过 24 小时。
+
 **数据源:**
 数据库
 
@@ -6194,6 +6196,8 @@ NONE
 * 如果指定了 `fromId`，返回的订单列表将是 order list ID >= `fromId`。
 
 * 如果不指定条件，则返回最近的订单列表。
+
+* `startTime`和`endTime`之间的时间不能超过 24 小时
 
 **数据源:**
 数据库
@@ -6291,6 +6295,8 @@ NONE
   `startTime` 和 `endTime` 不能与 `orderId` 一起使用。
 
 * 如果不指定条件，则返回最近的交易。
+
+* `startTime`和`endTime`之间的时间不能超过 24 小时。
 
 **数据源:**
 缓存 => 数据库
