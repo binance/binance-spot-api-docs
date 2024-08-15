@@ -2008,6 +2008,8 @@ This includes orders that are part of an order list.
 **Weight:**
 1
 
+**Parameters:**
+
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
@@ -2640,11 +2642,10 @@ timestamp | LONG | YES |
 ```
 POST /api/v3/order/oco 
 ```
+Send in a new OCO
 
 **Weight:** 
 1
-
-Send in a new OCO
 
 **Parameters:**
 
@@ -2755,9 +2756,6 @@ Matching Engine
 POST /api/v3/orderList/oco
 ```
 
-**Weight:** 
-1
-
 Send in an one-cancels-the-other (OCO) pair, where activation of one order immediately cancels the other.
 
 * An OCO has 2 legs called the **above leg** and **below leg**.
@@ -2766,6 +2764,9 @@ Send in an one-cancels-the-other (OCO) pair, where activation of one order immed
   * If the OCO is on the `SELL` side: `LIMIT_MAKER` `price` > Last Traded Price > `stopPrice`
   * If the OCO is on the `BUY` side: `LIMIT_MAKER` `price` < Last Traded Price < `stopPrice`
 * OCO counts as **2** orders against the order rate limit.
+
+**Weight:**
+1
 
 **Parameters:**
 
@@ -2890,26 +2891,26 @@ Name                   |Type   |Mandatory | Description
 ----                   |----   |------    |------
 symbol                 |STRING |YES       |
 listClientOrderId      |STRING |NO        |Arbitrary unique ID among open order lists. Automatically generated if not sent. <br>A new order list with the same listClientOrderId is accepted only when the previous one is filled or completely expired. <br> `listClientOrderId` is distinct from the `workingClientOrderId` and the `pendingClientOrderId`.
-newOrderRespType       |ENUM   |NO        |Format of the JSON response. Supported values: <a href="./enums.md#orderresponsetype">Order Response Type</a>
-selfTradePreventionMode|ENUM   |NO        |The allowed values are dependent on what is configured on the symbol. Supported values: <a href="./enums.md#stpmodes">STP Modes</a>
+newOrderRespType       |ENUM   |NO        |Format of the JSON response. Supported values: [Order Response Type](./enums.md#orderresponsetype)
+selfTradePreventionMode|ENUM   |NO        |The allowed values are dependent on what is configured on the symbol. Supported values: [STP Modes](./enums.md#stpmodes)
 workingType            |ENUM   |YES       |Supported values: `LIMIT`,`LIMIT_MAKER`
-workingSide            |ENUM   |YES       |Supported values: <a href="./enums.md#side">Order side</a>
+workingSide            |ENUM   |YES       |Supported values: [Order Side](./enums.md#side)
 workingClientOrderId   |STRING |NO        |Arbitrary unique ID among open orders for the working order.<br> Automatically generated if not sent.
 workingPrice           |DECIMAL|YES       |
 workingQuantity        |DECIMAL|YES       |Sets the quantity for the working order.
 workingIcebergQty      |DECIMAL|YES       |This can only be used if `workingTimeInForce` is `GTC`, or if `workingType` is `LIMIT_MAKER`.
-workingTimeInForce     |ENUM   |NO        |Supported values: <a href="(./enums.md#timeinforce">Time In Force</a>
+workingTimeInForce     |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
 workingStrategyId      |INT    |NO        |Arbitrary numeric value identifying the working order within an order strategy.
 workingStrategyType    |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
 pendingType            |ENUM   |YES       |Supported values: [Order Types](#order-type)<br> Note that `MARKET` orders using `quoteOrderQty` are not supported.
-pendingSide            |ENUM   |YES       |Supported values: <a href="./enums.md#side">Order Side</a>
+pendingSide            |ENUM   |YES       |Supported values: [Order Side](./enums.md#side)
 pendingClientOrderId   |STRING |NO        |Arbitrary unique ID among open orders for the pending order.<br> Automatically generated if not sent.
 pendingPrice           |DECIMAL|NO        |
 pendingStopPrice       |DECIMAL|NO        |
 pendingTrailingDelta   |DECIMAL|NO        |
 pendingQuantity        |DECIMAL|YES       |Sets the quantity for the pending order.
 pendingIcebergQty      |DECIMAL|NO        |This can only be used if `pendingTimeInForce` is `GTC`, or if `pendingType` is `LIMIT_MAKER`.
-pendingTimeInForce     |ENUM   |NO        |Supported values: <a href="(./enums.md#timeinforce">Time In Force</a>
+pendingTimeInForce     |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
 pendingStrategyId      |INT    |NO        |Arbitrary numeric value identifying the pending order within an order strategy.
 pendingStrategyType    |INT    |NO        |Arbitrary numeric value identifying the pending order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
 recvWindow             |LONG   |NO        |The value cannot be greater than `60000`.
@@ -3019,18 +3020,18 @@ Name                     |Type   |Mandatory | Description
 ----                     |----   |------    |------
 symbol                   |STRING |YES       |
 listClientOrderId        |STRING |NO        |Arbitrary unique ID among open order lists. Automatically generated if not sent. <br>A new order list with the same listClientOrderId is accepted only when the previous one is filled or completely expired. <br> `listClientOrderId` is distinct from the `workingClientOrderId`, `pendingAboveClientOrderId`, and the `pendingBelowClientOrderId`.
-newOrderRespType         |ENUM   |NO        |Format of the JSON response. Supported values: Supported values: <a href="./enums.md#orderresponsetype">Order Response Type</a>
-selfTradePreventionMode  |ENUM   |NO        |The allowed values are dependent on what is configured on the symbol. Supported values: <a href="./enums.md#stpmodes">STP Modes</a>
+newOrderRespType         |ENUM   |NO        |Format of the JSON response. Supported values: [Order Response Type](./enums.md#orderresponsetype)
+selfTradePreventionMode  |ENUM   |NO        |The allowed values are dependent on what is configured on the symbol. Supported values: [STP Modes](./enums.md#stpmodes)
 workingType              |ENUM   |YES       |Supported values: `LIMIT`, `LIMIT_MAKER`
-workingSide              |ENUM   |YES       |Supported values: <a href="./enums.md#side">Order side</a>
+workingSide              |ENUM   |YES       |Supported values: [Order side](./enums.md#side)
 workingClientOrderId     |STRING |NO        |Arbitrary unique ID among open orders for the working order.<br> Automatically generated if not sent.
 workingPrice             |DECIMAL|YES       |
 workingQuantity          |DECIMAL|YES        |
 workingIcebergQty        |DECIMAL|NO        |This can only be used if `workingTimeInForce` is `GTC`.
-workingTimeInForce       |ENUM   |NO        |Supported values: <a href="(./enums.md#timeinforce">Time In Force</a>
+workingTimeInForce       |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
 workingStrategyId        |INT    |NO        |Arbitrary numeric value identifying the working order within an order strategy.
 workingStrategyType      |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
-pendingSide              |ENUM   |YES       |Supported values: <a href="./enums.md#side">Order side</a>
+pendingSide              |ENUM   |YES       |Supported values: [Order side](./enums.md#side)
 pendingQuantity          |DECIMAL|YES       |
 pendingAboveType         |ENUM   |YES       |Supported values: `LIMIT_MAKER`, `STOP_LOSS`, and `STOP_LOSS_LIMIT`
 pendingAboveClientOrderId|STRING |NO        |Arbitrary unique ID among open orders for the pending above order.<br> Automatically generated if not sent.
@@ -3047,7 +3048,7 @@ pendingBelowPrice        |DECIMAL|NO        |
 pendingBelowStopPrice    |DECIMAL|NO        |
 pendingBelowTrailingDelta|DECIMAL|NO        |
 pendingBelowIcebergQty   |DECIMAL|NO        |This can only be used if `pendingBelowTimeInForce` is `GTC`, or if `pendingBelowType` is `LIMIT_MAKER`.
-pendingBelowTimeInForce  |ENUM   |NO        |Supported values: <a href="(./enums.md#timeinforce">Time In Force</a>
+pendingBelowTimeInForce  |ENUM   |NO        |Supported values: [Time In Force](enums.md#timeinforce)
 pendingBelowStrategyId   |INT    |NO        |Arbitrary numeric value identifying the pending below order within an order strategy.
 pendingBelowStrategyType |INT    |NO        |Arbitrary numeric value identifying the pending below order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
 recvWindow               |LONG   |NO        |The value cannot be greater than `60000`.
@@ -3163,11 +3164,10 @@ Matching Engine
 ```
 DELETE /api/v3/orderList 
 ```
+Cancel an entire Order List
 
 **Weight:** 
 1
-
-Cancel an entire Order List
 
 **Parameters:**
 
@@ -3257,11 +3257,10 @@ Matching Engine
 ```
 GET /api/v3/orderList 
 ```
+Retrieves a specific order list based on provided optional parameters.
 
 **Weight:**
 4
-
-Retrieves a specific order list based on provided optional parameters.
 
 **Parameters:**
 
@@ -3307,13 +3306,12 @@ Database
 ```
 GET /api/v3/allOrderList
 ```
-
-**Weight:**
-20
-
 Retrieves all order lists based on provided optional parameters.
 
 Note that the time between `startTime` and `endTime` can't be longer than 24 hours.
+
+**Weight:**
+20
 
 **Parameters:**
 

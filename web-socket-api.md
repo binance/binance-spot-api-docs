@@ -5168,7 +5168,7 @@ Name                   |Type   |Mandatory | Description
 `newOrderRespType`       |ENUM   |NO        |Format the JSON response. Supported values: [Order Response Type](./enums.md#order-response-type-neworderresptype)
 `selfTradePreventionMode`|ENUM   |NO        |The allowed values are dependent on what is configured on the symbol. See [STP Modes](./enums.md#stp-modes)
 `workingType`            |ENUM   |YES       |Supported values: `LIMIT`,`LIMIT_MAKER`
-`workingSide`            |ENUM   |YES       |Supported values: [Order Side](/enums.md#order-side-side)
+`workingSide`            |ENUM   |YES       |Supported values: [Order Side](./enums.md#order-side-side)
 `workingClientOrderId`   |STRING |NO        |Arbitrary unique ID among open orders for the working order.<br> Automatically generated if not sent.
 `workingPrice`           |DECIMAL|YES       |
 `workingQuantity`        |DECIMAL|YES       |Sets the quantity for the working order.
@@ -5334,9 +5334,9 @@ Name                     |Type   |Mandatory | Description
 `symbol`                   |STRING |YES       |
 `listClientOrderId`        |STRING |NO        |Arbitrary unique ID among open order lists. Automatically generated if not sent. <br>A new order list with the same listClientOrderId is accepted only when the previous one is filled or completely expired. <br> `listClientOrderId` is distinct from the `workingClientOrderId`, `pendingAboveClientOrderId`, and the `pendingBelowClientOrderId`.
 `newOrderRespType`         |ENUM   |NO        |Format the JSON response. Supported values: [Order Response Type](./enums.md#order-response-type-neworderresptype)
-`selfTradePreventionMode`  |ENUM   |NO        |The allowed values are dependent on what is configured on the symbol. See <a href="./enums.md#stpmodes">STP Modes</a>
+`selfTradePreventionMode`  |ENUM   |NO        |The allowed values are dependent on what is configured on the symbol. See [STP Modes](./enums.md#stpmodes)
 `workingType`              |ENUM   |YES       |Supported values: `LIMIT`, `LIMIT_MAKER`
-`workingSide`              |ENUM   |YES       |Supported values: <a href="./enums.md#side">Order Side</a>
+`workingSide`              |ENUM   |YES       |Supported values: [Order Side](./enums.md#side)
 `workingClientOrderId`     |STRING |NO        |Arbitrary unique ID among open orders for the working order.<br> Automatically generated if not sent.
 `workingPrice`             |DECIMAL|YES       |
 `workingQuantity`          |DECIMAL|YES        |
@@ -5344,7 +5344,7 @@ Name                     |Type   |Mandatory | Description
 `workingTimeInForce`       |ENUM   |NO        |Supported values: [Time In Force](#timeInForce)
 `workingStrategyId`        |INT    |NO        |Arbitrary numeric value identifying the working order within an order strategy.
 `workingStrategyType`      |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
-`pendingSide`              |ENUM   |YES       |Supported values: <a href="./enums.md#side">Order Side</a>
+`pendingSide`              |ENUM   |YES       |Supported values: [Order Side](./enums.md#side)
 `pendingQuantity`          |DECIMAL|YES       |
 `pendingAboveType`         |ENUM   |YES       |Supported values: `LIMIT_MAKER`, `STOP_LOSS`, and `STOP_LOSS_LIMIT`
 `pendingAboveClientOrderId`|STRING |NO        |Arbitrary unique ID among open orders for the pending above order.<br> Automatically generated if not sent.
