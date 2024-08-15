@@ -2811,26 +2811,26 @@ POST /api/v3/orderList/oto
 ----                   |----   |------    |------
 symbol                 |STRING |YES       |
 listClientOrderId      |STRING |NO        |整个订单列表的唯一ID。 如果未发送则自动生成。 <br> 仅当前一个订单列表已填满或完全过期时，才会接受含有相同 `listClientOrderId` 值的新订单列表。 <br> `listClientOrderId` 与 `workingClientOrderId` 和 `pendingClientOrderId` 不同。
-newOrderRespType       |ENUM   |NO        |用于设置JSON响应的格式。 支持的数值： <a href="./enums_CN.md#orderresponsetype">订单返回类型</a>
-selfTradePreventionMode|ENUM   |NO        |允许的数值取决于交易对上的配置。参考 <a href="./enums_CN.md#stpmodes">STP 模式</a>
+newOrderRespType       |ENUM   |NO        |用于设置JSON响应的格式。 支持的数值： [订单返回类型](./enums_CN.md#orderresponsetype)
+selfTradePreventionMode|ENUM   |NO        |允许的数值取决于交易对上的配置。参考 [STP 模式](./enums_CN.md#stpmodes)
 workingType            |ENUM   |YES       |支持的数值： `LIMIT`， `LIMIT_MAKER`
-workingSide            |ENUM   |YES       |支持的数值： <a href="./enums_CN.md#side">订单方向</a>
+workingSide            |ENUM   |YES       |支持的数值： [订单方向](./enums_CN.md#side)
 workingClientOrderId   |STRING |NO        |用于标识生效订单的唯一ID。 <br> 如果未发送则自动生成。
 workingPrice           |DECIMAL|YES       |
 workingQuantity        |DECIMAL|YES       |用于设置生效订单的数量。 
 workingIcebergQty      |DECIMAL|YES       |只有当 `workingTimeInForce` 为 `GTC` 时才能使用。
-workingTimeInForce     |ENUM   |NO        |支持的数值： <a href="./enums_CN.md#timeinforce">生效时间</a>
+workingTimeInForce     |ENUM   |NO        |支持的数值： [生效时间](./enums_CN.md#timeinforce)
 workingStrategyId      |INT    |NO        |订单策略中用于标识生效订单的 ID。
 workingStrategyType    |INT    |NO        |用于标识生效订单策略的任意数值。<br> 小于 `1000000` 的值被保留，无法使用。
 pendingType            |ENUM   |YES       |支持的数值： <a href="#order-type">订单类型</a><br> 请注意，系统不支持使用 `quoteOrderQty` 的 `MARKET` 订单。
-pendingSide            |ENUM   |YES       |支持的数值： <a href="./enums_CN.md#side">订单方向</a>
+pendingSide            |ENUM   |YES       |支持的数值： [订单方向](./enums_CN.md#side)
 pendingClientOrderId   |STRING |NO        |用于标识待处理订单的唯一ID。 <br> 如果未发送则自动生成。
 pendingPrice           |DECIMAL|NO        |
 pendingStopPrice       |DECIMAL|NO        |
 pendingTrailingDelta   |DECIMAL|NO        |
 pendingQuantity        |DECIMAL|YES       |用于设置待处理订单的数量。 
 pendingIcebergQty      |DECIMAL|NO        |只有当 `pendingTimeInForce` 为 `GTC` 时才能使用。
-pendingTimeInForce     |ENUM   |NO        |支持的数值： <a href="./enums_CN.md#timeinforce">生效时间</a>
+pendingTimeInForce     |ENUM   |NO        |支持的数值： [生效时间](./enums_CN.md#timeinforce)
 pendingStrategyId      |INT    |NO        |订单策略中用于标识待处理订单的 ID。
 pendingStrategyType    |INT    |NO        |用于标识待处理订单策略的任意数值。 <br> 小于 `1000000` 的值被保留，无法使用。
 recvWindow             |LONG   |NO        |不能大于 `60000`。
@@ -2939,18 +2939,18 @@ POST /api/v3/orderList/otoco
 ----                     |----   |------    |------
 symbol                   |STRING |YES       |
 listClientOrderId        |STRING |NO        |整个订单列表的唯一ID。 如果未发送则自动生成。 <br> 仅当前一个订单列表已填满或完全过期时，才会接受含有相同 `listClientOrderId` 值的新订单列表。 <br>  `listClientOrderId` 与 `workingClientOrderId`， `pendingAboveClientOrderId` 以及 `pendingBelowClientOrderId` 不同。
-newOrderRespType         |ENUM   |NO        |用于设置JSON响应的格式。 支持的数值： <a href="./enums_CN.md#orderresponsetype">订单返回类型</a>
-selfTradePreventionMode  |ENUM   |NO        |允许的数值取决于交易对上的配置。参考 <a href="./enums_CN.md#stpmodes">STP 模式</a>
+newOrderRespType         |ENUM   |NO        |用于设置JSON响应的格式。 支持的数值： [订单返回类型](./enums_CN.md#orderresponsetype)
+selfTradePreventionMode  |ENUM   |NO        |允许的数值取决于交易对上的配置。参考 [STP 模式](./enums_CN.md#stpmodes)
 workingType              |ENUM   |YES       |支持的数值： `LIMIT`， `LIMIT_MAKER`
-workingSide              |ENUM   |YES       |支持的数值： <a href="./enums_CN.md#side">订单方向</a>
+workingSide              |ENUM   |YES       |支持的数值： [订单方向](./enums_CN.md#side)
 workingClientOrderId     |STRING |NO        |用于标识生效订单的唯一ID。 <br> 如果未发送则自动生成。
 workingPrice             |DECIMAL|YES       |
 workingQuantity          |DECIMAL|YES        |
 workingIcebergQty        |DECIMAL|NO        |只有当 `workingTimeInForce` 为 `GTC` 时才能使用。
-workingTimeInForce       |ENUM   |NO        |支持的数值： <a href="./enums_CN.md#timeinforce">生效时间</a>
+workingTimeInForce       |ENUM   |NO        |支持的数值： [生效时间](./enums_CN.md#timeinforce)
 workingStrategyId        |INT    |NO        |订单策略中用于标识生效订单的 ID。
 workingStrategyType      |INT    |NO        |用于标识生效订单策略的任意数值。<br> 小于 `1000000` 的值被保留，无法使用。
-pendingSide              |ENUM   |YES       |支持的数值： <a href="./enums_CN.md#side">订单方向</a>
+pendingSide              |ENUM   |YES       |支持的数值： [订单方向](./enums_CN.md#side)
 pendingQuantity          |DECIMAL|YES       |
 pendingAboveType         |ENUM   |YES       |支持的数值： `LIMIT_MAKER`，`STOP_LOSS` 和 `STOP_LOSS_LIMIT`
 pendingAboveClientOrderId|STRING |NO        |用于标识待处理上方订单的唯一ID。 <br> 如果未发送则自动生成。
@@ -3511,6 +3511,7 @@ timestamp | LONG | YES |
   "requireSelfTradePrevention": false,
   "preventSor": false,
   "updateTime": 123456789,
+  "accountType": "SPOT",
   "balances": [
     {
       "asset": "BTC",
