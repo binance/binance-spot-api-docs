@@ -1,4 +1,4 @@
-# 错误代码汇总 (2024-04-02)
+# 错误代码汇总 (2024-08-15)
 币安Rest接口(包括wapi)返回的错误包含两部分，错误码与错误信息. 错误码是大类，一个错误码可能对应多个不同的错误信息。
 以下是一个完整错误码实例
 ```javascript
@@ -225,6 +225,9 @@
 "This symbol is restricted for this account."                    | 账户没有权限在此交易对交易 (比如账户只拥有 `ISOLATED_MARGIN`权限，则无法下`SPOT` 订单)。
 "Order was not canceled due to cancel restrictions."             | `cancelRestrictions` 设置为 `ONLY_NEW` 但订单状态不是 `NEW` <br/> 或 <br/> `cancelRestrictions` 设置为 `ONLY_PARTIALLY_FILLED` 但订单状态不是 `PARTIALLY_FILLED`。
 "Rest API trading is not enabled." / "WebSocket API trading is not enabled." | 下单时，服务器没有设置为允许访问 `TRADE` 的接口。
+"Order book liquidity is less than `LOT_SIZE` filter minimum quantity." |当订单簿流动性小于 `LOT_SIZE` 过滤器配置的最小数量时，无法提交包含 `quoteOrderQty` 的市价单。
+"Order book liquidity is less than `MARKET_LOT_SIZE` filter minimum quantity."|当订单簿流动性小于 `MARKET_LOT_SIZE` 过滤器的最小数量时，无法提交包含 `quoteOrderQty` 的市价单。
+"Order book liquidity is less than symbol minimum quantity." |当订单簿里没有订单时，无法提交包含 `quoteOrderQty` 的市价单。
 
 ## 关于 POST /api/v3/order/cancelReplace 的错误
 
