@@ -30,7 +30,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Web Socket Streams for Binance (2024-06-11)
+# Web Socket Streams for Binance (2024-08-15)
 
 # General WSS information
 * The base endpoint is: **wss://stream.binance.com:9443** or **wss://stream.binance.com:443**
@@ -491,7 +491,7 @@ Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection.
 
 **Stream Name:** \<symbol\>@bookTicker
 
-**Update Speed:** Real-time
+**Update Speed:** 1ms
 
 **Payload:**
 ```javascript

@@ -1,5 +1,5 @@
 
-# Web Socket 行情接口(2024-06-11)
+# Web Socket 行情接口(2024-08-15)
 # 基本信息
 * 本篇所列出的所有wss接口的baseurl为: **wss://stream.binance.com:9443** 或者 **wss://stream.binance.com:443**
 * 所有stream均可以直接访问，或者作为组合streams的一部分。
@@ -413,7 +413,7 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 
 **Stream 名称:** \<symbol\>@bookTicker
 
-**更新速度:** 实时
+**更新速度:** 1ms
 
 **Payload:**
 ```javascript
