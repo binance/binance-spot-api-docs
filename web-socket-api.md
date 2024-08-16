@@ -918,7 +918,7 @@ but specify the `TRADE` key with an explicit signature when placing orders.
 
 Data Source     | Latency  | Description
 --------------- | -------- | -----------
-Matching Engine | lowest   | The matching engine produces the response directly
+Matching Engine | lowest   | The Matching Engine produces the response directly
 Memory          | low      | Data is fetched from API server's local or external memory cache
 Database        | moderate | Data is retrieved from the database
 

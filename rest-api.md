@@ -90,7 +90,7 @@
   * **https://api2.binance.com**
   * **https://api3.binance.com**
   * **https://api4.binance.com**
-* The last 4 endpoints in the point above (`api1`-`api4`) might give better performance but have less stability. 
+* The last 4 endpoints in the point above (`api1`-`api4`) should give better performance but have less stability. 
 * All endpoints return either a JSON object or array.
 * Data is returned in **ascending** order. Oldest first, newest last.
 * All time and timestamp related fields are in **milliseconds**.
@@ -161,9 +161,9 @@ Sample Payload below:
 * The API system is asynchronous, so some delay in the response is normal and expected.
 * Each endpoint has a data source indicating where the data is being retrieved, and thus which endpoints have the most up-to-date response.
 
-These are the three sources, ordered by which is has the most up-to-date response to the one with potential delays in updates.
+These are the three sources, ordered by least to most potential for delays in data updates.
 
-  * **Matching Engine** - the data is from the matching Engine
+  * **Matching Engine** - the data is from the Matching Engine
   * **Memory** - the data is from a server's local or external memory
   * **Database** - the data is taken directly from a database
 
