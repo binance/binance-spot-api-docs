@@ -56,8 +56,8 @@ to change this behavior.
 
 - `EVERYTHING(1)`: The default mode; the connection receives all [ExecutionReport`<8>`](#executionreport)
   and [ListStatus`<N>`](#liststatus) messages, even those initiated from other sources.
-- `ONLY_ACKS(2)`: Receives only ACKs for operations initiated by this connection. This mode reduces bandwidth and may
-  offer a different performance profile.
+- `ONLY_ACKS(2)`: Receives only ACKs for operations initiated by this connection. This mode reduces bandwidth and should
+  offer a better performance profile.
 
 **Note**: ExecutionReport`<8>` push messages may be sent out of order in relation to responses.
 
@@ -493,7 +493,7 @@ Sent by the server whenever an order state changes.
 * By default, ExecutionReport`<8>` is sent for all orders of an account,
 including those submitted in different connections.
 Please see [Response Mode](#responsemode) for other behavior options.
-* FIX API should give the better performance for ExecutionReport<code>&lt;8&gt;</code> push.
+* FIX API should give better performance for ExecutionReport<code>&lt;8&gt;</code> push.
 
 | Tag   | Name                     | Type         | Required | Description                                                                                                                                                                                                                                                                                                                  |
 |-------|--------------------------|--------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|

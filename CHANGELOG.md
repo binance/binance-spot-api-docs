@@ -1,4 +1,13 @@
-# CHANGELOG for Binance's API (2024-08-01)
+# CHANGELOG for Binance's API (2024-08-16)
+
+## 2024-08-16
+
+**Notice:** The changes below are being rolled out gradually, and may take approximately a week to complete.
+
+General Changes:
+* New error messages have been added when quote quantity market orders (aka reverse market orders) are rejected in low-liquidity situations.
+
+---
 
 ## 2024-08-01
 
