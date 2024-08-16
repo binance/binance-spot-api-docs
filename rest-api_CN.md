@@ -1596,7 +1596,7 @@ quantity | DECIMAL | NO |
 quoteOrderQty | DECIMAL | NO |
 price | DECIMAL | NO |
 newClientOrderId | STRING | NO | 用户自定义的orderid，如空缺系统会自动赋值。
-strategyId |INT| NO|
+strategyId |LONG| NO|
 strategyType |INT| NO| 不能低于 `1000000`.
 stopPrice | DECIMAL | NO | 仅 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` 需要此参数。
 trailingDelta|LONG|NO| 用于 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, 和 `TAKE_PROFIT_LIMIT` 类型的订单。
@@ -2075,7 +2075,7 @@ cancelNewClientOrderId|STRING|NO | 用户自定义的id，如空缺系统会自�
 cancelOrigClientOrderId|STRING| NO| 必须提供`cancelOrigClientOrderId` 或者 `cancelOrderId`。 如果两个参数都提供, `cancelOrderId` 会占优先。
 cancelOrderId|LONG|NO| 必须提供`cancelOrigClientOrderId` 或者 `cancelOrderId`。 如果两个参数都提供，`cancelOrderId` 会占优先。
 newClientOrderId |STRING|NO| 用于辨识新订单。
-strategyId |INT| NO|
+strategyId |LONG| NO|
 strategyType |INT| NO| 不能低于 `1000000`。
 stopPrice|DECIMAL|NO|
 trailingDelta|LONG|NO|
@@ -2574,13 +2574,13 @@ side|ENUM|YES| 详见枚举定义：[订单方向](./enums_CN.md#side)
 quantity|DECIMAL|YES|
 limitClientOrderId|STRING|NO| 限价单的唯一ID
 price|DECIMAL|YES|
-limitStrategyId |INT| NO
+limitStrategyId |LONG| NO
 limitStrategyType | INT| NO | 不能低于 `1000000`
 limitIcebergQty|DECIMAL|NO|
 trailingDelta|LONG|NO|
 stopClientOrderId |STRING|NO| 止损/止损限价单的唯一ID
 stopPrice |DECIMAL| YES
-stopStrategyId |INT| NO
+stopStrategyId |LONG| NO
 stopStrategyType |INT| NO | 不能低于 `1000000`
 stopLimitPrice|DECIMAL|NO| 如果提供，须配合提交`stopLimitTimeInForce`
 stopIcebergQty|DECIMAL|NO|
@@ -2701,7 +2701,7 @@ abovePrice             |DECIMAL |No         |
 aboveStopPrice         |DECIMAL |No         |如果 `aboveType` 是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 才能使用。<br> 必须指定 `aboveStopPrice` 或 `aboveTrailingDelta` 或两者。
 aboveTrailingDelta     |LONG    |No         |请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md)。
 aboveTimeInForce       |DECIMAL |No         |如果 `aboveType` 是 `STOP_LOSS_LIMIT`，则为必填项。
-aboveStrategyId        |INT     |No         |订单策略中上方 leg 订单的 ID。
+aboveStrategyId        |LONG     |No         |订单策略中上方 leg 订单的 ID。
 aboveStrategyType      |INT     |No         |上方 leg 订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
 belowType              |ENUM    |Yes        |支持值：`STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`。
 belowClientOrderId     |STRING  |No         |
@@ -2710,7 +2710,7 @@ belowPrice             |DECIMAL |No         |
 belowStopPrice         |DECIMAL |No         |如果 `belowType` 是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 才能使用。 <br> 必须指定 `belowStopPrice` 或 `belowTrailingDelta` 或两者。
 belowTrailingDelta     |LONG    |No         |请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md)。
 belowTimeInForce       |ENUM    |No         |如果`belowType` 是 `STOP_LOSS_LIMIT`，则为必须配合提交的值。
-belowStrategyId        |INT    |No          |订单策略中下方 leg 订单的 ID。
+belowStrategyId        |LONG    |No          |订单策略中下方 leg 订单的 ID。
 belowStrategyType      |INT     |No         |下方 leg 订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
 newOrderRespType       |ENUM    |No         |响应格式可选值: `ACK`, `RESULT`, `FULL`。
 selfTradePreventionMode|ENUM    |No         |允许的 ENUM 取决于交易对上的配置。 可能支持的值为 `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`。
@@ -2820,7 +2820,7 @@ workingPrice           |DECIMAL|YES       |
 workingQuantity        |DECIMAL|YES       |用于设置生效订单的数量。 
 workingIcebergQty      |DECIMAL|YES       |只有当 `workingTimeInForce` 为 `GTC` 时才能使用。
 workingTimeInForce     |ENUM   |NO        |支持的数值： [生效时间](./enums_CN.md#timeinforce)
-workingStrategyId      |INT    |NO        |订单策略中用于标识生效订单的 ID。
+workingStrategyId      |LONG    |NO        |订单策略中用于标识生效订单的 ID。
 workingStrategyType    |INT    |NO        |用于标识生效订单策略的任意数值。<br> 小于 `1000000` 的值被保留，无法使用。
 pendingType            |ENUM   |YES       |支持的数值： <a href="#order-type">订单类型</a><br> 请注意，系统不支持使用 `quoteOrderQty` 的 `MARKET` 订单。
 pendingSide            |ENUM   |YES       |支持的数值： [订单方向](./enums_CN.md#side)
@@ -2831,7 +2831,7 @@ pendingTrailingDelta   |DECIMAL|NO        |
 pendingQuantity        |DECIMAL|YES       |用于设置待处理订单的数量。 
 pendingIcebergQty      |DECIMAL|NO        |只有当 `pendingTimeInForce` 为 `GTC` 时才能使用。
 pendingTimeInForce     |ENUM   |NO        |支持的数值： [生效时间](./enums_CN.md#timeinforce)
-pendingStrategyId      |INT    |NO        |订单策略中用于标识待处理订单的 ID。
+pendingStrategyId      |LONG    |NO        |订单策略中用于标识待处理订单的 ID。
 pendingStrategyType    |INT    |NO        |用于标识待处理订单策略的任意数值。 <br> 小于 `1000000` 的值被保留，无法使用。
 recvWindow             |LONG   |NO        |不能大于 `60000`。
 timestamp              |LONG   |YES       |
@@ -2948,7 +2948,7 @@ workingPrice             |DECIMAL|YES       |
 workingQuantity          |DECIMAL|YES        |
 workingIcebergQty        |DECIMAL|NO        |只有当 `workingTimeInForce` 为 `GTC` 时才能使用。
 workingTimeInForce       |ENUM   |NO        |支持的数值： [生效时间](./enums_CN.md#timeinforce)
-workingStrategyId        |INT    |NO        |订单策略中用于标识生效订单的 ID。
+workingStrategyId        |LONG    |NO        |订单策略中用于标识生效订单的 ID。
 workingStrategyType      |INT    |NO        |用于标识生效订单策略的任意数值。<br> 小于 `1000000` 的值被保留，无法使用。
 pendingSide              |ENUM   |YES       |支持的数值： [订单方向](./enums_CN.md#side)
 pendingQuantity          |DECIMAL|YES       |
@@ -2959,7 +2959,7 @@ pendingAboveStopPrice    |DECIMAL|NO        |
 pendingAboveTrailingDelta|DECIMAL|NO        |
 pendingAboveIcebergQty   |DECIMAL|NO        |只有当 `pendingAboveTimeInForce` 为 `GTC` 时才能使用。
 pendingAboveTimeInForce  |ENUM   |NO        |
-pendingAboveStrategyId   |INT    |NO        |订单策略中用于标识待处理上方订单的 ID。
+pendingAboveStrategyId   |LONG    |NO        |订单策略中用于标识待处理上方订单的 ID。
 pendingAboveStrategyType |INT    |NO        |用于标识待处理上方订单策略的任意数值。 <br> 小于 `1000000` 的值被保留，无法使用。
 pendingBelowType         |ENUM   |NO        |支持的数值： `LIMIT_MAKER`，`STOP_LOSS` 和 `STOP_LOSS_LIMIT`
 pendingBelowClientOrderId|STRING |NO        |用于标识待处理下方订单的唯一ID。 <br> 如果未发送则自动生成。
@@ -2968,7 +2968,7 @@ pendingBelowStopPrice    |DECIMAL|NO        |
 pendingBelowTrailingDelta|DECIMAL|NO        |
 pendingBelowIcebergQty   |DECIMAL|NO        |只有当 `pendingBelowTimeInForce` 为 `GTC` 时才能使用。
 pendingBelowTimeInForce  |ENUM   |NO        |
-pendingBelowStrategyId   |INT    |NO        |订单策略中用于标识待处理下方订单的 ID。
+pendingBelowStrategyId   |LONG    |NO        |订单策略中用于标识待处理下方订单的 ID。
 pendingBelowStrategyType |INT    |NO        |用于标识待处理下方订单策略的任意数值。 <br> 小于 `1000000` 的值被保留，无法使用。
 recvWindow               |LONG   |NO        |不能大于 `60000`。
 timestamp                |LONG   |YES       |
@@ -3362,7 +3362,7 @@ timeInForce             | ENUM   | NO |
 quantity                | DECIMAL| YES |
 price                   | DECIMAL| NO |
 newClientOrderId        | STRING | NO | 用户自定义的orderid，如空缺系统会自动赋值。如果几个订单具有相同的 `newClientOrderID` 赋值，<br/>那么只有在前一个订单成交后才可以接受下一个订单，否则该订单将被拒绝。
-strategyId              |INT     | NO|
+strategyId              |LONG     | NO|
 strategyType            |INT     | NO| 赋值不能小于 `1000000`.
 icebergQty              | DECIMAL| NO | 仅有限价单可以使用该参数，含义为创建冰山订单并指定冰山订单的数量。
 newOrderRespType        | ENUM   | NO | 指定响应类型:

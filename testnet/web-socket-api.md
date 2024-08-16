@@ -2861,7 +2861,7 @@ Name                | Type    | Mandatory | Description
 `stopPrice`         | DECIMAL | NO *      |
 `trailingDelta`     | INT     | NO *      | See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md)
 `icebergQty`        | DECIMAL | NO        |
-`strategyId`        | INT     | NO        | Arbitrary numeric value identifying the order within an order strategy.
+`strategyId`        | LONG     | NO        | Arbitrary numeric value identifying the order within an order strategy.
 `strategyType`      | INT     | NO        | <p>Arbitrary numeric value identifying the order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
 `selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
 `apiKey`            | STRING  | YES       |
@@ -3881,7 +3881,7 @@ Cancel an existing order and immediately place a new order instead of the cancel
     </tr>
     <tr>
         <td><code>strategyId</code></td>
-        <td>INT</td>
+        <td>LONG</td>
         <td>NO</td>
         <td>Arbitrary numeric value identifying the order within an order strategy.</td>
     </tr>
@@ -4823,7 +4823,7 @@ Name                     |Type    | Mandatory | Description
 `aboveStopPrice`         |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`. <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
 `aboveTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](..faqs/trailing-stop-faq.md).
 `aboveTimeInForce`       |DECIMAL |NO         |Required if the `aboveType` is `STOP_LOSS_LIMIT`. 
-`aboveStrategyId`        |INT     |NO         |Arbitrary numeric value identifying the above leg order within an order strategy. 
+`aboveStrategyId`        |LONG     |NO         |Arbitrary numeric value identifying the above leg order within an order strategy. 
 `aboveStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the above leg order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
 `belowType`              |ENUM    |YES        |Supported values : `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`
 `belowClientOrderId`     |STRING  |NO         |
@@ -4832,7 +4832,7 @@ Name                     |Type    | Mandatory | Description
 `belowStopPrice`         |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`. <br> If `aboveType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`, either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
 `belowTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](..faqs/trailing-stop-faq.md). 
 `belowTimeInForce`       |ENUM    |NO         |Required if the `belowType` is `STOP_LOSS_LIMIT`. 
-`belowStrategyId`        |INT    |NO          |Arbitrary numeric value identifying the below leg order within an order strategy. 
+`belowStrategyId`        |LONG    |NO          |Arbitrary numeric value identifying the below leg order within an order strategy. 
 `belowStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the below leg order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
 `newOrderRespType`       |ENUM    |NO         |Select response format: `ACK`, `RESULT`, `FULL`
 `selfTradePreventionMode`|ENUM    |NO         |The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
@@ -4993,7 +4993,7 @@ Name                   |Type   |Mandatory | Description
 `workingQuantity`        |DECIMAL|YES       |Sets the quantity for the working order.
 `workingIcebergQty`      |DECIMAL|YES       |This can only be used if `workingTimeInForce` is `GTC`.
 `workingTimeInForce`     |ENUM   |NO        |Supported values: <a href="./enums.md#timeinforce">Time in Force</a>
-`workingStrategyId`      |INT    |NO        |Arbitrary numeric value identifying the working order within an order strategy.
+`workingStrategyId`      |LONG    |NO        |Arbitrary numeric value identifying the working order within an order strategy.
 `workingStrategyType`    |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
 `pendingType`            |ENUM   |YES       |Supported values: <a href="./enums.md#ordertypes">Order Types</a> <br> Note that `MARKET` orders using `quoteOrderQty` are not supported.
 `pendingSide`            |ENUM   |YES       |Supported values: <a href="./enums.md#side">Order Side</a>
@@ -5004,7 +5004,7 @@ Name                   |Type   |Mandatory | Description
 `pendingQuantity`        |DECIMAL|YES       |Sets the quantity for the pending order.
 `pendingIcebergQty`      |DECIMAL|NO        |This can only be used if `pendingTimeInForce` is `GTC`.
 `pendingTimeInForce`     |ENUM   |NO        |Supported values: <a href="./enums.md#timeinforce">Time in Force</a>
-`pendingStrategyId`      |INT    |NO        |Arbitrary numeric value identifying the pending order within an order strategy.
+`pendingStrategyId`      |LONG    |NO        |Arbitrary numeric value identifying the pending order within an order strategy.
 `pendingStrategyType`    |INT    |NO        |Arbitrary numeric value identifying the pending order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
 `recvWindow`             |LONG   |NO        |The value cannot be greater than `60000`.
 `timestamp`              |LONG   |YES       |
@@ -5162,7 +5162,7 @@ Name                     |Type   |Mandatory | Description
 `workingQuantity`          |DECIMAL|YES       |
 `workingIcebergQty`        |DECIMAL|NO        |This can only be used if `workingTimeInForce` is `GTC`.
 `workingTimeInForce`       |ENUM   |NO        |Supported values: <a href="./enums.md#timeinforce">Time in Force</a>
-`workingStrategyId`        |INT    |NO        |Arbitrary numeric value identifying the working order within an order strategy.
+`workingStrategyId`        |LONG    |NO        |Arbitrary numeric value identifying the working order within an order strategy.
 `workingStrategyType`      |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
 `pendingSide`              |ENUM   |YES       |Supported values: <a href="./enums.md#side">Order Side</a>
 `pendingQuantity`          |DECIMAL|YES       |
@@ -5173,7 +5173,7 @@ Name                     |Type   |Mandatory | Description
 `pendingAboveTrailingDelta`|DECIMAL|NO        |
 `pendingAboveIcebergQty`   |DECIMAL|NO        |This can only be used if `pendingAboveTimeInForce` is `GTC`.
 `pendingAboveTimeInForce`  |ENUM   |NO        |
-`pendingAboveStrategyId`   |INT    |NO        |Arbitrary numeric value identifying the pending above order within an order strategy.
+`pendingAboveStrategyId`   |LONG    |NO        |Arbitrary numeric value identifying the pending above order within an order strategy.
 `pendingAboveStrategyType` |INT    |NO        |Arbitrary numeric value identifying the pending above order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
 `pendingBelowType`         |ENUM   |NO        |Supported values: `LIMIT_MAKER`, `STOP_LOSS`, and `STOP_LOSS_LIMIT`
 `pendingBelowClientOrderId`|STRING |NO        |Arbitrary unique ID among open orders for the pending below order.<br> Automatically generated if not sent.
@@ -5182,7 +5182,7 @@ Name                     |Type   |Mandatory | Description
 `pendingBelowTrailingDelta`|DECIMAL|NO        |
 `pendingBelowIcebergQty`   |DECIMAL|NO        |This can only be used if `pendingBelowTimeInForce` is `GTC`.
 `pendingBelowTimeInForce`  |ENUM   |NO        |
-`pendingBelowStrategyId`   |INT    |NO        |Arbitrary numeric value identifying the pending below order within an order strategy.
+`pendingBelowStrategyId`   |LONG    |NO        |Arbitrary numeric value identifying the pending below order within an order strategy.
 `pendingBelowStrategyType` |INT    |NO        |Arbitrary numeric value identifying the pending below order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
 `recvWindow`               |LONG   |NO        |The value cannot be greater than `60000`.
 `timestamp`                |LONG   |YES       |
@@ -5715,7 +5715,7 @@ Name                | Type    | Mandatory | Description
 `newClientOrderId`  | STRING  | NO        | Arbitrary unique ID among open orders. Automatically generated if not sent
 `newOrderRespType`  | ENUM    | NO        | <p>Select response format: `ACK`, `RESULT`, `FULL`.</p><p>`MARKET` and `LIMIT` orders use `FULL` by default.</p>
 `icebergQty`        | DECIMAL | NO        |
-`strategyId`        | INT     | NO        | Arbitrary numeric value identifying the order within an order strategy.
+`strategyId`        | LONG     | NO        | Arbitrary numeric value identifying the order within an order strategy.
 `strategyType`      | INT     | NO        | <p>Arbitrary numeric value identifying the order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
 `selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
 `apiKey`            | STRING  | YES       |
