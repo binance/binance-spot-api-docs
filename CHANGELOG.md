@@ -5,7 +5,7 @@
 **Notice:** The changes below are being rolled out gradually, and may take approximately a week to complete.
 
 General Changes:
-* New error message have been added when quote quantity market orders (aka reverse market orders) are rejected in low-liquidity situations.
+* New error messages have been added when quote quantity market orders (aka reverse market orders) are rejected in low-liquidity situations.
 
 ---
 
