@@ -5012,7 +5012,7 @@ NONE
 `workingClientOrderId`   |STRING |NO        |用于标识生效订单的唯一ID。 <br> 如果未发送则自动生成。
 `workingPrice`           |DECIMAL|YES       |
 `workingQuantity`        |DECIMAL|YES       |用于设置生效订单的数量。 
-`workingIcebergQty`      |DECIMAL|YES       |只有当 `workingTimeInForce` 为 `GTC` 时才能使用。
+`workingIcebergQty`      |DECIMAL|NO       |只有当 `workingTimeInForce` 为 `GTC` 时才能使用。
 `workingTimeInForce`     |ENUM   |NO        |支持的数值： [生效时间](#timeinforce)
 `workingStrategyId`      |LONG    |NO        |订单策略中用于标识生效订单的 ID。
 `workingStrategyType`    |INT    |NO        |用于标识生效订单策略的任意数值。<br> 小于 `1000000` 的值被保留，无法使用。

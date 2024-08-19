@@ -8,7 +8,7 @@
   * **https://api2.binance.com**
   * **https://api3.binance.com**
   * **https://api4.binance.com**
-* 上述列表的最后4个接口 (`api1`-`api4`) 可能会提供更好的性能，但其稳定性略为逊色。因此，请务必使用最适合的URL。
+* 上述列表的最后4个接口 (`api1`-`api4`) 会提供更好的性能，但其稳定性略为逊色。因此，请务必使用最适合的URL。
 * 所有接口的响应都是 JSON 格式。
 * 响应中如有数组，数组元素以时间**升序**排列，越早的数据越提前。
 * 所有时间、时间戳均为UNIX时间，单位为**毫秒**。
@@ -2818,7 +2818,7 @@ workingSide            |ENUM   |YES       |支持的数值： [订单方向](./e
 workingClientOrderId   |STRING |NO        |用于标识生效订单的唯一ID。 <br> 如果未发送则自动生成。
 workingPrice           |DECIMAL|YES       |
 workingQuantity        |DECIMAL|YES       |用于设置生效订单的数量。 
-workingIcebergQty      |DECIMAL|YES       |只有当 `workingTimeInForce` 为 `GTC` 时才能使用。
+workingIcebergQty      |DECIMAL|NO       |只有当 `workingTimeInForce` 为 `GTC` 时才能使用。
 workingTimeInForce     |ENUM   |NO        |支持的数值： [生效时间](./enums_CN.md#timeinforce)
 workingStrategyId      |LONG    |NO        |订单策略中用于标识生效订单的 ID。
 workingStrategyType    |INT    |NO        |用于标识生效订单策略的任意数值。<br> 小于 `1000000` 的值被保留，无法使用。
