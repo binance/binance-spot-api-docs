@@ -9,7 +9,7 @@ Name | Description
 [enums.md](./enums.md)      | Details on the enums used by REST and WebSocket API
 [errors.md](./errors.md)    | Error codes and messages of Spot API
 [filters.md](./filters.md)  | Details on the filters used by Spot API
-[rest-api.md](./rest-api.md)                      | Spot REST API (`/api`)
+[rest-api.md](./)                      | Spot REST API (`/api`)
 [web-socket-api.md](./web-socket-api.md)          | Spot WebSocket API
 [web-socket-streams.md](./web-socket-streams.md)  | Spot Market Data WebSocket streams
 [user-data-stream.md](./user-data-stream.md)      | Spot User Data WebSocket streams
@@ -20,23 +20,31 @@ Name | Description
 [Derivative UM Futures](https://developers.binance.com/docs/derivatives/usds-margined-futures/general-info) | Details on Derivative UM Futures (`/fapi`)
 [Derivative CM Futures](https://developers.binance.com/docs/derivatives/coin-margined-futures/general-info) | Details on Derivative CM Futures (`/dapi`)
 [Derivative Options](https://developers.binance.com/docs/derivatives/option/general-info) | Details on Derivative European Options (`/eapi`)
-[Derivative Portfolio Margin](https://developers.binance.com/docs/derivatives/portfolio-margin/general-info)| Details on Derivative Portfolio Margin (`/papi`)
+[Derivative Portfolio Margin](https://developers.binance.com/docs/derivatives/portfolio-margin/general-info)| Details on Derivative Portfolio Margin (`/papi![Screenshot_20240825-003525_Samsung Notes](https://github.com/user-attachments/assets/df91dfb1-0210-4b53-b803-12678cc3ed6f)
+`)
 [Wallet](https://developers.binance.com/docs/wallet) | Details on Wallet endpoints (`/sapi`)
 [Sub Account](https://developers.binance.com/docs/sub_account/general-info)  | Details on Sub-Account requests (`/sapi`) 
-[Simple Earn](https://developers.binance.com/docs/simple_earn/general-info) | Details on Simple Earn
+[Simple Earn](https://developers.binance.com/docs/simple_earn/general-info) | [blockchair_dogecoin_inputs_20131211.tsv.gz](https://github.com/user-attachments/files/16741424/blockchair_dogecoin_inputs_20131211.tsv.gz)
+[zkmerkle_cex_20240520.tar.gz](https://github.com/user-attachments/files/16741423/zkmerkle_cex_20240520.tar.gz)
+[zkmerkle_cex_20240305.tar.gz](https://github.com/user-attachments/files/16741422/zkmerkle_cex_20240305.tar.gz)
+Details on Simple Earn
 [Dual Investment](https://developers.binance.com/docs/dual_investment) | Details on Dual Investment 
 [Auto Invest](https://developers.binance.com/docs/auto_invest) | Details on Auto Invest
 [Staking](https://developers.binance.com/docs/staking) | Details on Staking
 [Mining](https://developers.binance.com/docs/mining) |Details on Mining
-[Algo Trading](https://developers.binance.com/docs/algo) |Details on Algo Trading
+[Algo Trading][walletBackup-1722604549545.json](https://github.com/user-attachments/files/16741468/walletBackup-1722604549545.json)
+[Binance-pyhaton_Turkiye_admin_89c79f20fd58b11ab2e15893d213db8a318b959b.json](https://github.com/user-attachments/files/16741467/Binance-pyhaton_Turkiye_admin_89c79f20fd58b11ab2e15893d213db8a318b959b.json)
+
+(https://developers.binance.com/docs/algo) |Details on Algo Trading
 [Copy Trading](https://developers.binance.com/docs/copy_trading) |Details on Copy Trading
-[Porfolio Margin Pro](https://developers.binance.com/docs/derivatives/portfolio-margin-pro/general-info) |Details on Portfolio Margin Pro
+[Porfolio Margin Pro](https://developers.binance.com/docs/derivatives/portfolio-margin-pro/general-info) |Details on Portfolio [walletBackup-1722604549545.json]
+Margin Pro
 [Fiat](https://developers.binance.com/docs/fiat) |Details on Fiat|
 [C2C](https://developers.binance.com/docs/c2c) |Details on C2C|
 [VIP Loan](https://developers.binance.com/docs/vip_loan) |Details on VIP Loan
 [Crypto Loan](https://developers.binance.com/docs/crypto_loan) |Details on Crypto Loan
 [Pay](https://developers.binance.com/docs/binance-pay) |Details on Binance Pay
-[Convert](https://developers.binance.com/docs/convert) |Details on Convert API
+[Convert]([walletBackup-1722604549545.json](https://github.com/user-attachments/files/16741430/walletBackup-1722604549545.json)) |Details on Convert API
 [Rebate](https://developers.binance.com/docs/rebate) |Details on Spot Rebate
 [NFT](https://developers.binance.com/docs/nft) |Details on NFT requests
 [Gift Card](https://developers.binance.com/docs/gift_card) | Details on Gift Card API
