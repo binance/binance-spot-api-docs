@@ -5,7 +5,46 @@
 
 
 Name | Description
------------- | ------------
+---diff --git a/Node./Baglayici./Dm b/Node./Baglayici./Dm
+new file mode 100644
+index 0000000..2173079
+--- /dev/null
++++ b/Node./Baglayici./Dm
+@@ -0,0 +1,32 @@
++```Htm  
++diff --git a/git remote add origin git@ssh.dev.azure.com:v3/recep021682KXdKDRS/Jetonlar/Jetonlar git push -u origin --all b/git remote add origin git@ssh.dev.azure.com:v3/recep021682KXdKDRS/Jetonlar/Jetonlar git push -u origin --all 
++yeni dosya modu 100644 
++dizin 0000000..7559099 
++--- /dev/null 
+++++ b/git remote add origin git@ssh.dev.azure.com:v3/recep021682KXdKDRS/Jetonlar/Jetonlar git push -u origin --all	 
++@@ -0,0 +1,25 @@ 
+++f75b47822cadb1af7e489d9a2696c4c2b290027c Pazartesi Eylül 17 00:00:00 2001 
+++Gönderen: Sarsılmazxx02 <Recocankaya@gmail.com> 
+++Tarih: Pzr, 25 Ağu 2024 22:33:09 +0300 
+++Konu: [PATCH] README.md'yi güncelle 
+++ 
+++--- 
+++ README.md | 5 ++++- 
+++ 1 dosya değiştirildi, 4 ekleme(+), 1 silme(-) 
+++ 
+++diff --git a/README.md b/README.md 
+++dizin 33e1f01..d855c17 100644 
+++--- a/README.md 
++++++ b/README.md 
+++@@ -2,7 +2,10 @@ 
+++ 
+++ [![npm sürümü](https:// Badge.fury.io/js/%40binance%2Fconnector.svg)](https://badge.fury.io/js/%40binance%2Fconnector) 
+++ [![Düğüm sürümü](https://img.shields.io/node/v/%40binance%2Fconnector.svg?style=flat)](http://nodejs.org/download/) 
+++-[![Standart-Js](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com/) 
++++[![Standart-Js] 
++++[brandkit.zip](https://github.com/user-attachments/files/16741683/brandkit.zip) 
++++ 
++++(https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com/) 
+++ [![Lisanslar: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
+++ 
++```[brandkit.zip](https://github.com/user-attachments/files/16741753/brandkit.zip)
+[binance-connector-node-3.4.1.tar.gz](https://github.com/user-attachments/files/16741752/binance-connector-node-3.4.1.tar.gz)
+--------- | ------------
 [enums.md](./enums.md)      | Details on the enums used by REST and WebSocket API
 [errors.md](./errors.md)    | Error codes and messages of Spot API
 [filters.md](./filters.md)  | Details on the filters used by Spot API
