@@ -145,13 +145,6 @@ MC4CAQAwBQYDK2VwBCIEIIJEYWtGBrhACmb9Dvy+qa8WEf0lQOl1s4CLIAB9m89u
 
 ## 限制
 
-### 下单频率限制
-
-* 要了解当前的限制和使用情况，请发送 [LimitQuery`<XLQ>`](#limitquery) 消息。
-  系统会生成 [LimitResponse`<XLR>`](#limitresponse) 消息作为响应。此消息中包含了有关下单频率限制和消息限制的信息。
-* 当下单数量超过限制时，您的消息将被拒绝，并且有关信息将以特定于该接口的拒绝消息形式回传给您。
-* 订单速率限制是 **基于每个账户计数的**。
-
 ### 消息限制
 
 * 每个连接都有一个关于 **可以发送到交易所的消息数量** 的限制。
@@ -159,6 +152,16 @@ MC4CAQAwBQYDK2VwBCIEIIJEYWtGBrhACmb9Dvy+qa8WEf0lQOl1s4CLIAB9m89u
 * 违反消息限制会立即导致 [Logout `<5>`](#logout) 并断开连接。
 * 要了解当前的限制和使用情况，请发送 [LimitQuery`<XLQ>`](#limitquery) 消息。
   接口将发送 [LimitResponse`<XLR>`](#limitresponse) 消息作为响应，其中包含了有关订单速率限制和消息限制的信息。
+
+<a id="unfilled-order-count"></a>
+
+### 未成交订单计数
+
+* 要了解您在特定时间间隔内下了多少订单，请发送 [LimitQuery`<XLQ>`](#limitquery) 消息。
+  系统将发送一条 [LimitResponse`<XLR>`](#limitresponse) 消息作为响应，其中会包含有关未成交订单计数和消息限制的信息。
+* **请注意，如果您的订单一直顺利完成交易，您可以在 API 持续下订单**。更多信息，请参见[现货未成交订单计数规则](./faqs/order_count_decrement_CN.md)。
+* 如果您超过了未成交的订单计数限制，您的消息将被拒绝，并且信息将用该接口的拒绝消息格式传回给您。
+* **未成交订单数量是按照每个账户来统计的**。
 
 <a id="connection-limits"></a>
 
@@ -609,8 +612,8 @@ Logout 响应
 
 | Tag | 名称     | 类型   | 是否必须 | 描述
 | --- |--- | ---| --- |---|
-|25033|OrderCancelRequestAndNewOrderSingleMode|INT |Y |用于定义： 如果取消失败，将会采取的后续操作 。 <br></br> 可能的值 ： <br></br> `1` - STOP_ON_FAILURE <br></br> `2` -ALLOW_FAILURE |
-|25038|OrderRateLimitExceededMode|INT |N|用于定义： 如果超过订单费率限制，将会如何处理取消请求。<br></br> 可能的值 ： <br></br>`1` - DO_NOTHING <br></br> `2` - CANCEL_ONLY |
+|25033|OrderCancelRequestAndNewOrderSingleMode|INT |Y |用于定义： 如果取消失败，将会采取的后续操作 。 <br> 可能的值 ： <br> `1` - STOP_ON_FAILURE <br></br> `2` -ALLOW_FAILURE |
+|25038|OrderRateLimitExceededMode|INT |N|用于定义： 如果超过未成交订单计数，将会如何处理取消请求。<br> 可能的值 ： <br>`1` - DO_NOTHING <br></br> `2` - CANCEL_ONLY |
 | 37    | OrderID                                 | INT    | N        | 来自于取消订单的 `OrderID`。                      |
 | 25034 | CancelClOrdID                           | STRING | N        | 待取消的 `ClOrdID`。                             |
 | 41    | OrigClOrdID                             | STRING | N        | 来自待取消订单的 `ClOrdID`。                      |
