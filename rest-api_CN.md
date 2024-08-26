@@ -51,7 +51,7 @@
   * HOUR => H
   * DAY => D
 * 在 `/api/v3/exchangeInfo`接口中`rateLimits`数组里包含有REST接口(不限于本篇的REST接口)的访问限制。包括带权重的访问频次限制、下单速率限制。参考 [枚举定义](./enums_CN.md) 中有关有限制类型的进一步说明。
-* 违反任何一个速率限制时（访问频次限制或下单速率限制），将返回429。
+* 当您超出请求速率限制时，请求会失败并返回 HTTP 状态代码 429。
 
 ## IP 访问限制
 * 每个请求将包含一个`X-MBX-USED-WEIGHT-(intervalNum)(intervalLetter)`的头，其中包含当前IP所有请求的已使用权重。
@@ -62,12 +62,14 @@
 * `Retry-After`的头会与带有418或429的响应发送，并且会给出**以秒为单位**的等待时长(如果是429)以防止禁令，或者如果是418，直到禁令结束。
 * **访问限制是基于IP的，而不是API Key**
 
-## 下单频率限制
-* 每个成功的下单回报将包含一个`X-MBX-ORDER-COUNT-(intervalNum)(intervalLetter)`的头，其中包含当前账户已用的下单限制数量。
-* 当下单数超过限制时，会收到带有429但不含`Retry-After`头的响应。请检查 `GET api/v3/exchangeInfo` 的下单频率限制 (rateLimitType = ORDERS) 并等待封禁时间结束。
-* 被拒绝或不成功的下单并不保证回报中包含以上头内容。
-* **下单频率限制是基于每个账户计数的。**
-* 用户可以通过接口 `GET api/v3/rateLimit/order` 来查询当前的下单量.
+<a id="unfilled-order-count"></a>
+
+## 未成交订单计数
+* 每个成功的订单响应都将包含一个 `X-MBX-ORDER-COUNT-(intervalNum)(intervalLetter)` 报文头，用于标识您在该时间间隔内下了多少订单。<br></br>如果您想要对此进行监控，请参阅 [`GET api/v3/rateLimit/order`](#query-unfilled-order-count)。
+* 被拒绝/不成功的订单不保证在响应中有 `X-MBX-ORDER-COUNT-**` 报文头。
+* 如果超过此值，您将收到一个 429 错误，而且不带 `Retry-After` 报文头。
+* **请注意，如果您的订单一直顺利完成交易，您可以通过 API 持续下订单**。更多信息，请参见[现货未成交订单计数规则](./faqs/order_count_decrement_CN.md)。
+* **未成交订单数量是按照每个账户来统计的**。
 
 # 数据来源
 * 因为API系统是异步的, 所以返回的数据有延时很正常, 也在预期之中。
@@ -392,6 +394,8 @@ NONE
   "serverTime": 1499827319559
 }
 ```
+
+<a id="exchangeInfo"></a>
 
 ### 交易规范信息
 ```
@@ -2083,7 +2087,7 @@ icebergQty|DECIMAL|NO|
 newOrderRespType|ENUM|NO|指定响应类型: <br/> 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`， 其他默认为`ACK`。
 selfTradePreventionMode|ENUM|NO|允许的 ENUM 取决于交易对的配置。支持的值有 `EXPIRE_TAKER`，`EXPIRE_MAKER`，`EXPIRE_BOTH`，`NONE`。
 cancelRestrictions| ENUM | NO | 支持的值: <br>`ONLY_NEW` - 如果订单状态为 `NEW`，撤销将成功。<br> `ONLY_PARTIALLY_FILLED` - 如果订单状态为 `PARTIALLY_FILLED`，撤销将成功。
-orderRateLimitExceededMode| ENUM | NO | 支持的值: <br> `DO_NOTHING` （默认值）- 只有在帐户未超过订单速率限制的情况下，才会尝试取消订单。<br> `CANCEL_ONLY` - 将始终取消订单。
+orderRateLimitExceededMode| ENUM | NO |支持的值： <br></br> “DO_NOTHING”（默认值）- 仅在账户未超过未成交订单频率限制时，会尝试取消订单。<br></br> “CANCEL_ONLY” - 将始终取消订单。
 recvWindow | LONG | NO | 不能大于 `60000`
 timestamp | LONG | YES |
 
@@ -2104,7 +2108,7 @@ timestamp | LONG | YES |
     <tr>
         <th><code>cancelReplaceMode</code></th>
         <th><code>orderRateLimitExceededMode</code></th>
-        <th>下单数</th>
+        <th>未成交订单数</th>
         <th><code>cancelResult</code></th>
         <th><code>newOrderResult</code></th>
         <th><code>status</code></th>
@@ -2264,7 +2268,7 @@ timestamp | LONG | YES |
 </table>
 
 
-**响应：没有超出下单速率限制时的 Response SUCCESS**
+**响应：没有超出未成交订单计数时的 Response SUCCESS**
 ```javascript
 // 撤单和下单都成功
 {
@@ -2305,7 +2309,7 @@ timestamp | LONG | YES |
 }
 ```
 
-**响应：选择了 `STOP_ON_FAILURE` 而且账户没有超出下单速率限制时, 撤单出现错误**
+**响应：选择了 `STOP_ON_FAILURE` 而且账户没有超出未成交订单计数时, 撤单出现错误**
 ```javascript
 {
   "code": -2022,
@@ -2322,7 +2326,7 @@ timestamp | LONG | YES |
 }
 ```
 
-**响应：撤单成功而且账户没有超出下单速率限制时，下单失败**
+**响应：撤单成功而且账户没有超出未成交订单计数时，下单失败**
 ```javascript
 {
   "code": -2021,
@@ -2353,7 +2357,7 @@ timestamp | LONG | YES |
 }
 ```
 
-**响应：选择 `ALLOW_FAILURE` 而且账户没有超出下单速率限制时, 撤单出现错误**
+**响应：选择 `ALLOW_FAILURE` 而且账户没有超出未成交订单计数时, 撤单出现错误**
 ```javascript
 {
   "code": -2021,
@@ -2376,7 +2380,7 @@ timestamp | LONG | YES |
 }
 ```
 
-**响应：选择 `cancelReplaceMode=ALLOW_FAILURE` 而且账户没有超出下单速率限制时, 撤单和下单失败**
+**响应：选择 `cancelReplaceMode=ALLOW_FAILURE` 而且账户没有超出未成交订单计数时, 撤单和下单失败**
 ```javascript
 {
   "code": -2022,
@@ -2396,7 +2400,7 @@ timestamp | LONG | YES |
 }
 ```
 
-**响应：选择 `orderRateLimitExceededMode=DO_NOTHING` 而且账户超出下单速率限制时**
+**响应：选择 `orderRateLimitExceededMode=DO_NOTHING` 而且账户超出未成交订单计数时**
 
 ```javascript
 {
@@ -2405,7 +2409,7 @@ timestamp | LONG | YES |
 }
 ```
 
-**响应：选择 `orderRateLimitExceededMode=CANCEL_ONLY` 而且账户超出下单速率限制时**
+**响应：选择 `orderRateLimitExceededMode=CANCEL_ONLY` 而且账户超出未成交订单计数时**
 
 ```javascript
 {
@@ -2564,6 +2568,16 @@ POST /api/v3/order/oco
 
 **权重:** 1
 
+发送新的 OCO。
+
+* 价格限制：
+    * `SELL`： Limit price > 最后交易价格 > stop Price
+    * `BUY`： Limit price < 最后交易价格 < stop Price
+* 数量限制：
+    * 两条腿的数量必须相同。
+    * 不过， `冰山` 交易的数量不一定相同
+* `OCO` 将**2个订单**添加到未成交的订单计数， `EXCHANGE_MAX_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
+
 **参数:**
 
 名称 |类型| 是否必需 | 描述
@@ -2590,17 +2604,6 @@ selfTradePreventionMode |ENUM| NO | 允许的 ENUM 取决于交易对的配置�
 recvWindow|LONG|NO| 不能大于 `60000`
 timestamp|LONG|YES|
 
-
-其他信息:
-
-* 价格限制:
-  * `SELL`: 限价 > 最新成交价 >触发价
-  * `BUY`: 限价 < 最新成交价 < 触发价
-* 数量限制:
-  * 两个 legs 必须具有同样的数量。
-  * `ICEBERG`数量不必相同
-* 下单rate
-  * 一个`OCO`订单被算成2个普通订单.
 
 **数据源:**
 撮合引擎
@@ -2681,7 +2684,7 @@ POST /api/v3/orderList/oco
 * 针对价格限制：
   * 如果 OCO 订单方向是 `SELL`：`LIMIT_MAKER` `price` > 最后交易价格 > `stopPrice`
   * 如果 OCO 订单方向是 `BUY`：`LIMIT_MAKER` `price` < 最后交易价格 < `stopPrice`
-* 在订单率限制中，OCO 计为 **2** 个订单。
+* `OCO` 将**2 个订单**添加到未成交订单计数，`EXCHANGE_MAX_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
 
 **权重:** 
 1
@@ -2800,7 +2803,7 @@ POST /api/v3/orderList/oto
 * 第二个订单被称为**待处理订单**。它可以是任何订单类型，但不包括使用参数 `quoteOrderQty` 的 `MARKET` 订单。只有当生效订单**完全成交**时，待处理订单才会被自动下单。
 * 如果生效订单或者待处理订单中的任意一个被单独取消，订单列表中剩余的那个订单也会被随之取消或过期。
 * 如果生效订单在下订单列表后**立即完全成交**，则可能会得到订单响应。其中，生效订单的状态为 `FILLED` ，但待处理订单的状态为 `PENDING_NEW`。针对这类情况，如果需要检查当前状态，您可以查询相关的待处理订单。
-* `OTO` 订单对于下单速率限制、 `EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器来说，会被计为**2**个订单。
+* `OTO` 订单将**2 个订单**添加到未成交订单计数，`EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
 
 **权重:** 
 1
@@ -2928,7 +2931,8 @@ POST /api/v3/orderList/otoco
     * 生效订单的行为与此一致 [OTO](#new-order-list---oto-trade)
 * 一个OTOCO订单有两个待处理订单（pending above 和 pending below），它们构成了一个 OCO 订单列表。只有当生效订单**完全成交**时，待处理订单们才会被自动下单。
     * 待处理上方(pending above)订单和待处理下方(pending below)订单都遵循与 OCO 订单列表相同的规则 [Order List OCO](#new-order-list---oco-trade)。
-* `OTOCO` 订单对于下单速率限制、 `EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器来说，会被计为**3**个订单。
+* `OTOCO` 在未成交订单计数，`EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器的基础上添加**3个订单**。
+
 
 **权重:** 
 1
@@ -3587,11 +3591,14 @@ timestamp | LONG | YES |
   }
 ]
 ```
-### 查询目前下单数 (TRADE)
+
+<a id="query-unfilled-order-count"></a>
+
+### 查询未成交的订单计数 (USER_DATA)
 ```
 GET /api/v3/rateLimit/order
 ```
-获取用户在当前时间区间内的下单总数。
+显示用户在所有时间间隔内的未成交订单计数。
 
 **权重:**
 40

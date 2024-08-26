@@ -220,7 +220,7 @@
 * [`exchangeInfo`](#交易规范信息) 有包含与速率限制相关的信息。
 * 根据不同的间隔，有多种频率限制类型。
 * 从响应中的可选 `rateLimits` 字段，能看到当前的频率限制状态。
-* 如果违反任何速率限制（访问频次限制或下单速率限制），将收到429。
+* 当您超出未成交订单计数或者请求速率限制时，请求会失败并返回 HTTP 状态代码 429。
 
 ## 如何咨询频率限制
 
@@ -375,15 +375,18 @@ API 有多种频率限制间隔。
 }
 ```
 
-## 下单速率限制
-* 每个下单请求都会计入到**订单限额**。
-  * 成功的订单会更新 `ORDERS` 频率限制类型。
-  * 被拒绝或不成功的订单可能会也可能不会更新 `ORDERS` 计数。
-* 使用 [`account.rateLimits.orders`](#账户订单率限制-user_data) 请求跟踪当前的订单率限制。
-* 订单速率限制适用于**每一个账户**，并由账户的所有 API key 共享。
-* 如果您超过订单速率限制，请求会失败，状态为 `429`。
-  * 这错误代码表示您有责任停止发送请求，不得滥用API。
-  * 响应会包含一个 `retryAfter` 字段，指示什么时候能在重试。
+<a id="unfilled-order-count"></a>
+
+## 未成交订单计数
+
+* 成功下单将更新 `订单` 速率限制类型。
+* 被拒绝或不成功的订单可能会也可能不会更新 `订单` 速率限制类型。
+* **请注意，如果您的订单一直顺利完成交易，您可以通过 API 持续下订单**。更多信息，请参见 [现货未成交订单计数规则](./faqs/order_count_decrement_CN.md)。
+* 使用 [`account.rateLimits.orders`](#query-unfilled-order-count) 请求来跟踪您在此时间间隔内下了多少订单。
+* 如果超过此值，请求将失败，状态为 `429`。
+  * 此状态代码表示您应退出并停止向 API 滥发信息。
+  * 状态为 `429` 的响应会包含 `retryAfter` 字段，用以指示何时可以重试请求。
+* 这是按 **每一个账户** 维护的，并由该账户的所有 API 密钥共享。
 
 表示在10秒内下了12个订单和在24小时内下了4043个订单的成功响应：
 
@@ -902,6 +905,8 @@ NONE
   ]
 }
 ```
+
+<a id="exchangeInfo"></a>
 
 ### 交易规范信息
 
@@ -3778,7 +3783,7 @@ NONE
         <td><code>orderRateLimitExceededMode</code></td>
         <td>ENUM</td>
         <td>NO</td>
-        <td>支持的值: <br> <code>DO_NOTHING</code> （默认值）- 只有在帐户未超过订单速率限制的情况下，才会尝试取消订单。<br> <code>CANCEL_ONLY</code> - 将始终取消订单。</td>
+        <td>支持的值： <br> <code>DO_NOTHING</code> （默认值） - 仅在账户未超过未成交订单频率限制时，会尝试取消订单。<br> <code>CANCEL_ONLY</code> - 将始终取消订单。</td>
     </tr>    
     <tr>
         <td><code>recvWindow</code></td>
@@ -3817,7 +3822,7 @@ NONE
     <tr>
         <th><code>cancelReplaceMode</code></th>
         <th><code>orderRateLimitExceededMode</code></th>
-        <th>下单数</th>
+        <th>未成交订单数</th>
         <th><code>cancelResult</code></th>
         <th><code>newOrderResult</code></th>
         <th><code>status</code></th>
@@ -4290,7 +4295,7 @@ NONE
 }
 ```
 
-如果 `orderRateLimitExceededMode` 是 `DO_NOTHING`，那么无论 `cancelReplaceMode` 的取值，当账户超出下单速率限制时，响应将有 `"status": 429`:
+如果 `orderRateLimitExceededMode` 是 `DO_NOTHING`，那么无论 `cancelReplaceMode` 的取值，当账户超出未成交订单计数时，响应将有 `"status": 429`:
 
 ```javascript
 {
@@ -4326,7 +4331,7 @@ NONE
 }
 ```
 
-如果 `orderRateLimitExceededMode` 是 `CANCEL_ONLY`，那么无论 `cancelReplaceMode` 的取值，当账户超出下单速率限制时，响应将有 `"status": 409`:
+如果 `orderRateLimitExceededMode` 是 `CANCEL_ONLY`，那么无论 `cancelReplaceMode` 的取值，当账户超出未成交订单计数时，响应将有 `"status": 409`:
 
 ```javascript
 {
@@ -4698,7 +4703,7 @@ NONE
 
 * `trailingDelta` 仅适用于 OCO 的 `STOP_LOSS`/`STOP_LOSS_LIMIT` leg。
 
-* 在订单率限制中，OCO 计为2个订单。
+* `OCO` 将**2个订单**添加到未成交的订单计数， `EXCHANGE_MAX_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
 
 **数据源:**
 撮合引擎
@@ -4830,7 +4835,7 @@ NONE
 * 针对价格限制：
   * 如果 OCO 订单方向是 `SELL`：`LIMIT_MAKER` `price` > 最后交易价格 > `stopPrice`
   * 如果 OCO 订单方向是 `BUY`：`LIMIT_MAKER` `price` < 最后交易价格 < `stopPrice`
-* 在订单率限制中，OCO 计为 **2** 个订单。
+* OCO 将**2 个订单**添加到未成交订单计数、`EXCHANGE_MAX_ORDERS`过滤器和 `MAX_NUM_ORDERS` 过滤器中。
 
 **参数:**
 
@@ -4995,7 +5000,7 @@ NONE
 * 第二个订单被称为**待处理订单**。它可以是任何订单类型，但不包括使用参数 `quoteOrderQty` 的 `MARKET` 订单。只有当生效订单**完全成交**时，待处理订单才会被自动下单。
 * 如果生效订单或者待处理订单中的任意一个被单独取消，订单列表中剩余的那个订单也会被随之取消或过期。
 * 如果生效订单在下订单列表后**立即完全成交**，则可能会得到订单响应。其中，生效订单的状态为 `FILLED` ，但待处理订单的状态为 `PENDING_NEW`。针对这类情况，如果需要检查当前状态，您可以查询相关的待处理订单。
-* `OTO` 订单对于下单速率限制、 `EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器来说，会被计为**2**个订单。
+* `OTO` 订单将**2 个订单**添加到未成交订单计数，`EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
 
 **权重:** 1
 
@@ -5163,7 +5168,7 @@ NONE
     * 生效订单的行为与此一致 [OTO](#new-order-list---oto-trade)
 * 一个OTOCO订单有两个待处理订单（pending above 和 pending below），它们构成了一个 OCO 订单列表。只有当生效订单**完全成交**时，待处理订单们才会被自动下单。
     * 待处理上方(pending above)订单和待处理下方(pending below)订单都遵循与 OCO 订单列表相同的规则 [Order List OCO](#new-order-list---oco-trade)。
-* `OTOCO` 订单对于下单速率限制、 `EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器来说，会被计为**3**个订单。
+* `OTOCO` 在未成交订单计数，`EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器的基础上添加**3个订单**。
 
 **权重:** 1
 
@@ -5986,7 +5991,9 @@ NONE
 }
 ```
 
-### 账户订单率限制 (USER_DATA)
+<a id="query-unfilled-order-count"></a>
+
+### 查询未成交的订单计数 (USER_DATA)
 
 ```javascript
 {
@@ -6000,7 +6007,7 @@ NONE
 }
 ```
 
-查询当前的订单率限制。
+显示用户在所有时间间隔内的未成交订单计数。
 
 **权重:**
 40
