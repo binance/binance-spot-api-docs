@@ -1,4 +1,10 @@
-# CHANGELOG for Binance's API (2024-08-16)
+# CHANGELOG for Binance's API (2024-08-26)
+
+## 2024-08-26
+
+* [Spot Unfilled Order Count Rules](./faqs/order_count_decrement.md) have been updated to explain how to decrease your unfilled order count when placing orders.
+
+---
 
 ## 2024-08-16
 
@@ -19,6 +25,7 @@ General Changes:
 
 * [FIX API and Drop Copy Sessions](fix-api.md) has been added to the documentation.
 * The release date to the live exchange has not been determined.
+
 
 ---
 

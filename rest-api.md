@@ -9,7 +9,7 @@
 - [LIMITS](#limits)
   - [General Info on Limits](#general-info-on-limits)
   - [IP Limits](#ip-limits)
-  - [Order Rate Limits](#order-rate-limits)
+  - [Unfilled Order Count](#unfilled-order-count)
 - [Data Sources](#data-sources)
 - [Endpoint security type](#endpoint-security-type)
 - [SIGNED (TRADE and USER_DATA) Endpoint security](#signed-trade-and-user_data-endpoint-security)
@@ -69,7 +69,7 @@
   - [Account Endpoints](#account-endpoints)
     - [Account information (USER_DATA)](#account-information-user_data)
     - [Account trade list (USER_DATA)](#account-trade-list-user_data)
-    - [Query Current Order Count Usage (TRADE)](#query-current-order-count-usage-trade)
+    - [Query Unfilled Order Count (TRADE)](#query-unfilled-order-count-trade)
     - [Query Prevented Matches (USER_DATA)](#query-prevented-matches-user_data)
     - [Query Allocations (USER_DATA)](#query-allocations-user_data)
     - [Query Commission Rates (USER_DATA)](#query-commission-rates-user_data)
@@ -140,7 +140,7 @@ Sample Payload below:
     * DAY => D
 * `intervalNum` describes the amount of the interval. For example, `intervalNum` 5 with `intervalLetter` M means "Every 5 minutes".
 * The `/api/v3/exchangeInfo` `rateLimits` array contains objects related to the exchange's `RAW_REQUESTS`, `REQUEST_WEIGHT`, and `ORDERS` rate limits. These are further defined in the `ENUM definitions` section under `Rate limiters (rateLimitType)`.
-* A 429 will be returned when either request rate limit or order rate limit is violated.
+* Requests fail with HTTP status code 429 when you exceed the request rate limit.
 
 ## IP Limits
 * Every request will contain `X-MBX-USED-WEIGHT-(intervalNum)(intervalLetter)` in the response headers which has the current used weight for the IP for all request rate limiters defined.
@@ -151,11 +151,12 @@ Sample Payload below:
 * A `Retry-After` header is sent with a 418 or 429 responses and will give the **number of seconds** required to wait, in the case of a 429, to prevent a ban, or, in the case of a 418, until the ban is over.
 * **The limits on the API are based on the IPs, not the API keys.**
 
-## Order Rate Limits
-* Every successful order response will contain a `X-MBX-ORDER-COUNT-(intervalNum)(intervalLetter)` header which has the current order count for the account for all order rate limiters defined. To monitor order count usage, refer to `GET api/v3/rateLimit/order`.
-* When the order count exceeds the limit, you will receive a 429 error without the `Retry-After` header. Please check the Order Rate Limit rules using `GET api/v3/exchangeInfo` and wait for reactivation accordingly.
+## Unfilled Order Count
+* Every successful order response will contain a `X-MBX-ORDER-COUNT-(intervalNum)(intervalLetter)` header indicating how many orders you have placed for that interval. <br></br> To monitor this, refer to [`GET api/v3/rateLimit/order`](#query-unfilled-order-count).
 * Rejected/unsuccessful orders are not guaranteed to have `X-MBX-ORDER-COUNT-**` headers in the response.
-* **The order rate limit is counted against each account**.
+* If you have exceeded this, you will receive a 429 error without the `Retry-After` header. 
+* **Please note that if your orders are consistently filled by trades, you can continuously place orders on the API**. For more information, please see [Spot Unfilled Order Count Rules](./faqs/order_count_decrement.md).
+* **The number of unfilled orders is tracked for each account.**
 
 # Data Sources
 * The API system is asynchronous, so some delay in the response is normal and expected.
@@ -500,6 +501,8 @@ Memory
   "serverTime": 1499827319559
 }
 ```
+
+<a id="exchangeInfo"></a>
 
 ### Exchange information
 ```
@@ -2157,7 +2160,7 @@ icebergQty|DECIMAL|NO|
 newOrderRespType|ENUM|NO|Allowed values: <br/> `ACK`, `RESULT`, `FULL` <br/> `MARKET` and `LIMIT` orders types default to `FULL`; all other orders default to `ACK`
 selfTradePreventionMode |ENUM| NO | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
 cancelRestrictions| ENUM   | NO           | Supported values: <br>`ONLY_NEW` - Cancel will succeed if the order status is `NEW`.<br> `ONLY_PARTIALLY_FILLED ` - Cancel will succeed if order status is `PARTIALLY_FILLED`. For more information please refer to [Regarding `cancelRestrictions`](#regarding-cancelrestrictions)
-orderRateLimitExceededMode|ENUM|No| Supported values: <br> `DO_NOTHING` (default)- will only attempt to cancel the order if account has not exceeded the order rate limit<br> `CANCEL_ONLY` - will always cancel the order
+orderRateLimitExceededMode|ENUM|No| Supported values: <br> `DO_NOTHING` (default)- will only attempt to cancel the order if account has not exceeded the unfilled order rate limit<br> `CANCEL_ONLY` - will always cancel the order
 recvWindow | LONG | NO | The value cannot be greater than `60000`
 timestamp | LONG | YES |
 
@@ -2169,7 +2172,6 @@ Response format varies depending on whether the processing of the message succee
 **Data Source:**
 Matching Engine
 
-**Response - SUCCESS:**
 
 <table>
 <thead>
@@ -2180,7 +2182,7 @@ Matching Engine
     <tr>
         <th><code>cancelReplaceMode</code></th>
         <th><code>orderRateLimitExceededMode</code></th>
-        <th>Order Count Usage</th>
+        <th>Unfilled Order Count</th>
         <th><code>cancelResult</code></th>
         <th><code>newOrderResult</code></th>
         <th><code>status</code></th>
@@ -2339,7 +2341,7 @@ Matching Engine
 </tbody>
 </table>
 
-**Response SUCCESS has not exceeded the order rate limit:**
+**Response SUCCESS unfilled order count is not exceeded:**
 
 ```javascript
 // Both the cancel order placement and new order placement succeeded.
@@ -2384,7 +2386,7 @@ Matching Engine
 }
 ```
 
-**Response when Cancel Order Fails with STOP_ON FAILURE and account has not exceeded the order rate limit:**
+**Response when Cancel Order Fails with STOP_ON FAILURE and account has not exceeded unfilled order count:**
 ```javascript
 {
   "code": -2022,
@@ -2401,7 +2403,7 @@ Matching Engine
 }
 ```
 
-**Response when Cancel Order Succeeds but New Order Placement Fails and account has not exceeded the order rate limit:**
+**Response when Cancel Order Succeeds but New Order Placement Fails and account has not exceeded the unfilled order count:**
 ```javascript
 {
   "code": -2021,
@@ -2433,7 +2435,7 @@ Matching Engine
 }
 ```
 
-**Response when Cancel Order fails with ALLOW_FAILURE and account has not exceeded the order rate limit:**
+**Response when Cancel Order fails with ALLOW_FAILURE and account has not exceeded the unfilled order count:**
 
 ```javascript
 {
@@ -2457,7 +2459,7 @@ Matching Engine
 }
 ```
 
-**Response when both Cancel Order and New Order Placement fail using `cancelReplaceMode=ALLOW_FAILURE` and account has not exceeded the order rate limit:**
+**Response when both Cancel Order and New Order Placement fail using `cancelReplaceMode=ALLOW_FAILURE` and account has not exceeded the unfilled order count:**
 
 ```javascript
 {
@@ -2478,7 +2480,7 @@ Matching Engine
 }
 ```
 
-**Response when using `orderRateLimitExceededMode=DO_NOTHING` and account's order rate limit has been exceeded:**
+**Response when using `orderRateLimitExceededMode=DO_NOTHING` and account's unfilled order count has been exceeded:**
 
 ```javascript
 {
@@ -2487,7 +2489,7 @@ Matching Engine
 }
 ```
 
-**Response when using `orderRateLimitExceededMode=CANCEL_ONLY` and account's order rate limit has been exceeded:**
+**Response when using `orderRateLimitExceededMode=CANCEL_ONLY` and account's unfilled order count has been exceeded:**
 
 ```javascript
 {
@@ -2642,7 +2644,17 @@ timestamp | LONG | YES |
 ```
 POST /api/v3/order/oco 
 ```
-Send in a new OCO
+
+Send in a new OCO.
+
+* Price Restrictions:
+    * `SELL`: Limit Price > Last Price > Stop Price
+    * `BUY`: Limit Price < Last Price < Stop Price
+* Quantity Restrictions:
+    * Both legs must have the same quantity.
+    * `ICEBERG` quantities however do not have to be the same
+* `OCO` adds **2 orders** to the unfilled order count, `EXCHANGE_MAX_ORDERS` filter and the `MAX_NUM_ORDERS` filter.
+
 
 **Weight:** 
 1
@@ -2673,16 +2685,6 @@ selfTradePreventionMode |ENUM| NO | The allowed enums is dependent on what is co
 recvWindow|LONG|NO| The value cannot be greater than `60000`
 timestamp|LONG|YES|
 
-
-Additional Info:
-* Price Restrictions:
-    * `SELL`: Limit Price > Last Price > Stop Price
-    * `BUY`: Limit Price < Last Price < Stop Price
-* Quantity Restrictions:
-    * Both legs must have the same quantity.
-    * ```ICEBERG``` quantities however do not have to be the same
-* Order Rate Limit
-    * `OCO` counts as 2 orders against the order rate limit.
 
 **Data Source:**
 Matching Engine
@@ -2763,7 +2765,7 @@ Send in an one-cancels-the-other (OCO) pair, where activation of one order immed
 * Price restrictions:     
   * If the OCO is on the `SELL` side: `LIMIT_MAKER` `price` > Last Traded Price > `stopPrice`
   * If the OCO is on the `BUY` side: `LIMIT_MAKER` `price` < Last Traded Price < `stopPrice`
-* OCO counts as **2** orders against the order rate limit.
+* OCOs add **2 orders** to the unfilled order count, `EXCHANGE_MAX_ORDERS` filter, and the `MAX_NUM_ORDERS` filter.
 
 **Weight:**
 1
@@ -2881,7 +2883,7 @@ Places an OTO.
 * The second order is called the **pending order**. It can be any order type except for `MARKET` orders using parameter `quoteOrderQty`. The pending order is only placed on the order book when the working order gets **fully filled**.
 * If either the working order or the pending order is cancelled individually, the other order in the order list will also be canceled or expired.
 * When the order list is placed, if the working order gets **immediately fully filled**, the placement response will show the working order as `FILLED` but the pending order will still appear as `PENDING_NEW`. You need to query the status of the pending order again to see its updated status.
-* OTOs count as **2** orders against the order rate limit, `EXCHANGE_MAX_NUM_ORDERS` filter and `MAX_NUM_ORDERS` filter.
+* OTOs add **2 orders** to the unfilled order count, `EXCHANGE_MAX_NUM_ORDERS` filter and `MAX_NUM_ORDERS` filter.
 
 **Weight:** 1
 
@@ -3009,7 +3011,7 @@ Place an OTOCO.
   * The behavior of the working order is the same as the [OTO](#new-order-list---oto-trade).
 * OTOCO has 2 pending orders (pending above and pending below), forming an OCO pair. The pending orders are only placed on the order book when the working order gets **fully filled**.
     * The rules of the pending above and pending below follow the same rules as the [Order List OCO](#new-order-list---oco-trade).
-* OTOCOs count as **3** orders against the order rate limit, `EXCHANGE_MAX_NUM_ORDERS` filter, and `MAX_NUM_ORDERS` filter.
+* OTOCOs add **3 orders** against the unfilled order count, `EXCHANGE_MAX_NUM_ORDERS` filter, and `MAX_NUM_ORDERS` filter.
 
 
 **Weight:** 1
@@ -3675,13 +3677,14 @@ Memory => Database
 ]
 ```
 
-### Query Current Order Count Usage (TRADE)
+<a id="query-unfilled-order-count"></a>
+
+### Query Unfilled Order Count (USER_DATA)
 ```
 GET /api/v3/rateLimit/order
 ```
 
-Displays the user's current order count usage for all intervals.
-
+Displays the user's unfilled order count for all intervals.
 
 **Weight:**
 40
