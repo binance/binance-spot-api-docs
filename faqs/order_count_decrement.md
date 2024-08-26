@@ -89,7 +89,7 @@ In these cases the unfilled order count may be decremented by more than one orde
 
 * **The examples only give a general idea of the behavior.** The 10-second interval is used for simplicity. The actual configuration on the live exchange may be different.  
 * There is a short delay between the order being filled and the unfilled order count update. Please be careful when your unfilled order count is close to the limit.  
-* Please refer to [How does unfilled`ORDERS` rate limit work?](#order-rate-limit) to see how you can monitor the unfilled order count depending on the API.
+* Please refer to [How does unfilled `ORDERS` rate limit work?](#order-rate-limit) to see how you can monitor the unfilled order count depending on the API.
 
 **Example 1** — taker:
 
