@@ -17,7 +17,7 @@ allocation
 * Unique identifier of an allocation on a symbol.
 
 `allocationType`
-* See [AllocationType](../rest-api.md#allocationtype) 
+* See [AllocationType](../enums.md#allocationtype) 
 
 `askPrice`
 * In ticker responses: the lowest price on the `SELL` side.

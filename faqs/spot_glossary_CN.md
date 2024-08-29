@@ -17,7 +17,7 @@ allocation
 * 此字段是一个唯一识别码，用来标识针对某个交易对上进行的分配(allocation)。
 
 `allocationType`
-* 参考 [ 分配类型 ](../rest-api_CN.md#allocationtype) 
+* 参考 [ 分配类型 ](../enums_CN.md#allocationtype) 
 
 `askPrice`
 * `ticker` 请求返回的来自“卖"方的最低价格。
