@@ -25,105 +25,105 @@
 # Update Sub Account Endpoint:
 # GET /sapi/v1/sub-account/transfer/subUserHistory: update response field # fromAccountType and toAccountType. Return USDT_FUTURE/COIN_FUTURE in order to differentiate 2 futures wallets.
 # New Wallet Endpoint:
-GET /sapi/v1/account/info: To fetch the “VIP Level”, “whether Margin account is enabled” and “whether Futures account is enabled”
+# GET /sapi/v1/account/info: To fetch the “VIP Level”, “whether Margin account is enabled” and “whether Futures account is enabled”
 2024-04-08
-Update Wallet Endpoint:
-GET /sapi/v1/capital/config/getall: delete response field resetAddressStatus
+# Update Wallet Endpoint:
+# GET /sapi/v1/capital/config/getall: delete response field resetAddressStatus
 2024-01-15
-New Endpoints for Wallet:
-GET /sapi/v1/spot/delist-schedule: Query spot delist schedule
-Update Endpoints for Wallet:
-GET /sapi/v1/asset/dribblet：add parameter accountType
-POST /sapi/v1/asset/dust-btc：add parameter accountType
-POST /sapi/v1/asset/dust：add parameter accountType
+# New Endpoints for Wallet:
+# GET /sapi/v1/spot/delist-schedule: Query spot delist schedule
+# Update Endpoints for Wallet:
+# GET /sapi/v1/asset/dribblet：add parameter accountType
+# POST /sapi/v1/asset/dust-btc：add parameter accountType
+# POST /sapi/v1/asset/dust：add parameter accountType
 2023-11-21
-New endpoint for Wallet:
-GET /sapi/v1/capital/deposit/address/list: Fetch deposit address list with network.
+# New endpoint for Wallet:
+# GET /sapi/v1/capital/deposit/address/list: Fetch deposit address list with network.
 2023-11-02
-Changes to Wallet Endpoint:
-GET /sapi/v1/account/apiRestrictions: add new response field enablePortfolioMarginTrading
+# Changes to Wallet Endpoint:
+# GET /sapi/v1/account/apiRestrictions: add new response field enablePortfolioMarginTrading
 2023-09-22
-New endpoints for Wallet:
-GET /sapi/v1/asset/wallet/balance: query user wallet balance
-GET /sapi/v1/asset/custody/transfer-history: query user delegation history(For Master Account)
+# New endpoints for Wallet:
+# GET /sapi/v1/asset/wallet/balance: query user wallet balance
+# GET /sapi/v1/asset/custody/transfer-history: query user delegation history(For Master Account)
 2023-09-04
-Rate limit adjustment for Wallet Endpoint:
-GET /sapi/v1/capital/withdraw/history: UID rate limit is adjusted to 18000, maxmium 10 requests per second. Please refer to the endpoint description for detail
+# Rate limit adjustment for Wallet Endpoint:
+# GET /sapi/v1/capital/withdraw/history: UID rate limit is adjusted to 18000, maxmium 10 requests per second. Please refer to the endpoint description for detail
 2023-05-18
-New endpoints for Wallet：
-POST /sapi/v1/capital/deposit/credit-apply: apply deposit credit for expired address
+# New endpoints for Wallet：
+# POST /sapi/v1/capital/deposit/credit-apply: apply deposit credit for expired address
 2023-05-09
-Update endpoints for Wallet:
-POST /sapi/v1/asset/transfer: add enum MAIN_PORTFOLIO_MARGIN and PORTFOLIO_MARGIN_MAIN
+# Update endpoints for Wallet:
+# POST /sapi/v1/asset/transfer: add enum MAIN_PORTFOLIO_MARGIN and # PORTFOLIO_MARGIN_MAIN
 2023-02-02
-Update endpoints for Wallet:
-Universal Transfer POST /sapi/v1/asset/transfer support option transfer
+# Update endpoints for Wallet:
+# Universal Transfer POST /sapi/v1/asset/transfer support option transfer
 2022-12-26
-New endpoints for wallet:
-GET /sapi/v1/capital/contract/convertible-coins: Get a user's auto-conversion settings in deposit/withdrawal
-POST /sapi/v1/capital/contract/convertible-coins: User can use it to turn on or turn off the BUSD auto-conversion from/to a specific stable coin.
+# New endpoints for wallet:
+# GET /sapi/v1/capital/contract/convertible-coins: Get a user's auto-conversion settings in deposit/withdrawal
+# POST /sapi/v1/capital/contract/convertible-coins: User can use it to turn on or turn off the BUSD auto-conversion from/to a specific stable coin.
 2022-11-18
-New endpoint for Wallet:
-GET /sapi/v1/asset/ledger-transfer/cloud-mining/queryByPage: The query of Cloud-Mining payment and refund history
+# New endpoint for Wallet:
+# GET /sapi/v1/asset/ledger-transfer/cloud-mining/queryByPage: The query of Cloud-Mining payment and refund history
 2022-11-02
-Update endpoints for Wallet:
-POST /sapi/v1/capital/withdraw/apply: Weight changed to Weight(UID): 600
+# Update endpoints for Wallet:
+# POST /sapi/v1/capital/withdraw/apply: Weight changed to Weight(UID): 600
 2022-10-28
-Update endpoints for Wallet:
-POST /sapi/v1/asset/convert-transfer: New parameter accountType
-POST /sapi/v1/asset/convert-transfer/queryByPage: request method is changed to GET, new parameter clientTranId
+# Update endpoints for Wallet:
+# POST /sapi/v1/asset/convert-transfer: New parameter accountType
+# POST /sapi/v1/asset/convert-transfer/queryByPage: request method is changed to GET, new parameter clientTranId
 2022-09-29
-New endpoints for Wallet:
-POST /sapi/v1/asset/convert-transfer: Convert transfer, convert between BUSD and stablecoins.
-POST /sapi/v1/asset/convert-transfer/queryByPage: Query convert transfer
+# New endpoints for Wallet:
+# POST /sapi/v1/asset/convert-transfer: Convert transfer, convert between # BUSD and stablecoins.
+# POST /sapi/v1/asset/convert-transfer/queryByPage: Query convert transfer
 2022-07-01
-New endpoint for Wallet:
-POST /sapi/v3/asset/getUserAsset to get user assets.
+# New endpoint for Wallet:
+# POST /sapi/v3/asset/getUserAsset to get user assets.
 2022-2-17
-The following updates will take effect on February 24, 2022 08:00 AM UTC
+# The following updates will take effect on February 24, 2022 08:00 AM UTC
 
-Update endpoint for Wallet：
-GET /sapi/v1/accountSnapshot
-The time limit of this endpoint is shortened to only support querying the data of the latest month
+# Update endpoint for Wallet：
+# GET /sapi/v1/accountSnapshot
+# The time limit of this endpoint is shortened to only support querying the data of the latest month
 
 2022-02-09
-New endpoint for Wallet:
-POST /sapi/v1/asset/dust-btc to get assets that can be converted into BNB
+# New endpoint for Wallet:
+# POST /sapi/v1/asset/dust-btc to get assets that can be converted into BNB
 2021-12-30
-Update endpoint for Wallet：
-As the Mining account is merged into Funding account, transfer types MAIN_MINING, MINING_MAIN, MINING_UMFUTURE, MARGIN_MINING, and MINING_MARGIN will be discontinued in Universal Transfer endpoint POST /sapi/v1/asset/transfer on January 05, 2022 08:00 AM UTC
+# Update endpoint for Wallet：
+# As the Mining account is merged into Funding account, transfer types # MAIN_MINING, MINING_MAIN, MINING_UMFUTURE, MARGIN_MINING, and # MINING_MARGIN will be discontinued in Universal Transfer endpoint POST /sapi/v1/asset/transfer on January 05, 2022 08:00 AM UTC
 2021-11-19
-Update endpoint for Wallet:
-New fieldinfoadded inGET /sapi/v1/capital/withdraw/historyto show the reason for withdrawal failure
+# Update endpoint for Wallet:
+# New fieldinfoadded inGET /sapi/v1/capital/withdraw/historyto show the # #reason for withdrawal failure
 2021-11-18
-The following updates will take effect on November 25, 2021 08:00 AM UTC
+# The following updates will take effect on November 25, 2021 08:00 AM UTC
 
-Update endpoint for Wallet：
-GET /sapi/v1/accountSnapshot
-The query time range of both endpoints are shortened to support data query within the last 6 months only, where startTime does not support selecting a timestamp beyond 6 months. If you do not specify startTime and endTime, the data of the last 7 days will be returned by default.
+# Update endpoint for Wallet：
+# GET /sapi/v1/accountSnapshot
+# The query time range of both endpoints are shortened to support data query within the last 6 months only, where startTime does not support # #selecting a timestamp beyond 6 months. If you do not specify startTime # #and endTime, the data of the last 7 days will be returned by default.
 
 2021-11-17
-The following endpoints will be discontinued on November 17, 2021 13:00 PM UTC:
-POST /sapi/v1/account/apiRestrictions/ipRestriction to support user enable and disable IP restriction for an API Key
-POST /sapi/v1/account/apiRestrictions/ipRestriction/ipList to support user add IP list for an API Key
-GET /sapi/v1/account/apiRestrictions/ipRestriction to support user query IP restriction for an API Key
-DELETE /sapi/v1/account/apiRestrictions/ipRestriction/ipList to support user delete IP list for an API Key
-2021-11-16
+# The following endpoints will be discontinued on November 17, 2021 13:00 PM UTC:
+# POST /sapi/v1/account/apiRestrictions/ipRestriction to support user enable and disable IP restriction for an API Key
+# POST /sapi/v1/account/apiRestrictions/ipRestriction/ipList to support user add IP list for an API Key
+# GET /sapi/v1/account/apiRestrictions/ipRestriction to support user query IP restriction for an API Key
+# DELETE /sapi/v1/account/apiRestrictions/ipRestriction/ipList to support user delete IP list for an API Key
+# 2021-11-16
 New endpoints for Sub-Account:
-POST /sapi/v1/sub-account/subAccountApi/ipRestriction to support master account enable and disable IP restriction for a sub-account API Key
-POST /sapi/v1/sub-account/subAccountApi/ipRestriction/ipList to support master account add IP list for a sub-account API Key
-GET /sapi/v1/sub-account/subAccountApi/ipRestriction to support master account query IP restriction for a sub-account API Key
-DELETE /sapi/v1/sub-account/subAccountApi/ipRestriction/ipList to support master account delete IP list for a sub-account API Key
+# POST /sapi/v1/sub-account/subAccountApi/ipRestriction to support master account enable and disable IP restriction for a sub-account API Key
+# POST /sapi/v1/sub-account/subAccountApi/ipRestriction/ipList to support master account add IP list for a sub-account API Key
+GET /sapi/v1/sub-account/subAccountApi/ipRestriction to support master # #account query IP restriction for a sub-account API Key
+DELETE /sapi/v1/sub-account/subAccountApi/ipRestriction/ipList to support # master account delete IP list for a sub-account API Key
 2021-11-05
-Update endpoint for Wallet:
-New parameter walletType added in POST /sapi/v1/capital/withdraw/apply to support user choose wallet type spot wallet and funding wallet when withdraw crypto.
+# Update endpoint for Wallet:
+# New parameter walletType added in POST /sapi/v1/capital/withdraw/apply to #support user choose wallet type spot wallet and funding wallet when withdraw crypto.
 2021-11-04
-The following updates will take effect on November 11, 2021 08:00 AM UTC
+# The following updates will take effect on November 11, 2021 08:00 AM UTC
 
 Update endpoints for Wallet and Futures：
-GET /sapi/v1/asset/transfer
-GET /sapi/v1/futures/transfer
-The query time range of both endpoints are shortened to support data query within the last 6 months only, where startTime does not support selecting a timestamp beyond 6 months. If you do not specify startTime and endTime, the data of the last 7 days will be returned by default.
+# GET /sapi/v1/asset/transfer
+# GET /sapi/v1/futures/transfer
+# The query time range of both endpoints are shortened to support data query within the last 6 months only, where startTime does not support #selecting a timestamp beyond 6 months. If you do not specify startTime and endTime, the data of the last 7 days will be returned by default.
 
 2021-10-22
 # Update endpoint for Wallet:
