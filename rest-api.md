@@ -769,6 +769,8 @@ Database
 ]
 ```
 
+<a id="klines"></a>
+
 ### Kline/Candlestick data
 ```
 GET /api/v3/klines
@@ -834,6 +836,8 @@ Database
   ]
 ]
 ```
+
+<a id="uiKlines"></a>
 
 ### UIKlines
 ```

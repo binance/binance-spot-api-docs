@@ -6,19 +6,19 @@
 
 在 RESTful API 上，您可以在 `data-api.binance.vision` 上访问以下接口：
 
-* [GET /api/v3/aggTrades](../rest-api_CN.md#近期成交归集)
-* [GET /api/v3/avgPrice](../rest-api_CN.md#当前平均价格)
-* [GET /api/v3/depth](../rest-api_CN.md#深度信息)
-* [GET /api/v3/exchangeInfo](../rest-api_CN.md#交易规范信息)
-* [GET /api/v3/klines](../rest-api_CN.md#k线数据)
-* [GET /api/v3/ping](../rest-api_CN.md#测试服务器连通性-ping)
-* [GET /api/v3/ticker](../rest-api_CN.md#滚动窗口价格变动统计)
-* [GET /api/v3/ticker/24hr](../rest-api_CN.md#24hr价格变动情况)
-* [GET /api/v3/ticker/bookTicker](../rest-api_CN.md#最优挂单接口)
-* [GET /api/v3/ticker/price](../rest-api_CN.md#最新价格接口)
-* [GET /api/v3/time](../rest-api_CN.md#获取服务器时间)
-* [GET /api/v3/trades](../rest-api_CN.md#近期成交)
-* [GET /api/v3/uiKlines](../rest-api_CN.md#uik线数据)
+* [GET /api/v3/aggTrades](../rest-api_CN.md#aggTrades)
+* [GET /api/v3/avgPrice](../rest-api_CN.md#avgPrice)
+* [GET /api/v3/depth](../rest-api_CN.md#depth)
+* [GET /api/v3/exchangeInfo](../rest-api_CN.md#exchangeInfo)
+* [GET /api/v3/klines](../rest-api_CN.md#klines)
+* [GET /api/v3/ping](../rest-api_CN.md#ping)
+* [GET /api/v3/ticker](../rest-api_CN.md#rollingwindowticker)
+* [GET /api/v3/ticker/24hr](../rest-api_CN.md#twentyfourhourticker)
+* [GET /api/v3/ticker/bookTicker](../rest-api_CN.md#bookTicker)
+* [GET /api/v3/ticker/price](../rest-api_CN.md#ticker-price)
+* [GET /api/v3/time](../rest-api_CN.md#time)
+* [GET /api/v3/trades](../rest-api_CN.md#trades)
+* [GET /api/v3/uiKlines](../rest-api_CN.md#uiKlines)
 
 请求示例:
 
