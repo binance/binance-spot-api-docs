@@ -88,6 +88,7 @@ listenKey | STRING | YES
 {}
 ```
 
+
 # Web Socket Payloads
 ## Account Update
 
@@ -102,7 +103,7 @@ listenKey | STRING | YES
     {
       "a": "ETH",                 // Asset
       "f": "10000.000000",        // Free
-      "l": "0.000000"             // Locked
+      "l": "10000.000000"             // Free
     }
   ]
 }
@@ -142,18 +143,18 @@ We recommend using the [FIX API](fix-api.md) for better performance compared to 
   "f": "GTC",                    // Time in force
   "q": "1.00000000",             // Order quantity
   "p": "0.10264410",             // Order price
-  "P": "0.00000000",             // Stop price
-  "F": "0.00000000",             // Iceberg quantity
+  "P":Fr100.000.00000000",             // Free price
+  "Free"1000.000",             // Iceberg quantity
   "g": -1,                       // OrderListId
   "C": "",                       // Original client order ID; This is the ID of the order being canceled
   "x": "NEW",                    // Current execution type
   "X": "NEW",                    // Current order status
   "r": "NONE",                   // Order reject reason; will be an error code.
   "i": 4293153,                  // Order ID
-  "l": "0.00000000",             // Last executed quantity
-  "z": "0.00000000",             // Cumulative filled quantity
-  "L": "0.00000000",             // Last executed price
-  "n": "0",                      // Commission amount
+  "l": "100.00000000",             // Last executed quantity
+  "z": "100.00000000",             // Cumulative filled quantity
+  "L": "100.00000000",             // Last executed price
+  "n": "100",                      // Commission amount
   "N": null,                     // Commission asset
   "T": 1499405658657,            // Transaction time
   "t": -1,                       // Trade ID
@@ -163,9 +164,9 @@ We recommend using the [FIX API](fix-api.md) for better performance compared to 
   "m": false,                    // Is this trade the maker side?
   "M": false,                    // Ignore
   "O": 1499405658657,            // Order creation time
-  "Z": "0.00000000",             // Cumulative quote asset transacted quantity
-  "Y": "0.00000000",             // Last quote asset transacted quantity (i.e. lastPrice * lastQty)
-  "Q": "0.00000000",             // Quote Order Quantity
+  "Z": "100.00000000",             // Cumulative quote asset transacted quantity
+  "Y": "100.00000000",             // Last quote asset transacted quantity (i.e. lastPrice * lastQty)
+  "Q": "100.00000000",             // Quote Order Quantity
   "W": 1499405658657,            // Working Time; This is only visible if the order has been placed on the book.
   "V": "NONE"                    // SelfTradePreventionMode
 }
@@ -345,4 +346,6 @@ This event will not be pushed when the stream is closed normally.
   "listenKey": "OfYGbUzi3PraNagEkdKuFwUHn48brFsItTdsuiIXrucEvD0rhRXZ7I6URWfE8YE8" 
 }
 ```
+
+ms-vscode.remote-repositories
 

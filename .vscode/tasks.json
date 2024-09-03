@@ -1,4 +1,96 @@
 {
+    {
+        "exports": {
+            ".": "./dist/constants.ts",
+            "./add": "./dist/add.ts",
+            "./subtract": "./dist/subtract.ts"
+        }
+    }
+  import { GRAVITATIONAL_CONSTANT, SPEED_OF_LIGHT
+    } from '@repo/math';
+import { add
+    } from '@repo/math/add';
+import { subtract
+    } from '@repo/math/subtract';
+    apiAnahtarı	dbefbc809e3e83c283a984c3a1459732ea7db1360ca80c5c2c8867408d28cc83
+    gizliAnahtar	2b5eb11e18796d12d88f13dc27dbbd02c2cc51ff7059765ed9821957d82bb4d9
+    Parametre	Değer
+    sembol	BTCUSD_200925
+    taraf	SATIN ALMAK
+    tip	SINIR
+    zamanGüçlü	Genel Şartlar
+    miktar	1
+    fiyat	9000
+    almaPenceresi	5000
+    zaman damgası	1591702613943
+    Örnek 1: Sorgu 
+    Örnek 1
+    
+    HMAC SHA256 imzası:
+    
+        $ echo -n "symbol=BTCUSD_200925&side=BUY&type=LIMIT&quantity=1&price=9000&timeInForce=GTC&recvWindow=5000&timestamp=1591702613943" | openssl dgst -sha256 -hmac "2b5eb11e18796d12d88f13dc27dbbd02c2cc51ff7059765ed9821957d82bb4d9"
+        (stdin)= 21fd819734bf0e5c68740eed892909414d693635c5f7fffab1313925ae13556a
+    
+    
+    curl komutu:
+    
+        (HMAC SHA256)
+        $ curl -H "X-MBX-APIKEY: dbefbc809e3e83c283a984c3a1459732ea7db1360ca80c5c2c8867408d28cc83" -X POST 'https://dapi.binance.com/dapi/v1/order?symbol=BTCUSD_200925&side=BUY&type=LIMIT&quantity=1&price=9000&timeInForce=GTC&recvWindow=5000&timestamp=1591702613943&signature= 21fd819734bf0e5c68740eed892909414d693635c5f7fffab1313925ae13556a'
+    
+    
+    sorguDizesi:
+    
+    sembol=BTCUSD_200925
+    &side=ALIŞVERİŞ
+    &type=LIMIT
+    &timeInForce=GTC
+    &miktar=1
+    &fiyat=9000
+    &recvWindow=5000
+    ×tamp=1591702613943
+    
+    Örnek 2: Bir talep 
+    Örnek 2
+    
+    HMAC SHA256 imzası:
+    
+        $ echo -n "symbol=BTCUSD_200925&side=BUY&type=LIMIT&quantity=1&price=9000&timeInForce=GTC&recvWindow=5000&timestamp=1591702613943" | openssl dgst -sha256 -hmac "2b5eb11e18796d12d88f13dc27dbbd02c2cc51ff7059765ed9821957d82bb4d9"
+        (stdin)= 21fd819734bf0e5c68740eed892909414d693635c5f7fffab1313925ae13556a
+    
+    
+    curl komutu:
+    
+        (HMAC SHA256)
+        $ curl -H "X-MBX-APIKEY: dbefbc809e3e83c283a984c3a1459732ea7db1360ca80c5c2c8867408d28cc83" -X POST 'https://dapi.binance.com/dapi/v1/order' -d 'symbol=BTCUSD_200925&side=BUY&type=LIMIT&quantity=1&price=9000&timeInForce=GTC&recvWindow=5000&timestamp=1591702613943&signature= 21fd819734bf0e5c68740eed892909414d693635c5f7fffab1313925ae13556a'
+    
+    
+    istekGövdesi:
+    
+    sembol=BTCUSD_200925
+    &side=ALIŞVERİŞ
+    &type=LIMIT
+    &timeInForce=GTC
+    &miktar=1
+    &fiyat=9000
+    &recvWindow=5000
+    ×tamp=1591702613943
+    
+    Örnek 3: Karma sorgu dizesi ve istek 
+    Örnek 3
+    
+    HMAC SHA256 imzası:
+    
+        $ echo -n "symbol=BTCUSD_200925&side=BUY&type=LIMIT&timeInForce=GTCquantity=1&price=9000&recvWindow=5000&timestamp= 1591702613943" | openssl dgst -sha256 -hmac "2b5eb11e18796d12d88f13dc27dbbd02c2cc51ff7059765ed9821957d82bb4d9"
+        (stdin)= f3129e7c72c7727037891ad8a86b76a7dc514ba125a536775c8ba403b2d1b222
+    
+    
+    curl komutu:
+    
+        (HMAC SHA256)
+        $ curl -H "X-MBX-APIKEY: dbefbc809e3e83c283a984c3a1459732ea7db1360ca80c5c2c8867408d28cc83" -X POST 'https://dapi.binance.com/dapi/v1/order?symbol=BTCUSD_200925&side=BUY&type=LIMIT&timeInForce=GTC' -d 'quantity=1&price=9000&recvWindow=5000&timestamp= 1591702613943&signature=f3129e7c72c7727037891ad8a86b76a7dc514ba125a536775c8ba403b2d1b222'
+    
+    
+    
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
     "version": "2.0.0",
