@@ -1,4 +1,5 @@
 {
     "remoteHub.richNavigation.enabled": true,
-    "remoteHub.gitProtocol": "ssh"
+    "remoteHub.gitProtocol": "ssh",
+    "workbench.editor.preferHistoryBasedLanguageDetection": true
 }
