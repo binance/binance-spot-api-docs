@@ -1,0 +1,4 @@
+{
+    "remoteHub.richNavigation.enabled": true,
+    "remoteHub.gitProtocol": "ssh"
+}
