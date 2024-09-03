@@ -54,6 +54,8 @@ Name | Description
 [sor_faq](./faqs/sor_faq.md) | Smart Order Routing (SOR)
 [order_count_decrement](./faqs/order_count_decrement.md) | Updates to the Spot Order Count Limit Rules.
 [sbe_faq](./faqs/sbe_faq.md) | Information on the implementation of Simple Binary Encoding (SBE) on the API
+[Apı data only apı and websocket streams.)([README (2).md](https://github.com/user-attachments/files/16854220/README.2.md)]
+)
 
 # Change log
 
@@ -79,7 +81,10 @@ Please refer to [CHANGELOG](./CHANGELOG.md) for latest changes on our APIs and S
 * [Spot Testnet](https://testnet.binance.vision/)
     * Users can use the SPOT Testnet to practice SPOT trading.
     * Currently, this is only available via the API.
+    * [binance(3).md](https://github.com/user-attachments/files/16854219/binance.3.md)
     * Only endpoints starting with `/api/*` are supported, `/sapi/*` is not supported.
+    * [Api.txt](https://github.com/user-attachments/files/16854255/Api.txt)
+
 
 # Contact Us
 
