@@ -12,7 +12,7 @@
     - [How to interpret rate limits](#how-to-interpret-rate-limits)
     - [How to show/hide rate limit information](#how-to-showhide-rate-limit-information)
   - [IP limits](#ip-limits)
-  - [Order rate limits](#order-rate-limits)
+  - [Unfilled Order Count](#unfilled-order-count)
 - [Request security](#request-security)
   - [SIGNED (TRADE and USER_DATA) request security](#signed-trade-and-user_data-request-security)
   - [Timing security](#timing-security)
@@ -69,7 +69,7 @@
     - [Test new order using SOR (TRADE)](#test-new-order-using-sor-trade)
   - [Account requests](#account-requests)
     - [Account information (USER_DATA)](#account-information-user_data)
-    - [Account order rate limits (USER_DATA)](#account-order-rate-limits-user_data)
+    - [Account unfilled order count (USER_DATA)](#account-unfilled-order-count-user_data)
     - [Account order history (USER_DATA)](#account-order-history-user_data)
     - [Account order list history (USER_DATA)](#account-order-list-history-user_data)
     - [Account trade history (USER_DATA)](#account-trade-history-user_data)
@@ -308,7 +308,7 @@ The connection is per **IP address**.
 * Current API rate limits can be queried using the [`exchangeInfo`](#exchange-information) request.
 * There are multiple rate limit types across multiple intervals.
 * Responses can indicate current rate limit status in the optional `rateLimits` field.
-* Requests fail with status `429` when order rate limits or request rate limits are violated.
+* Requests fail with status `429` when unfilled order count or request rate limits are violated.
 
 ### How to interpret rate limits
 
@@ -469,16 +469,16 @@ Failed response indicating that you are banned and the ban will last until epoch
 }
 ```
 
-## Order rate limits
+## Unfilled Order Count
 
-* Every request to place an order counts towards your **order limit**.
-  * Successfully placed orders update the `ORDERS` rate limit type.
-  * Rejected or unsuccessful orders might or might not update the `ORDERS` count.
-* Use the [`account.rateLimits.orders`](#account-order-rate-limits-user_data) request to keep track of the current order rate limits.
-* Order rate limit is maintained **per account** and is shared by all API keys of the account.
-* If you go over the order rate limit, requests fail with status `429`.
+* Successfully placed orders update the `ORDERS` rate limit type.
+* Rejected or unsuccessful orders might or might not update the `ORDERS` rate limit type.
+* **Please note that if your orders are consistently filled by trades, you can continuously place orders on the API**. For more information, please see [Spot Unfilled Order Count Rules](../faqs/order_count_decrement.md).
+* Use the [`account.rateLimits.orders`](#query-unfilled-order-count) request to keep track of how many orders you have placed within this interval.
+* If you exceed this, requests fail with status `429`.
   * This status code indicates you should back off and stop spamming the API.
-  * Rate-limited responses include a `retryAfter` field, indicating when you can retry the request.
+  * Responses that have a status `429` include a `retryAfter` field, indicating when you can retry the request.
+* This is maintained **per account** and is shared by all API keys of the account.
 
 Successful response indicating that you have placed 12 orders in 10 seconds, and 4043 orders in the past 24 hours:
 
@@ -3919,7 +3919,7 @@ Cancel an existing order and immediately place a new order instead of the cancel
         <td><code>orderRateLimitExceededMode</code></td>
         <td>ENUM</td>
         <td>NO</td>
-        <td>Supported values: <br> <code>DO_NOTHING</code> (default)- will only attempt to cancel the order if account has not exceeded the order rate limit<br> <code>CANCEL_ONLY</code> - will always cancel the order.</td>
+        <td>Supported values: <br> <code>DO_NOTHING</code> (default)- will only attempt to cancel the order if account has not exceeded the unfilled order rate limit<br> <code>CANCEL_ONLY</code> - will always cancel the order.</td>
     </tr>
     <tr>
         <td><code>recvWindow</code></td>
@@ -3960,7 +3960,7 @@ Available `cancelReplaceMode` options:
     <tr>
         <th><code>cancelReplaceMode</code></th>
         <th><code>orderRateLimitExceededMode</code></th>
-        <th>Order Count Usage</th>
+        <th>Unfilled Order Count</th>
         <th><code>cancelResult</code></th>
         <th><code>newOrderResult</code></th>
         <th><code>status</code></th>
@@ -4438,7 +4438,7 @@ If both operations fail, response will have `"status": 400`:
 }
 ```
 
-If `orderRateLimitExceededMode` is `DO_NOTHING` regardless of `cancelReplaceMode`, and you have exceeded your order count usage, you will get status `429` with the following error:
+If `orderRateLimitExceededMode` is `DO_NOTHING` regardless of `cancelReplaceMode`, and you have exceeded your unfilled order count, you will get status `429` with the following error:
 
 ```javascript
 {
@@ -4474,7 +4474,7 @@ If `orderRateLimitExceededMode` is `DO_NOTHING` regardless of `cancelReplaceMode
 }
 ```
 
-If `orderRateLimitExceededMode` is `CANCEL_ONLY` regardless of `cancelReplaceMode`, and you have exceeded your order count usage, you will get status `409` with the following error:
+If `orderRateLimitExceededMode` is `CANCEL_ONLY` regardless of `cancelReplaceMode`, and you have exceeded your unfilled order count, you will get status `409` with the following error:
 
 ```javascript
 {
@@ -4806,7 +4806,7 @@ Send in an one-cancels-the-other (OCO) pair, where activation of one order immed
         * `abovePrice` > Last Traded Price > `belowStopPrice`
     * If the `aboveType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`, and the `belowType` is `LIMIT_MAKER`:
         *  `aboveStopPrice` > Last Traded Price > `belowPrice`
-* OCO counts as **2** orders against the order rate limit.
+* OCOs add **2 orders** to the unfilled order count, `EXCHANGE_MAX_ORDERS` filter, and `MAX_NUM_ORDERS` filter.
 
 **Parameters:**
 
@@ -4974,7 +4974,7 @@ Places an OTO.
 * The second order is called the **pending order**. It can be any order type except for `MARKET` orders using parameter `quoteOrderQty`. The pending order is only placed on the order book when the working order gets **fully filled**.
 * If either the working order or the pending order is cancelled individually, the other order in the order list will also be canceled or expired.
 * When the order list is placed, if the working order gets **immediately fully filled**, the placement response will show the working order as `FILLED` but the pending order will still appear as `PENDING_NEW`. You need to query the status of the pending order again to see its updated status.
-* OTOs count as **2** orders against the order rate limit, `EXCHANGE_MAX_NUM_ORDERS` filter and `MAX_NUM_ORDERS` filter.
+* OTOs add **2 orders** to the unfilled order count, `EXCHANGE_MAX_NUM_ORDERS` filter and `MAX_NUM_ORDERS` filter.
 
 **Weight:** 1
 
@@ -5143,7 +5143,7 @@ Places an OTOCO.
   * The behavior of the working order is the same as the [OTO](#new-order-list---oto-trade).
 * OTOCO has 2 pending orders (pending above and pending below), forming an OCO pair. The pending orders are only placed on the order book when the working order gets **fully filled**.
     * The rules of the pending above and pending below follow the same rules as the [Order List OCO](#new-order-list---oco-trade).
-* OTOCOs count as **3** orders against the order rate limit, `EXCHANGE_MAX_NUM_ORDERS` filter, and `MAX_NUM_ORDERS` filter.
+* OTOCOs add **3 orders** to the unfilled order count, `EXCHANGE_MAX_NUM_ORDERS` filter, and `MAX_NUM_ORDERS` filter.
 
 **Weight:** 1
 
@@ -5969,7 +5969,7 @@ Memory => Database
 }
 ```
 
-### Account order rate limits (USER_DATA)
+### Account unfilled order count (USER_DATA)
 
 ```javascript
 {
@@ -5983,7 +5983,7 @@ Memory => Database
 }
 ```
 
-Query your current order rate limit.
+Query your current unfilled order count for all intervals.
 
 **Weight:**
 40

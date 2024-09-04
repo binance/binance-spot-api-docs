@@ -156,15 +156,6 @@ Resulting Logon `<A>` message:
 
 ## Limits
 
-### Order Rate Limits
-
-* To understand current limits and usage, please send a [LimitQuery`<XLQ>`](#limitquery) message.
-  A [LimitResponse`<XLR>`](#limitresponse) message will be sent in response, containing information about Order Rate
-  Limits and Message Limits.
-* When the order count exceeds the limit, your message will be rejected, and information will be transferred back to you
-  in a reject message specific to that endpoint.
-* The order rate limit is **counted against each account**.
-
 ### Message Limits
 
 * Each connection has a limit on **how many messages can be sent to the exchange**.
@@ -185,6 +176,14 @@ Resulting Logon `<A>` message:
   breach and the current limit.
 * The limit is 5 concurrent TCP connections per account for the order entry sessions.
 * The limit is 10 concurrent TCP connections per account for the Drop Copy sessions.
+
+### Unfilled Order Count
+
+* To understand how many orders you have placed within a certain time interval, please send a [LimitQuery`<XLQ>`](#limitquery) message.
+  A [LimitResponse`<XLR>`](#limitresponse) message will be sent in response, containing information about Unfilled Order Count and Message Limits.
+* **Please note that if your orders are consistently filled by trades, you can continuously place orders on the API**. For more information, please see [Spot Unfilled Order Count Rules](../faqs/order_count_decrement.md). 
+* If you exceed the unfilled order count your message will be rejected, and information will be transferred back to you in a reject message specific to that endpoint.
+* **The number of unfilled orders is tracked for each account.**
 
 ## Error Handling
 
@@ -628,7 +627,7 @@ Please refer to [Supported Order Types](#ordertype) for supported field combinat
 | Tag   | Name                                    | Type   | Required | Description                                                                                                                                                                                                                                                                                                                  |
 |-------|-----------------------------------------|--------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 25033 | OrderCancelRequestAndNewOrderSingleMode | INT    | Y        | What action should be taken if cancel fails. <br></br> Possible values: <br></br> `1` - STOP_ON_FAILURE <br></br> `2` - ALLOW_FAILURE                                                                                                                                                                                                       |
-| 25038 | OrderRateLimitExceededMode              | INT    | N        | What should be done to the cancellation request if the Order Rate Limits are exceeded. <br></br>Possible values: `1` - DO_NOTHING <br></br> `2` - CANCEL_ONLY                                                                                                                                                                          |
+| 25038 | OrderRateLimitExceededMode              | INT    | N        | What should be done to the cancellation request if you exceed the unfilled order rate limit. <br></br>Possible values: `1` - DO_NOTHING <br></br> `2` - CANCEL_ONLY                                                                                                                                                                          |
 | 37    | OrderID                                 | INT    | N        | `OrderID` of the order to cancel.                                                                                                                                                                                                                                                                                            |
 | 25034 | CancelClOrdID                           | STRING | N        | `ClOrdID` of the cancel.                                                                                                                                                                                                                                                                                                     |
 | 41    | OrigClOrdID                             | STRING | N        | `ClOrdID` of the order to cancel.                                                                                                                                                                                                                                                                                            |

@@ -1,7 +1,14 @@
-# CHANGELOG for Binance SPOT Testnet (2024-08-07)
+# CHANGELOG for Binance SPOT Testnet (2024-09-04)
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/). 
 This is not always synced with the live exchange. 
+
+## 2024-09-04 
+
+* Spot Testnet now supports Unfilled Order Count. Please refer to this [page](../faqs/order_count_decrement.md) on how you can decrement your unfilled order count when placing orders.
+* The documentation has been updated to reflect the wording.
+
+---
 
 ## 2024-08-07
 
