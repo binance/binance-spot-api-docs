@@ -20,7 +20,7 @@ Name | Description
 [Derivative UM Futures](https://developers.binance.com/docs/derivatives/usds-margined-futures/general-info) | Details on Derivative UM Futures (`/fapi`)
 [Derivative CM Futures](https://developers.binance.com/docs/derivatives/coin-margined-futures/general-info) | Details on Derivative CM Futures (`/dapi`)
 [Derivative Options](https://developers.binance.com/docs/derivatives/option/general-info) | Details on Derivative European Options (`/eapi`)
-[Derivative Portfolio Margin](https://developers.binance.com/docs/derivatives/portfolio-margin/general-info)| Details on Derivative Portfolio Margin (`/papi`)
+[Derivative Portfolio Margin](https://www.binance.com/tr/portfolio-margin/docs/derivatives/portfolio-margin/general-info)| Details on Derivative Portfolio Margin (`/papi`)
 [Wallet](https://developers.binance.com/docs/wallet) | Details on Wallet endpoints (`/sapi`)
 [Sub Account](https://developers.binance.com/docs/sub_account/general-info)  | Details on Sub-Account requests (`/sapi`) 
 [Simple Earn](https://developers.binance.com/docs/simple_earn/general-info) | Details on Simple Earn
@@ -30,7 +30,7 @@ Name | Description
 [Mining](https://developers.binance.com/docs/mining) |Details on Mining
 [Algo Trading](https://developers.binance.com/docs/algo) |Details on Algo Trading
 [Copy Trading](https://developers.binance.com/docs/copy_trading) |Details on Copy Trading
-[Porfolio Margin Pro](https://developers.binance.com/docs/derivatives/portfolio-margin-pro/general-info) |Details on Portfolio Margin Pro
+[Porfolio Margin Pro](https://www.binance.com/tr/portfolio-margin/docs/derivatives/portfolio-margin-pro/general-info) |Details on Portfolio Margin Pro
 [Fiat](https://developers.binance.com/docs/fiat) |Details on Fiat|
 [C2C](https://developers.binance.com/docs/c2c) |Details on C2C|
 [VIP Loan](https://developers.binance.com/docs/vip_loan) |Details on VIP Loan
