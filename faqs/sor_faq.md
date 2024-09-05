@@ -336,6 +336,9 @@ You can find the current SOR configuration in Exchange Information (`GET /api/v3
   ]
 ```
 
+The `sors` field is optional.
+It is omitted in responses if SOR is not available.
+
 ## How do I place an order using SOR?
 
 On the Rest API, the request is `POST /api/v3/sor/order`.

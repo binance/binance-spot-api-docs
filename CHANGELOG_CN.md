@@ -1,4 +1,260 @@
-# 更新日志 (2023-12-04)
+
+# 更新日志 (2024-08-26)
+
+## 2024-08-26 
+
+* [现货未成交订单计数规则](./faqs/order_count_decrement_CN.md)  已更新，解释了如何在下订单时减少未成交的订单数量。
+
+---
+## 2024-08-16
+
+**注意：** 以下的变更正在逐步推出，可能需要大约一周的时间才能完成。
+
+常规更改：
+* 在市场流动性低的情况下，当提交包含 `quoteOrderQty` 的市价单（又名反向市价单）被拒绝时，添加了新的错误消息。
+
+
+---
+
+## 2024-08-01
+
+* [FIX API 和 Drop Copy 会话](fix-api_CN.md) 将于 **8 月 8 日 05:00 UTC** 上线。
+
+---
+
+## 2024-07-26
+
+* [FIX API 和 Drop Copy 会话](fix-api_CN.md) 已添加到文档中。
+* 实时交换的发布日期尚未确定。
+
+---
+
+## 2024-07-22
+
+常规更改：
+
+* 修复了 klines 的时间戳不正确的 bug。
+  * REST API： 带有 `timeZone` 参数的 `GET /api/v3/klines` 和 `GET /api/v3/uiKlines` 
+  * WebSocket API： 带有 `timeZone` 参数的 `klines` 和 `uiKlines`
+  * WebSocket Streams: `<symbol>@kline_<interval>@+08：00`
+
+---
+
+## 2024-06-11
+
+* 在 **6月11日 UTC 时间 05:00**，我们将开始推出新功能 `One-Triggers-the-Other` (OTO) 订单和 `One-Triggers-a-One-Cancels-The-Other` (OTOCO) 订单。（请注意，我们可能需要花几个小时来部署到所有服务器。）
+    * 有关详细信息，请参阅以下页面：
+        * REST API：
+            * `POST /api/v3/orderList/oto`
+            * `POST /api/v3/orderList/otoco`
+        * WebSocket API：
+            * `orderList.place.oto`
+            * `orderList.place.otoco`
+* 在 **6月18日 UTC 时间 05:00**，我们将会把买方的订单 ID（`b`） 和卖方的订单 ID（`a`） 从交易流中删除（i.e. `<symbol>@trade`）。 （请注意，我们可能需要花几个小时来部署到所有服务器。）
+    * [WebSocket 账户接口](web-socket-streams_CN.md) 与其相关的文档已经被更改了。
+    * 要监控您的订单是否是交易的一部分，请订阅 [WebSocket 账户接口](user-data-stream_CN.md)。          
+
+---
+
+## 2024-06-06
+
+此功能将在**6月6日 UTC时间11:59**前上线。
+
+REST API
+
+* `POST /api/v3/order/cancelReplace` 新加可选参数 `orderRateLimitExceededMode`。
+
+WebSocket API
+
+* `order.cancelReplace` 新加可选参数 `orderRateLimitExceededMode`。
+
+---
+
+## 2024-05-30
+
+WebSocket Streams
+
+* Kline 新增加了对 UTC+8 时区的支持。（例如，`btcusdt@kline_1d@+08:00`）
+
+---
+
+## 2024-04-10
+
+以下更新的生效时间已被推迟到 **4月25日 05：00 UTC** 
+
+* "交易规范信息"响应中的交易对权限信息已从字段 `permissions` 移至字段 `permissionSets`。
+* 字段 `permissions` 将为空，并将在未来版本中删除。
+* 以前，`"permissions":["SPOT","MARGIN"]` 代表如果您的账户具有 `SPOT` 或 `MARGIN` 权限，您就可以在该交易对上下订单。现在，等效项是 `"permissionSets":[["SPOT","MARGIN"]]`（请注意额外的方括号）。`permissionSets`数组中的每个权限数组称为 "permission set"。
+* 交易对的权限现在可以有更多权限类型。例如，`"permissionSets":[["SPOT","MARGIN"],["TRD_GRP_004","TRD_GRP_005"]]` 指示除了支持以上提过的权限集，也接受 `TRD_GRP_004` 或 `TRD_GRP_005`。交易对的 `permissionSets` 中可以有任意排列组合的权限集。
+
+REST API
+
+* `otoAllowed` 现在将出现在 `GET /api/v3/exchangeInfo` 上，指示该交易品种是否支持 One-Triggers-the-Other (OTO) 订单。
+
+WebSocket API
+
+* `otoAllowed` 现在将出现在 `exchangeInfo` 上，指示该交易品种是否支持 One-Triggers-the-Other (OTO) 订单。
+
+SBE
+
+* 已发布新模式 2:0 [Spot_2_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_2_0.xml)。 当前模式 1:0 [spot_1_0.xml](https://github.com/binance/binance-spot-api-docs/blob/becd4d44a09d94821d2dc761ba9197aae8b495c3/sbe/schemas/spot_1_0.xml) 将被弃用，并从根据我们模式弃用政策，会将在 6 个月内下线。
+* 在 REST API 或 WebSocket API 上使用模式 1:0 时，消息 `ExchangeInfoResponse` 中的组"权限"将始终为空。在升级到模式 2:0后， 您才可以在 `permissionSets` 组中查找权限信息。
+* 最新模式仍将支持已弃用的 OCO 请求。
+* 请注意，在模式 2:0 实际发布之前尝试使用它会导致错误。
+
+---
+
+## 2024-04-02
+
+**注意：** 以下的变更将逐步推出，并预计需要大约一周的时间完成。
+
+* `GET /api/v3/account` 新加可选参数 `omitZeroBalances`，如果启用，则会隐藏所有零余额。
+* `account.status` 新加可选参数 `omitZeroBalances`，如果启用，则会隐藏所有零余额。
+* **以下请求的权重已从 10 增加到 25 （该规定将于2024年4月4日生效）**：
+    * `GET /api/v3/trades`
+    * `GET /api/v3/historicalTrades`
+    * `trades.recent`
+    * `trades.historical`
+
+User Data Stream
+
+* 如果 `listenKey` 过期，将在流中发出新事件 `listenKeyExpired`。
+
+REST API
+
+* REST API 上现已弃用 `POST /api/v3/order/oco` 接口。从今开始，请使用新的 `POST /api/v3/orderList/oco` 接口（请注意，新接口使用不同的参数）。
+
+WebSocket API
+
+* WebSocket API 上现已弃用 `orderList.place` 请求。从今开始，请使用新的 `orderList.place.oco` 请求（请注意，新接口使用不同的参数）。
+
+
+**以下内容将于发布日期 _大约_ 一周后生效：**
+
+* "交易规范信息"响应中的交易对权限信息已从字段 `permissions` 移至字段 `permissionSets`。
+* 字段 `permissions` 将为空，并将在未来版本中删除。
+* 以前，`"permissions":["SPOT","MARGIN"]` 代表如果您的账户具有 `SPOT` 或 `MARGIN` 权限，您就可以在该交易对上下订单。现在，等效项是 `"permissionSets":[["SPOT","MARGIN"]]`（请注意额外的方括号）。`permissionSets`数组中的每个权限数组称为 "permission set"。
+* 交易对的权限现在可以有更多权限类型。例如，`"permissionSets":[["SPOT","MARGIN"],["TRD_GRP_004","TRD_GRP_005"]]` 指示除了支持以上提过的权限集，也接受 `TRD_GRP_004` 或 `TRD_GRP_005`。交易对的 `permissionSets` 中可以有任意排列组合的权限集。
+
+REST API
+
+* `otoAllowed` 现在将出现在 `GET /api/v3/exchangeInfo` 上，指示该交易品种是否支持 One-Triggers-the-Other (OTO) 订单。
+
+WebSocket API
+
+* `otoAllowed` 现在将出现在 `exchangeInfo` 上，指示该交易品种是否支持 One-Triggers-the-Other (OTO) 订单。
+
+
+SBE
+
+* 已发布新模式 2:0 [Spot_2_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_2_0.xml)。 当前模式 1:0 [spot_1_0.xml](https://github.com/binance/binance-spot-api-docs/blob/becd4d44a09d94821d2dc761ba9197aae8b495c3/sbe/schemas/spot_1_0.xml) 将被弃用，并从根据我们模式弃用政策，会将在 6 个月内下线。
+* 在 REST API 或 WebSocket API 上使用模式 1:0 时，消息 `ExchangeInfoResponse` 中的组"权限"将始终为空。在升级到模式 2:0后， 您才可以在 `permissionSets` 组中查找权限信息。
+* 最新模式仍将支持已弃用的 OCO 请求。
+* 请注意，在模式 2:0 实际发布之前尝试使用它会导致错误。
+
+## 2024-02-28
+
+**将于 2024 年 3 月 5 日生效。**
+
+简单二进制编码 (SBE) 将部署到现货的 Rest API 和  WebSocket API 生产系统上。
+
+更多关于SBE的信息, 请参考[常见问题解答 (FAQ)](./faqs/sbe_faq_CN.md)
+
+---
+
+## 2024-02-08
+
+现货的 WebSocket API 现在在[测试网](https://testnet.binance.vision)上支持简单二进制编码(SBE)。
+
+SBE 模式已经更新了 WebSocket API 元数据，但并没有增加 `schemaId` 或者 `version`。
+
+* 仅在 REST API 上使用 SBE 的用户可以继续使用 SBE 模式 [`128b94b2591944a536ae427626b795000100cf1d`](https://github.com/binance/binance-spot-api-docs/blob/128b94b2591944a536ae427626b795000100cf1d/sbe/schemas/spot_1_0.xml)，或者更新到新提交的 SBE 模式。
+
+* 希望在 WebSocket API 上使用 SBE 的用户，需要更新到[最新的 SBE 模式](https://github.com/binance/binance-spot-api-docs/blob/becd4d44a09d94821d2dc761ba9197aae8b495c3/sbe/schemas/spot_1_0.xml)。
+
+SBE 的 [FAQ](./faqs/sbe_faq_CN.md) 已经更新。
+
+---
+
+## 2023-12-08
+
+简单二进制编码 (SBE) 已经在[现货测试网](https://testnet.binance.vision)上线。
+生产系统会在随后支持。
+更多关于SBE的信息, 请参考[常见问题解答 (FAQ)](./faqs/sbe_faq_CN.md)
+
+---
+
+## 2023-12-04
+
+**注意**： 以下的变更将逐步推出，并预计需要大约一周的时间完成。
+
+* 错误消息 `Precision is over the maximum defined for this asset.` 被改为 `Parameter '%s' has too much precision.`
+    * 当参数的精度超出允许范围时，将返回此错误消息。例如，如果基础资产（`base asset`）精度为6，但是设置`quantity=0.1234567`，则会出现此错误消息。
+    * 这会影响所有具有以下参数的请求:
+        * `quantity`
+        * `quoteOrderQty`
+        * `icebergQty`
+        * `limitIcebergQty`
+        * `stopIcebergQty`
+        * `price`
+        * `stopPrice`
+        * `stopLimitPrice`
+* 现在，请求查询OCO开单时会正确返回**升序**的结果。这会影响以下请求：
+    * REST API: `GET /api/v3/openOrderList`
+    * WebSocket API: `openOrderList.status`
+* 现在，当指定`startTime`或`fromId`时，请求查询所有 OCO 订单会正确返回**升序**的结果。这会影响以下请求：
+    * REST API: `GET /api/v3/allOrderList`
+    * WebSocket API: `allOrderLists`
+* 修复了一个错误。订单查询请求不再会对新下的订单错误返回[`-2026 ORDER_ARCHIVED`](./errors.md#-2026-order_archived)错误。
+    * REST API: `GET /api/v3/order`
+    * WebSocket API: `order.status`
+
+
+REST API
+
+* 新接口 `GET /api/v3/account/commission`
+* 新接口 `GET /api/v3/ticker/tradingDay`
+* `GET /api/v3/avgPrice` 新加字段 `closeTime`, 用于显示最后交易时间。
+* `GET /api/v3/klines` 和 `/api/v3/uiKlines` 新加可选参数 `timeZone`。
+* `POST /api/v3/order/test` 和 `POST /api/v3/sor/order/test` 新加可选参数 `computeCommissionRates`。
+* 关于发送无效接口的变动：
+    * 以前，如果查询一个不存在的端点（例如 `curl -X GET "https://api.binance.com/api/v3/exchangie"`），你会收到 HTTP 404 状态码，以及响应 "`<html><body><h2>404 Not found</h2></body></html>`"。
+    * 从现在开始，只有当接受请求头中包含`text/html`时，HTML响应才会出现在这种情况下。HTTP状态码将保持不变。
+
+WebSocket API
+
+* 新请求 `account.commission`
+* 新增请求以允许会话身份验证: **(请注意，这些请求只能使用Ed25519密钥。)**
+    * `session.logon`
+    * `session.logout`
+    * `session.status`
+* 新请求 `ticker.tradingDay`
+* 方法 `avgPrice` 新加字段 `closeTime`, 用于显示最后交易时间。
+* 方法 `klines` 和 `uiKlines` 新加可选参数 `timeZone`。
+* 方法 `order.test` 和 `sor.order.test` 新加可选参数 `computeCommissionRates`.
+* 修复了一个错误。之前在发送 ping 之前未经请求发送的 pongs 会导致断开连接。
+
+WebSocket Streams
+
+* 新数据流 `<symbol>@avgPrice`
+* 请求中的`id`现在支持和 WebSocket API 里`id`一样的值:
+    * 64位有符号整数 (之前是无符号整数)
+    * 字母数字字符串；最大长度36
+    * `null`
+* 修复了一个错误，之前在发送 ping 之前未经请求发送的 pongs 会导致断开连接。
+
+User Data Streams
+
+* 当事件类型为 `executionReport`，而执行类型（x）为`TRADE_PREVENTION`时，字段`l`、`L`和`Y`现在将始终为0。新增字段`pl`、`pL`和`pY`将描述被阻止执行的数量、被阻止执行的价格和被阻止执行的名义金额。这些新字段显示了如果接收方订单没有启用自成交防止功能时，`l`、`L`和`Y`会是什么值。
+
+
+**以下将在发布日期后_大约_一周后生效:**
+
+* 交易对权限将仅影响下单，而不影响取消订单。
+    * `permissions`仍然适用于撤消挂单再下单（Cancel-Replace orders）（比如，如果您的账户有使用此请求下单的权限，则将不允许取消操作）。
+
+
+---
 
 ## 2023-10-19
 
@@ -45,92 +301,23 @@
     </tr>
 </table>
 
-## 2023-12-04
-
-**注意**： 以下的变更将逐步推出，并预计需要大约一周的时间完成。
-
-* 错误消息 `Precision is over the maximum defined for this asset.` 被改为 `Parameter '%s' has too much precision.`
-    * 当参数的精度超出允许范围时，将返回此错误消息。例如，如果“基础资产”（`base asset`）精度为6，但是设置“quantity=0.1234567”，则会出现此错误消息。
-    * 这会影响所有具有以下参数的请求:
-        * `quantity`
-        * `quoteOrderQty`
-        * `icebergQty`
-        * `limitIcebergQty`
-        * `stopIcebergQty`
-        * `price`
-        * `stopPrice`
-        * `stopLimitPrice`
-* 现在，请求查询OCO开单时会正确返回**升序**的结果。这会影响以下请求：
-    * REST API: `GET /api/v3/openOrderList`
-    * WebSocket API: `openOrderList.status`
-* 现在，当指定`startTime`或`fromId`时，请求查询所有 OCO 订单会正确返回**升序**的结果。这会影响以下请求：
-    * REST API: `GET /api/v3/allOrderList`
-    * WebSocket API: `allOrderLists`
-* 修复了一个错误。订单查询请求不再会对新下的订单错误返回[`-2026 ORDER_ARCHIVED`](./errors.md#-2026-order_archived)错误。
-    * REST API: `GET /api/v3/order`
-    * WebSocket API: `order.status`
-
-
-REST API
-
-* 新接口 `GET /api/v3/account/commission`
-* 新接口 `GET /api/v3/ticker/tradingDay`
-* `GET /api/v3/avgPrice` 新加字段 `closeTime`, 用于显示最后交易时间。
-* `GET /api/v3/klines` 和 `/api/v3/uiKlines` 新加可选参数 `timeZone`.
-* `POST /api/v3/order/test` 和 `POST /api/v3/sor/order/test` 新加可选参数 `computeCommissionRates`.
-* 关于发送无效接口的变动：
-    * 以前，如果查询一个不存在的端点（例如 `curl -X GET "https://api.binance.com/api/v3/exchangie"`），你会收到 HTTP 404 状态码，以及响应 "`<html><body><h2>404 Not found</h2></body></html>`"。
-    * 从现在开始，只有当接受请求头中包含`text/html`时，HTML响应才会出现在这种情况下。HTTP状态码将保持不变。
-
-WebSocket API
-
-* 新请求 `account.commission`
-* 新增请求以允许会话身份验证: **(请注意，这些请求只能使用Ed25519密钥。)**
-    * `session.logon`
-    * `session.logout`
-    * `session.status`
-* 新请求 `ticker.tradingDay`
-* 方法 `avgPrice` 新加字段 `closeTime`, 用于显示最后交易时间。
-* 方法 `klines` 和 `uiKlines` 新加可选参数 `timeZone`。
-* 方法 `order.test` 和 `sor.order.test` 新加可选参数 `computeCommissionRates`.
-* 修复了一个错误。之前在发送 ping 之前未经请求发送的 pongs 会导致断开连接。
-
-WebSocket Streams
-
-* 新数据流 `<symbol>@avgPrice`
-* 请求中的`id`现在支持和 WebSocket API 里`id`一样的值:
-    * 64位有符号整数 (之前是无符号整数)
-    * 字母数字字符串；最大长度36
-    * `null`
-* 修复了一个错误，之前在发送 ping 之前未经请求发送的 pongs 会导致断开连接。
-
-User Data Streams
-
-* 当事件类型为executionReport，而执行类型（x）为`TRADE_PREVENTION`时，字段`l`、`L`和`Y`现在将始终为0。新增字段`pl`、`pL`和`pY`将描述被阻止执行的数量、被阻止执行的价格和被阻止执行的名义金额。这些新字段显示了如果接收方订单没有启用自成交防止功能时，`l`、`L`和`Y`会是什么值。
-
-
-**以下将在发布日期后_大约_一周后生效:**
-
-* 交易对权限将仅影响下单，而不影响取消订单。
-    * `permissions`仍然适用于撤消挂单再下单（Cancel-Replace orders）（比如，如果您的账户有使用此请求下单的权限，则将不允许取消操作）。
-
 
 ---
 
 ## 2023-10-03
 
 * **下单量的退回(`Order decrement`)功能在 06:15 UTC上线.**
-* 此功能的更详细信息, 请参考 [FAQ](./faqs/order_count_decrement_cn.md)
+* 此功能的更详细信息, 请参考 [FAQ](./faqs/order_count_decrement_CN.md)
 
 ## 2023-08-25
 
-* Websocket API 的 `exchangeInfo` 中的 `RAW REQUESTS` 被移除，新增了用于表示WebSocket连接数限制的 `CONNECTIONS`.
+* Websocket API 的 `exchangeInfo` 中的 `RAW REQUESTS` 被移除，新增了用于表示WebSocket连接数限制的 `CONNECTIONS`。
 
 **下面的变更会在UTC时间 2023-08-25 00:00 上线**
-* WebSocket API 的 `CONNECTIONS` 被调整为每5分钟300.
-* REST API 和 WebSocket API 的 `REQUEST_WEIGHT` 调整为每分钟6,000.
-* REST API 中的 `RAW_REQUESTS` 调整为每5分钟61,000.
-* 之前连接到 WebSocket API 的权重为1. **现权重调整到 2**.
+* WebSocket API 的 `CONNECTIONS` 被调整为每5分钟300。
+* REST API 和 WebSocket API 的 `REQUEST_WEIGHT` 调整为每分钟6,000。
+* REST API 中的 `RAW_REQUESTS` 调整为每5分钟61,000。
+* 之前连接到 WebSocket API 的权重为1。**现权重调整到 2**。
 * 下表的 REST API 和 WebSocket API 请求的权重被调整:
 
 |请求接口|之前请求权重| 新请求权重|
@@ -174,7 +361,7 @@ User Data Streams
 
 ## 2023-08-08
 
-智能订单路由(Smart Order Routing：SOR）添加到 API 中。您可以在[SOR 常见问题](./faqs/sor_faq_cn.md) 文档中找到更多详细信息。具体上线时间请关注相关公告。
+智能订单路由(Smart Order Routing：SOR）添加到 API 中。您可以在[SOR 常见问题](./faqs/sor_faq_CN.md) 文档中找到更多详细信息。具体上线时间请关注相关公告。
 
 REST API
 
@@ -215,7 +402,7 @@ USER DATA STREAM
 * 现在支持使用 Ed25519 类型的 API key。(UI 会在本周发布更新支持)
     * Ed25519 API keys 是 RSA API keys 的替代品，使用非对称加密技术来验证您的 API 请求。
     * **我们建议切换到 Ed25519** 以提高性能和安全性。 <br>
-        详情请参考[API Key 类型](./faqs/api_key_types_cn.md)。
+        详情请参考[API Key 类型](./faqs/api_key_types_CN.md)。
 * 文档已更新，包括了有关如何使用 Ed25519 key 对有效载荷进行签名的说明。
 
 ---
@@ -241,25 +428,25 @@ USER DATA STREAM
 Rest API
 
 * `GET /api/v3/account` 变动：
-    * 返回数据中添加新字段 `preventSor`.
-    * 返回数据中添加用户ID的新字段 `uid`.
+    * 返回数据中添加新字段 `preventSor`。
+    * 返回数据中添加用户ID的新字段 `uid`。
 * `GET /api/v3/historicalTrades` 变动：
-    * 鉴权类型从 `MARKET_DATA` 变更为 `NONE`.
-    * 不需要设置 `X-MBX-APIKEY` 到请求的header中.
+    * 鉴权类型从 `MARKET_DATA` 变更为 `NONE`。
+    * 不需要设置 `X-MBX-APIKEY` 到请求的header中。
 
 Websocket API
 
 * `account.status` 变动：
-    * 返回数据中添加新字段 `preventSor`.
-    * 返回数据中添加用户ID的新字段 `uid`.
+    * 返回数据中添加新字段 `preventSor`。
+    * 返回数据中添加用户ID的新字段 `uid`。
 * `trades.historical` 变动：
-    * 鉴权类型从 `MARKET_DATA` 变更为 `NONE`.
-    * 请求中不需要设置 `apiKey`.
+    * 鉴权类型从 `MARKET_DATA` 变更为 `NONE`。
+    * 请求中不需要设置 `apiKey`。
 
-* 修改了几个bugs: 当下单时设置 `type=MARKET` 和 `quoteOrderQty`, 也被称为“反向市价单”:
-    * 当处于极端市场情况下, 订单不会返回部分成交，或者成交的数量为0甚至是负数.
-    * 当这种反向市价单的成交数量超过交易对的 `maxQty`, 订单会因为违反`MARKET_LOT_SIZE` 过滤器而被拒绝.
-* 修复一个OCO订单的bug: 当使用 `trailingDelta` 时候, 当任何leg被触发时, `trailingTime` 值可能不正确.
+* 修改了几个bugs: 当下单时设置 `type=MARKET` 和 `quoteOrderQty`, 也被称为"反向市价单":
+    * 当处于极端市场情况下, 订单不会返回部分成交，或者成交的数量为0甚至是负数。
+    * 当这种反向市价单的成交数量超过交易对的 `maxQty`, 订单会因为违反`MARKET_LOT_SIZE` 过滤器而被拒绝。
+* 修复一个OCO订单的bug: 当使用 `trailingDelta` 时候, 当任何leg被触发时, `trailingTime` 值可能不正确。
 * 这些接口的返回数据中添加新字段 `transactTime` :
     * `DELETE /api/v3/order`
     * `POST /api/v3/order/cancelReplace`
@@ -276,7 +463,7 @@ Websocket API
 ## 2023-06-06
 
 * 为了提供系统的冗余能力，新加一个API接入网址: **https://api-gcp.binance.com/**
-    * 此网址利用了 GCP (Google Cloud Platform) 的CDN，可能在性能上比`api1`-`api4`要慢.
+    * 此网址利用了 GCP (Google Cloud Platform) 的CDN，可能在性能上比`api1`-`api4`要慢。
 
 ---
 
@@ -426,7 +613,9 @@ WEBSOCKET API
 
 ---
 
-## 实际发布日期待定
+## 2023-01-19
+
+实际发布日期待定
 
 **新功能**：Self-Trade Prevention（STP）会添加到系统中。此功能将阻止订单与来自同一账户或者同一 `tradeGroupId` 账户的订单交易。
 
@@ -442,7 +631,7 @@ WEBSOCKET API
 ]
 ```
 
-在[STP 常见问题](./faqs/stp_faq_cn.md) 文档中可以找到更多其它关于 STP 功能的详细信息。
+在[STP 常见问题](./faqs/stp_faq_CN.md) 文档中可以找到更多其它关于 STP 功能的详细信息。
 
 REST API
 
@@ -994,7 +1183,7 @@ WEB SOCKET 连接限制
 ---
 
 ## 2018-11-13
-### Rest API
+REST API
   * 账户交易权限被禁时允许进行撤单操作。
   * 增加了新的过滤器: `PERCENT_PRICE`, `MARKET_LOT_SIZE`, `MAX_NUM_ICEBERG_ORDERS`。
   * 增加了 `RAW_REQUESTS` 频率限制. 该限制仅统计请求次数，不统计请求权重。
@@ -1012,11 +1201,11 @@ WEB SOCKET 连接限制
      例如
      https://api.binance.com/api/v3/avgPrice?symbol=BNBUSDT
 
-### User data stream
+USER DATA STREAM
   * 成交报告中增加了 `末次成交金额` (`Y`)，等于 `末次成交量` * `末次成交价格` (`L` * `l`).
 
 ## 2018-07-18
-### Rest API
+REST API
   *  新过滤器: `ICEBERG_PARTS`
   *  `POST api/v3/order` 中 `newOrderRespType` 参数的缺省值更改; `MARKET`  `LIMIT` 默认为 `FULL`, 其他默认为 `ACK`.
   *  POST api/v3/order `RESULT` 与 `FULL` 响应中增加 `cummulativeQuoteQty`
@@ -1030,7 +1219,7 @@ WEB SOCKET 连接限制
   *  订单查询结果中增加 `cummulativeQuoteQty`字段. 负值表示尚无任何成交，该字段不可用.
   *  `REQUESTS` 限制更名为 `REQUEST_WEIGHT`. 避免名字造成的误解。
 
-### User data stream
+USER DATA STREAM
   *  订单报告与成交报告中增加`cummulativeQuoteQty` 字段 (`Z`). 表示已经成交的金额， 即已经花费的金额(买入订单)或已经收到的金额(卖出订单)，均未计算手续费. 此功能增加之前成交的订单在历史订单接口中查询到的该字段可能小于零.
   *  `cummulativeQuoteQty`/`cummulativeQty` 可以用来计算该订单已经成交部分的平均价格。
   *  成交报告中增加了 `O`字段 (订单创建时间)

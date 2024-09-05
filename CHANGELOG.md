@@ -1,4 +1,201 @@
-# CHANGELOG for Binance's API (2023-12-04)
+# CHANGELOG for Binance's API (2024-08-26)
+
+## 2024-08-26
+
+* [Spot Unfilled Order Count Rules](./faqs/order_count_decrement.md) have been updated to explain how to decrease your unfilled order count when placing orders.
+
+---
+
+## 2024-08-16
+
+**Notice:** The changes below are being rolled out gradually, and may take approximately a week to complete.
+
+General Changes:
+* New error messages have been added when quote quantity market orders (aka reverse market orders) are rejected in low-liquidity situations.
+
+---
+
+## 2024-08-01
+
+* [FIX API and Drop Copy Sessions](fix-api.md) will be available on **August 8, 05:00 UTC**.
+
+---
+
+## 2024-07-26
+
+* [FIX API and Drop Copy Sessions](fix-api.md) has been added to the documentation.
+* The release date to the live exchange has not been determined.
+
+
+---
+
+## 2024-07-22 
+
+General changes:
+
+* Fixed a bug where klines had incorrect timestamps.
+  * REST API: `GET /api/v3/klines` and `GET /api/v3/uiKlines` with `timeZone` parameter
+  * WebSocket API: `klines` and `uiKlines` with `timeZone` parameter
+  * WebSocket Streams: `<symbol>@kline_<interval>@+08:00` streams
+
+---
+
+## 2024-06-11 
+
+* On **June 11, 05:00 UTC**, One-Triggers-the-Other (OTO) orders and One-Triggers-a-One-Cancels-The-Other (OTOCO) orders will be enabled. (Note this may take a few hours to be rolled out to all servers.)
+    * New requests have been added:
+        * REST API:
+            * `POST /api/v3/orderList/oto`
+            * `POST /api/v3/orderList/otoco`
+        * WebSocket API:
+            * `orderList.place.oto`
+            * `orderList.place.otoco`
+* On **June 18, 05:00 UTC**, Buyer order ID `b` and Seller order ID `a` will be removed from the Trade Streams (i.e. `<symbol>@trade`).  (Note that this may take a few hours to be rolled out to all servers.)
+    * [WebSocket Streams](web-socket-streams.md) has been updated regarding this change.
+    * To monitor if your order was part of a trade, please listen to the [User Data Streams](user-data-stream.md)
+
+---
+
+## 2024-06-06
+
+This will be available by **June 6, 11:59 UTC**.
+
+REST API
+
+* `orderRateLimitExceededMode` has been added to `POST /api/v3/order/cancelReplace`.
+
+WebSocket API
+
+* `orderRateLimitExceededMode` has been added to `order.cancelReplace`.
+
+---
+
+## 2024-05-30
+
+WebSocket Streams:
+
+* Kline/Candlestick streams can now support a UTC+8 timezone offset. (e.g. `btcusdt@kline_1d@+08:00`)
+
+---
+
+## 2024-04-10
+
+The following changes have been postponed to take effect on **April 25, 05:00 UTC**
+
+General changes:
+
+* Symbol permission information in Exchange Information responses has moved from field `permissions` to field `permissionSets`.
+* Field `permissions` will be empty and will be removed in a future release.
+* Previously, `"permissions":["SPOT","MARGIN"]` meant that you could place an order on the symbol if your account had `SPOT` or `MARGIN` permissions. The equivalent is `"permissionSets":[["SPOT","MARGIN"]]`. (Note the extra set of square brackets.) Each array of permissions inside the `permissionSets` array is called a "permission set".
+* Symbol permissions can now be more complex. `"permissionSets":[["SPOT","MARGIN"],["TRD_GRP_004","TRD_GRP_005"]]` means that you may place an order on the symbol if your account has SPOT or MARGIN permissions **and** `TRD_GRP_004` or `TRD_GRP_005` permissions. There may be an arbitrary number of permission sets in a symbol's `permissionSets`.
+
+REST API
+
+* `otoAllowed` will now appear on `GET /api/v3/exchangeInfo`, that indicates if One-Triggers-the-Other (OTO) orders are supported on that symbol.
+
+WebSocket API
+
+* `otoAllowed` will now appear on `exchangeInfo`, that indicates if One-Triggers-the-Other (OTO) orders are supported on that symbol.
+
+SBE
+
+* A new schema 2:0 [spot_2_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_2_0.xml) has been released. The current schema 1:0 [spot_1_0.xml](https://github.com/binance/binance-spot-api-docs/blob/becd4d44a09d94821d2dc761ba9197aae8b495c3/sbe/schemas/spot_1_0.xml) will thus be deprecated, and retired from the API in 6 months as per our schema deprecation policy.
+* When using schema 1:0 on REST API or WebSocket API, group "permissions" in message "ExchangeInfoResponse" will always be empty. Upgrade to schema 2:0 to find permission information in group "permissionSets". See General changes above for more details.
+* Deprecated OCO requests will still be supported by the latest schema.
+* Note that trying to use schema 2:0 before it is actually released will result in an error.
+
+
+---
+
+## 2024-04-02
+
+**Notice:** The changes below are being rolled out gradually, and will take approximately a week to complete.
+
+General changes:
+
+* `GET /api/v3/account` has a new optional parameter `omitZeroBalances`, which if enabled hides all zero balances.
+* `account.status` has a new optional parameter `omitZeroBalances` which if enabled hides all zero balances.
+* **The weight of the following requests has been increased from 10 to 25 (This will take effect on April 4, 2024)**:
+    * `GET /api/v3/trades`
+    * `GET /api/v3/historicalTrades`
+    * `trades.recent`
+    * `trades.historical`
+
+User Data Stream:
+
+* New event `listenKeyExpired` that will be emitted in the streams if the `listenKey` expired.
+
+REST API
+
+* The `POST /api/v3/order/oco` endpoint is now deprecated on the REST API. You should use the new `POST /api/v3/orderList/oco` endpoint instead. Note that this new endpoint uses different parameters.
+
+WebSocket API
+
+* The `orderList.place` request is now deprecated on the WebSocket API. You should now use the new `orderList.place.oco` request instead. Note that this new request uses different parameters.
+
+
+**The following will take effect _approximately_ a week after the release date:**
+
+General changes:
+
+* Symbol permission information in Exchange Information responses has moved from field `permissions` to field `permissionSets`.
+* Field `permissions` will be empty and will be removed in a future release.
+* Previously, `"permissions":["SPOT","MARGIN"]` meant that you could place an order on the symbol if your account had `SPOT` or `MARGIN` permissions. The equivalent is `"permissionSets":[["SPOT","MARGIN"]]`. (Note the extra set of square brackets.) Each array of permissions inside the `permissionSets` array is called a "permission set".
+* Symbol permissions can now be more complex. `"permissionSets":[["SPOT","MARGIN"],["TRD_GRP_004","TRD_GRP_005"]]` means that you may place an order on the symbol if your account has SPOT or MARGIN permissions **and** `TRD_GRP_004` or `TRD_GRP_005` permissions. There may be an arbitrary number of permission sets in a symbol's `permissionSets`.
+
+REST API
+
+* `otoAllowed` will now appear on `GET /api/v3/exchangeInfo`, that indicates if One-Triggers-the-Other (OTO) orders are supported on that symbol.
+
+WebSocket API
+
+* `otoAllowed` will now appear on `exchangeInfo`, that indicates if One-Triggers-the-Other (OTO) orders are supported on that symbol.
+
+
+SBE
+
+* A new schema 2:0 [spot_2_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_2_0.xml) has been released. The current schema 1:0 [spot_1_0.xml](https://github.com/binance/binance-spot-api-docs/blob/becd4d44a09d94821d2dc761ba9197aae8b495c3/sbe/schemas/spot_1_0.xml) will thus be deprecated, and retired from the API in 6 months as per our schema deprecation policy.
+* When using schema 1:0 on REST API or WebSocket API, group "permissions" in message "ExchangeInfoResponse" will always be empty. Upgrade to schema 2:0 to find permission information in group "permissionSets". See General changes above for more details.
+* Deprecated OCO requests will still be supported by the latest schema.
+* Note that trying to use schema 2:0 before it is actually released will result in an error.
+
+---
+
+
+## 2024-02-28
+
+**This will take effect on March 5, 2024.** 
+
+Simple Binary Encoding (SBE) will be added to the live exchange, both for the Rest API and WebSocket API.
+
+For more information on SBE, please refer to the [FAQ](./faqs/sbe_faq.md)
+
+
+---
+
+## 2024-02-08
+
+The SPOT WebSocket API can now support SBE on [SPOT Testnet](https://testnet.binance.vision).
+
+The SBE schema has been updated with WebSocket API metadata without incrementing either `schemaId` or `version`.
+
+Users using SBE only on the REST API may continue to use the SBE schema with git commit hash [`128b94b2591944a536ae427626b795000100cf1d`](https://github.com/binance/binance-spot-api-docs/blob/128b94b2591944a536ae427626b795000100cf1d/sbe/schemas/spot_1_0.xml) or update to the newly-published SBE schema.
+
+Users who want to use SBE on the WebSocket API must use the [newly-published SBE schema](https://github.com/binance/binance-spot-api-docs/blob/becd4d44a09d94821d2dc761ba9197aae8b495c3/sbe/schemas/spot_1_0.xml).
+
+The [FAQ](./faqs/sbe_faq.md) for SBE has been updated.
+
+---
+
+## 2023-12-08 
+
+Simple Binary Encoding (SBE) has been added to [SPOT Testnet](https://testnet.binance.vision). 
+
+This will be added to the live exchange at a later date.
+
+For more information on what SBE is, please refer to the [FAQ](./faqs/sbe_faq.md)
+
+---
 
 ## 2023-12-04
 
@@ -71,7 +268,8 @@ User Data Streams
 * Symbol Permissions will only affect order placement, not cancellation.
     * `permissions` still apply to Cancel-Replace orders (i.e. The cancellation won't be allowed if your account does have the permission to place an order using this request.)
 
-----
+
+---
 
 ## 2023-10-19
 
@@ -445,7 +643,9 @@ New API cluster has been added. Note that all endpoints are functionally equal, 
 
 ---
 
-## RELEASE DATE TBD
+## 2023-01-19
+
+**ACTUAL RELEASE DATE TBD**
 
 **New Feature**: Self-Trade Prevention (aka STP) will be added to the system at a later date. This will prevent orders from matching with orders from the same account, or accounts under the same `tradeGroupId`.
 
@@ -991,7 +1191,7 @@ USER DATA STREAM
 
 ## 2020-04-25
 
-### REST API
+REST API
 
 * New field `permissions`
     * Defines the trading permissions that are allowed on accounts and symbols.
@@ -1010,7 +1210,8 @@ USER DATA STREAM
     * This endpoint will cancel all open orders including OCO orders.
 * Orders can be canceled via the API on symbols in the `BREAK` or `HALT` status.
 
-### USER DATA
+USER DATA STREAM
+
 * `OutboundAccountInfo` has new field `P` which shows the trading permissions of the account.
 
 ---
@@ -1051,7 +1252,7 @@ WEB SOCKET STREAM
 ---
 ## 2019-11-13
 
-### Rest API
+REST API
 
 * api/v3/exchangeInfo has new fields:
     * `quoteOrderQtyMarketAllowed`
@@ -1104,7 +1305,8 @@ By end of Q1 2020, the following endpoints will be removed from the API. The doc
 </tr>
 </table>
 
-### USER DATA STREAM
+USER DATA STREAM
+
 * Changes to`executionReport` event
     * If the C field is empty, it will now properly return `null`, instead of `"null"`.
     * New field Q which represents the `quoteOrderQty`.
@@ -1112,7 +1314,8 @@ By end of Q1 2020, the following endpoints will be removed from the API. The doc
 * `balanceUpdate` event type added
     * This event occurs when funds are deposited or withdrawn from your account.
 
-### WEB SOCKET STREAM
+WEB SOCKET STREAMS
+
 * WSS now supports live subscribing/unsubscribing to streams.
 
 ---
@@ -1151,7 +1354,8 @@ By end of Q1 2020, the following endpoints will be removed from the API. The doc
 
 ---
 ## 2019-08-15
-### Rest API
+
+REST API
 * New order type: OCO ("One Cancels the Other")
     * An OCO has 2 orders: (also known as legs in financial terms)
         * ```STOP_LOSS``` or ```STOP_LOSS_LIMIT``` leg
@@ -1205,18 +1409,18 @@ By end of Q1 2020, the following endpoints will be removed from the API. The doc
 * GET api/v1/depth now supports `limit` 5000 and 10000; weights are 50 and 100 respectively.
 * GET api/v1/exchangeInfo has a new parameter `ocoAllowed`.
 
-### USER DATA STREAM
+USER DATA STREAM
 * ```executionReport``` event now contains "g" which has the ```orderListId```; it will be set to -1 for non-OCO orders.
 * New Event Type ```listStatus```; ```listStatus``` is sent on an update to any OCO order.
 * New Event Type ```outboundAccountPosition```; ```outboundAccountPosition``` is sent any time an account's balance changes and contains the assets that could have changed by the event that generated the balance change (a deposit, withdrawal, trade, order placement, or cancellation).
 
-### NEW ERRORS
+NEW ERRORS
 * **-1131 BAD_RECV_WINDOW**
     * ```recvWindow``` must be less than 60000
 * **-1099 Not found, authenticated, or authorized**
     * This replaces error code -1999
 
-### NEW -2011 ERRORS
+NEW -2011 ERRORS
 * **OCO_BAD_ORDER_PARAMS**
     * A parameter for one of the orders is incorrect.
 * **OCO_BAD_PRICES**
@@ -1226,23 +1430,24 @@ By end of Q1 2020, the following endpoints will be removed from the API. The doc
 
 ---
 ## 2019-03-12
-### Rest API
+
+REST API 
 * X-MBX-USED-WEIGHT header added to Rest API responses.
 * Retry-After header added to Rest API 418 and 429 responses.
 * When canceling the Rest API can now return `errorCode` -1013 OR -2011 if the symbol's `status` isn't `TRADING`.
 * `api/v1/depth` no longer has the ignored and empty `[]`.
 * `api/v3/myTrades` now returns `quoteQty`; the price * qty of for the trade.
 
-### Websocket streams
+WEBSOCKET STREAMS
 * `<symbol>@depth` and `<symbol>@depthX` streams no longer have the ignored and empty `[]`.
 
-### System improvements
+SYSTEM IMPROVEMENTS
 * Matching Engine stability/reliability improvements.
 * Rest API performance improvements.
 
 ---
 ## 2018-11-13
-### Rest API
+REST API
 * Can now cancel orders through the Rest API during a trading ban.
 * New filters: `PERCENT_PRICE`, `MARKET_LOT_SIZE`, `MAX_NUM_ICEBERG_ORDERS`.
 * Added `RAW_REQUESTS` rate limit. Limits based on the number of requests over X minutes regardless of weight.
@@ -1265,12 +1470,12 @@ By end of Q1 2020, the following endpoints will be removed from the API. The doc
    For example:
    https://api.binance.com/api/v3/avgPrice?symbol=BNBUSDT
 
-### User data stream
+USER DATA STREAM
 * `Last quote asset transacted quantity` (as variable `Y`) added to execution reports. Represents the `lastPrice` * `lastQty` (`L` * `l`).
 
 ---
 ## 2018-07-18
-### Rest API
+REST API
 *  New filter: `ICEBERG_PARTS`
 *  `POST api/v3/order` new defaults for `newOrderRespType`. `ACK`, `RESULT`, or `FULL`; `MARKET` and `LIMIT` order types default to `FULL`, all other orders default to `ACK`.
 *  POST api/v3/order `RESULT` and `FULL` responses now have `cummulativeQuoteQty`
@@ -1284,7 +1489,7 @@ By end of Q1 2020, the following endpoints will be removed from the API. The doc
 *  Order lookup endpoints will now return `cummulativeQuoteQty`. If `cummulativeQuoteQty` is < 0, it means the data isn't available for this order at this time.
 *  `REQUESTS` rate limit type changed to `REQUEST_WEIGHT`. This limit was always logically request weight and the previous name for it caused confusion.
 
-### User data stream
+USER DATA STREAM
 *  `cummulativeQuoteQty` field added to order responses and execution reports (as variable `Z`). Represents the cummulative amount of the `quote` that has been spent (with a `BUY` order) or received (with a `SELL` order). Historical orders will have a value < 0 in this field indicating the data is not available at this time. `cummulativeQuoteQty` divided by `cummulativeQty` will give the average price for an order.
 *  `O` (order creation time) added to execution reports
 

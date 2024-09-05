@@ -1,0 +1,17 @@
+{
+  "environment": "PROD",
+  "latestSchema": {
+    "id": 2,
+    "version": 0,
+    "releaseDate": "2024-04-25"
+  },
+  "deprecatedSchemas": [
+    {
+      "id": 1,
+      "version": 0,
+      "releaseDate": "2024-03-05",
+      "deprecatedDate": "2024-04-25"
+    }
+  ],
+  "retiredSchemas": []
+}

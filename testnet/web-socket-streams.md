@@ -15,7 +15,7 @@
   - [Aggregate Trade Streams](#aggregate-trade-streams)
   - [Trade Streams](#trade-streams)
   - [Kline/Candlestick Streams for UTC](#klinecandlestick-streams-for-utc)
-  - [Kline/Candlestick Streams with Timezone offset](#klinecandlestick-streams-with-timezone-offset)
+  - [Kline/Candlestick Streams with timezone offset](#klinecandlestick-streams-with-timezone-offset)
   - [Individual Symbol Mini Ticker Stream](#individual-symbol-mini-ticker-stream)
   - [All Market Mini Tickers Stream](#all-market-mini-tickers-stream)
   - [Individual Symbol Ticker Streams](#individual-symbol-ticker-streams)
@@ -30,10 +30,10 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Web Socket Streams for Binance (2024-06-11)
+# Web Socket Streams for Binance SPOT Testnet (2024-06-05)
 
 # General WSS information
-* The base endpoint is: **wss://stream.binance.com:9443** or **wss://stream.binance.com:443**
+* The base endpoint is: **wss://testnet.binance.vision/ws**.
 * Streams can be accessed either in a single raw stream or in a combined stream
 * Raw streams are accessed at **/ws/\<streamName\>**
 * Combined streams are accessed at **/stream?streams=\<streamName1\>/\<streamName2\>/\<streamName3\>**
@@ -44,7 +44,6 @@
   * If the websocket server does not receive a `pong frame` back from the connection within a 10 minute period, the connection will be disconnected. 
   * When you receive a ping, you must send a pong with a copy of ping's payload as soon as possible.
   * Unsolicited `pong frames` are allowed, but will not prevent disconnection. **It is recommended that the payload for these pong frames are empty.**
-* The base endpoint **wss://data-stream.binance.vision** can be subscribed to receive **only** market data messages. <br> User data stream is **NOT** available from this URL.
 
 ## Websocket Limits
 * WebSocket connections have a limit of 5 incoming messages per second. A message is considered:
@@ -233,9 +232,10 @@ The Trade Streams push raw trade information; each trade has a unique buyer and 
 ```
 
 ## Kline/Candlestick Streams for UTC
-The Kline/Candlestick Stream push updates to the current klines/candlestick every second in `UTC+0` timezone
+The Kline/Candlestick Stream push updates to the current klines/candlestick every second in `UTC+0` timezone.
 
 <a id="kline-intervals"></a>
+
 **Kline/Candlestick chart intervals:**
 
 s-> seconds; m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
@@ -256,7 +256,6 @@ s-> seconds; m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
 * 3d
 * 1w
 * 1M
-  
 
 **Stream Name:** \<symbol\>@kline_\<interval\>
 
@@ -291,16 +290,16 @@ s-> seconds; m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
 ```
 
 ## Kline/Candlestick Streams with timezone offset
-The Kline/Candlestick Stream push updates to the current klines/candlestick every second in `UTC+8` timezone
+
+The Kline/Candlestick Stream push updates to the current klines/candlestick every second in `UTC+8` timezone.
 
 **Kline/Candlestick chart intervals:**
-
 Supported intervals: See [`Kline/Candlestick chart intervals`](#kline-intervals)
 
 **UTC+8 timezone offset:**
 
 * Kline intervals open and close in the `UTC+8` timezone. For example the `1d` klines will open at the beginning of the `UTC+8` day, and close at the end of the `UTC+8` day.
-* Note that `E` (event time), `t` (start time) and `T` (close time) in the payload are Unix timestamps, which are always interpreted in UTC.
+* Note that `E` (event time), `t` (start time), and `T` (close time) in the payload are Unix timestamps, which are always interpreted in UTC.
 
 **Stream Name:** \<symbol\>@kline_\<interval\>@+08:00
 
@@ -435,7 +434,7 @@ Rolling window ticker statistics for a single symbol, computed over multiple win
 **Update Speed:** 1000ms
 
 **Note**: This stream is different from the \<symbol\>@ticker stream.
-The open time `"O"` always starts on a minute, while the closing time `"C"` is the current time of the update.
+The open time `O` always starts on a minute, while the closing time `C` is the current time of the update.
 As such, the effective window might be up to 59999ms wider that \<window_size\>.
 
 **Payload:**
@@ -583,9 +582,9 @@ Order book price and quantity depth updates used to locally manage an order book
 ```
 
 ## How to manage a local order book correctly
-1. Open a stream to **wss://stream.binance.com:9443/ws/bnbbtc@depth**.
+1. Open a stream to **wss://testnet.binance.vision/ws/bnbbtc@depth**.
 2. Buffer the events you receive from the stream.
-3. Get a depth snapshot from **https://api.binance.com/api/v3/depth?symbol=BNBBTC&limit=1000** .
+3. Get a depth snapshot from **https://testnet.binance.vision/api/v3/depth?symbol=BNBBTC&limit=1000** .
 4. Drop any event where `u` is <= `lastUpdateId` in the snapshot.
 5. The first processed event should have `U` <= `lastUpdateId`+1 **AND** `u` >= `lastUpdateId`+1.
 6. While listening to the stream, each new event's `U` should be equal to the previous event's `u`+1.
