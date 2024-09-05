@@ -823,13 +823,12 @@ Database
 
 ### UIKlines
 
-The request is similar to klines having the same parameters and response.
-
-`uiKlines` return modified kline data, optimized for presentation of candlestick charts.
-
 ```
 GET /api/v3/uiKlines
 ```
+The request is similar to klines having the same parameters and response.
+
+`uiKlines` return modified kline data, optimized for presentation of candlestick charts.
 
 **Weight:**
 2
@@ -3543,6 +3542,7 @@ Memory => Database
   }
 ]
 ```
+<a id="query-unfilled-order-count"></a>
 
 ### Query Unfilled Order Count (TRADE)
 ```

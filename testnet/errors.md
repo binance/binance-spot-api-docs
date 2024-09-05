@@ -1,4 +1,4 @@
-# Error codes for Binance SPOT Testnet (2024-06-21)
+# Error codes for Binance SPOT Testnet (2024-08-16)
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload when using the REST API:
 ```javascript
@@ -292,6 +292,10 @@ Error message                                                   | Description
 "Order was not canceled due to cancel restrictions."            | Either `cancelRestrictions` was set to `ONLY_NEW` but the order status was not `NEW` <br/> or <br/> `cancelRestrictions` was set to `ONLY_PARTIALLY_FILLED` but the order status was not `PARTIALLY_FILLED`. 
 "Rest API trading is not enabled." / "WebSocket API trading is not enabled." | Order is being placed or a server that is not configured to allow access to `TRADE` endpoints.
 "FIX API trading is not enabled.                                | Order is placed on a FIX server that is not TRADE enabled.
+"Order book liquidity is less than `LOT_SIZE` filter minimum quantity." |Quote quantity market orders cannot be placed when the order book liquidity is less than minimum quantity configured for the `LOT_SIZE` filter.
+"Order book liquidity is less than `MARKET_LOT_SIZE` filter minimum quantity."|Quote quantity market orders cannot be placed when the order book liquidity is less than the minimum quantity for `MARKET_LOT_SIZE` filter.
+"Order book liquidity is less than symbol minimum quantity." | Quote quantity market orders cannot be placed when there are no orders on the book.
+
 
 ## Errors regarding placing orders via cancelReplace
 
