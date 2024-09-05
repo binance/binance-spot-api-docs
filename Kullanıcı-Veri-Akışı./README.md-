@@ -1,0 +1,229 @@
+
+Binance Logo
+Kullanıcı Veri Akışı
+
+Bu sayfada
+Binance için Kullanıcı Veri Akışları (2024-04-02)
+Genel WSS bilgileri
+Temel API uç noktası şudur: https://api.binance.com
+Kullanıcı Veri Akışı listenKeyoluşturulduktan sonra 60 dakika boyunca geçerlidir.
+PUTAktif bir şekilde yapıldığında listenKeygeçerlilik süresi 60 dakika uzatılır.
+DELETEAktif bir işlem yapmak listenKeyakışı kapatır ve geçersiz kılar listenKey.
+POSTAktif bir hesaba işlem yapıldığında, listenKeyaktif olan hesap geri döndürülür listenKeyve geçerliliği 60 dakika uzatılır.
+Temel websocket uç noktası şudur: wss://stream.binance.com:9443
+Kullanıcı Veri Akışlarına /ws/<listenKey> veya /stream?streams=<listenKey> adresinden erişilir
+Stream.binance.com'a tek bir bağlantı yalnızca 24 saat geçerlidir; 24 saatlik sürenin sonunda bağlantınızın kesilmesini bekleyin
+API Uç Noktaları
+Bir listenKey (USER_STREAM 
+POST /api/v3/userDataStream
+
+Yeni bir kullanıcı veri akışı başlatın. Keepalive gönderilmediği takdirde akış 60 dakika sonra kapanacaktır. Hesapta aktif bir varsa listenKey, bu listenKeydöndürülecek ve geçerliliği 60 dakika uzatılacaktır.
+
+Ağırlık: 1
+
+Parametreler: YOK
+
+Cevap:
+
+{
+  "listenKey": "pqia91ma19a5s61cv6a81va65sdf19v8a65a1a5s61cv6a81va65sdf19v8a65a1"
+}
+
+
+ListenKey'i Pingle/Canlı Tut (USER_STREAM 
+PUT /api/v3/userDataStream
+
+Zaman aşımını önlemek için bir kullanıcı veri akışını canlı tutun. Kullanıcı veri akışları 60 dakika sonra kapanacaktır. Yaklaşık her 30 dakikada bir ping göndermeniz önerilir.
+
+Ağırlık: 1
+
+Parametreler:
+
+İsim	Tip	Zorunlu	Tanım
+dinleAnahtar	SİCİM	EVET	
+Cevap:
+
+{}
+
+listenKey'i (USER_STREAM 
+DELETE /api/v3/userDataStream
+
+Kullanıcı veri akışını kapatın.
+
+Ağırlık: 1
+
+Parametreler:
+
+İsim	Tip	Zorunlu	Tanım
+dinleAnahtar	SİCİM	EVET	
+Cevap:
+
+{}
+
+Web Soketi Yükleri
+Hesap 
+outboundAccountPositionHesap bakiyesi değiştiğinde her zaman gönderilir ve bakiye değişikliğini oluşturan olay tarafından muhtemelen değiştirilen varlıkları içerir.
+
+{
+  "e": "outboundAccountPosition", // Event type
+  "E": 1564034571105,             // Event Time
+  "u": 1564034571073,             // Time of last account update
+  "B": [                          // Balances Array
+    {
+      "a": "ETH",                 // Asset
+      "f": "10000.000000",        // Free
+      "l": "0.000000"             // Locked
+    }
+  ]
+}
+
+
+Bakiye 
+Bakiye Güncellemesi aşağıdaki durumlarda gerçekleşir:
+
+Hesaptan para yatırma veya çekme işlemleri
+Hesaplar arası para transferi (örneğin Spot'tan Marj'a)
+Yük
+
+{
+  "e": "balanceUpdate",         // Event Type
+  "E": 1573200697110,           // Event Time
+  "a": "BTC",                   // Asset
+  "d": "100.00000000",          // Balance Delta
+  "T": 1573200697068            // Clear Time
+}
+
+
+Sipariş 
+Siparişler etkinlikle birlikte güncellenmektedir executionReport.
+
+Kullanıcı Veri Akışlarını kullanmakla karşılaştırıldığında daha iyi performans için FIX API'sini kullanmanızı öneririz .
+
+Yük:
+
+{
+  "e": "executionReport",        // Event type
+  "E": 1499405658658,            // Event time
+  "s": "ETHBTC",                 // Symbol
+  "c": "mUvoqJxFIILMdfAW5iGSOW", // Client order ID
+  "S": "BUY",                    // Side
+  "o": "LIMIT",                  // Order type
+  "f": "GTC",                    // Time in force
+  "q": "1.00000000",             // Order quantity
+  "p": "0.10264410",             // Order price
+  "P": "0.00000000",             // Stop price
+  "F": "0.00000000",             // Iceberg quantity
+  "g": -1,                       // OrderListId
+  "C": "",                       // Original client order ID; This is the ID of the order being canceled
+  "x": "NEW",                    // Current execution type
+  "X": "NEW",                    // Current order status
+  "r": "NONE",                   // Order reject reason; will be an error code.
+  "i": 4293153,                  // Order ID
+  "l": "0.00000000",             // Last executed quantity
+  "z": "0.00000000",             // Cumulative filled quantity
+  "L": "0.00000000",             // Last executed price
+  "n": "0",                      // Commission amount
+  "N": null,                     // Commission asset
+  "T": 1499405658657,            // Transaction time
+  "t": -1,                       // Trade ID
+  "v": 3,                        // Prevented Match Id; This is only visible if the order expired due to STP
+  "I": 8641984,                  // Ignore
+  "w": true,                     // Is the order on the book?
+  "m": false,                    // Is this trade the maker side?
+  "M": false,                    // Ignore
+  "O": 1499405658657,            // Order creation time
+  "Z": "0.00000000",             // Cumulative quote asset transacted quantity
+  "Y": "0.00000000",             // Last quote asset transacted quantity (i.e. lastPrice * lastQty)
+  "Q": "0.00000000",             // Quote Order Quantity
+  "W": 1499405658657,            // Working Time; This is only visible if the order has been placed on the book.
+  "V": "NONE"                    // SelfTradePreventionMode
+}
+
+
+Not:Z Ortalama fiyat , 'e bölünerek bulunabilir z.
+
+Yürütme 
+Bunlar, yalnızca belirli koşullar karşılandığında yükte görünen alanlardır.
+
+Bu parametreler hakkında ek bilgi için lütfen Spot Sözlüğüne bakın .
+
+Alan	İsim	Tanım	Örnekler
+d	Arkasındaki Delta	Sadece takip eden stop emirleri için görünür.	"d": 4
+D	Takip Süresi	"D": 1668680518494
+j	Strateji Kimliği	Yalnızca strategyIdsipariş sırasında parametre sağlanmışsa görünür.	"j": 1
+J	Strateji Türü	Yalnızca strategyTypesipariş sırasında parametre sağlanmışsa görünür.	"J": 1000000
+v	Engellenen Eşleşme Kimliği	Sadece STP nedeniyle süresi dolan siparişler için görünür.	"v": 3
+A	Önlenen Miktar	"A":"3.000000"
+B	Son Önlenen Miktar	"B":"3.000000"
+u	Ticaret Grubu Kimliği	"u":1
+U	Karşı Sipariş Kimliği	"U":37
+Cs	Sayaç Sembolü	"Cs": "BTCUSDT"
+pl	Engellenen Yürütme Miktarı	"pl":"2.123456"
+pL	Engellenen Yürütme Fiyatı	"pL":"0.10000001"
+pY	Engellenen Yürütme Teklif Miktarı	"pY":"0.21234562"
+W	Çalışma Zamanı	Sipariş kitap üzerinde çalışırken görünür	"W": 1668683798379
+b	Eşleşme Türü	Tahsisleri olan siparişler için görünür	"b":"ONE_PARTY_TRADE_REPORT"
+a	Tahsis Kimliği	"a":1234
+k	Çalışma Katı	Potansiyel olarak tahsisleri olan siparişler için görünür	"k":"SOR"
+uS	KullanılmışSor	SOR kullanan siparişler için görünür	"uS":true
+Eğer sipariş bir sipariş listesi ise, ListStatusolaya ek olarak isimli bir olay gönderilecektir executionReport.
+
+Yük
+
+{
+  "e": "listStatus",                // Event Type
+  "E": 1564035303637,               // Event Time
+  "s": "ETHBTC",                    // Symbol
+  "g": 2,                           // OrderListId
+  "c": "OCO",                       // Contingency Type
+  "l": "EXEC_STARTED",              // List Status Type
+  "L": "EXECUTING",                 // List Order Status
+  "r": "NONE",                      // List Reject Reason
+  "C": "F4QN4G8DlFATFlIUQ0cjdD",    // List Client Order ID
+  "T": 1564035303625,               // Transaction Time
+  "O": [                            // An array of objects
+    {
+      "s": "ETHBTC",                // Symbol
+      "i": 17,                      // OrderId
+      "c": "AJYsMjErWJesZvqlJCTUgL" // ClientOrderId
+    },
+    {
+      "s": "ETHBTC",
+      "i": 18,
+      "c": "bfYPSQdLoqAJeNrOr9adzq"
+    }
+  ]
+}
+
+
+Yürütme 
+NEW- Sipariş motora kabul edildi.
+CANCELED- Sipariş kullanıcı tarafından iptal edildi.
+REPLACED(şu anda kullanılmıyor)
+REJECTED- Sipariş reddedildi ve işleme alınmadı (Bu mesaj yalnızca yeni sipariş verme isteğinin reddedildiği ancak iptal isteğinin başarılı olduğu Siparişleri İptal Et ve Değiştir seçeneğinde görünür.)
+TRADE- Siparişin bir kısmı veya tamamı dolmuştur.
+EXPIRED- Emir, emir tipinin kurallarına göre (örneğin, doldurulmayan LIMIT FOK emirleri, kısmen doldurulan LIMIT IOC veya MARKET emirleri) veya borsa tarafından iptal edildi (örneğin, likidasyon sırasında iptal edilen emirler, bakım sırasında iptal edilen emirler).
+TRADE_PREVENTION- Sipariş STP nedeniyle sona erdi.
+Daha alakalı enum tanımları için Enums sayfasını kontrol edin .
+
+Dinleme Anahtarının 
+Bu olay, dinleme anahtarının süresi dolduğunda gönderilir.
+
+listenKeyYeni bir etkinlik oluşturulana kadar bundan sonra başka etkinlik gönderilmeyecektir .
+
+Akış normal şekilde kapatıldığında bu olay itilmeyecektir.
+
+Yük:
+
+{
+  "e": "listenKeyExpired",  // Event type
+  "E": 1699596037418,      // Event time
+  "listenKey": "OfYGbUzi3PraNagEkdKuFwUHn48brFsItTdsuiIXrucEvD0rhRXZ7I6URWfE8YE8" 
+}
+
+
+Öncesi
+Web Soket Akışları
+Sonraki
+Web Soket API'si
+Telif Hakkı © 2024 Binance.
