@@ -1,0 +1,26 @@
+```Html
+Current runner version: '2.319.1'
+Operating System
+  Ubuntu
+  [2](https://github.com/vercel/turborepo/actions/runs/10638942872/job/29495923476#step:1:2)2.04.4
+  LTS
+Runner Image
+  Image: ubuntu-22.04
+  Version: 20240825.1.0
+  Included Software: https://github.com/actions/runner-images/blob/ubuntu22/20240825.1/images/ubuntu/Ubuntu2204-Readme.md
+  Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu22%2F20240825.1
+Runner Image Provisioner
+  2.0.[3](https://github.com/vercel/turborepo/actions/runs/10638942872/job/29495923476#step:1:3)84.1
+GITHUB_TOKEN Permissions
+  Contents: read
+  Metadata: read
+  PullRequests: write
+Secret source: Actions
+Prepare workflow directory
+Prepare all required actions
+Getting action download info
+Download action repository 'actions/checkout@v3' (SHA:f[4](https://github.com/vercel/turborepo/actions/runs/10638942872/job/29495923476#step:1:4)3a0e5ff2bd29409[5](https://github.com/vercel/turborepo/actions/runs/10638942872/job/29495923476#step:1:5)638e1828[6](https://github.com/vercel/turborepo/actions/runs/10638942872/job/29495923476#step:1:7)ca9a3d1956744)
+Download action repository 'technote-space/get-diff-action@v6' (SHA:f2[7](https://github.com/vercel/turborepo/actions/runs/10638942872/job/29495923476#step:1:8)caffdd0fb9b13f4fc191c016bb4e0632[8](https://github.com/vercel/turborepo/actions/runs/10638942872/job/29495923476#step:1:9)44af)
+Complete job name: Determine jobs to run
+
+```
