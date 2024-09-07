@@ -1,92 +1,209 @@
-# API Key 类型
+API 1. Kullanıcı 
+curl 'https://www.binanceapis.com/oauth-api/v1/user-info' \
+--header 'Authorization: Bearer {access_token}'
 
-币安 API 需要 API Key 才能访问经过身份验证的接口以进行交易，账户历史记录等。
+Parametreler:
 
-我们支持多种类型的 API key：
+İsim	Tip	Zorunlu	Tanım
+erişim_belirteci	Sicim	EVET	
+Cevap:
 
-- Ed25519（推荐）
-- HMAC
-- RSA
+{
+  "code": "000000",
+  "message": null,
+  "data": {
+    "userId": "e10e20b7f20947e7bd206b15ce3dae90"
+  },
+  "success": true
+}
 
-本文档概述了受支持的 API Keys。
+API 2. 
+curl --request POST 'https://www.binanceapis.com/oauth-api/v1/revoke-token' \
+--header 'Authorization: Bearer {access_token}'
 
-**我们建议使用 Ed25519 API keys**，因为它在所有受支持的 API key 类型中提供最佳性能和安全性。
+Parametreler:
 
-请读 [REST API](../rest-api_CN.md#需要签名的接口-trade-与-user_data) 或者 [WebSocket API](../web-socket-api_CN.md#请求鉴权类型) 文档以了解如何使用不同的 API Key 类型。
+İsim	Tip	Zorunlu	Tanım
+erişim_belirteci	Sicim	EVET	
+Cevap:
 
-## Ed25519 
+{
+  "code": "000000",
+  "message": null,
+  "data": true, // true means clear access_token success
+  "success": true
+}
+Binance API'sine Erişmek İçin OAuth Kullanma
+Binance API'leri kimlik doğrulama ve yetkilendirme için OAuth 2.0 protokolünü kullanır   . Binance, web sunucusu, tek sayfa (tarayıcı tabanlı), mobil ve yerel uygulamalar gibi yaygın OAuth 2.0 senaryolarını destekler. Bu belge, uygulamanızın bir kullanıcının adına bir API isteği gerçekleştirmesi için onayını güvence altına almak amacıyla Binance'in OAuth 2.0 sunucusuyla nasıl iletişim kurduğu konusunda size rehberlik edecektir.
 
-Ed25519 keys 使用非对称加密技术。
-您只与币安共享您的 public key 并在本地使用 private key 签署 API 请求。
-币安 API 会使用 public key 来验证您的请求签名。
+Başlamak için, uygulamanızın gerekli izinleri tanımlaması veya scopes. Binance Geliştirici Merkezi'ni ziyaret edin , bir Binance varlık hesabı için kaydolun ve oradan konsolunuza giderek bir OAuth uygulaması oluşturun ve kendi istemci kimliğinizi ve istemci sırrınızı edinin. Şimdilik, Binance Girişi (Oauth2.0), yalnızca yakın ekosistem ortaklarına sunulmaktadır. Daha fazla bilgi için lütfen iş ekibimizle iletişime geçin.
 
-Ed25519 Keys 提供与 3072 bits 的 RSA keys 相当的安全性，但是 key 更小，签名更小，签名的计算更快。
+Belirli uygulama türünüze bağlı olarak, burada listelenen iki farklı yetkilendirme akışından birini seçebilirsiniz:
 
-**我们建议使用 Ed25519 API keys**
+Web uygulamaları için lütfen 'Yetkilendirme Kodu Akışı' bölümüne bakınız;
+Tarayıcı tabanlı uygulamalar, mobil ve yerel uygulamalar için lütfen 'PCKE Akışı' bölümüne bakın.
+1. Yetkilendirme Kodu 
+Adım 1. Kullanıcıları Binance erişimi talebinde bulunmaya yönlendirin ve yetkilendirme parametrelerini ayarlayın 
+GET https://accounts.binance.com/en/oauth/authorize?
+    response_type=code&
+    client_id=YOUR_CLIENT_ID&
+    redirect_uri=YOUR_REDIRECT_URI&
+    state=CSRF_TOKEN&
+    scope=SCOPES
+    Bir kullanıcıyı uygulamanıza erişim yetkisi vermek için Binance'e yönlendirirken ilk adımınız yetkilendirme isteğini oluşturmaktır.
 
-Ed25519 key 例子:
+Parametreler	Tanım
+response_type	Gerekli Değercode
+client_id	Gerekli Uygulamanızın istemci kimliği.
+redirect_uri	gerekli Kullanıcıların yetkilendirmeden sonra yönlendirileceği web uygulamanızdaki URL. Bu değerin URL kodlu olması gerekir.
+state	İsteğe bağlı CSRF (cross-site request forgery) saldırılarına karşı koruma sağlamak için CSRF belirteci.
+scope	Gerekli Uygulamanızın erişim istediği kapsamların listesi, virgülle ( ,) ayrılmış şekilde.
+İşte bir yetkilendirme URL'sinin örneği:
 
-```
------BEGIN PUBLIC KEY-----
-MCowBQYDK2VwAyEAgmDRTtj2FA+wzJUIlAL9ly1eovjLBu7uXUFR+jFULmg=
------END PUBLIC KEY-----
-```
+GET https://accounts.binance.com/en/oauth/authorize?
+    response_type=code&
+    client_id=a28f296f2cbe6c64b4d5dec24735d39b1b6fffcf&
+    redirect_uri=https%3A%2F%2Fdomain.com%2Foauth%2Fcallback&
+    state=377f36a4557ab5935b36&
+    scope=user:openId,create:apikey
 
-Ed25519 签名例子:
+Adım 2. Binance kullanıcıdan 
+Bu adımda, kullanıcı uygulamanıza talep edilen erişimi verip vermemeye karar verir. Bu aşamada, Binance uygulamanızın adını ve kullanıcının yetkilendirme kimlik bilgileriyle erişim izni istediği Binance API hizmetlerini gösteren bir onay penceresi görüntüler. Kullanıcı daha sonra uygulamanıza erişim izni vermeyi kabul edebilir veya reddedebilir.
 
-```
-E7luAubOlcRxL10iQszvNCff+xJjwJrfajEHj1hOncmsgaSB4NE+A/BbQhCWwit/usNJ32/LeTwDYPoA7Qz4BA==
-```
+Uygulamanızın bu aşamada herhangi bir şey yapmasına gerek yok çünkü Binance'in OAuth 2.0 sunucusunun geri yönlendirmesini bekliyor.
 
-## HMAC
+Adım 3. Binance, 
+Kullanıcı başvurunuzu onaylarsa Binance'in OAuth sunucusu redirect_urigeçici bir yetkilendirme codeparametresiyle sizi tekrar size yönlendirecektir.
 
-HMAC keys 使用对称加密技术。
-币安生成并与您共享一个 secret key，您可以使用该 secret key 对 API 请求进行签名。
-币安 API 使用相同的共享 secret key 来验证您的请求签名。
+1. adımda bir parametre belirttiyseniz state, parametre de dahil edilecektir. Rastgele bir dize oluşturursanız veya bir çerezin veya istemcinin 'sini yakalayan başka bir değerin karma değerini kodlarsanız state, isteğin ve yanıtın aynı tarayıcıda kaynaklandığından emin olmak için yanıtı doğrulayabilir ve böylece siteler arası istek sahteciliği gibi saldırılara karşı koruma sağlayabilirsiniz
 
-HMAC 签名可以快速计算和压缩。<br>
-但是，由于共享 secret key 必须在多方之间共享，这就不如 Ed25519 或 RSA keys 使用的非对称加密技术那么安全。
+GET https://domain.com/oauth/callback?
+    code=cf6941ae8918b6a008f1377f36a4557ab5935b36&
+    state=377f36a4557ab5935b36
 
-**不建议使用 HMAC keys。** 我们建议换成并使用非对称 API Keys，例如 Ed25519 或 RSA。
+    Adım 4. Yenileme ve erişim 
+Uygulamanız yetkilendirmeyi aldıktan sonra code, yetkilendirmeyi bir erişim belirteci ile değiştirebilir code; bu da bir POST çağrısı yapılarak yapılabilir:
 
-HMAC key 例子:
+POST https://accounts.binance.com/oauth/token?client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET&grant_type=authorization_code&code=STEP3_CODE&redirect_uri=YOUR_REDIRECT_URI
 
-```
-Fhs4lGae2qAi6VNjbJjebUAwXrIChb7mlf372UOICMwdKaNdNBGKtfdeUff2TTTT
-```
 
-HMAC 签名例子:
+Parametre	Tanım
+grant_type	gerekli değerauthorization_code
+code	gerekli Step3 dönüş kodu
+client_id	gerekli Uygulamanızın istemci kimliği.
+client_secret	gerekli Uygulamanızın istemci sırrı.
+redirect_uri	gerekli Kullanıcıların yetkilendirmeden sonra yönlendirileceği web uygulamanızdaki URL. Bu değerin URL kodlu olması gerekir.
 
-```
-7f3fc79c57d7a70d2b644ad4589672f4a5d55a62af2a336a0af7d4896f8d48b8
-```
+curl https://accounts.binance.com/oauth/token \
+  -X POST
+  -d 'client_id=je-client&client_secret=je-client-secret&grant_type=authorization_code&code=95OfIm&redirect_uri=https%3A%2F%2Fdomain.com%2Foauth%2Fcallback'
 
-## RSA
+  {
+  "access_token": "83f2bf51-a2c4-4c2e-b7c4-46cef6a8dba5",
+  "refresh_token": "fb5587ee-d9cf-4cb5-a586-4aed72cc9bea",
+  "scope": "read",
+  "token_type": "bearer",
+  "expires_in": 30714
+}
+POST https://accounts.binance.com/oauth/token?client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET&grant_type=refresh_token&refresh_token=STEP4_REFRESH_TOKEN
 
-RSA keys 使用非对称加密技术。 <br>
-您只与币安共享您的 public key 并在本地使用 private key 签署 API 请求。
-币安 API 会使用 public key 来验证您的请求签名。
 
-我们支持 2048 和 4096 bits 的 RSA keys。
+Parametre	Tanım
+grant_type	gerekli  değer refresh_token
+refresh_token	Gerekli  Step4 yenileme belirteci
+client_id	gerekli  Uygulamanızın istemci kimliği.
+client_secret	gerekli  Uygulamanızın istemci sırrı.
+Örnek POST çağrısı:	
+curl https://accounts.binance.com/oauth/token \
+  -X POST
+  -d 'client_id=je-client&client_secret=je-client-secret&grant_type=refresh_token&refresh_token=95OfIm
 
-虽然 RSA keys 比 HMAC keys 更安全，RSA 签名比 HMAC 和 Ed25519 大很多，这会降低性能。
+Başarılı bir istekten sonra, yanıtta geçerli bir değer  döndürülür ve yanıttaki saniye cinsinden süreyi access_token aşarsa geçersiz sayılır .expires_in
 
-RSA (2048 bits) 例子:
+POST https://accounts.binance.com/oauth/token?client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET&grant_type=refresh_token&refresh_token=STEP4_REFRESH_TOKEN
 
-```
------BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyfKiFXpcOhF5rX1XxePN
-akwN7Etwtn3v05cZNY+ftDHbVZHs/kY6Ruj5lhxVFAq5dv7Ba9/4jPijXuMuIc6Y
-8nUlqtrrxC8DEOAczw9SKATDYZN9nbLfYlbBFfHzRQUXdAtYCPI6XtxmJBS7aOBb
-4nZe1SVm+bhLrp0YQnx2P0s+37qkGeVn09m6w9MnWxjgCkkYFPWQkXIu5qOnwx6p
-NfqDmFD7d7dUc/6PZQ1bKFALu/UETsobmBk82ShbrBhlc0JXuhf9qBR7QASjHjFQ
-2N+VF2PfH8dm5prZIpz/MFKPkBW4Yuss0OXiD+jQt1J2JUKspLqsIqoXjHQQGjL7
-3wIDAQAB
------END PUBLIC KEY-----
-```
 
-RSA (2048 bits) 签名例子::
+Parametre	Tanım
+grant_type	gerekli  değer refresh_token
+refresh_token	Gerekli  Step4 yenileme belirteci
+client_id	gerekli  Uygulamanızın istemci kimliği.
+client_secret	gerekli  Uygulamanızın istemci sırrı.
+Örnek POST çağrısı:	
+curl https://accounts.binance.com/oauth/token \
+  -X POST
+  -d 'client_id=je-client&client_secret=je-client-secret&grant_type=refresh_token&refresh_token=95OfIm
 
-```
-wS6q6h77AvH1TqwInoTDdWIIubRCiUP4RLG++GI24twL3BMtX0EEV+YT1eH8Hb8bLe0Rb9OhOHbt1CC3aurzoCTgZvhNek47mg+Bpu8fwQ7eRkXEiWBx5C8BNN73JwnnkZw4UzYvqiwAs162jToV8AL0eN043KJ3MEKCy3C6nyeYOFSg+1Cp637KtAZk3z7aHknSu7/PXSPuwMIpBgFctf8YKGZFAVRbgwlcgUDhXyaGts6OFePGy0jkZKJHawb/w5hoatatsfVmVC4hZ8fsfystQ9k5DNjTm7ROApWaXy9BsfAYcj13O424mqlpkKG4EGnIjOIWB/pRDDQEm2O/xg==
-```
+Başarılı bir istekten sonra, yanıtta geçerli bir değer  döndürülür ve yanıttaki saniye cinsinden süreyi access_token aşarsa geçersiz sayılır .expires_in
+
+Geçerli bir 'niz olduktan sonra access_tokenilk API çağrınızı yapabilirsiniz:
+
+curl 'https://www.binanceapis.com/oauth-api/v1/user-info' \
+--header 'Authorization: Bearer {access_token}'
+
+Cevap:
+
+{
+  "code": "000000",
+  "message": null,
+  "data": {
+    "userId": "e10e20b7f20947e7bd206b15ce3dae90",
+    "email": "xx@xx.com"
+  },
+  "success": true
+}
+
+2. PKCE 
+PKCE uzantısı, yetkilendirme kodunun kötü niyetli bir istemci tarafından ele geçirilip bir erişim belirteci ile değiştirildiği bir saldırıyı, yetkilendirme sunucusuna yetkilendirme kodunu değiştiren aynı istemci örneğinin akışı başlatanla aynı olduğunu doğrulama yolu sağlayarak önler. Daha fazla ayrıntı için https://tools.ietf.org/html/rfc7636 adresine bakın
+
+Adım 1. Kullanıcıları Binance erişimi talebinde bulunmaya yönlendirin ve yetkilendirme parametrelerini ayarlayın 
+GET https://accounts.binance.com/en/oauth/authorize?
+    response_type=code&
+    client_id=YOUR_CLIENT_ID&
+    redirect_uri=YOUR_REDIRECT_URI&
+    state=CSRF_TOKEN&
+    scope=SCOPES&
+    code_challenge=CODE_CHALLENGE&
+    code_challenge_method=S256
+
+    Bir kullanıcıyı Binance'e yönlendirerek uygulamanıza erişimi yetkilendirmek için ilk adımınız yetkilendirme isteğini oluşturmaktır. Yeni bir PKCE code_verifier oluşturmanız ve depolamanız gerekir, ayrıca STEP4'te kullanılacaktır
+
+    İşte javascript generate code_verifier'
+
+// Generate a secure random string using the browser crypto functions
+function generateRandomString() {
+  var array = new Uint32Array(28);
+  window.crypto.getRandomValues(array);
+  return Array.from(array, (dec) => ("0" + dec.toString(16)).substr(-2)).join(
+    ""
+  );
+}
+
+// Calculate the SHA256 hash of the input text.
+function sha256(code_verifier) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(code_verifier);
+  return window.crypto.subtle.digest("SHA-256", data);
+}
+
+// Base64-urlencodes the input string
+function base64urlencode(hashed) {
+  return btoa(String.fromCharCode.apply(null, new Uint8Array(hashed)))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+}
+
+// Return the base64-urlencoded sha256 hash for the PKCE challenge
+async function generateCodeChallenge(code_verifier) {
+  hashed = await sha256(code_verifier);
+  return base64urlencode(hashed);
+}
+
+GET https://accounts.binance.com/en/oauth/authorize?
+    response_type=code&
+    client_id=a28f296f2cbe6c64b4d5dec24735d39b1b6fffcf&
+    redirect_uri=https%3A%2F%2Fdomain.com%2Foauth%2Fcallback&
+    state=377f36a4557ab5935b36&
+    scope=user:openId,create:apikey&
+    code_challenge=ARU184muFVaDi3LObH5YTZSxqA5ZdYPLspCl7wFwV0U
+    code_challenge_method=S256
