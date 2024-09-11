@@ -1,0 +1,87 @@
+[
+  {
+    txid: "4b93c138293a7e3dfea6f0a63d944890b5ba571b03cc22d8c66995535e90dce8",
+    fee: 18277,
+    vsize: 2585,
+    value: 4972029
+  },
+  ...
+]
+
+
+
+
+
+import mempoolJS from "@mempool/mempool.js";
+
+const init = async () => {
+  
+  const { bitcoin: { mempool } } = mempoolJS({
+    hostname: 'mempool.space'
+  });
+
+  const getMempoolRecent = await mempool.getMempoolRecent();
+  console.log(getMempoolRecent);
+          
+};
+
+init();
+
+
+
+
+# npm
+npm install @mempool/mempool.js --save
+
+# yarn
+yarn add @mempool/mempool.js
+
+
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://mempool.space/mempool.js"></script>
+    <script>
+      const init = async () => {
+        
+        const { bitcoin: { mempool } } = mempoolJS({
+          hostname: 'mempool.space'
+        });
+
+        const getMempoolRecent = await mempool.getMempoolRecent();
+
+        document.getElementById("result").textContent = JSON.stringify(getMempoolRecent, undefined, 2);
+        
+      };
+      init();
+    </script>
+  </head>
+  <body>
+    <pre id="result"></pre>
+  </body>
+</html>
+
+
+
+
+
+
+
+```c++
+[
+  {
+    txid: "4b93c138293a7e3dfea6f0a63d944890b5ba571b03cc22d8c66995535e90dce8",
+    fee: 18277,
+    vsize: 2585,
+    value: 4972029
+  },
+  ...
+]
+
+
+
+
+
+```
