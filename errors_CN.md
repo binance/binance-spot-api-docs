@@ -33,6 +33,10 @@
 ### -1008 SERVER_BUSY
   * 现货交易服务器当前因其他请求而过载。 请在几分钟后重试。
 
+### -1013 消息无效
+  * 请求被 API 拒绝 （在这个情况中，此请求并没有到达撮合引擎）。
+  * 潜在的错误信息可以在 [订单未能通过过滤器](#filter-failures) 或 [下单失败](#other-errors) 中找到。
+
 #### -1014 不支持的订单参数(组合)
  * 不支持的订单参数组合. 
 
@@ -193,6 +197,8 @@
 #### -2026 交易被归档
   * Order was canceled or expired with no executed qty over 90 days ago and has been archived.
 
+<a id="other errors"></a>
+
 ## -1010 收到了错误消息
 这个错误代码是由撮合引擎抛出的，引擎还会抛出2010和2011，具体原因需要参考下面列出的具体消息
 
@@ -236,6 +242,8 @@
 
 ### -2022 Order cancel-replace failed.
 收到该错误码代表撤单**和**下单都失败。
+
+<a id="filter_failures"></a>
 
 ## 订单未能通过过滤器
 错误信息 | 描述

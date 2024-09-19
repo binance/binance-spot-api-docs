@@ -33,6 +33,10 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 #### -1008 SERVER_BUSY
   * Server is currently overloaded with other requests. Please try again in a few minutes. 
 
+#### -1013 INVALID_MESSAGE
+  * The request is rejected by the API. (i.e. The request didn't reach the Matching Engine.) 
+  * Potential error messages can be found in [Filter Failures](#filter-failures) or [Failures during order placement](#other-errors).
+
 #### -1014 UNKNOWN_ORDER_COMPOSITION
  * Unsupported order combination.
 
@@ -195,6 +199,8 @@ Errors consist of two parts: an error code and a message. Codes are universal,
   * Order was canceled or expired with no executed qty over 90 days ago and has been archived.
 
 
+<a id="other errors"></a>
+
 ## Messages for -1010 ERROR_MSG_RECEIVED, -2010 NEW_ORDER_REJECTED, and -2011 CANCEL_REJECTED
 This code is sent when an error has been returned by the matching engine.
 The following messages which will indicate the specific error:
@@ -242,6 +248,8 @@ This code is sent when either the cancellation of the order failed or the new or
 ### -2022 Order cancel-replace failed.
 
 This code is sent when both the cancellation of the order failed and the new order placement failed.
+
+<a id="filter_failures"></a>
 
 ## Filter failures
 Error message | Description
