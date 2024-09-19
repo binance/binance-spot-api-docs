@@ -2743,7 +2743,7 @@ NONE
 `icebergQty`        | DECIMAL | NO        |
 `strategyId`        | LONG     | NO        | 标识订单策略中订单的任意ID。
 `strategyType`      | INT     | NO        | <p>标识订单策略的任意数值。</p><p>小于`1000000`的值是保留的，不能使用。</p>
-`selfTradePreventionMode` |ENUM| NO | 允许的 ENUM 取决于交易对的配置。支持的值有 `EXPIRE_TAKER`，`EXPIRE_MAKER`，`EXPIRE_BOTH`，`NONE`。
+`selfTradePreventionMode` |ENUM| NO | 允许的 ENUM 取决于交易对的配置。支持值：[STP 模式](./enums_CN.md#stpmodes)
 `apiKey`            | STRING  | YES       |
 `recvWindow`        | INT     | NO        | 值不能大于 `60000`
 `signature`         | STRING  | YES       |
@@ -3328,7 +3328,7 @@ NONE
   "result": {
     "symbol": "BTCUSDT",
     "orderId": 12569099453,
-    "orderListId": -1,                  // 订单列表的ID，不然就是-1
+    "orderListId": -1,                  // 如果是属于订单列表的订单时会出现
     "clientOrderId": "4d96324ff9d44481926157",
     "price": "23416.10000000",
     "origQty": "0.00847000",
@@ -3534,7 +3534,7 @@ NONE
         "clientOrderId": "Tnu2IP0J5Y4mxw3IATBfmW"
       }
     ],
-    // OCO leg 状态格式与单个订单相同。
+    // 订单列表的状态格式与单个订单相同。
     "orderReports": [
       {
         "symbol": "BTCUSDT",
@@ -3764,7 +3764,7 @@ NONE
         <td>NO</td>
         <td>
             <p>允许的 ENUM 取决于交易对的配置。</p>
-            <p>支持的值有 <tt>EXPIRE_TAKER</tt>, <tt>EXPIRE_MAKER</tt>, <tt>EXPIRE_BOTH</tt>, <tt>NONE</tt>.</p>
+            <p>支持的值有： <tt>EXPIRE_TAKER</tt>, <tt>EXPIRE_MAKER</tt>, <tt>EXPIRE_BOTH</tt>, <tt>NONE</tt>.</p>
         </td>
     </tr>
     <tr>
@@ -4624,7 +4624,9 @@ NONE
 
 **注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 "订单响应中的特定条件时才会出现的字段" 部分。
 
-### OCO下单 - 已弃用 (TRADE)
+### 订单列表（Order lists）
+
+#### OCO下单 - 已弃用 (TRADE)
 
 ```javascript
 {
@@ -4674,7 +4676,7 @@ NONE
 `stopStrategyId`    | LONG     | NO        | 标识订单策略中的 stop 订单的任意ID。
 `stopStrategyType`  | INT     | NO        | <p>标识 stop 订单策略的任意数值。</p><p>小于`1000000`的值是保留的，不能使用。</p>
 `newOrderRespType`  | ENUM    | NO        | 可选的响应格式: `ACK`，`RESULT`，`FULL` (默认)
-`selfTradePreventionMode` |ENUM| NO | 允许的 ENUM 取决于交易对的配置。支持的值有 `EXPIRE_TAKER`，`EXPIRE_MAKER`，`EXPIRE_BOTH`，`NONE`。
+`selfTradePreventionMode` |ENUM| NO | 允许的 ENUM 取决于交易对的配置。支持的值有：[STP 模式](./enums_CN.md#stpmodes)
 `apiKey`            | STRING  | YES       |
 `recvWindow`        | INT     | NO        | 值不能大于 `60000`
 `signature`         | STRING  | YES       |
@@ -4802,7 +4804,7 @@ NONE
 }
 ```
 
-### 发送新 OCO 订单 (TRADE)
+#### 发送新 OCO 订单 (TRADE)
 
 ```javascript
 {
@@ -4830,8 +4832,8 @@ NONE
 
 发送新 one-cancels-the-other (OCO) 订单，激活其中一个订单会立即取消另一个订单。
 
-* OCO 有 2 legs，称为 **上方 leg** 和 **下方 leg**。
-* 其中一条 leg 必须是 `LIMIT_MAKER` 订单，另一条 leg 必须是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 订单。
+* OCO 包含了两个订单，分别被称为 **上方订单** 和 **下方订单**。
+* 其中一个订单必须是 `LIMIT_MAKER` 订单，另一个订单必须是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 订单。
 * 针对价格限制：
   * 如果 OCO 订单方向是 `SELL`：`LIMIT_MAKER` `price` > 最后交易价格 > `stopPrice`
   * 如果 OCO 订单方向是 `BUY`：`LIMIT_MAKER` `price` < 最后交易价格 < `stopPrice`
@@ -4844,16 +4846,16 @@ NONE
 `symbol`                 |STRING  |YES        |
 `listClientOrderId`      |STRING  |NO         |整个订单列表的唯一ID。 如果未发送则自动生成。 <br> 仅当前一个订单已填满或完全过期时，才会接受具有相同的`listClientOrderId`。 <br> `listClientOrderId` 与 `aboveClientOrderId` 和 `belowCLientOrderId` 不同。
 `side`                   |ENUM    |YES        |订单方向：`BUY` or `SELL`
-`quantity`               |DECIMAL |YES        |两个 legs 的数量。
+`quantity`               |DECIMAL |YES        |两个订单的数量。
 `aboveType`              |ENUM    |YES        |支持值：`STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`。
-`aboveClientOrderId`     |STRING  |NO         |上方 leg 的唯一ID。 如果未发送则自动生成。
+`aboveClientOrderId`     |STRING  |NO         |上方订单的唯一ID。 如果未发送则自动生成。
 `aboveIcebergQty`        |LONG    |NO         |请注意，只有当 `aboveTimeInForce` 为 `GTC` 时才能使用。
 `abovePrice`             |DECIMAL |NO         |
 `aboveStopPrice`         |DECIMAL |NO         |如果 `aboveType` 是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 才能使用。<br> 必须指定 `aboveStopPrice` 或 `aboveTrailingDelta` 或两者。
 `aboveTrailingDelta`     |LONG    |NO         |请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md).
 `aboveTimeInForce`       |DECIMAL |NO         |如果 `aboveType` 是 `STOP_LOSS_LIMIT`，则为必填项。
-`aboveStrategyId`        |LONG     |NO         |订单策略中上方 leg 订单的 ID。
-`aboveStrategyType`      |INT     |NO         |上方 leg 订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
+`aboveStrategyId`        |LONG     |NO         |订单策略中上方订单的 ID。
+`aboveStrategyType`      |INT     |NO         |上方订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
 `belowType`              |ENUM    |YES        |支持值：`STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`
 `belowClientOrderId`     |STRING  |NO         |
 `belowIcebergQty`        |LONG    |NO         |请注意，只有当 `belowTimeInForce` 为 `GTC` 时才能使用。
@@ -4861,10 +4863,10 @@ NONE
 `belowStopPrice`         |DECIMAL |NO         |如果 `belowType` 是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 才能使用 <br> 必须指定 `belowStopPrice` 或 `belowTrailingDelta` 或两者。
 `belowTrailingDelta`     |LONG    |NO         |请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md)。
 `belowTimeInForce`       |ENUM    |NO         |如果`belowType` 是 `STOP_LOSS_LIMIT`，则为必须配合提交的值。
-`belowStrategyId`        |LONG     |NO          |订单策略中下方 leg 订单的 ID。
-`belowStrategyType`      |INT     |NO         |下方 leg 订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
+`belowStrategyId`        |LONG     |NO          |订单策略中下方订单的 ID。
+`belowStrategyType`      |INT     |NO         |下方订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
 `newOrderRespType`       |ENUM    |NO         |响应格式可选值: `ACK`, `RESULT`, `FULL`。
-`selfTradePreventionMode`|ENUM    |NO         |允许的 ENUM 取决于交易对上的配置。 可能支持的值为 `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`。
+`selfTradePreventionMode`|ENUM    |NO         |允许的 ENUM 取决于交易对上的配置。 可能支持的值为：[STP 模式](./enums_CN.md#stpmodes)
 `apiKey`                 |STRING  |YES        |
 `recvWindow`             |LONG    |NO         |不能大于 `60000`。
 `signature`              |STRING  |YES        |
@@ -4969,7 +4971,7 @@ NONE
 }
 ```
 
-### 发送新订单列表 - OTO (TRADE)
+#### 发送新订单列表 - OTO (TRADE)
 
 ```javascript
 {
@@ -5134,7 +5136,7 @@ NONE
 
 **注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 "订单响应中的特定条件时才会出现的字段" 部分。
 
-### 发送新订单列表 - OTOCO (TRADE)
+#### 发送新订单列表 - OTOCO (TRADE)
 
 ```javascript
 {
@@ -5337,7 +5339,7 @@ NONE
 
 **注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 "订单响应中的特定条件时才会出现的字段" 部分。
 
-### 查询订单列表 (USER_DATA)
+#### 查询订单列表 (USER_DATA)
 
 ```javascript
 {
@@ -5457,7 +5459,7 @@ NONE
 }
 ```
 
-### 撤销订单列表订单(TRADE)
+#### 撤销订单列表订单(TRADE)
 
 ```javascript
 {
@@ -5623,7 +5625,7 @@ NONE
 }
 ```
 
-### 查询订单列表挂单 (USER_DATA)
+#### 查询订单列表挂单 (USER_DATA)
 
 ```javascript
 {
@@ -5741,7 +5743,7 @@ NONE
 `icebergQty`        | DECIMAL | NO        |
 `strategyId`        | LONG     | NO        | 用于标识订单策略中订单的任意数字值。
 `strategyType`      | INT     | NO        | <p>用于标识订单策略的任意数字值。</p><p>小于 `1000000` 是保留值，应此不能被使用。</p>
-`selfTradePreventionMode` |ENUM | NO      | 允许的 ENUM 取决于交易对的配置。支持的值有 `EXPIRE_TAKER`，`EXPIRE_MAKER`，`EXPIRE_BOTH`，`NONE`。
+`selfTradePreventionMode` |ENUM | NO      | 允许的 ENUM 取决于交易对的配置。支持的值有：[STP 模式](./enums_CN.md#stpmodes)
 `apiKey`            | STRING  | YES       |
 `timestamp`         | INT     | YES       |
 `recvWindow`        | INT     | NO        | 赋值不能大于 `60000`

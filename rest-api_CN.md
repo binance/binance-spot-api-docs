@@ -1626,7 +1626,7 @@ stopPrice | DECIMAL | NO | 仅 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `T
 trailingDelta|LONG|NO| 用于 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, 和 `TAKE_PROFIT_LIMIT` 类型的订单。
 icebergQty | DECIMAL | NO | 仅有限价单(包括条件限价单与限价做事单)可以使用该参数，含义为创建冰山订单并指定冰山订单的数量。
 newOrderRespType | ENUM | NO | 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`, 其他默认为`ACK`。
-selfTradePreventionMode |ENUM| NO | 允许的 ENUM 取决于交易对的配置。支持的值有 `EXPIRE_TAKER`，`EXPIRE_MAKER`，`EXPIRE_BOTH`，`NONE`。
+selfTradePreventionMode |ENUM| NO | 允许的 ENUM 取决于交易对的配置。支持的值有：[STP 模式](./enums_CN.md#stpmodes)。
 recvWindow | LONG | NO |
 timestamp | LONG | YES |
 
@@ -1665,7 +1665,7 @@ Type | 强制要求的参数 | 其他信息
 {
   "symbol": "BTCUSDT",
   "orderId": 28,
-  "orderListId": -1, // 除非隶属于订单列表, 否则此值为 -1
+  "orderListId": -1, // 除非此单是订单列表的一部分, 否则此值为 -1
   "clientOrderId": "6gCrw2kRUAF9CvJDGP16IP",
   "transactTime": 1507725176595
 }
@@ -1677,7 +1677,7 @@ Type | 强制要求的参数 | 其他信息
 {
   "symbol": "BTCUSDT",
   "orderId": 28,
-  "orderListId": -1, // 除非隶属于订单列表, 否则此值为 -1
+  "orderListId": -1, // 除非此单是订单列表的一部分, 否则此值为 -1
   "clientOrderId": "6gCrw2kRUAF9CvJDGP16IP",
   "transactTime": 1507725176595,
   "price": "1.00000000",
@@ -1699,7 +1699,7 @@ Type | 强制要求的参数 | 其他信息
 {
   "symbol": "BTCUSDT",
   "orderId": 28,
-  "orderListId": -1, // 除非隶属于订单列表, 否则此值为 -1
+  "orderListId": -1, // 除非此单是订单列表的一部分, 否则此值为 -1
   "clientOrderId": "6gCrw2kRUAF9CvJDGP16IP",
   "transactTime": 1507725176595,
   "price": "1.00000000",
@@ -1857,7 +1857,7 @@ timestamp | LONG | YES |
 {
   "symbol": "LTCBTC",               // 交易对
   "orderId": 1,                     // 系统的订单ID
-  "orderListId": -1,                // 订单列表的ID，不然就是-1
+  "orderListId": -1,                // 除非此单是订单列表的一部分, 否则此值为 -1
   "clientOrderId": "myOrder1",      // 客户自己设置的ID
   "price": "0.1",                   // 订单价格
   "origQty": "1.0",                 // 用户设置的原始订单数量
@@ -1911,7 +1911,7 @@ timestamp | LONG | YES |
 {
   "symbol": "LTCBTC",
   "orderId": 28,
-  "orderListId": -1,                // 订单列表的ID，不然就是-1
+  "orderListId": -1,                // 除非此单是订单列表的一部分, 否则此值为 -1
   "origClientOrderId": "myOrder1",
   "clientOrderId": "cancelMyOrder1",
   "transactTime": 1507725176595,
@@ -1977,7 +1977,7 @@ timestamp | LONG | YES |
     "symbol": "BTCUSDT",
     "origClientOrderId": "E6APeyTJvkMvLMYMqu1KQ4",
     "orderId": 11,
-    "orderListId": -1, // 订单列表的ID，不然就是-1
+    "orderListId": -1,
     "clientOrderId": "pXLV6Hz6mprAcVYpVMTGgx",
     "transactTime": 1684804350068,
     "price": "0.089853",
@@ -2105,7 +2105,7 @@ stopPrice|DECIMAL|NO|
 trailingDelta|LONG|NO|
 icebergQty|DECIMAL|NO|
 newOrderRespType|ENUM|NO|指定响应类型: <br/> 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`， 其他默认为`ACK`。
-selfTradePreventionMode|ENUM|NO|允许的 ENUM 取决于交易对的配置。支持的值有 `EXPIRE_TAKER`，`EXPIRE_MAKER`，`EXPIRE_BOTH`，`NONE`。
+selfTradePreventionMode|ENUM|NO|允许的 ENUM 取决于交易对的配置。支持的值有：[STP 模式](./enums_CN.md#stpmodes)。
 cancelRestrictions| ENUM | NO | 支持的值: <br>`ONLY_NEW` - 如果订单状态为 `NEW`，撤销将成功。<br> `ONLY_PARTIALLY_FILLED` - 如果订单状态为 `PARTIALLY_FILLED`，撤销将成功。
 orderRateLimitExceededMode| ENUM | NO |支持的值： <br></br> “DO_NOTHING”（默认值）- 仅在账户未超过未成交订单频率限制时，会尝试取消订单。<br></br> “CANCEL_ONLY” - 将始终取消订单。
 recvWindow | LONG | NO | 不能大于 `60000`
@@ -2494,7 +2494,7 @@ timestamp | LONG | YES |
   {
     "symbol": "LTCBTC",
     "orderId": 1,
-    "orderListId": -1, // 订单列表的ID，不然就是-1
+    "orderListId": -1, // 除非此单是订单列表的一部分, 否则此值为 -1
     "clientOrderId": "myOrder1",
     "price": "0.1",
     "origQty": "1.0",
@@ -2553,7 +2553,7 @@ timestamp | LONG | YES |
   {
     "symbol": "LTCBTC",
     "orderId": 1,
-    "orderListId": -1,  // 订单列表的ID，不然就是-1
+    "orderListId": -1,  // 除非此单是订单列表的一部分, 否则此值为 -1
     "clientOrderId": "myOrder1",
     "price": "0.1",
     "origQty": "1.0",
@@ -2580,7 +2580,7 @@ timestamp | LONG | YES |
 
 ### 订单列表（Order lists）
 
-### 发送新 OCO 订单 - 已弃用 (TRADE)
+#### 发送新 OCO 订单 - 已弃用 (TRADE)
 
 ```
 POST /api/v3/order/oco 
@@ -2620,7 +2620,7 @@ stopLimitPrice|DECIMAL|NO| 如果提供，须配合提交`stopLimitTimeInForce`
 stopIcebergQty|DECIMAL|NO|
 stopLimitTimeInForce|ENUM|NO| 有效值 `GTC`/`FOK`/`IOC`
 newOrderRespType|ENUM|NO| 详见枚举定义：[订单返回类型](./enums_CN.md#orderresponsetype)
-selfTradePreventionMode |ENUM| NO | 允许的 ENUM 取决于交易对的配置。支持的值有 `EXPIRE_TAKER`，`EXPIRE_MAKER`，`EXPIRE_BOTH`，`NONE`。
+selfTradePreventionMode |ENUM| NO | 允许的 ENUM 取决于交易对的配置。支持的值有：[STP 模式](./enums_CN.md#stpmodes)。
 recvWindow|LONG|NO| 不能大于 `60000`
 timestamp|LONG|YES|
 
@@ -2691,7 +2691,7 @@ timestamp|LONG|YES|
 }
 ```
 
-### New Order list - OCO (TRADE)
+#### New Order list - OCO (TRADE)
 
 ```
 POST /api/v3/orderList/oco
@@ -2699,8 +2699,8 @@ POST /api/v3/orderList/oco
 
 发送新 one-cancels-the-other (OCO) 订单，激活其中一个订单会立即取消另一个订单。
 
-* OCO 有 2 legs，称为 **上方 leg** 和 **下方 leg**。
-* 其中一条 leg 必须是 `LIMIT_MAKER` 订单，另一条 leg 必须是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 订单。
+* OCO 包含了两个订单，分别被称为 **上方订单** 和 **下方订单**。
+* 其中一个订单必须是 `LIMIT_MAKER` 订单，另一个订单必须是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 订单。
 * 针对价格限制：
   * 如果 OCO 订单方向是 `SELL`：`LIMIT_MAKER` `price` > 最后交易价格 > `stopPrice`
   * 如果 OCO 订单方向是 `BUY`：`LIMIT_MAKER` `price` < 最后交易价格 < `stopPrice`
@@ -2716,16 +2716,16 @@ POST /api/v3/orderList/oco
 symbol                 |STRING  |Yes        |
 listClientOrderId      |STRING  |No         |整个 OCO order list 的唯一ID。 如果未发送则自动生成。 <br> 仅当前一个订单已填满或完全过期时，才会接受具有相同的`listClientOrderId`。 <br> `listClientOrderId` 与 `aboveClientOrderId` 和 `belowCLientOrderId` 不同。
 side                   |ENUM    |Yes        |订单方向：`BUY` or `SELL`
-quantity               |DECIMAL |Yes        |两个 legs 的数量。
+quantity               |DECIMAL |Yes        |两个订单的数量。
 aboveType              |ENUM    |Yes        |支持值：`STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`。
-aboveClientOrderId     |STRING  |No         |上方 leg 的唯一ID。 如果未发送则自动生成。
+aboveClientOrderId     |STRING  |No         |上方订单的唯一ID。 如果未发送则自动生成。
 aboveIcebergQty        |LONG    |No         |请注意，只有当 `aboveTimeInForce` 为 `GTC` 时才能使用。
 abovePrice             |DECIMAL |No         |
 aboveStopPrice         |DECIMAL |No         |如果 `aboveType` 是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 才能使用。<br> 必须指定 `aboveStopPrice` 或 `aboveTrailingDelta` 或两者。
 aboveTrailingDelta     |LONG    |No         |请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md)。
 aboveTimeInForce       |DECIMAL |No         |如果 `aboveType` 是 `STOP_LOSS_LIMIT`，则为必填项。
-aboveStrategyId        |LONG     |No         |订单策略中上方 leg 订单的 ID。
-aboveStrategyType      |INT     |No         |上方 leg 订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
+aboveStrategyId        |LONG     |No         |订单策略中上方订单的 ID。
+aboveStrategyType      |INT     |No         |上方订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
 belowType              |ENUM    |Yes        |支持值：`STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`。
 belowClientOrderId     |STRING  |No         |
 belowIcebergQty        |LONG    |No         |请注意，只有当 `belowTimeInForce` 为 `GTC` 时才能使用。
@@ -2733,10 +2733,10 @@ belowPrice             |DECIMAL |No         |
 belowStopPrice         |DECIMAL |No         |如果 `belowType` 是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 才能使用。 <br> 必须指定 `belowStopPrice` 或 `belowTrailingDelta` 或两者。
 belowTrailingDelta     |LONG    |No         |请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md)。
 belowTimeInForce       |ENUM    |No         |如果`belowType` 是 `STOP_LOSS_LIMIT`，则为必须配合提交的值。
-belowStrategyId        |LONG    |No          |订单策略中下方 leg 订单的 ID。
-belowStrategyType      |INT     |No         |下方 leg 订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
+belowStrategyId        |LONG    |No          |订单策略中下方订单的 ID。
+belowStrategyType      |INT     |No         |下方订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
 newOrderRespType       |ENUM    |No         |响应格式可选值: `ACK`, `RESULT`, `FULL`。
-selfTradePreventionMode|ENUM    |No         |允许的 ENUM 取决于交易对上的配置。 可能支持的值为 `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`。
+selfTradePreventionMode|ENUM    |No         |允许的 ENUM 取决于交易对上的配置。 支持值：[STP 模式](./enums_CN.md#stpmodes)。
 recvWindow             |LONG   |No          |不能大于 `60000`。
 timestamp              |LONG   |Yes         | 
 
@@ -2810,7 +2810,7 @@ timestamp              |LONG   |Yes         |
 ```
 
 <a id="new-order-list---oto-trade"></a>
-### New Order List - OTO (TRADE)
+#### New Order List - OTO (TRADE)
 
 ```
 POST /api/v3/orderList/oto
@@ -2852,7 +2852,7 @@ pendingPrice           |DECIMAL|NO        |
 pendingStopPrice       |DECIMAL|NO        |
 pendingTrailingDelta   |DECIMAL|NO        |
 pendingQuantity        |DECIMAL|YES       |用于设置待处理订单的数量。 
-pendingIcebergQty      |DECIMAL|NO        |只有当 `pendingTimeInForce` 为 `GTC` 时才能使用。
+pendingIcebergQty      |DECIMAL|NO        |只有当 `pendingTimeInForce` 为 `GTC` 或者当 `pendingType` 为 `LIMIT_MAKER` 时才能使用。
 pendingTimeInForce     |ENUM   |NO        |支持的数值： [生效时间](./enums_CN.md#timeinforce)
 pendingStrategyId      |LONG    |NO        |订单策略中用于标识待处理订单的 ID。
 pendingStrategyType    |INT    |NO        |用于标识待处理订单策略的任意数值。 <br> 小于 `1000000` 的值被保留，无法使用。
@@ -2938,7 +2938,7 @@ timestamp              |LONG   |YES       |
 **注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 "订单响应中的特定条件时才会出现的字段" 部分。
 
 <a id="new-order-list---otoco-trade"></a>
-### New Order List - OTOCO (TRADE)
+#### New Order List - OTOCO (TRADE)
 
 ```
 POST /api/v3/orderList/otoco
@@ -3102,7 +3102,7 @@ timestamp                |LONG   |YES       |
 
 **注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 "订单响应中的特定条件时才会出现的字段" 部分。
 
-## 取消订单列表 (TRADE)
+#### 取消订单列表 (TRADE)
 
 ``
 DELETE /api/v3/orderList 
@@ -3193,7 +3193,7 @@ timestamp|LONG|YES|
 }
 ```
 
-## 查询订单列表 (USER_DATA)
+#### 查询订单列表 (USER_DATA)
 
 ``
 GET /api/v3/orderList 
@@ -3241,7 +3241,7 @@ timestamp|LONG|YES|
 }
 ```
 
-## 查询所有订单列表 (USER_DATA)
+#### 查询所有订单列表 (USER_DATA)
 
 ``
 GET /api/v3/allOrderList 
@@ -3316,7 +3316,7 @@ timestamp|LONG|YES|
 ]
 ```
 
-## 查询订单列表挂单 (USER_DATA)
+#### 查询订单列表挂单 (USER_DATA)
 
 ``
 GET /api/v3/openOrderList
@@ -3391,7 +3391,7 @@ strategyType            |INT     | NO| 赋值不能小于 `1000000`.
 icebergQty              | DECIMAL| NO | 仅有限价单可以使用该参数，含义为创建冰山订单并指定冰山订单的数量。
 newOrderRespType        | ENUM   | NO | 指定响应类型:
 指定响应类型 `ACK`, `RESULT` 或 `FULL`; 默认为 `FULL`。
-selfTradePreventionMode |ENUM    | NO | 允许的 ENUM 取决于交易对的配置。支持的值有 `EXPIRE_TAKER`，`EXPIRE_MAKER`，`EXPIRE_BOTH`，`NONE`。
+selfTradePreventionMode |ENUM    | NO | 允许的 ENUM 取决于交易对的配置。支持的值有：[STP 模式](./enums_CN.md#stpmodes)。
 recvWindow              | LONG   | NO | 赋值不能大于 `60000`
 timestamp               | LONG | YES |
 
