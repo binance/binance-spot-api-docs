@@ -221,7 +221,9 @@
   </component>
  </components>
  <fields>
-  <field number='8' name='BeginString' type='STRING'/>
+  <field number='8' name='BeginString' type='STRING'>
+    <value enum='FIX.4.4' description='FIX44'/>
+  </field>
   <field number='9' name='BodyLength' type='LENGTH'/>
   <field number='10' name='CheckSum' type='STRING'/>
   <field number='11' name='ClOrdID' type='STRING'/>
