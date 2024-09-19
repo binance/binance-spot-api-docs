@@ -57,16 +57,18 @@
     - [Cancel and replace order (TRADE)](#cancel-and-replace-order-trade)
     - [Current open orders (USER_DATA)](#current-open-orders-user_data)
     - [Cancel open orders (TRADE)](#cancel-open-orders-trade)
-    - [Place new Order list - OCO (TRADE)](#place-new-order-list---oco-trade)
-    - [Place new Order list - OTO (TRADE)](#place-new-order-list---oto-trade)
+    - [Order lists](#order-lists)
+      - [Place new Order list - OCO (TRADE)](#place-new-order-list---oco-trade)
+      - [Place new Order list - OTO (TRADE)](#place-new-order-list---oto-trade)
       - [Mandatory parameters based on `pendingType` or `workingType`](#mandatory-parameters-based-on-pendingtype-or-workingtype)
-    - [Place new Order list - OTOCO (TRADE)](#place-new-order-list---otoco-trade)
+      - [Place new Order list - OTOCO (TRADE)](#place-new-order-list---otoco-trade)
       - [Mandatory parameters based on `pendingAboveType`, `pendingBelowType` or `workingType`](#mandatory-parameters-based-on-pendingabovetype-pendingbelowtype-or-workingtype)
-    - [Query Order List (USER_DATA)](#query-order-list-user_data)
-    - [Cancel Order List (TRADE)](#cancel-order-list-trade)
-    - [Current open order lists (USER_DATA)](#current-open-order-lists-user_data)
-    - [Place new order using SOR (TRADE)](#place-new-order-using-sor-trade)
-    - [Test new order using SOR (TRADE)](#test-new-order-using-sor-trade)
+      - [Query Order list (USER_DATA)](#query-order-list-user_data)
+      - [Cancel Order list (TRADE)](#cancel-order-list-trade)
+      - [Current open order lists (USER_DATA)](#current-open-order-lists-user_data)
+    - [SOR](#sor)
+      - [Place new order using SOR (TRADE)](#place-new-order-using-sor-trade)
+      - [Test new order using SOR (TRADE)](#test-new-order-using-sor-trade)
   - [Account requests](#account-requests)
     - [Account information (USER_DATA)](#account-information-user_data)
     - [Account unfilled order count (USER_DATA)](#account-unfilled-order-count-user_data)
@@ -916,7 +918,7 @@ but specify the `TRADE` key with an explicit signature when placing orders.
 
 Data Source     | Latency  | Description
 --------------- | -------- | -----------
-Matching Engine | lowest   | The matching engine produces the response directly
+Matching Engine | lowest   | The Matching Engine produces the response directly
 Memory          | low      | Data is fetched from API server's local or external memory cache
 Database        | moderate | Data is retrieved from the database
 
@@ -1077,7 +1079,7 @@ Notes:
 
 * `permissions` accepts either a list of permissions, or a single permission name. E.g. `"SPOT"`.
 
-* [Available Permissions](./enums.md#permissions)
+* [Available Permissions](./enums.md#account-and-symbol-permissions)
 
 #### Examples of Symbol Permissions Interpretation from the Response: 
 
@@ -1185,7 +1187,7 @@ Memory
       }
     ],
     // Optional field. Present only when SOR is available.
-    // https://github.com/binance/binance-spot-api-docs/blob/master/faqs/sor_faq.md    
+    // https://github.com/binance/binance-spot-api-docs/blob/master/faqs/sor_faq.md
     "sors": [
       {
         "baseAsset": "BTC",
@@ -3249,7 +3251,7 @@ Response format is selected by using the `newOrderRespType` parameter.
 
 There are fields in the order responses (e.g. order placement, order query, order cancellation) that appear only if certain conditions are met. 
 
-These fields can apply to Order Lists.
+These fields can apply to Order lists.
 
 The fields are listed below:
 
@@ -3596,7 +3598,7 @@ Notes:
 
 * `newClientOrderId` will replace `clientOrderId` of the canceled order, freeing it up for new orders.
 
-* If you cancel an order that is a part of an Order List, the entire Order List is canceled.
+* If you cancel an order that is a part of an order List, the entire order list is canceled.
 
 **Data Source:**
 Matching Engine
@@ -4479,7 +4481,7 @@ If `orderRateLimitExceededMode` is `CANCEL_ONLY` regardless of `cancelReplaceMod
 ```javascript
 {
   "id": "3b3ac45c-1002-4c7d-88e8-630c408ecd87",
-  "status": 400,
+  "status": 409,
   "error": {
     "code": -2021,
     "msg": "Order cancel-replace partially failed.",
@@ -4770,7 +4772,9 @@ Cancellation reports for orders and order lists have the same format as in [`ord
 
 **Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
-### Place new Order list - OCO (TRADE)
+### Order lists
+
+#### Place new Order list - OCO (TRADE)
 
 ```javascript
 {
@@ -4799,9 +4803,9 @@ Cancellation reports for orders and order lists have the same format as in [`ord
 
 Send in an one-cancels-the-other (OCO) pair, where activation of one order immediately cancels the other.
 
-* An OCO has 2 legs called the **above leg** and **below leg**.
-* One of the legs must be a `LIMIT_MAKER` order and the other leg must be `STOP_LOSS` or `STOP_LOSS_LIMIT` order.
-* Price restriction on the legs:     
+* An OCO has 2 orders called the **above order** and **below order**.
+* One of the orders must be a `LIMIT_MAKER` order and the other must be `STOP_LOSS` or `STOP_LOSS_LIMIT` order.
+* Price restrictions:     
     * If the `aboveType` is `LIMIT_MAKER` and the `belowType` is either a `STOP_LOSS` or `STOP_LOSS_LIMIT`: 
         * `abovePrice` > Last Traded Price > `belowStopPrice`
     * If the `aboveType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`, and the `belowType` is `LIMIT_MAKER`:
@@ -4815,7 +4819,7 @@ Name                     |Type    | Mandatory | Description
 `symbol`                 |STRING  |YES        |
 `listClientOrderId`      |STRING  |NO         |Arbitrary unique ID among open order lists. Automatically generated if not sent. <br> A new order list with the same `listClientOrderId` is accepted only when the previous one is filled or completely expired. <br> `listClientOrderId` is distinct from the `aboveClientOrderId` and the `belowCLientOrderId`.
 `side`                   |ENUM    |YES        |`BUY` or `SELL`
-`quantity`               |DECIMAL |YES        |Quantity for both legs of the order list.
+`quantity`               |DECIMAL |YES        |Quantity for both orders of the order list.
 `aboveType`              |ENUM    |YES        |Supported values : `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`
 `aboveClientOrderId`     |STRING  |NO        |Arbitrary unique ID among open orders for the above leg order. Automatically generated if not sent
 `aboveIcebergQty`        |LONG    |NO         |Note that this can only be used if `aboveTimeInForce` is `GTC`.
@@ -4823,8 +4827,8 @@ Name                     |Type    | Mandatory | Description
 `aboveStopPrice`         |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`. <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
 `aboveTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](..faqs/trailing-stop-faq.md).
 `aboveTimeInForce`       |DECIMAL |NO         |Required if the `aboveType` is `STOP_LOSS_LIMIT`. 
-`aboveStrategyId`        |LONG     |NO         |Arbitrary numeric value identifying the above leg order within an order strategy. 
-`aboveStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the above leg order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
+`aboveStrategyId`        |LONG     |NO         |Arbitrary numeric value identifying the above order within an order strategy. 
+`aboveStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the above order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
 `belowType`              |ENUM    |YES        |Supported values : `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`
 `belowClientOrderId`     |STRING  |NO         |
 `belowIcebergQty`        |LONG    |NO         |Note that this can only be used if `belowTimeInForce` is `GTC`.
@@ -4832,8 +4836,8 @@ Name                     |Type    | Mandatory | Description
 `belowStopPrice`         |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`. <br> If `aboveType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`, either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
 `belowTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](..faqs/trailing-stop-faq.md). 
 `belowTimeInForce`       |ENUM    |NO         |Required if the `belowType` is `STOP_LOSS_LIMIT`. 
-`belowStrategyId`        |LONG    |NO          |Arbitrary numeric value identifying the below leg order within an order strategy. 
-`belowStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the below leg order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
+`belowStrategyId`        |LONG    |NO          |Arbitrary numeric value identifying the below order within an order strategy. 
+`belowStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the below order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
 `newOrderRespType`       |ENUM    |NO         |Select response format: `ACK`, `RESULT`, `FULL`
 `selfTradePreventionMode`|ENUM    |NO         |The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
 `apiKey`                 |STRING |YES         |
@@ -4943,7 +4947,7 @@ See [`order.place`](#place-new-order-trade) for more examples.
 }
 ```
 
-### Place new Order list - OTO (TRADE)
+#### Place new Order list - OTO (TRADE)
 
 ```javascript
 {
@@ -5109,7 +5113,7 @@ Matching Engine
 
 **Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
-### Place new Order list - OTOCO (TRADE)
+#### Place new Order list - OTOCO (TRADE)
 
 ```javascript
 {
@@ -5181,7 +5185,7 @@ Name                     |Type   |Mandatory | Description
 `pendingBelowStopPrice`    |DECIMAL|NO        |
 `pendingBelowTrailingDelta`|DECIMAL|NO        |
 `pendingBelowIcebergQty`   |DECIMAL|NO        |This can only be used if `pendingBelowTimeInForce` is `GTC`.
-`pendingBelowTimeInForce`  |ENUM   |NO        |
+`pendingBelowTimeInForce`  |ENUM   |NO        |Supported values: [Time In Force](#timeInForce)
 `pendingBelowStrategyId`   |LONG    |NO        |Arbitrary numeric value identifying the pending below order within an order strategy.
 `pendingBelowStrategyType` |INT    |NO        |Arbitrary numeric value identifying the pending below order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
 `recvWindow`               |LONG   |NO        |The value cannot be greater than `60000`.
@@ -5311,7 +5315,7 @@ Depending on the `pendingType` or `workingType`, some optional parameters will b
 
 **Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
-### Query Order List (USER_DATA)
+#### Query Order list (USER_DATA)
 
 ```javascript
 {
@@ -5432,7 +5436,7 @@ Database
 }
 ```
 
-### Cancel Order List (TRADE)
+#### Cancel Order list (TRADE)
 
 ```javascript
 {
@@ -5599,7 +5603,7 @@ Matching Engine
 }
 ```
 
-### Current open order lists (USER_DATA)
+#### Current open order lists (USER_DATA)
 
 ```javascript
 {
@@ -5676,7 +5680,9 @@ Database
 }
 ```
 
-### Place new order using SOR (TRADE)
+### SOR
+
+#### Place new order using SOR (TRADE)
 
 ```javascript
 {
@@ -5778,7 +5784,7 @@ Matching Engine
 }
 ```
 
-### Test new order using SOR (TRADE)
+#### Test new order using SOR (TRADE)
 
 ```javascript
 {
@@ -5968,6 +5974,8 @@ Memory => Database
   ]
 }
 ```
+
+<a id="query-unfilled-order-count"></a>
 
 ### Account unfilled order count (USER_DATA)
 
@@ -6563,7 +6571,7 @@ Database
         "enabledForAccount": true,
         "enabledForSymbol": true,
         "discountAsset": "BNB",
-        "discount": "0.25000000"         //Standard commission is reduced by this rate when paying commission in BNB.
+        "discount": "0.75000000"         //Standard commission is reduced by this rate when paying commission in BNB.
       }
     }
   ],
