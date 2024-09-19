@@ -199,7 +199,7 @@ Errors consist of two parts: an error code and a message. Codes are universal,
   * Order was canceled or expired with no executed qty over 90 days ago and has been archived.
 
 
-<a id="other errors"></a>
+<a id="other-errors"></a>
 
 ## Messages for -1010 ERROR_MSG_RECEIVED, -2010 NEW_ORDER_REJECTED, and -2011 CANCEL_REJECTED
 This code is sent when an error has been returned by the matching engine.

@@ -197,7 +197,7 @@
 #### -2026 交易被归档
   * Order was canceled or expired with no executed qty over 90 days ago and has been archived.
 
-<a id="other errors"></a>
+<a id="other-errors"></a>
 
 ## -1010 收到了错误消息
 这个错误代码是由撮合引擎抛出的，引擎还会抛出2010和2011，具体原因需要参考下面列出的具体消息
