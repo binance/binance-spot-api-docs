@@ -243,7 +243,7 @@
 ### -2022 Order cancel-replace failed.
 收到该错误码代表撤单**和**下单都失败。
 
-<a id="filter_failures"></a>
+<a id="filter-failures"></a>
 
 ## 订单未能通过过滤器
 错误信息 | 描述
