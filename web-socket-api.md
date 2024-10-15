@@ -88,7 +88,7 @@
 
 # Public WebSocket API for Binance
 
-**Last Update:** October 15, 2024
+**Last Updated:** October 15, 2024
 
 ## General API Information
 

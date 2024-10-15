@@ -1,6 +1,6 @@
 # Error codes for Binance
 
-**Last Update:** October 15, 2024
+**Last Updated:** October 15, 2024
 
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
