@@ -1,4 +1,6 @@
-# REST行情与交易接口 (2024-04-02)
+# REST行情与交易接口 
+
+**最后更新时间： 2024 年 10 月 15 日**
 
 ## API 基本信息
 * 本篇列出接口的 base URL 有:
@@ -414,21 +416,22 @@ GET /api/v3/exchangeInfo
 
 **参数:**
 
-有四种用法
+名称 |类型 |是否必须 | 描述
+------------ |------------ |------------ |------------
+symbol |STRING| No|示例：curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbol=BNBBTC" 
+symbols |ARRAY OF STRING|No| 示例：curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbols=%5B%22BNBBTC%22,%22BTCUSDT%22%5D" <br/> 或 <br/> curl -g -X  GET 'https://api.binance.com/api/v3/exchangeInfo?symbols=["BTCUSDT","BNBBTC"]'
+permissions |ENUM|No|示例：curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=SPOT" <br/> or <br/> curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=%5B%22MARGIN%22%2C%22LEVERAGED%22%5D" <br/> or <br/> curl -g -X GET 'https://api.binance.com/api/v3/exchangeInfo?permissions=["MARGIN","LEVERAGED"]' |
+showPermissionSets|BOOLEAN|No|除非设置了 `permissions` 参数，否则默认为 `false`.
+symbolStatus|ENUM|No|用于过滤具有此 `tradingStatus` 的交易对。有效值： `TRADING`， `HALT`， `BREAK` <br> 不能与 `symbols` 或 `symbol` 组合使用。|
 
-|用法|举例|
------ | ----|
-|不需要交易对|curl -X GET "https://api.binance.com/api/v3/exchangeInfo"|
-|单个交易对|curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbol=BNBBTC"|
-|多个交易对| curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbols=%5B%22BNBBTC%22,%22BTCUSDT%22%5D" <br/> 或者 <br/> curl -g -X GET 'https://api.binance.com/api/v3/exchangeInfo?symbols=["BTCUSDT","BNBBTC"]'|
-| 交易权限 | curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=SPOT" <br/> 或者 <br/> curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=%5B%22MARGIN%22%2C%22LEVERAGED%22%5D" <br/> 或者 <br/> curl -g -X GET 'https://api.binance.com/api/v3/exchangeInfo?permissions=["MARGIN","LEVERAGED"]'|
 
 **备注**:
-* 如果参数 `symbol` 或者 `symbols` 提供的交易对不存在, 系统会返回错误并提示交易对不正确.
-* 所有的参数都是可选的.
-* `permissions` 支持单个或者多个值, 比如 `SPOT`, `["MARGIN","LEVERAGED"]`.
-* 如果`permissions`值没有提供, 其默认值为 `["SPOT","MARGIN","LEVERAGED"]`.
-  * 如果想显示所有交易权限，需要分别指定(比如，`["SPOT","MARGIN",...]`). 从 [账户与交易对权限](enums_CN.md#account-and-symbol-permissions) 查看交易权限列表.
+* 如果参数 `symbol` 或者 `symbols` 提供的交易对不存在, 系统会返回错误并提示交易对不正确。
+* 所有的参数都是可选的。
+* `permissions` 可以支持单个或多个值（例如 `SPOT`, `["MARGIN","LEVERAGED"]`）。此参数不能与 `symbol` 或 `symbols` 组合使用。
+* 如果未提供 `permissions` 参数，那么所有具有 `SPOT`、`MARGIN` 或 `LEVERAGED` 权限的交易对都将被公开。
+  * 要显示具有任何权限的交易对，您需要在 `permissions` 中明确指定它们：（例如 `["SPOT","MARGIN",...]`)。有关完整列表，请参阅 [可用权限](enums_CN.md#account-and-symbol-permissions)
+  * 您也可以选择使用 `showPermissionSets=true`。此参数可以与其他参数结合使用。
 
 ### 解释响应中的 `permissionSets`：
 

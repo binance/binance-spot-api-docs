@@ -1,4 +1,6 @@
-# Binance 的公共 WebSocket API (2024-04-02)
+# Binance 的公共 WebSocket API 
+
+**最后更新时间：2024 年 10 月 15 日**
 
 ## API 基本信息
 
@@ -940,7 +942,7 @@ NONE
     <tr>
         <td><code>symbol</code></td>
         <td>STRING</td>
-        <td rowspan="3" align="center">NO</td>
+        <td rowspan="5" align="center">NO</td>
         <td>代表单个交易对</td>
     </tr>
     <tr>
@@ -953,16 +955,26 @@ NONE
         <td>ARRAY of STRING</td>
         <td>按权限过滤交易对</td>
     </tr>
+    <tr>
+      <td><code>showPermissionSets</code></td>
+      <td>BOOLEAN</td>
+      <td>除非设置了 <code>permissions</code> 参数，否则默认为 <code>false</code>。</td>
+    </tr>
+    <tr>
+      <td><code>symbolStatus</code></td>
+      <td>ENUM</td>
+      <td>过滤具有此 <code>tradingStatus</code> 的交易对。<br></br>有效值： <code>TRADING</code>， <code>HALT</code>， <code>BREAK</code> <br> 不能与 <code>symbol</code> 或 <code>symbols</code> 组合使用</td>
+    </tr>
 </tbody>
 </table>
 
 备注：
 
-* 只能指定 `symbol`，`symbols`，`permissions` 参数之一。
+* 参数 `symbol`、`symbols` 和 `permissions` 不能相互组合使用。
 
-* 如果没有参数，`exchangeInfo` 会显示所有 `["SPOT, "MARGIN", "LEVERAGED"]` 权限的交易对。
+* 如果没有参数，`exchangeInfo` 将显示具有 `SPOT`、`MARGIN` 或 `LEVERAGED` 权限的所有交易对。
 
-  * 如果想显示交易的 *所有* 活动交易对，您需要明确请求所有权限。
+  * 要显示具有任何权限的交易对，您需要在 `permissions` 中明确指定它们：（例如 `["SPOT","MARGIN",...]`)。有关完整列表，请参阅 [可用权限](enums_CN.md#account-and-symbol-permissions)。
 
 * `permissions` 接受多个权限或单个权限名称, 比如 `"SPOT"`。
 

@@ -1,4 +1,16 @@
-# CHANGELOG for Binance's API (2024-08-26)
+# CHANGELOG for Binance's API 
+
+## 2024-10-15
+
+**Note:** This will take effect on **October 23, 2024**. Since the changes are being rolled out gradually, this may take a few hours for the changes to be seen in all affected APIs.
+
+Changes to Exchange Information (i.e. [`GET /api/v3/exchangeInfo`](rest-api.md#exchangeInfo) from REST and [`exchangeInfo`](web-socket-api.md#exchangeInfo) for WebSocket API). The rest of the documentation has been updated regarding this change.
+
+* Symbol permission sets are now hidden by default: `permissionSets` field is returned as an empty array.
+* A new optional parameter `showPermissionSets` can be used to show the permissions. Please add `showPermissionSets=true` to show full permission sets.
+* A new optional parameter `symbolStatus` can now be used to only show symbols with the specified status. (e.g. `TRADING`, `HALT`, `BREAK`)
+
+---
 
 ## 2024-08-26
 

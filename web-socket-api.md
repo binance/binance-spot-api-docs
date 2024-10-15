@@ -86,7 +86,9 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public WebSocket API for Binance (2024-04-02)
+# Public WebSocket API for Binance
+
+**Last Update:** October 15, 2024
 
 ## General API Information
 
@@ -1058,7 +1060,7 @@ Query current exchange trading rules, rate limits, and symbol information.
     <tr>
         <td><code>symbol</code></td>
         <td>STRING</td>
-        <td rowspan="3" align="center">NO</td>
+        <td rowspan="5" align="center">NO</td>
         <td>Describe a single symbol</td>
     </tr>
     <tr>
@@ -1071,16 +1073,26 @@ Query current exchange trading rules, rate limits, and symbol information.
         <td>ARRAY of STRING</td>
         <td>Filter symbols by permissions</td>
     </tr>
+    <tr>
+      <td><code>showPermissionSets</code></td>
+      <td>BOOLEAN</td>
+      <td>Controls whether the content of the <code>permissionSets</code> field is populated or not. Defaults to <code>false</code> unless the <code>permissions</code> parameter is set.</td>
+    </tr>
+    <tr>
+      <td><code>symbolStatus</code></td>
+      <td>ENUM</td>
+      <td>Filters symbols that have this <code>tradingStatus</code>.<br></br> Valid values: <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code> <br> Cannot be used in combination with <code>symbol</code> or <code>symbols</code></td>
+    </tr>
 </tbody>
 </table>
 
 Notes:
 
-* Only one of `symbol`, `symbols`, `permissions` parameters can be specified.
+* Parameters `symbol`, `symbols`, and `permissions` cannot be used in combination with each other.
 
-* Without parameters, `exchangeInfo` displays all symbols with `["SPOT, "MARGIN", "LEVERAGED"]` permissions.
+* Without parameters, `exchangeInfo` displays all symbols that have permissions `SPOT`, `MARGIN`, or `LEVERAGED`.
 
-  * In order to list *all* active symbols on the exchange, you need to explicitly request all permissions.
+  * To display symbols with any permission you need to specify them explicitly in `permissions`: (e.g. `["SPOT","MARGIN",...]`.). See [Account and Symbol Permissions](enums.md#account-and-symbol-permissions) for the full list.
 
 * `permissions` accepts either a list of permissions, or a single permission name. E.g. `"SPOT"`.
 

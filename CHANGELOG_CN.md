@@ -1,5 +1,17 @@
 
-# 更新日志 (2024-08-26)
+# 更新日志 
+
+## 2024-10-15
+
+**注意：** 这将在 **2024 年 10 月 23 日**生效。由于更改是逐步推出的，因此可能需要几个小时才能在所有受影响的 API 中看到相关的更改。
+
+对 'Exchange Information' 的更改 （即 REST API 的 [`GET /api/v3/exchangeInfo`](rest-api_CN.md#exchangeInfo) 和 WebSocket API 的 [`exchangeInfo`](web-socket-api_CN.md#exchangeInfo)）。与此更改有关的其余文档已更新。
+
+* 默认情况下， 交易对的权限设置将被隐藏： `permissionSets` 将会返回一个空数组。
+* 新的可选参数 `showPermissionSets` 可被用来显示权限。 请在请求中添加 `showPermissionSets=true` 来查看所有权限。
+* 新的可选参数 `symbolStatus` 现在可用于仅显示具有指定状态的交易对。（例如：`TRADING`， `HALT`， `BREAK`）
+
+---
 
 ## 2024-08-26 
 
@@ -89,11 +101,11 @@ WebSocket Streams
 
 REST API
 
-* `otoAllowed` 现在将出现在 `GET /api/v3/exchangeInfo` 上，指示该交易品种是否支持 One-Triggers-the-Other (OTO) 订单。
+* `otoAllowed` 现在将出现在 `GET /api/v3/exchangeInfo` 上，指示该交易对是否支持 One-Triggers-the-Other (OTO) 订单。
 
 WebSocket API
 
-* `otoAllowed` 现在将出现在 `exchangeInfo` 上，指示该交易品种是否支持 One-Triggers-the-Other (OTO) 订单。
+* `otoAllowed` 现在将出现在 `exchangeInfo` 上，指示该交易对是否支持 One-Triggers-the-Other (OTO) 订单。
 
 SBE
 
@@ -138,11 +150,11 @@ WebSocket API
 
 REST API
 
-* `otoAllowed` 现在将出现在 `GET /api/v3/exchangeInfo` 上，指示该交易品种是否支持 One-Triggers-the-Other (OTO) 订单。
+* `otoAllowed` 现在将出现在 `GET /api/v3/exchangeInfo` 上，指示该交易对是否支持 One-Triggers-the-Other (OTO) 订单。
 
 WebSocket API
 
-* `otoAllowed` 现在将出现在 `exchangeInfo` 上，指示该交易品种是否支持 One-Triggers-the-Other (OTO) 订单。
+* `otoAllowed` 现在将出现在 `exchangeInfo` 上，指示该交易对是否支持 One-Triggers-the-Other (OTO) 订单。
 
 
 SBE
