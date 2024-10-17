@@ -1,4 +1,4 @@
-# 错误代码汇总 (2024-08-16)
+# 错误代码汇总 (2024-10-17)
 币安Rest接口(包括wapi)返回的错误包含两部分，错误码与错误信息. 错误码是大类，一个错误码可能对应多个不同的错误信息。
 以下是一个完整错误码实例
 ```javascript
@@ -119,6 +119,9 @@
 
 #### -1121 无效的交易对
  * Invalid symbol.
+
+#### -1122 无效的交易对状态
+  * Invalid symbolStatus.
 
 #### -1125 无效的listenKey
  * This listenKey does not exist.

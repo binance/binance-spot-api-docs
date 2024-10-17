@@ -1,5 +1,13 @@
+# 更新日志 (2024-10-17)
 
-# 更新日志 (2024-08-26)
+## 2024-10-17
+
+Exchange Information 的更改 （即 REST API 的 [`GET /api/v3/exchangeInfo`](rest-api_CN.md#exchangeInfo) 和 WebSocket API 的 [`exchangeInfo`](web-socket-api_CN.md#exchangeInfo)）。
+
+* 新的可选参数 `showPermissionSets` 可用于隐藏 `permissionsSets` 的权限信息;这可用于减小消息大小。
+* 新的可选参数 `symbolStatus` 用于仅显示具有指定状态的交易对。（例如：`TRADING`， `HALT`， `BREAK`）
+
+---
 
 ## 2024-08-26 
 

@@ -1,4 +1,13 @@
-# CHANGELOG for Binance's API (2024-08-26)
+# CHANGELOG for Binance's API (2024-10-17)
+
+## 2024-10-17
+
+Changes to Exchange Information (i.e. [`GET /api/v3/exchangeInfo`](rest-api.md#exchangeInfo) from REST and [`exchangeInfo`](web-socket-api.md#exchangeInfo) for WebSocket API).
+
+* A new optional parameter `showPermissionSets` can be used to hide the permissions from `permissionsSets`; This can be used for a reduced payload size.
+* A new optional parameter `symbolStatus` can now be used to only show symbols with the specified status. (e.g. `TRADING`, `HALT`, `BREAK`)
+
+---
 
 ## 2024-08-26
 

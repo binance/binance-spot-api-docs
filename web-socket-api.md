@@ -86,7 +86,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public WebSocket API for Binance (2024-04-02)
+# Public WebSocket API for Binance (2024-10-17)
 
 ## General API Information
 
@@ -1058,7 +1058,7 @@ Query current exchange trading rules, rate limits, and symbol information.
     <tr>
         <td><code>symbol</code></td>
         <td>STRING</td>
-        <td rowspan="3" align="center">NO</td>
+        <td rowspan="5" align="center">NO</td>
         <td>Describe a single symbol</td>
     </tr>
     <tr>
@@ -1070,6 +1070,16 @@ Query current exchange trading rules, rate limits, and symbol information.
         <td><code>permissions</code></td>
         <td>ARRAY of STRING</td>
         <td>Filter symbols by permissions</td>
+    </tr>
+    <tr>
+        <td><code>showPermissionSets</code></td>
+        <td>BOOLEAN</td>
+        <td>Controls whether the content of the <code>permissionSets</code> field is populated or not. Defaults to <code>true</code>.</td>
+    </tr>
+    <tr>
+        <td><code>symbolStatus</code></td>
+        <td>ENUM</td>
+        <td>Filters symbols that have this <code>tradingStatus</code>.<br></br> Valid values: <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code> <br> Cannot be used in combination with <code>symbol</code> or <code>symbols</code></td>
     </tr>
 </tbody>
 </table>

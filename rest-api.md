@@ -80,7 +80,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2023-04-02)
+# Public Rest API for Binance (2024-10-17)
 
 ## General API Information
 * The following base endpoints are available. Please use whichever works best for your setup:
@@ -514,21 +514,20 @@ Current exchange trading rules and symbol information
 
 **Parameters:**
 
-There are 4 possible options:
-
-|Options|Example|
------ | ----|
-|No parameter|curl -X GET "https://api.binance.com/api/v3/exchangeInfo"|
-|symbol|curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbol=BNBBTC"|
-|symbols| curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbols=%5B%22BNBBTC%22,%22BTCUSDT%22%5D" <br/> or <br/> curl -g -X  GET 'https://api.binance.com/api/v3/exchangeInfo?symbols=["BTCUSDT","BNBBTC"]' |
-|permissions| curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=SPOT" <br/> or <br/> curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=%5B%22MARGIN%22%2C%22LEVERAGED%22%5D" <br/> or <br/> curl -g -X GET 'https://api.binance.com/api/v3/exchangeInfo?permissions=["MARGIN","LEVERAGED"]' |
+Name | Type | Mandatory | Description
+------------ | ------------ | ------------ | ------------
+symbol |STRING| No| Example: curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbol=BNBBTC" 
+symbols |ARRAY OF STRING|No| Examples: curl -X GET "https://api.binance.com/api/v3/exchangeInfo?symbols=%5B%22BNBBTC%22,%22BTCUSDT%22%5D" <br/> or <br/> curl -g -X  GET 'https://api.binance.com/api/v3/exchangeInfo?symbols=["BTCUSDT","BNBBTC"]'
+permissions |ENUM|No|Examples: curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=SPOT" <br/> or <br/> curl -X GET "https://api.binance.com/api/v3/exchangeInfo?permissions=%5B%22MARGIN%22%2C%22LEVERAGED%22%5D" <br/> or <br/> curl -g -X GET 'https://api.binance.com/api/v3/exchangeInfo?permissions=["MARGIN","LEVERAGED"]' |
+showPermissionSets|BOOLEAN|No|Controls whether the content of the `permissionSets` field is populated or not. Defaults to `true`
+symbolStatus|ENUM|No|Filters symbols that have this `tradingStatus`. Valid values: `TRADING`, `HALT`, `BREAK` <br> Cannot be used in combination with `symbols` or `symbol`.|
 
 **Notes:**
 * If the value provided to `symbol` or `symbols` do not exist, the endpoint will throw an error saying the symbol is invalid.
 * All parameters are optional.
-* `permissions` can support single or multiple values (e.g. `SPOT`, `["MARGIN","LEVERAGED"]`)
-* If `permissions` parameter not provided, the default values will be `["SPOT","MARGIN","LEVERAGED"]`.
-  * To display all permissions you need to specify them explicitly: (e.g. `["SPOT","MARGIN",...]`.). See [Account and Symbol Permissions](enums.md#account-and-symbol-permissions) for the full list.
+* `permissions` can support single or multiple values (e.g. `SPOT`, `["MARGIN","LEVERAGED"]`). This cannot be used in combination with `symbol` or `symbols`.
+* If `permissions` parameter not provided, all symbols that have either `SPOT`, `MARGIN`, or `LEVERAGED` permission will be exposed.
+  * To display symbols with any permission you need to specify them explicitly in `permissions`: (e.g. `["SPOT","MARGIN",...]`.). See [Account and Symbol Permissions](enums.md#account-and-symbol-permissions) for the full list.
 
 #### Examples of Symbol Permissions Interpretation from the Response: 
 
