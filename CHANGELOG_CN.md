@@ -1,4 +1,15 @@
-# 更新日志 (2024-10-17)
+# 更新日志 
+
+**上次更新时间： 2024-10-18**
+
+## 2024-10-18
+
+Rest 和 WebSocket API:
+
+* 注意：根据我们的 SBE 政策，SBE 1：0 模式将于 2024 年 10 月 25 日被禁用 [废止后 6 个月](./faqs/sbe_faq_CN.md)。
+* [面向生产的 SBE 生命周期]（https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json） 已基于本次更改进行了更新。
+
+---
 
 ## 2024-10-17
 
@@ -6,6 +17,7 @@ Exchange Information 的更改 （即 REST API 的 [`GET /api/v3/exchangeInfo`](
 
 * 新的可选参数 `showPermissionSets` 可用于隐藏 `permissionsSets` 的权限信息;这可用于减小消息大小。
 * 新的可选参数 `symbolStatus` 用于仅显示具有指定状态的交易对。（例如：`TRADING`， `HALT`， `BREAK`）
+
 
 ---
 

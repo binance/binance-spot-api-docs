@@ -5,13 +5,14 @@
     "version": 0,
     "releaseDate": "2024-04-25"
   },
-  "deprecatedSchemas": [
+  "deprecatedSchemas": [],
+  "retiredSchemas": [
     {
       "id": 1,
       "version": 0,
       "releaseDate": "2024-03-05",
-      "deprecatedDate": "2024-04-25"
+      "deprecatedDate": "2024-04-25",
+      "retiredDate": "2024-10-25"
     }
-  ],
-  "retiredSchemas": []
+  ]
 }

@@ -1,6 +1,18 @@
-# CHANGELOG for Binance's API (2024-10-17)
+# CHANGELOG for Binance's API (2024-10-18)
+
+**Last Updated: 2024-10-18**
+
+## 2024-10-18
+
+REST and WebSocket API:
+
+* Reminder that SBE 1:0 schema will be disabled on 2024-10-25, [6 months after being deprecated](./faqs/sbe_faq.md), as per our SBE policy.
+* The [SBE lifecycle for Prod](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) has been updated to reflect this change. 
+
+---
 
 ## 2024-10-17
+
 
 Changes to Exchange Information (i.e. [`GET /api/v3/exchangeInfo`](rest-api.md#exchangeInfo) from REST and [`exchangeInfo`](web-socket-api.md#exchangeInfo) for WebSocket API).
 
