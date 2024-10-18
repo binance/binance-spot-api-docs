@@ -1,4 +1,4 @@
-# CHANGELOG for Binance's API (2024-10-18)
+# CHANGELOG for Binance's API
 
 **Last Updated: 2024-10-18**
 
