@@ -7,7 +7,7 @@
 Rest 和 WebSocket API:
 
 * 注意：根据我们的 SBE 政策，SBE 1：0 模式将于 2024 年 10 月 25 日被禁用 [废止后 6 个月](./faqs/sbe_faq_CN.md)。
-* [面向生产的 SBE 生命周期]（https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json） 已基于本次更改进行了更新。
+* [面向生产的 SBE 生命周期](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) 已基于本次更改进行了更新。
 
 ---
 
