@@ -36,30 +36,28 @@ on how to set up an Ed25519 key pair.
 
 ### On message processing order
 
-The `MessageHandling (25035)` field required in the initial [Logon`<A>`](#logon-request) message controls whether the messages may get reordered.
+The `MessageHandling (25035)` field required in the initial [Logon`<A>`](#logon-request) message controls whether the
+messages may get reordered before they are processed by the engine.
 
-- `UNORDERED(1)` should offer better performance, but there is a risk that messages may be processed in a different
-  order.
-- `SEQUENTIAL(2)` guarantees that messages are processed according to their `MsgSeqNum(34)`.
+- `UNORDERED(1)` messages from client are allowed to be sent to the engine out of order.
+- `SEQUENTIAL(2)` messages from client are always sent to the engine in the `MsgSeqNum (34)` order.
+
+> [!TIP]
+> `UNORDERED(1)` should offer better performance when there are multiple messages in flight from the client to the server.
+
 
 <a id="responsemode"></a>
 
 ### Response Mode
 
 FIX API allows multiple concurrent sessions for a single account (see [Connection Limits](#connection-limits)).
-By default, all sessions receive all of the account's successful [ExecutionReport`<8>`](#executionreport)
-and [ListStatus`<N>`](#liststatus) messages,
-including those in response to orders placed from other FIX sessions and via non-FIX APIs.
+By default, all sessions receive all of the account's successful [ExecutionReport`<8>`](#executionreport) and [ListStatus`<N>`](#liststatus) messages. This is referred to as ExecutionReport push.
 
 Use the `ResponseMode (25036)` field in the initial [Logon`<A>`](#logon-request) message
 to change this behavior.
 
-- `EVERYTHING(1)`: The default mode; the connection receives all [ExecutionReport`<8>`](#executionreport)
-  and [ListStatus`<N>`](#liststatus) messages, even those initiated from other sources.
-- `ONLY_ACKS(2)`: Receives only ACKs for operations initiated by this connection. This mode reduces bandwidth and should
-  offer a better performance profile.
-
-**Note**: ExecutionReport`<8>` push messages may be sent out of order in relation to responses.
+- `EVERYTHING(1)`: The default mode.
+- `ONLY_ACKS(2)`: Receive only ACK messages whether operation succeeded or failed. Disables ExecutionReport push.
 
 <a id="signaturecomputation"></a>
 
@@ -436,8 +434,8 @@ Please refer to [Supported Order Types](#NewOrderSingle-required-fields).
 
 **Response:**
 
-* [ExecutionReport`<8>`](#executionreport) with `ExecType (150)` value `NEW(0)` if the order was accepted.
-* [ExecutionReport`<8>`](#executionreport) with `ExecType (150)` value `REJECTED(8)` if the order was rejected.
+* [ExecutionReport`<8>`](#executionreport) with `ExecType (150)` value `NEW (0)` if the order was accepted.
+* [ExecutionReport`<8>`](#executionreport) with `ExecType (150)` value `REJECTED (8)` if the order was rejected.
 * [Reject`<3>`](#reject) if the message is rejected.
 
 <a id="ordertype"></a>
@@ -450,25 +448,25 @@ Please refer to [Supported Order Types](#NewOrderSingle-required-fields).
 | Limit order                           | `LIMIT`             | BUY or SELL | <code>40=2&#124;</code>                                 |                                  |
 | Limit maker order                     | `LIMIT_MAKER`       | BUY or SELL | <code>40=2&#124;18=6&#124;</code>                           |                                  |
 | Buy stop loss order                   | `STOP_LOSS`         | BUY         | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102                             |
-| Buy trailing stop loss order          | `STOP_LOSS`         | BUY         | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102,1109                        |
+| Buy trailing stop loss order          | `STOP_LOSS`         | BUY         | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102,25009                        |
 | Buy stop loss limit order             | `STOP_LOSS_LIMIT`   | BUY         | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102                             |
-| Buy trailing stop loss limit order    | `STOP_LOSS_LIMIT`   | BUY         | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102,1109                        |
+| Buy trailing stop loss limit order    | `STOP_LOSS_LIMIT`   | BUY         | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102,25009                        |
 | Sell stop loss order                  | `STOP_LOSS`         | SELL        | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102                             |
-| Sell trailing stop loss order         | `STOP_LOSS`         | SELL        | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102,1109                        |
+| Sell trailing stop loss order         | `STOP_LOSS`         | SELL        | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102,25009                        |
 | Sell stop loss limit order            | `STOP_LOSS_LIMIT`   | SELL        | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102                             |
-| Sell trailing stop loss limit order   | `STOP_LOSS_LIMIT`   | SELL        | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102,1109                        |
+| Sell trailing stop loss limit order   | `STOP_LOSS_LIMIT`   | SELL        | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102,25009                        |
 | Buy take profit order                 | `TAKE_PROFIT`       | BUY         | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102                             |
-| Buy trailing take profit order        | `TAKE_PROFIT`       | BUY         | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102,1109                        |
-| Buy trailing take profit order        | `TAKE_PROFIT`       | BUY         | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;</code>         | 1109                             |
+| Buy trailing take profit order        | `TAKE_PROFIT`       | BUY         | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102,25009                        |
+| Buy trailing take profit order        | `TAKE_PROFIT`       | BUY         | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;</code>         | 25009                             |
 | Buy take profit order                 | `TAKE_PROFIT_LIMIT` | BUY         | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102                             |
-| Buy trailing take profit limit order  | `TAKE_PROFIT_LIMIT` | BUY         | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102,1109                        |
-| Buy trailing take profit limit order  | `TAKE_PROFIT_LIMIT` | BUY         | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;</code>         | 1109                             |
+| Buy trailing take profit limit order  | `TAKE_PROFIT_LIMIT` | BUY         | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102,25009                        |
+| Buy trailing take profit limit order  | `TAKE_PROFIT_LIMIT` | BUY         | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;</code>         | 25009                             |
 | Sell take profit order                | `TAKE_PROFIT`       | SELL        | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102                             |
-| Sell trailing take profit order       | `TAKE_PROFIT`       | SELL        | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102,1109                        |
-| Sell trailing take profit order       | `TAKE_PROFIT`       | SELL        | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;</code>         | 1109                             |
+| Sell trailing take profit order       | `TAKE_PROFIT`       | SELL        | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102,25009                        |
+| Sell trailing take profit order       | `TAKE_PROFIT`       | SELL        | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;</code>         | 25009                             |
 | Sell take profit limit order          | `TAKE_PROFIT_LIMIT` | SELL        | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102                             |
-| Sell trailing take profit limit order | `TAKE_PROFIT_LIMIT` | SELL        | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102,1109                        |
-| Sell trailing take profit limit order | `TAKE_PROFIT_LIMIT` | SELL        | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;</code>         | 1109                             |
+| Sell trailing take profit limit order | `TAKE_PROFIT_LIMIT` | SELL        | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102,25009                        |
+| Sell trailing take profit limit order | `TAKE_PROFIT_LIMIT` | SELL        | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;</code>         | 25009                             |
 
 <a id="NewOrderSingle-required-fields"></a>
 
@@ -589,7 +587,7 @@ If the canceled order is part of an order list, the entire list will be canceled
 
 **Response:**
 
-* [ExecutionReport`<8>`](#executionreport) with `ExecType (150)` value `CANCELED(4)` for each canceled order.
+* [ExecutionReport`<8>`](#executionreport) with `ExecType (150)` value `CANCELED (4)` for each canceled order.
 * [ListStatus`<N>`](#liststatus) if orders in an order list were canceled.
 * [OrderCancelReject`<9>`](#ordercancelreject) if cancellation was rejected.
 * [Reject`<3>`](#reject) if the message is rejected.
@@ -665,9 +663,9 @@ Please refer to [Supported Order Types](#ordertype) for supported field combinat
 
 **Response:**
 
-* [ExecutionReport`<8>`](#executionreport) with `ExecType (150)` value `CANCELED(4)` for the canceled order.
-* [ExecutionReport`<8>`](#executionreport) with `ExecType (150)` value `NEW(0)` for the new order.
-* [ExecutionReport`<8>`](#executionreport) with `ExecType (150)` value `REJECTED(8)` if the new order was rejected.
+* [ExecutionReport`<8>`](#executionreport) with `ExecType (150)` value `CANCELED (4)` for the canceled order.
+* [ExecutionReport`<8>`](#executionreport) with `ExecType (150)` value `NEW (0)` for the new order.
+* [ExecutionReport`<8>`](#executionreport) with `ExecType (150)` value `REJECTED (8)` if the new order was rejected.
 * [OrderCancelReject`<9>`](#ordercancelreject) if the cancellation was rejected.
 * [Reject`<3>`](#reject) if the message is rejected.
 
@@ -693,7 +691,7 @@ Sent by the client to cancel all open orders on a symbol.
 
 **Responses:**
 
-* [ExecutionReport`<8>`](#executionreport) with `ExecType (150)` value `CANCELED(4)` for the every order canceled.
+* [ExecutionReport`<8>`](#executionreport) with `ExecType (150)` value `CANCELED (4)` for the every order canceled.
 * [OrderMassCancelReport`<r>`](#ordermasscancelreport) with `MassCancelResponse (531)` field indicating whether the message is accepted or rejected.
 * [Reject`<3>`](#reject) if the message is rejected.
 
@@ -775,8 +773,8 @@ Please refer to [Supported Order List Types](#order-list-types) for supported or
 | OCO             | `1`                     | 1. below order<br></br><br></br>2. above order                                         | 1. below order=`SELL`<br></br><br></br>2. above order=`SELL`                                                         | 1. below order=`STOP_LOSS` or `STOP_LOSS_LIMIT`<br></br><br></br>2. above order=`LIMIT_MAKER`                                                                  | 1. below order:<br></br><code>25010=1&#124;25011=2&#124;25012=1&#124;25013=2&#124;</code><br></br><br></br>2. above order:<br></br><code>25010=1&#124;25011=1&#124;25012=0&#124;25013=2&#124;</code>                                                                                                        |
 | OCO             | `1`                     | 1. below order<br></br><br></br>2. above order                                         | 1. below order=`BUY`<br></br><br></br>2. above order=`BUY`                                                           | 1. below order=`LIMIT_MAKER`<br></br><br></br>2. above order=`STOP_LOSS` or `STOP_LOSS_LIMIT`                                                                  | 1. below order:<br></br><code>25010=1&#124;25011=1&#124;25012=1&#124;25013=2&#124;</code><br></br><br></br>2. above order:<br></br><code>25010=1&#124;25011=2&#124;25012=0&#124;25013=2&#124;</code>                                                                                                        |
 | OTO             | `2`                     | 1. working order<br></br><br></br>2. pending order                                     | 1. working order=`SELL` or `BUY`<br></br><br></br>2. pending order=`SELL` or `BUY`                                   | 1. working order=`LIMIT` or `LIMIT_MAKER`<br></br><br></br>2. pending order=ANY                                                                                | 1. working order:<br></br>NONE<br></br><br></br>2. pending order:<br></br><code>25010=1&#124;25011=3&#124;25012=0&#124;25013=1&#124;</code>                                                                                                                                      |
-| OTOCO           | `2`                     | 1. working order<br></br><br></br>2. pending below order<br></br><br></br>3. pending above order | 1. working order=`SELL` or `BUY`<br></br><br></br>2. pending below order=`SELL`<br></br><br></br>3. pending above order=`SELL` | 1. working order=`LIMIT` or `LIMIT_MAKER`<br></br><br></br>2. pending below order=`STOP_LOSS` or `STOP_LOSS_LIMIT`<br></br><br></br>3. pending above order=`LIMIT_MAKER` | 1. working order:<br></br>NONE<br></br><br></br>2. pending below order:<br></br><code>25010=2&#124;25011=2&#124;25012=0&#124;25013=2&#124;25011=2&#124;25012=2&#124;25013=2&#124;</code><br></br><br></br>3. pending above order:<br></br><code>25010=2&#124;25011=2&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=1&#124;25013=2&#124;</code> |
-| OTOCO           | `2`                     | 1. working order<br></br><br></br>2. pending below order<br></br><br></br>3. pending above order | 1. working order=`SELL` or `BUY`<br></br><br></br>2. pending below order=`BUY`<br></br><br></br>3. pending above order=`BUY`   | 1. working order=`LIMIT` or `LIMIT_MAKER`<br></br><br></br>2. pending below order=`LIMIT_MAKER`<br></br><br></br>3. pending above order=`STOP_LOSS` or `STOP_LOSS_LIMIT` | 1. working order:<br></br>NONE<br></br><br></br>2. pending below order:<br></br><code>25010=2&#124;25011=2&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=2&#124;25013=2&#124;</code><br></br><br></br>3. pending above order:<br></br><code>25010=2&#124;25011=2&#124;25012=0&#124;25013=2&#124;25011=2&#124;25012=1&#124;25013=2&#124;</code> |
+| OTOCO           | `2`                     | 1. working order<br></br><br></br>2. pending below order<br></br><br></br>3. pending above order | 1. working order=`SELL` or `BUY`<br></br><br></br>2. pending below order=`SELL`<br></br><br></br>3. pending above order=`SELL` | 1. working order=`LIMIT` or `LIMIT_MAKER`<br></br><br></br>2. pending below order=`STOP_LOSS` or `STOP_LOSS_LIMIT`<br></br><br></br>3. pending above order=`LIMIT_MAKER` | 1. working order:<br></br>NONE<br></br><br></br>2. pending below order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=2&#124;25012=2&#124;25013=2&#124;</code><br></br><br></br>3. pending above order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=1&#124;25013=2&#124;</code> |
+| OTOCO           | `2`                     | 1. working order<br></br><br></br>2. pending below order<br></br><br></br>3. pending above order | 1. working order=`SELL` or `BUY`<br></br><br></br>2. pending below order=`BUY`<br></br><br></br>3. pending above order=`BUY`   | 1. working order=`LIMIT` or `LIMIT_MAKER`<br></br><br></br>2. pending below order=`LIMIT_MAKER`<br></br><br></br>3. pending above order=`STOP_LOSS` or `STOP_LOSS_LIMIT` | 1. working order:<br></br>NONE<br></br><br></br>2. pending below order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=2&#124;25013=2&#124;</code><br></br><br></br>3. pending above order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=2&#124;25012=1&#124;25013=2&#124;</code> |
 
 <a id="liststatus"></a>
 

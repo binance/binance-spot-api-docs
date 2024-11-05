@@ -34,24 +34,26 @@ FIX 连接需要 TLS 加密。请使用本地 TCP+TLS 连接或设置本地代�
 
 ### 关于消息处理顺序
 
-初始消息 [Logon`<A>`](#logon-request) 中必需的 `MessageHandling (25035)` 字段控制是否可以重新排序消息。
+初始消息 [Logon`<A>`](#logon-request) 中必需的 `MessageHandling (25035)` 字段被用于控制：是否在消息被撮合引擎处理前，需要重新排序消息。
 
-- `UNORDERED(1)` 应该会提供更优的性能，但存在消息可能以不同顺序处理的风险。
-- `SEQUENTIAL(2)` 保证消息按照它们的 `MsgSeqNum(34)` 来按序处理。
+- `UNORDERED(1)` 允许不按顺序将来自客户端的消息发送到撮合引擎。
+- `SEQUENTIAL(2)` 来自客户端的消息始终以 `MsgSeqNum(34)` 中定义的顺序发送到撮合引擎。
+
+> [!TIP]
+> 在有多个消息需要从客户端传输到服务器的情况时， `UNORDERED(1)` 应该会提供更好的性能。
 
 <a id="responsemode"></a>
 
 ### 响应模式
 
 FIX API 允许单个账户的多个并发会话（参见 [连接限制](#connection-limits)）。
-默认情况下，所有会话将接收该账户的所有成功 [ExecutionReport`<8>`](#executionreport) 和 [ListStatus`<N>`](#liststatus) 消息。这些消息也包括那些来自其他 FIX 会话和非 FIX API 下单的响应消息。
+默认情况下，所有会话将接收该账户的所有成功 [ExecutionReport`<8>`](#executionreport) 和 [ListStatus`<N>`](#liststatus) 消息。这被称为 `ExecutionReport` 推送。
 
 用户可以在初始消息 [Logon`<A>`](#logon-request) 中使用 `ResponseMode (25036)` 字段来改变这种行为。
 
-- `EVERYTHING(1)`： 默认模式；连接接收所有 [ExecutionReport`<8>`](#executionreport) 和 [ListStatus`<N>`](#liststatus) 消息，即使是从其他来源发起的。
-- `ONLY_ACKS(2)`： 仅接收由此连接发起的操作的 ACKs。此模式减少带宽并会提供更好的性能特征。
+- `EVERYTHING(1)`： 默认模式。
+- `ONLY_ACKS(2)`： 无论操作成功还是失败，都只接收 ACK 消息。禁用 `ExecutionReport` 推送。
 
-**注意**: ExecutionReport`<8>` 所推送消息可能会与响应的顺序不一致。
 
 <a id="signaturecomputation"></a>
 
@@ -421,8 +423,8 @@ Logout 响应
 
 **响应:**
 
-* 如果订单被接受， [ExecutionReport`<8>`](#executionreport)的 `ExecType (150)` 值为 `NEW(0)`。
-* 如果订单被拒绝， [ExecutionReport`<8>`](#executionreport)的 `ExecType (150)` 值为 `REJECTED(8)`。
+* 如果订单被接受， [ExecutionReport`<8>`](#executionreport)的 `ExecType (150)` 值为 `NEW (0)`。
+* 如果订单被拒绝， [ExecutionReport`<8>`](#executionreport)的 `ExecType (150)` 值为 `REJECTED (8)`。
 * 如果消息被拒绝，则为 [Reject`<3>`](#reject)。
 
 <a id="ordertype"></a>
@@ -435,25 +437,25 @@ Logout 响应
 | Limit order                           | `LIMIT`             | BUY 或 SELL  | <code>40=2&#124;</code>                                 |                                  |
 | Limit maker order                     | `LIMIT_MAKER`       | BUY 或 SELL  | <code>40=2&#124;18=6&#124;</code>                           |                                  |
 | Buy stop loss order                   | `STOP_LOSS`         | BUY         | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102                             |
-| Buy trailing stop loss order          | `STOP_LOSS`         | BUY         | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102,1109                        |
+| Buy trailing stop loss order          | `STOP_LOSS`         | BUY         | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102,25009                        |
 | Buy stop loss limit order             | `STOP_LOSS_LIMIT`   | BUY         | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102                             |
-| Buy trailing stop loss limit order    | `STOP_LOSS_LIMIT`   | BUY         | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102,1109                        |
+| Buy trailing stop loss limit order    | `STOP_LOSS_LIMIT`   | BUY         | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102,25009                        |
 | Sell stop loss order                  | `STOP_LOSS`         | SELL        | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102                             |
-| Sell trailing stop loss order         | `STOP_LOSS`         | SELL        | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102,1109                        |
+| Sell trailing stop loss order         | `STOP_LOSS`         | SELL        | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102,25009                        |
 | Sell stop loss limit order            | `STOP_LOSS_LIMIT`   | SELL        | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102                             |
-| Sell trailing stop loss limit order   | `STOP_LOSS_LIMIT`   | SELL        | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102,1109                        |
+| Sell trailing stop loss limit order   | `STOP_LOSS_LIMIT`   | SELL        | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102,25009                        |
 | Buy take profit order                 | `TAKE_PROFIT`       | BUY         | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102                             |
-| Buy trailing take profit order        | `TAKE_PROFIT`       | BUY         | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102,1109                        |
-| Buy trailing take profit order        | `TAKE_PROFIT`       | BUY         | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;</code>         | 1109                             |
+| Buy trailing take profit order        | `TAKE_PROFIT`       | BUY         | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102,25009                        |
+| Buy trailing take profit order        | `TAKE_PROFIT`       | BUY         | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;</code>         | 25009                             |
 | Buy take profit order                 | `TAKE_PROFIT_LIMIT` | BUY         | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102                             |
-| Buy trailing take profit limit order  | `TAKE_PROFIT_LIMIT` | BUY         | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102,1109                        |
-| Buy trailing take profit limit order  | `TAKE_PROFIT_LIMIT` | BUY         | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;</code>         | 1109                             |
+| Buy trailing take profit limit order  | `TAKE_PROFIT_LIMIT` | BUY         | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=D&#124;</code> | 1102,25009                        |
+| Buy trailing take profit limit order  | `TAKE_PROFIT_LIMIT` | BUY         | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;</code>         | 25009                             |
 | Sell take profit order                | `TAKE_PROFIT`       | SELL        | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102                             |
-| Sell trailing take profit order       | `TAKE_PROFIT`       | SELL        | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102,1109                        |
-| Sell trailing take profit order       | `TAKE_PROFIT`       | SELL        | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;</code>         | 1109                             |
+| Sell trailing take profit order       | `TAKE_PROFIT`       | SELL        | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102,25009                        |
+| Sell trailing take profit order       | `TAKE_PROFIT`       | SELL        | <code>40=3&#124;1100=4&#124;1101=1&#124;1107=2&#124;</code>         | 25009                             |
 | Sell take profit limit order          | `TAKE_PROFIT_LIMIT` | SELL        | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102                             |
-| Sell trailing take profit limit order | `TAKE_PROFIT_LIMIT` | SELL        | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102,1109                        |
-| Sell trailing take profit limit order | `TAKE_PROFIT_LIMIT` | SELL        | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;</code>         | 1109                             |        |
+| Sell trailing take profit limit order | `TAKE_PROFIT_LIMIT` | SELL        | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;1109=U&#124;</code> | 1102,25009                        |
+| Sell trailing take profit limit order | `TAKE_PROFIT_LIMIT` | SELL        | <code>40=4&#124;1100=4&#124;1101=1&#124;1107=2&#124;</code>         | 25009                             |        |
 
 
 <a id="NewOrderSingle-required-fields"></a>
@@ -571,7 +573,7 @@ Logout 响应
 ```
 
 **响应：**
-* 对于每个被取消的订单，[ExecutionReport`<8>`](#executionreport)的 `ExecType (150)` 值为 `CANCELED(4)`。
+* 对于每个被取消的订单，[ExecutionReport`<8>`](#executionreport)的 `ExecType (150)` 值为 `CANCELED (4)`。
 * 如果订单列表中的订单被取消，则为 [ListStatus`<N>`](#liststatus)。
 * 如果取消被拒绝，则为 [OrderCancelReject`<9>`](#ordercancelreject)。
 * 如果消息被拒绝，则为 [Reject`<3>`](#reject)。
@@ -646,9 +648,9 @@ Logout 响应
 
 **响应：**
 
-* 对于每个被取消的订单，[ExecutionReport`<8>`](#executionreport) 的 `ExecType (150)` 值为 `CANCELED(4)`。
-* 对于新订单，[ExecutionReport`<8>`](#executionreport) 的 `ExecType (150)` 值为 `NEW(0)`。
-* 如果新订单被拒绝，[ExecutionReport`<8>`](#executionreport) 的 `ExecType (150)` 值为 `REJECTED(8)`。
+* 对于每个被取消的订单，[ExecutionReport`<8>`](#executionreport) 的 `ExecType (150)` 值为 `CANCELED (4)`。
+* 对于新订单，[ExecutionReport`<8>`](#executionreport) 的 `ExecType (150)` 值为 `NEW (0)`。
+* 如果新订单被拒绝，[ExecutionReport`<8>`](#executionreport) 的 `ExecType (150)` 值为 `REJECTED (8)`。
 * 如果取消订单的请求被拒绝，则为 [OrderCancelReject`<9>`](#ordercancelreject)。
 * 如果消息被拒绝，则为 [Reject`<3>`](#reject)。
 
@@ -674,7 +676,7 @@ Logout 响应
 
 **响应：**
 
-* 对于每个被取消的订单，[ExecutionReport`<8>`](#executionreport) 的 `ExecType (150)` 值为 `CANCELED(4)`。
+* 对于每个被取消的订单，[ExecutionReport`<8>`](#executionreport) 的 `ExecType (150)` 值为 `CANCELED (4)`。
 * 对于请求是否被接受或者拒绝，请参考 [OrderMassCancelReport`<r>`](#ordermasscancelreport) 的字段 `MassCancelResponse (531)`。
 * 如果消息被拒绝，则为 [Reject`<3>`](#reject)。
 
@@ -753,8 +755,8 @@ Logout 响应
 | OCO             | `1`                     | 1. below order<br></br><br></br>2. above order                                         | 1. below order=`SELL`<br></br><br></br>2. above order=`SELL`                                                         | 1. below order=`STOP_LOSS` 或 `STOP_LOSS_LIMIT`<br></br><br></br>2. above order=`LIMIT_MAKER`                                                                  | 1. below order:<br></br><code>25010=1&#124;25011=2&#124;25012=1&#124;25013=2&#124;</code><br></br><br></br>2. above order:<br></br><code>25010=1&#124;25011=1&#124;25012=0&#124;25013=2&#124;</code>                                                                                                        |
 | OCO             | `1`                     | 1. below order<br></br><br></br>2. above order                                         | 1. below order=`BUY`<br></br><br></br>2. above order=`BUY`                                                           | 1. below order=`LIMIT_MAKER`<br></br><br></br>2. above order=`STOP_LOSS` 或 `STOP_LOSS_LIMIT`                                                                  | 1. below order:<br></br><code>25010=1&#124;25011=1&#124;25012=1&#124;25013=2&#124;</code><br></br><br></br>2. above order:<br></br><code>25010=1&#124;25011=2&#124;25012=0&#124;25013=2&#124;</code>                                                                                                        |
 | OTO             | `2`                     | 1. working order<br></br><br></br>2. pending order                                     | 1. working order=`SELL` 或 `BUY`<br></br><br></br>2. pending order=`SELL` 或 `BUY`                                   | 1. working order=`LIMIT` 或 `LIMIT_MAKER`<br></br><br></br>2. pending order=ANY                                                                                | 1. working order:<br></br>NONE<br></br><br></br>2. pending order:<br></br><code>25010=1&#124;25011=3&#124;25012=0&#124;25013=1&#124;</code>                                                                                                                                      |
-| OTOCO           | `2`                     | 1. working order<br></br><br></br>2. pending below order<br></br><br></br>3. pending above order | 1. working order=`SELL` 或 `BUY`<br></br><br></br>2. pending below order=`SELL`<br></br><br></br>3. pending above order=`SELL` | 1. working order=`LIMIT` 或 `LIMIT_MAKER`<br></br><br></br>2. pending below order=`STOP_LOSS` 或 `STOP_LOSS_LIMIT`<br></br><br></br>3. pending above order=`LIMIT_MAKER` | 1. working order:<br></br>NONE<br></br><br></br>2. pending below order:<br></br><code>25010=2&#124;25011=2&#124;25012=0&#124;25013=2&#124;25011=2&#124;25012=2&#124;25013=2&#124;</code><br></br><br></br>3. pending above order:<br></br><code>25010=2&#124;25011=2&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=1&#124;25013=2&#124;</code> |
-| OTOCO           | `2`                     | 1. working order<br></br><br></br>2. pending below order<br></br><br></br>3. pending above order | 1. working order=`SELL` 或 `BUY`<br></br><br></br>2. pending below order=`BUY`<br></br><br></br>3. pending above order=`BUY`   | 1. working order=`LIMIT` 或 `LIMIT_MAKER`<br></br><br></br>2. pending below order=`LIMIT_MAKER`<br></br><br></br>3. pending above order=`STOP_LOSS` 或 `STOP_LOSS_LIMIT` | 1. working order:<br></br>NONE<br></br><br></br>2. pending below order:<br></br><code>25010=2&#124;25011=2&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=2&#124;25013=2&#124;</code><br></br><br></br>3. pending above order:<br></br><code>25010=2&#124;25011=2&#124;25012=0&#124;25013=2&#124;25011=2&#124;25012=1&#124;25013=2&#124;</code> |
+| OTOCO           | `2`                     | 1. working order<br></br><br></br>2. pending below order<br></br><br></br>3. pending above order | 1. working order=`SELL` 或 `BUY`<br></br><br></br>2. pending below order=`SELL`<br></br><br></br>3. pending above order=`SELL` | 1. working order=`LIMIT` 或 `LIMIT_MAKER`<br></br><br></br>2. pending below order=`STOP_LOSS` 或 `STOP_LOSS_LIMIT`<br></br><br></br>3. pending above order=`LIMIT_MAKER` | 1. working order:<br></br>NONE<br></br><br></br>2. pending below order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=2&#124;25012=2&#124;25013=2&#124;</code><br></br><br></br>3. pending above order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=1&#124;25013=2&#124;</code> |
+| OTOCO           | `2`                     | 1. working order<br></br><br></br>2. pending below order<br></br><br></br>3. pending above order | 1. working order=`SELL` 或 `BUY`<br></br><br></br>2. pending below order=`BUY`<br></br><br></br>3. pending above order=`BUY`   | 1. working order=`LIMIT` 或 `LIMIT_MAKER`<br></br><br></br>2. pending below order=`LIMIT_MAKER`<br></br><br></br>3. pending above order=`STOP_LOSS` 或 `STOP_LOSS_LIMIT` | 1. working order:<br></br>NONE<br></br><br></br>2. pending below order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=2&#124;25013=2&#124;</code><br></br><br></br>3. pending above order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=2&#124;25012=1&#124;25013=2&#124;</code> |
 
 <a id="liststatus"></a>
 
