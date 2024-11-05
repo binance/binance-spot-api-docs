@@ -1018,6 +1018,8 @@ Memory
 }
 ```
 
+<a id="exchangeInfo"></a>
+
 ### Exchange information
 
 ```javascript
