@@ -29,7 +29,6 @@
     - [Test connectivity](#test-connectivity)
     - [Check server time](#check-server-time)
     - [Exchange information](#exchange-information)
-      - [Examples of Symbol Permissions Interpretation from the Response:](#examples-of-symbol-permissions-interpretation-from-the-response)
   - [Market data requests](#market-data-requests)
     - [Order book](#order-book)
     - [Recent trades](#recent-trades)
@@ -49,20 +48,16 @@
     - [Log out of the session](#log-out-of-the-session)
   - [Trading requests](#trading-requests)
     - [Place new order (TRADE)](#place-new-order-trade)
-      - [Conditional fields in Order Responses](#conditional-fields-in-order-responses)
     - [Test new order (TRADE)](#test-new-order-trade)
     - [Query order (USER_DATA)](#query-order-user_data)
     - [Cancel order (TRADE)](#cancel-order-trade)
-      - [Regarding `cancelRestrictions`](#regarding-cancelrestrictions)
     - [Cancel and replace order (TRADE)](#cancel-and-replace-order-trade)
     - [Current open orders (USER_DATA)](#current-open-orders-user_data)
     - [Cancel open orders (TRADE)](#cancel-open-orders-trade)
     - [Order lists](#order-lists)
       - [Place new Order list - OCO (TRADE)](#place-new-order-list---oco-trade)
       - [Place new Order list - OTO (TRADE)](#place-new-order-list---oto-trade)
-      - [Mandatory parameters based on `pendingType` or `workingType`](#mandatory-parameters-based-on-pendingtype-or-workingtype)
       - [Place new Order list - OTOCO (TRADE)](#place-new-order-list---otoco-trade)
-      - [Mandatory parameters based on `pendingAboveType`, `pendingBelowType` or `workingType`](#mandatory-parameters-based-on-pendingabovetype-pendingbelowtype-or-workingtype)
       - [Query Order list (USER_DATA)](#query-order-list-user_data)
       - [Cancel Order list (TRADE)](#cancel-order-list-trade)
       - [Current open order lists (USER_DATA)](#current-open-order-lists-user_data)
@@ -85,7 +80,9 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public WebSocket API for Binance SPOT Testnet (2024-05-23)
+# Public WebSocket API for Binance SPOT Testnet 
+
+**Last Updated: 2024-11-05**
 
 ## General API Information
 
@@ -1053,7 +1050,7 @@ Query current exchange trading rules, rate limits, and symbol information.
     <tr>
         <td><code>symbol</code></td>
         <td>STRING</td>
-        <td rowspan="3" align="center">NO</td>
+        <td rowspan="5" align="center">NO</td>
         <td>Describe a single symbol</td>
     </tr>
     <tr>
@@ -1065,6 +1062,16 @@ Query current exchange trading rules, rate limits, and symbol information.
         <td><code>permissions</code></td>
         <td>ARRAY of STRING</td>
         <td>Filter symbols by permissions</td>
+    </tr>
+    <tr>
+        <td><code>showPermissionSets</code></td>
+        <td>BOOLEAN</td>
+        <td>Controls whether the content of the <code>permissionSets</code> field is populated or not. Defaults to <code>true</code>.</td>
+    </tr>
+    <tr>
+        <td><code>symbolStatus</code></td>
+        <td>ENUM</td>
+        <td>Filters symbols that have this <code>tradingStatus</code>.<br></br> Valid values: <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code> <br> Cannot be used in combination with <code>symbol</code> or <code>symbols</code></td>
     </tr>
 </tbody>
 </table>
@@ -1081,7 +1088,9 @@ Notes:
 
 * [Available Permissions](./enums.md#account-and-symbol-permissions)
 
-#### Examples of Symbol Permissions Interpretation from the Response: 
+<a id="examples-of-symbol-permissions-interpretation-from-the-response"></a>
+
+**Examples of Symbol Permissions Interpretation from the Response:**
 
 * `[["A","B"]]` means you may place an order if your account has either permission "A" **or** permission "B". 
 * `[["A"],["B"]]` means you can place an order if your account has permission "A" **and** permission "B". 
@@ -3247,7 +3256,8 @@ Response format is selected by using the `newOrderRespType` parameter.
 }
 ```
 
-#### Conditional fields in Order Responses
+<a id="conditional-fields-in-order-responses"></a>
+**Conditional fields in Order Responses**
 
 There are fields in the order responses (e.g. order placement, order query, order cancellation) that appear only if certain conditions are met. 
 
@@ -3724,7 +3734,9 @@ When an order list is canceled:
 
 **Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
-#### Regarding `cancelRestrictions`
+<a id="regarding-cancelrestrictions"></a>
+
+**Regarding `cancelRestrictions`**
 
 * If the `cancelRestrictions` value is not any of the supported values, the error will be: 
 ```json
@@ -5014,7 +5026,9 @@ Name                   |Type   |Mandatory | Description
 `timestamp`              |LONG   |YES       |
 `signature`              |STRING |YES       |
 
-#### Mandatory parameters based on `pendingType` or `workingType`
+<a id="mandatory-parameters-based-on-pendingtype-or-workingtype"></a>
+
+**Mandatory parameters based on `pendingType` or `workingType`**
 
 Depending on the `pendingType` or `workingType`, some optional parameters will become mandatory.
 
@@ -5192,7 +5206,9 @@ Name                     |Type   |Mandatory | Description
 `timestamp`                |LONG   |YES       |
 `signature`                |STRING|YES|
 
-#### Mandatory parameters based on `pendingAboveType`, `pendingBelowType` or `workingType`
+<a id="mandatory-parameters-based-on-pendingabovetype-pendingbelowtype-or-workingtype"></a>
+
+**Mandatory parameters based on `pendingAboveType`, `pendingBelowType` or `workingType`**
 
 Depending on the `pendingType` or `workingType`, some optional parameters will become mandatory.
 

@@ -1,4 +1,7 @@
-# Error codes for Binance SPOT Testnet (2024-08-16)
+# Error codes for Binance SPOT Testnet 
+
+**Last Updated: 2024-11-05** 
+
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload when using the REST API:
 ```javascript
@@ -132,6 +135,9 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 #### -1121 BAD_SYMBOL
  * Invalid symbol.
+
+#### -1122 INVALID_SYMBOLSTATUS
+ * Invalid symbolStatus.
 
 #### -1125 INVALID_LISTEN_KEY
  * This listenKey does not exist.

@@ -1,7 +1,18 @@
-# CHANGELOG for Binance SPOT Testnet (2024-10-02)
+# CHANGELOG for Binance SPOT Testnet 
+
+**Last Updated: 2024-11-05**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/). 
 This is not always synced with the live exchange. 
+
+## 2024-11-05 
+
+Changes to Exchange Information (i.e. [`GET /api/v3/exchangeInfo`](rest-api.md#exchangeInfo) from REST and [`exchangeInfo`](web-socket-api.md#exchangeInfo) for WebSocket API).
+
+* A new optional parameter `showPermissionSets` can be used to hide the permissions from `permissionsSets`; This can be used for a reduced payload size.
+* A new optional parameter `symbolStatus` can now be used to only show symbols with the specified status. (e.g. `TRADING`, `HALT`, `BREAK`)
+
+---
 
 ## 2024-10-02 
 
