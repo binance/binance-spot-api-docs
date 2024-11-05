@@ -489,6 +489,8 @@ Memory
 }
 ```
 
+<a id="exchangeInfo"></a>
+
 ### Exchange information
 ```
 GET /api/v3/exchangeInfo
