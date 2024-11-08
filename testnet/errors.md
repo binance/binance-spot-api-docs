@@ -190,6 +190,18 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * If the order type for the above or below leg is `STOP_LOSS_LIMIT`, and `icebergQty` is provided for that leg, the `timeInForce` has to be `GTC` else it will throw an error.
  * `TimeInForce (59)` must be `GTC (1)` when `MaxFloor (111)` is used.
 
+#### -1165 BUY_OCO_LIMIT_MUST_BE_BELOW
+* A limit order in a buy OCO must be below.
+
+#### -1166 SELL_OCO_LIMIT_MUST_BE_ABOVE
+* A limit order in a sell OCO must be above.
+
+#### -1167 BOTH_OCO_ORDERS_CANNOT_BE_CONTINGENT
+* Both OCO orders cannot be contingent.
+
+#### -1168 BOTH_OCO_ORDERS_CANNOT_BE_LIMIT
+* At least one OCO order must be contingent.
+
 #### -1169 INVALID_TAG_NUMBER
  * Invalid tag number.
 

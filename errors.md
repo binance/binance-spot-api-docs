@@ -1,4 +1,7 @@
-# Error codes for Binance (2024-10-17)
+# Error codes for Binance 
+
+**Last Updated: (2024-10-17)**
+
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
 ```javascript
@@ -170,6 +173,64 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 #### -1160 OCO_ICEBERGQTY_TIMEINFORCE
 * Parameter '%s' is not supported if `aboveTimeInForce`/`belowTimeInForce` is not GTC.
 * If the order type for the above or below leg is `STOP_LOSS_LIMIT`, and `icebergQty` is provided for that leg, the `timeInForce` has to be `GTC` else it will throw an error.
+
+#### -1165 BUY_OCO_LIMIT_MUST_BE_BELOW
+* A limit order in a buy OCO must be below.
+
+#### -1166 SELL_OCO_LIMIT_MUST_BE_ABOVE
+* A limit order in a sell OCO must be above.
+
+#### -1167 BOTH_OCO_ORDERS_CANNOT_BE_CONTINGENT
+* Both OCO orders cannot be contingent.
+
+#### -1168 BOTH_OCO_ORDERS_CANNOT_BE_LIMIT
+* At least one OCO order must be contingent.
+
+#### -1169 INVALID_TAG_NUMBER
+ * Invalid tag number.
+
+#### -1170 TAG_NOT_DEFINED_IN_MESSAGE
+ * Tag '%s' not defined for this message type.
+
+#### -1171 TAG_APPEARS_MORE_THAN_ONCE
+ * Tag '%s' appears more than once.
+
+#### -1172 TAG_OUT_OF_ORDER
+ * Tag '%s' specified out of required order.
+
+#### -1173 GROUP_FIELDS_OUT_OF_ORDER
+ * Repeating group '%s' fields out of order.
+
+#### -1174 INVALID_COMPONENT
+ * Component '%s' is incorrectly populated on '%s' order. Recommendation: '%s'
+
+#### -1175 RESET_SEQ_NUM_SUPPORT
+ * Continuation of sequence numbers to new session is currently unsupported. Sequence numbers must be reset for each new session.
+
+#### -1176 ALREADY_LOGGED_IN
+ * [Logon`<A>`](fix-api.md#logon-main) should only be sent once.
+
+#### -1177 GARBLED_MESSAGE
+ * `CheckSum(10)` contains an incorrect value.
+ * `BeginString (8)` is not the first tag in a message.
+ * `MsgType (35)` is not the third tag in a message.
+ * `BodyLength (9)` does not contain the correct byte count.
+ * Only printable ASCII characters and SOH (Start of Header) are allowed.
+
+#### -1178 BAD_SENDER_COMPID  
+ * `SenderCompId(49)` contains an incorrect value. The SenderCompID value should not change throughout the lifetime of a session.
+
+#### -1179 BAD_SEQ_NUM
+ * `MsgSeqNum(34)` contains an unexpected value. Expected: '%d'.
+
+#### -1180 EXPECTED_LOGON
+ * [Logon`<A>`](fix-api.md#logon-main) must be the first message in the session.
+
+#### -1181 TOO_MANY_MESSAGES
+ * Too many messages; current limit is '%d' messages per '%s'.
+
+#### -1182 PARAMS_BAD_COMBO
+ * Conflicting fields: [%s]
 
 #### -1183 NOT_ALLOWED_IN_DROP_COPY_SESSIONS
  * Requested operation is not allowed in DropCopy sessions.

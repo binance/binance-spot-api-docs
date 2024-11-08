@@ -1,4 +1,7 @@
-# 错误代码汇总 (2024-10-17)
+# 错误代码汇总 
+
+**上次更新时间: 2024-10-17**
+
 币安Rest接口(包括wapi)返回的错误包含两部分，错误码与错误信息. 错误码是大类，一个错误码可能对应多个不同的错误信息。
 以下是一个完整错误码实例
 ```javascript
@@ -7,7 +10,6 @@
   "msg":"Invalid symbol."
 }
 ```
-
 
 ## 10xx - 服务器或网络问题
 #### -1000 未知错误
@@ -169,6 +171,64 @@
 #### -1160 OCO 订单类型的冰山数量参数与 time in force 参数的组合有问题
 * Parameter '%s' is not supported if `aboveTimeInForce`/`belowTimeInForce` is not GTC.
 * If the order type for the above or below leg is `STOP_LOSS_LIMIT`, and `icebergQty` is provided for that leg, the `timeInForce` has to be `GTC` else it will throw an error.
+
+#### -1165 买入 OCO 限价单必须较低
+* A limit order in a buy OCO must be below.
+
+#### -1166 卖出 OCO 限价单必须较高
+* A limit order in a sell OCO must be above.
+
+#### -1167 两个 OCO 订单不能都是依存订单
+* Both OCO orders cannot be contingent.
+
+#### -1168 两个 OCO 订单不能都是是限价单
+* At least one OCO order must be contingent.
+
+#### -1169 Tag无效
+ * Invalid tag number.
+
+#### -1170 Tag无效
+ * Tag '%s' not defined for this message type.
+
+#### -1171 Tag重复出现
+ * Tag '%s' appears more than once.
+
+#### -1172 Tag顺序错误
+ * Tag '%s' specified out of required order.
+
+#### -1173 分组字段顺序错误
+ * Repeating group '%s' fields out of order.
+
+#### -1174 无效组件
+ * Component '%s' is incorrectly populated on '%s' order. Recommendation: '%s'
+
+#### -1175 序列号重置错误
+ * Continuation of sequence numbers to new session is currently unsupported. Sequence numbers must be reset for each new session.
+
+#### -1176 已登录
+ * [Logon`<A>`](fix-api.md#logon-main) should only be sent once.
+
+#### -1177 错误消息
+ * `CheckSum(10)` contains an incorrect value.
+ * `BeginString (8)` is not the first tag in a message.
+ * `MsgType (35)` is not the third tag in a message.
+ * `BodyLength (9)` does not contain the correct byte count.
+ * Only printable ASCII characters and SOH (Start of Header) are allowed.
+
+#### -1178 Compid错误
+ * `SenderCompId(49)` contains an incorrect value. The SenderCompID value should not change throughout the lifetime of a session.
+
+#### -1179 序列号错误
+ * `MsgSeqNum(34)` contains an unexpected value. Expected: '%d'.
+
+#### -1180 登陆消息错误
+ * [Logon`<A>`](fix-api.md#logon-main) must be the first message in the session.
+
+#### -1181 消息太多
+ * Too many messages; current limit is '%d' messages per '%s'.
+
+#### -1182 错误的参数组合
+ * Conflicting fields: [%s]
 
 #### -1183 不允许在 Drop Copy 会话中使用
  * Requested operation is not allowed in DropCopy sessions.
