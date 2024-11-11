@@ -315,8 +315,9 @@
 "Filter failure: PERCENT_PRICE" |检查订单中价格是否相对于过去N分钟的平均价格变动超过了百分之X。
 "Filter failure: LOT_SIZE" | 检查订单中数量的上限、下线、步进间隔。
 "Filter failure: MIN_NOTIONAL" | `price` * `quantity`，也就是订单金额，是否超过了最小值。
+"Filter failure: NOTIONAL" | `price` * `quantity` 不在 `minNotional` 和 `maxNotional` 的范围内
 "Filter failure: ICEBERG_PARTS" | 冰山订单只能被分割成有限个小订单。
-"Filter failure: MARKET_LOT_SIZE" | 与LOT_SIZE含义一致，只是对市价单生效。
+"Filter failure: MARKET_LOT_SIZE" | 与 `LOT_SIZE` 含义一致，只是对市价单生效。
 "Filter failure: MAX_POSITION" | 账户的仓位已达到定义的最大限额。<br/> 它是由基础资产余额的总和以及所有未平仓买入订单的数量之和组成的。
 "Filter failure: MAX_NUM_ORDERS" | 账户在该交易对下最多挂单数。
 "Filter failure: MAX_NUM_ALGO_ORDERS" | 账户在该交易对下最多的止盈/止损挂单数。

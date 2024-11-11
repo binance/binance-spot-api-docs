@@ -339,6 +339,7 @@ Error message | Description
 "Filter failure: PERCENT_PRICE" | `price` is X% too high or X% too low from the average weighted price over the last Y minutes.
 "Filter failure: LOT_SIZE" | `quantity` is too high, too low, and/or not following the step size rule for the symbol.
 "Filter failure: MIN_NOTIONAL" | `price` * `quantity` is too low to be a valid order for the symbol.
+"Filter failure: NOTIONAL" | `price` * `quantity` is not within range of the `minNotional` and `maxNotional`
 "Filter failure: ICEBERG_PARTS" | `ICEBERG` order would break into too many parts; icebergQty is too small.
 "Filter failure: MARKET_LOT_SIZE" | `MARKET` order's `quantity` is too high, too low, and/or not following the step size rule for the symbol.
 "Filter failure: MAX_POSITION" | The account's position has reached the maximum defined limit. <br/> This is composed of the sum of the balance of the base asset, and the sum of the quantity of all open `BUY` orders.
