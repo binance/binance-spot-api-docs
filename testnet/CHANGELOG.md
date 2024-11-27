@@ -7,7 +7,7 @@ This is not always synced with the live exchange.
 
 ## 2024-11-27
 
-**Note:** These changes will be deployed live **starting tomorrow** and may take several hours for all features to work as intended.
+**Note:** These changes will be deployed live **starting 2024-11-28** and may take several hours for all features to work as intended.
 
 **New Feature: Microsecond support:**
 
