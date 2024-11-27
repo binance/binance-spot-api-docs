@@ -32,7 +32,7 @@
 
 # Web Socket Streams for Binance SPOT Testnet 
 
-**Last Updated: 2024-11-28** 
+**Last Updated: 2024-11-27** 
 
 # General WSS information
 * The base endpoint is: **wss://testnet.binance.vision/ws**.

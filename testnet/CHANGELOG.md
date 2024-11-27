@@ -1,13 +1,13 @@
 # CHANGELOG for Binance SPOT Testnet 
 
-**Last Updated: 2024-11-28**
+**Last Updated: 2024-11-27**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/). 
 This is not always synced with the live exchange. 
 
-## 2024-11-28
+## 2024-11-27
 
-**Note:** These changes will be deployed live and may take several hours for all features to work as intended.
+**Note:** These changes will be deployed live **starting tomorrow** and may take several hours for all features to work as intended.
 
 **New Feature: Microsecond support:**
 

@@ -21,7 +21,7 @@
 
 # User Data Streams for Binance Spot TESTNET
 
-**Last Updated: 2024-11-28**
+**Last Updated: 2024-11-27**
 
 # General WSS information
 * The base API endpoint is: **https://testnet.binance.vision/**
