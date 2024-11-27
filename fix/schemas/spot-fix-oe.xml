@@ -103,7 +103,7 @@
    <component name='NewOrder' required='Y'/>
   </message>
   <message name='Logon' msgcat='admin' msgtype='A'>
-   <field name='EncryptMethod' required='Y'/>
+   <field name='EncryptMethod' required='N'/>
    <field name='HeartBtInt' required='Y'/>
    <field name='RawDataLength' required='N'/>
    <field name='RawData' required='N'/>
@@ -149,7 +149,7 @@
     <field name='ClOrdID' required='Y'/>
     <field name='Symbol' required='Y'/>
     <field name='OrderID' required='N'/>
-    <component name='ListTriggeringInstruction' required='Y'/>
+    <component name='ListTriggeringInstruction' required='N'/>
     <field name='OrdRejReason' required='N'/>
     <field name='ErrorCode' required='N'/>
     <field name='Text' required='N'/>
@@ -182,6 +182,9 @@
     <field name='LimitResetInterval' required='N'/>
     <field name='LimitResetIntervalResolution' required='N'/>
    </group>
+  </message>
+  <message name='News' msgtype='B' msgcat='app'>
+   <field name='Headline' required='Y'/>
   </message>
  </messages>
  <trailer>
@@ -243,6 +246,7 @@
    <value enum='8' description='EXECUTION_REPORT'/>
    <value enum='9' description='ORDER_CANCEL_REJECT'/>
    <value enum='A' description='LOGON'/>
+   <value enum='B' description='NEWS'/>
    <value enum='D' description='NEW_ORDER_SINGLE'/>
    <value enum='E' description='NEW_ORDER_LIST'/>
    <value enum='F' description='ORDER_CANCEL_REQUEST'/>
@@ -313,6 +317,7 @@
    <value enum='Y' description='YES'/>
    <value enum='N' description='NO'/>
   </field>
+  <field number='148' name='Headline' type='STRING'/>
   <field number='150' name='ExecType' type='CHAR'>
    <value enum='0' description='NEW'/>
    <value enum='4' description='CANCELED'/>
