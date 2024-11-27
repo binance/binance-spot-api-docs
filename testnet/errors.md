@@ -1,6 +1,6 @@
 # Error codes for Binance SPOT Testnet 
 
-**Last Updated: 2024-11-05** 
+**Last Updated: 2024-11-28** 
 
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload when using the REST API:
@@ -190,6 +190,26 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * If the order type for the above or below leg is `STOP_LOSS_LIMIT`, and `icebergQty` is provided for that leg, the `timeInForce` has to be `GTC` else it will throw an error.
  * `TimeInForce (59)` must be `GTC (1)` when `MaxFloor (111)` is used.
 
+#### \-1161 DEPRECATED\_SCHEMA
+
+* Unable to encode the response in SBE schema 'x'. Please use schema 'y' or higher.
+
+#### \-1196 BUY\_OCO\_STOP\_LOSS\_MUST\_BE\_ABOVE
+
+* A stop loss order in a buy OCO must be above.
+
+#### \-1197 SELL\_OCO\_STOP\_LOSS\_MUST\_BE\_BELOW
+
+* A stop loss order in a sell OCO must be below.
+
+#### \-1198 BUY\_OCO\_TAKE\_PROFIT\_MUST\_BE\_BELOW
+
+* A take profit order in a buy OCO must be below.
+
+#### \-1199 SELL\_OCO\_TAKE\_PROFIT\_MUST\_BE\_ABOVE
+
+* A take profit order in a sell OCO must be above.
+
 #### -1165 BUY_OCO_LIMIT_MUST_BE_BELOW
 * A limit order in a buy OCO must be below.
 
@@ -256,6 +276,9 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 #### -1185 DROP_COPY_SESSION_REQUIRED
  * Only DropCopy sessions are supported on this server. Either reconnect to order entry server or send `DropCopyFlag (9406)` field.
+
+#### -1194 INVALID_TIME_UNIT
+  * Invalid value for time unit; expected either MICROSECOND or MILLISECOND.
 
 #### -2010 NEW_ORDER_REJECTED
  * NEW_ORDER_REJECTED

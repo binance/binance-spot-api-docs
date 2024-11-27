@@ -14,19 +14,26 @@
     - [Conditional Fields in Execution Report](#conditional-fields-in-execution-report)
     - [Execution types](#execution-types)
   - [Listen Key Expired](#listen-key-expired)
+  - [Event Stream Terminated](#event-stream-terminated)
+  - [External Lock Update](#external-lock-update)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# User Data Streams for Binance Spot TESTNET(2024-03-13)
+# User Data Streams for Binance Spot TESTNET
+
+**Last Updated: 2024-11-28**
+
 # General WSS information
 * The base API endpoint is: **https://testnet.binance.vision/**
 * A User Data Stream `listenKey` is valid for 60 minutes after creation.
 * Doing a `PUT` on an active `listenKey` will extend its validity for 60 minutes.
 * Doing a `DELETE` on an active `listenKey` will close the stream and invalidate the `listenKey`.
 * Doing a `POST` on an account with an active `listenKey` will return the currently active `listenKey` and extend its validity for 60 minutes.
-* The base websocket endpoint is: **wss://stream.binance.com:9443**
+* The base websocket endpoint is: **wss://stream.testnet.binance.vision:9443**
 * User Data Streams are accessed at **/ws/\<listenKey\>** or **/stream?streams=\<listenKey\>**
-* A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark
+* A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark.
+* All time and timestamp related fields in the JSON responses are **milliseconds by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND` or `timeUnit=microsecond` in the URL.
+  * For example `/ws/<listenKey>&timeUnit=MICROSECO`
 
 # API Endpoints
 ## Create a listenKey (USER_STREAM)
@@ -343,3 +350,35 @@ This event will not be pushed when the stream is closed normally.
   "listenKey": "OfYGbUzi3PraNagEkdKuFwUHn48brFsItTdsuiIXrucEvD0rhRXZ7I6URWfE8YE8" 
 }
 ```
+
+## Event Stream Terminated
+
+This event appears only for WebSocket API. 
+
+`eventStreamTerminated` is sent when the User Data Stream is stopped. For example, after you send a `userDataStream.stop` request, or a `session.logout` request.
+
+**Payload:**
+
+```javascript
+{
+  "event": {
+    "e": "eventStreamTerminated", // Event Type
+    "E": 1728973001334            // Event Time
+  }
+}
+```
+
+## External Lock Update
+
+`externalLockUpdate` is sent when part of your spot wallet balance is locked/unlocked by an external system, for example when used as margin collateral.
+
+**Payload:**
+
+```javascript
+{
+  "e": "externalLockUpdate",  // Event Type
+  "E": 1581557507324,         // Event Time
+  "a": "NEO",                 // Asset
+  "d": "10.00000000",         // Delta
+  "T": 1581557507268          // Transaction Time
+}```

@@ -5,6 +5,7 @@
   - [General API Information](#general-api-information)
   - [Request format](#request-format)
   - [Response format](#response-format)
+  - [Event Format](#event-format)
     - [Status codes](#status-codes)
 - [Rate limits](#rate-limits)
   - [Connection limits](#connection-limits)
@@ -77,12 +78,14 @@
     - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
     - [Ping user data stream (USER_STREAM)](#ping-user-data-stream-user_stream)
     - [Stop user data stream (USER_STREAM)](#stop-user-data-stream-user_stream)
+    - [Subscribe to User Data Stream](#subscribe-to-user-data-stream)
+    - [Unsubscribe from User Data Stream](#unsubscribe-from-user-data-stream)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # Public WebSocket API for Binance SPOT Testnet 
 
-**Last Updated: 2024-11-05**
+**Last Updated: 2024-11-28**
 
 ## General API Information
 
@@ -94,7 +97,8 @@
   * When you receive a ping, you must send a pong with a copy of ping's payload as soon as possible.
   * Unsolicited `pong frames` are allowed, but will not prevent disconnection. **It is recommended that the payload for these pong frames are empty.**
 * Lists are returned in **chronological order**, unless noted otherwise.
-* All timestamps are in **milliseconds** in UTC, unless noted otherwise.
+* All timestamps in the JSON responses are in **milliseconds in UTC by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND` or `timeUnit=microsecond` in the URL.
+* Timestamp parameters (e.g. `startTime`, `endTime`, `timestamp`) can be passed in milliseconds or microseconds.
 * All field names and values are **case-sensitive**, unless noted otherwise.
 
 ## Request format
@@ -272,6 +276,44 @@ Response fields:
   </tr>
 </tbody>
 </table>
+
+## Event Format
+
+User Data Stream events for non-SBE sessions are sent as JSON in **text frames**, one event per frame.
+
+Events in SBE sessions will be sent as **binary frames**.
+
+Please refer to [`userDataStream.subscribe`](#user-data-stream-subscribe) for details on how to subscribe to User Data Stream in WebSocket API.
+
+Example of an event:
+
+```javascript
+{
+  "event": {
+    "e": "outboundAccountPosition",
+    "E": 1728972148778,
+    "u": 1728972148778,
+    "B": [
+      {
+        "a": "ABC",
+        "f": "11818.00000000",
+        "l": "182.00000000"
+      },
+      {
+        "a": "DEF",
+        "f": "10580.00000000",
+        "l": "70.00000000"
+      }
+    ]
+  }
+}
+```
+
+Event fields:
+
+| Name | Type | Mandatory | Description |
+| :---- | :---- | :---- | :---- |
+| `event` | OBJECT | YES | Event payload. See [User Data Streams](user-data-stream.md) |
 
 ### Status codes
 
@@ -2699,6 +2741,8 @@ If more than one symbol is requested, response returns an array:
 
 **Note:** Only _Ed25519_ keys are supported for this feature. 
 
+<a id="session-logon"></a>
+
 ### Log in with API key (SIGNED)
 
 ```javascript
@@ -2746,7 +2790,8 @@ Memory
     "authorizedSince": 1649729878532,
     "connectedSince": 1649729873021,
     "returnRateLimits": false,
-    "serverTime": 1649729878630
+    "serverTime": 1649729878630,
+    "userDataStream": true
   }
 }
 ```
@@ -2785,7 +2830,8 @@ Memory
     "authorizedSince": 1649729878532,
     "connectedSince": 1649729873021,
     "returnRateLimits": false,
-    "serverTime": 1649730611671
+    "serverTime": 1649730611671,
+    "userDataStream": true
   }
 }
 ```
@@ -2826,7 +2872,8 @@ Memory
     "authorizedSince": null,
     "connectedSince": 1649729873021,
     "returnRateLimits": false,
-    "serverTime": 1649730611671
+    "serverTime": 1649730611671,
+    "userDataStream": true
   }
 }
 ```
@@ -4818,12 +4865,14 @@ Cancellation reports for orders and order lists have the same format as in [`ord
 Send in an one-cancels-the-other (OCO) pair, where activation of one order immediately cancels the other.
 
 * An OCO has 2 orders called the **above order** and **below order**.
-* One of the orders must be a `LIMIT_MAKER` order and the other must be `STOP_LOSS` or `STOP_LOSS_LIMIT` order.
-* Price restrictions:     
-    * If the `aboveType` is `LIMIT_MAKER` and the `belowType` is either a `STOP_LOSS` or `STOP_LOSS_LIMIT`: 
-        * `abovePrice` > Last Traded Price > `belowStopPrice`
-    * If the `aboveType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`, and the `belowType` is `LIMIT_MAKER`:
-        *  `aboveStopPrice` > Last Traded Price > `belowPrice`
+* One of the orders must be a `LIMIT_MAKER/TAKE_PROFIT/TAKE_PROFIT_LIMIT` order and the other must be `STOP_LOSS` or `STOP_LOSS_LIMIT` order.  
+* Price restrictions:  
+  * If the OCO is on the `SELL` side:   
+    * `LIMIT_MAKER/TAKE_PROFIT_LIMIT` `price` \> Last Traded Price \> `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`  
+    * `TAKE_PROFIT stopPrice` \> Last Traded Price \> `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`  
+  * If the OCO is on the `BUY` side:  
+    * `LIMIT_MAKER` `price` \< Last Traded Price \< `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`  
+    * `TAKE_PROFIT stopPrice >` Last Traded Price `> STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
 * OCOs add **2 orders** to the unfilled order count, `EXCHANGE_MAX_ORDERS` filter, and `MAX_NUM_ORDERS` filter.
 
 **Parameters:**
@@ -4834,22 +4883,23 @@ Name                     |Type    | Mandatory | Description
 `listClientOrderId`      |STRING  |NO         |Arbitrary unique ID among open order lists. Automatically generated if not sent. <br> A new order list with the same `listClientOrderId` is accepted only when the previous one is filled or completely expired. <br> `listClientOrderId` is distinct from the `aboveClientOrderId` and the `belowCLientOrderId`.
 `side`                   |ENUM    |YES        |`BUY` or `SELL`
 `quantity`               |DECIMAL |YES        |Quantity for both orders of the order list.
-`aboveType`              |ENUM    |YES        |Supported values : `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`
+`aboveType`              |ENUM    |YES        |Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
 `aboveClientOrderId`     |STRING  |NO        |Arbitrary unique ID among open orders for the above leg order. Automatically generated if not sent
 `aboveIcebergQty`        |LONG    |NO         |Note that this can only be used if `aboveTimeInForce` is `GTC`.
-`abovePrice`             |DECIMAL |NO         |
-`aboveStopPrice`         |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`. <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
+`abovePrice`             |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price. 
+`aboveStopPrice`         |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`. <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
 `aboveTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](..faqs/trailing-stop-faq.md).
-`aboveTimeInForce`       |DECIMAL |NO         |Required if the `aboveType` is `STOP_LOSS_LIMIT`. 
+`aboveTimeInForce`       |DECIMAL |NO         |Required if `aboveType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`.
 `aboveStrategyId`        |LONG     |NO         |Arbitrary numeric value identifying the above order within an order strategy. 
 `aboveStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the above order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
-`belowType`              |ENUM    |YES        |Supported values : `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`
+`belowType`              |ENUM    |YES        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 `belowClientOrderId`     |STRING  |NO         |
 `belowIcebergQty`        |LONG    |NO         |Note that this can only be used if `belowTimeInForce` is `GTC`.
-`belowPrice`             |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS_LIMIT` or `LIMIT_MAKER` to specify the limit price.
-`belowStopPrice`         |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`. <br> If `aboveType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`, either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
+`belowPrice`             |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
+`belowStopPrice`         |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`.  
+Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
 `belowTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](..faqs/trailing-stop-faq.md). 
-`belowTimeInForce`       |ENUM    |NO         |Required if the `belowType` is `STOP_LOSS_LIMIT`. 
+`belowTimeInForce`       |ENUM    |NO         |Required if `belowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`
 `belowStrategyId`        |LONG    |NO          |Arbitrary numeric value identifying the below order within an order strategy. 
 `belowStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the below order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
 `newOrderRespType`       |ENUM    |NO         |Select response format: `ACK`, `RESULT`, `FULL`
@@ -5186,19 +5236,20 @@ Name                     |Type   |Mandatory | Description
 `workingStrategyType`      |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
 `pendingSide`              |ENUM   |YES       |Supported values: [Order Side](./enums.md#side)
 `pendingQuantity`          |DECIMAL|YES       |
-`pendingAboveType`         |ENUM   |YES       |Supported values: `LIMIT_MAKER`, `STOP_LOSS`, and `STOP_LOSS_LIMIT`
+`pendingAboveType`         |ENUM   |YES       |Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
 `pendingAboveClientOrderId`|STRING |NO        |Arbitrary unique ID among open orders for the pending above order.<br> Automatically generated if not sent.
-`pendingAbovePrice`        |DECIMAL|NO        |
-`pendingAboveStopPrice`    |DECIMAL|NO        |
-`pendingAboveTrailingDelta`|DECIMAL|NO        |
+`pendingAbovePrice`        |DECIMAL|NO        |Can be used if `pendingAboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price. 
+`pendingAboveStopPrice`    |DECIMAL|NO        |Can be used if \`pending`AboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
+`pendingAboveTrailingDelta`|DECIMAL|NO        |See [Trailing Stop FAQ](../faqs/trailing_stop_faq.md)
 `pendingAboveIcebergQty`   |DECIMAL|NO        |This can only be used if `pendingAboveTimeInForce` is `GTC`.
 `pendingAboveTimeInForce`  |ENUM   |NO        |
 `pendingAboveStrategyId`   |LONG    |NO        |Arbitrary numeric value identifying the pending above order within an order strategy.
 `pendingAboveStrategyType` |INT    |NO        |Arbitrary numeric value identifying the pending above order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
-`pendingBelowType`         |ENUM   |NO        |Supported values: `LIMIT_MAKER`, `STOP_LOSS`, and `STOP_LOSS_LIMIT`
+`pendingBelowType`         |ENUM   |NO        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 `pendingBelowClientOrderId`|STRING |NO        |Arbitrary unique ID among open orders for the pending below order.<br> Automatically generated if not sent.
-`pendingBelowPrice`        |DECIMAL|NO        |
-`pendingBelowStopPrice`    |DECIMAL|NO        |
+`pendingBelowPrice`        |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT` to specify the limit price.
+`pendingBelowStopPrice`    |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`.  
+Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
 `pendingBelowTrailingDelta`|DECIMAL|NO        |
 `pendingBelowIcebergQty`   |DECIMAL|NO        |This can only be used if `pendingBelowTimeInForce` is `GTC`.
 `pendingBelowTimeInForce`  |ENUM   |NO        |Supported values: [Time In Force](#timeInForce)
@@ -5217,11 +5268,11 @@ Depending on the `pendingType` or `workingType`, some optional parameters will b
 |Type                                                       |Additional mandatory parameters|Additional information|
 |----                                                       |----                           |------  
 |`workingType` = `LIMIT`                                    |`workingTimeInForce`           | 
-|`pendingAboveType` = `STOP_LOSS`          |`pendingAboveTrailingDelta` and/or `pendingAboveStopPrice`|
-|`pendingAboveType` =`STOP_LOSS_LIMIT` |`pendingAbovePrice`, `pendingAboveTrailingDelta` and/or `pendingAboveStopPrice`, `pendingAboveTimeInForce`|
+|`pendingAboveType`\= `STOP_LOSS/TAKE_PROFIT`       |`pendingAboveTrailingDelta` and/or `pendingAboveStopPrice`|
+|`pendingAboveType=STOP_LOSS_LIMIT/TAKE_PROFIT_LIMIT` |`pendingAbovePrice`, `pendingAboveTrailingDelta` and/or `pendingAboveStopPrice`, `pendingAboveTimeInForce`|
 |`pendingAboveType` =`LIMIT_MAKER` |`pendingAbovePrice`|
-|`pendingBelowType` = `STOP_LOSS`            |`pendingBelowTrailingDelta` and/or `pendingBelowStopPrice`|
-|`pendingBelowType` =`STOP_LOSS_LIMIT` |`pendingBelowPrice`, `pendingBelowTrailingDelta` and/or `pendingBelowStopPrice`, `pendingBelowTimeInForce`|
+|`pendingBelowType= STOP_LOSS/TAKE_PROFIT`         |`pendingBelowTrailingDelta` and/or `pendingBelowStopPrice`|
+|`pendingBelowType=STOP_LOSS_LIMIT/TAKE_PROFIT_LIMIT`|`pendingBelowPrice`, `pendingBelowTrailingDelta` and/or `pendingBelowStopPrice`, `pendingBelowTimeInForce`|
 |`pendingBelowType` =`LIMIT_MAKER` |`pendingBelowPrice`|
 
 **Data Source:** Matching Engine
@@ -6765,3 +6816,93 @@ Memory
   ]
 }
 ```
+
+<a id="user-data-stream-subscribe"></a>
+
+### Subscribe to User Data Stream 
+
+```javascript
+{
+  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+  "method": "userDataStream.subscribe"
+}
+```
+
+Subscribe to the User Data Stream in the current WebSocket connection.
+
+**Notes:**
+
+* This method requires an authenticated WebSocket connection using Ed25519 keys. Please refer to [`session.logon`](#session-logon).  
+* User Data Stream events are available in both JSON and SBE sessions.  
+  * Please refer to [User Data Streams](user-data-stream.md) for the event format details.  
+  * For SBE, only SBE schema 2:1 or later is supported.
+
+**Weight**:  
+2
+
+**Parameters**:  
+NONE
+
+**Response**:
+
+```javascript
+
+{
+  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+  "status": 200,
+  "result": {}
+}
+```
+
+Sample user data stream payload from the WebSocket API:
+
+```javascript
+{
+  "event": {
+    "e": "outboundAccountPosition",
+    "E": 1728972148778,
+    "u": 1728972148778,
+    "B": [
+      {
+        "a": "ABC",
+        "f": "11818.00000000",
+        "l": "182.00000000"
+      },
+      {
+        "a": "DEF",
+        "f": "10580.00000000",
+        "l": "70.00000000"
+      }
+    ]
+  }
+}
+```
+
+### Unsubscribe from User Data Stream
+
+```javascript
+{
+  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+  "method": "userDataStream.unsubscribe"
+}
+```
+
+Stop listening to the User Data Stream in the current WebSocket connection. 
+
+**Weight**:  
+2
+
+**Parameters**:
+
+NONE
+
+**Response**:
+
+```javascript
+{
+  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+  "status": 200,
+  "result": {}
+}
+```
+

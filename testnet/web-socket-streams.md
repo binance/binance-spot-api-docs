@@ -30,7 +30,9 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Web Socket Streams for Binance SPOT Testnet (2024-06-05)
+# Web Socket Streams for Binance SPOT Testnet 
+
+**Last Updated: 2024-11-28** 
 
 # General WSS information
 * The base endpoint is: **wss://testnet.binance.vision/ws**.
@@ -39,6 +41,8 @@
 * Combined streams are accessed at **/stream?streams=\<streamName1\>/\<streamName2\>/\<streamName3\>**
 * Combined stream events are wrapped as follows: **{"stream":"\<streamName\>","data":\<rawPayload\>}**
 * All symbols for streams are **lowercase**
+* All time and timestamp related fields are **milliseconds by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND` or `timeUnit=microsecond` in the URL.  
+  * For example: `/stream?streams=btcusdt@trade&timeUnit=MICROSECOND`
 * A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark
 * Websocket server will send a `ping frame` every 3 minutes. 
   * If the websocket server does not receive a `pong frame` back from the connection within a 10 minute period, the connection will be disconnected. 

@@ -76,13 +76,14 @@
 
 # Public Rest API for Binance SPOT Testnet 
 
-**Last Updated: 2024-11-05**
+**Last Updated: 2024-11-28**
 
 ## General API Information
 * The base endpoint is **https://testnet.binance.vision/api**
 * All endpoints return either a JSON object or array.
 * Data is returned in **ascending** order. Oldest first, newest last.
-* All time and timestamp related fields are in **milliseconds**.
+* All time and timestamp related fields in the JSON responses are in **milliseconds by default.** To receive the information in microseconds, please add the header `X-MBX-TIME-UNIT:MICROSECOND` or `X-MBX-TIME-UNIT:microsecond`.
+* Timestamp parameters (e.g. `startTime`, `endTime`, `timestamp`) can be passed in milliseconds or microseconds.
 
 ## HTTP Return Codes
 
@@ -2643,12 +2644,14 @@ POST /api/v3/orderList/oco
 Send in an one-cancels-the-other (OCO) pair, where activation of one order immediately cancels the other.
 
 * An OCO has 2 orders called the **above order** and **below order**.
-* One of the orders must be a `LIMIT_MAKER` order and the other must be `STOP_LOSS` or `STOP_LOSS_LIMIT` order.
-* Price restrictions:     
-    * If the `aboveType` is `LIMIT_MAKER` and the `belowType` is either a `STOP_LOSS` or `STOP_LOSS_LIMIT`: 
-        * `abovePrice` > Last Traded Price > `belowStopPrice`
-    * If the `aboveType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`, and the `belowType` is `LIMIT_MAKER`:
-        *  `aboveStopPrice` > Last Traded Price > `belowPrice`
+* One of the orders must be a `LIMIT_MAKER/TAKE_PROFIT/TAKE_PROFIT_LIMIT` order and the other must be `STOP_LOSS` or `STOP_LOSS_LIMIT` order.  
+* Price restrictions  
+  * If the OCO is on the `SELL` side:   
+    * `LIMIT_MAKER/TAKE_PROFIT_LIMIT` `price` \> Last Traded Price \>  `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`  
+    * `TAKE_PROFIT stopPrice > Last Traded Price > STOP_LOSS/STOP_LOSS_LIMIT stopPrice`   
+  * If the OCO is on the `BUY` side:  
+    * `LIMIT_MAKER/TAKE_PROFIT_LIMIT price` \< Last Traded Price \< `stopPrice`  
+    * `TAKE_PROFIT stopPrice` \< Last Traded Price \< `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
 * OCOs add **2 orders** to the unfilled order count, `EXCHANGE_MAX_ORDERS` filter, and the `MAX_NUM_ORDERS` filter.
 
 **Parameters:**
@@ -2659,22 +2662,22 @@ symbol                 |STRING  |Yes        |
 listClientOrderId      |STRING  |No         |Arbitrary unique ID among open order lists. Automatically generated if not sent. <br> A new order list with the same `listClientOrderId` is accepted only when the previous one is filled or completely expired. <br> `listClientOrderId` is distinct from the `aboveClientOrderId` and the `belowCLientOrderId`.
 side                   |ENUM    |Yes        |`BUY` or `SELL`
 quantity               |DECIMAL |Yes        |Quantity for both orders of the order list.
-aboveType              |ENUM    |Yes        |Supported values : `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`
+aboveType              | ENUM   | Yes       | Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` 
 aboveClientOrderId     |STRING  |No         |Arbitrary unique ID among open orders for the above order. Automatically generated if not sent
 aboveIcebergQty        |LONG    |No         |Note that this can only be used if `aboveTimeInForce` is `GTC`.
-abovePrice             |DECIMAL |No         |
-aboveStopPrice         |DECIMAL |No         |Can be used if `aboveType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`. <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
+abovePrice             |DECIMAL |No         |Can be used if `aboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price. 
+aboveStopPrice         |DECIMAL |No         |Can be used if `aboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`. <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
 aboveTrailingDelta     |LONG    |No         |See [Trailing Stop order FAQ](../faqs/trailing-stop-faq.md).
-aboveTimeInForce       |DECIMAL |No         |Required if the `aboveType` is `STOP_LOSS_LIMIT`. 
+aboveTimeInForce       |DECIMAL |No         |Required if `aboveType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`.
 aboveStrategyId        |LONG     |No         |Arbitrary numeric value identifying the above order within an order strategy. 
 aboveStrategyType      |INT     |No         |Arbitrary numeric value identifying the above order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
-belowType              |ENUM    |Yes        |Supported values : `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`
+belowType              |ENUM    |Yes        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 belowClientOrderId     |STRING  |No         |Arbitrary unique ID among open orders for the below order. Automatically generated if not sent
 belowIcebergQty        |LONG    |No         |Note that this can only be used if `belowTimeInForce` is `GTC`.
 belowPrice             |DECIMAL |No         |Can be used if `belowType` is `STOP_LOSS_LIMIT` or `LIMIT_MAKER` to specify the limit price.
-belowStopPrice         |DECIMAL |No         |Can be used if `belowType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`. <br>Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
+belowStopPrice         |DECIMAL |No         |Can be used if `belowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT` or `TAKE_PROFIT_LIMIT`. Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified. <br>Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
 belowTrailingDelta     |LONG    |No         |See [Trailing Stop order FAQ](../faqs/trailing-stop-faq.md). 
-belowTimeInForce       |ENUM    |No         |Required if the `belowType` is `STOP_LOSS_LIMIT`.
+belowTimeInForce       |ENUM    |No         |Required if `belowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`.
 belowStrategyId        |LONG    |No          |Arbitrary numeric value identifying the below order within an order strategy. 
 belowStrategyType      |INT     |No         |Arbitrary numeric value identifying the below order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
 newOrderRespType       |ENUM    |No         |Select response format: `ACK`, `RESULT`, `FULL`
@@ -2917,19 +2920,20 @@ workingStrategyId        |LONG    |NO        |Arbitrary numeric value identifyin
 workingStrategyType      |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
 pendingSide              |ENUM   |YES       |Supported values: [Order side](./enums.md#side)
 pendingQuantity          |DECIMAL|YES       |
-pendingAboveType         |ENUM   |YES       |Supported values: `LIMIT_MAKER`, `STOP_LOSS`, and `STOP_LOSS_LIMIT`
+pendingAboveType         |ENUM   |YES       |Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
 pendingAboveClientOrderId|STRING |NO        |Arbitrary unique ID among open orders for the pending above order.<br> Automatically generated if not sent.
-pendingAbovePrice        |DECIMAL|NO        |
-pendingAboveStopPrice    |DECIMAL|NO        |
-pendingAboveTrailingDelta|DECIMAL|NO        |
+pendingAbovePrice        |DECIMAL|NO        |Can be used if `pendingAboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price. 
+pendingAboveStopPrice    |DECIMAL|NO        |Can be used if `pendingAboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, or `TAKE_PROFIT_LIMIT`
+pendingAboveTrailingDelta|DECIMAL|NO        |See [Trailing Stop FAQ](../faqs/trailing_stop_faq.md)
 pendingAboveIcebergQty   |DECIMAL|NO        |This can only be used if `pendingAboveTimeInForce` is `GTC` or if `pendingAboveType` is `LIMIT_MAKER`.
 pendingAboveTimeInForce  |ENUM   |NO        |
 pendingAboveStrategyId   |LONG    |NO        |Arbitrary numeric value identifying the pending above order within an order strategy.
 pendingAboveStrategyType |INT    |NO        |Arbitrary numeric value identifying the pending above order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
-pendingBelowType         |ENUM   |NO        |Supported values: `LIMIT_MAKER`, `STOP_LOSS`, and `STOP_LOSS_LIMIT`
+pendingBelowType         |ENUM   |NO        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 pendingBelowClientOrderId|STRING |NO        |Arbitrary unique ID among open orders for the pending below order.<br> Automatically generated if not sent.
 pendingBelowPrice        |DECIMAL|NO        |
-pendingBelowStopPrice    |DECIMAL|NO        |
+pendingBelowStopPrice    |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, or `TAKE_PROFIT_LIMIT`.  
+Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
 pendingBelowTrailingDelta|DECIMAL|NO        |
 pendingBelowIcebergQty   |DECIMAL|NO        |This can only be used if `pendingBelowTimeInForce` is `GTC` or if `pendingBelowType` is `LIMIT_MAKER`.
 pendingBelowTimeInForce  |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
@@ -2947,11 +2951,11 @@ Depending on the `pendingAboveType`/`pendingBelowType` or `workingType`, some op
 |Type                                                       |Additional mandatory parameters|Additional information|
 |----                                                       |----                           |------  
 |`workingType` = `LIMIT`                                    |`workingTimeInForce`           | 
-|`pendingAboveType `= `STOP_LOSS`          |`pendingAboveTrailingDelta` and/or `pendingAboveStopPrice`|
-|`pendingAboveType` =`STOP_LOSS_LIMIT` |`pendingAbovePrice`, `pendingAboveTrailingDelta` and/or `pendingAboveStopPrice`, `pendingAboveTimeInForce`|
+|`pendingAboveType` = `STOP_LOSS/TAKE_PROFIT`        |`pendingAboveTrailingDelta` and/or `pendingAboveStopPrice`|
+|`pendingAboveType=STOP_LOSS_LIMIT/TAKE_PROFIT_LIMIT` |`pendingAbovePrice`, `pendingAboveTrailingDelta` and/or `pendingAboveStopPrice`, `pendingAboveTimeInForce`|
 |`pendingAboveType` =`LIMIT_MAKER` |`pendingAbovePrice`|
-|`pendingBelowType` = `STOP_LOSS`            |`pendingBelowTrailingDelta` and/or `pendingBelowStopPrice`|
-|`pendingBelowType` =`STOP_LOSS_LIMIT` |`pendingBelowPrice`, `pendingBelowTrailingDelta` and/or `pendingBelowStopPrice`, `pendingBelowTimeInForce`|
+|`pendingBelowType= STOP_LOSS/TAKE_PROFIT`            |`pendingBelowTrailingDelta` and/or `pendingBelowStopPrice`|
+|`pendingBelowType=STOP_LOSS_LIMIT/TAKE_PROFIT_LIMIT` |`pendingBelowPrice`, `pendingBelowTrailingDelta` and/or `pendingBelowStopPrice`, `pendingBelowTimeInForce`|
 |`pendingBelowType` =`LIMIT_MAKER` |`pendingBelowPrice`|
 
 **Data Source:**
