@@ -2659,7 +2659,7 @@ Send in an one-cancels-the-other (OCO) pair, where activation of one order immed
 * Price restrictions  
   * If the OCO is on the `SELL` side:   
     * `LIMIT_MAKER/TAKE_PROFIT_LIMIT` `price` \> Last Traded Price \>  `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`  
-    * `TAKE_PROFIT stopPrice > Last Traded Price > STOP_LOSS/STOP_LOSS_LIMIT stopPrice`   
+    * `TAKE_PROFIT stopPrice` > Last Traded Price > `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`   
   * If the OCO is on the `BUY` side:  
     * `LIMIT_MAKER/TAKE_PROFIT_LIMIT price` \< Last Traded Price \< `stopPrice`  
     * `TAKE_PROFIT stopPrice` \< Last Traded Price \< `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
