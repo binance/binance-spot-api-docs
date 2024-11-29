@@ -536,6 +536,7 @@ Successful response indicating that you have placed 12 orders in 10 seconds, and
     "price": "0.10000000",
     "origQty": "10.00000000",
     "executedQty": "0.00000000",
+    "origQuoteOrderQty": "0.000000",
     "cummulativeQuoteQty": "0.00000000",
     "status": "NEW",
     "timeInForce": "GTC",
@@ -3203,6 +3204,7 @@ Response format is selected by using the `newOrderRespType` parameter.
     "price": "23416.10000000",
     "origQty": "0.00847000",
     "executedQty": "0.00000000",
+    "origQuoteOrderQty": "0.000000",
     "cummulativeQuoteQty": "0.00000000",
     "status": "NEW",
     "timeInForce": "GTC",
@@ -3253,6 +3255,7 @@ Response format is selected by using the `newOrderRespType` parameter.
     "price": "23416.10000000",
     "origQty": "0.00847000",
     "executedQty": "0.00847000",
+    "origQuoteOrderQty": "0.000000",
     "cummulativeQuoteQty": "198.33521500",
     "status": "FILLED",
     "timeInForce": "GTC",
@@ -3680,6 +3683,7 @@ When an individual order is canceled:
     "price": "23416.10000000",
     "origQty": "0.00847000",
     "executedQty": "0.00001000",
+    "origQuoteOrderQty": "0.000000",
     "cummulativeQuoteQty": "0.23416100",
     "status": "CANCELED",
     "timeInForce": "GTC",
@@ -3742,6 +3746,7 @@ When an order list is canceled:
         "price": "23450.50000000",
         "origQty": "0.00850000"
         "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.00000000",
         "status": "CANCELED",
         "timeInForce": "GTC",
@@ -3760,6 +3765,7 @@ When an order list is canceled:
         "price": "23400.00000000",
         "origQty": "0.00850000"
         "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.00000000",
         "status": "CANCELED",
         "timeInForce": "GTC",
@@ -4233,6 +4239,7 @@ If both cancel and placement succeed, you get the following response with `"stat
       "price": "23450.00000000",
       "origQty": "0.00847000",
       "executedQty": "0.00001000",
+      "origQuoteOrderQty": "0.000000",
       "cummulativeQuoteQty": "0.23450000",
       "status": "CANCELED",
       "timeInForce": "GTC",
@@ -4251,6 +4258,7 @@ If both cancel and placement succeed, you get the following response with `"stat
       "price": "23416.10000000",
       "origQty": "0.00847000",
       "executedQty": "0.00000000",
+      "origQuoteOrderQty": "0.000000",
       "cummulativeQuoteQty": "0.00000000",
       "status": "NEW",
       "timeInForce": "GTC",
@@ -4354,6 +4362,7 @@ and the `"data"` field detailing which operation succeeded, which failed, and wh
         "price": "23450.00000000",
         "origQty": "0.00847000",
         "executedQty": "0.00001000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.23450000",
         "status": "CANCELED",
         "timeInForce": "GTC",
@@ -4416,6 +4425,7 @@ and the `"data"` field detailing which operation succeeded, which failed, and wh
         "price": "23416.10000000",
         "origQty": "0.00847000",
         "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.00000000",
         "status": "NEW",
         "timeInForce": "GTC",
@@ -4559,6 +4569,7 @@ If `orderRateLimitExceededMode` is `CANCEL_ONLY` regardless of `cancelReplaceMod
         "price": "1.00",
         "origQty": "10.00000000",
         "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.00",
         "status": "CANCELED",
         "timeInForce": "GTC",
@@ -4747,6 +4758,7 @@ Cancellation reports for orders and order lists have the same format as in [`ord
       "price": "23416.10000000",
       "origQty": "0.00847000",
       "executedQty": "0.00001000",
+      "origQuoteOrderQty": "0.000000",
       "cummulativeQuoteQty": "0.23416100",
       "status": "CANCELED",
       "timeInForce": "GTC",
@@ -4791,6 +4803,7 @@ Cancellation reports for orders and order lists have the same format as in [`ord
           "price": "23450.50000000",
           "origQty": "0.00850000",
           "executedQty": "0.00000000",
+          "origQuoteOrderQty": "0.000000",
           "cummulativeQuoteQty": "0.00000000",
           "status": "CANCELED",
           "timeInForce": "GTC",
@@ -4809,6 +4822,7 @@ Cancellation reports for orders and order lists have the same format as in [`ord
           "price": "23400.00000000",
           "origQty": "0.00850000",
           "executedQty": "0.00000000",
+          "origQuoteOrderQty": "0.000000",
           "cummulativeQuoteQty": "0.00000000",
           "status": "CANCELED",
           "timeInForce": "GTC",
@@ -4956,6 +4970,7 @@ See [`order.place`](#place-new-order-trade) for more examples.
         "price": "1.50000000",
         "origQty": "1.000000",
         "executedQty": "0.000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.00000000",
         "status": "NEW",
         "timeInForce": "GTC",
@@ -4974,6 +4989,7 @@ See [`order.place`](#place-new-order-trade) for more examples.
         "price": "1.49999999",
         "origQty": "1.000000",
         "executedQty": "0.000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.00000000",
         "status": "NEW",
         "timeInForce": "GTC",
@@ -5131,6 +5147,7 @@ Matching Engine
         "price": "1.000000",
         "origQty": "1.000000",
         "executedQty": "0.000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.000000",
         "status": "NEW",
         "timeInForce": "GTC",
@@ -5148,6 +5165,7 @@ Matching Engine
         "price": "0.000000",
         "origQty": "1.000000",
         "executedQty": "0.000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.000000",
         "status": "PENDING_NEW",
         "timeInForce": "GTC",
@@ -5249,7 +5267,7 @@ Name                     |Type   |Mandatory | Description
 `pendingBelowClientOrderId`|STRING |NO        |Arbitrary unique ID among open orders for the pending below order.<br> Automatically generated if not sent.
 `pendingBelowPrice`        |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT` to specify the limit price.
 `pendingBelowStopPrice`    |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`.  
-Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
+Either `pendingBelowStopPrice` or `pendingBelowTrailingDelta` or both, must be specified.
 `pendingBelowTrailingDelta`|DECIMAL|NO        |
 `pendingBelowIcebergQty`   |DECIMAL|NO        |This can only be used if `pendingBelowTimeInForce` is `GTC`.
 `pendingBelowTimeInForce`  |ENUM   |NO        |Supported values: [Time In Force](#timeInForce)
@@ -5268,7 +5286,7 @@ Depending on the `pendingType` or `workingType`, some optional parameters will b
 |Type                                                       |Additional mandatory parameters|Additional information|
 |----                                                       |----                           |------  
 |`workingType` = `LIMIT`                                    |`workingTimeInForce`           | 
-|`pendingAboveType`\= `STOP_LOSS/TAKE_PROFIT`       |`pendingAboveTrailingDelta` and/or `pendingAboveStopPrice`|
+|`pendingAboveType` = `STOP_LOSS/TAKE_PROFIT`       |`pendingAboveTrailingDelta` and/or `pendingAboveStopPrice`|
 |`pendingAboveType=STOP_LOSS_LIMIT/TAKE_PROFIT_LIMIT` |`pendingAbovePrice`, `pendingAboveTrailingDelta` and/or `pendingAboveStopPrice`, `pendingAboveTimeInForce`|
 |`pendingAboveType` =`LIMIT_MAKER` |`pendingAbovePrice`|
 |`pendingBelowType= STOP_LOSS/TAKE_PROFIT`         |`pendingBelowTrailingDelta` and/or `pendingBelowStopPrice`|
@@ -5318,6 +5336,7 @@ Depending on the `pendingType` or `workingType`, some optional parameters will b
         "price": "1.500000",
         "origQty": "1.000000",
         "executedQty": "0.000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.000000",
         "status": "NEW",
         "timeInForce": "GTC",
@@ -5335,6 +5354,7 @@ Depending on the `pendingType` or `workingType`, some optional parameters will b
         "price": "0.000000",
         "origQty": "5.000000",
         "executedQty": "0.000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.000000",
         "status": "PENDING_NEW",
         "timeInForce": "GTC",
@@ -5353,6 +5373,7 @@ Depending on the `pendingType` or `workingType`, some optional parameters will b
         "price": "5.000000",
         "origQty": "5.000000",
         "executedQty": "0.000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.000000",
         "status": "PENDING_NEW",
         "timeInForce": "GTC",
@@ -5634,6 +5655,7 @@ Matching Engine
         "price": "23410.00000000",
         "origQty": "0.00650000",
         "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.00000000",
         "status": "CANCELED",
         "timeInForce": "GTC",
@@ -5651,6 +5673,7 @@ Matching Engine
         "price": "23420.00000000",
         "origQty": "0.00650000",
         "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.00000000",
         "status": "CANCELED",
         "timeInForce": "GTC",
@@ -5819,6 +5842,7 @@ Matching Engine
       "price": "31000.00000000",
       "origQty": "0.50000000",
       "executedQty": "0.50000000",
+      "origQuoteOrderQty": "0.000000",
       "cummulativeQuoteQty": "14000.00000000",
       "status": "FILLED",
       "timeInForce": "GTC",
