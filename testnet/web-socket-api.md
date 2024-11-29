@@ -5,8 +5,8 @@
   - [General API Information](#general-api-information)
   - [Request format](#request-format)
   - [Response format](#response-format)
-  - [Event Format](#event-format)
     - [Status codes](#status-codes)
+  - [Event Format](#event-format)
 - [Rate limits](#rate-limits)
   - [Connection limits](#connection-limits)
   - [General information on rate limits](#general-information-on-rate-limits)
@@ -277,6 +277,27 @@ Response fields:
 </tbody>
 </table>
 
+### Status codes
+
+Status codes in the `status` field are the same as in HTTP.
+
+Here are some common status codes that you might encounter:
+
+* `200` indicates a successful response.
+* `4XX` status codes indicate invalid requests; the issue is on your side.
+  * `400` – your request failed, see `error` for the reason.
+  * `403` – you have been blocked by the Web Application Firewall.
+  * `409` – your request partially failed but also partially succeeded, see `error` for details.
+  * `418` – you have been auto-banned for repeated violation of rate limits.
+  * `429` – you have exceeded API request rate limit, please slow down.
+* `5XX` status codes indicate internal errors; the issue is on Binance's side.
+  * **Important:** If a response contains 5xx status code, it **does not** necessarily mean that your request has failed.
+    Execution status is _unknown_ and the request might have actually succeeded.
+    Please use query methods to confirm the status.
+    You might also want to establish a new WebSocket connection for that.
+
+See [Error codes for Binance](errors.md) for a list of error codes and messages.
+
 ## Event Format
 
 User Data Stream events for non-SBE sessions are sent as JSON in **text frames**, one event per frame.
@@ -314,27 +335,6 @@ Event fields:
 | Name | Type | Mandatory | Description |
 | :---- | :---- | :---- | :---- |
 | `event` | OBJECT | YES | Event payload. See [User Data Streams](user-data-stream.md) |
-
-### Status codes
-
-Status codes in the `status` field are the same as in HTTP.
-
-Here are some common status codes that you might encounter:
-
-* `200` indicates a successful response.
-* `4XX` status codes indicate invalid requests; the issue is on your side.
-  * `400` – your request failed, see `error` for the reason.
-  * `403` – you have been blocked by the Web Application Firewall.
-  * `409` – your request partially failed but also partially succeeded, see `error` for details.
-  * `418` – you have been auto-banned for repeated violation of rate limits.
-  * `429` – you have exceeded API request rate limit, please slow down.
-* `5XX` status codes indicate internal errors; the issue is on Binance's side.
-  * **Important:** If a response contains 5xx status code, it **does not** necessarily mean that your request has failed.
-    Execution status is _unknown_ and the request might have actually succeeded.
-    Please use query methods to confirm the status.
-    You might also want to establish a new WebSocket connection for that.
-
-See [Error codes for Binance](errors.md) for a list of error codes and messages.
 
 # Rate limits
 
