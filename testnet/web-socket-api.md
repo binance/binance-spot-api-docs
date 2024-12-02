@@ -7,26 +7,26 @@
   - [Response format](#response-format)
     - [Status codes](#status-codes)
   - [Event Format](#event-format)
-- [Rate limits](#rate-limits)
+  - [Rate limits](#rate-limits)
   - [Connection limits](#connection-limits)
-  - [General information on rate limits](#general-information-on-rate-limits)
-    - [How to interpret rate limits](#how-to-interpret-rate-limits)
-    - [How to show/hide rate limit information](#how-to-showhide-rate-limit-information)
-  - [IP limits](#ip-limits)
-  - [Unfilled Order Count](#unfilled-order-count)
-- [Request security](#request-security)
-  - [SIGNED (TRADE and USER_DATA) request security](#signed-trade-and-user_data-request-security)
-  - [Timing security](#timing-security)
-  - [SIGNED request example (HMAC)](#signed-request-example-hmac)
-  - [SIGNED request example (RSA)](#signed-request-example-rsa)
-  - [SIGNED Request Example (Ed25519)](#signed-request-example-ed25519)
+    - [General information on rate limits](#general-information-on-rate-limits)
+      - [How to interpret rate limits](#how-to-interpret-rate-limits)
+      - [How to show/hide rate limit information](#how-to-showhide-rate-limit-information)
+    - [IP limits](#ip-limits)
+    - [Unfilled Order Count](#unfilled-order-count)
+  - [Request security](#request-security)
+    - [SIGNED (TRADE and USER_DATA) request security](#signed-trade-and-user_data-request-security)
+    - [Timing security](#timing-security)
+    - [SIGNED request example (HMAC)](#signed-request-example-hmac)
+    - [SIGNED request example (RSA)](#signed-request-example-rsa)
+    - [SIGNED Request Example (Ed25519)](#signed-request-example-ed25519)
   - [Session Authentication](#session-authentication)
     - [Authenticate after connection](#authenticate-after-connection)
     - [Authorize _ad hoc_ requests](#authorize-_ad-hoc_-requests)
-- [Data sources](#data-sources)
+  - [Data sources](#data-sources)
 - [Public API requests](#public-api-requests)
-    - [Terminology](#terminology)
   - [General requests](#general-requests)
+    - [Terminology](#terminology)
     - [Test connectivity](#test-connectivity)
     - [Check server time](#check-server-time)
     - [Exchange information](#exchange-information)
@@ -78,8 +78,8 @@
     - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
     - [Ping user data stream (USER_STREAM)](#ping-user-data-stream-user_stream)
     - [Stop user data stream (USER_STREAM)](#stop-user-data-stream-user_stream)
-    - [Subscribe to User Data Stream](#subscribe-to-user-data-stream)
-    - [Unsubscribe from User Data Stream](#unsubscribe-from-user-data-stream)
+    - [Subscribe to User Data Stream (USER_STREAM)](#subscribe-to-user-data-stream-user_stream)
+    - [Unsubscribe from User Data Stream (USER_STREAM)](#unsubscribe-from-user-data-stream-user_stream)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -336,7 +336,7 @@ Event fields:
 | :---- | :---- | :---- | :---- |
 | `event` | OBJECT | YES | Event payload. See [User Data Streams](user-data-stream.md) |
 
-# Rate limits
+## Rate limits
 
 ## Connection limits
 
@@ -344,14 +344,14 @@ There is a limit of **300 connections per attempt every 5 minutes**.
 
 The connection is per **IP address**.
 
-## General information on rate limits
+### General information on rate limits
 
 * Current API rate limits can be queried using the [`exchangeInfo`](#exchange-information) request.
 * There are multiple rate limit types across multiple intervals.
 * Responses can indicate current rate limit status in the optional `rateLimits` field.
 * Requests fail with status `429` when unfilled order count or request rate limits are violated.
 
-### How to interpret rate limits
+#### How to interpret rate limits
 
 A response with rate limit status may look like this:
 
@@ -400,7 +400,7 @@ you will have to wait for the shorter interval to expire and reset.
 If you exhaust a longer interval, you will have to wait for that interval to reset,
 even if shorter rate limit count is zero.
 
-### How to show/hide rate limit information
+#### How to show/hide rate limit information
 
 `rateLimits` field is included with every response by default.
 
@@ -448,7 +448,7 @@ the `rateLimits` field can be omitted from responses to reduce their size.
 
 **Note:** Your requests are still rate limited if you hide the `rateLimits` field in responses.
 
-## IP limits
+### IP limits
 
 * Every request has a certain **weight**, added to your limit as you perform requests. 
   * The heavier the request (e.g. querying data from multiple symbols), the more weight the request will cost.
@@ -510,7 +510,7 @@ Failed response indicating that you are banned and the ban will last until epoch
 }
 ```
 
-## Unfilled Order Count
+### Unfilled Order Count
 
 * Successfully placed orders update the `ORDERS` rate limit type.
 * Rejected or unsuccessful orders might or might not update the `ORDERS` rate limit type.
@@ -571,7 +571,7 @@ Successful response indicating that you have placed 12 orders in 10 seconds, and
 }
 ```
 
-# Request security
+## Request security
 
 * Every method has a security type which determines how to call it.
   * Security type is stated next to the method name.
@@ -595,12 +595,12 @@ Security type | API key  | Signature | Description
   * By default, an API key cannot `TRADE`. You need to enable trading in API Management first.
 * `TRADE` and `USER_DATA` requests are also known as `SIGNED` requests.
 
-## SIGNED (TRADE and USER_DATA) request security
+### SIGNED (TRADE and USER_DATA) request security
 
 * `SIGNED` requests require an additional parameter: `signature`, authorizing the request.
 * Please consult [SIGNED request example (HMAC)](#signed-request-example-hmac), [SIGNED request example (RSA)](#signed-request-example-rsa), and [SIGNED request example (Ed25519)](#signed-request-example-ed25519) on how to compute signature, depending on which API key type you are using.
 
-## Timing security
+### Timing security
 
 * `SIGNED` requests also require a `timestamp` parameter which should be the current millisecond timestamp.
 * An additional optional parameter, `recvWindow`, specifies for how long the request stays valid.
@@ -624,7 +624,7 @@ server.
 
 **It is recommended to use a small `recvWindow` of 5000 or less!**
 
-## SIGNED request example (HMAC)
+### SIGNED request example (HMAC)
 
 Here is a step-by-step guide on how to sign requests using HMAC secret key.
 
@@ -729,7 +729,7 @@ Finally, complete the request by adding the `signature` parameter with the signa
 }
 ```
 
-## SIGNED request example (RSA)
+### SIGNED request example (RSA)
 
 Here is a step-by-step guide on how to sign requests using your RSA private key.
 
@@ -832,7 +832,7 @@ Finally, complete the request by adding the `signature` parameter with the signa
 }
 ```
 
-## SIGNED Request Example (Ed25519)
+### SIGNED Request Example (Ed25519)
 
 **Note: It is highly recommended to use Ed25519 API keys as it should provide the best performance and security out of all supported key types.**
 
@@ -950,7 +950,7 @@ overriding the authenticated API key and using a different one to authorize a sp
 For example, you might want to authenticate your `USER_DATA` key to be used by default,
 but specify the `TRADE` key with an explicit signature when placing orders.
 
-# Data sources
+## Data sources
 
 * The API system is asynchronous. Some delay in the response is normal and expected.
 
@@ -969,14 +969,14 @@ Database        | moderate | Data is retrieved from the database
 
 # Public API requests
 
+## General requests
+
 ### Terminology
 
 These terms will be used throughout the documentation, so it is recommended especially for new users to read to help their understanding of the API.
 
 * `base asset` refers to the asset that is the `quantity` of a symbol. For the symbol BTCUSDT, BTC would be the `base asset`.
 * `quote asset` refers to the asset that is the `price` of a symbol. For the symbol BTCUSDT, USDT would be the `quote asset`.
-
-## General requests
 
 ### Test connectivity
 
@@ -3309,6 +3309,7 @@ Response format is selected by using the `newOrderRespType` parameter.
 ```
 
 <a id="conditional-fields-in-order-responses"></a>
+
 **Conditional fields in Order Responses**
 
 There are fields in the order responses (e.g. order placement, order query, order cancellation) that appear only if certain conditions are met. 
@@ -6843,7 +6844,7 @@ Memory
 
 <a id="user-data-stream-subscribe"></a>
 
-### Subscribe to User Data Stream 
+### Subscribe to User Data Stream (USER_STREAM)
 
 ```javascript
 {
@@ -6902,7 +6903,7 @@ Sample user data stream payload from the WebSocket API:
 }
 ```
 
-### Unsubscribe from User Data Stream
+### Unsubscribe from User Data Stream (USER_STREAM)
 
 ```javascript
 {
