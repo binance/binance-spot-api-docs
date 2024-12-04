@@ -2,7 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [General WSS information](#general-wss-information)
+  - [General WSS information](#general-wss-information)
   - [Websocket Limits](#websocket-limits)
   - [Live Subscribing/Unsubscribing to streams](#live-subscribingunsubscribing-to-streams)
     - [Subscribe to a stream](#subscribe-to-a-stream)
@@ -15,7 +15,7 @@
   - [Aggregate Trade Streams](#aggregate-trade-streams)
   - [Trade Streams](#trade-streams)
   - [Kline/Candlestick Streams for UTC](#klinecandlestick-streams-for-utc)
-  - [Kline/Candlestick Streams with Timezone offset](#klinecandlestick-streams-with-timezone-offset)
+  - [Kline/Candlestick Streams with timezone offset](#klinecandlestick-streams-with-timezone-offset)
   - [Individual Symbol Mini Ticker Stream](#individual-symbol-mini-ticker-stream)
   - [All Market Mini Tickers Stream](#all-market-mini-tickers-stream)
   - [Individual Symbol Ticker Streams](#individual-symbol-ticker-streams)
@@ -32,9 +32,9 @@
 
 # Web Socket Streams for Binance (2024-06-11)
 
-# General WSS information
+## General WSS information
 * The base endpoint is: **wss://stream.binance.com:9443** or **wss://stream.binance.com:443**
-* Streams can be accessed either in a single raw stream or in a combined stream
+* Streams can be accessed either in a single raw stream or in a combined stream.
 * Raw streams are accessed at **/ws/\<streamName\>**
 * Combined streams are accessed at **/stream?streams=\<streamName1\>/\<streamName2\>/\<streamName3\>**
 * Combined stream events are wrapped as follows: **{"stream":"\<streamName\>","data":\<rawPayload\>}**
@@ -593,5 +593,7 @@ Order book price and quantity depth updates used to locally manage an order book
 8. If the quantity is 0, **remove** the price level.
 9. Receiving an event that removes a price level that is not in your local order book can happen and is normal.
 
-Note:
-Due to depth snapshots having a limit on the number of price levels, a price level outside of the initial snapshot that doesn't have a quantity change won't have an update in the Diff. Depth Stream. Consequently, those price levels will not be visible in the local order book even when applying all updates from the Diff. Depth Stream correctly and cause the local order book to have some slight differences with the real order book. However, for most use cases the depth limit of 5000 is enough to understand the market and trade effectively.
+
+> [!NOTE]
+> Due to depth snapshots having a limit on the number of price levels, a price level outside of the initial snapshot that doesn't have a quantity change won't have an update in the Diff. Depth Stream. Consequently, those price levels will not be visible in the local order book even when applying all updates from the Diff. Depth Stream correctly and cause the local order book to have some slight differences with the real order book. However, for most use cases the depth limit of 5000 is enough to understand the market and trade effectively.
+
