@@ -14,11 +14,15 @@
     - [Conditional Fields in Execution Report](#conditional-fields-in-execution-report)
     - [Execution types](#execution-types)
   - [Listen Key Expired](#listen-key-expired)
+  - [Event Stream Terminated](#event-stream-terminated)
+  - [External Lock Update](#external-lock-update)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# User Data Streams for Binance (2024-04-02)
-# General WSS information
+# User Data Streams for Binance 
+
+**Last Updated: 2024-12-09**
+
 * The base API endpoint is: **https://api.binance.com**
 * A User Data Stream `listenKey` is valid for 60 minutes after creation.
 * Doing a `PUT` on an active `listenKey` will extend its validity for 60 minutes.
@@ -28,8 +32,8 @@
 * User Data Streams are accessed at **/ws/\<listenKey\>** or **/stream?streams=\<listenKey\>**
 * A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark
 
-# API Endpoints
-## Create a listenKey (USER_STREAM)
+## API Endpoints
+### Create a listenKey (USER_STREAM)
 ```
 POST /api/v3/userDataStream
 ```
@@ -48,7 +52,7 @@ NONE
 }
 ```
 
-## Ping/Keep-alive a listenKey (USER_STREAM)
+### Ping/Keep-alive a listenKey (USER_STREAM)
 ```
 PUT /api/v3/userDataStream
 ```
@@ -68,7 +72,7 @@ listenKey | STRING | YES
 {}
 ```
 
-## Close a listenKey (USER_STREAM)
+### Close a listenKey (USER_STREAM)
 ```
 DELETE /api/v3/userDataStream
 ```
@@ -88,8 +92,8 @@ listenKey | STRING | YES
 {}
 ```
 
-# Web Socket Payloads
-## Account Update
+## Web Socket Payloads
+### Account Update
 
 `outboundAccountPosition` is sent any time an account balance has changed and contains the assets that were possibly changed by the event that generated the balance change.
 
@@ -108,7 +112,7 @@ listenKey | STRING | YES
 }
 ```
 
-## Balance Update
+### Balance Update
 
 Balance Update occurs during the following:
 * Deposits or withdrawals from the account
@@ -125,7 +129,7 @@ Balance Update occurs during the following:
 }
 ```
 
-## Order Update
+### Order Update
 Orders are updated with the `executionReport` event.
 
 We recommend using the [FIX API](fix-api.md) for better performance compared to using the User Data Streams.
@@ -173,7 +177,7 @@ We recommend using the [FIX API](fix-api.md) for better performance compared to 
 
 **Note:** Average price can be found by doing `Z` divided by `z`.
 
-### Conditional Fields in Execution Report
+#### Conditional Fields in Execution Report
 
 These are fields that appear in the payload only if certain conditions are met.
 
@@ -316,7 +320,7 @@ If the order is an order list, an event named `ListStatus` will be sent in addit
 }
 ```
 
-### Execution types
+**Execution types:**
 
 * `NEW` - The order has been accepted into the engine.
 * `CANCELED` - The order has been canceled by the user.
@@ -328,7 +332,7 @@ If the order is an order list, an event named `ListStatus` will be sent in addit
 
 Check the [Enums page](./enums.md) for more relevant enum definitions.
 
-## Listen Key Expired 
+### Listen Key Expired 
 
 This event is sent when the listen key expires.
 
@@ -345,4 +349,38 @@ This event will not be pushed when the stream is closed normally.
   "listenKey": "OfYGbUzi3PraNagEkdKuFwUHn48brFsItTdsuiIXrucEvD0rhRXZ7I6URWfE8YE8" 
 }
 ```
+
+## Event Stream Terminated
+
+This event appears only for WebSocket API. 
+
+`eventStreamTerminated` is sent when the User Data Stream is stopped. For example, after you send a `userDataStream.stop` request, or a `session.logout` request.
+
+**Payload:**
+
+```javascript
+{
+  "event": {
+    "e": "eventStreamTerminated", // Event Type
+    "E": 1728973001334            // Event Time
+  }
+}
+```
+
+## External Lock Update
+
+`externalLockUpdate` is sent when part of your spot wallet balance is locked/unlocked by an external system, for example when used as margin collateral.
+
+**Payload:**
+
+```javascript
+{
+  "e": "externalLockUpdate",  // Event Type
+  "E": 1581557507324,         // Event Time
+  "a": "NEO",                 // Asset
+  "d": "10.00000000",         // Delta
+  "T": 1581557507268          // Transaction Time
+}
+```
+
 

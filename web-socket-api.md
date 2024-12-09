@@ -6,6 +6,7 @@
   - [Request format](#request-format)
   - [Response format](#response-format)
     - [Status codes](#status-codes)
+  - [Event format](#event-format)
 - [Rate limits](#rate-limits)
   - [Connection limits](#connection-limits)
   - [General information on rate limits](#general-information-on-rate-limits)
@@ -22,14 +23,13 @@
   - [Session Authentication](#session-authentication)
     - [Authenticate after connection](#authenticate-after-connection)
     - [Authorize _ad hoc_ requests](#authorize-_ad-hoc_-requests)
-- [Data sources](#data-sources)
+  - [Data sources](#data-sources)
 - [Public API requests](#public-api-requests)
-    - [Terminology](#terminology)
   - [General requests](#general-requests)
+    - [Terminology](#terminology)
     - [Test connectivity](#test-connectivity)
     - [Check server time](#check-server-time)
     - [Exchange information](#exchange-information)
-      - [Examples of Symbol Permissions Interpretation from the Response:](#examples-of-symbol-permissions-interpretation-from-the-response)
   - [Market data requests](#market-data-requests)
     - [Order book](#order-book)
     - [Recent trades](#recent-trades)
@@ -49,11 +49,9 @@
     - [Log out of the session](#log-out-of-the-session)
   - [Trading requests](#trading-requests)
     - [Place new order (TRADE)](#place-new-order-trade)
-      - [Conditional fields in Order Responses](#conditional-fields-in-order-responses)
     - [Test new order (TRADE)](#test-new-order-trade)
     - [Query order (USER_DATA)](#query-order-user_data)
     - [Cancel order (TRADE)](#cancel-order-trade)
-      - [Regarding `cancelRestrictions`](#regarding-cancelrestrictions)
     - [Cancel and replace order (TRADE)](#cancel-and-replace-order-trade)
     - [Current open orders (USER_DATA)](#current-open-orders-user_data)
     - [Cancel open orders (TRADE)](#cancel-open-orders-trade)
@@ -61,9 +59,7 @@
       - [Place new OCO - Deprecated (TRADE)](#place-new-oco---deprecated-trade)
       - [Place new Order list - OCO (TRADE)](#place-new-order-list---oco-trade)
       - [Place new Order list - OTO (TRADE)](#place-new-order-list---oto-trade)
-      - [Mandatory parameters based on `pendingType` or `workingType`](#mandatory-parameters-based-on-pendingtype-or-workingtype)
       - [Place new Order list - OTOCO (TRADE)](#place-new-order-list---otoco-trade)
-      - [Mandatory parameters based on `pendingAboveType`, `pendingBelowType` or `workingType`](#mandatory-parameters-based-on-pendingabovetype-pendingbelowtype-or-workingtype)
       - [Query Order list (USER_DATA)](#query-order-list-user_data)
       - [Cancel Order list (TRADE)](#cancel-order-list-trade)
       - [Current open Order lists (USER_DATA)](#current-open-order-lists-user_data)
@@ -83,14 +79,18 @@
     - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
     - [Ping user data stream (USER_STREAM)](#ping-user-data-stream-user_stream)
     - [Stop user data stream (USER_STREAM)](#stop-user-data-stream-user_stream)
+    - [Subscribe to User Data Stream (USER_STREAM)](#subscribe-to-user-data-stream-user_stream)
+    - [Unsubscribe from User Data Stream (USER_STREAM)](#unsubscribe-from-user-data-stream-user_stream)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public WebSocket API for Binance (2024-10-17)
+# Public WebSocket API for Binance 
+
+**Last Updated: 2024-12-09**
 
 ## General API Information
 
-* The base endpoint is: **`wss://ws-api.binance.com:443/ws-api/v3`**
+* The base endpoint is: **`wss://ws-api.binance.com:443/ws-api/v3`**.
   * If you experience issues with the standard 443 port, alternative port 9443 is also available.
   * The base endpoint for [testnet](https://testnet.binance.vision/) is: `wss://testnet.binance.vision/ws-api/v3`
 * A single connection to the API is only valid for 24 hours; expect to be disconnected after the 24-hour mark.
@@ -164,6 +164,7 @@ Example of successful response:
     "price": "0.10000000",
     "origQty": "10.00000000",
     "executedQty": "0.00000000",
+    "origQuoteOrderQty": "0.000000",
     "cummulativeQuoteQty": "0.00000000",
     "status": "NEW",
     "timeInForce": "GTC",
@@ -299,22 +300,60 @@ Here are some common status codes that you might encounter:
 
 See [Error codes for Binance](errors.md) for a list of error codes and messages.
 
-# Rate limits
+## Event format
 
-## Connection limits
+User Data Stream events for non-SBE sessions are sent as JSON in **text frames**, one event per frame.
+
+Events in SBE sessions will be sent as **binary frames.**
+
+Please refer to [`userDataStream.subscribe`](#user_data_stream_susbcribe) for details on how to subscribe to User Data Stream in WebSocket API.
+
+Example of an event:
+
+```javascript
+{
+  "event": {
+    "e": "outboundAccountPosition",
+    "E": 1728972148778,
+    "u": 1728972148778,
+    "B": [
+      {
+        "a": "ABC",
+        "f": "11818.00000000",
+        "l": "182.00000000"
+      },
+      {
+        "a": "DEF",
+        "f": "10580.00000000",
+        "l": "70.00000000"
+      }
+    ]
+  }
+}
+```
+
+Event fields:
+
+| Name | Type | Mandatory | Description |
+| :---- | :---- | :---- | :---- |
+| `event` | OBJECT | YES | Event payload. See [User Data Streams](user-data-stream.md) |
+
+## Rate limits
+
+### Connection limits
 
 There is a limit of **300 connections per attempt every 5 minutes**. 
 
 The connection is per **IP address**.
 
-## General information on rate limits
+### General information on rate limits
 
 * Current API rate limits can be queried using the [`exchangeInfo`](#exchange-information) request.
 * There are multiple rate limit types across multiple intervals.
 * Responses can indicate current rate limit status in the optional `rateLimits` field.
 * Requests fail with status `429` when unfilled order count or request rate limits are violated.
 
-### How to interpret rate limits
+#### How to interpret rate limits
 
 A response with rate limit status may look like this:
 
@@ -363,7 +402,7 @@ you will have to wait for the shorter interval to expire and reset.
 If you exhaust a longer interval, you will have to wait for that interval to reset,
 even if shorter rate limit count is zero.
 
-### How to show/hide rate limit information
+#### How to show/hide rate limit information
 
 `rateLimits` field is included with every response by default.
 
@@ -411,7 +450,7 @@ the `rateLimits` field can be omitted from responses to reduce their size.
 
 **Note:** Your requests are still rate limited if you hide the `rateLimits` field in responses.
 
-## IP limits
+### IP limits
 
 * Every request has a certain **weight**, added to your limit as you perform requests. 
   * The heavier the request (e.g. querying data from multiple symbols), the more weight the request will cost.
@@ -473,7 +512,7 @@ Failed response indicating that you are banned and the ban will last until epoch
 }
 ```
 
-## Unfilled Order Count
+### Unfilled Order Count
 
 * Successfully placed orders update the `ORDERS` rate limit type.
 * Rejected or unsuccessful orders might or might not update the `ORDERS` rate limit type.
@@ -500,6 +539,7 @@ Successful response indicating that you have placed 12 orders in 10 seconds, and
     "price": "0.10000000",
     "origQty": "10.00000000",
     "executedQty": "0.00000000",
+    "origQuoteOrderQty": "0.000000",
     "cummulativeQuoteQty": "0.00000000",
     "status": "NEW",
     "timeInForce": "GTC",
@@ -534,7 +574,7 @@ Successful response indicating that you have placed 12 orders in 10 seconds, and
 }
 ```
 
-# Request security
+## Request security
 
 * Every method has a security type which determines how to call it.
   * Security type is stated next to the method name.
@@ -558,12 +598,12 @@ Security type | API key  | Signature | Description
   * By default, an API key cannot `TRADE`. You need to enable trading in API Management first.
 * `TRADE` and `USER_DATA` requests are also known as `SIGNED` requests.
 
-## SIGNED (TRADE and USER_DATA) request security
+### SIGNED (TRADE and USER_DATA) request security
 
 * `SIGNED` requests require an additional parameter: `signature`, authorizing the request.
 * Please consult [SIGNED request example (HMAC)](#signed-request-example-hmac), [SIGNED request example (RSA)](#signed-request-example-rsa), and [SIGNED request example (Ed25519)](#signed-request-example-ed25519) on how to compute signature, depending on which API key type you are using.
 
-## Timing security
+### Timing security
 
 * `SIGNED` requests also require a `timestamp` parameter which should be the current millisecond timestamp.
 * An additional optional parameter, `recvWindow`, specifies for how long the request stays valid.
@@ -587,7 +627,7 @@ server.
 
 **It is recommended to use a small `recvWindow` of 5000 or less!**
 
-## SIGNED request example (HMAC)
+### SIGNED request example (HMAC)
 
 Here is a step-by-step guide on how to sign requests using HMAC secret key.
 
@@ -692,7 +732,7 @@ Finally, complete the request by adding the `signature` parameter with the signa
 }
 ```
 
-## SIGNED request example (RSA)
+### SIGNED request example (RSA)
 
 Here is a step-by-step guide on how to sign requests using your RSA private key.
 
@@ -795,7 +835,7 @@ Finally, complete the request by adding the `signature` parameter with the signa
 }
 ```
 
-## SIGNED Request Example (Ed25519)
+### SIGNED Request Example (Ed25519)
 
 **Note: It is highly recommended to use Ed25519 API keys as it should provide the best performance and security out of all supported key types.**
 
@@ -913,7 +953,7 @@ overriding the authenticated API key and using a different one to authorize a sp
 For example, you might want to authenticate your `USER_DATA` key to be used by default,
 but specify the `TRADE` key with an explicit signature when placing orders.
 
-# Data sources
+## Data sources
 
 * The API system is asynchronous. Some delay in the response is normal and expected.
 
@@ -932,14 +972,14 @@ Database        | moderate | Data is retrieved from the database
 
 # Public API requests
 
+## General requests
+
 ### Terminology
 
 These terms will be used throughout the documentation, so it is recommended especially for new users to read to help their understanding of the API.
 
 * `base asset` refers to the asset that is the `quantity` of a symbol. For the symbol BTCUSDT, BTC would be the `base asset`.
 * `quote asset` refers to the asset that is the `price` of a symbol. For the symbol BTCUSDT, USDT would be the `quote asset`.
-
-## General requests
 
 ### Test connectivity
 
@@ -1096,7 +1136,9 @@ Notes:
 
 * [Available Permissions](./enums.md#account-and-symbol-permissions)
 
-#### Examples of Symbol Permissions Interpretation from the Response: 
+<a id="examples-of-symbol-permissions-interpretation-from-the-response"></a>
+
+**Examples of Symbol Permissions Interpretation from the Response:**
 
 * `[["A","B"]]` means you may place an order if your account has either permission "A" **or** permission "B". 
 * `[["A"],["B"]]` means you can place an order if your account has permission "A" **and** permission "B". 
@@ -2703,6 +2745,8 @@ If more than one symbol is requested, response returns an array:
 
 **Note:** Only _Ed25519_ keys are supported for this feature. 
 
+<a id="session-logon"></a>
+
 ### Log in with API key (SIGNED)
 
 ```javascript
@@ -2750,7 +2794,8 @@ Memory
     "authorizedSince": 1649729878532,
     "connectedSince": 1649729873021,
     "returnRateLimits": false,
-    "serverTime": 1649729878630
+    "serverTime": 1649729878630,
+    "userDataStream": true
   }
 }
 ```
@@ -2789,7 +2834,8 @@ Memory
     "authorizedSince": 1649729878532,
     "connectedSince": 1649729873021,
     "returnRateLimits": false,
-    "serverTime": 1649730611671
+    "serverTime": 1649730611671,
+    "userDataStream": true
   }
 }
 ```
@@ -2830,7 +2876,8 @@ Memory
     "authorizedSince": null,
     "connectedSince": 1649729873021,
     "returnRateLimits": false,
-    "serverTime": 1649730611671
+    "serverTime": 1649730611671,
+    "userDataStream": true
   }
 }
 ```
@@ -3160,6 +3207,7 @@ Response format is selected by using the `newOrderRespType` parameter.
     "price": "23416.10000000",
     "origQty": "0.00847000",
     "executedQty": "0.00000000",
+    "origQuoteOrderQty": "0.000000",
     "cummulativeQuoteQty": "0.00000000",
     "status": "NEW",
     "timeInForce": "GTC",
@@ -3210,6 +3258,7 @@ Response format is selected by using the `newOrderRespType` parameter.
     "price": "23416.10000000",
     "origQty": "0.00847000",
     "executedQty": "0.00847000",
+    "origQuoteOrderQty": "0.000000",
     "cummulativeQuoteQty": "198.33521500",
     "status": "FILLED",
     "timeInForce": "GTC",
@@ -3262,7 +3311,9 @@ Response format is selected by using the `newOrderRespType` parameter.
 }
 ```
 
-#### Conditional fields in Order Responses
+<a id="conditional-fields-in-order-responses"></a>
+
+**Conditional fields in Order Responses**
 
 There are fields in the order responses (e.g. order placement, order query, order cancellation) that appear only if certain conditions are met. 
 
@@ -3636,6 +3687,7 @@ When an individual order is canceled:
     "price": "23416.10000000",
     "origQty": "0.00847000",
     "executedQty": "0.00001000",
+    "origQuoteOrderQty": "0.000000",
     "cummulativeQuoteQty": "0.23416100",
     "status": "CANCELED",
     "timeInForce": "GTC",
@@ -3698,6 +3750,7 @@ When an order list is canceled:
         "price": "23450.50000000",
         "origQty": "0.00850000"
         "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.00000000",
         "status": "CANCELED",
         "timeInForce": "GTC",
@@ -3739,7 +3792,9 @@ When an order list is canceled:
 
 **Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
-#### Regarding `cancelRestrictions`
+<a id="regarding-cancelrestrictions"></a>
+
+**Regarding `cancelRestrictions`**
 
 * If the `cancelRestrictions` value is not any of the supported values, the error will be: 
 ```json
@@ -4186,6 +4241,7 @@ If both cancel and placement succeed, you get the following response with `"stat
       "price": "23450.00000000",
       "origQty": "0.00847000",
       "executedQty": "0.00001000",
+      "origQuoteOrderQty": "0.000000",
       "cummulativeQuoteQty": "0.23450000",
       "status": "CANCELED",
       "timeInForce": "GTC",
@@ -4204,6 +4260,7 @@ If both cancel and placement succeed, you get the following response with `"stat
       "price": "23416.10000000",
       "origQty": "0.00847000",
       "executedQty": "0.00000000",
+      "origQuoteOrderQty": "0.000000",
       "cummulativeQuoteQty": "0.00000000",
       "status": "NEW",
       "timeInForce": "GTC",
@@ -4307,6 +4364,7 @@ and the `"data"` field detailing which operation succeeded, which failed, and wh
         "price": "23450.00000000",
         "origQty": "0.00847000",
         "executedQty": "0.00001000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.23450000",
         "status": "CANCELED",
         "timeInForce": "GTC",
@@ -4369,6 +4427,7 @@ and the `"data"` field detailing which operation succeeded, which failed, and wh
         "price": "23416.10000000",
         "origQty": "0.00847000",
         "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.00000000",
         "status": "NEW",
         "timeInForce": "GTC",
@@ -4512,6 +4571,7 @@ If `orderRateLimitExceededMode` is `CANCEL_ONLY` regardless of `cancelReplaceMod
         "price": "1.00",
         "origQty": "10.00000000",
         "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.00",
         "status": "CANCELED",
         "timeInForce": "GTC",
@@ -4618,6 +4678,7 @@ If all symbols are requested, use the `symbol` field to tell which symbol the or
       "price": "23416.10000000",
       "origQty": "0.00847000",
       "executedQty": "0.00720000",
+      "origQuoteOrderQty": "0.000000",
       "cummulativeQuoteQty": "172.43931000",
       "status": "PARTIALLY_FILLED",
       "timeInForce": "GTC",
@@ -4700,6 +4761,7 @@ Cancellation reports for orders and order lists have the same format as in [`ord
       "price": "23416.10000000",
       "origQty": "0.00847000",
       "executedQty": "0.00001000",
+      "origQuoteOrderQty": "0.000000",
       "cummulativeQuoteQty": "0.23416100",
       "status": "CANCELED",
       "timeInForce": "GTC",
@@ -4744,6 +4806,7 @@ Cancellation reports for orders and order lists have the same format as in [`ord
           "price": "23450.50000000",
           "origQty": "0.00850000",
           "executedQty": "0.00000000",
+          "origQuoteOrderQty": "0.000000",
           "cummulativeQuoteQty": "0.00000000",
           "status": "CANCELED",
           "timeInForce": "GTC",
@@ -4762,6 +4825,7 @@ Cancellation reports for orders and order lists have the same format as in [`ord
           "price": "23400.00000000",
           "origQty": "0.00850000",
           "executedQty": "0.00000000",
+          "origQuoteOrderQty": "0.000000",
           "cummulativeQuoteQty": "0.00000000",
           "status": "CANCELED",
           "timeInForce": "GTC",
@@ -4917,6 +4981,7 @@ See [`order.place`](#place-new-order-trade) for more examples.
         "price": "23410.00000000",
         "origQty": "0.00650000",
         "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.00000000",
         "status": "NEW",
         "timeInForce": "GTC",
@@ -4935,6 +5000,7 @@ See [`order.place`](#place-new-order-trade) for more examples.
         "price": "23420.00000000",
         "origQty": "0.00650000",
         "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.00000000",
         "status": "NEW",
         "timeInForce": "GTC",
@@ -5001,10 +5067,14 @@ See [`order.place`](#place-new-order-trade) for more examples.
 Send in an one-cancels the other (OCO) pair, where activation of one order immediately cancels the other.
 
 * An OCO has 2 orders called the **above order** and **below order**.
-* One of the orders must be a `LIMIT_MAKER` order and the other must be `STOP_LOSS` or `STOP_LOSS_LIMIT` order.
-* Price restrictions:     
-  * If the OCO is on the `SELL` side: `LIMIT_MAKER` `price` > Last Traded Price > `stopPrice`
-  * If the OCO is on the `BUY` side: `LIMIT_MAKER` `price` < Last Traded Price < `stopPrice`
+* One of the orders must be a `LIMIT_MAKER/TAKE_PROFIT/TAKE_PROFIT_LIMIT` order and the other must be `STOP_LOSS` or `STOP_LOSS_LIMIT` order.  
+* Price restrictions:  
+  * If the OCO is on the `SELL` side:   
+    * `LIMIT_MAKER/TAKE_PROFIT_LIMIT` `price` > Last Traded Price > `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`  
+    * `TAKE_PROFIT stopPrice` > Last Traded Price > `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`  
+  * If the OCO is on the `BUY` side:  
+    * `LIMIT_MAKER` `price` < Last Traded Price < `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`  
+    * `TAKE_PROFIT stopPrice` > Last Traded Price > `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
 * OCOs add **2 orders** to the unfilled order count, `EXCHANGE_MAX_ORDERS` filter, and `MAX_NUM_ORDERS` filter.
 
 **Parameters:**
@@ -5015,22 +5085,23 @@ Name                     |Type    | Mandatory | Description
 `listClientOrderId`      |STRING  |NO         |Arbitrary unique ID among open order lists. Automatically generated if not sent. <br> A new order list with the same `listClientOrderId` is accepted only when the previous one is filled or completely expired. <br> `listClientOrderId` is distinct from the `aboveClientOrderId` and the `belowCLientOrderId`.
 `side`                   |ENUM    |YES        |`BUY` or `SELL`
 `quantity`               |DECIMAL |YES        |Quantity for both orders of the order list.
-`aboveType`              |ENUM    |YES        |Supported values : `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`
+`aboveType`              |ENUM    |YES        |Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
 `aboveClientOrderId`     |STRING  |NO        |Arbitrary unique ID among open orders for the above order. Automatically generated if not sent
 `aboveIcebergQty`        |LONG    |NO         |Note that this can only be used if `aboveTimeInForce` is `GTC`.
-`abovePrice`             |DECIMAL |NO         |
-`aboveStopPrice`         |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`. <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
+`abovePrice`             |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price. 
+`aboveStopPrice`         |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
 `aboveTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md).
-`aboveTimeInForce`       |DECIMAL |NO         |Required if the `aboveType` is `STOP_LOSS_LIMIT`. 
+`aboveTimeInForce`       |DECIMAL |NO         |Required if `aboveType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`.
 `aboveStrategyId`        |LONG     |NO         |Arbitrary numeric value identifying the above order within an order strategy. 
 `aboveStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the above order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
-`belowType`              |ENUM    |YES        |Supported values : `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`
+`belowType`              |ENUM    |YES        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 `belowClientOrderId`     |STRING  |NO         |
 `belowIcebergQty`        |LONG    |NO         |Note that this can only be used if `belowTimeInForce` is `GTC`.
-`belowPrice`             |DECIMAL |NO         |
-`belowStopPrice`         |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`. <br>Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
+`belowPrice`             |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
+`belowStopPrice`         |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT` or `TAKE_PROFIT_LIMIT`.  
+Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
 `belowTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md). 
-`belowTimeInForce`       |ENUM    |NO         |Required if the `belowType` is `STOP_LOSS_LIMIT`.
+`belowTimeInForce`       |ENUM    |NO         |Required if `belowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`
 `belowStrategyId`        |LONG    |NO          |Arbitrary numeric value identifying the below order within an order strategy. 
 `belowStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the below order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
 `newOrderRespType`       |ENUM    |NO         |Select response format: `ACK`, `RESULT`, `FULL`
@@ -5086,6 +5157,7 @@ See [`order.place`](#place-new-order-trade) for more examples.
         "price": "1.50000000",
         "origQty": "1.000000",
         "executedQty": "0.000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.00000000",
         "status": "NEW",
         "timeInForce": "GTC",
@@ -5104,6 +5176,7 @@ See [`order.place`](#place-new-order-trade) for more examples.
         "price": "1.49999999",
         "origQty": "1.000000",
         "executedQty": "0.000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.00000000",
         "status": "NEW",
         "timeInForce": "GTC",
@@ -5207,7 +5280,9 @@ Name                   |Type   |Mandatory | Description
 `timestamp`              |LONG   |YES       |
 `signature`              |STRING |YES       |
 
-#### Mandatory parameters based on `pendingType` or `workingType`
+<a id="mandatory-parameters-based-on-pendingtype-or-workingtype"></a>
+
+**Mandatory parameters based on `pendingType` or `workingType`**
 
 Depending on the `pendingType` or `workingType`, some optional parameters will become mandatory.
 
@@ -5258,6 +5333,7 @@ Matching Engine
         "price": "1.000000",
         "origQty": "1.000000",
         "executedQty": "0.000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.000000",
         "status": "NEW",
         "timeInForce": "GTC",
@@ -5275,6 +5351,7 @@ Matching Engine
         "price": "0.000000",
         "origQty": "1.000000",
         "executedQty": "0.000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.000000",
         "status": "PENDING_NEW",
         "timeInForce": "GTC",
@@ -5362,19 +5439,20 @@ Name                     |Type   |Mandatory | Description
 `workingStrategyType`      |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
 `pendingSide`              |ENUM   |YES       |Supported values: [Order Side](./enums.md#side)
 `pendingQuantity`          |DECIMAL|YES       |
-`pendingAboveType`         |ENUM   |YES       |Supported values: `LIMIT_MAKER`, `STOP_LOSS`, and `STOP_LOSS_LIMIT`
+`pendingAboveType`         |ENUM   |YES       |Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
 `pendingAboveClientOrderId`|STRING |NO        |Arbitrary unique ID among open orders for the pending above order.<br> Automatically generated if not sent.
-`pendingAbovePrice`        |DECIMAL|NO        |
-`pendingAboveStopPrice`    |DECIMAL|NO        |
-`pendingAboveTrailingDelta`|DECIMAL|NO        |
+`pendingAbovePrice`        |DECIMAL|NO        |Can be used if `pendingAboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price. 
+`pendingAboveStopPrice`    |DECIMAL|NO        |Can be used if `pendingAboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
+`pendingAboveTrailingDelta`|DECIMAL|NO        |See [Trailing Stop FAQ](faqs/trailing-stop-faq.md)
 `pendingAboveIcebergQty`   |DECIMAL|NO        |This can only be used if `pendingAboveTimeInForce` is `GTC` or if `pendingAboveType` is `LIMIT_MAKER`.
 `pendingAboveTimeInForce`  |ENUM   |NO        |
 `pendingAboveStrategyId`   |LONG    |NO        |Arbitrary numeric value identifying the pending above order within an order strategy.
 `pendingAboveStrategyType` |INT    |NO        |Arbitrary numeric value identifying the pending above order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
-`pendingBelowType`         |ENUM   |NO        |Supported values: `LIMIT_MAKER`, `STOP_LOSS`, and `STOP_LOSS_LIMIT`
+`pendingBelowType`         |ENUM   |NO        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 `pendingBelowClientOrderId`|STRING |NO        |Arbitrary unique ID among open orders for the pending below order.<br> Automatically generated if not sent.
-`pendingBelowPrice`        |DECIMAL|NO        |
-`pendingBelowStopPrice`    |DECIMAL|NO        |
+`pendingBelowPrice`        |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT` to specify limit price
+`pendingBelowStopPrice`    |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`.  
+Either `pendingBelowStopPrice` or `pendingBelowTrailingDelta` or both, must be specified.
 `pendingBelowTrailingDelta`|DECIMAL|NO        |
 `pendingBelowIcebergQty`   |DECIMAL|NO        |This can only be used if `pendingBelowTimeInForce` is `GTC`, or if `pendingBelowType` is `LIMIT_MAKER`.
 `pendingBelowTimeInForce`  |ENUM   |NO        |Supported values: [Time In Force](#timeInForce)
@@ -5384,7 +5462,9 @@ Name                     |Type   |Mandatory | Description
 `timestamp`                |LONG   |YES       |
 `signature`                |STRING|YES|
 
-#### Mandatory parameters based on `pendingAboveType`, `pendingBelowType` or `workingType`
+<a id="mandatory-parameters-based-on-pendingabovetype-pendingbelowtype-or-workingtype"></a>
+
+**Mandatory parameters based on `pendingAboveType`, `pendingBelowType` or `workingType`**
 
 Depending on the `pendingAboveType`/`pendingBelowType` or `workingType`, some optional parameters will become mandatory.
 
@@ -5392,11 +5472,11 @@ Depending on the `pendingAboveType`/`pendingBelowType` or `workingType`, some op
 |----                                                       |----                           |------  
 |`workingType` = `LIMIT`                                    |`workingTimeInForce`           | 
 |`pendingAboveType`= `LIMIT_MAKER`                                |`pendingAbovePrice`          |
-|`pendingAboveType`= `STOP_LOSS`          |`pendingAboveStopPrice` and/or `pendingAboveTrailingDelta`|
-|`pendingAboveType`=`STOP_LOSS_LIMIT` |`pendingAbovePrice`, `pendingAboveStopPrice` and/or `pendingAboveTrailingDelta`, `pendingAboveTimeInForce`|
+|`pendingAboveType` = `STOP_LOSS/TAKE_PROFIT`         |`pendingAboveStopPrice` and/or `pendingAboveTrailingDelta`|
+|`pendingAboveType=STOP_LOSS_LIMIT/TAKE_PROFIT_LIMIT`|`pendingAbovePrice`, `pendingAboveStopPrice` and/or `pendingAboveTrailingDelta`, `pendingAboveTimeInForce`|
 |`pendingBelowType`= `LIMIT_MAKER`                                |`pendingBelowPrice`          |
-|`pendingBelowType`= `STOP_LOSS`            |`pendingBelowStopPrice` and/or `pendingBelowTrailingDelta`|
-|`pendingBelowType`=`STOP_LOSS_LIMIT` |`pendingBelowPrice`, `pendingBelowStopPrice` and/or `pendingBelowTrailingDelta`, `pendingBelowTimeInForce`|
+`pendingBelowType= STOP_LOSS/TAKE_PROFIT`         |`pendingBelowStopPrice` and/or `pendingBelowTrailingDelta`|
+|`pendingBelowType=STOP_LOSS_LIMIT/TAKE_PROFIT_LIMIT`|`pendingBelowPrice`, `pendingBelowStopPrice` and/or `pendingBelowTrailingDelta`, `pendingBelowTimeInForce`|
 
 
 **Data Source:** Matching Engine
@@ -5442,6 +5522,7 @@ Depending on the `pendingAboveType`/`pendingBelowType` or `workingType`, some op
         "price": "1.500000",
         "origQty": "1.000000",
         "executedQty": "0.000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.000000",
         "status": "NEW",
         "timeInForce": "GTC",
@@ -5459,6 +5540,7 @@ Depending on the `pendingAboveType`/`pendingBelowType` or `workingType`, some op
         "price": "0.000000",
         "origQty": "5.000000",
         "executedQty": "0.000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.000000",
         "status": "PENDING_NEW",
         "timeInForce": "GTC",
@@ -5477,6 +5559,7 @@ Depending on the `pendingAboveType`/`pendingBelowType` or `workingType`, some op
         "price": "5.000000",
         "origQty": "5.000000",
         "executedQty": "0.000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.000000",
         "status": "PENDING_NEW",
         "timeInForce": "GTC",
@@ -5758,6 +5841,7 @@ Matching Engine
         "price": "23410.00000000",
         "origQty": "0.00650000",
         "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.00000000",
         "status": "CANCELED",
         "timeInForce": "GTC",
@@ -5775,6 +5859,7 @@ Matching Engine
         "price": "23420.00000000",
         "origQty": "0.00650000",
         "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.00000000",
         "status": "CANCELED",
         "timeInForce": "GTC",
@@ -5943,6 +6028,7 @@ Matching Engine
       "price": "31000.00000000",
       "origQty": "0.50000000",
       "executedQty": "0.50000000",
+      "origQuoteOrderQty": "0.000000",
       "cummulativeQuoteQty": "14000.00000000",
       "status": "FILLED",
       "timeInForce": "GTC",
@@ -6940,3 +7026,92 @@ Memory
   ]
 }
 ```
+<a id="user_data_stream_susbcribe"></a>
+
+### Subscribe to User Data Stream (USER_STREAM)
+
+```javascript
+{
+  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+  "method": "userDataStream.subscribe"
+}
+```
+
+Subscribe to the User Data Stream in the current WebSocket connection.
+
+**Notes:**
+
+* This method requires an authenticated WebSocket connection using Ed25519 keys. Please refer to [`session.logon`](#session-logon).  
+* User Data Stream events are available in both JSON and SBE sessions.  
+  * Please refer to [User Data Streams](user-data-stream.md) for the event format details.  
+  * For SBE, only SBE schema 2:1 or later is supported.
+
+**Weight**:  
+2
+
+**Parameters**:  
+NONE
+
+**Response**:
+
+```javascript
+
+{
+  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+  "status": 200,
+  "result": {}
+}
+```
+
+Sample user data stream payload from the WebSocket API:
+
+```javascript
+{
+  "event": {
+    "e": "outboundAccountPosition",
+    "E": 1728972148778,
+    "u": 1728972148778,
+    "B": [
+      {
+        "a": "ABC",
+        "f": "11818.00000000",
+        "l": "182.00000000"
+      },
+      {
+        "a": "DEF",
+        "f": "10580.00000000",
+        "l": "70.00000000"
+      }
+    ]
+  }
+}
+```
+
+### Unsubscribe from User Data Stream (USER_STREAM)
+
+```javascript
+{
+  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+  "method": "userDataStream.unsubscribe"
+}
+```
+
+Stop listening to the User Data Stream in the current WebSocket connection. 
+
+**Weight**:  
+2
+
+**Parameters**:
+
+NONE
+
+**Response**:
+
+```javascript
+{
+  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+  "status": 200,
+  "result": {}
+}
+```
+

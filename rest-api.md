@@ -6,28 +6,24 @@
   - [HTTP Return Codes](#http-return-codes)
   - [Error Codes](#error-codes)
   - [General Information on Endpoints](#general-information-on-endpoints)
-- [LIMITS](#limits)
-  - [General Info on Limits](#general-info-on-limits)
-  - [IP Limits](#ip-limits)
-  - [Unfilled Order Count](#unfilled-order-count)
-- [Data Sources](#data-sources)
-- [Endpoint security type](#endpoint-security-type)
-- [SIGNED (TRADE and USER_DATA) Endpoint security](#signed-trade-and-user_data-endpoint-security)
-  - [Timing security](#timing-security)
-  - [SIGNED Endpoint Examples for POST /api/v3/order](#signed-endpoint-examples-for-post-apiv3order)
-    - [HMAC Keys](#hmac-keys)
-      - [Example 1: As a request body](#example-1-as-a-request-body)
-      - [Example 2: As a query string](#example-2-as-a-query-string)
-      - [Example 3: Mixed query string and request body](#example-3-mixed-query-string-and-request-body)
-    - [RSA Keys](#rsa-keys)
-    - [Ed25519 Keys](#ed25519-keys)
+  - [LIMITS](#limits)
+    - [General Info on Limits](#general-info-on-limits)
+    - [IP Limits](#ip-limits)
+    - [Unfilled Order Count](#unfilled-order-count)
+  - [Data Sources](#data-sources)
+  - [Endpoint security type](#endpoint-security-type)
+    - [SIGNED (TRADE and USER_DATA) Endpoint security](#signed-trade-and-user_data-endpoint-security)
+    - [Timing security](#timing-security)
+    - [SIGNED Endpoint Examples for POST /api/v3/order](#signed-endpoint-examples-for-post-apiv3order)
+      - [HMAC Keys](#hmac-keys)
+      - [RSA Keys](#rsa-keys)
+      - [Ed25519 Keys](#ed25519-keys)
 - [Public API Endpoints](#public-api-endpoints)
-    - [Terminology](#terminology)
   - [General endpoints](#general-endpoints)
+    - [Terminology](#terminology)
     - [Test connectivity](#test-connectivity)
     - [Check server time](#check-server-time)
     - [Exchange information](#exchange-information)
-      - [Examples of Symbol Permissions Interpretation from the Response:](#examples-of-symbol-permissions-interpretation-from-the-response)
   - [Market Data endpoints](#market-data-endpoints)
     - [Order book](#order-book)
     - [Recent trades list](#recent-trades-list)
@@ -43,11 +39,9 @@
     - [Rolling window price change statistics](#rolling-window-price-change-statistics)
   - [Trading endpoints](#trading-endpoints)
     - [New order (TRADE)](#new-order-trade)
-      - [Conditional fields in Order Responses](#conditional-fields-in-order-responses)
     - [Test new order (TRADE)](#test-new-order-trade)
     - [Query order (USER_DATA)](#query-order-user_data)
     - [Cancel order (TRADE)](#cancel-order-trade)
-      - [Regarding `cancelRestrictions`](#regarding-cancelrestrictions)
     - [Cancel All Open Orders on a Symbol (TRADE)](#cancel-all-open-orders-on-a-symbol-trade)
     - [Cancel an Existing Order and Send a New Order (TRADE)](#cancel-an-existing-order-and-send-a-new-order-trade)
     - [Current open orders (USER_DATA)](#current-open-orders-user_data)
@@ -55,10 +49,8 @@
     - [Order lists](#order-lists)
       - [New OCO - Deprecated (TRADE)](#new-oco---deprecated-trade)
       - [New Order list - OCO (TRADE)](#new-order-list---oco-trade)
-      - [New Order List - OTO (TRADE)](#new-order-list---oto-trade)
-      - [Mandatory parameters based on `pendingType` or `workingType`](#mandatory-parameters-based-on-pendingtype-or-workingtype)
-      - [New Order List - OTOCO (TRADE)](#new-order-list---otoco-trade)
-      - [Mandatory parameters based on `pendingAboveType`, `pendingBelowType` or `workingType`](#mandatory-parameters-based-on-pendingabovetype-pendingbelowtype-or-workingtype)
+      - [New Order list - OTO (TRADE)](#new-order-list---oto-trade)
+      - [New Order list - OTOCO (TRADE)](#new-order-list---otoco-trade)
       - [Cancel Order list (TRADE)](#cancel-order-list-trade)
       - [Query Order list (USER_DATA)](#query-order-list-user_data)
       - [Query all Order lists (USER_DATA)](#query-all-order-lists-user_data)
@@ -80,7 +72,9 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public Rest API for Binance (2024-10-17)
+# Public Rest API for Binance 
+
+**Last Updated: 2024-12-09**
 
 ## General API Information
 * The following base endpoints are available. Please use whichever works best for your setup:
@@ -130,9 +124,9 @@ Sample Payload below:
 * If a parameter sent in both the `query string` and `request body`, the
   `query string` parameter will be used.
 
-# LIMITS
+## LIMITS
 
-## General Info on Limits
+### General Info on Limits
 * The following `intervalLetter` values for headers:
     * SECOND => S
     * MINUTE => M
@@ -142,7 +136,7 @@ Sample Payload below:
 * The `/api/v3/exchangeInfo` `rateLimits` array contains objects related to the exchange's `RAW_REQUESTS`, `REQUEST_WEIGHT`, and `ORDERS` rate limits. These are further defined in the `ENUM definitions` section under `Rate limiters (rateLimitType)`.
 * Requests fail with HTTP status code 429 when you exceed the request rate limit.
 
-## IP Limits
+### IP Limits
 * Every request will contain `X-MBX-USED-WEIGHT-(intervalNum)(intervalLetter)` in the response headers which has the current used weight for the IP for all request rate limiters defined.
 * Each route has a `weight` which determines for the number of requests each endpoint counts for. Heavier endpoints and endpoints that do operations on multiple symbols will have a heavier `weight`.
 * When a 429 is received, it's your obligation as an API to back off and not spam the API.
@@ -151,14 +145,14 @@ Sample Payload below:
 * A `Retry-After` header is sent with a 418 or 429 responses and will give the **number of seconds** required to wait, in the case of a 429, to prevent a ban, or, in the case of a 418, until the ban is over.
 * **The limits on the API are based on the IPs, not the API keys.**
 
-## Unfilled Order Count
+### Unfilled Order Count
 * Every successful order response will contain a `X-MBX-ORDER-COUNT-(intervalNum)(intervalLetter)` header indicating how many orders you have placed for that interval. <br></br> To monitor this, refer to [`GET api/v3/rateLimit/order`](#query-unfilled-order-count).
 * Rejected/unsuccessful orders are not guaranteed to have `X-MBX-ORDER-COUNT-**` headers in the response.
 * If you have exceeded this, you will receive a 429 error without the `Retry-After` header. 
 * **Please note that if your orders are consistently filled by trades, you can continuously place orders on the API**. For more information, please see [Spot Unfilled Order Count Rules](./faqs/order_count_decrement.md).
 * **The number of unfilled orders is tracked for each account.**
 
-# Data Sources
+## Data Sources
 * The API system is asynchronous, so some delay in the response is normal and expected.
 * Each endpoint has a data source indicating where the data is being retrieved, and thus which endpoints have the most up-to-date response.
 
@@ -171,7 +165,7 @@ These are the three sources, ordered by least to most potential for delays in da
 Some endpoints can have more than 1 data source. (e.g. Memory => Database)
 This means that the endpoint will check the first Data Source, and if it cannot find the value it's looking for it will check the next one.
 
-# Endpoint security type
+## Endpoint security type
 * Each endpoint has a security type that determines how you will
   interact with it. This is stated next to the NAME of the endpoint.
 * If no security type is stated, assume the security type is NONE.
@@ -190,13 +184,13 @@ USER_STREAM | Endpoint requires sending a valid API-Key.
 
 * `TRADE` and `USER_DATA` endpoints are `SIGNED` endpoints.
 
-# SIGNED (TRADE and USER_DATA) Endpoint security
+### SIGNED (TRADE and USER_DATA) Endpoint security
 * `SIGNED` endpoints require an additional parameter, `signature`, to be sent in the  `query string` or `request body`.
 * The `signature` is **not case sensitive**.
 * Please consult the [examples](#signed-endpoint-examples-for-post-apiv3order) below on how to compute signature, depending on which API key type you are using.
 
 
-## Timing security
+### Timing security
 * A `SIGNED` endpoint also requires a parameter, `timestamp`, to be sent which
   should be the millisecond timestamp of when the request was created and sent.
 * An additional parameter, `recvWindow`, may be sent to specify the number of
@@ -222,9 +216,9 @@ server.
 **It is recommended to use a small recvWindow of 5000 or less! The max cannot go beyond 60,000!**
 
 
-## SIGNED Endpoint Examples for POST /api/v3/order
+### SIGNED Endpoint Examples for POST /api/v3/order
 
-### HMAC Keys
+#### HMAC Keys
 Here is a step-by-step example of how to send a valid signed payload from the
 Linux command line using `echo`, `openssl`, and `curl`.
 
@@ -245,7 +239,7 @@ Parameter | Value
 `recvWindow` | 5000
 `timestamp` | 1499827319559
 
-#### Example 1: As a request body
+**Example 1: As a request body**
 * **requestBody:** symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559
 * **HMAC SHA256 signature:**
 
@@ -262,7 +256,7 @@ Parameter | Value
     [linux]$ curl -H "X-MBX-APIKEY: vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A" -X POST 'https://api.binance.com/api/v3/order' -d 'symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71'
     ```
 
-#### Example 2: As a query string
+**Example 2: As a query string**
 * **queryString:** symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559
 * **HMAC SHA256 signature:**
 
@@ -279,7 +273,7 @@ Parameter | Value
     [linux]$ curl -H "X-MBX-APIKEY: vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A" -X POST 'https://api.binance.com/api/v3/order?symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71'
     ```
 
-#### Example 3: Mixed query string and request body
+**Example 3: Mixed query string and request body**
 * **queryString:** symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC
 * **requestBody:** quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559
 * **HMAC SHA256 signature:**
@@ -301,7 +295,7 @@ Note that the signature is different in example 3.
 There is no & between "GTC" and "quantity=1".
 
 
-### RSA Keys
+#### RSA Keys
 
 This will be a step by step process how to create the signature payload to send a valid signed payload.
 
@@ -384,7 +378,7 @@ curl -H "X-MBX-APIKEY: $API_KEY" -X "$API_METHOD" \
     --data-urlencode "signature=$signature"
 ```
 
-### Ed25519 Keys 
+#### Ed25519 Keys 
 
 **Note: It is highly recommended to use Ed25519 API keys as it should provide the best performance and security out of all supported key types.**
 
@@ -451,6 +445,9 @@ print(response.json())
 ```
 
 # Public API Endpoints
+
+## General endpoints
+
 ### Terminology
 
 These terms will be used throughout the documentation, so it is recommended especially for new users to read to help their understanding of the API.
@@ -458,7 +455,6 @@ These terms will be used throughout the documentation, so it is recommended espe
 * `base asset` refers to the asset that is the `quantity` of a symbol. For the symbol BTCUSDT, BTC would be the `base asset`.
 * `quote asset` refers to the asset that is the `price` of a symbol. For the symbol BTCUSDT, USDT would be the `quote asset`.
 
-## General endpoints
 ### Test connectivity
 ```
 GET /api/v3/ping
@@ -529,7 +525,9 @@ symbolStatus|ENUM|No|Filters symbols that have this `tradingStatus`. Valid value
 * If `permissions` parameter not provided, all symbols that have either `SPOT`, `MARGIN`, or `LEVERAGED` permission will be exposed.
   * To display symbols with any permission you need to specify them explicitly in `permissions`: (e.g. `["SPOT","MARGIN",...]`.). See [Account and Symbol Permissions](enums.md#account-and-symbol-permissions) for the full list.
 
-#### Examples of Symbol Permissions Interpretation from the Response: 
+<a id="examples-of-symbol-permissions-interpretation-from-the-response"></a>
+
+**Examples of Symbol Permissions Interpretation from the Response:**
 
 * `[["A","B"]]` means you may place an order if your account has either permission "A" **or** permission "B". 
 * `[["A"],["B"]]` means you can place an order if your account has permission "A" **and** permission "B". 
@@ -1738,6 +1736,7 @@ Matching Engine
   "price": "0.00000000",
   "origQty": "10.00000000",
   "executedQty": "10.00000000",
+  "origQuoteOrderQty": "0.000000",
   "cummulativeQuoteQty": "10.00000000",
   "status": "FILLED",
   "timeInForce": "GTC",
@@ -1759,6 +1758,7 @@ Matching Engine
   "price": "0.00000000",
   "origQty": "10.00000000",
   "executedQty": "10.00000000",
+  "origQuoteOrderQty": "0.000000",
   "cummulativeQuoteQty": "10.00000000",
   "status": "FILLED",
   "timeInForce": "GTC",
@@ -1806,7 +1806,9 @@ Matching Engine
 }
 ```
 
-#### Conditional fields in Order Responses
+<a id="conditional-fields-in-order-responses"></a>
+
+**Conditional fields in Order Responses**
 
 There are fields in the order responses (e.g. order placement, order query, order cancellation) that appear only if certain conditions are met.
 
@@ -1986,7 +1988,9 @@ Matching Engine
 
 **Note:** The payload above does not show all fields that can appear in the order response. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
-#### Regarding `cancelRestrictions`
+<a id="regarding-cancelrestrictions"></a>
+
+**Regarding `cancelRestrictions`**
 
 * If the `cancelRestrictions` value is not any of the supported values, the error will be:
 ```json
@@ -2359,6 +2363,7 @@ Matching Engine
     "price": "0.01000000",
     "origQty": "0.000100",
     "executedQty": "0.00000000",
+    "origQuoteOrderQty": "0.000000",
     "cummulativeQuoteQty": "0.00000000",
     "status": "CANCELED",
     "timeInForce": "GTC",
@@ -2376,6 +2381,7 @@ Matching Engine
     "origQty": "0.040000",
     "executedQty": "0.00000000",
     "cummulativeQuoteQty": "0.00000000",
+    "origQuoteOrderQty": "0.000000",
     "status": "NEW",
     "timeInForce": "GTC",
     "type": "LIMIT",
@@ -2421,6 +2427,7 @@ Matching Engine
       "price": "0.006123",
       "origQty": "10000.000000",
       "executedQty": "0.000000",
+      "origQuoteOrderQty": "0.000000",
       "cummulativeQuoteQty": "0.000000",
       "status": "CANCELED",
       "timeInForce": "GTC",
@@ -2509,6 +2516,7 @@ Matching Engine
       "price": "1.00",
       "origQty": "10.00000000",
       "executedQty": "0.00000000",
+      "origQuoteOrderQty": "0.000000",
       "cummulativeQuoteQty": "0.00",
       "status": "CANCELED",
       "timeInForce": "GTC",
@@ -2723,6 +2731,7 @@ Matching Engine
       "price": "0.000000",
       "origQty": "0.624363",
       "executedQty": "0.000000",
+      "origQuoteOrderQty": "0.000000",
       "cummulativeQuoteQty": "0.000000",
       "status": "NEW",
       "timeInForce": "GTC",
@@ -2741,6 +2750,7 @@ Matching Engine
       "price": "0.036435",
       "origQty": "0.624363",
       "executedQty": "0.000000",
+      "origQuoteOrderQty": "0.000000",
       "cummulativeQuoteQty": "0.000000",
       "status": "NEW",
       "timeInForce": "GTC",
@@ -2762,10 +2772,14 @@ POST /api/v3/orderList/oco
 Send in an one-cancels-the-other (OCO) pair, where activation of one order immediately cancels the other.
 
 * An OCO has 2 orders called the **above order** and **below order**.
-* One of the orders must be a `LIMIT_MAKER` order and the other must be `STOP_LOSS` or `STOP_LOSS_LIMIT` order.
-* Price restrictions:     
-  * If the OCO is on the `SELL` side: `LIMIT_MAKER` `price` > Last Traded Price > `stopPrice`
-  * If the OCO is on the `BUY` side: `LIMIT_MAKER` `price` < Last Traded Price < `stopPrice`
+* One of the orders must be a `LIMIT_MAKER/TAKE_PROFIT/TAKE_PROFIT_LIMIT` order and the other must be `STOP_LOSS` or `STOP_LOSS_LIMIT` order.  
+* Price restrictions  
+  * If the OCO is on the `SELL` side:   
+    * `LIMIT_MAKER/TAKE_PROFIT_LIMIT` `price` > Last Traded Price >  `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`  
+    * `TAKE_PROFIT stopPrice` > Last Traded Price > `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`   
+  * If the OCO is on the `BUY` side:  
+    * `LIMIT_MAKER/TAKE_PROFIT_LIMIT price` < Last Traded Price < `stopPrice`  
+    * `TAKE_PROFIT stopPrice` < Last Traded Price < `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
 * OCOs add **2 orders** to the unfilled order count, `EXCHANGE_MAX_ORDERS` filter, and the `MAX_NUM_ORDERS` filter.
 
 **Weight:**
@@ -2779,22 +2793,22 @@ symbol                 |STRING  |Yes        |
 listClientOrderId      |STRING  |No         |Arbitrary unique ID among open order lists. Automatically generated if not sent. <br> A new order list with the same `listClientOrderId` is accepted only when the previous one is filled or completely expired. <br> `listClientOrderId` is distinct from the `aboveClientOrderId` and the `belowCLientOrderId`.
 side                   |ENUM    |Yes        |`BUY` or `SELL`
 quantity               |DECIMAL |Yes        |Quantity for both orders of the order list.
-aboveType              |ENUM    |Yes        |Supported values : `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`
+aboveType              |ENUM    |Yes        |Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
 aboveClientOrderId     |STRING  |No         |Arbitrary unique ID among open orders for the above order. Automatically generated if not sent
 aboveIcebergQty        |LONG    |No         |Note that this can only be used if `aboveTimeInForce` is `GTC`.
-abovePrice             |DECIMAL |No         |
-aboveStopPrice         |DECIMAL |No         |Can be used if `aboveType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`. <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
+abovePrice             |DECIMAL |No         |Can be used if `aboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price. 
+aboveStopPrice         |DECIMAL |No         |Can be used if `aboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
 aboveTrailingDelta     |LONG    |No         |See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md).
-aboveTimeInForce       |DECIMAL |No         |Required if the `aboveType` is `STOP_LOSS_LIMIT`. 
+aboveTimeInForce       |DECIMAL |No         |Required if `aboveType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`
 aboveStrategyId        |LONG     |No         |Arbitrary numeric value identifying the above order within an order strategy. 
 aboveStrategyType      |INT     |No         |Arbitrary numeric value identifying the above order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
-belowType              |ENUM    |Yes        |Supported values : `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`
+belowType              |ENUM    |Yes        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 belowClientOrderId     |STRING  |No         |Arbitrary unique ID among open orders for the below order. Automatically generated if not sent
 belowIcebergQty        |LONG    |No         |Note that this can only be used if `belowTimeInForce` is `GTC`.
-belowPrice             |DECIMAL |No         |Can be used if `belowType` is `STOP_LOSS_LIMIT` or `LIMIT_MAKER` to specify the limit price.
-belowStopPrice         |DECIMAL |No         |Can be used if `belowType` is `STOP_LOSS` or `STOP_LOSS_LIMIT`. <br>Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
+belowPrice             |DECIMAL |No         |Can be used if `belowType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
+belowStopPrice         |DECIMAL |No         |Can be used if `belowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT` or `TAKE_PROFIT_LIMIT` <br>Either belowStopPrice or belowTrailingDelta or both, must be specified.
 belowTrailingDelta     |LONG    |No         |See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md). 
-belowTimeInForce       |ENUM    |No         |Required if the `belowType` is `STOP_LOSS_LIMIT`.
+belowTimeInForce       |ENUM    |No         |Required if `belowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`.
 belowStrategyId        |LONG    |No          |Arbitrary numeric value identifying the below order within an order strategy. 
 belowStrategyType      |INT     |No         |Arbitrary numeric value identifying the below order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
 newOrderRespType       |ENUM    |No         |Select response format: `ACK`, `RESULT`, `FULL`
@@ -2840,6 +2854,7 @@ Response format for `orderReports` is selected using the `newOrderRespType` para
             "price": "1.00000000",
             "origQty": "5.00000000",
             "executedQty": "0.00000000",
+            "origQuoteOrderQty": "0.000000",
             "cummulativeQuoteQty": "0.00000000",
             "status": "NEW",
             "timeInForce": "GTC",
@@ -2859,6 +2874,7 @@ Response format for `orderReports` is selected using the `newOrderRespType` para
             "price": "3.00000000",
             "origQty": "5.00000000",
             "executedQty": "0.00000000",
+            "origQuoteOrderQty": "0.000000",
             "cummulativeQuoteQty": "0.00000000",
             "status": "NEW",
             "timeInForce": "GTC",
@@ -2871,7 +2887,7 @@ Response format for `orderReports` is selected using the `newOrderRespType` para
 }
 ```
 
-#### New Order List - OTO (TRADE)
+#### New Order list - OTO (TRADE)
 
 ```
 POST /api/v3/orderList/oto
@@ -2919,7 +2935,9 @@ pendingStrategyType    |INT    |NO        |Arbitrary numeric value identifying t
 recvWindow             |LONG   |NO        |The value cannot be greater than `60000`.
 timestamp              |LONG   |YES       |
 
-#### Mandatory parameters based on `pendingType` or `workingType`
+<a id="mandatory-parameters-based-on-pendingtype-or-workingtype"></a>
+
+**Mandatory parameters based on `pendingType` or `workingType`**
 
 Depending on the `pendingType` or `workingType`, some optional parameters will become mandatory.
 
@@ -2967,6 +2985,7 @@ Matching Engine
             "price": "1.00000000",
             "origQty": "1.00000000",
             "executedQty": "0.00000000",
+            "origQuoteOrderQty": "0.000000",
             "cummulativeQuoteQty": "0.00000000",
             "status": "NEW",
             "timeInForce": "GTC",
@@ -2984,6 +3003,7 @@ Matching Engine
             "price": "0.00000000",
             "origQty": "5.00000000",
             "executedQty": "0.00000000",
+            "origQuoteOrderQty": "0.000000",
             "cummulativeQuoteQty": "0.00000000",
             "status": "PENDING_NEW",
             "timeInForce": "GTC",
@@ -2998,7 +3018,7 @@ Matching Engine
 
 **Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
-#### New Order List - OTOCO (TRADE)
+#### New Order list - OTOCO (TRADE)
 
 ```
 POST /api/v3/orderList/otoco
@@ -3011,7 +3031,7 @@ Place an OTOCO.
 * The first order is called the **working order** and must be `LIMIT` or `LIMIT_MAKER`. Initially, only the working order goes on the order book. 
   * The behavior of the working order is the same as the [OTO](#new-order-list---oto-trade).
 * OTOCO has 2 pending orders (pending above and pending below), forming an OCO pair. The pending orders are only placed on the order book when the working order gets **fully filled**.
-    * The rules of the pending above and pending below follow the same rules as the [Order List OCO](#new-order-list---oco-trade).
+    * The rules of the pending above and pending below follow the same rules as the [Order list OCO](#new-order-list---oco-trade).
 * OTOCOs add **3 orders** against the unfilled order count, `EXCHANGE_MAX_NUM_ORDERS` filter, and `MAX_NUM_ORDERS` filter.
 
 
@@ -3036,19 +3056,19 @@ workingStrategyId        |LONG    |NO        |Arbitrary numeric value identifyin
 workingStrategyType      |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
 pendingSide              |ENUM   |YES       |Supported values: [Order side](./enums.md#side)
 pendingQuantity          |DECIMAL|YES       |
-pendingAboveType         |ENUM   |YES       |Supported values: `LIMIT_MAKER`, `STOP_LOSS`, and `STOP_LOSS_LIMIT`
+pendingAboveType         |ENUM   |YES       |Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
 pendingAboveClientOrderId|STRING |NO        |Arbitrary unique ID among open orders for the pending above order.<br> Automatically generated if not sent.
-pendingAbovePrice        |DECIMAL|NO        |
-pendingAboveStopPrice    |DECIMAL|NO        |
-pendingAboveTrailingDelta|DECIMAL|NO        |
+pendingAbovePrice        |DECIMAL|NO        |Can be used if `pendingAboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price. 
+pendingAboveStopPrice    |DECIMAL|NO        |Can be used if `pendingAboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
+pendingAboveTrailingDelta|DECIMAL|NO        |See [Trailing Stop FAQ](faqs/trailing-stop-faq.md)
 pendingAboveIcebergQty   |DECIMAL|NO        |This can only be used if `pendingAboveTimeInForce` is `GTC` or if `pendingAboveType` is `LIMIT_MAKER`.
 pendingAboveTimeInForce  |ENUM   |NO        |
 pendingAboveStrategyId   |LONG    |NO        |Arbitrary numeric value identifying the pending above order within an order strategy.
 pendingAboveStrategyType |INT    |NO        |Arbitrary numeric value identifying the pending above order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
-pendingBelowType         |ENUM   |NO        |Supported values: `LIMIT_MAKER`, `STOP_LOSS`, and `STOP_LOSS_LIMIT`
+pendingBelowType         |ENUM   |NO        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 pendingBelowClientOrderId|STRING |NO        |Arbitrary unique ID among open orders for the pending below order.<br> Automatically generated if not sent.
-pendingBelowPrice        |DECIMAL|NO        |
-pendingBelowStopPrice    |DECIMAL|NO        |
+pendingBelowPrice        |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT` to specify limit price
+pendingBelowStopPrice    |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`. <br> Either `pendingBelowStopPrice` or `pendingBelowTrailingDelta` or both, must be specified.
 pendingBelowTrailingDelta|DECIMAL|NO        |
 pendingBelowIcebergQty   |DECIMAL|NO        |This can only be used if `pendingBelowTimeInForce` is `GTC`, or if `pendingBelowType` is `LIMIT_MAKER`.
 pendingBelowTimeInForce  |ENUM   |NO        |Supported values: [Time In Force](enums.md#timeinforce)
@@ -3057,7 +3077,9 @@ pendingBelowStrategyType |INT    |NO        |Arbitrary numeric value identifying
 recvWindow               |LONG   |NO        |The value cannot be greater than `60000`.
 timestamp                |LONG   |YES       |
 
-#### Mandatory parameters based on `pendingAboveType`, `pendingBelowType` or `workingType`
+<a id="mandatory-parameters-based-on-pendingabovetype-pendingbelowtype-or-workingtype"></a>
+
+**Mandatory parameters based on `pendingAboveType`, `pendingBelowType` or `workingType`**
 
 Depending on the `pendingAboveType`/`pendingBelowType` or `workingType`, some optional parameters will become mandatory.
 
@@ -3065,11 +3087,11 @@ Depending on the `pendingAboveType`/`pendingBelowType` or `workingType`, some op
 |----                                                       |----                           |------  
 |`workingType` = `LIMIT`                                    |`workingTimeInForce`           | 
 |`pendingAboveType`= `LIMIT_MAKER`                                |`pendingAbovePrice`     |
-|`pendingAboveType`= `STOP_LOSS`          |`pendingAboveStopPrice` and/or `pendingAboveTrailingDelta`|
-|`pendingAboveType`=`STOP_LOSS_LIMIT` |`pendingAbovePrice`, `pendingAboveStopPrice` and/or `pendingAboveTrailingDelta`, `pendingAboveTimeInForce`|
+|`pendingAboveType` = `STOP_LOSS/TAKE_PROFIT`        |`pendingAboveStopPrice` and/or `pendingAboveTrailingDelta`|
+|`pendingAboveType=STOP_LOSS_LIMIT/TAKE_PROFIT_LIMIT` |`pendingAbovePrice`, `pendingAboveStopPrice` and/or `pendingAboveTrailingDelta`, `pendingAboveTimeInForce`|
 |`pendingBelowType`= `LIMIT_MAKER`                                |`pendingBelowPrice`          |
-|`pendingBelowType`= `STOP_LOSS`            |`pendingBelowStopPrice` and/or `pendingBelowTrailingDelta`|
-|`pendingBelowType`=`STOP_LOSS_LIMIT` |`pendingBelowPrice`, `pendingBelowStopPrice` and/or `pendingBelowTrailingDelta`, `pendingBelowTimeInForce`|
+|`pendingBelowType= STOP_LOSS/TAKE_PROFIT`         |`pendingBelowStopPrice` and/or `pendingBelowTrailingDelta`|
+|`pendingBelowType=STOP_LOSS_LIMIT/TAKE_PROFIT_LIMIT` |`pendingBelowPrice`, `pendingBelowStopPrice` and/or `pendingBelowTrailingDelta`, `pendingBelowTimeInForce`|
 
 **Data Source:**
 
@@ -3113,6 +3135,7 @@ Matching Engine
             "price": "1.00000000",
             "origQty": "1.00000000",
             "executedQty": "0.00000000",
+            "origQuoteOrderQty": "0.000000",
             "cummulativeQuoteQty": "0.00000000",
             "status": "NEW",
             "timeInForce": "GTC",
@@ -3130,6 +3153,7 @@ Matching Engine
             "price": "1.00000000",
             "origQty": "5.00000000",
             "executedQty": "0.00000000",
+            "origQuoteOrderQty": "0.000000",
             "cummulativeQuoteQty": "0.00000000",
             "status": "PENDING_NEW",
             "timeInForce": "IOC",
@@ -3148,6 +3172,7 @@ Matching Engine
             "price": "3.00000000",
             "origQty": "5.00000000",
             "executedQty": "0.00000000",
+            "origQuoteOrderQty": "0.000000",
             "cummulativeQuoteQty": "0.00000000",
             "status": "PENDING_NEW",
             "timeInForce": "GTC",
@@ -3167,7 +3192,7 @@ Matching Engine
 ```
 DELETE /api/v3/orderList 
 ```
-Cancel an entire Order List
+Cancel an entire Order list
 
 **Weight:** 
 1
@@ -3225,6 +3250,7 @@ Matching Engine
       "price": "1.00000000",
       "origQty": "10.00000000",
       "executedQty": "0.00000000",
+      "origQuoteOrderQty": "0.000000",
       "cummulativeQuoteQty": "0.00000000",
       "status": "CANCELED",
       "timeInForce": "GTC",
@@ -3243,6 +3269,7 @@ Matching Engine
       "price": "3.00000000",
       "origQty": "10.00000000",
       "executedQty": "0.00000000",
+      "origQuoteOrderQty": "0.000000",
       "cummulativeQuoteQty": "0.00000000",
       "status": "CANCELED",
       "timeInForce": "GTC",
@@ -3474,6 +3501,7 @@ Matching Engine
   "price": "31000.00000000",
   "origQty": "0.50000000",
   "executedQty": "0.50000000",
+  "origQuoteOrderQty": "0.000000",
   "cummulativeQuoteQty": "14000.00000000",
   "status": "FILLED",
   "timeInForce": "GTC",

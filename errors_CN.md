@@ -1,6 +1,6 @@
 # 错误代码汇总 
 
-**上次更新时间: 2024-10-17**
+**最近更新： 2024-12-09**
 
 币安Rest接口(包括wapi)返回的错误包含两部分，错误码与错误信息. 错误码是大类，一个错误码可能对应多个不同的错误信息。
 以下是一个完整错误码实例
@@ -12,24 +12,24 @@
 ```
 
 ## 10xx - 服务器或网络问题
-#### -1000 未知错误
+### -1000 未知错误
  * 未知错误
 
-#### -1001 连接断开
+### -1001 连接断开
  * 通常是一个内部错误，一般重试即可解决。
 
-#### -1002 未授权
+### -1002 未授权
  * 请检查你的(API)权限
 
-#### -1003 请求过多
+### -1003 请求过多
  * 排队的请求过多。
  * 请求权重过多； 当前限制是 %s 每 %s 的请求权重。 请使用 Websocket Streams 进行实时更新，以避免轮询API。
  * 请求权重过多； IP被禁止，直到％s。 请使用 Websocket Streams 进行实时更新，以免被禁。
 
-#### -1006 非常规响应
+### -1006 非常规响应
  * （从内部）接收到了不符合预设格式的消息，下单状态未知。
 
-#### -1007 超时
+### -1007 超时
  * 后端服务超时，下单状态未知。
 
 ### -1008 SERVER_BUSY
@@ -39,225 +39,240 @@
   * 请求被 API 拒绝 （在这个情况中，此请求并没有到达撮合引擎）。
   * 潜在的错误信息可以在 [订单未能通过过滤器](#filter-failures) 或 [下单失败](#other-errors) 中找到。
 
-#### -1014 不支持的订单参数(组合)
+### -1014 不支持的订单参数(组合)
  * 不支持的订单参数组合. 
 
-#### -1015 订单太多
+### -1015 订单太多
  * 下单(撤单)太多
 
-#### -1016 服务器下线
+### -1016 服务器下线
  * 服务器下线
 
-#### -1020 不支持的操作
+### -1020 不支持的操作
  * 不支持的操作
 
-#### -1021 时间同步问题
+### -1021 时间同步问题
  * 时延过大，服务器根据接请求中的时间戳判定耗时已经超出了recevWindow。请改善网络条件或者增大recevWindow。
  * 时间偏移过大，服务器根据请求中的时间戳判定客户端时间比服务器时间提前了1秒钟以上。(该参数不可由客户端调节)
 
-#### -1022 签名不正确
+### -1022 签名不正确
  * 请求中携带的signature与服务器根据规则计算得到的signature不一致。通常是因为客户端代码中使用的apisecret错误。
 
 
 ## 11xx - 请求内容中的问题
-#### -1100 非法字符
+### -1100 非法字符
  * Illegal characters found in a parameter.
  * Illegal characters found in parameter '%s'; legal range is '%s'.
 
-#### -1101 参数太多
+### -1101 参数太多
  * Too many parameters sent for this endpoint.
  * Too many parameters; expected '%s' and received '%s'.
  * Duplicate values for a parameter detected.
 
-#### -1102 缺少必须参数
+### -1102 缺少必须参数
  * A mandatory parameter was not sent, was empty/null, or malformed.
  * Mandatory parameter '%s' was not sent, was empty/null, or malformed.
  * Param '%s' or '%s' must be sent, but both were empty/null!
 
-#### -1103 无法识别的参数
+### -1103 无法识别的参数
  * An unknown parameter was sent.
 
-#### -1104 冗余参数
+### -1104 冗余参数
  * Not all sent parameters were read.
  * Not all sent parameters were read; read '%s' parameter(s) but was sent '%s'.
 
-#### -1105 空参数(仅有参数名)
+### -1105 空参数(仅有参数名)
  * A parameter was empty.
  * Parameter '%s' was empty.
 
-#### -1106 非必需参数
+### -1106 非必需参数
  * A parameter was sent when not required.
  * Parameter '%s' sent when not required.
 
-#### -1108 参数溢出
+### -1108 参数溢出
  * Parameter '%s' overflowed.
 
-#### -1111 精度过高
+### -1111 精度过高
  * Parameter '%s' has too much precision.
 
-#### -1112 空白的orderbook
+### -1112 空白的orderbook
  * No orders on book for symbol.
 
-#### -1114 错误地发送了不需要的TIF参数
+### -1114 错误地发送了不需要的TIF参数
  * TimeInForce parameter sent when not required.
 
-#### -1115 无效的TIF参数
+### -1115 无效的TIF参数
  * Invalid timeInForce.
 
-#### -1116 无效的订单类型
+### -1116 无效的订单类型
  * Invalid orderType.
 
-#### -1117 无效的订单方向
+### -1117 无效的订单方向
  * Invalid side.
 
-#### -1118 空白的newClientOrderId
+### -1118 空白的newClientOrderId
  * New client order ID was empty.
 
-#### -1119 空白的originalClientOrderId
+### -1119 空白的originalClientOrderId
  * Original client order ID was empty.
 
-#### -1120 无效的间隔(interval)
+### -1120 无效的间隔(interval)
  * Invalid interval.
 
-#### -1121 无效的交易对
+### -1121 无效的交易对
  * Invalid symbol.
 
-#### -1122 无效的交易对状态
+### -1122 无效的交易对状态
   * Invalid symbolStatus.
 
-#### -1125 无效的listenKey
+### -1125 无效的listenKey
  * This listenKey does not exist.
 
-#### -1127 查询间隔过长
+### -1127 查询间隔过长
  * Lookup interval is too big.
  * More than %s hours between startTime and endTime.
 
-#### -1128 无效的可选参数组合
+### -1128 无效的可选参数组合
  * Combination of optional parameters invalid.
 
-#### -1130 无效参数(值)
+### -1130 无效参数(值)
  * Invalid data sent for a parameter.
  * Data sent for parameter '%s' is not valid.
 
-#### -1134 strategyType不符合需求
+### -1134 strategyType不符合需求
  * `strategyType` was less than 1000000. 
 
-#### -1135 无效的JSON
+### -1135 无效的JSON
  * Invalid JSON Request
  * JSON sent for parameter '%s' is not valid
 
-#### -1139 无效的Ticker类型
+### -1139 无效的Ticker类型
  * Invalid ticker type.
 
-#### -1145 无效的取消限制
+### -1145 无效的取消限制
  * `cancelRestrictions` has to be either `ONLY_NEW` or `ONLY_PARTIALLY_FILLED`.
 
-#### -1151 重复的交易对
+### -1151 重复的交易对
  * Symbol is present multiple times in the list.
 
- #### -1152 无效的SBE报文头部
+ ### -1152 无效的SBE报文头部
 * Invalid `X-MBX-SBE` header; expected `<SCHEMA_ID>:<VERSION>`.
 
-#### -1153 不支持的SCHEMA_ID
+### -1153 不支持的SCHEMA_ID
 * Unsupported SBE schema ID or version specified in the `X-MBX-SBE` header.
 
-#### -1155 SBE 没有开启
+### -1155 SBE 没有开启
 * SBE is not enabled.
 
-#### -1158 OCO 订单类型被拒绝
+### -1158 OCO 订单类型被拒绝
 * Order type not supported in OCO. 
 * If the order type provided in the `aboveType` and/or `belowType` is not supported.
 
-#### -1160 OCO 订单类型的冰山数量参数与 time in force 参数的组合有问题
+### -1160 OCO 订单类型的冰山数量参数与 time in force 参数的组合有问题
 * Parameter '%s' is not supported if `aboveTimeInForce`/`belowTimeInForce` is not GTC.
 * If the order type for the above or below leg is `STOP_LOSS_LIMIT`, and `icebergQty` is provided for that leg, the `timeInForce` has to be `GTC` else it will throw an error.
 
-#### -1165 买入 OCO 限价单必须较低
+### -1161 被弃用的模式
+* Unable to encode the response in SBE schema 'x'. Please use schema 'y' or higher.
+
+### -1165 买入 OCO 限价单必须较低
 * A limit order in a buy OCO must be below.
 
-#### -1166 卖出 OCO 限价单必须较高
+### -1166 卖出 OCO 限价单必须较高
 * A limit order in a sell OCO must be above.
 
-#### -1167 两个 OCO 订单不能都是依存订单
+### -1167 两个 OCO 订单不能都是依存订单
 * Both OCO orders cannot be contingent.
 
-#### -1168 两个 OCO 订单不能都是是限价单
+### -1168 两个 OCO 订单不能都是是限价单
 * At least one OCO order must be contingent.
 
-#### -1169 Tag无效
+### -1169 Tag无效
  * Invalid tag number.
 
-#### -1170 Tag无效
+### -1170 Tag无效
  * Tag '%s' not defined for this message type.
 
-#### -1171 Tag重复出现
+### -1171 Tag重复出现
  * Tag '%s' appears more than once.
 
-#### -1172 Tag顺序错误
+### -1172 Tag顺序错误
  * Tag '%s' specified out of required order.
 
-#### -1173 分组字段顺序错误
+### -1173 分组字段顺序错误
  * Repeating group '%s' fields out of order.
 
-#### -1174 无效组件
+### -1174 无效组件
  * Component '%s' is incorrectly populated on '%s' order. Recommendation: '%s'
 
-#### -1175 序列号重置错误
+### -1175 序列号重置错误
  * Continuation of sequence numbers to new session is currently unsupported. Sequence numbers must be reset for each new session.
 
-#### -1176 已登录
+### -1176 已登录
  * [Logon`<A>`](fix-api.md#logon-main) should only be sent once.
 
-#### -1177 错误消息
+### -1177 错误消息
  * `CheckSum(10)` contains an incorrect value.
  * `BeginString (8)` is not the first tag in a message.
  * `MsgType (35)` is not the third tag in a message.
  * `BodyLength (9)` does not contain the correct byte count.
  * Only printable ASCII characters and SOH (Start of Header) are allowed.
 
-#### -1178 Compid错误
+### -1178 Compid错误
  * `SenderCompId(49)` contains an incorrect value. The SenderCompID value should not change throughout the lifetime of a session.
 
-#### -1179 序列号错误
+### -1179 序列号错误
  * `MsgSeqNum(34)` contains an unexpected value. Expected: '%d'.
 
-#### -1180 登陆消息错误
+### -1180 登陆消息错误
  * [Logon`<A>`](fix-api.md#logon-main) must be the first message in the session.
 
-#### -1181 消息太多
+### -1181 消息太多
  * Too many messages; current limit is '%d' messages per '%s'.
 
-#### -1182 错误的参数组合
+### -1182 错误的参数组合
  * Conflicting fields: [%s]
 
-#### -1183 不允许在 Drop Copy 会话中使用
+### -1183 不允许在 Drop Copy 会话中使用
  * Requested operation is not allowed in DropCopy sessions.
 
-#### -1184 不允许使用 Drop Copy 会话
+### -1184 不允许使用 Drop Copy 会话
  * DropCopy sessions are not supported on this server. Please reconnect to a drop copy server.
 
-#### -1185 需要使用 Drop Copy 会话
+### -1185 需要使用 Drop Copy 会话
  * Only DropCopy sessions are supported on this server. Either reconnect to order entry server or send `DropCopyFlag (9406)` field.
 
-#### -2010 新订单被拒绝
+### -1196 买方 `OCO` 单的止损限价单必须是上方（`above`） 订单
+* A stop loss order in a buy OCO must be above.
+
+### -1197 卖方 `OCO` 单的止损限价单必须是下方（`below`） 订单
+* A stop loss order in a sell OCO must be below.
+
+### -1198 买方 `OCO` 单的止盈单必须是下方（`below`） 订单
+* A take profit order in a buy OCO must be below.
+
+### -1199 卖方 `OCO` 单的止盈单必须是上方（`above`） 订单
+* A take profit order in a sell OCO must be above.
+
+### -2010 新订单被拒绝
  * NEW_ORDER_REJECTED
 
-#### -2011 订单取消被拒绝
+### -2011 订单取消被拒绝
  * CANCEL_REJECTED
 
-#### -2013 不存在的订单
+### -2013 不存在的订单
  * Order does not exist.
 
-#### -2014 API Key格式无效
+### -2014 API Key格式无效
  * API-key format invalid.
 
-#### -2015 API Key权限，例如该Key不存在、请求并非来自允许的IP范围、或者该接口对应权限未开放
+### -2015 API Key权限，例如该Key不存在、请求并非来自允许的IP范围、或者该接口对应权限未开放
  * Invalid API-key, IP, or permissions for action.
 
-#### -2016 非交易窗口
+### -2016 非交易窗口
  * No trading window could be found for the symbol. Try ticker/24hrs instead.
 
-#### -2026 交易被归档
+### -2026 交易被归档
   * Order was canceled or expired with no executed qty over 90 days ago and has been archived.
 
 <a id="other-errors"></a>

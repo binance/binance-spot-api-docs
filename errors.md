@@ -1,6 +1,6 @@
 # Error codes for Binance 
 
-**Last Updated: (2024-10-17)**
+**Last Updated: 2024-12-09** 
 
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
@@ -11,255 +11,273 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 }
 ```
 
-
 ## 10xx - General Server or Network issues
-#### -1000 UNKNOWN
+### -1000 UNKNOWN
  * An unknown error occurred while processing the request.
 
-#### -1001 DISCONNECTED
+### -1001 DISCONNECTED
  * Internal error; unable to process your request. Please try again.
 
-#### -1002 UNAUTHORIZED
+### -1002 UNAUTHORIZED
  * You are not authorized to execute this request.
 
-#### -1003 TOO_MANY_REQUESTS
+### -1003 TOO_MANY_REQUESTS
  * Too many requests queued.
  * Too much request weight used; current limit is %s request weight per %s. Please use WebSocket Streams for live updates to avoid polling the API.
  * Way too much request weight used; IP banned until %s. Please use WebSocket Streams for live updates to avoid bans.
 
-#### -1006 UNEXPECTED_RESP
+### -1006 UNEXPECTED_RESP
  * An unexpected response was received from the message bus. Execution status unknown.
 
-#### -1007 TIMEOUT
+### -1007 TIMEOUT
  * Timeout waiting for response from backend server. Send status unknown; execution status unknown.
 
-#### -1008 SERVER_BUSY
+### -1008 SERVER_BUSY
   * Server is currently overloaded with other requests. Please try again in a few minutes. 
 
-#### -1013 INVALID_MESSAGE
+### -1013 INVALID_MESSAGE
   * The request is rejected by the API. (i.e. The request didn't reach the Matching Engine.) 
   * Potential error messages can be found in [Filter Failures](#filter-failures) or [Failures during order placement](#other-errors).
 
-#### -1014 UNKNOWN_ORDER_COMPOSITION
+### -1014 UNKNOWN_ORDER_COMPOSITION
  * Unsupported order combination.
 
-#### -1015 TOO_MANY_ORDERS
+### -1015 TOO_MANY_ORDERS
  * Too many new orders.
  * Too many new orders; current limit is %s orders per %s.
 
-#### -1016 SERVICE_SHUTTING_DOWN
+### -1016 SERVICE_SHUTTING_DOWN
  * This service is no longer available.
 
-#### -1020 UNSUPPORTED_OPERATION
+### -1020 UNSUPPORTED_OPERATION
  * This operation is not supported.
 
-#### -1021 INVALID_TIMESTAMP
+### -1021 INVALID_TIMESTAMP
  * Timestamp for this request is outside of the recvWindow.
  * Timestamp for this request was 1000ms ahead of the server's time.
 
-#### -1022 INVALID_SIGNATURE
+### -1022 INVALID_SIGNATURE
  * Signature for this request is not valid.
 
 
 ## 11xx - Request issues
-#### -1100 ILLEGAL_CHARS
+### -1100 ILLEGAL_CHARS
  * Illegal characters found in a parameter.
  * Illegal characters found in parameter '%s'; legal range is '%s'.
 
-#### -1101 TOO_MANY_PARAMETERS
+### -1101 TOO_MANY_PARAMETERS
  * Too many parameters sent for this endpoint.
  * Too many parameters; expected '%s' and received '%s'.
  * Duplicate values for a parameter detected.
 
-#### -1102 MANDATORY_PARAM_EMPTY_OR_MALFORMED
+### -1102 MANDATORY_PARAM_EMPTY_OR_MALFORMED
  * A mandatory parameter was not sent, was empty/null, or malformed.
  * Mandatory parameter '%s' was not sent, was empty/null, or malformed.
  * Param '%s' or '%s' must be sent, but both were empty/null!
 
-#### -1103 UNKNOWN_PARAM
+### -1103 UNKNOWN_PARAM
  * An unknown parameter was sent.
 
-#### -1104 UNREAD_PARAMETERS
+### -1104 UNREAD_PARAMETERS
  * Not all sent parameters were read.
  * Not all sent parameters were read; read '%s' parameter(s) but was sent '%s'.
 
-#### -1105 PARAM_EMPTY
+### -1105 PARAM_EMPTY
  * A parameter was empty.
  * Parameter '%s' was empty.
 
-#### -1106 PARAM_NOT_REQUIRED
+### -1106 PARAM_NOT_REQUIRED
  * A parameter was sent when not required.
  * Parameter '%s' sent when not required.
 
-#### -1108 PARAM_OVERFLOW
+### -1108 PARAM_OVERFLOW
  * Parameter '%s' overflowed.
 
-#### -1111 BAD_PRECISION
+### -1111 BAD_PRECISION
  * Parameter '%s' has too much precision.
 
-#### -1112 NO_DEPTH
+### -1112 NO_DEPTH
  * No orders on book for symbol.
 
-#### -1114 TIF_NOT_REQUIRED
+### -1114 TIF_NOT_REQUIRED
  * TimeInForce parameter sent when not required.
 
-#### -1115 INVALID_TIF
+### -1115 INVALID_TIF
  * Invalid timeInForce.
 
-#### -1116 INVALID_ORDER_TYPE
+### -1116 INVALID_ORDER_TYPE
  * Invalid orderType.
 
-#### -1117 INVALID_SIDE
+### -1117 INVALID_SIDE
  * Invalid side.
 
-#### -1118 EMPTY_NEW_CL_ORD_ID
+### -1118 EMPTY_NEW_CL_ORD_ID
  * New client order ID was empty.
 
-#### -1119 EMPTY_ORG_CL_ORD_ID
+### -1119 EMPTY_ORG_CL_ORD_ID
  * Original client order ID was empty.
 
-#### -1120 BAD_INTERVAL
+### -1120 BAD_INTERVAL
  * Invalid interval.
 
-#### -1121 BAD_SYMBOL
+### -1121 BAD_SYMBOL
  * Invalid symbol.
 
-#### -1122 INVALID_SYMBOLSTATUS
+### -1122 INVALID_SYMBOLSTATUS
   * Invalid symbolStatus.
 
-#### -1125 INVALID_LISTEN_KEY
+### -1125 INVALID_LISTEN_KEY
  * This listenKey does not exist.
 
-#### -1127 MORE_THAN_XX_HOURS
+### -1127 MORE_THAN_XX_HOURS
  * Lookup interval is too big.
  * More than %s hours between startTime and endTime.
 
-#### -1128 OPTIONAL_PARAMS_BAD_COMBO
+### -1128 OPTIONAL_PARAMS_BAD_COMBO
  * Combination of optional parameters invalid.
 
-#### -1130 INVALID_PARAMETER
+### -1130 INVALID_PARAMETER
  * Invalid data sent for a parameter.
  * Data sent for parameter '%s' is not valid.
 
-#### -1134 BAD_STRATEGY_TYPE
+### -1134 BAD_STRATEGY_TYPE
  * `strategyType` was less than 1000000. 
 
-#### -1135 INVALID_JSON
+### -1135 INVALID_JSON
  * Invalid JSON Request
  * JSON sent for parameter '%s' is not valid
 
-#### -1139 INVALID_TICKER_TYPE
+### -1139 INVALID_TICKER_TYPE
  * Invalid ticker type.
 
-#### -1145 INVALID_CANCEL_RESTRICTIONS
+### -1145 INVALID_CANCEL_RESTRICTIONS
  * `cancelRestrictions` has to be either `ONLY_NEW` or `ONLY_PARTIALLY_FILLED`.
 
-#### -1151 DUPLICATE_SYMBOLS
+### -1151 DUPLICATE_SYMBOLS
  * Symbol is present multiple times in the list.
 
-#### -1152 INVALID_SBE_HEADER
+### -1152 INVALID_SBE_HEADER
 * Invalid `X-MBX-SBE` header; expected `<SCHEMA_ID>:<VERSION>`.
 
-#### -1153 UNSUPPORTED_SCHEMA_ID
+### -1153 UNSUPPORTED_SCHEMA_ID
 * Unsupported SBE schema ID or version specified in the `X-MBX-SBE` header.
 
-#### -1155 SBE_DISABLED
+### -1155 SBE_DISABLED
 * SBE is not enabled.
 
-#### -1158 OCO_ORDER_TYPE_REJECTED
+### -1158 OCO_ORDER_TYPE_REJECTED
 * Order type not supported in OCO. 
 * If the order type provided in the `aboveType` and/or `belowType` is not supported.
 
-#### -1160 OCO_ICEBERGQTY_TIMEINFORCE
+### -1160 OCO_ICEBERGQTY_TIMEINFORCE
 * Parameter '%s' is not supported if `aboveTimeInForce`/`belowTimeInForce` is not GTC.
 * If the order type for the above or below leg is `STOP_LOSS_LIMIT`, and `icebergQty` is provided for that leg, the `timeInForce` has to be `GTC` else it will throw an error.
 
-#### -1165 BUY_OCO_LIMIT_MUST_BE_BELOW
+### -1161 DEPRECATED_SCHEMA
+* Unable to encode the response in SBE schema 'x'. Please use schema 'y' or higher.
+
+### -1165 BUY_OCO_LIMIT_MUST_BE_BELOW
 * A limit order in a buy OCO must be below.
 
-#### -1166 SELL_OCO_LIMIT_MUST_BE_ABOVE
+### -1166 SELL_OCO_LIMIT_MUST_BE_ABOVE
 * A limit order in a sell OCO must be above.
 
-#### -1167 BOTH_OCO_ORDERS_CANNOT_BE_CONTINGENT
+### -1167 BOTH_OCO_ORDERS_CANNOT_BE_CONTINGENT
 * Both OCO orders cannot be contingent.
 
-#### -1168 BOTH_OCO_ORDERS_CANNOT_BE_LIMIT
+### -1168 BOTH_OCO_ORDERS_CANNOT_BE_LIMIT
 * At least one OCO order must be contingent.
 
-#### -1169 INVALID_TAG_NUMBER
+### -1169 INVALID_TAG_NUMBER
  * Invalid tag number.
 
-#### -1170 TAG_NOT_DEFINED_IN_MESSAGE
+### -1170 TAG_NOT_DEFINED_IN_MESSAGE
  * Tag '%s' not defined for this message type.
 
-#### -1171 TAG_APPEARS_MORE_THAN_ONCE
+### -1171 TAG_APPEARS_MORE_THAN_ONCE
  * Tag '%s' appears more than once.
 
-#### -1172 TAG_OUT_OF_ORDER
+### -1172 TAG_OUT_OF_ORDER
  * Tag '%s' specified out of required order.
 
-#### -1173 GROUP_FIELDS_OUT_OF_ORDER
+### -1173 GROUP_FIELDS_OUT_OF_ORDER
  * Repeating group '%s' fields out of order.
 
-#### -1174 INVALID_COMPONENT
+### -1174 INVALID_COMPONENT
  * Component '%s' is incorrectly populated on '%s' order. Recommendation: '%s'
 
-#### -1175 RESET_SEQ_NUM_SUPPORT
+### -1175 RESET_SEQ_NUM_SUPPORT
  * Continuation of sequence numbers to new session is currently unsupported. Sequence numbers must be reset for each new session.
 
-#### -1176 ALREADY_LOGGED_IN
+### -1176 ALREADY_LOGGED_IN
  * [Logon`<A>`](fix-api.md#logon-main) should only be sent once.
 
-#### -1177 GARBLED_MESSAGE
+### -1177 GARBLED_MESSAGE
  * `CheckSum(10)` contains an incorrect value.
  * `BeginString (8)` is not the first tag in a message.
  * `MsgType (35)` is not the third tag in a message.
  * `BodyLength (9)` does not contain the correct byte count.
  * Only printable ASCII characters and SOH (Start of Header) are allowed.
 
-#### -1178 BAD_SENDER_COMPID  
+### -1178 BAD_SENDER_COMPID  
  * `SenderCompId(49)` contains an incorrect value. The SenderCompID value should not change throughout the lifetime of a session.
 
-#### -1179 BAD_SEQ_NUM
+### -1179 BAD_SEQ_NUM
  * `MsgSeqNum(34)` contains an unexpected value. Expected: '%d'.
 
-#### -1180 EXPECTED_LOGON
+### -1180 EXPECTED_LOGON
  * [Logon`<A>`](fix-api.md#logon-main) must be the first message in the session.
 
-#### -1181 TOO_MANY_MESSAGES
+### -1181 TOO_MANY_MESSAGES
  * Too many messages; current limit is '%d' messages per '%s'.
 
-#### -1182 PARAMS_BAD_COMBO
+### -1182 PARAMS_BAD_COMBO
  * Conflicting fields: [%s]
 
-#### -1183 NOT_ALLOWED_IN_DROP_COPY_SESSIONS
+### -1183 NOT_ALLOWED_IN_DROP_COPY_SESSIONS
  * Requested operation is not allowed in DropCopy sessions.
 
-#### -1184 DROP_COPY_SESSION_NOT_ALLOWED
+### -1184 DROP_COPY_SESSION_NOT_ALLOWED
  * DropCopy sessions are not supported on this server. Please reconnect to a drop copy server.
 
-#### -1185 DROP_COPY_SESSION_REQUIRED
+### -1185 DROP_COPY_SESSION_REQUIRED
  * Only DropCopy sessions are supported on this server. Either reconnect to order entry server or send `DropCopyFlag (9406)` field.
 
-#### -2010 NEW_ORDER_REJECTED
+### -1196 BUY_OCO_STOP_LOSS_MUST_BE_ABOVE
+
+* A stop loss order in a buy OCO must be above.
+
+### -1197 SELL_OCO_STOP_LOSS_MUST_BE_BELOW
+
+* A stop loss order in a sell OCO must be below.
+
+### -1198 BUY_OCO_TAKE_PROFIT_MUST_BE_BELOW
+
+* A take profit order in a buy OCO must be below.
+
+### -1199 SELL_OCO_TAKE_PROFIT_MUST_BE_ABOVE
+
+* A take profit order in a sell OCO must be above.
+
+### -2010 NEW_ORDER_REJECTED
  * NEW_ORDER_REJECTED
 
-#### -2011 CANCEL_REJECTED
+### -2011 CANCEL_REJECTED
  * CANCEL_REJECTED
 
-#### -2013 NO_SUCH_ORDER
+### -2013 NO_SUCH_ORDER
  * Order does not exist.
 
-#### -2014 BAD_API_KEY_FMT
+### -2014 BAD_API_KEY_FMT
  * API-key format invalid.
 
-#### -2015 REJECTED_MBX_KEY
+### -2015 REJECTED_MBX_KEY
  * Invalid API-key, IP, or permissions for action.
 
-#### -2016 NO_TRADING_WINDOW
+### -2016 NO_TRADING_WINDOW
  * No trading window could be found for the symbol. Try ticker/24hrs instead.
 
-#### -2026 ORDER_ARCHIVED
+### -2026 ORDER_ARCHIVED
   * Order was canceled or expired with no executed qty over 90 days ago and has been archived.
 
 
