@@ -213,7 +213,7 @@
 
 有关错误代码和消息的列表，请参阅 [Binance 的错误代码](errors_CN.md)。
 
-### 事件格式
+## 事件格式
 
 非 SBE 会话的账户数据流事件以 JSON 格式在 **text 帧** 中发送，每帧一个事件。
 
@@ -2669,7 +2669,8 @@ days    | `1d`, `2d` ... `7d`
     "authorizedSince": 1649729878532,
     "connectedSince": 1649729873021,
     "returnRateLimits": false,
-    "serverTime": 1649729878630
+    "serverTime": 1649729878630,
+    "userDataStream": true
   }
 }
 ```
@@ -2706,7 +2707,8 @@ NONE
     "authorizedSince": 1649729878532,
     "connectedSince": 1649729873021,
     "returnRateLimits": false,
-    "serverTime": 1649730611671
+    "serverTime": 1649730611671,
+    "userDataStream": true
   }
 }
 ```
@@ -2746,7 +2748,8 @@ NONE
     "authorizedSince": null,
     "connectedSince": 1649729873021,
     "returnRateLimits": false,
-    "serverTime": 1649730611671
+    "serverTime": 1649730611671,
+    "userDataStream": true
   }
 }
 ```
