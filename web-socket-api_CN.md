@@ -812,7 +812,7 @@ print(result)
 
 * [`session.logon`](#session-logon) – 进行身份验证，或更改与连接相关联的API密钥。
 * [`session.status`](#query-session-status) – 检查连接状态和当前API密钥。
-* [`session.logout`](#log-out-of-the-session) – 忘记与连接关联的API密钥。
+* [`session.logout`](#session-logout) – 忘记与连接关联的API密钥。
 
 
 **关于吊销API密钥:**
@@ -2675,6 +2675,8 @@ days    | `1d`, `2d` ... `7d`
 }
 ```
 
+<a id="query-session-status"></a>
+
 ### 查询会话状态
 
 ```javascript
@@ -2712,6 +2714,8 @@ NONE
   }
 }
 ```
+
+<a id="session-logout"></a>
 
 ### 退出会话
 
