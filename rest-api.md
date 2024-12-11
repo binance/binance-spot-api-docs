@@ -3921,7 +3921,7 @@ Database
 
 
 ## User data stream endpoints
-Specifics on how user data streams work can be found [here.](https://github.com/binance/binance-spot-api-docs/blob/master/user-data-stream.md)
+Specifics on how user data streams work can be found [here.](user-data-stream.md)
 
 ### Start user data stream (USER_STREAM)
 ```
