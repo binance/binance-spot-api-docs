@@ -187,10 +187,11 @@
     <td><code>rateLimits</code></td>
     <td>ARRAY</td>
     <td>NO</td>
-    <td>速率限制状态。请看 <a href="#速率限制">速率限制</a></td>
+    <td>速率限制状态。请看 <a href="#ratelimits">速率限制</a></td>
   </tr>
 </tbody>
 </table>
+
 
 ### 状态代码
 
@@ -252,6 +253,8 @@ SBE 会话中的事件将作为 **二进制帧** 发送。
 | `event` | OBJECT    | YES       | 事件 payload。请看 [WebSocket 账户接口](user-data-stream_CN.md)
 
 
+<a id="ratelimits"></a>
+
 ## 速率限制
 
 ### 连接数量限制
@@ -260,7 +263,7 @@ SBE 会话中的事件将作为 **二进制帧** 发送。
 
 ### 速率限制基本信息
 
-* [`exchangeInfo`](#交易规范信息) 有包含与速率限制相关的信息。
+* [`exchangeInfo`](#exchangeInfo) 有包含与速率限制相关的信息。
 * 根据不同的间隔，有多种频率限制类型。
 * 从响应中的可选 `rateLimits` 字段，能看到当前的频率限制状态。
 * 当您超出未成交订单计数或者请求速率限制时，请求会失败并返回 HTTP 状态代码 429。
@@ -363,7 +366,7 @@ API 有多种频率限制间隔。
   * 越消耗资源的接口, 比如查询多个交易对, 权重就会越大。
   * 连接到 WebSocket API 会用到2个权重。
 * 当前权重使用由 `REQUEST_WEIGHT` 频率限制类型指示。
-* 请使用[`exchangeInfo`](#交易规范信息)请求来跟踪当前的重量限制。
+* 请使用[`exchangeInfo`](#exchangeInfo)请求来跟踪当前的重量限制。
 * 权重是基于**每个 IP 地址**累积的，并由来自该地址的所有连接共享。
 * 如果超多限制，客服端会收到 `429`。
   * 这错误代码表示您有责任停止发送请求，不得滥用API。
@@ -484,7 +487,7 @@ API 有多种频率限制间隔。
 ## 请求鉴权类型
 
 * 每个函数都有自己的鉴权类型，鉴权类型决定了访问时应当进行何种鉴权。
-  * 鉴权类型会在本文档中各个函数名称旁声明。比如 [下新的订单 (TRADE)](#下新的订单-trade)。
+  * 鉴权类型会在本文档中各个函数名称旁声明。比如 [下新的订单 (TRADE)](#order-place)。
   * 如果没有特殊声明即默认为 NONE
 
 鉴权类型 | API key | 签名 | 描述
@@ -507,7 +510,7 @@ API 有多种频率限制间隔。
 ### SIGNED (TRADE 和 USER_DATA) 请求鉴权
 
 * 为了授权请求，`SIGNED` 请求必须带 `signature` 参数。
-* 请参考 [签名请求示例（HMAC）](#SIGNED-请求示例-HMAC), [签名请求示例（RSA）](#SIGNED-请求示例-RSA) 和 [SIGNED 请求示例 (Ed25519)](#signed-请求示例-ed25519) 理解如何计算签名。
+* 请参考 [签名请求示例（HMAC）](#hmac), [签名请求示例（RSA）](#rsa) 和 [SIGNED 请求示例 (Ed25519)](#ed25519) 理解如何计算签名。
 
 
 ### 时间同步安全
@@ -530,6 +533,8 @@ API 有多种频率限制间隔。
 **关于交易时效性** 互联网状况并不完全稳定可靠，因此你的程序本地到币安服务器的时延会有抖动, 这是我们设置 `recvWindow` 的目所在。如果你从事高频交易，对交易时效性有较高的要求，可以灵活设置 `recvWindow` 以达到你的要求。
 
 **建议使用5000毫秒以下的 `recvWindow`！**
+
+<a id="hmac"></a>
 
 ### SIGNED 请求示例 (HMAC)
 
@@ -636,6 +641,8 @@ cc15477742bd704c29492d96c7ead9414dfd8e0ec4a00f947bb5bb454ddbd08a
 }
 ```
 
+<a id="rsa"></a>
+
 ### SIGNED 请求示例 (RSA)
 
 Key          | Value
@@ -732,6 +739,8 @@ OJJaf8C/3VGrU4ATTR4GiUDqL2FboSE1Qw7UnnoYNfXTXHubIl1iaePGuGyfct4NPu5oVEZCH4Q6ZStf
   }
 }
 ```
+
+<a id="ed25519"></a>
 
 ### SIGNED 请求示例 (Ed25519)
 
@@ -1170,10 +1179,10 @@ NONE
 
 如果需要持续监控深度信息更新，请考虑使用 WebSocket Streams：
 
-* [`<symbol>@depth<levels>`](web-socket-streams_CN.md#有限档深度信息)
-* [`<symbol>@depth`](web-socket-streams_CN.md#增量深度信息stream)
+* [`<symbol>@depth<levels>`](web-socket-streams_CN.md#depth)
+* [`<symbol>@depth`](web-socket-streams_CN.md#diff-depth)
 
-如果需要[维护本地orderbook](web-socket-streams_CN.md#如何正确在本地维护一个orderbook副本)，您可以将 `depth` 请求与 `<symbol>@depth` streams 一起使用。
+如果需要[维护本地orderbook](web-socket-streams_CN.md#how-to-maintain-orderbook)，您可以将 `depth` 请求与 `<symbol>@depth` streams 一起使用。
 
 **权重:**
 根据限制调整：
@@ -1279,7 +1288,7 @@ NONE
 
 如果您需要访问实时交易活动，请考虑使用 WebSocket Streams：
 
-* [`<symbol>@trade`](web-socket-streams_CN.md#逐笔交易)
+* [`<symbol>@trade`](web-socket-streams_CN.md#trade)
 
 **权重:**
 25
@@ -1405,7 +1414,7 @@ NONE
 
 如果需要访问实时交易活动，请考虑使用 WebSocket Streams：
 
-* [`<symbol>@aggTrade`](web-socket-streams_CN.md#归集交易)
+* [`<symbol>@aggTrade`](web-socket-streams_CN.md#aggtrade)
 
 如果需要历史总交易数据，可以使用 [data.binance.vision](https://github.com/binance/binance-public-data/#aggtrades)。
 
@@ -1466,6 +1475,7 @@ NONE
 }
 ```
 
+<a id="klines"></a>
 ### K线数据
 
 ```javascript
@@ -1487,7 +1497,7 @@ Klines 由其开盘时间和收盘时间为唯一标识。
 
 如果您需要访问实时 kline 更新，请考虑使用 WebSocket Streams：
 
-* [`<symbol>@kline_<interval>`](web-socket-streams_CN.md#K线)
+* [`<symbol>@kline_<interval>`](web-socket-streams_CN.md#kline)
 
 如果需要历史K线数据，可以使用 [data.binance.vision](https://github.com/binance/binance-public-data/#klines)。
 
@@ -1578,7 +1588,7 @@ months    | `1M`
 }
 ```
 
-请求参数和响应字段与[`k线`](#K线数据)接口相同。
+请求参数和响应字段与[`k线`](#klines)接口相同。
 uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化。
 
 **权重:**
@@ -1688,7 +1698,7 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
   ]
 }
 ```
-
+<a id="twentyfourhourticker"></a>
 ### 24hr 价格变动情况
 
 ```javascript
@@ -1704,10 +1714,10 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
 24 小时滚动窗口价格变动数据。
 如果您需要持续监控交易统计，请考虑使用 WebSocket Streams:
 
-* [`<symbol>@ticker`](web-socket-streams_CN.md#按Symbol的完整Ticker) 或者 [`!ticker@arr`](web-socket-streams_CN.md#全市场所有交易对的完整Ticker)
-* [`<symbol>@miniTicker`](web-socket-streams_CN.md#按Symbol的精简Ticker) 或者 [`!miniTicker@arr`](web-socket-streams_CN.md#全市场所有Symbol的精简Ticker)
+* [`<symbol>@ticker`](web-socket-streams_CN.md#twentyfourhourticker) 或者 [`!ticker@arr`](web-socket-streams_CN.md#all-markets-ticker)
+* [`<symbol>@miniTicker`](web-socket-streams_CN.md#twentyfourhourminiticker) 或者 [`!miniTicker@arr`](web-socket-streams_CN.md#all-markets-mini-ticker)
 
-如果你想用不同的窗口数量，可以用 [`ticker`](#滚动窗口价格变动统计) 请求。
+如果你想用不同的窗口数量，可以用 [`ticker`](#ticker) 请求。
 
 **权重:**
 根据交易对的数量进行调整：
@@ -2141,7 +2151,7 @@ With `symbols`:
 }
 ```
 
-
+<a id="ticker"></a>
 ### 滚动窗口价格变动统计
 
 ```javascript
@@ -2160,7 +2170,7 @@ With `symbols`:
 
 使用自定义窗口获取滚动窗口价格变化统计信息。
 
-这个请求类似于 [`ticker.24hr`](#24hr-价格变动情况)，但统计数据是使用指定的任意窗口按需计算的。
+这个请求类似于 [`ticker.24hr`](#twentyfourhourticker)，但统计数据是使用指定的任意窗口按需计算的。
 
 **注意：** 窗口大小精度限制为1分钟。
 虽然 `closeTime` 是请求的当前时间，`openTime` 总是从分钟边界开始。
@@ -2184,7 +2194,7 @@ With `symbols`:
 
 如果您需要持续监控交易统计，请考虑使用 WebSocket Streams:
 
-* [`<symbol>@ticker_<window_size>`](web-socket-streams_CN.md#按Symbol的滚动窗口统计) 或者 [`!ticker_<window-size>@arr`](web-socket-streams_CN.md#全市场滚动窗口统计)
+* [`<symbol>@ticker_<window_size>`](web-socket-streams_CN.md#rolling-window-ticker) 或者 [`!ticker_<window-size>@arr`](web-socket-streams_CN.md#all-market-rolling-window-ticker)
 
 **权重:**
 根据交易对的数量进行调整：
@@ -2391,8 +2401,8 @@ days    | `1d`, `2d` ... `7d`
 
 如果需要访问实时价格更新，请考虑使用 WebSocket Streams:
 
-* [`<symbol>@aggTrade`](web-socket-streams_CN.md#归集交易)
-* [`<symbol>@trade`](web-socket-streams_CN.md#逐笔交易)
+* [`<symbol>@aggTrade`](web-socket-streams_CN.md#aggtrade)
+* [`<symbol>@trade`](web-socket-streams_CN.md#trade)
 
 **权重:**
 根据交易对的数量进行调整：
@@ -2511,7 +2521,7 @@ days    | `1d`, `2d` ... `7d`
 
 如果您需要访问实时订单薄 ticker 更新，请考虑使用 WebSocket Streams:
 
-* [`<symbol>@bookTicker`](web-socket-streams_CN.md#按Symbol的最优挂单信息)
+* [`<symbol>@bookTicker`](web-socket-streams_CN.md#bookticker)
 
 **权重:**
 根据交易对的数量进行调整：
@@ -2761,6 +2771,7 @@ NONE
 
 ## 交易请求
 
+<a id="order-place"></a>
 ### 下新的订单 (TRADE)
 
 ```javascript
@@ -3012,7 +3023,7 @@ NONE
   * `stopPrice` 必须高于市场价格：`STOP_LOSS BUY`，`TAKE_PROFIT SELL`
   * `stopPrice` 必须低于市场价格：`STOP_LOSS SELL`，`TAKE_PROFIT BUY`
 
-* 使用 `quoteOrderQty` 的 `MARKET` 订单遵循 [`LOT_SIZE`](filters_CN.md#LOT_SIZE_订单尺寸) 过滤规则。
+* 使用 `quoteOrderQty` 的 `MARKET` 订单遵循 [`LOT_SIZE`](filters_CN.md#lotsize) 过滤规则。
 
   该订单将执行一个名义价值尽可能接近请求的 `quoteOrderQty` 的数量。
 
@@ -3232,7 +3243,7 @@ NONE
 
 **参数:**
 
-除了 [`order.place`](##下新的订单-trade) 的所有参数,
+除了 [`order.place`](#order-place) 的所有参数,
 下面参数也有效:
 
 参数名                   |类型          | 是否必需    | 描述
@@ -3298,6 +3309,8 @@ NONE
   ]
 }
 ```
+
+<a id="order-status"></a>
 
 ### 查询订单 (USER_DATA)
 
@@ -3431,6 +3444,8 @@ NONE
 }
 ```
 **注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 [订单响应中的特定条件时才会出现的字段](#conditional-fields-in-order-responses) 部分。
+
+<a id=order-cancel></a>
 
 ### 撤销订单 (TRADE)
 
@@ -3877,7 +3892,7 @@ NONE
 </tbody>
 </table>
 
-类似于 [`order.place`](#下新的订单-trade) 请求，额外的强制参数 (*) 由新订单的 [`type`](#order-type) 确定。
+类似于 [`order.place`](#order-place) 请求，额外的强制参数 (*) 由新订单的 [`type`](#order-type) 确定。
 
 可用的 `cancelReplaceMode` 选项：
 
@@ -4074,7 +4089,7 @@ NONE
 
 * 如果未尝试下新订单，订单次数仍会增加。
 
-* 与 [`order.cancel`](#撤销订单-TRADE) 一样，如果您撤销订单列表内的某个订单，则整个订单列表将被撤销。
+* 与 [`order.cancel`](#order-cancel) 一样，如果您撤销订单列表内的某个订单，则整个订单列表将被撤销。
 
 **数据源:**
 撮合引擎
@@ -4489,8 +4504,8 @@ NONE
 
 如果您需要持续监控订单状态更新，请考虑使用 WebSocket Streams：
 
-* [`userDataStream.start`](#Websocket-账户信息) 请求
-* [`executionReport`](./user-data-stream_CN.md#订单更新) 更新
+* [`userDataStream.start`](#user-data-stream-requests) 请求
+* [`executionReport`](./user-data-stream_CN.md#executionReport) 更新
 
 **权重:**
 根据交易对的数量进行调整：
@@ -4515,7 +4530,7 @@ NONE
 
 **响应:**
 
-挂单的状态报告与 [`order.status`](#查询订单-USER_DATA) 相同。
+挂单的状态报告与 [`order.status`](#order-status) 相同。
 
 请注意，某些字段是可选的，仅在订单中有设置它们时才包括。
 
@@ -4600,7 +4615,7 @@ NONE
 
 **响应:**
 
-订单和订单列表的撤销报告的格式与 [`order.cancel`](#撤销订单-TRADE) 中的格式相同。
+订单和订单列表的撤销报告的格式与 [`order.cancel`](#order-cancel) 中的格式相同。
 
 ```javascript
 {
@@ -4794,7 +4809,7 @@ NONE
 
 使用 `newOrderRespType` 参数选择 `orderReports` 的响应格式。
 以下示例适用于 `RESULT` 响应类型。
-有关更多示例，请参阅 [`order.place`](#下新的订单-trade)。
+有关更多示例，请参阅 [`order.place`](#order-place)。
 
 ```javascript
 {
@@ -4885,7 +4900,7 @@ NONE
   ]
 }
 ```
-
+<a id="orderlist-place-oco"></a>
 #### 发送新 OCO 订单 (TRADE)
 
 ```javascript
@@ -4963,7 +4978,7 @@ NONE
 
 **响应:**
 
-使用 `newOrderRespType` 参数来选择 `orderReports` 的响应格式。以下示例适用于 `RESULT` 响应类型。 请参阅 [`order.place`](##下新的订单-trade)了解更多 `orderReports` 的响应类型。
+使用 `newOrderRespType` 参数来选择 `orderReports` 的响应格式。以下示例适用于 `RESULT` 响应类型。 请参阅 [`order.place`](#order-place)了解更多 `orderReports` 的响应类型。
 
 ```javascript
 {
@@ -5059,6 +5074,7 @@ NONE
 }
 ```
 
+<a id="orderList-place-oto"></a>
 #### 发送新订单列表 - OTO (TRADE)
 
 ```javascript
@@ -5259,9 +5275,9 @@ NONE
 
 * 一个 OTOCO 订单（One-Triggers-One-Cancels-the-Other）是一个包含了三个订单的订单列表。
 * 第一个订单被称为**生效订单**，必须为 `LIMIT` 或 `LIMIT_MAKER` 类型的订单。最初，订单簿上只有生效订单。
-    * 生效订单的行为与此一致 [OTO](#new-order-list---oto-trade)
+    * 生效订单的行为与此一致 [OTO](#orderList-place-oto)
 * 一个OTOCO订单有两个待处理订单（pending above 和 pending below），它们构成了一个 OCO 订单列表。只有当生效订单**完全成交**时，待处理订单们才会被自动下单。
-    * 待处理上方(pending above)订单和待处理下方(pending below)订单都遵循与 OCO 订单列表相同的规则 [Order List OCO](#new-order-list---oco-trade)。
+    * 待处理上方(pending above)订单和待处理下方(pending below)订单都遵循与 OCO 订单列表相同的规则 [Order List OCO](#orderlist-place-oco)。
 * `OTOCO` 在未成交订单计数，`EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器的基础上添加**3个订单**。
 
 **权重:** 1
@@ -5436,6 +5452,8 @@ NONE
 
 **注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 [订单响应中的特定条件时才会出现的字段](#conditional-fields-in-order-responses) 部分。
 
+<a id="orderList-status"></a>
+
 #### 查询订单列表 (USER_DATA)
 
 ```javascript
@@ -5453,7 +5471,7 @@ NONE
 
 检查订单列表的执行状态。
 
-对于单个订单的执行状态，使用 [`order.status`](#查询订单-USER_DATA)。
+对于单个订单的执行状态，使用 [`order.status`](#order-status)。
 
 **权重:**
 4
@@ -5643,7 +5661,7 @@ NONE
 
 * 如果同时指定了 `orderListId` 和 `listClientOrderId` 参数，仅使用 `orderListId` 并忽略 `listClientOrderId`。
 
-* 使用 [`order.cancel`](#撤销订单-TRADE) 撤销订单列表内的某个订单，则整个订单列表将被撤销。
+* 使用 [`order.cancel`](#order-cancel) 撤销订单列表内的某个订单，则整个订单列表将被撤销。
 
 **数据源:**
 撮合引擎
@@ -5742,8 +5760,8 @@ NONE
 
 如果您需要持续监控订单状态更新，请考虑使用 WebSocket Streams：
 
-* [`userDataStream.start`](#Websocket-账户信息) 请求
-* [`executionReport`](./user-data-stream_CN.md#订单更新) 更新
+* [`userDataStream.start`](#user-data-stream-requests) 请求
+* [`executionReport`](./user-data-stream_CN.md#executionReport) 更新
 
 **权重:**
 6
@@ -5800,6 +5818,8 @@ NONE
   ]
 }
 ```
+
+<a id="sor-order-place"></a>
 
 ### 下 SOR 订单 (TRADE)
 
@@ -5936,7 +5956,7 @@ NONE
 
 **参数:**
 
-除了 [`sor.order.place`](#place-new-order-using-sor-trade) 所有参数,
+除了 [`sor.order.place`](#sor-order-place) 所有参数,
 下面参数也有效:
 
 参数名                   |类型          | 是否必需    | 描述
@@ -6216,7 +6236,7 @@ NONE
 
 **响应:**
 
-订单状态报告与 [`order.status`](#查询订单-USER_DATA) 相同。
+订单状态报告与 [`order.status`](#order-status) 相同。
 
 请注意，某些字段是可选的，仅在订单中有设置它们时才包括。
 
@@ -6313,7 +6333,7 @@ NONE
 
 **响应:**
 
-订单列表的状态报告与 [`orderList.status`](#查询-OCO-user_data) 相同。
+订单列表的状态报告与 [`orderList.status`](#orderList-status) 相同。
 
 ```javascript
 {
@@ -6705,6 +6725,7 @@ timestamp           | LONG   | YES          |
 }
 ```
 
+<a id="user-data-stream-requests"></a>
 
 ## Websocket 账户信息
 
@@ -6727,7 +6748,7 @@ timestamp           | LONG   | YES          |
 开始新的用户数据流
 
 **注意：** 
-数据流将在 60 分钟后关闭，除非定期发送 [`userDataStream.ping`](#ping-user-data-stream-user_stream) 请求。
+数据流将在 60 分钟后关闭，除非定期发送 [`userDataStream.ping`](#user_data_stream_ping) 请求。
 
 **权重:**
 2
@@ -6765,6 +6786,8 @@ timestamp           | LONG   | YES          |
   ]
 }
 ```
+
+<a id="user_data_stream_ping"></a>
 
 ### Ping 账户数据流 (USER_STREAM)
 
