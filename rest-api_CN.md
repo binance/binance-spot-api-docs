@@ -3409,6 +3409,8 @@ timestamp|LONG|YES|
 
 ### SOR
 
+<a id="sor-order"></a>
+
 #### 下 SOR 订单 (TRADE)
 
 ```
@@ -3498,7 +3500,7 @@ POST /api/v3/sor/order/test
 
 **参数:**
 
-除了 [`POST /api/v3/sor/order`](#new-order-using-sor-trade) 所有参数,
+除了 [`POST /api/v3/sor/order`](#sor-order) 所有参数,
 如下参数也接受:
 
 参数名                   |类型          | 是否必需    | 描述
