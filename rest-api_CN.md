@@ -1617,8 +1617,8 @@ POST /api/v3/order
 名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-side | ENUM | YES | 详见枚举定义：[订单类型](./enums_CN.md#ordertypes)
-type | ENUM | YES | 详见枚举定义：[订单方向](./enums_CN.md#side)
+side | ENUM | YES | 详见枚举定义：[订单类型](./enums_CN.md#side)
+type | ENUM | YES | 详见枚举定义：[订单方向](./enums_CN.md#ordertype)
 timeInForce | ENUM | NO | 详见枚举定义：[生效时间](./enums.md#timeinforce)
 quantity | DECIMAL | NO |
 quoteOrderQty | DECIMAL | NO |

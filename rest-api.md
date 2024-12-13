@@ -1670,9 +1670,9 @@ Send in a new order.
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-side | ENUM | YES |
-type | ENUM | YES |
-timeInForce | ENUM | NO |
+side | ENUM | YES | Please see [Enums](enums.md#side) for supported values.
+type | ENUM | YES | Please see [Enums](enums.md#ordertypes) for supported values
+timeInForce | ENUM | NO | Please see [Enums](enums.md#timeinforce) for supported values.
 quantity | DECIMAL | NO |
 quoteOrderQty|DECIMAL|NO|
 price | DECIMAL | NO |
