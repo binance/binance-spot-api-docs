@@ -584,15 +584,22 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 
 <a id="how-to-maintain-orderbook"></a>
 
-## 如何正确在本地维护一个orderbook副本
-1. 订阅 **wss://stream.binance.com:9443/ws/bnbbtc@depth**
-2. 开始缓存收到的更新。同一个价位，后收到的更新覆盖前面的。
-3. 访问Rest接口 **https://api.binance.com/api/v3/depth?symbol=BNBBTC&limit=1000** 获得一个1000档的深度快照
-4. 将目前缓存到的信息中`u`小于步骤3中获取到的快照中的`lastUpdateId`的部分丢弃(丢弃更早的信息，已经过期)。
-5. 将深度快照中的内容更新到本地orderbook副本中，并从websocket接收到的第一个`U` <= `lastUpdateId`+1 **且** `u` >= `lastUpdateId`+1 的event开始继续更新本地副本。
-6. 每一个新event的`U`应该恰好等于上一个event的`u`+1，否则可能出现了丢包，请从step3重新进行初始化。
-7. 每一个event中的挂单量代表这个价格目前的挂单量**绝对值**，而不是相对变化。
-8. 如果某个价格对应的挂单量为0，表示该价位的挂单已经撤单或者被吃，应该移除这个价位。
+## 如何正确在本地维护一个order book副本
+1. 打开与 `wss://stream.binance.com:9443/ws/bnbbtc@depth` 的 WebSocket 连接。
+2. 开始缓存收到的event。请记录您收到的第一个event的 `U`值。
+3. 访问 `https://api.binance.com/api/v3/depth?symbol=BNBBTC&limit=5000` 获取深度快照。
+4. 如果快照中的 `lastUpdateId` 小于等于步骤 2 中的 `U` 值，请返回步骤 3。
+5. 在收到的event中，丢弃快照中 `u` <= `lastUpdateId` 的所有event。现在第一个event的 `lastUpdateId` 应该在 `[U;u]` 范围以内。
+6. 将本地order book设置为快照。它的更新ID 为 `lastUpdateId`。
+7. 更新所有缓存的event，以及后续的所有event。
 
-注意:
-因为深度快照对价格档位数量有限制，初始快照之外的价格档位并且没有数量变化的价格档位不会出现在增量深度的更新信息内。因此，即使应用来自增量深度的所有更新，这些价格档位也不会在本地 order book 中可见，所以本地的 order book 与真实的 order book 可能会有一些差异。 不过对于大多数用例，5000 的深度限制足以有效地了解市场和交易。
+要将event应用于您的本地order book，请遵循以下更新过程：
+1. 如果event `u` (最后一次更新 ID) < 您本地order book的更新 ID，请忽略该事件。
+2. 如果event `U` (第一次更新 ID) > 您本地order book的更新 ID，则说明出现问题。请丢弃您的本地order book并从头开始开始重建。
+3. 对于买价 (`b`) 和卖价 (`a`) 中的每个价位，在order book中设置新的数量：
+    * 如果order book中不存在价位，则插入新的数量。
+    * 如果数量为零，则从order book中删除此价位。
+4. 将order book更新 ID 设置为处理过event中的最后一次更新 ID (`u`)。
+
+> [!NOTE]
+> 由于深度快照对价位的数量有限制，因此初始快照之外没有数量变化的价位将不会在增量深度信息stream中进行更新。因此，即使正确添加了增量深度信息stream的所有更新，这些价位在本地order book中也将不可见，并导致本地 order book 与实际 order book 有一些细微的差异。但是，对于大多数场景，5000 的深度限制足以了解市场并进行有效交易。
