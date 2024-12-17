@@ -1,11 +1,19 @@
 # CHANGELOG for Binance SPOT Testnet 
 
-**Last Updated: 2024-11-27**
+**Last Updated: 2024-12-17**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/). 
 This is not always synced with the live exchange. 
 
-## 2024-11-27
+## 2024-12-17 
+
+* FIX Market Data is now available. The [FIX API](fix-api.md) documentation for SPOT Testnet has been updated regarding this feature.
+* Please refer to this [link](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml) for the QuickFix Schema for FIX Market Data.
+
+---
+
+
+### 2024-11-27
 
 **Note:** These changes will be deployed live **starting 2024-11-28** and may take several hours for all features to work as intended.
 
@@ -160,7 +168,7 @@ FIX API
 ---
 
 
-## 2024-11-05 
+### 2024-11-05 
 
 **Note:** This is in the process of being deployed. Please consult the Spot Test Network's [homepage](https://testnet.binance.vision/) to be informed of the release completion.
 
@@ -171,7 +179,7 @@ Changes to Exchange Information (i.e. [`GET /api/v3/exchangeInfo`](rest-api.md#e
 
 ---
 
-## 2024-10-02 
+### 2024-10-02 
 
 REST and WebSocket API:
 
@@ -180,14 +188,14 @@ REST and WebSocket API:
 
 ---
 
-## 2024-09-04 
+### 2024-09-04 
 
 * Spot Testnet now supports Unfilled Order Count. Please refer to this [page](../faqs/order_count_decrement.md) on how you can decrement your unfilled order count when placing orders.
 * The documentation has been updated to reflect the wording.
 
 ---
 
-## 2024-08-16
+### 2024-08-16
 
 General Changes:
 
@@ -195,13 +203,13 @@ General Changes:
 
 ---
 
-## 2024-08-07
+### 2024-08-07
 
 * The [QuickFix schema](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml) has been modified.
 
 ---
 
-## 2024-07-23
+### 2024-07-23
 
 **Note:** This will be deployed starting around 7am UTC. Please consult the Spot Test Network's [homepage](https://testnet.binance.vision/) to be informed of the release completion.
 
@@ -210,7 +218,7 @@ General Changes:
 
 ---
 
-## 2024-07-17 
+### 2024-07-17 
 
 General changes:
 
@@ -221,7 +229,7 @@ General changes:
 
 ---
 
-## 2024-06-21
+### 2024-06-21
 
 * [FIX API](fix-api.md) will be available today (2024-06-21) on the Spot Test Network. Please consult the Spot Test Network's [homepage](https://testnet.binance.vision/) to be informed of the release completion.
   * Using the FIX API requires an Ed25519 API Key with the `FIX_API` permission.
@@ -229,7 +237,7 @@ General changes:
 
 ---
 
-## 2024-06-05
+### 2024-06-05
 
 WebSocket Streams
 
@@ -238,7 +246,7 @@ WebSocket Streams
 
 ---
 
-## 2024-05-30 
+### 2024-05-30 
 
 WebSocket API
 
@@ -250,7 +258,7 @@ WebSocket Streams
 
 ---
 
-## 2024-05-23 
+### 2024-05-23 
 
 REST API
 
@@ -266,7 +274,7 @@ WebSocket Streams
 
 ---
 
-## 2024-05-02
+### 2024-05-02
 
 * One-Triggers-the-Other (OTO) orders and One-Triggers-a-One-Cancels-The-Other (OTOCO) orders are now enabled.
 * New requests have been added:
@@ -279,7 +287,7 @@ WebSocket Streams
 
 ---
 
-## 2024-04-04 
+### 2024-04-04 
 
 General changes:
 
@@ -315,7 +323,7 @@ SBE
 
 ---
 
-## 2024-03-13
+### 2024-03-13
 
 General changes:
 
