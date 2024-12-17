@@ -21,7 +21,7 @@
 
 # User Data Streams for Binance 
 
-**Last Updated: 2024-12-09**
+**Last Updated: 2024-12-17**
 
 * The base API endpoint is: **https://api.binance.com**
 * A User Data Stream `listenKey` is valid for 60 minutes after creation.
@@ -31,7 +31,9 @@
 * The base websocket endpoint is: **wss://stream.binance.com:9443**
 * User Data Streams are accessed at **/ws/\<listenKey\>** or **/stream?streams=\<listenKey\>**
 * A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark
-
+* All time and timestamp related fields in the JSON responses are **milliseconds by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND` or `timeUnit=microsecond` in the URL.  
+  * For example `/ws/<listenKey>&timeUnit=MICROSECOND`
+    
 ## API Endpoints
 ### Create a listenKey (USER_STREAM)
 ```

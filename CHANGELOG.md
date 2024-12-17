@@ -1,6 +1,60 @@
 # CHANGELOG for Binance's API 
 
-**Last Updated: 2024-12-09**
+**Last Updated: 2024-12-17**
+
+### 2024-12-17
+
+General Changes:
+
+The system now supports microseconds in all related time and/or timestamp fields. Microsecond support is **opt-in**, by default the requests and responses still use milliseconds. Examples in documentation are also using milliseconds for the foreseeable future.
+
+WebSocket Streams
+
+* A new optional parameter `timeUnit` can be used in the connection URL to select the time unit.  
+  * For example: `/stream?streams=btcusdt@trade&timeUnit=millisecond`  
+  * Supported values are:  
+    * `MILLISECOND`  
+    * `millisecond`  
+    * `MICROSECOND`  
+    * `microsecond`  
+  * If the time unit is not selected, milliseconds will be used by default.
+
+REST API
+
+* A new optional header `X-MBX-TIME-UNIT` can be sent in the request to select the time unit.  
+  * Supported values:  
+    * `MILLISECOND`  
+    * `millisecond`  
+    * `MICROSECOND`  
+    * `microsecond`  
+  * The time unit affects timestamp fields in JSON responses (e.g., `time`, `transactTime`).  
+    * SBE responses continue to be in microseconds regardless of time unit.  
+  * If the time unit is not selected, milliseconds will be used by default.   
+* Timestamp parameters (e.g. `startTime`, `endTime`, `timestamp)` can now be passed in milliseconds or microseconds.
+
+WebSocket API
+
+* A new optional parameter `timeUnit` can be used in the connection URL to select the time unit.   
+  * Supported values:  
+    * `MILLISECOND`   
+    * `millisecond`  
+    * `MICROSECOND`  
+    * `microsecond`  
+  * The time unit affects timestamp fields in JSON responses (e.g., `time`, `transactTime`).  
+    * SBE responses continue to be in microseconds regardless of time unit.  
+  * If the time unit is not selected, milliseconds will be used by default.   
+* Timestamp parameters (e.g. `startTime`, `endTime`, `timestamp)` can now be passed in milliseconds or microseconds.
+
+User Data Streams
+
+* A new optional parameter `timeUnit` can be used in the connection URL to select the time unit.   
+  * Supported values   
+    * `MILLISECOND`   
+    * `MICROSECOND`.  
+    * `microsecond`  
+    * `millisecond`
+    
+---
 
 ### 2024-12-09
 

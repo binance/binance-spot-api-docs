@@ -1,6 +1,6 @@
 # 错误代码汇总 
 
-**最近更新： 2024-12-09**
+**最近更新： 2024-12-17**
 
 币安Rest接口(包括wapi)返回的错误包含两部分，错误码与错误信息. 错误码是大类，一个错误码可能对应多个不同的错误信息。
 以下是一个完整错误码实例
@@ -241,6 +241,9 @@
 
 ### -1185 需要使用 Drop Copy 会话
  * Only DropCopy sessions are supported on this server. Either reconnect to order entry server or send `DropCopyFlag (9406)` field.
+ 
+### -1194 错误的时间单位
+* Invalid value for time unit; expected either MICROSECOND or MILLISECOND. 
 
 ### -1196 买方 `OCO` 单的止损限价单必须是上方（`above`） 订单
 * A stop loss order in a buy OCO must be above.

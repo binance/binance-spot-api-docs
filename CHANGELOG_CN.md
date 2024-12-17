@@ -1,5 +1,61 @@
 # 更新日志 
 
+**最近更新： 2024-12-17**
+
+## 2024-12-17
+
+常规更改：
+
+系统现在在所有相关时间和/或时间戳的字段中支持微秒。微秒支持是 **opt-in**，默认情况下，请求和响应仍然使用毫秒。文档中的示例也在可预见的将来使用毫秒。
+
+WebSocket Streams
+
+* 可以在连接 URL 中使用新的可选参数 `timeUnit` 来选择时间单位。 
+  * 例如：`/stream？streams=btcusdt@trade&timeUnit=millisecond` 
+  * 支持的值为： 
+    * `MILLISECOND`  
+    * `millisecond`  
+    * `MICROSECOND`  
+    * `microsecond`  
+  * 如果未选择时间单位，则默认使用毫秒。
+
+REST API
+
+* 可以在请求中发送新的可选报文头 `X-MBX-TIME-UNIT` 来选择时间单位。 
+  * 支持的值： 
+    * `MILLISECOND`  
+    * `millisecond`  
+    * `MICROSECOND`  
+    * `microsecond`  
+  * 时间单位会影响 JSON 响应中的时间戳字段（例如，`time`、`transactTime`）。 
+    * 无论时间单位如何，SBE 响应都将继续以微秒为单位。 
+  * 如果未选择时间单位，则默认使用毫秒。  
+* 时间戳参数（例如 'startTime'、'endTime'、'timestamp）' 现在可以以毫秒或微秒为单位传递。
+
+WebSocket API
+
+* 可以在连接 URL 中使用新的可选参数 `timeUnit` 来选择时间单位。  
+  * 支持的值： 
+    * `MILLISECOND`   
+    * `millisecond`  
+    * `MICROSECOND`  
+    * `microsecond`
+  * 时间单位会影响 JSON 响应中的时间戳字段（例如，`time`、`transactTime`）。 
+    * 无论时间单位如何，SBE 响应都将继续以微秒为单位。 
+  * 如果未选择时间单位，则默认使用毫秒。  
+* 时间戳参数（例如 `startTime`、`endTime`、`timestamp`） 现在可以以毫秒或微秒为单位传递。
+
+User Data Streams
+
+* 可以在连接 URL 中使用新的可选参数 `timeUnit` 来选择时间单位。  
+  * 支持的值  
+    * `MILLISECOND`   
+    * `MICROSECOND`
+    * `microsecond`  
+    * `millisecond`
+
+--- 
+
 **最近更新： 2024-12-09**
 
 ### 2024-12-09

@@ -1,6 +1,6 @@
 # WebSocket 账户接口
 
-**最近更新： 2024-12-09**
+**最近更新： 2024-12-17**
 
 ## 基本信息
 * 本篇所列出API接口的base url : **https://api.binance.com**
@@ -12,6 +12,8 @@
 * U订阅账户数据流的stream名称为 **/ws/\<listenKey\>** 或 **/stream?streams=\<listenKey\>**
 * 每个链接有效期不超过24小时，请妥善处理断线重连。
 * 账户数据流的消息不保证严格时间序; **请使用 E 字段进行排序**
+* JSON 响应中的所有时间和时间戳相关字段均以**毫秒为默认单位**。要以微秒为单位接收信息，请在 URL 中添加参数 `timeUnit=MICROSECOND` 或 `timeUnit=microsecond`。 
+  * 例如：`/ws/<listenKey>&timeUnit=MICROSECOND`
 
 ## 与Websocket账户接口相关的REST接口
 
@@ -116,7 +118,7 @@ listenKey | STRING | YES
 }
 ```
 
-
+<a id="executionReport"></a>
 ### 订单更新
 订单通过`executionReport`事件进行更新。
 

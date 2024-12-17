@@ -1,6 +1,6 @@
 # Error codes for Binance 
 
-**Last Updated: 2024-12-09** 
+**Last Updated: 2024-12-17** 
 
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
@@ -242,6 +242,9 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 ### -1185 DROP_COPY_SESSION_REQUIRED
  * Only DropCopy sessions are supported on this server. Either reconnect to order entry server or send `DropCopyFlag (9406)` field.
+
+#### -1194 INVALID_TIME_UNIT
+* Invalid value for time unit; expected either MICROSECOND or MILLISECOND.
 
 ### -1196 BUY_OCO_STOP_LOSS_MUST_BE_ABOVE
 

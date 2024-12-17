@@ -2,7 +2,7 @@
 
 **声明:** 此术语表只适用现货交易(`SPOT`); 用于合约、期权或者其他币安API相应的术语可能有不一样的表达。
 
-## A
+### A
 
 `ACK`
 * `newOrderRespType`的枚举值, 设置时下单的返回值只包括下面的字段: `symbol`, `orderId`, `orderListId`, `clientOrderId`, 和 `transactTime`。
@@ -33,7 +33,7 @@ allocation
 
 ---
 
-## B
+### B
 
 `baseAsset`
 * 基准资产; 指代交易对中的第一个资产(比如 `BTCUSDT`中的`BTC`), 表示被出售或者买进的资产。
@@ -61,7 +61,7 @@ allocation
 
 ---
 
-## C
+### C
 
 `CANCELED`
 * 订单的一个状态, 用来表示订单被用户取消。
@@ -83,14 +83,14 @@ allocation
 
 ---
 
-## D
+### D
 
 Data Source
 * 发送请求后得到数据的地方, 比如数据库, 缓存等。
 
 ---
 
-## E
+### E
 
 `executedQty`
 * 订单中成交的数量。
@@ -103,7 +103,7 @@ Data Source
 
 ---
 
-## F
+### F
 
 `filters`
 * 过滤器; 用于定义交易规则。
@@ -119,21 +119,21 @@ Data Source
 
 ---
 
-## G
+### G
 
 `GTC`/ Good Til Canceled
 * `timeInForce` 的枚举值, 表示订单会一直有效, 直到全部成交或者被取消。
 
 ---
 
-## H
+### H
 
 `HALT`
 * 交易对的一个交易状态, 可以用来表示交易处于紧急暂停状态。 此时市场信息还会生成。
 
 ---
 
-## I
+### I
 
 `intervalNum`
 * 表示间隔时间, 例如如果`interval`的值是`SECOND`, 并且`intervalNum`是5, 那么表示为每5秒钟间隔。
@@ -152,14 +152,14 @@ Data Source
 
 ---
 
-## K
+### K
 
 `kline`
 * K线; 包括了一定时期内的开盘价, 收盘价, 最高价，最低价，交易量，以及其他的市场数据。 通常也被成为蜡烛图。
 
 ---
 
-## L
+### L
 
 Last Prevented Quantity
 * 最后被阻止交易的数量。这仅在订单因 STP 触发而过期时可见。
@@ -190,7 +190,7 @@ Last Prevented Quantity
 
 ---
 
-## M
+### M
 
 `MARKET`
 * 一个订单的类型; 其订单会在系统中尽可能的全部成交，除非市场没有流动性，无法成交部分会被交易取消。
@@ -204,7 +204,7 @@ Memory
 
 ---
 
-## N
+### N
 
 `NEW`
 * 一个订单的状态, 表示订单成功被发送到了交易引擎。
@@ -217,7 +217,7 @@ Notional value
 
 ---
 
-## O
+### O
 
 `OCO`
 
@@ -249,7 +249,7 @@ Order List
 
 ---
 
-## P
+### P
 
 `PARTIALLY_FILLED`
 * 订单的一种状态, 表示订单被部分成交。
@@ -270,7 +270,7 @@ Pending order
 
 ---
 
-## Q
+### Q
 
 `quantity`
 * 订单量; 买卖订单时候基本资产(`base asset`)的数量。
@@ -292,7 +292,7 @@ Pending order
 
 ---
 
-## R
+### R
 
 `recvWindow`
 * API中的一个参数, 值为毫秒; 用以设定请求从`timestamp`开始的有效期。
@@ -305,7 +305,7 @@ Reverse `MARKET` order
 
 ---
 
-## S
+### S
 
 Self Trade Prevention (STP)
 * 自我交易预防; 此功能能阻止订单与来自同一账户或者同一 `tradeGroupId` 下的账户的订单撮合交易。
@@ -346,7 +346,7 @@ Smart Order Routing (SOR)
 
 ---
 
-## T
+### T
 
 `TAKE_PROFIT`
 * 止盈订单; 当市场价格触及`stopPrice`价, 此订单会以市价单(`MARKET`)被执行。
@@ -378,24 +378,24 @@ Smart Order Routing (SOR)
 * 追踪单被激活和跟踪价格变化的时间。
 
 `transactTime`
-* 订单的更新时间： 下单， 成交或者取消。此字段（和所有时间戳有关的字段一样）的单位为毫秒++
+* 订单的更新时间：下单， 成交或者取消。默认情况下，此字段（以及所有与时间戳相关的字段）在 JSON 响应中单位是毫秒。
 
 ---
 
-## U
+### U
 
 `uiKlines`
 * 为了前端展示而优化的K线。
 
 `updateTime`
-* 订单的最后更新时间, 单位为毫秒。
+* 订单的上次更新时间。默认情况下，此字段（以及所有与时间戳相关的字段）在 JSON 响应中单位是毫秒。
 
 User Data Stream
 * 通过WebSocket推送及时的个人用户信息, 包括了账户余额的变动, 订单的更新等。
 
 ---
 
-## W
+### W
 
 `weightedAveragePrice`
 * 成交量加权平均价; 将过去N分钟内所有交易的价格按各自的成交量加权而算出的平均价。
@@ -411,7 +411,7 @@ Working order
 * 指示订单何时添加到了 order book。
 ---
 
-## X
+### X
 
 `X-MBX-ORDER-COUNT-XX`
 * 请求的返回Header里面一个自定义值, 用来表明当前用户下单限制额的所剩额度。

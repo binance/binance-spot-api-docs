@@ -1,6 +1,6 @@
-# REST行情与交易接口
+# REST行情与交易接口 
 
-**最近更新： 2024-12-09**
+**最近更新： 2024-12-17**
 
 ## API 基本信息
 * 本篇列出接口的 base URL 有:
@@ -13,7 +13,8 @@
 * 上述列表的最后4个接口 (`api1`-`api4`) 会提供更好的性能，但其稳定性略为逊色。因此，请务必使用最适合的URL。
 * 所有接口的响应都是 JSON 格式。
 * 响应中如有数组，数组元素以时间**升序**排列，越早的数据越提前。
-* 所有时间、时间戳均为UNIX时间，单位为**毫秒**。
+* JSON 响应中的所有时间和时间戳相关字段均以**毫秒为默认单位**。要以微秒为单位接收信息，请添加报文头 `X-MBX-TIME-UNIT：MICROSECOND` 或 `X-MBX-TIME-UNIT：microsecond`。 
+* 时间戳参数（例如 `startTime`、`endTime`、`timestamp`）可以以毫秒或微秒为单位传递。
 * 对于仅发送公开市场数据的 API，您可以使用接口的 base URL https://data-api.binance.vision 。请参考 [Market Data Only_CN](./faqs/market_data_only_CN.md) 页面。
 
 ## HTTP 返回代码
@@ -1617,8 +1618,8 @@ POST /api/v3/order
 名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-side | ENUM | YES | 详见枚举定义：[订单类型](./enums_CN.md#side)
-type | ENUM | YES | 详见枚举定义：[订单方向](./enums_CN.md#ordertype)
+side | ENUM | YES | 详见枚举定义：[订单方向](./enums_CN.md#side)
+type | ENUM | YES | 详见枚举定义：[订单类型](./enums_CN.md#ordertype)
 timeInForce | ENUM | NO | 详见枚举定义：[生效时间](./enums.md#timeinforce)
 quantity | DECIMAL | NO |
 quoteOrderQty | DECIMAL | NO |

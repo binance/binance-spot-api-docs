@@ -30,7 +30,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Web Socket Streams for Binance (2024-06-11)
+# Web Socket Streams for Binance (2024-12-17)
 
 ## General WSS information
 * The base endpoint is: **wss://stream.binance.com:9443** or **wss://stream.binance.com:443**
@@ -45,6 +45,8 @@
   * When you receive a ping, you must send a pong with a copy of ping's payload as soon as possible.
   * Unsolicited `pong frames` are allowed, but will not prevent disconnection. **It is recommended that the payload for these pong frames are empty.**
 * The base endpoint **wss://data-stream.binance.vision** can be subscribed to receive **only** market data messages. <br> User data stream is **NOT** available from this URL.
+* All time and timestamp related fields are **milliseconds by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND or timeUnit=microsecond` in the URL.  
+  * For example: `/stream?streams=btcusdt@trade&timeUnit=MICROSECOND`
 
 ## Websocket Limits
 * WebSocket connections have a limit of 5 incoming messages per second. A message is considered:

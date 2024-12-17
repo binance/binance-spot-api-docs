@@ -1,5 +1,7 @@
 
-# Web Socket 行情接口(2024-06-11)
+# Web Socket 行情接口
+
+**最近更新： 2024-12-17**
 
 ## 基本信息
 * 本篇所列出的所有wss接口的baseurl为: **wss://stream.binance.com:9443** 或者 **wss://stream.binance.com:443**
@@ -14,6 +16,8 @@
     * 当客户收到ping消息，必需尽快回复pong消息，同时payload需要和ping消息一致。
     * 未经请求的pong消息是被允许的，但是不会保证连接不断开。**对于这些pong消息，建议payload为空**
 * **wss://data-stream.binance.vision** 可以用来订阅仅有市场信息的数据流。账户信息**无法**从此URL获得。
+* 所有时间和时间戳相关字段均以**毫秒为默认单位**。 要以微秒为单位接收信息，请在 URL 中添加参数 `timeUnit=MICROSECOND` 或 `timeUnit=microsecond`。 
+  * 例如： `/stream?streams=btcusdt@trade&timeUnit=MICROSECOND`
 
 ## WebSocket 连接限制
 
@@ -601,5 +605,5 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
     * 如果数量为零，则从order book中删除此价位。
 4. 将order book更新 ID 设置为处理过event中的最后一次更新 ID (`u`)。
 
-> [!NOTE]
+> *注意*_:_ <br/>
 > 由于深度快照对价位的数量有限制，因此初始快照之外没有数量变化的价位将不会在增量深度信息stream中进行更新。因此，即使正确添加了增量深度信息stream的所有更新，这些价位在本地order book中也将不可见，并导致本地 order book 与实际 order book 有一些细微的差异。但是，对于大多数场景，5000 的深度限制足以了解市场并进行有效交易。
