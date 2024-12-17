@@ -5,7 +5,7 @@
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/). 
 This is not always synced with the live exchange. 
 
-## 2024-12-17 
+### 2024-12-17 
 
 * FIX Market Data is now available. The [FIX API](fix-api.md) documentation for SPOT Testnet has been updated regarding this feature.
 * Please refer to this [link](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml) for the QuickFix Schema for FIX Market Data.
