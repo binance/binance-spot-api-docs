@@ -1,0 +1,259 @@
+<fix major='4' type='FIX' servicepack='0' minor='4'>
+ <header>
+  <field name='BeginString' required='Y'/>
+  <field name='BodyLength' required='Y'/>
+  <field name='MsgType' required='Y'/>
+  <field name='SenderCompID' required='Y'/>
+  <field name='TargetCompID' required='Y'/>
+  <field name='MsgSeqNum' required='Y'/>
+  <field name='SendingTime' required='Y'/>
+  <field name='RecvWindow' required='N'/>
+  <field name='TraceID' required='N'/>
+  <field name='TraceRequest' required='N'/>
+ </header>
+ <messages>
+  <message name='Heartbeat' msgcat='admin' msgtype='0'>
+   <field name='TestReqID' required='N'/>
+  </message>
+  <message name='TestRequest' msgcat='admin' msgtype='1'>
+   <field name='TestReqID' required='Y'/>
+  </message>
+  <message name='Reject' msgcat='admin' msgtype='3'>
+   <field name='RefSeqNum' required='N'/>
+   <field name='RefTagID' required='N'/>
+   <field name='RefMsgType' required='N'/>
+   <field name='SessionRejectReason' required='N'/>
+   <field name='ErrorCode' required='N'/>
+   <field name='Text' required='N'/>
+  </message>
+  <message name='Logout' msgcat='admin' msgtype='5'>
+   <field name='Text' required='N'/>
+  </message>
+  <message name='Logon' msgcat='admin' msgtype='A'>
+   <field name='EncryptMethod' required='N'/>
+   <field name='HeartBtInt' required='Y'/>
+   <field name='RawDataLength' required='N'/>
+   <field name='RawData' required='N'/>
+   <field name='ResetSeqNumFlag' required='N'/>
+   <field name='Username' required='N'/>
+   <field name='MessageHandling' required='N'/>
+   <field name='UUID' required='N'/>
+  </message>
+  <message name='LimitQuery' msgcat='app' msgtype='XLQ'>
+   <field name='ReqID' required='Y'/>
+  </message>
+  <message name='LimitResponse' msgcat='app' msgtype='XLR'>
+   <field name='ReqID' required='Y'/>
+   <group name='NoLimitIndicators' required='N'>
+    <field name='LimitType' required='Y'/>
+    <field name='LimitCount' required='Y'/>
+    <field name='LimitMax' required='Y'/>
+    <field name='LimitResetInterval' required='N'/>
+    <field name='LimitResetIntervalResolution' required='N'/>
+   </group>
+  </message>
+  <message name='InstrumentListRequest' msgcat='app' msgtype='x'>
+   <field name='InstrumentReqID' required='Y'/>
+   <field name='InstrumentListRequestType' required='Y'/>
+   <field name='Symbol' required='N'/>
+  </message>
+  <message name='InstrumentList' msgcat='app' msgtype='y'>
+   <field name='InstrumentReqID' required='Y'/>
+   <group name='NoRelatedSym' required='Y'>
+    <field name='Symbol' required='Y'/>
+    <field name='Currency' required='Y'/>
+    <field name='MinTradeVol' required='Y'/>
+    <field name='MaxTradeVol' required='Y'/>
+    <field name='MinQtyIncrement' required='Y'/>
+    <field name='MarketMinTradeVol' required='Y'/>
+    <field name='MarketMaxTradeVol' required='Y'/>
+    <field name='MarketMinQtyIncrement' required='Y'/>
+    <field name='MinPriceIncrement' required='Y'/>
+   </group>
+  </message>
+  <message name='MarketDataRequest' msgcat='app' msgtype='V'>
+   <field name='MDReqID' required='Y'/>
+   <field name='SubscriptionRequestType' required='Y'/>
+   <field name='MarketDepth' required='N'/>
+   <group name='NoRelatedSym' required='N'>
+    <field name='Symbol' required='Y'/>
+   </group>
+   <group name='NoMDEntryTypes' required='N'>
+    <field name='MDEntryType' required='Y'/>
+   </group>
+   <field name='AggregatedBook' required='N'/>
+  </message>
+  <message name='MarketDataRequestReject' msgcat='app' msgtype='Y'>
+   <field name='MDReqID' required='Y'/>
+   <field name='MDReqRejReason' required='N'/>
+   <field name='ErrorCode' required='N'/>
+   <field name='Text' required='N'/>
+  </message>
+  <message name='MarketDataSnapshot' msgcat='app' msgtype='W'>
+   <field name='MDReqID' required='Y'/>
+   <field name='Symbol' required='Y'/>
+   <field name='LastBookUpdateID' required='N'/>
+   <group name='NoMDEntries' required='Y'>
+    <field name='MDEntryType' required='Y'/>
+    <field name='MDEntryPx' required='Y'/>
+    <field name='MDEntrySize' required='Y'/>
+   </group>
+  </message>
+  <message name='MarketDataIncrementalRefresh' msgcat='app' msgtype='X'>
+   <field name='MDReqID' required='Y'/>
+   <field name='LastFragment' required='N'/>
+   <group name='NoMDEntries' required='Y'>
+    <field name='MDUpdateAction' required='Y'/>
+    <field name='MDEntryPx' required='N'/>
+    <field name='MDEntrySize' required='N'/>
+    <field name='MDEntryType' required='Y'/>
+    <field name='Symbol' required='N'/>
+    <field name='TransactTime' required='N'/>
+    <field name='TradeID' required='N'/>
+    <field name='FirstBookUpdateID' required='N'/>
+    <field name='LastBookUpdateID' required='N'/>
+   </group>
+  </message>
+  <message name='News' msgtype='B' msgcat='app'>
+   <field name='Headline' required='Y'/>
+  </message>
+ </messages>
+ <trailer>
+  <field name='CheckSum' required='Y'/>
+ </trailer>
+ <components>
+ </components>
+ <fields>
+  <field number='8' name='BeginString' type='STRING'>
+   <value enum='FIX.4.4' description='FIX44'/>
+  </field>
+  <field number='9' name='BodyLength' type='LENGTH'/>
+  <field number='10' name='CheckSum' type='STRING'/>
+  <field number='15' name='Currency' type='STRING'/>
+  <field number='34' name='MsgSeqNum' type='SEQNUM'/>
+  <field number='35' name='MsgType' type='STRING'>
+   <value enum='0' description='HEARTBEAT'/>
+   <value enum='1' description='TEST_REQUEST'/>
+   <value enum='3' description='REJECT'/>
+   <value enum='5' description='LOGOUT'/>
+   <value enum='A' description='LOGON'/>
+   <value enum='B' description='NEWS'/>
+   <value enum='V' description='MARKET_DATA_REQUEST'/>
+   <value enum="W" description="MARKET_DATA_SNAPSHOT"/>
+   <value enum="X" description="MARKET_DATA_INCREMENTA_REFRESH"/>
+   <value enum="Y" description="MARKET_DATA_REQUEST_REJECT"/>
+   <value enum='x' description='INSTRUMENT_LIST_REQUEST'/>
+   <value enum='y' description='INSTRUMENT_LIST'/>
+   <value enum='XLQ' description='LIMIT_QUERY'/>
+   <value enum='XLR' description='LIMIT_RESPONSE'/>
+  </field>
+  <field number='45' name='RefSeqNum' type='INT'/>
+  <field number='49' name='SenderCompID' type='STRING'/>
+  <field number='52' name='SendingTime' type='UTCTIMESTAMP'/>
+  <field number='55' name='Symbol' type='STRING'/>
+  <field number='56' name='TargetCompID' type='STRING'/>
+  <field number='58' name='Text' type='STRING'/>
+  <field number='60' name='TransactTime' type='UTCTIMESTAMP'/>
+  <field number='95' name='RawDataLength' type='LENGTH'/>
+  <field number='96' name='RawData' type='DATA'/>
+  <field number='98' name='EncryptMethod' type='INT'>
+   <value enum='0' description='NONE'/>
+  </field>
+  <field number='108' name='HeartBtInt' type='INT'/>
+  <field number='112' name='TestReqID' type='STRING'/>
+  <field number='141' name='ResetSeqNumFlag' type='BOOLEAN'>
+   <value enum='Y' description='YES'/>
+   <value enum='N' description='NO'/>
+  </field>
+  <field number='146' name='NoRelatedSym' type='NUMINGROUP'/>
+  <field number='148' name='Headline' type='STRING'/>
+  <field number='262' name='MDReqID' type='STRING'/>
+  <field number='263' name='SubscriptionRequestType' type='char'>
+   <value enum='1' description='Subscribe'/>
+   <value enum='2' description='Unsubscribe'/>
+  </field>
+  <field number='264' name='MarketDepth' type='INT'/>
+  <field number='266' name='AggregatedBook' type='BOOLEAN'>
+   <value enum='Y' description='BOOK_ENTRIES_TO_BE_AGGREGATED'/>
+  </field>
+  <field number='267' name='NoMDEntryTypes' type='NUMINGROUP'/>
+  <field number='268' name='NoMDEntries' type='NUMINGROUP'/>
+  <field number='269' name='MDEntryType' type='CHAR'>>
+   <value enum='0' description='BID'/>
+   <value enum='1' description='OFFER'/>
+   <value enum='2' description='TRADE'/>
+  </field>
+  <field number='270' name='MDEntryPx' type='PRICE'/>
+  <field number='271' name='MDEntrySize' type='QTY'/>
+  <field number="279" name="MDUpdateAction" type="CHAR">
+   <value enum="0" description="NEW"/>
+   <value enum="1" description="CHANGE"/>
+   <value enum="2" description="DELETE"/>
+  </field>
+  <field number='281' name='MDReqRejReason' type='CHAR'>
+   <value enum="1" description="DUPLICATE_MDREQID"/>
+   <value enum="2" description="TOO_MANY_SUBSCRIPTIONS"/>
+  </field>
+  <field number='320' name='InstrumentReqID' type='STRING'/>
+  <field number='371' name='RefTagID' type='INT'/>
+  <field number='372' name='RefMsgType' type='STRING'/>
+  <field number='373' name='SessionRejectReason' type='INT'>
+   <value enum='0' description='INVALID_TAG_NUMBER'/>
+   <value enum='1' description='REQUIRED_TAG_MISSING'/>
+   <value enum='2' description='TAG_NOT_DEFINED_FOR_THIS_MESSAGE_TYPE'/>
+   <value enum='3' description='UNDEFINED_TAG'/>
+   <value enum='5' description='VALUE_IS_INCORRECT'/>
+   <value enum='6' description='INCORRECT_DATA_FORMAT_FOR_VALUE'/>
+   <value enum='8' description='SIGNATURE_PROBLEM'/>
+   <value enum='10' description='SENDINGTIME_ACCURACY_PROBLEM'/>
+   <value enum='13' description='TAG_APPEARS_MORE_THAN_ONCE'/>
+   <value enum='14' description='TAG_SPECIFIED_OUT_OF_REQUIRED_ORDER'/>
+   <value enum='15' description='REPEATING_GROUP_FIELDS_OUT_OF_ORDER'/>
+   <value enum='16' description='INCORRECT_NUMINGROUP_COUNT_FOR_REPEATING_GROUP'/>
+   <value enum='99' description='OTHER'/>
+  </field>
+  <field number='553' name='Username' type='STRING'/>
+  <field number='559' name='InstrumentListRequestType' type='INT'>
+   <value enum='0' description='SINGLE_INSTRUMENT'/>
+   <value enum='4' description='ALL_INSTRUMENTS'/>
+  </field>
+  <field number='562' name='MinTradeVol' type='QTY'/>
+  <field number='893' name='LastFragment' type='BOOLEAN'>
+   <value enum='N' description='NOT_LAST_MESSAGE'/>
+   <value enum='Y' description='LAST_MESSAGE'/>
+  </field>
+  <field number='969' name='MinPriceIncrement' type='PRICE'/>
+  <field number='1003' name='TradeID' type='INT'/>
+  <field number='1140' name='MaxTradeVol' type='QTY'/>
+  <field number='6136' name='ReqID' type='STRING'/>
+  <field number='25000' name='RecvWindow' type='INT'/>
+  <field number='25003' name='NoLimitIndicators' type='NUMINGROUP'/>
+  <field number='25004' name='LimitType' type='CHAR'>
+   <value enum='2' description='MESSAGE_LIMIT'/>
+   <value enum='3' description='SUBSCRIPTION_LIMIT'/>
+  </field>
+  <field number='25005' name='LimitCount' type='INT'/>
+  <field number='25006' name='LimitMax' type='INT'/>
+  <field number='25007' name='LimitResetInterval' type='INT'/>
+  <field number='25008' name='LimitResetIntervalResolution' type='CHAR'>
+   <value enum='s' description='SECOND'/>
+   <value enum='m' description='MINUTE'/>
+   <value enum='h' description='HOUR'/>
+   <value enum='d' description='DAY'/>
+  </field>
+  <field number='25016' name='ErrorCode' type='INT'/>
+  <field number='25035' name='MessageHandling' type='INT'>
+   <value enum='1' description='UNORDERED'/>
+   <value enum='2' description='SEQUENTIAL'/>
+  </field>
+  <field number='25037' name='UUID' type='STRING'/>
+  <field number='25039' name='MinQtyIncrement' type='QTY'/>
+  <field number='25040' name='MarketMinTradeVol' type='QTY'/>
+  <field number='25041' name='MarketMaxTradeVol' type='QTY'/>
+  <field number='25042' name='MarketMinQtyIncrement' type='QTY'/>
+  <field number='25043' name='FirstBookUpdateID' type='INT'/>
+  <field number='25044' name='LastBookUpdateID' type='INT'/>
+  <field number='26000' name='TraceID' type='INT'/>
+  <field number='26001' name='TraceRequest' type='BOOLEAN'/>
+ </fields>
+</fix>
