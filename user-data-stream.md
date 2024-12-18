@@ -32,7 +32,7 @@
 * User Data Streams are accessed at **/ws/\<listenKey\>** or **/stream?streams=\<listenKey\>**
 * A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark
 * All time and timestamp related fields in the JSON responses are **milliseconds by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND` or `timeUnit=microsecond` in the URL.  
-  * For example `/ws/<listenKey>&timeUnit=MICROSECOND`
+  * For example `/ws/<listenKey>?timeUnit=MICROSECOND`
     
 ## API Endpoints
 ### Create a listenKey (USER_STREAM)

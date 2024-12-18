@@ -13,7 +13,7 @@
 * 每个链接有效期不超过24小时，请妥善处理断线重连。
 * 账户数据流的消息不保证严格时间序; **请使用 E 字段进行排序**
 * JSON 响应中的所有时间和时间戳相关字段均以**毫秒为默认单位**。要以微秒为单位接收信息，请在 URL 中添加参数 `timeUnit=MICROSECOND` 或 `timeUnit=microsecond`。 
-  * 例如：`/ws/<listenKey>&timeUnit=MICROSECOND`
+  * 例如：`/ws/<listenKey>?timeUnit=MICROSECOND`
 
 ## 与Websocket账户接口相关的REST接口
 

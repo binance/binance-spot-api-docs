@@ -24,6 +24,7 @@
 **Last Updated: 2024-11-27**
 
 # General WSS information
+
 * The base API endpoint is: **https://testnet.binance.vision/**
 * A User Data Stream `listenKey` is valid for 60 minutes after creation.
 * Doing a `PUT` on an active `listenKey` will extend its validity for 60 minutes.
@@ -33,10 +34,10 @@
 * User Data Streams are accessed at **/ws/\<listenKey\>** or **/stream?streams=\<listenKey\>**
 * A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark.
 * All time and timestamp related fields in the JSON responses are **milliseconds by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND` or `timeUnit=microsecond` in the URL.
-  * For example `/ws/<listenKey>&timeUnit=MICROSECOND`
+  * For example `/ws/<listenKey>?timeUnit=MICROSECOND`
 
-# API Endpoints
-## Create a listenKey (USER_STREAM)
+## API Endpoints
+### Create a listenKey (USER_STREAM)
 ```
 POST /api/v3/userDataStream
 ```
@@ -55,7 +56,7 @@ NONE
 }
 ```
 
-## Ping/Keep-alive a listenKey (USER_STREAM)
+### Ping/Keep-alive a listenKey (USER_STREAM)
 ```
 PUT /api/v3/userDataStream
 ```
@@ -75,7 +76,7 @@ listenKey | STRING | YES
 {}
 ```
 
-## Close a listenKey (USER_STREAM)
+### Close a listenKey (USER_STREAM)
 ```
 DELETE /api/v3/userDataStream
 ```
@@ -95,8 +96,8 @@ listenKey | STRING | YES
 {}
 ```
 
-# Web Socket Payloads
-## Account Update
+## Web Socket Payloads
+### Account Update
 
 `outboundAccountPosition` is sent any time an account balance has changed and contains the assets that were possibly changed by the event that generated the balance change.
 
@@ -115,7 +116,7 @@ listenKey | STRING | YES
 }
 ```
 
-## Balance Update
+### Balance Update
 
 Balance Update occurs during the following:
 * Deposits or withdrawals from the account
@@ -132,7 +133,7 @@ Balance Update occurs during the following:
 }
 ```
 
-## Order Update
+### Order Update
 Orders are updated with the `executionReport` event.
 
 **Payload:**
@@ -178,7 +179,7 @@ Orders are updated with the `executionReport` event.
 
 **Note:** Average price can be found by doing `Z` divided by `z`.
 
-### Conditional Fields in Execution Report
+#### Conditional Fields in Execution Report
 
 These are fields that appear in the payload only if certain conditions are met.
 
@@ -321,7 +322,7 @@ If the order is an order list, an event named `ListStatus` will be sent in addit
 }
 ```
 
-### Execution types
+#### Execution types
 
 * `NEW` - The order has been accepted into the engine.
 * `CANCELED` - The order has been canceled by the user.
@@ -333,7 +334,7 @@ If the order is an order list, an event named `ListStatus` will be sent in addit
 
 Check the [Rest API Documentation](./rest-api.md#enum-definitions) for more relevant enum definitions.
 
-## Listen Key Expired 
+### Listen Key Expired 
 
 This event is sent when the listen key expires.
 
@@ -351,7 +352,7 @@ This event will not be pushed when the stream is closed normally.
 }
 ```
 
-## Event Stream Terminated
+### Event Stream Terminated
 
 This event appears only for WebSocket API. 
 
@@ -368,7 +369,7 @@ This event appears only for WebSocket API.
 }
 ```
 
-## External Lock Update
+### External Lock Update
 
 `externalLockUpdate` is sent when part of your spot wallet balance is locked/unlocked by an external system, for example when used as margin collateral.
 
