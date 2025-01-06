@@ -3570,7 +3570,7 @@ timestamp | LONG | YES |
   "takerCommission": 15,
   "buyerCommission": 0,
   "sellerCommission": 0,
-    "commissionRates": {
+  "commissionRates": {
     "maker": "0.00150000",
     "taker": "0.00150000",
     "buyer": "0.00000000",
@@ -3594,12 +3594,12 @@ timestamp | LONG | YES |
       "asset": "LTC",
       "free": "4763368.68006011",
       "locked": "0.00000000"
-    },
-    "permissions": [
-      "SPOT"
-    ],
-    "uid": 354937868
-  ]
+    }
+  ],
+  "permissions": [
+    "SPOT"
+  ],
+  "uid": 354937868
 }
 ```
 
