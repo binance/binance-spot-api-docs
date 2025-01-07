@@ -8,8 +8,6 @@
   <field name='MsgSeqNum' required='Y'/>
   <field name='SendingTime' required='Y'/>
   <field name='RecvWindow' required='N'/>
-  <field name='TraceID' required='N'/>
-  <field name='TraceRequest' required='N'/>
  </header>
  <messages>
   <message name='Heartbeat' msgcat='admin' msgtype='0'>
@@ -44,7 +42,7 @@
   </message>
   <message name='LimitResponse' msgcat='app' msgtype='XLR'>
    <field name='ReqID' required='Y'/>
-   <group name='NoLimitIndicators' required='N'>
+   <group name='NoLimitIndicators' required='Y'>
     <field name='LimitType' required='Y'/>
     <field name='LimitCount' required='Y'/>
     <field name='LimitMax' required='Y'/>
@@ -139,9 +137,9 @@
    <value enum='A' description='LOGON'/>
    <value enum='B' description='NEWS'/>
    <value enum='V' description='MARKET_DATA_REQUEST'/>
-   <value enum="W" description="MARKET_DATA_SNAPSHOT"/>
-   <value enum="X" description="MARKET_DATA_INCREMENTA_REFRESH"/>
-   <value enum="Y" description="MARKET_DATA_REQUEST_REJECT"/>
+   <value enum='W' description='MARKET_DATA_SNAPSHOT'/>
+   <value enum='X' description='MARKET_DATA_INCREMENTAL_REFRESH'/>
+   <value enum='Y' description='MARKET_DATA_REQUEST_REJECT'/>
    <value enum='x' description='INSTRUMENT_LIST_REQUEST'/>
    <value enum='y' description='INSTRUMENT_LIST'/>
    <value enum='XLQ' description='LIMIT_QUERY'/>
@@ -185,14 +183,14 @@
   </field>
   <field number='270' name='MDEntryPx' type='PRICE'/>
   <field number='271' name='MDEntrySize' type='QTY'/>
-  <field number="279" name="MDUpdateAction" type="CHAR">
-   <value enum="0" description="NEW"/>
-   <value enum="1" description="CHANGE"/>
-   <value enum="2" description="DELETE"/>
+  <field number='279' name='MDUpdateAction' type='CHAR'>
+   <value enum='0' description='NEW'/>
+   <value enum='1' description='CHANGE'/>
+   <value enum='2' description='DELETE'/>
   </field>
   <field number='281' name='MDReqRejReason' type='CHAR'>
-   <value enum="1" description="DUPLICATE_MDREQID"/>
-   <value enum="2" description="TOO_MANY_SUBSCRIPTIONS"/>
+   <value enum='1' description='DUPLICATE_MDREQID'/>
+   <value enum='2' description='TOO_MANY_SUBSCRIPTIONS'/>
   </field>
   <field number='320' name='InstrumentReqID' type='STRING'/>
   <field number='371' name='RefTagID' type='INT'/>
@@ -253,7 +251,5 @@
   <field number='25042' name='MarketMinQtyIncrement' type='QTY'/>
   <field number='25043' name='FirstBookUpdateID' type='INT'/>
   <field number='25044' name='LastBookUpdateID' type='INT'/>
-  <field number='26000' name='TraceID' type='INT'/>
-  <field number='26001' name='TraceRequest' type='BOOLEAN'/>
  </fields>
 </fix>
