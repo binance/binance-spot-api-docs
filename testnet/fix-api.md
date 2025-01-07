@@ -26,7 +26,7 @@ You can setup and configure your API key permissions on [Spot Test Network](http
 
 ### Fix Market Data sessions
 
-* Endpoint is: `tcp+tls://fix-md.testnet.binance.com:9000`  
+* Endpoint is: `tcp+tls://fix-md.testnet.binance.vision:9000`
 * Supports market data streams and active instruments queries.  
 * Does not support placing or canceling orders.   
 * Only API keys with `FIX_API` or `FIX_API_READ_ONLY` are allowed to connect.
@@ -907,6 +907,8 @@ Sent by the client to query information about active instruments (i.e., those th
 #### InstrumentList<code>&lt;y&gt;</code>
 
 Sent by the server in a response to the [InstrumentListRequest`<x>`](#instrumentlistrequest).
+
+**Note:** Additional information on symbols (e.g. filters) is available through the [exchangeInfo](https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#exchange-information) request.
 
 | Tag     | Name                  | Type       | Required | Description                                |
 |---------|-----------------------|------------|----------|--------------------------------------------|
