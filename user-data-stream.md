@@ -164,7 +164,7 @@ We recommend using the [FIX API](fix-api.md) for better performance compared to 
   "T": 1499405658657,            // Transaction time
   "t": -1,                       // Trade ID
   "v": 3,                        // Prevented Match Id; This is only visible if the order expired due to STP
-  "I": 8641984,                  // Ignore
+  "I": 8641984,                  // Execution Id
   "w": true,                     // Is the order on the book?
   "m": false,                    // Is this trade the maker side?
   "M": false,                    // Ignore
