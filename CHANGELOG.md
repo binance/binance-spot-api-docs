@@ -1,6 +1,13 @@
 # CHANGELOG for Binance's API 
 
-**Last Updated: 2024-12-17**
+**Last Updated: 2025-01-09**
+
+### 2025-01-09
+
+* FIX Market Data will be available at **January 16, 05:00 UTC**. The FIX API documentation has been updated regarding this feature.  
+* Please refer to this [link](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml) for the QuickFix Schema for FIX Market Data.
+
+---
 
 ### 2024-12-17
 

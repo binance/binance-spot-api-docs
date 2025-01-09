@@ -1,6 +1,6 @@
 # Error codes for Binance 
 
-**Last Updated: 2024-12-17** 
+**Last Updated: 2025-01-09**
 
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
@@ -135,6 +135,8 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 ### -1128 OPTIONAL_PARAMS_BAD_COMBO
  * Combination of optional parameters invalid.
+ * Fields [%s] must be sent together or omitted entirely.
+ * Invalid 'MDEntryType (269)' combination. BID and OFFER must be requested together. 
 
 ### -1130 INVALID_PARAMETER
  * Invalid data sent for a parameter.
@@ -242,6 +244,25 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 ### -1185 DROP_COPY_SESSION_REQUIRED
  * Only DropCopy sessions are supported on this server. Either reconnect to order entry server or send `DropCopyFlag (9406)` field.
+
+### -1186 NOT_ALLOWED_IN_ORDER_ENTRY_SESSIONS
+* Requested operation is not allowed in order entry sessions. 
+
+### -1187 NOT_ALLOWED_IN_MARKET_DATA_SESSIONS
+* Requested operation is not allowed in market data sessions. 
+
+### -1188 INCORRECT_NUM_IN_GROUP_COUNT 
+* Incorrect NumInGroup count for repeating group '%s'. 
+
+### -1189 DUPLICATE_ENTRIES_IN_A_GROUP
+* Group '%s' contains duplicate entries.
+
+### -1190 INVALID_REQUEST_ID 
+* 'MDReqID (262)' contains a subscription request id that is already in use on this connection.   
+* 'MDReqID (262)' contains an unsubscription request id that does not match any active subscription. 
+
+### -1191 TOO_MANY_SUBSCRIPTIONS 
+* Too many subscriptions. Connection may create up to '%s' subscriptions at a time. 
 
 #### -1194 INVALID_TIME_UNIT
 * Invalid value for time unit; expected either MICROSECOND or MILLISECOND.

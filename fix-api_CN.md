@@ -1,8 +1,15 @@
 # FIX API
 
-**注意:** 此 API 只能用于现货 （`SPOT`） 交易所。
+> [!NOTE]
+> 此 API 只能用于现货 （`SPOT`） 交易所。
 
 ## 基本信息
+
+FIX 连接需要 TLS 加密。请使用本地 TCP+TLS 连接或设置本地代理如 [stunnel](https://www.stunnel.org/) 来处理 TLS 加密。
+
+**FIX 会话仅支持 Ed25519 密钥。**
+
+关于如何设置 Ed25519 密钥对，请参考 [本教程](https://www.binance.com/zh-CN/support/faq/%E5%A6%82%E4%BD%95%E7%94%9F%E6%88%90ed25519%E5%AF%86%E9%92%A5%E5%AF%B9%E5%9C%A8%E5%B8%81%E5%AE%89%E5%8F%91%E9%80%81api%E8%AF%B7%E6%B1%82-6b9a63f1e3384cf48a2eedb82767a69a)。
 
 ### FIX API 订单接入会话
 
@@ -10,23 +17,35 @@
 - 支持下单，取消订单和查询当前限制使用情况。
 - 支持接收账户的所有 [ExecutionReport`<8>`](#executionreport) 和 [List Status`<N>`](#liststatus)。
 - 仅允许带有 `FIX_API` 的 API Key 连接。
+- 关于 QuickFix 模式文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
 
 ### FIX API Drop Copy 会话
 
 - 端点为：`tcp+tls://fix-dc.binance.com:9000`
 - 支持接收账户的所有 [ExecutionReport`<8>`](#executionreport) 和 [List Status`<N>`](#liststatus)。
 - 仅允许连接带有 `FIX_API` 或 `FIX_API_READ_ONLY` 的 API Key。
+- 关于 QuickFix 模式文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
+
+### FIX API Market Data 会话
+
+* 端点为：`tcp+tls：//fix-md.binance.com：9000`
+* 支持市场数据流和活动工具查询。 
+* 不支持下订单或取消订单。  
+* 仅允许连接带有“FIX_API”或“FIX_API_READ_ONLY”的 API 密钥。
 
 关于 QuickFix 模式 (Schema) 文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
 
 FIX 连接需要 TLS 加密。请使用本地 TCP+TLS 连接或设置本地代理如 [stunnel](https://www.stunnel.org/) 来处理 TLS 加密。
 
+FIX Market Data 的 QuickFix Schema 可以在 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml)
+
 ### API Key 权限
 
 如果您需要使用 FIX API 的订单接入会话，您的 API key 必须配置 `FIX_API` 权限。
 如果您需要使用 FIX API 的 Drop Copy 会话，您的 API key 必须配置 `FIX_API_READ_ONLY` 或 `FIX_API` 权限。
+要访问 FIX Market Data 会话，您的 API 密钥必须配置为 `FIX_API` 或 `FIX_API_READ_ONLY` 权限
 
-**FIX API 订单接入和 FIX API Drop Copy 会话仅支持 Ed25519 密钥。**
+**FIX 会话仅支持 Ed25519 密钥。**
 
 关于如何设置 Ed25519 密钥对，请参考 [本教程](https://www.binance.com/zh-CN/support/faq/%E5%A6%82%E4%BD%95%E7%94%9F%E6%88%90ed25519%E5%AF%86%E9%92%A5%E5%AF%B9%E5%9C%A8%E5%B8%81%E5%AE%89%E5%8F%91%E9%80%81api%E8%AF%B7%E6%B1%82-6b9a63f1e3384cf48a2eedb82767a69a)。
 
@@ -46,14 +65,14 @@ FIX 连接需要 TLS 加密。请使用本地 TCP+TLS 连接或设置本地代�
 
 ### 响应模式
 
-FIX API 允许单个账户的多个并发会话（参见 [连接限制](#connection-limits)）。
-默认情况下，所有会话将接收该账户的所有成功 [ExecutionReport`<8>`](#executionreport) 和 [ListStatus`<N>`](#liststatus) 消息。这被称为 `ExecutionReport` 推送。
+默认情况下，所有并发订单录入会话都会接收到账户所有
+成功的 [ExecutionReport `<8>` ](#executionreport) 和 [ListStatus `<N>` ](#liststatus) 消息，
+包括从其他 FIX 会话和通过非 FIX API 下达的订单。
 
 用户可以在初始消息 [Logon`<A>`](#logon-request) 中使用 `ResponseMode (25036)` 字段来改变这种行为。
 
 - `EVERYTHING(1)`： 默认模式。
 - `ONLY_ACKS(2)`： 无论操作成功还是失败，都只接收 ACK 消息。禁用 `ExecutionReport` 推送。
-
 
 <a id="signaturecomputation"></a>
 
@@ -154,6 +173,9 @@ MC4CAQAwBQYDK2VwBCIEIIJEYWtGBrhACmb9Dvy+qa8WEf0lQOl1s4CLIAB9m89u
 * 违反消息限制会立即导致 [Logout `<5>`](#logout) 并断开连接。
 * 要了解当前的限制和使用情况，请发送 [LimitQuery`<XLQ>`](#limitquery) 消息。
   接口将发送 [LimitResponse`<XLR>`](#limitresponse) 消息作为响应，其中包含了有关订单速率限制和消息限制的信息。
+* FIX 订单输入会话限制为每 10 秒 10,000 条消息。 
+* FIX 市场数据会话限制为每 60 秒 10,000 条消息
+
 
 <a id="unfilled-order-count"></a>
 
@@ -175,6 +197,8 @@ MC4CAQAwBQYDK2VwBCIEIIJEYWtGBrhACmb9Dvy+qa8WEf0lQOl1s4CLIAB9m89u
 * 违反限制时， [Reject `<3>`](#reject) 消息会被发送给用户。该消息包含了有关违反连接限制和当前限制的信息。
 * 对于订单接入会话，其限制为每个账户 5 个并发 TCP 连接。
 * 对于 Drop Copy 会话，其限制为每个账户 10 个并发 TCP 连接。
+* 对于市场数据会话，每个账户的并发 TCP 连接数限制为 5 个。
+
 
 ## 错误处理
 
@@ -214,6 +238,7 @@ MC4CAQAwBQYDK2VwBCIEIIJEYWtGBrhACmb9Dvy+qa8WEf0lQOl1s4CLIAB9m89u
 
 * `ClOrdID (11)`
 * `OrigClOrdID (41)`
+* `MDReqID (262)`
 * `ClListID (25014)`
 * `OrigClListID (25015)`
 * `CancelClOrdID (25034)`
@@ -236,7 +261,7 @@ MC4CAQAwBQYDK2VwBCIEIIJEYWtGBrhACmb9Dvy+qa8WEf0lQOl1s4CLIAB9m89u
 |-------|--------------|--------------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 8     | BeginString  | STRING       | Y        | 始终为 `FIX.4.4`。 <br></br> 必须是消息的第一个字段。|
 | 9     | BodyLength   | LENGTH       | Y        | 消息长度（以字节为单位）。 <br></br> 必须是消息的第二个字段。|
-| 35    | MsgType      | STRING       | Y        | 必须是消息的第三个字段。 <br></br> 可能的值： <br></br>`0` - [HEARTBEAT](#heartbeat) <br></br>`1` - [TEST_REQUEST](#testrequest) <br></br>`3` - [REJECT](#reject) <br></br>`5` - [LOGOUT](#logout) <br></br>`8` - [EXECUTION_REPORT](#executionreport) <br></br> `9` - [ORDER_CANCEL_REJECT](#ordercancelreject) <br></br> `A` - [LOGON](#logon-main) <br></br> `D` - [NEW_ORDER_SINGLE](#newordersingle) <br></br> `E` - [NEW_ORDER_LIST](#neworderlist) <br></br> `F` - [ORDER_CANCEL_REQUEST](#ordercancelrequest) <br></br> `N` - [LIST_STATUS](#liststatus) <br></br> `q` - [ORDER_MASS_CANCEL_REQUEST](#ordermasscancelrequest) <br></br> `r` - [ORDER_MASS_CANCEL_REPORT](#ordermasscancelreport) <br></br> `XCN` - [ORDER_CANCEL_REQUEST_AND_NEW_ORDER_SINGLE](#ordercancelrequestandnewordersingle) <br></br> `XLQ` - [LIMIT_QUERY](#limitquery) <br></br> `XLR` - [LIMIT_RESPONSE](#limitresponse) <br></br>`B` - [NEWS](#news)|
+| 35    | MsgType      | STRING       | Y        | 必须是消息的第三个字段。 <br></br> 可能的值： <br></br>`0` - [HEARTBEAT](#heartbeat) <br></br>`1` - [TEST_REQUEST](#testrequest) <br></br>`3` - [REJECT](#reject) <br></br>`5` - [LOGOUT](#logout) <br></br>`8` - [EXECUTION_REPORT](#executionreport) <br></br> `9` - [ORDER_CANCEL_REJECT](#ordercancelreject) <br></br> `A` - [LOGON](#logon-main) <br></br> `D` - [NEW_ORDER_SINGLE](#newordersingle) <br></br> `E` - [NEW_ORDER_LIST](#neworderlist) <br></br> `F` - [ORDER_CANCEL_REQUEST](#ordercancelrequest) <br></br> `N` - [LIST_STATUS](#liststatus) <br></br> `q` - [ORDER_MASS_CANCEL_REQUEST](#ordermasscancelrequest) <br></br> `r` - [ORDER_MASS_CANCEL_REPORT](#ordermasscancelreport) <br></br> `XCN` - [ORDER_CANCEL_REQUEST_AND_NEW_ORDER_SINGLE](#ordercancelrequestandnewordersingle) <br></br> `XLQ` - [LIMIT_QUERY](#limitquery) <br></br> `XLR` - [LIMIT_RESPONSE](#limitresponse) <br></br> `B` - [NEWS](#news) <br></br> y` - [INSTRUMENT_LIST](#instrumentlist) <br></br>`V` - [MARKET_DATA_REQUEST](#marketdatarequest) <br></br> `Y` - [MARKET_DATA_REQUEST_REJECT](#marketdatarequestreject) <br></br>`W` - [MARKET_DATA_SNAPSHOT](#marketdatasnapshot) <br></br>`X` - [MARKET_DATA_INCREMENTAL_REFRESH](#marketdataincrementalrefresh)|
 | 49    | SenderCompID | STRING       | Y        | 在账户的活动会话中必须是独特的。<br></br> 必须使用正则表达式：`^[a-zA-Z0-9-_]{1,8}$` |
 | 56    | TargetCompID | STRING       | Y        | 在客户端的消息中必须设置为`SPOT`。|
 | 34    | MsgSeqNum    | SEQNUM       | Y        | 整数消息序列号。 <br></br> 会导致间隙的值将被拒绝。|
@@ -277,7 +302,8 @@ MC4CAQAwBQYDK2VwBCIEIIJEYWtGBrhACmb9Dvy+qa8WEf0lQOl1s4CLIAB9m89u
 
 由客户端发送用于请求 [Heartbeat`<0>`](#heartbeat) 响应。
 
-**注意:** 如果客户端未能在超时范围内发送带有正确 `TestReqID (112)` 的 Heartbeat`<0>` 来响应 TestRequest`<1>` ，其连接将被断开。
+> [!NOTE]
+> 如果客户端未能在超时范围内发送带有正确 `TestReqID (112)` 的 Heartbeat`<0>` 来响应 TestRequest`<1>` ，其连接将被断开。
 
 | Tag | 名称      | 类型   | 必填 | 描述                                                            |
 |-----|-----------|--------|----------|------------------------------------------------------------------------|
@@ -312,7 +338,8 @@ Logon`<A>` 必须是客户端发送的第一条消息。
 
 由服务器发送，用以响应成功的登录。
 
-**注意:** Logon`<A>` 在整个会话期间只能发送一次。
+> [!NOTE]
+> Logon`<A>` 在整个会话期间只能发送一次。
 
 <a id="logon-request"></a>
 
@@ -397,6 +424,9 @@ Logout 响应
 
 ### 下单消息 
 
+> [!NOTE]
+> 以下消息只能用于 FIX 订单接入会话和 FIX Drop Copy 会话
+
 <a id="newordersingle"></a>
 
 #### NewOrderSingle<code>&lt;D&gt;</code>
@@ -405,8 +435,9 @@ Logout 响应
 
 请参阅 [支持的订单类型](#ordertype) 了解支持的字段组合。
 
-**注意:** 许多字段会根据订单类型变为必填。
-请参阅 [支持的订单类型](#NewOrderSingle-required-fields)。
+> [!NOTE]
+> 许多字段会根据订单类型变为必填。
+> 请参阅 [支持的订单类型](#NewOrderSingle-required-fields)。
 
 | Tag | 名称     | 类型   | 是否必须 | 描述                                                                                                                                                                                                                                                                                                                  |
 |-------|--------------------------|---------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -494,10 +525,9 @@ Logout 响应
 
 每当订单状态发生变化时由服务器发送。
 
-**注意:** 
-* 默认情况下，ExecutionReport`<8>` 会发送该账户的所有订单，包括在不同连接中提交的订单。
-请参阅 [响应模式](#responsemode) 来了解其他行为选项。
-* FIX API 应该为 ExecutionReport<code>&lt;8&gt;</code> 推送提供更好的性能。
+> [!NOTE]
+> * 默认情况下，ExecutionReport`<8>` 会发送该账户的所有订单，包括在不同连接中提交的订单。 请参阅 [响应模式](#responsemode) 来了解其他行为选项。
+> * FIX API 应该为 ExecutionReport<code>&lt;8&gt;</code> 推送提供更好的性能。
 
 | Tag | 名称     | 类型   | 是否必须 | 描述                                                                                                                                                                                                                                                                                                                  |
 |-------|--------------------------|--------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -626,7 +656,8 @@ Logout 响应
 由客户发送，用以取消订单并提交新订单以供执行。
 在描述新订单时，请参阅 [支持的订单类型](#ordertype) 了解支持的字段组合。
 
-**注意：** 取消始终是优先处理的，紧接着的是提交新订单。
+> [!NOTE]
+> 取消始终是优先处理的，紧接着的是提交新订单。
 
 | Tag | 名称     | 类型   | 是否必须 | 描述
 | --- |--- | ---| --- |---|
@@ -676,7 +707,8 @@ Logout 响应
 
 由客户端发送，用以取消交易品种上的所有挂单。
 
-**注意事项：** 该账户的所有订单都将被取消，包括从不同连接中下的订单。
+> [!NOTE]
+> 该账户的所有订单都将被取消，包括从不同连接中下的订单。
 
 | Tag | 名称     | 类型   | 是否必须 | 描述 |
 | --- |--- | ---| --- |---|
@@ -764,7 +796,8 @@ Logout 响应
 
 #### 支持的订单列表类型
 
-**注意：** 订单必须按照下表中 *订单名称* 中指定的顺序排列。
+> [!NOTE]
+> 订单必须按照下表中 *订单名称* 中指定的顺序排列。
 
 | 订单列表名称 |应急类型（1385） |订单名称                         |订单方 |允许的币安订单类型 |列出触发指令
 | ---        |---           | ---                          | ---         |---             |---|
@@ -784,8 +817,9 @@ Logout 响应
 
 每当订单列表状态发生变化时，由服务器发送的消息。
 
-**注意：** 默认情况下，ListStatus`<N>` 会含有该账户的所有订单列表，包括在不同连接中提交的订单列表。
-请参阅 [响应模式](#responsemode) 来了解其他行为选项。
+> [!NOTE]
+> 默认情况下，ListStatus`<N>` 会含有该账户的所有订单列表，包括在不同连接中提交的订单列表。
+> 请参阅 [响应模式](#responsemode) 来了解其他行为选项。
 
 | Tag | 名称     | 类型   | 是否必须 | 描述|
 | --- |--- | --- | --- | ---|
@@ -855,4 +889,220 @@ Logout 响应
 
 ```
 8=FIX.4.4|9=225|35=XLR|34=2|49=SPOT|52=20240614-05:42:42.724057|56=uGnG0ef8|6136=1718343762723730315|25003=3|25004=2|25005=1|25006=1000|25007=10|25008=s|25004=1|25005=0|25006=200|25007=10|25008=s|25004=1|25005=0|25006=200000|25007=1|25008=d|10=241|
+```
+
+### 市场数据流
+
+> [!NOTE]
+> 以下消息只能用于 FIX 市场数据流。
+
+<a id="instrumentlistrequest"></a>
+
+#### InstrumentListRequest<code>&lt;x&gt;</code>
+
+由客户端发送以查询有关有效的交易对（即具有处于可交易的交易对）的信息。如果用于未激活的交易对，将以[REJECT`<3>`](#reject)进行响应。
+
+| Tag | Name                      | Type   | Required | Description                                                                        |
+|-----|---------------------------|--------|----------|------------------------------------------------------------------------------------|
+| 320 | InstrumentReqID           | STRING | Y        | 此请求的 ID                                                               |
+| 559 | InstrumentListRequestType | INT    | Y        | 可能的值： <br></br> `0` - SINGLE_INSTRUMENT <br></br> `4` - ALL_INSTRUMENTS |
+| 55  | Symbol                    | STRING | N        | 当 `InstrumentListRequestType` 设置为 `SINGLE_INSTRUMENT (0)` 时是必需的    |
+
+**示例消息:**
+
+```
+8=FIX.4.4|35=x|49=BTCUSDT|56=SPOT|34=10|52=20240917-02:42:43.624784|320=BTCUSDT_INFO|559=0|55=1726540962645|
+```
+
+<a id="instrumentlist"></a>
+
+#### InstrumentList<code>&lt;y&gt;</code>
+
+由服务器在响应 [InstrumentListRequest`<x>`](#instrumentlistrequest) 时发送。
+
+> [!NOTE]
+> 有关交易对（例如，过滤器）的其他信息可通过 [exchangeInfo]https://github.com/binance/binance-spot-api-docs/blob/master/rest-api_CN.md#exchangeInfo） 请求来获得。
+
+| Tag     | Name                  | Type       | Required | Description                                |
+|---------|-----------------------|------------|----------|--------------------------------------------|
+| 320     | InstrumentReqID       | STRING     | Y        | `InstrumentReqID` 从请求中得到               |
+| 146     | NoRelatedSym          | NUMINGROUP | Y        | 交易数量                                 |
+| =>55    | Symbol                | STRING     | Y        | 交易对                                        |
+| =>15    | Currency              | STRING     | Y        | 此交易品种的定价资产                |
+| 146     | NoRelatedSym          | NUMINGROUP | Y        | 交易品种数量                                 |
+| =>55    | Symbol                | STRING     | Y        |                                            |
+| =>15    | Currency              | STRING     | Y        | 此交易品种的 Quote asset                |
+| =>562   | MinTradeVol           | QTY        | Y        | 最低交易数量               |
+| =>1140  | MaxTradeVol           | QTY        | Y        | 最大交易数量               |
+| =>25039 | MinQtyIncrement       | QTY        | Y        | 最小数量增加             |
+| =>25040 | MarketMinTradeVol     | QTY        | Y        | 最低市价单交易数量  |
+| =>25041 | MarketMaxTradeVol     | QTY        | Y        | 市价单最大交易数量  |
+| =>25042 | MarketMinQtyIncrement | QTY        | Y        | 最低市价订单数量增加 |
+| =>969   | MinPriceIncrement     | PRICE      | Y        | 最低价格上调幅度                |
+
+**示例消息:**
+
+```
+8=FIX.4.4|9=0000205|35=y|49=SPOT|56=TRANCE01|34=10|52=20240917-02:42:43.625203|320=BTCUSDT_INFO|146=1|55=1726540962645|15=1726540962422|562=0.01000|1140=10.00000|25039=0.00001|25040=0.01000|25041=0.01000|25042=0.00001|969=0.001|10=033|
+```
+
+<a id="marketdatarequest"></a>
+
+#### MarketDataRequest<code>&lt;V&gt;</code>
+
+由客户发送，用于订阅或取消订阅市场数据流。
+
+<a id="tradestream"></a>
+
+**交易数据流**
+
+交易数据流推送原始交易信息;每笔交易都有唯一的买家和卖家。
+
+**订阅所需的字段：**
+
+- `SubscriptionRequestType` 的值为 `SUBSCRIBE(1)`
+- `MDEntryType` 的值为 `TRADE(2)` 
+
+**更新速度：** 实时
+
+<a id="symbolbooktickerstream"></a>
+
+**book ticker数据流**
+
+将指定交易对最佳买价，卖价以及数量的更新进行实时推送。
+
+**订阅所需的字段**
+
+- `SubscriptionRequestType` 值为 `SUBSCRIBE(1)`
+- `MDEntryType` 值为 `BID (0)` 
+- `MDEntryType` 值为 `OFFER(1)`  
+- `MarketDepth` 值为 `1` 
+\
+**Individual Symbol Book Ticker Stream**
+
+将指定交易品种的任何更新实时推送到最佳买价或卖价或数量。
+
+**订阅所需的字段**
+
+- 值为 `SUBSCRIBE(1)` 的 `SubscriptionRequestType`
+- 值为 `BID (0)` 的 `MDEntryType`
+- 值为 `OFFER(1)` 的 `MDEntryType`
+- 值为 `1` 的 `MarketDepth`
+
+**更新速度：** 实时
+
+> [!NOTE]
+> 在 [单个交易对订单簿数据流](#symbolbooktickerstream) 中，在[MarketDataIncrementalRefresh`<X>`](#marketdataincrementalrefresh) 消息里 `MDUpdateAction` 取代了之前的 Best Quote，
+
+<a id="diffdepthstream"></a>
+
+**增量深度数据流**
+
+用于本地订单簿管理的价格和数量深度更新。
+
+**订阅所需的字段**
+
+- `SubscriptionRequestType` 值为 `SUBSCRIBE(1)`  
+- `MDEntryType` 值为 `BID (0)` 
+- `MDEntryType` 值为 `OFFER (1)`
+- `MarketDepth` 值介于 `2` 和 `5000` 之间，用于控制初始快照的大小，对后续的 [MarketDataIncrementalRefresh `<X>` ](#marketdataincrementalrefresh) 消息没有影响
+
+**更新速度：** 100 毫秒
+
+> [!NOTE]
+> 由于 [MarketDataSnapshot`<W>`](#marketdatasnapshot) 对价格的深度有限制，所在初始快照之外没有数量变化的价格不会在增量深度信息数据流中。<br></br>因此，即使更新所有推送的数据流信息，依然会导致本地订单簿与真实订单簿有些微差异。<br></br>对于大多数情况，5000 的深度限制就足以理解市场和进行有效的交易。
+
+| Tag   | Name                    | Type       | Required | Description                                                                                                                       |
+|:------|-------------------------|------------|----------|-----------------------------------------------------------------------------------------------------------------------------------|
+| 262   | MDReqID                 | STRING     | Y        | 此请求的 ID                                                                                                              |
+| 263   | SubscriptionRequestType | CHAR       | Y        | 订阅请求类型。 可能的值： <br></br> `1` - SUBSCRIBE <br></br> `2` - UNSUBSCRIBE                             |
+| 264   | MarketDepth             | INT        | N        |订阅深度。<br></br>可能的值： <br></br> `1` - Book Ticker 订阅 <br></br> `2`-`5000` - 增量深度流 |
+| 266   | AggregatedBook          | NUMINGROUP | N        | 可能的值： <br></br> `Y` - 每个价格每侧 1 个帐簿条目                                                             |
+| 146   | NoRelatedSym            | NUMINGROUP | N        | 交易对数量                                                                                                                 |
+| =>55  | Symbol                  | STRING     | Y        |                                                                                                                                   |
+| 267   | NoMDEntryTypes          | NUMINGROUP | N        | 条目类型数量                                                                                                            |
+| =>269 | MDEntryType             | CHAR       | Y        | 可使用的值： <br></br> `0` - BID <br></br> `1` - OFFER <br></br> `2` - TRADE|
+
+**示例消息:**
+
+```
+# Subscriptions
+# BOOK TICKER Stream
+8=FIX.4.4|9=132|35=V|49=TRADER1|56=SPOT|34=4|52=20241122-06:17:14.183428|262=BOOK_TICKER_STREAM|263=1|264=1|266=Y|146=1|55=BTCUSDT|267=2|269=0|269=1|10=010|
+# DEPTH Stream
+8=FIX.4.4|9=127|35=V|49=TRADER1|56=SPOT|34=7|52=20241122-06:17:14.443822|262=DEPTH_STREAM|263=1|264=10|266=Y|146=1|55=BTCUSDT|267=2|269=0|269=1|10=111|
+# TRADE Stream
+8=FIX.4.4|9=120|35=V|49=TRADER1|56=SPOT|34=3|52=20241122-06:34:14.775606|262=TRADE_STREAM|263=1|264=1|266=Y|146=1|55=BTCUSDT|267=1|269=2|10=040|
+# Unsubscription from TRADE Stream
+8=FIX.4.4|9=79|35=V|49=TRADER1|56=SPOT|34=7|52=20241122-06:41:56.966969|262=TRADE_STREAM|263=2|264=1|10=113|
+```
+
+<a id="marketdatarequestreject"></a>
+
+### MarketDataRequestReject<code>&lt;Y&gt;</code>
+
+服务器对不正确的 MarketDataRequest 的响应消息 `<V>`.
+
+| Tag   | Name           | Type   | Required | Description                                                                               |
+|-------|----------------|--------|----------|-------------------------------------------------------------------------------------------|
+| 262   | MDReqID        | STRING | Y        | 不正确的ID [MarketDataRequest`<V>`](#marketdatarequest)                            |
+| 281   | MDReqRejReason | CHAR   | N        | 可能的错误原因: <br></br> `1` - DUPLICATE_MDREQID <br></br> `2` - TOO_MANY_SUBSCRIPTIONS |
+| 25016 | ErrorCode      | INT    | N        | API 错误代码 [参见 错误代码](errors.md)。  |
+| 58    | Text           | STRING | N        | 错误信息。                                                             |
+
+
+**示例消息:**
+
+```
+8=FIX.4.4|9=0000218|35=Y|49=SPOT|56=EXAMPLE|34=5|52=20241019-05:39:36.688964|262=BOOK_TICKER_2|281=2|25016=-1191|58=Similar subscription is already active on this connection. Symbol='BNBBUSD', active subscription id: 'BOOK_TICKER_1'.|10=137|
+```
+
+<a id="marketdatasnapshot"></a>
+
+### MarketDataSnapshot<code>&lt;W&gt;</code>
+
+服务器对 [MarketDataRequest`<V>`](#marketdatarequest)，激活 [单个 Symbol Book Ticker Stream](#symbolbooktickerstream) 或 [增量深度流](#diffdepthstream) 订阅的响应消息。
+
+| Tag   | Name             | Type       | Required | Description                                                                             |
+|-------|------------------|------------|----------|-----------------------------------------------------------------------------------------|
+| 262   | MDReqID          | STRING     | Y        | 激活此订阅的 [MarketDataRequest`<V>`](#marketdatarequest) 的 ID|
+| 55    | Symbol           | STRING     | Y        |                                                                                         |
+| 25044 | LastBookUpdateID | INT        | N        |                                                                                         |
+| 268   | NoMDEntries      | NUMINGROUP | Y        | 条目数                                                                       |
+| =>269 | MDEntryType      | CHAR       | Y        | 可能的值： <br></br> `0` - BID <br></br> `1` - OFFER <br></br> `2` - TRADE     |
+| =>270 | MDEntryPx        | PRICE      | Y        | 价格                                                                                   |
+| =>271 | MDEntrySize      | QTY        | Y        | 数量                                                                                |
+
+**示例消息:**
+
+```
+8=FIX.4.4|9=0000107|35=W|49=SPOT|56=EXAMPLE|34=34|52=20241019-05:41:52.867164|262=BOOK_TICKER_1_2|55=BNBBUSD|25044=0|268=0|10=151|
+```
+
+<a id="marketdataincrementalrefresh"></a>
+
+### MarketDataIncrementalRefresh<code>&lt;X&gt;</code>
+
+当一个订阅的数据流发生变化时，服务器发出的响应消息。
+
+| Tag     | Name              | Type         | Required | Description                                                                                                                                      |
+|---------|-------------------|--------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| 262     | MDReqID           | STRING       | Y        | 激活此订阅的 [MarketDataRequest `<V>`](#marketdatarequest) 的 ID                                                          |
+| 893     | LastFragment      | BOOLEAN      | N        | 如果存在，则表示消息已分段。它只会出现在[交易数据流](#tradestream) 和 [增量深度数据流](#diffdepthstream)中。                 |
+| 268     | NoMDEntries       | NUMINGROUP   | Y        | 条目数                                                                                                                               |
+| =>279   | MDUpdateAction    | CHAR         | Y        | 可能的值： <br></br> `0` - NEW <br></br> `1` - CHANGE <br></br> `2` - DELETE                                                           |
+| =>270   | MDEntryPx         | PRICE        | Y        | 价格                                                                                                                                           |
+| =>271   | MDEntrySize       | QTY          | N        | 数量                                                                                                                                         |
+| =>269   | MDEntryType       | CHAR         | Y        | 可能的值： <br></br> `0` - BID <br></br> `1` - OFFER <br></br> `2` - TRADE                                                                  |
+| =>55    | Symbol            | STRING       | N        | 如果未指定`交易对`，则默认使用同一市场数据流消息中前一个消息的交易对 |
+| =>60    | TransactTime      | UTCTIMESTAMP | N        |                                                                                                                                                  |
+| =>1003  | TradeID           | INT          | N        |                                                                                                                                                  |
+| =>25043 | FirstBookUpdateID | INT          | N        |   只会在 [增量深度数据流](#diffdepthstream) 中出现. <br></br> 如果 `LastBookUpdateID` 没有指定，市场数据消息的 `FirstBookUpdateID` 将会默认设置为与之前消息一样的 `FirstBookUpdateID`  |
+| =>25044 | LastBookUpdateID  | INT          | N        |   只会在 [增量深度数据流](#diffdepthstream) 和 [单个交易对订单簿数据流](#symbolbooktickerstream) 中出现. <br></br> 如果 `LastBookUpdateID` 没有指定，市场数据消息的 `LastBookUpdateID` 将会默认设置为与之前消息一样的 `LastBookUpdateID`  |
+
+
+**示例消息:**
+
+```
+8=FIX.4.4|9=0000313|35=X|49=SPOT|56=EXAMPLE|34=16|52=20241019-05:40:11.466313|262=TRADE_3|893=N|268=3|279=0|269=2|270=10.00000|271=0.01000|55=BNBBUSD|1003=0|60=20241019-05:40:11.464000|279=0|269=2|270=10.00000|271=0.01000|1003=1|60=20241019-05:40:11.464000|279=0|269=2|270=10.00000|271=0.01000|1003=2|60=20241019-05:40:11.464000|10=125|
 ```

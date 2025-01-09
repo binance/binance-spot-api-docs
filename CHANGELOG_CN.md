@@ -1,6 +1,13 @@
 # 更新日志 
 
-**最近更新： 2024-12-17**
+**最近更新： 2025-01-09**
+
+### 2025-01-09
+
+* FIX 市场数据将在 **January 16, 05:00 UTC** 提供。FIX API 文档已更新有关此功能。
+* 请参阅此 [链接]（https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml） 以获取 FIX市场数据的 QuickFix 模式。
+
+---
 
 ## 2024-12-17
 

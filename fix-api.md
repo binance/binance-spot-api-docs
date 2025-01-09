@@ -1,8 +1,16 @@
 # FIX API
 
-**Note:** This API can only be used with the SPOT Exchange.
+> [!NOTE]
+> This API can only be used with the SPOT Exchange.
 
 ## General Information
+
+FIX connections require TLS encryption. Please either use native TCP+TLS connection or set up a local proxy such as [stunnel](https://www.stunnel.org/) to handle TLS encryption.
+
+**FIX sessions only support Ed25519 keys.** </br>
+
+Please refer to [this tutorial](https://www.binance.com/en/support/faq/how-to-generate-an-ed25519-key-pair-to-send-api-requests-on-binance-6b9a63f1e3384cf48a2eedb82767a69a)
+on how to set up an Ed25519 key pair.
 
 ### FIX API order entry sessions
 
@@ -10,16 +18,22 @@
 - Supports placing orders, canceling orders, and querying current limit usage.
 - Supports receiving all of the account's [ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
 - Only API keys with `FIX_API` are allowed to connect.
+- QuickFix Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml).
 
 ### FIX API Drop Copy sessions
 
 - Endpoint is: `tcp+tls://fix-dc.binance.com:9000`
 - Supports receiving all of the account's [ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
 - Only API keys with `FIX_API` or `FIX_API_READ_ONLY` are allowed to connect.
+- QuickFix Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml).
 
-QuickFix schema file can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml).
+### Fix Market Data sessions
 
-FIX connections require TLS encryption. Please either use native TCP+TLS connection or set up a local proxy such as [stunnel](https://www.stunnel.org/) to handle TLS encryption.
+* Endpoint is: `tcp+tls://fix-md.binance.com:9000`  
+* Supports market data streams and active instruments queries.  
+* Does not support placing or canceling orders.   
+* Only API keys with `FIX_API` or `FIX_API_READ_ONLY` are allowed to connect.
+* QuickFix Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml).
 
 ### API Key Permissions
 
@@ -27,7 +41,9 @@ To access the FIX API order entry sessions, your API key must be configured with
 
 To access the FIX Drop Copy sessions, your API key must be configured with either `FIX_API_READ_ONLY` or `FIX_API` permission.
 
-**FIX API order entry and Drop Copy sessions only support Ed25519 keys.**
+To access the FIX Market Data sessions, your API key must be configured with either `FIX_API` or `FIX_API_READ_ONLY` permission.
+
+**FIX sessions only support Ed25519 keys.**
 
 Please refer to [this tutorial](https://www.binance.com/en/support/faq/how-to-generate-an-ed25519-key-pair-to-send-api-requests-on-binance-6b9a63f1e3384cf48a2eedb82767a69a)
 on how to set up an Ed25519 key pair.
@@ -50,8 +66,9 @@ messages may get reordered before they are processed by the engine.
 
 ### Response Mode
 
-FIX API allows multiple concurrent sessions for a single account (see [Connection Limits](#connection-limits)).
-By default, all sessions receive all of the account's successful [ExecutionReport`<8>`](#executionreport) and [ListStatus`<N>`](#liststatus) messages. This is referred to as ExecutionReport push.
+By default, all concurrent order entry sessions receive all of the account's
+successful [ExecutionReport`<8>`](#executionreport) and [ListStatus`<N>`](#liststatus) messages,
+including those in response to orders placed from other FIX sessions and via non-FIX APIs.
 
 Use the `ResponseMode (25036)` field in the initial [Logon`<A>`](#logon-request) message
 to change this behavior.
@@ -162,6 +179,8 @@ Resulting Logon `<A>` message:
 * To understand current limits and usage, please send a [LimitQuery`<XLQ>`](#limitquery) message.
   A [LimitResponse`<XLR>`](#limitresponse) message will be sent in response, containing information about Order Rate
   Limits and Message Limits.
+* FIX Order entry sessions have a limit of 10,000 messages every 10 seconds.  
+* FIX Market Data sessions have a limit of 10,000 messages every 60 seconds. 
 
 <a id="connection-limits"></a>
 
@@ -174,7 +193,7 @@ Resulting Logon `<A>` message:
   breach and the current limit.
 * The limit is 5 concurrent TCP connections per account for the order entry sessions.
 * The limit is 10 concurrent TCP connections per account for the Drop Copy sessions.
-
+* The limit is 5 concurrent TCP connections per account for Market Data sessions.
 
 ### Unfilled Order Count
 
@@ -183,7 +202,6 @@ Resulting Logon `<A>` message:
 * **Please note that if your orders are consistently filled by trades, you can continuously place orders on the API**. For more information, please see [Spot Unfilled Order Count Rules](./faqs/order_count_decrement.md). 
 * If you exceed the unfilled order count your message will be rejected, and information will be transferred back to you in a reject message specific to that endpoint.
 * **The number of unfilled orders is tracked for each account.**
-
 
 ## Error Handling
 
@@ -223,15 +241,15 @@ Client order ID fields must conform to the regex `^[a-zA-Z0-9-_]{1,36}$`:
 
 * `ClOrdID (11)`
 * `OrigClOrdID (41)`
+* `MDReqID (262)`
 * `ClListID (25014)`
 * `OrigClListID (25015)`
 * `CancelClOrdID (25034)`
 
 ## Message Components
 
-**Note:**
-
-In example messages, the `|` character is used to represent SOH character:
+> [!NOTE]
+> In example messages, the `|` character is used to represent SOH character:
 
 ```
 8=FIX.4.4|9=113|35=A|34=1|49=SPOT|52=20240612-08:52:21.636837|56=5JQmUOsm|98=0|108=30|25037=4392a152-3481-4499-921a-6d42c50702e2|10=051|
@@ -243,16 +261,16 @@ In example messages, the `|` character is used to represent SOH character:
 
 Appears at the start of every message.
 
-| Tag   | Name         | Type         | Required | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-|-------|--------------|--------------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 8     | BeginString  | STRING       | Y        | Always `FIX.4.4`. <br></br> Must be the first field the message.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| 9     | BodyLength   | LENGTH       | Y        | Message length in bytes. <br></br> Must be the second field in the message.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| 35    | MsgType      | STRING       | Y        | Must be the third field in the message. <br></br> Possible values: <br></br>`0` - [HEARTBEAT](#heartbeat) <br></br>`1` - [TEST_REQUEST](#testrequest) <br></br>`3` - [REJECT](#reject) <br></br>`5` - [LOGOUT](#logout) <br></br>`8` - [EXECUTION_REPORT](#executionreport) <br></br> `9` - [ORDER_CANCEL_REJECT](#ordercancelreject) <br></br> `A` - [LOGON](#logon-main) <br></br> `D` - [NEW_ORDER_SINGLE](#newordersingle) <br></br> `E` - [NEW_ORDER_LIST](#neworderlist) <br></br> `F` - [ORDER_CANCEL_REQUEST](#ordercancelrequest) <br></br> `N` - [LIST_STATUS](#liststatus) <br></br> `q` - [ORDER_MASS_CANCEL_REQUEST](#ordermasscancelrequest) <br></br> `r` - [ORDER_MASS_CANCEL_REPORT](#ordermasscancelreport) <br></br> `XCN` - [ORDER_CANCEL_REQUEST_AND_NEW_ORDER_SINGLE](#ordercancelrequestandnewordersingle) <br></br> `XLQ` - [LIMIT_QUERY](#limitquery) <br></br> `XLR` - [LIMIT_RESPONSE](#limitresponse) <br></br> `B` - [NEWS](#news)|
-| 49    | SenderCompID | STRING       | Y        | Must be unique across an account's active sessions.  <br></br> Must obey regex: `^[a-zA-Z0-9-_]{1,8}$`|
-| 56    | TargetCompID | STRING       | Y        | A string identifying this TCP connection.<br></br>On messages from client required to be set to `SPOT`. <br></br>Must be unique across TCP connections. <br></br> Must conform to the regex: `^[a-zA-Z0-9-_]{1,8}$`  |
-| 34    | MsgSeqNum    | SEQNUM       | Y        | Integer message sequence number. <br></br> Values that will cause a gap will be rejected.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| 52    | SendingTime  | UTCTIMESTAMP | Y        | Time of message transmission (always expressed in UTC).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| 25000 | RecvWindow   | INT          | N        | Number of milliseconds after `SendingTime (52)` the request is valid for. <br></br> Defaults to `5000` milliseconds in [Logon`<A>`](#logon-request) and has a max value of `60000` milliseconds.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| Tag   | Name         | Type         | Required | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+|-------|--------------|--------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 8     | BeginString  | STRING       | Y        | Always `FIX.4.4`. <br></br> Must be the first field the message.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| 9     | BodyLength   | LENGTH       | Y        | Message length in bytes. <br></br> Must be the second field in the message.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| 35    | MsgType      | STRING       | Y        | Must be the third field in the message. <br></br> Possible values: <br></br>`0` - [HEARTBEAT](#heartbeat) <br></br>`1` - [TEST_REQUEST](#testrequest) <br></br>`3` - [REJECT](#reject) <br></br>`5` - [LOGOUT](#logout) <br></br>`8` - [EXECUTION_REPORT](#executionreport) <br></br> `9` - [ORDER_CANCEL_REJECT](#ordercancelreject) <br></br> `A` - [LOGON](#logon-main) <br></br> `D` - [NEW_ORDER_SINGLE](#newordersingle) <br></br> `E` - [NEW_ORDER_LIST](#neworderlist) <br></br> `F` - [ORDER_CANCEL_REQUEST](#ordercancelrequest) <br></br> `N` - [LIST_STATUS](#liststatus) <br></br> `q` - [ORDER_MASS_CANCEL_REQUEST](#ordermasscancelrequest) <br></br> `r` - [ORDER_MASS_CANCEL_REPORT](#ordermasscancelreport) <br></br> `XCN` - [ORDER_CANCEL_REQUEST_AND_NEW_ORDER_SINGLE](#ordercancelrequestandnewordersingle) <br></br> `XLQ` - [LIMIT_QUERY](#limitquery) <br></br> `XLR` - [LIMIT_RESPONSE](#limitresponse) <br></br> `B` - [NEWS](#news) <br></br> `y` - [INSTRUMENT_LIST](#instrumentlist)  <br></br>`V` - [MARKET_DATA_REQUEST](#marketdatarequest) <br></br> `Y` - [MARKET_DATA_REQUEST_REJECT](#marketdatarequestreject) <br></br>`W` - [MARKET_DATA_SNAPSHOT](#marketdatasnapshot) <br></br>`X` - [MARKET_DATA_INCREMENTAL_REFRESH](#marketdataincrementalrefresh) |
+| 49    | SenderCompID | STRING       | Y        | Must be unique across an account's active sessions.  <br></br> Must obey regex: `^[a-zA-Z0-9-_]{1,8}$`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| 56    | TargetCompID | STRING       | Y        | A string identifying this TCP connection.<br></br>On messages from client required to be set to `SPOT`. <br></br>Must be unique across TCP connections. <br></br> Must conform to the regex: `^[a-zA-Z0-9-_]{1,8}$`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |                                                                                                                                      |
+| 34    | MsgSeqNum    | SEQNUM       | Y        | Integer message sequence number. <br></br> Values that will cause a gap will be rejected.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| 52    | SendingTime  | UTCTIMESTAMP | Y        | Time of message transmission (always expressed in UTC).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| 25000 | RecvWindow   | INT          | N        | Number of milliseconds after `SendingTime (52)` the request is valid for. <br></br> Defaults to `5000` milliseconds in [Logon`<A>`](#logon-request) and has a max value of `60000` milliseconds.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 
 <a id="trailer"></a>
 
@@ -288,7 +306,8 @@ Sent by the server if there is no incoming traffic during the heartbeat interval
 
 Sent by the client to request a [Heartbeat`<0>`](#heartbeat) response.
 
-**Note:** If the client does not respond to TestRequest`<1>` with Heartbeat`<0>` with a correct `TestReqID (112)`  within timeout, the connection will be dropped.
+> [!NOTE]
+> If the client does not respond to TestRequest`<1>` with Heartbeat`<0>` with a correct `TestReqID (112)`  within timeout, the connection will be dropped.
 
 | Tag | Name      | Type   | Required | Description                                                            |
 |-----|-----------|--------|----------|------------------------------------------------------------------------|
@@ -323,7 +342,8 @@ Logon`<A>` must be the first message sent by the client.
 
 Sent by the server in response to a successful logon.
 
-**Note:** Logon`<A>` can only be sent once for the entirety of the session.
+> [!NOTE]
+> Logon`<A>` can only be sent once for the entirety of the session.
 
 <a id="logon-request"></a>
 
@@ -339,8 +359,7 @@ Sent by the server in response to a successful logon.
 | 553   | Username        | STRING  | Y        | API key. **Only Ed25519 API keys are supported.**                                                                                                  |
 | 25035 | MessageHandling | INT     | Y        | Possible values: <br></br> `1` - UNORDERED <br></br> `2` - SEQUENTIAL <br></br> Please refer to [On message order processing](#orderedmode) for more information. |
 | 25036 | ResponseMode    | INT     | N        | Please refer to [Response Mode](#responsemode).                                                                                                    |
-| 9406  | DropCopyFlag    |BOOLEAN   | N |Must be set to 'Y' when logging into Drop Copy sessions.|
-
+| 9406  | DropCopyFlag    |BOOLEAN  | N        |Must be set to 'Y' when logging into Drop Copy sessions.|
 
 **Sample Message:**
 
@@ -408,6 +427,9 @@ Sent by the server when the connection is about to be closed.
 
 ### Order Entry Messages 
 
+> [!NOTE]
+> The messages below can only be used for the FIX Order Entry and FIX Drop Copy Sessions.
+
 <a id="newordersingle"></a>
 
 #### NewOrderSingle<code>&lt;D&gt;</code>
@@ -416,8 +438,9 @@ Sent by the client to submit a new order for execution.
 
 Please refer to [Supported Order Types](#ordertype) for supported field combinations.
 
-**Note:** Many fields become required based on the order type.
-Please refer to [Supported Order Types](#NewOrderSingle-required-fields).
+> [!NOTE]
+> Many fields become required based on the order type.
+> Please refer to [Supported Order Types](#NewOrderSingle-required-fields).
 
 | Tag   | Name                     | Type    | Required | Description                                                                                                                                                                                                                                                                                                                  |
 |-------|--------------------------|---------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -504,11 +527,9 @@ Required fields based on Binance OrderType:
 
 Sent by the server whenever an order state changes.
 
-**Notes:** 
-* By default, ExecutionReport`<8>` is sent for all orders of an account,
-including those submitted in different connections.
-Please see [Response Mode](#responsemode) for other behavior options.
-* FIX API should give better performance for ExecutionReport<code>&lt;8&gt;</code> push.
+> [!NOTE]
+> * By default, ExecutionReport`<8>` is sent for all orders of an account, including those submitted in different connections. Please see [Response Mode](#responsemode) for other behavior options.
+> * FIX API should give better performance for ExecutionReport<code>&lt;8&gt;</code> push.
 
 | Tag   | Name                     | Type         | Required | Description                                                                                                                                                                                                                                                                                                                  |
 |-------|--------------------------|--------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -641,12 +662,13 @@ Sent by the client to cancel an order and submit a new one for execution.
 
 Please refer to [Supported Order Types](#ordertype) for supported field combinations when describing the new order.
 
-**Note:** Cancel is always processed first. Then immediately after that the new order is submitted.
+> [!NOTE]
+> Cancel is always processed first. Then immediately after that the new order is submitted.
 
 | Tag   | Name                                    | Type   | Required | Description                                                                                                                                                                                                                                                                                                                  |
 |-------|-----------------------------------------|--------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 25033 | OrderCancelRequestAndNewOrderSingleMode | INT    | Y        | What action should be taken if cancel fails. <br> Possible values: <br> `1` - STOP_ON_FAILURE <br> `2` - ALLOW_FAILURE                                                                                                                                                                                                       |
-| 25038 | OrderRateLimitExceededMode              | INT    | N        | What should be done to the cancellation request if you exceed the unfilled order rate limit. <br>Possible values: `1` - DO_NOTHING <br> `2` - CANCEL_ONLY                                                                                                                                                                          |
+| 25033 | OrderCancelRequestAndNewOrderSingleMode | INT    | Y        | What action should be taken if cancel fails. <br></br> Possible values: <br></br> `1` - STOP_ON_FAILURE <br></br> `2` - ALLOW_FAILURE                                                                                                                                                                                                       |
+| 25038 | OrderRateLimitExceededMode              | INT    | N        | What should be done to the cancellation request if you exceed the unfilled order rate limit. <br></br>Possible values: `1` - DO_NOTHING <br></br> `2` - CANCEL_ONLY                                                                                                                                                                          |
 | 37    | OrderID                                 | INT    | N        | `OrderID` of the order to cancel.                                                                                                                                                                                                                                                                                            |
 | 25034 | CancelClOrdID                           | STRING | N        | `ClOrdID` of the cancel.                                                                                                                                                                                                                                                                                                     |
 | 41    | OrigClOrdID                             | STRING | N        | `ClOrdID` of the order to cancel.                                                                                                                                                                                                                                                                                            |
@@ -691,7 +713,8 @@ Please refer to [Supported Order Types](#ordertype) for supported field combinat
 
 Sent by the client to cancel all open orders on a symbol.
 
-**Note:** All orders of the account will be canceled, including those placed in different connections.
+> [!NOTE]
+> All orders of the account will be canceled, including those placed in different connections.
 
 | Tag | Name                  | Type   | Required | Description                                                                                                    |
 |-----|-----------------------|--------|----------|----------------------------------------------------------------------------------------------------------------|
@@ -782,7 +805,8 @@ Please refer to [Supported Order List Types](#order-list-types) for supported or
 
 #### Supported Order List Types
 
-**Note:** Orders must be specified in the sequence indicated in the *Order Names* column in the table below.
+> [!NOTE]
+> Orders must be specified in the sequence indicated in the *Order Names* column in the table below.
 
 | Order list name | Contingency Type (1385) | Order names                                                                                        | Order sides                                                                                                                      | Allowed Binance order types                                                                                                                                                                         | List Triggering Instructions                                                                                                                                                                                                                                                                                                                                                                                    |
 |-----------------|-------------------------|----------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -803,9 +827,9 @@ Please refer to [Supported Order List Types](#order-list-types) for supported or
 
 Sent by the server whenever an order list state changes.
 
-**Note:** By default, ListStatus`<N>` is sent for all order lists of an account,
-including those submitted in different connections.
-Please see [Response Mode](#responsemode) for other behavior options.
+> [!NOTE]
+> By default, ListStatus`<N>` is sent for all order lists of an account, including those submitted in different connections.
+> Please see [Response Mode](#responsemode) for other behavior options.
 
 | Tag      | Name                         | Type         | Required | Description                                                                                                                                             |
 |----------|------------------------------|--------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -874,4 +898,211 @@ Sent by the server in response to [LimitQuery`<XLQ>`](#limitquery).
 
 ```
 8=FIX.4.4|9=225|35=XLR|34=2|49=SPOT|52=20240614-05:42:42.724057|56=uGnG0ef8|6136=1718343762723730315|25003=3|25004=2|25005=1|25006=1000|25007=10|25008=s|25004=1|25005=0|25006=200|25007=10|25008=s|25004=1|25005=0|25006=200000|25007=1|25008=d|10=241|
+```
+
+### Market Data Messages
+
+> [!NOTE]
+> The messages below can only be used for the FIX Market Data.
+
+<a id="instrumentlistrequest"></a>
+
+#### InstrumentListRequest<code>&lt;x&gt;</code>
+
+Sent by the client to query information about active instruments (i.e., those that have the TRADING status). If used for an inactive instrument, it will be responded to with a [Reject`<3>`](#reject).
+
+| Tag | Name                      | Type   | Required | Description                                                                        |
+|-----|---------------------------|--------|----------|------------------------------------------------------------------------------------|
+| 320 | InstrumentReqID           | STRING | Y        | ID of this request                                                                 |
+| 559 | InstrumentListRequestType | INT    | Y        | Possible values: <br></br> `0` - SINGLE_INSTRUMENT <br></br> `4` - ALL_INSTRUMENTS |
+| 55  | Symbol                    | STRING | N        | Required when the `InstrumentListRequestType` is set to `SINGLE_INSTRUMENT(0)`     |
+
+**Sample Message:**
+
+```
+8=FIX.4.4|35=x|49=BTCUSDT|56=SPOT|34=10|52=20240917-02:42:43.624784|320=BTCUSDT_INFO|559=0|55=1726540962645|
+```
+
+<a id="instrumentlist"></a>
+
+#### InstrumentList<code>&lt;y&gt;</code>
+
+Sent by the server in a response to the [InstrumentListRequest`<x>`](#instrumentlistrequest).
+
+> [!NOTE]
+> More detailed symbol information is available through the [exchangeInfo](https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#exchange-information) endpoint.
+
+
+| Tag     | Name                  | Type       | Required | Description                                |
+|---------|-----------------------|------------|----------|--------------------------------------------|
+| 320     | InstrumentReqID       | STRING     | Y        | `InstrumentReqID` from the request.        |
+| 146     | NoRelatedSym          | NUMINGROUP | Y        | Number of symbols                          |
+| =>55    | Symbol                | STRING     | Y        |                                            |
+| =>15    | Currency              | STRING     | Y        | Quote asset of this symbol                 |
+| =>562   | MinTradeVol           | QTY        | Y        | The minimum trading quantity               |
+| =>1140  | MaxTradeVol           | QTY        | Y        | The maximum trading quantity               |
+| =>25039 | MinQtyIncrement       | QTY        | Y        | The minimum quantity increase              |
+| =>25040 | MarketMinTradeVol     | QTY        | Y        | The minimum market order trading quantity  |
+| =>25041 | MarketMaxTradeVol     | QTY        | Y        | The maximum market order trading quantity  |
+| =>25042 | MarketMinQtyIncrement | QTY        | Y        | The minimum market order quantity increase |
+| =>969   | MinPriceIncrement     | PRICE      | Y        | The minimum price increase                 |
+
+**Sample Message:**
+
+```
+8=FIX.4.4|9=0000205|35=y|49=SPOT|56=TRANCE01|34=10|52=20240917-02:42:43.625203|320=BTCUSDT_INFO|146=1|55=1726540962645|15=1726540962422|562=0.01000|1140=10.00000|25039=0.00001|25040=0.01000|25041=0.01000|25042=0.00001|969=0.001|10=033|
+```
+
+<a id="marketdatarequest"></a>
+
+#### MarketDataRequest<code>&lt;V&gt;</code>
+
+Sent by the client to subscribe to or unsubscribe from market data stream.
+
+<a id="tradestream"></a>
+
+**Trade Stream**
+
+The Trade Streams push raw trade information; each trade has a unique buyer and seller.
+
+**Fields required to subscribe:**
+
+- `SubscriptionRequestType` present with value `SUBSCRIBE(1)`
+- `MDEntryType` present with value `TRADE(2)`
+
+**Update Speed:** Real-time
+
+<a id="symbolbooktickerstream"></a>
+
+**Individual Symbol Book Ticker Stream**
+
+Pushes any update to the best bid or offers price or quantity in real-time for a specified symbol. 
+
+**Fields required to subscribe:**
+
+- `SubscriptionRequestType` with value `SUBSCRIBE(1)`
+- `MDEntryType` with value `BID(0)`
+- `MDEntryType` with value `OFFER(1)`
+- `MarketDepth` with value `1`
+
+**Update Speed:** Real-time
+
+> [!NOTE]
+> In the [Individual Symbol Book Ticker Stream](#symbolbooktickerstream), when `MDUpdateAction` is set to `CHANGE(1)` in a
+> [MarketDataIncrementalRefresh`<X>`](#marketdataincrementalrefresh) message sent from the server, it replaces the previous best quote.
+
+<a id="diffdepthstream"></a>
+
+**Diff. Depth Stream**
+
+Order book price and quantity depth updates used to locally manage an order book.
+
+**Fields required to subscribe:**
+
+- `SubscriptionRequestType` with value `SUBSCRIBE(1)`
+- `MDEntryType` with value `BID(0)`
+- `MDEntryType` with value `OFFER(1)`
+- `MarketDepth` with a value between `2` and `5000`, which controls the size of the initial snapshot and has no effect on subsequent [MarketDataIncrementalRefresh`<X>`](#marketdataincrementalrefresh) messages
+
+**Update Speed:** 100ms
+
+> [!NOTE]
+> Since the [MarketDataSnapshot`<W>`](#marketdatasnapshot) have a limit on the number of price levels (5000 on each side maximum), you won't learn the quantities for the levels outside of the initial snapshot unless they change.
+> So be careful when using the information for those levels, since they might not reflect the full view of the order book.
+> However, for most use cases, seeing 5000 levels on each side is enough to understand the market and trade effectively.
+
+| Tag   | Name                    | Type       | Required | Description                                                                                                                       |
+|:------|-------------------------|------------|----------|-----------------------------------------------------------------------------------------------------------------------------------|
+| 262   | MDReqID                 | STRING     | Y        | ID of this request                                                                                                                |
+| 263   | SubscriptionRequestType | CHAR       | Y        | Subscription Request Type.  Possible values: <br></br> `1` - SUBSCRIBE <br></br> `2` - UNSUBSCRIBE                                |
+| 264   | MarketDepth             | INT        | N        | Subscription depth. <br></br> Possible values: <br></br> `1` - Book Ticker subscription <br></br> `2`-`5000` - Diff. Depth Stream |
+| 266   | AggregatedBook          | NUMINGROUP | N        | Possible values: <br></br> `Y` - one book entry per side per price                                                                |
+| 146   | NoRelatedSym            | NUMINGROUP | N        | Number of symbols                                                                                                                 |
+| =>55  | Symbol                  | STRING     | Y        |                                                                                                                                   |
+| 267   | NoMDEntryTypes          | NUMINGROUP | N        | Number of entry types                                                                                                             |
+| =>269 | MDEntryType             | CHAR       | Y        | Possible values: <br></br> `0` - BID <br></br> `1` - OFFER <br></br> `2` - TRADE                                                  |
+
+**Sample Message:**
+
+```
+# Subscriptions
+# BOOK TICKER Stream
+8=FIX.4.4|9=132|35=V|49=TRADER1|56=SPOT|34=4|52=20241122-06:17:14.183428|262=BOOK_TICKER_STREAM|263=1|264=1|266=Y|146=1|55=BTCUSDT|267=2|269=0|269=1|10=010|
+
+# DEPTH Stream
+8=FIX.4.4|9=127|35=V|49=TRADER1|56=SPOT|34=7|52=20241122-06:17:14.443822|262=DEPTH_STREAM|263=1|264=10|266=Y|146=1|55=BTCUSDT|267=2|269=0|269=1|10=111|
+
+# TRADE Stream
+8=FIX.4.4|9=120|35=V|49=TRADER1|56=SPOT|34=3|52=20241122-06:34:14.775606|262=TRADE_STREAM|263=1|264=1|266=Y|146=1|55=BTCUSDT|267=1|269=2|10=040|
+
+# Unsubscription from TRADE Stream
+8=FIX.4.4|9=79|35=V|49=TRADER1|56=SPOT|34=7|52=20241122-06:41:56.966969|262=TRADE_STREAM|263=2|264=1|10=113|
+```
+
+<a id="marketdatarequestreject"></a>
+
+### MarketDataRequestReject<code>&lt;Y&gt;</code>
+
+Sent by the server in a response to an invalid MarketDataRequest `<V>`.
+
+| Tag   | Name           | Type   | Required | Description                                                                               |
+|-------|----------------|--------|----------|-------------------------------------------------------------------------------------------|
+| 262   | MDReqID        | STRING | Y        | ID of the invalid [MarketDataRequest`<V>`](#marketdatarequest)                            |
+| 281   | MDReqRejReason | CHAR   | N        | Possible values: <br></br> `1` - DUPLICATE_MDREQID <br></br> `2` - TOO_MANY_SUBSCRIPTIONS |
+| 25016 | ErrorCode      | INT    | N        | API Error code. See [Errors](errors.md)                                                   |
+| 58    | Text           | STRING | N        | Human-readable error message.                                                             |
+
+**Sample Message:**
+
+```
+8=FIX.4.4|9=0000218|35=Y|49=SPOT|56=EXAMPLE|34=5|52=20241019-05:39:36.688964|262=BOOK_TICKER_2|281=2|25016=-1191|58=Similar subscription is already active on this connection. Symbol='BNBBUSD', active subscription id: 'BOOK_TICKER_1'.|10=137|
+```
+
+<a id="marketdatasnapshot"></a>
+
+### MarketDataSnapshot<code>&lt;W&gt;</code>
+
+Sent by the server in response to a [MarketDataRequest`<V>`](#marketdatarequest), activating [Individual Symbol Book Ticker Stream](#symbolbooktickerstream) or [Diff. Depth Stream](#diffdepthstream) subscriptions.
+
+| Tag   | Name             | Type       | Required | Description                                                                             |
+|-------|------------------|------------|----------|-----------------------------------------------------------------------------------------|
+| 262   | MDReqID          | STRING     | Y        | ID of the [MarketDataRequest`<V>`](#marketdatarequest) that activated this subscription |
+| 55    | Symbol           | STRING     | Y        |                                                                                         |
+| 25044 | LastBookUpdateID | INT        | N        |                                                                                         |
+| 268   | NoMDEntries      | NUMINGROUP | Y        | Number of entries                                                                       |
+| =>269 | MDEntryType      | CHAR       | Y        | Possible values: <br></br> `0` - BID <br></br> `1` - OFFER <br></br> `2` - TRADE        |
+| =>270 | MDEntryPx        | PRICE      | Y        | Price                                                                                   |
+| =>271 | MDEntrySize      | QTY        | Y        | Quantity                                                                                |
+
+**Sample message:**
+
+```
+8=FIX.4.4|9=0000107|35=W|49=SPOT|56=EXAMPLE|34=34|52=20241019-05:41:52.867164|262=BOOK_TICKER_1_2|55=BNBBUSD|25044=0|268=0|10=151|
+```
+
+<a id="marketdataincrementalrefresh"></a>
+
+### MarketDataIncrementalRefresh<code>&lt;X&gt;</code>
+
+Sent by the server when there is a change in a subscribed stream.
+
+| Tag     | Name              | Type         | Required | Description                                                                                                                                                                                                                                                                                                  |
+|---------|-------------------|--------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 262     | MDReqID           | STRING       | Y        | ID of the [MarketDataRequest`<V>`](#marketdatarequest) that activated this subscription                                                                                                                                                                                                                      |
+| 893     | LastFragment      | BOOLEAN      | N        | When present, this indicates that the message was fragmented. It can only appear in the [Trade Stream](#tradestream) and [Diff. Depth Stream](#diffdepthstream)                                                                                                                                              |
+| 268     | NoMDEntries       | NUMINGROUP   | Y        | Number of entries                                                                                                                                                                                                                                                                                            |
+| =>279   | MDUpdateAction    | CHAR         | Y        | Possible values: <br></br> `0` - NEW <br></br> `1` - CHANGE <br></br> `2` - DELETE                                                                                                                                                                                                                           |
+| =>270   | MDEntryPx         | PRICE        | Y        | Price                                                                                                                                                                                                                                                                                                        |
+| =>271   | MDEntrySize       | QTY          | N        | Quantity                                                                                                                                                                                                                                                                                                     |
+| =>269   | MDEntryType       | CHAR         | Y        | Possible values: <br></br> `0` - BID <br></br> `1` - OFFER <br></br> `2` - TRADE                                                                                                                                                                                                                             |
+| =>55    | Symbol            | STRING       | N        | Market Data Entry will default to the same `Symbol` of the previous Market Data Entry in the same Market Data message if `Symbol` is not specified                                                                                                                                                           |
+| =>60    | TransactTime      | UTCTIMESTAMP | N        |                                                                                                                                                                                                                                                                                                              |
+| =>1003  | TradeID           | INT          | N        |                                                                                                                                                                                                                                                                                                              |
+| =>25043 | FirstBookUpdateID | INT          | N        | Only present in [Diff. Depth Stream](#diffdepthstream). <br></br> Market Data Entry will default to the same `FirstBookUpdateID` of the previous Market Data Entry in the same Market Data message if `FirstBookUpdateID` is not specified                                                                   |
+| =>25044 | LastBookUpdateID  | INT          | N        | Only present in [Diff. Depth Stream](#diffdepthstream) and [Individual Symbol Book Ticker Stream](#symbolbooktickerstream). <br></br> Market Data Entry will default to the same `LastBookUpdateID` of the previous Market Data Entry in the same Market Data message if `LastBookUpdateID` is not specified |
+
+**Sample Message:**
+
+```
+8=FIX.4.4|9=0000313|35=X|49=SPOT|56=EXAMPLE|34=16|52=20241019-05:40:11.466313|262=TRADE_3|893=N|268=3|279=0|269=2|270=10.00000|271=0.01000|55=BNBBUSD|1003=0|60=20241019-05:40:11.464000|279=0|269=2|270=10.00000|271=0.01000|1003=1|60=20241019-05:40:11.464000|279=0|269=2|270=10.00000|271=0.01000|1003=2|60=20241019-05:40:11.464000|10=125|
 ```

@@ -1,6 +1,6 @@
 # 错误代码汇总 
 
-**最近更新： 2024-12-17**
+**最近更新： 2025-01-09**
 
 币安Rest接口(包括wapi)返回的错误包含两部分，错误码与错误信息. 错误码是大类，一个错误码可能对应多个不同的错误信息。
 以下是一个完整错误码实例
@@ -134,6 +134,8 @@
 
 ### -1128 无效的可选参数组合
  * Combination of optional parameters invalid.
+ * Fields [%s] must be sent together or omitted entirely.
+ * Invalid 'MDEntryType (269)' combination. BID and OFFER must be requested together. 
 
 ### -1130 无效参数(值)
  * Invalid data sent for a parameter.
@@ -256,6 +258,25 @@
 
 ### -1199 卖方 `OCO` 单的止盈单必须是上方（`above`） 订单
 * A take profit order in a sell OCO must be above.
+
+### -1186 不允许在订单输入会话中使用
+* Requested operation is not allowed in order entry sessions. 
+
+### -1187 不允许在市场数据会话使用
+* Requested operation is not allowed in market data sessions. 
+
+### -1188 组计数中的数字不正确 
+* Incorrect NumInGroup count for repeating group '%s'. 
+
+### -1189 组中包含重复条目
+* Group '%s' contains duplicate entries.
+
+### -1190 无效的请求 ID 
+* 'MDReqID (262)' contains a subscription request id that is already in use on this connection.   
+* 'MDReqID (262)' contains an unsubscription request id that does not match any active subscription. 
+
+### -1191 订阅数量过多 
+* Too many subscriptions. Connection may create up to '%s' subscriptions at a time.
 
 ### -2010 新订单被拒绝
  * NEW_ORDER_REJECTED

@@ -102,7 +102,7 @@
    <field name='LastFragment' required='N'/>
    <group name='NoMDEntries' required='Y'>
     <field name='MDUpdateAction' required='Y'/>
-    <field name='MDEntryPx' required='N'/>
+    <field name='MDEntryPx' required='Y'/>
     <field name='MDEntrySize' required='N'/>
     <field name='MDEntryType' required='Y'/>
     <field name='Symbol' required='N'/>
