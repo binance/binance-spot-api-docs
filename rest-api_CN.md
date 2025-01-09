@@ -1604,7 +1604,7 @@ GET /api/v3/ticker
 ]
 ```
 
-## 账户接口
+## 交易接口
 ### 下单 (TRADE)
 ```
 POST /api/v3/order 
