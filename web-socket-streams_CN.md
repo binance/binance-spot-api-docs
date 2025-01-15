@@ -1,6 +1,9 @@
 
-# Web Socket 行情接口(2024-06-11)
-# 基本信息
+# Web Socket 行情接口
+
+**最近更新： 2024-12-17**
+
+## 基本信息
 * 本篇所列出的所有wss接口的baseurl为: **wss://stream.binance.com:9443** 或者 **wss://stream.binance.com:443**
 * 所有stream均可以直接访问，或者作为组合streams的一部分。
 * 直接访问时URL格式为 **/ws/\<streamName\>**
@@ -13,6 +16,8 @@
     * 当客户收到ping消息，必需尽快回复pong消息，同时payload需要和ping消息一致。
     * 未经请求的pong消息是被允许的，但是不会保证连接不断开。**对于这些pong消息，建议payload为空**
 * **wss://data-stream.binance.vision** 可以用来订阅仅有市场信息的数据流。账户信息**无法**从此URL获得。
+* 所有时间和时间戳相关字段均以**毫秒为默认单位**。 要以微秒为单位接收信息，请在 URL 中添加参数 `timeUnit=MICROSECOND` 或 `timeUnit=microsecond`。 
+  * 例如： `/stream?streams=btcusdt@trade&timeUnit=MICROSECOND`
 
 ## WebSocket 连接限制
 
@@ -171,6 +176,7 @@
 
 
 # Stream 详细定义
+<a id="aggtrade"></a>
 ## 归集交易
 归集交易与逐笔交易的区别在于，同一个taker在同一价格与多个maker成交时，会被归集为一笔成交。
 
@@ -195,6 +201,8 @@
 }
 ```
 
+<a id="trade"></a>
+
 ## 逐笔交易
 逐笔交易推送每一笔成交的信息。**成交**，或者说交易的定义是仅有一个吃单者与一个挂单者相互交易。
 
@@ -216,7 +224,7 @@
   "M": true            // 请忽略该字段
 }
 ```
-
+<a id="kline"></a>
 ## UTC K线
 K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更新是基于 `UTC+0` 时区的。
 
@@ -316,6 +324,7 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 }
 ```
 
+<a id="twentyfourhourminiticker"></a>
 ## 按Symbol的精简Ticker
 按Symbol逐秒刷新的24小时精简ticker信息
 
@@ -338,6 +347,7 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
   }
 ```
 
+<a id="all-markets-mini-ticker"></a>
 ## 全市场所有Symbol的精简Ticker
 同上，只是推送所有交易对
 
@@ -353,6 +363,8 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
   }
 ]
 ```
+
+<a id="twentyfourhourticker"></a>
 
 ## 按Symbol的完整Ticker
 按Symbol逐秒刷新的24小时完整ticker信息
@@ -390,6 +402,7 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 }
 ```
 
+<a id="all-markets-ticker"></a>
 ## 全市场所有交易对的完整Ticker
 同上，只是推送所有交易对
 
@@ -405,7 +418,7 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
   }
 ]
 ```
-
+<a id="bookticker"></a>
 ## 按Symbol的最优挂单信息
 
 实时推送指定交易对最优挂单信息
@@ -449,6 +462,7 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 }
 ```
 
+<a id="depth"></a>
 
 ## 有限档深度信息
 每秒推送有限档深度信息。levels 表示几档买卖单信息, 可选 5/10/20档
@@ -477,6 +491,7 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
   ]
 }
 ```
+<a id="diff-depth"></a>
 
 ## 增量深度信息stream
 每秒推送orderbook的变化部分（如果有）
@@ -510,7 +525,7 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 }
 ```
 
-
+<a id="rolling-window-ticker"></a>
 ## 按Symbol的滚动窗口统计
 
 单个symbol的滚动窗口统计, 支持多个时间窗口。
@@ -548,7 +563,7 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
   "n": 18151          // Total number of trades
 }
 ```
-
+<a id="all-market-rolling-window-ticker"></a>
 ## 全市场滚动窗口统计
 
 全市场symbols的滚动窗口ticker统计，计算于多个窗口。<br/>
@@ -571,16 +586,26 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 ]
 ```
 
+<a id="how-to-maintain-orderbook"></a>
 
-## 如何正确在本地维护一个orderbook副本
-1. 订阅 **wss://stream.binance.com:9443/ws/bnbbtc@depth**
-2. 开始缓存收到的更新。同一个价位，后收到的更新覆盖前面的。
-3. 访问Rest接口 **https://api.binance.com/api/v3/depth?symbol=BNBBTC&limit=1000** 获得一个1000档的深度快照
-4. 将目前缓存到的信息中`u`小于步骤3中获取到的快照中的`lastUpdateId`的部分丢弃(丢弃更早的信息，已经过期)。
-5. 将深度快照中的内容更新到本地orderbook副本中，并从websocket接收到的第一个`U` <= `lastUpdateId`+1 **且** `u` >= `lastUpdateId`+1 的event开始继续更新本地副本。
-6. 每一个新event的`U`应该恰好等于上一个event的`u`+1，否则可能出现了丢包，请从step3重新进行初始化。
-7. 每一个event中的挂单量代表这个价格目前的挂单量**绝对值**，而不是相对变化。
-8. 如果某个价格对应的挂单量为0，表示该价位的挂单已经撤单或者被吃，应该移除这个价位。
+## 如何正确在本地维护一个order book副本
+1. 打开与 `wss://stream.binance.com:9443/ws/bnbbtc@depth` 的 WebSocket 连接。
+2. 开始缓存收到的event。请记录您收到的第一个event的 `U`值。
+3. 访问 `https://api.binance.com/api/v3/depth?symbol=BNBBTC&limit=5000` 获取深度快照。
+4. 如果快照中的 `lastUpdateId` 小于等于步骤 2 中的 `U` 值，请返回步骤 3。
+5. 在收到的event中，丢弃快照中 `u` <= `lastUpdateId` 的所有event。现在第一个event的 `lastUpdateId` 应该在 `[U;u]` 范围以内。
+6. 将本地order book设置为快照。它的更新ID 为 `lastUpdateId`。
+7. 更新所有缓存的event，以及后续的所有event。
 
-注意:
-因为深度快照对价格档位数量有限制，初始快照之外的价格档位并且没有数量变化的价格档位不会出现在增量深度的更新信息内。因此，即使应用来自增量深度的所有更新，这些价格档位也不会在本地 order book 中可见，所以本地的 order book 与真实的 order book 可能会有一些差异。 不过对于大多数用例，5000 的深度限制足以有效地了解市场和交易。
+要将event应用于您的本地order book，请遵循以下更新过程：
+1. 如果event `u` (最后一次更新 ID) < 您本地order book的更新 ID，请忽略该事件。
+2. 如果event `U` (第一次更新 ID) > 您本地order book的更新 ID，则说明出现问题。请丢弃您的本地order book并从头开始开始重建。
+3. 对于买价 (`b`) 和卖价 (`a`) 中的每个价位，在order book中设置新的数量：
+    * 如果order book中不存在价位，则插入新的数量。
+    * 如果数量为零，则从order book中删除此价位。
+4. 将order book更新 ID 设置为处理过event中的最后一次更新 ID (`u`)。
+
+> [!NOTE] 
+> 由于从 API 检索的深度快照对价位的数量有限制（每侧最多 5000 个），因此除非它们发生变化，否则您将无法了解初始快照之外的价位数量。<br> 
+> 因此，在使用这些级别的信息时要小心，因为它们可能无法反映订单簿的完整视图。<br> 
+> 但是，对于大多数场景，可以每侧看到 5000 个价位就足以了解市场并进行有效交易。

@@ -8,11 +8,13 @@
 FIX connections require TLS encryption. Please either use native TCP+TLS connection or set up a local proxy such as [stunnel](https://www.stunnel.org/) to handle TLS encryption.
 
 **FIX sessions only support Ed25519 keys.** </br>
-You can setup and configure your API key permissions on [Spot Test Network](https://testnet.binance.vision/).
+
+Please refer to [this tutorial](https://www.binance.com/en/support/faq/how-to-generate-an-ed25519-key-pair-to-send-api-requests-on-binance-6b9a63f1e3384cf48a2eedb82767a69a)
+on how to set up an Ed25519 key pair.
 
 ### FIX API order entry sessions
 
-- Endpoint is: `tcp+tls://fix-oe.testnet.binance.vision:9000`
+- Endpoint is: `tcp+tls://fix-oe.binance.com:9000`
 - Supports placing orders, canceling orders, and querying current limit usage.
 - Supports receiving all of the account's [ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
 - Only API keys with `FIX_API` are allowed to connect.
@@ -20,19 +22,31 @@ You can setup and configure your API key permissions on [Spot Test Network](http
 
 ### FIX API Drop Copy sessions
 
-- Endpoint is: `tcp+tls://fix-dc.testnet.binance.vision:9000`
+- Endpoint is: `tcp+tls://fix-dc.binance.com:9000`
 - Supports receiving all of the account's [ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
 - Only API keys with `FIX_API` or `FIX_API_READ_ONLY` are allowed to connect.
 - QuickFix Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml).
 
 ### Fix Market Data sessions
 
-* Endpoint is: `tcp+tls://fix-md.testnet.binance.vision:9000`
+* Endpoint is: `tcp+tls://fix-md.binance.com:9000`  
 * Supports market data streams and active instruments queries.  
 * Does not support placing or canceling orders.   
 * Only API keys with `FIX_API` or `FIX_API_READ_ONLY` are allowed to connect.
 * QuickFix Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml).
 
+### API Key Permissions
+
+To access the FIX API order entry sessions, your API key must be configured with the `FIX_API` permission.
+
+To access the FIX Drop Copy sessions, your API key must be configured with either `FIX_API_READ_ONLY` or `FIX_API` permission.
+
+To access the FIX Market Data sessions, your API key must be configured with either `FIX_API` or `FIX_API_READ_ONLY` permission.
+
+**FIX sessions only support Ed25519 keys.**
+
+Please refer to [this tutorial](https://www.binance.com/en/support/faq/how-to-generate-an-ed25519-key-pair-to-send-api-requests-on-binance-6b9a63f1e3384cf48a2eedb82767a69a)
+on how to set up an Ed25519 key pair.
 
 <a id="orderedmode"></a>
 
@@ -46,6 +60,7 @@ messages may get reordered before they are processed by the engine.
 
 > [!TIP]
 > `UNORDERED(1)` should offer better performance when there are multiple messages in flight from the client to the server.
+
 
 <a id="responsemode"></a>
 
@@ -184,7 +199,7 @@ Resulting Logon `<A>` message:
 
 * To understand how many orders you have placed within a certain time interval, please send a [LimitQuery`<XLQ>`](#limitquery) message.
   A [LimitResponse`<XLR>`](#limitresponse) message will be sent in response, containing information about Unfilled Order Count and Message Limits.
-* **Please note that if your orders are consistently filled by trades, you can continuously place orders on the API**. For more information, please see [Spot Unfilled Order Count Rules](../faqs/order_count_decrement.md). 
+* **Please note that if your orders are consistently filled by trades, you can continuously place orders on the API**. For more information, please see [Spot Unfilled Order Count Rules](./faqs/order_count_decrement.md). 
 * If you exceed the unfilled order count your message will be rejected, and information will be transferred back to you in a reject message specific to that endpoint.
 * **The number of unfilled orders is tracked for each account.**
 
@@ -439,7 +454,7 @@ Please refer to [Supported Order Types](#ordertype) for supported field combinat
 | 59    | TimeInForce              | CHAR    | N        | Possible values: <br></br> `1` - GOOD_TILL_CANCEL <br></br> `3` - IMMEDIATE_OR_CANCEL <br></br> `4` - FILL_OR_KILL                                                                                                                                                                                                                          |
 | 111   | MaxFloor                 | QTY     | N        | Used for iceberg orders, this specifies the visible quantity of the order on the book.                                                                                                                                                                                                                                       |
 | 152   | CashOrderQty             | QTY     | N        | Quantity of the order specified in the quote asset units, for reverse market orders.                                                                                                                                                                                                                                         |
-| 847   | TargetStrategy           | INT     | N        | The value cannot be less than `1000000`.                                                                                                                                                                                                                                                                                                                             |
+| 847   | TargetStrategy           | INT     | N        | The value cannot be less than `1000000`.                                                                                                                                                                                                                                                                                     |
 | 7940  | StrategyID               | INT     | N        |                                                                                                                                                                                                                                                                                      |
 | 25001 | SelfTradePreventionMode  | CHAR    | N        | Possible values: <br></br> `1` - NONE <br></br> `2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br> `4` - EXPIRE_BOTH                                                                                                                                                                                                                      |
 | 1100  | TriggerType              | CHAR    | N        | Possible values: `4` - PRICE_MOVEMENT                                                                                                                                                                                                                                                                                        |
@@ -878,7 +893,7 @@ Sent by the server in response to [LimitQuery`<XLQ>`](#limitquery).
 | =>25006 | LimitMax                     | INT        | Y        | The maximum allowed for this limit.                                                                                    |
 | =>25007 | LimitResetInterval           | INT        | N        | How often the limit resets.                                                                                            |
 | =>25008 | LimitResetIntervalResolution | CHAR       | N        | Time unit of `LimitResetInterval`. Possible values: <br></br> `s` - SECOND <br></br> `m` - MINUTE <br></br> `h` - HOUR <br></br> `d` - DAY |
- 
+
 **Sample Message:**
 
 ```
@@ -915,7 +930,7 @@ Sent by the client to query information about active instruments (i.e., those th
 Sent by the server in a response to the [InstrumentListRequest`<x>`](#instrumentlistrequest).
 
 > [!NOTE]
-> More detailed symbol information is available through the [exchangeInfo](https://github.com/binance/binance-spot-api-docs/blob/master/testnet/rest-api.md#exchange-information) endpoint.
+> More detailed symbol information is available through the [exchangeInfo](https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#exchange-information) endpoint.
 
 
 | Tag     | Name                  | Type       | Required | Description                                |

@@ -1,6 +1,8 @@
-# WebSocket 账户接口(2024-04-02)
+# WebSocket 账户接口
 
-# 基本信息
+**最近更新： 2024-12-17**
+
+## 基本信息
 * 本篇所列出API接口的base url : **https://api.binance.com**
 * 用于订阅账户数据的 `listenKey` 从创建时刻起有效期为60分钟
 * 可以通过 `PUT` 一个 `listenKey` 延长60分钟有效期
@@ -10,10 +12,12 @@
 * U订阅账户数据流的stream名称为 **/ws/\<listenKey\>** 或 **/stream?streams=\<listenKey\>**
 * 每个链接有效期不超过24小时，请妥善处理断线重连。
 * 账户数据流的消息不保证严格时间序; **请使用 E 字段进行排序**
+* JSON 响应中的所有时间和时间戳相关字段均以**毫秒为默认单位**。要以微秒为单位接收信息，请在 URL 中添加参数 `timeUnit=MICROSECOND` 或 `timeUnit=microsecond`。 
+  * 例如：`/ws/<listenKey>?timeUnit=MICROSECOND`
 
-# 与Websocket账户接口相关的REST接口
+## 与Websocket账户接口相关的REST接口
 
-## 生成 Listen Key (USER_STREAM)
+### 生成 Listen Key (USER_STREAM)
 ```
 POST /api/v3/userDataStream
 ```
@@ -32,7 +36,7 @@ NONE
 }
 ```
 
-## 延长 Listen Key 有效期 (USER_STREAM)
+### 延长 Listen Key 有效期 (USER_STREAM)
 ```
 PUT /api/v3/userDataStream
 ```
@@ -52,7 +56,7 @@ listenKey | STRING | YES
 {}
 ```
 
-## 关闭 Listen Key (USER_STREAM)
+### 关闭 Listen Key (USER_STREAM)
 ```
 DELETE /api/v3/userDataStream
 ```
@@ -72,9 +76,9 @@ listenKey | STRING | YES
 {}
 ```
 
-# Websocket推送事件
+## Websocket推送事件
 
-## 账户更新
+### 账户更新
 
 每当帐户余额发生更改时，都会发送一个事件`outboundAccountPosition`，其中包含可能由生成余额变动的事件而变动的资产。
 
@@ -95,7 +99,7 @@ listenKey | STRING | YES
 }
 ```
 
-## 余额更新
+### 余额更新
 
 当下列情形发生时更新:
 
@@ -114,9 +118,11 @@ listenKey | STRING | YES
 }
 ```
 
-
-## 订单更新
+<a id="executionReport"></a>
+### 订单更新
 订单通过`executionReport`事件进行更新。
+
+与使用用户数据流相比，我们建议使用 [FIX API](fix-api_CN.md) 以获得更好的性能。
 
 
 **Payload:**
@@ -145,7 +151,7 @@ listenKey | STRING | YES
   "n": "0",                      // 手续费数量
   "N": null,                     // 手续费资产类别
   "T": 1499405658657,            // 成交时间
-  "I": 8641984,                  // 请忽略
+  "I": 8641984,                  // Execution ID
   "w": true,                     // 订单是否在订单簿上？
   "m": false,                    // 该成交是作为挂单成交吗？
   "M": false,                    // 请忽略
@@ -161,7 +167,7 @@ listenKey | STRING | YES
 
 **备注:** 通过将`Z`除以`z`可以找到平均价格。
 
-### `executionReport` 中的特定条件时才会出现的字段
+#### `executionReport` 中的特定条件时才会出现的字段
 
 这些字段仅在满足特定条件时才会出现。有关这些参数的更多信息，请参阅 [现货交易API术语表](./faqs/spot_glossary_CN.md)。
 
@@ -274,7 +280,7 @@ listenKey | STRING | YES
 
 如果是一个订单组，则除了显示`executionReport`事件外，还将显示一个名为`ListStatus`的事件。
 
-> **Payload**
+**Payload**
 
 ```javascript
 {
@@ -305,17 +311,17 @@ listenKey | STRING | YES
 
 **可能的执行类型:**
 
-* NEW - 新订单已被引擎接受。
-* CANCELED - 订单被用户取消。
-* REPLACED - (保留字段，当前未使用)
-* REJECTED - 新订单被拒绝 （这信息只会在撤消挂单再下单中发生，下新订单被拒绝但撤消挂单请求成功）。
-* TRADE - 订单有新成交。
-* EXPIRED - 订单已根据 Time In Force 参数的规则取消（e.g. 没有成交的 LIMIT FOK 订单或部分成交的 LIMIT IOC 订单）或者被交易所取消（e.g. 强平或维护期间取消的订单）。
-* TRADE_PREVENTION - 订单因 STP 触发而过期。
+* `NEW` - 新订单已被引擎接受。
+* `CANCELED` - 订单被用户取消。
+* `REPLACED` - (保留字段，当前未使用)
+* `REJECTED` - 新订单被拒绝 （这信息只会在撤消挂单再下单中发生，下新订单被拒绝但撤消挂单请求成功）。
+* `TRADE` - 订单有新成交。
+* `EXPIRED` - 订单已根据 Time In Force 参数的规则取消（e.g. 没有成交的 LIMIT FOK 订单或部分成交的 LIMIT IOC 订单）或者被交易所取消（e.g. 强平或维护期间取消的订单）。
+* `TRADE_PREVENTION` - 订单因 STP 触发而过期。
 
 请查阅 [枚举定义](./enums_CN.md) 文档获取更多枚举定义。
 
-## Listen Key 已过期
+### Listen Key 已过期
 
 当监听 listen key 过期时会发送此事件。此后不会再发送任何事件，直到创建新的 `listenKey`。
 
@@ -328,5 +334,39 @@ listenKey | STRING | YES
   "e": "listenKeyExpired",  // 事件类型
   "E": 1699596037418,      // 事件时间
   "listenKey": "OfYGbUzi3PraNagEkdKuFwUHn48brFsItTdsuiIXrucEvD0rhRXZ7I6URWfE8YE8" 
+}
+```
+
+
+## 事件流已终止
+
+此事件仅在使用 WebSocket API 时才会发生。
+
+当账户数据流被终止时，`eventStreamTerminated` 会被发送。例如，在您发送 `userDataStream.stop` 请求或 `session.logout` 请求之后。
+
+**Payload:**
+
+```javascript
+{
+  "event": {
+    "e": "eventStreamTerminated", // Event Type
+    "E": 1728973001334            // Event Time
+  }
+}
+```
+
+## 外部锁定更新
+
+当您的现货钱包余额被外部系统锁定/解锁时 （例如，当用作保证金抵押品时），新事件 `externalLockUpdate` 将会被发送。
+
+**Payload:**
+
+```javascript
+{
+  "e": "externalLockUpdate",  // Event Type
+  "E": 1581557507324,         // Event Time
+  "a": "NEO",                 // Asset
+  "d": "10.00000000",         // Delta
+  "T": 1581557507268          // Transaction Time
 }
 ```

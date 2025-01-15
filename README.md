@@ -57,7 +57,7 @@ Name | Description
 
 # Change log
 
-Please refer to [CHANGELOG](./CHANGELOG.md) for latest changes on our APIs (both REST and WebSocket) and Streamers.
+Please refer to [CHANGELOG](./CHANGELOG.md) for latest changes on our APIs and Streamers.
 
 # Useful Resources
 

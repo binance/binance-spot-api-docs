@@ -103,7 +103,7 @@
    <component name='NewOrder' required='Y'/>
   </message>
   <message name='Logon' msgcat='admin' msgtype='A'>
-   <field name='EncryptMethod' required='Y'/>
+   <field name='EncryptMethod' required='N'/>
    <field name='HeartBtInt' required='Y'/>
    <field name='RawDataLength' required='N'/>
    <field name='RawData' required='N'/>
@@ -111,6 +111,7 @@
    <field name='Username' required='N'/>
    <field name='MessageHandling' required='N'/>
    <field name='ResponseMode' required='N'/>
+   <field name='DropCopyFlag' required='N'/>
    <field name='UUID' required='N'/>
   </message>
   <message name='NewOrderSingle' msgcat='app' msgtype='D'>
@@ -145,10 +146,10 @@
    <field name='ListRejectReason' required='N'/>
    <field name='TransactTime' required='N'/>
    <group name='NoOrders' required='N'>
+    <field name='ClOrdID' required='Y'/>
     <field name='Symbol' required='Y'/>
     <field name='OrderID' required='N'/>
-    <field name='ClOrdID' required='Y'/>
-    <component name='ListTriggeringInstruction' required='Y'/>
+    <component name='ListTriggeringInstruction' required='N'/>
     <field name='OrdRejReason' required='N'/>
     <field name='ErrorCode' required='N'/>
     <field name='Text' required='N'/>
@@ -182,6 +183,9 @@
     <field name='LimitResetIntervalResolution' required='N'/>
    </group>
   </message>
+  <message name='News' msgtype='B' msgcat='app'>
+   <field name='Headline' required='Y'/>
+  </message>
  </messages>
  <trailer>
   <field name='CheckSum' required='Y'/>
@@ -197,9 +201,9 @@
   </component>
   <component name='ListTriggeringInstruction'>
    <group name='NoListTriggeringInstructions' required='N'>
-    <field name='ListTriggerType' required='N'/>
-    <field name='ListTriggerTriggerIndex' required='N'/>
-    <field name='ListTriggerAction' required='N'/>
+    <field name='ListTriggerType' required='Y'/>
+    <field name='ListTriggerTriggerIndex' required='Y'/>
+    <field name='ListTriggerAction' required='Y'/>
    </group>
   </component>
   <component name='NewOrder'>
@@ -220,7 +224,9 @@
   </component>
  </components>
  <fields>
-  <field number='8' name='BeginString' type='STRING'/>
+  <field number='8' name='BeginString' type='STRING'>
+    <value enum='FIX.4.4' description='FIX44'/>
+  </field>
   <field number='9' name='BodyLength' type='LENGTH'/>
   <field number='10' name='CheckSum' type='STRING'/>
   <field number='11' name='ClOrdID' type='STRING'/>
@@ -240,6 +246,7 @@
    <value enum='8' description='EXECUTION_REPORT'/>
    <value enum='9' description='ORDER_CANCEL_REJECT'/>
    <value enum='A' description='LOGON'/>
+   <value enum='B' description='NEWS'/>
    <value enum='D' description='NEW_ORDER_SINGLE'/>
    <value enum='E' description='NEW_ORDER_LIST'/>
    <value enum='F' description='ORDER_CANCEL_REQUEST'/>
@@ -310,6 +317,7 @@
    <value enum='Y' description='YES'/>
    <value enum='N' description='NO'/>
   </field>
+  <field number='148' name='Headline' type='STRING'/>
   <field number='150' name='ExecType' type='CHAR'>
    <value enum='0' description='NEW'/>
    <value enum='4' description='CANCELED'/>
@@ -399,6 +407,7 @@
   </field>
   <field number='6136' name='ReqID' type='STRING'/>
   <field number='7940' name='StrategyID' type='INT'/>
+  <field number='9406' name='DropCopyFlag' type='BOOLEAN'/>
   <field number='25000' name='RecvWindow' type='INT'/>
   <field number='25001' name='SelfTradePreventionMode' type='CHAR'>
    <value enum='1' description='NONE'/>

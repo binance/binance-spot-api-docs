@@ -2,7 +2,7 @@
 
 **Disclaimer:** This glossary refers only to the SPOT API Implementation. The definition for these terms may differ with regards to Futures, Options, and other APIs by Binance.
 
-## A
+### A
 
 `ACK`
 * `newOrderRespType` enum. Stands for a type of order response in JSON where only the following fields are emitted: `symbol`, `orderId`, `orderListId`, `clientOrderId`, and `transactTime`.
@@ -17,7 +17,7 @@ allocation
 * Unique identifier of an allocation on a symbol.
 
 `allocationType`
-* See [AllocationType](../rest-api.md#allocationtype) 
+* See [AllocationType](../enums.md#allocationtype) 
 
 `askPrice`
 * In ticker responses: the lowest price on the `SELL` side.
@@ -33,7 +33,7 @@ allocation
 
 ---
 
-## B
+### B
 
 `baseAsset`
 * The first asset in the symbol (e.g. `BTC` is the `base asset` of symbol `BTCUSDT`), which represents the asset being bought and sold (the `quantity`).
@@ -61,7 +61,7 @@ allocation
 
 ---
 
-## C
+### C
 
 `CANCELED`
 * Order `status` indicating the order has been canceled by the user.
@@ -83,14 +83,14 @@ allocation
 
 ---
 
-## D
+### D
 
 Data Source
 * Specifies where the endpoint or request is retrieving their data.
 
 ---
 
-## E
+### E
 
 `executedQty`
 * The field that shows how much of the quantity was filled in an order.
@@ -103,7 +103,7 @@ Data Source
 
 ---
 
-## F
+### F
 
 `filters`
 * Defines the trading rules on the exchange.
@@ -119,21 +119,21 @@ Data Source
 
 ---
 
-## G
+### G
 
 `GTC`/ Good Til Canceled
 * `timeInForce` enum where the order will remain active until it is canceled or fully filled.
 
 ---
 
-## H
+### H
 
 `HALT`
 * Symbol's trading status that represents the symbol is not available for trading, which can happen during emergency downtime. Market data is still generated during `HALT`.
 
 ---
 
-## I
+### I
 
 `intervalNum`
 * Describes the amount of time in the interval (e.g. if `interval` is `SECOND` and `intervalNum` is 5, then this will be interpreted as every 5 seconds).
@@ -152,14 +152,14 @@ Data Source
 
 ---
 
-## K
+### K
 
 `kline`
 * Identifies the open, close, high, low price, trading volume, and other market data, of a symbol at a specified time for a specific duration. Also known as a Candlestick.
 
 ---
 
-## L
+### L
 
 Last Prevented Quantity
 * Order quantity that expired due to STP.
@@ -180,7 +180,7 @@ Last Prevented Quantity
 * A parameter used in placing OCO orders (i.e. `POST /api/v3/order/oco`) that identifies the `LIMIT_MAKER` pair of the OCO Order.
 
 `listClientOrderId`
-* A parameter used in placing OCO Orders (i.e. `POST /api/v3/order/oco`) that identifies the pair of orders.
+* A parameter used in placing OCO Orders (e.g. `POST /api/v3/order/oco`) that identifies the pair of orders.
 
 `listenKey`
 * Individual key used on User Data Stream to get live updates on the associated account.
@@ -190,7 +190,7 @@ Last Prevented Quantity
 
 ---
 
-## M
+### M
 
 `MARKET`
 * A `type` of order where the user buys or sells an asset at the best available prices and liquidity until the order is fully filled or the order book's liquidity is exhausted.
@@ -204,7 +204,7 @@ Memory
 
 ---
 
-## N
+### N
 
 `NEW`
 * Order `status` where a order has been successfully sent to the Matching Engine.
@@ -217,10 +217,10 @@ Notional value
 
 ---
 
-## O
+### O
 
 `OCO`
-* One-Cancels-the-Other type of order that is composed by a pair of orders (i.e. `STOP_LOSS` or `STOP_LOSS_LIMIT` paired with a `LIMIT_MAKER` order) with the condition that if one of the orders execute, the other is automatically expired.
+* One-Cancels-the-Other type of order that is composed by a pair of orders (e.g. `STOP_LOSS` or `STOP_LOSS_LIMIT` paired with a `LIMIT_MAKER` order) with the condition that if one of the orders execute, the other is automatically expired.
 
 Order Book
 * List of the open bids and asks for a symbol.
@@ -248,7 +248,7 @@ Order List
 
 ---
 
-## P
+### P
 
 `PARTIALLY_FILLED`
 * Order `status` indicating that part of the order has been partially filled.
@@ -273,7 +273,7 @@ Prevented Match
 
 ---
 
-## Q
+### Q
 
 `quantity`
 * Parameter used to specify the amount of the `base asset` to buy or sell.
@@ -295,7 +295,7 @@ Prevented Match
 
 ---
 
-## R
+### R
 
 `recvWindow`
 * Parameter in the APIs that can be used to specify the number of milliseconds after the `timestamp` the request is valid for.
@@ -308,7 +308,7 @@ Reverse `MARKET` order
 
 ---
 
-## S
+### S
 
 Self Trade Prevention (STP)
 * Self Trade Prevention is a feature that prevents orders of users, or the user's `tradeGroupId` from matching against their own.
@@ -349,7 +349,7 @@ Smart Order Routing (SOR)
 
 ---
 
-## T
+### T
 
 `TAKE_PROFIT`
 * A `type` of algorithmic order where once the market price hits the `stopPrice`, a `MARKET` order is placed on the order book.
@@ -381,24 +381,24 @@ Smart Order Routing (SOR)
 * The time when the trailing order is now active and tracking price changes.
 
 `transactTime`
-* The time when the order was updated: placed, filled, or canceled. This field (as well as all timestamp related fields) will be in milliseconds.
+* The time when the order was updated: placed, filled, or canceled. This field (as well as all timestamp related fields) will be in milliseconds by default in JSON responses.
 
 ---
 
-## U
+### U
 
 `uiKlines`
 * Modified candlestick data that is optimized for presentation of candlestick charts.
 
 `updateTime`
-* Last update to the order. This field (as well as all timestamp related fields) will be in milliseconds.
+* Last update to the order. This field (as well as all timestamp related fields) will be in milliseconds by default in JSON responses.
 
 User Data Stream
 * Websocket stream used to get real-time information of a user's account. (e.g. Changes to Balances, Order Updates, etc.)
 
 ---
 
-## W
+### W
 
 `weightedAveragePrice`
 * The volume weighted average price in the last x minutes.
@@ -415,7 +415,7 @@ Working order
 
 ---
 
-## X
+### X
 
 `X-MBX-ORDER-COUNT-XX`
 * Response header that is emitted when a user places an order, indicating the current order count for the interval XX for that account.

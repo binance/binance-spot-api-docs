@@ -1,6 +1,233 @@
-# CHANGELOG for Binance's API (2024-06-11)
+# CHANGELOG for Binance's API 
 
-## 2024-06-11 
+**Last Updated: 2025-01-09**
+
+### 2025-01-09
+
+* FIX Market Data will be available at **January 16, 05:00 UTC**. The FIX API documentation has been updated regarding this feature.  
+* Please refer to this [link](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml) for the QuickFix Schema for FIX Market Data.
+
+---
+
+### 2024-12-17
+
+General Changes:
+
+The system now supports microseconds in all related time and/or timestamp fields. Microsecond support is **opt-in**, by default the requests and responses still use milliseconds. Examples in documentation are also using milliseconds for the foreseeable future.
+
+WebSocket Streams
+
+* A new optional parameter `timeUnit` can be used in the connection URL to select the time unit.  
+  * For example: `/stream?streams=btcusdt@trade&timeUnit=millisecond`  
+  * Supported values are:  
+    * `MILLISECOND`  
+    * `millisecond`  
+    * `MICROSECOND`  
+    * `microsecond`  
+  * If the time unit is not selected, milliseconds will be used by default.
+
+REST API
+
+* A new optional header `X-MBX-TIME-UNIT` can be sent in the request to select the time unit.  
+  * Supported values:  
+    * `MILLISECOND`  
+    * `millisecond`  
+    * `MICROSECOND`  
+    * `microsecond`  
+  * The time unit affects timestamp fields in JSON responses (e.g., `time`, `transactTime`).  
+    * SBE responses continue to be in microseconds regardless of time unit.  
+  * If the time unit is not selected, milliseconds will be used by default.   
+* Timestamp parameters (e.g. `startTime`, `endTime`, `timestamp)` can now be passed in milliseconds or microseconds.
+
+WebSocket API
+
+* A new optional parameter `timeUnit` can be used in the connection URL to select the time unit.   
+  * Supported values:  
+    * `MILLISECOND`   
+    * `millisecond`  
+    * `MICROSECOND`  
+    * `microsecond`  
+  * The time unit affects timestamp fields in JSON responses (e.g., `time`, `transactTime`).  
+    * SBE responses continue to be in microseconds regardless of time unit.  
+  * If the time unit is not selected, milliseconds will be used by default.   
+* Timestamp parameters (e.g. `startTime`, `endTime`, `timestamp)` can now be passed in milliseconds or microseconds.
+
+User Data Streams
+
+* A new optional parameter `timeUnit` can be used in the connection URL to select the time unit.   
+  * Supported values   
+    * `MILLISECOND`   
+    * `MICROSECOND`.  
+    * `microsecond`  
+    * `millisecond`
+    
+---
+
+### 2024-12-09
+
+**Notice:** The changes below will be rolled out starting at **2024-12-12** and may take approximately a week to complete.
+
+General Changes
+
+* Timestamp parameters now reject values too far into the past or the future. To be specific, the parameter will be rejected if:  
+  * `timestamp` before 2017-01-01 (less than 1483228800000)  
+  * `timestamp` is more than 10 seconds after the current time (e.g., if current time is 1729745280000 then it is an error to use 1729745291000 or greater)  
+* If `startTime` and/or `endTime` values are outside of range, the values will be adjusted to fit the correct range.   
+* The field for quote order quantity (`origQuoteOrderQty`) has been added to responses that previously did not have it. Note that for order placement endpoints the field will only appear for requests with `newOrderRespType` set to `RESULT` or `FULL`.   
+  * Please refer to the table below for affected requests with: `origQuoteOrderQty`:
+
+| Service | Request |
+| :---- | :---- |
+| REST | `POST /api/v3/order`  |
+|  | `POST /api/v3/sor/order`  |
+|  | `POST /api/v3/order/oco`  |
+|  | `POST /api/v3/orderList/oco`  |
+|  | `POST /api/v3/orderList/oto`  |
+|  | `POST /api/v3/orderList/otoco`  |
+|  | `DELETE /api/v3/order`  |
+|  | `DELETE /api/v3/orderList`  |
+|  | `POST /api/v3/order/cancelReplace` |
+| WebSocket API | `order.place`  |
+|  | `sor.order.place`  |
+|  | `orderList.place`  |
+|  | `orderList.place.oco`  |
+|  | `orderList.place.oto`  |
+|  | `orderList.place.otoco`  |
+|  | `order.cancel`  |
+|  | `orderList.cancel`  |
+|  | `order.cancelReplace` |
+
+SBE
+
+* A new schema 2:1 [spot_2_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_2_1.xml) has been released. The current schema 2:0 [spot_2_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_2_0.xml) will thus be deprecated, and retired from the API in 6 months as per our schema deprecation policy.  
+* Schema 2:1 is a backward compatible update of schema 2:0. You will always receive payloads in 2:1 format when you request either schema 2:0 or 2:1.  
+* Changes in SBE schema 2:1:  
+  * New field `origQuoteOrderQty` in order placement/cancellation responses (Note: Decoders generated using the 2:0 schema will skip this field.):  
+    * `NewOrderResultResponse`  
+    * `NewOrderFullResponse`  
+    * `CancelOrderResponse`  
+    * `NewOrderListResultResponse`  
+    * `NewOrderListFullResponse`  
+    * `CancelOrderListResponse`  
+  * WebSocket API only: New field `userDataStream` in session status responses:  
+    * `WebSocketSessionLogonResponse`  
+    * `WebSocketSessionStatusResponse`  
+    * `WebSocketSessionLogoutResponse`  
+  * WebSocket API only: New messages for User Data Stream support:  
+    * `UserDataStreamSubscribeResponse`  
+    * `UserDataStreamUnsubscribeResponse`  
+    * `BalanceUpdateEvent`  
+    * `EventStreamTerminatedEvent`  
+    * `ExecutionReportEvent`  
+    * `ExternalLockUpdateEvent`  
+    * `ListStatusEvent`  
+    * `OutboundAccountPositionEvent`
+
+WebSocket API
+
+* You can now subscribe to User Data Stream events through your WebSocket API connection.   
+  * Note: This feature is only available for users of the Ed25519 API keys.  
+  * Note: New SBE schema 2:1 is required for User Data Stream subscriptions in SBE format.  
+* New requests:  
+  * `userDataStream.subscribe`  
+  * `userDataStream.unsubscribe`  
+* Changes to `session.logon`, `session.status`, and `session.logout`  
+  * Added a new field `userDataStream` indicating if the user data stream subscription is active.   
+* Fixed a bug where you wouldn't receive a new listenKey using `userDataStream.start` after `session.logon` 
+
+User Data Stream
+
+* WebSocket API only: New event `eventStreamTerminated` is emitted when you either logout from your websocket session or you have unsubscribed from the user data stream.   
+* New event `externalLockUpdate` is sent when your spot wallet balance is locked/unlocked by an external system.
+
+FIX API
+
+* The [schema](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml) has been updated with a new Administrative message News \<B\>, which can be used for all FIX services. Receiving this message indicates that your connection is about to be closed.
+
+The following changes will occur **between 2024-12-16 to 2024-12-20**:
+
+* Fixed a bug that prevented orders from being placed when submitting OCOs on the `BUY` side without providing a `stopPrice`.  
+* `TAKE_PROFIT` and `TAKE_PROFIT_LIMIT` support has been added for OCOs.  
+  * Previously OCOs could only be composed by the following order types:  
+    * `LIMIT_MAKER` \+ `STOP_LOSS`  
+    * `LIMIT_MAKER` \+ `STOP_LOSS_LIMIT`  
+  * Now OCOs can be composed of the following order types:  
+    * `LIMIT_MAKER` \+ `STOP_LOSS`  
+    * `LIMIT_MAKER` \+ `STOP_LOSS_LIMIT`  
+    * `TAKE_PROFIT` \+ `STOP_LOSS`  
+    * `TAKE_PROFIT` \+ `STOP_LOSS_LIMIT`   
+    * `TAKE_PROFIT_LIMIT` \+ `STOP_LOSS`  
+    * `TAKE_PROFIT_LIMIT` \+ `STOP_LOSS_LIMIT`  
+  * This is supported by the following requests:   
+    * `POST /api/v3/orderList/oco`  
+    * `POST /api/v3/orderList/otoco`  
+    * `orderList.place.oco`  
+    * `orderList.place.otoco`  
+    * `NewOrderList<E>`  
+  * Error code \-1167 will be obsolete after this update and will be removed from the documentation in a later update.
+
+---
+
+### 2024-10-18
+
+REST and WebSocket API:
+
+* Reminder that SBE 1:0 schema will be disabled on 2024-10-25, [6 months after being deprecated](./faqs/sbe_faq.md), as per our SBE policy.
+* The [SBE lifecycle for Prod](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) has been updated to reflect this change. 
+
+---
+
+### 2024-10-17
+
+
+Changes to Exchange Information (i.e. [`GET /api/v3/exchangeInfo`](rest-api.md#exchangeInfo) from REST and [`exchangeInfo`](web-socket-api.md#exchangeInfo) for WebSocket API).
+
+* A new optional parameter `showPermissionSets` can be used to hide the permissions from `permissionsSets`; This can be used for a reduced payload size.
+* A new optional parameter `symbolStatus` can now be used to only show symbols with the specified status. (e.g. `TRADING`, `HALT`, `BREAK`)
+
+---
+
+### 2024-08-26
+
+* [Spot Unfilled Order Count Rules](./faqs/order_count_decrement.md) have been updated to explain how to decrease your unfilled order count when placing orders.
+
+---
+
+### 2024-08-16
+
+**Notice:** The changes below are being rolled out gradually, and may take approximately a week to complete.
+
+General Changes:
+* New error messages have been added when quote quantity market orders (aka reverse market orders) are rejected in low-liquidity situations.
+
+---
+
+### 2024-08-01
+
+* [FIX API and Drop Copy Sessions](fix-api.md) will be available on **August 8, 05:00 UTC**.
+
+---
+
+### 2024-07-26
+
+* [FIX API and Drop Copy Sessions](fix-api.md) has been added to the documentation.
+* The release date to the live exchange has not been determined.
+
+
+---
+
+### 2024-07-22 
+
+General changes:
+
+* Fixed a bug where klines had incorrect timestamps.
+  * REST API: `GET /api/v3/klines` and `GET /api/v3/uiKlines` with `timeZone` parameter
+  * WebSocket API: `klines` and `uiKlines` with `timeZone` parameter
+  * WebSocket Streams: `<symbol>@kline_<interval>@+08:00` streams
+
+---
+
+### 2024-06-11 
 
 * On **June 11, 05:00 UTC**, One-Triggers-the-Other (OTO) orders and One-Triggers-a-One-Cancels-The-Other (OTOCO) orders will be enabled. (Note this may take a few hours to be rolled out to all servers.)
     * New requests have been added:
@@ -16,7 +243,7 @@
 
 ---
 
-## 2024-06-06
+### 2024-06-06
 
 This will be available by **June 6, 11:59 UTC**.
 
@@ -30,7 +257,7 @@ WebSocket API
 
 ---
 
-## 2024-05-30
+### 2024-05-30
 
 WebSocket Streams:
 
@@ -38,7 +265,7 @@ WebSocket Streams:
 
 ---
 
-## 2024-04-10
+### 2024-04-10
 
 The following changes have been postponed to take effect on **April 25, 05:00 UTC**
 
@@ -67,7 +294,7 @@ SBE
 
 ---
 
-## 2024-04-02
+### 2024-04-02
 
 **Notice:** The changes below are being rolled out gradually, and will take approximately a week to complete.
 
@@ -122,7 +349,7 @@ SBE
 ---
 
 
-## 2024-02-28
+### 2024-02-28
 
 **This will take effect on March 5, 2024.** 
 
@@ -133,7 +360,7 @@ For more information on SBE, please refer to the [FAQ](./faqs/sbe_faq.md)
 
 ---
 
-## 2024-02-08
+### 2024-02-08
 
 The SPOT WebSocket API can now support SBE on [SPOT Testnet](https://testnet.binance.vision).
 
@@ -147,7 +374,7 @@ The [FAQ](./faqs/sbe_faq.md) for SBE has been updated.
 
 ---
 
-## 2023-12-08 
+### 2023-12-08 
 
 Simple Binary Encoding (SBE) has been added to [SPOT Testnet](https://testnet.binance.vision). 
 
@@ -157,7 +384,7 @@ For more information on what SBE is, please refer to the [FAQ](./faqs/sbe_faq.md
 
 ---
 
-## 2023-12-04
+### 2023-12-04
 
 **Notice:** The changes below are being rolled out gradually, and will take approximately a week to complete.
 
@@ -231,7 +458,7 @@ User Data Streams
 
 ---
 
-## 2023-10-19
+### 2023-10-19
 
 **Effective on 2023-10-19 00:00 UTC**
 
@@ -278,14 +505,14 @@ User Data Streams
 
 ---
 
-## 2023-10-03
+### 2023-10-03
 
 * **Order decrement feature went live at 06:15 UTC**.
 * For more information on this feature, please refer to our [FAQ](./faqs/order_count_decrement.md)
 
 ---
 
-## 2023-08-25
+### 2023-08-25
 
 * For WebSocket API, removed `RAW REQUESTS` rate limit in `exchangeInfo`, replaced it with `CONNECTIONS` rate limit, which is the limit for new Websocket connections.
 
@@ -340,7 +567,7 @@ Please refer to the table for more details:
 
 ---
 
-## 2023-08-08
+### 2023-08-08
 
 Smart Order Routing (SOR) has been added to the APIs. For more information please refer to our [FAQ](./faqs/sor_faq.md). Please wait for future announcements on when the feature will be enabled.
 
@@ -378,7 +605,7 @@ USER DATA STREAM
 
 ---
 
-## 2023-07-18
+### 2023-07-18
 
 * New API key type – Ed25519 – is now supported. (UI support will be released this week.)
   * Ed25519 API keys are an alternative to RSA API keys, using asymmetric cryptography to authenticate your requests on the API.
@@ -388,7 +615,7 @@ USER DATA STREAM
 
 ---
 
-## 2023-07-11
+### 2023-07-11
 
 **Notice:** The change below are being rolled out, and will take approximately a week to complete.
 
@@ -444,14 +671,14 @@ Websocket API
 
 ---
 
-## 2023-06-06
+### 2023-06-06
 
 * A new endpoint is now available for redundancy: **https://api-gcp.binance.com/**
     * This is using the GCP (Google Cloud Platform) CDN and may have slower performance compared to `api1`-`api4` endpoints.
 
 ---
 
-## 2023-05-26
+### 2023-05-26
 
 **Notice:** The change below are being rolled out, and will take approximately a week to complete.
 
@@ -463,7 +690,7 @@ Websocket API
 
 ---
 
-## 2023-05-24
+### 2023-05-24
 
 * **The previous market data URLs have been deprecated. Please update your code immediately to prevent interruption of our services.**
     * API Market data from `data.binance.com` can now be accessed from `data-api.binance.vision`.
@@ -471,7 +698,7 @@ Websocket API
 
 ---
 
-## 2023-03-13
+### 2023-03-13
 
 **Notice:** All changes are being rolled out gradually to all our servers, and may take a week to complete.
 
@@ -575,7 +802,7 @@ WEBSOCKET API
     ```
 ---
 
-## 2023-02-17
+### 2023-02-17
 
 **Changes to Websocket Limits**
 
@@ -587,7 +814,7 @@ Please be careful when trying to open multiple connections or reconnecting to th
 
 ---
 
-## 2023-01-26
+### 2023-01-26
 
 As per the [announcement](https://www.binance.com/en/support/announcement/binance-spot-launches-self-trade-prevention-stp-function-on-api-312fd0112fb44635b397c116e56d8f84), Self Trade Prevention will be enabled at **2023-01-26 08:00 UTC**.
 
@@ -595,7 +822,7 @@ Please refer to `GET /api/v3/exchangeInfo` from the Rest API or `exchangeInfo` f
 
 ---
 
-## 2023-01-23
+### 2023-01-23
 
 New API cluster has been added. Note that all endpoints are functionally equal, but may vary in performance.
 
@@ -603,7 +830,7 @@ New API cluster has been added. Note that all endpoints are functionally equal, 
 
 ---
 
-## 2023-01-19
+### 2023-01-19
 
 **ACTUAL RELEASE DATE TBD**
 
@@ -682,20 +909,20 @@ USER DATA STREAM
 
 ---
 
-## 2022-12-28
+### 2022-12-28
 
 * SPOT WebSocket API documentation has been updated to show how to sign a request using an RSA key.
 
 ---
 
-## 2022-12-26
+### 2022-12-26
 
 * Spot WebSocket API is now available on the live exchange.
 * Spot Websocket API can be accessed through this URL: `wss://ws-api.binance.com/ws-api/v3`
 
 ---
 
-## 2022-12-15
+### 2022-12-15
 
 * New RSA signature
     * Documentation has been updated to show how to create RSA keys.
@@ -712,7 +939,7 @@ USER DATA STREAM
 
 ---
 
-## 2022-12-13
+### 2022-12-13
 
 REST API
 
@@ -728,7 +955,7 @@ Way too much request weight used; IP banned until %s. Please use WebSocket Strea
 
 ---
 
-## 2022-12-05
+### 2022-12-05
 
 **Notice:** These changes are being rolled out gradually to all our servers, and will take approximately a week to complete.
 
@@ -828,14 +1055,14 @@ USER DATA STREAM
 
 ---
 
-## 2022-12-02
+### 2022-12-02
 
 * Added a new market data base URL `https://data.binance.com`.
 * Added a new WebSocket URL `wss://data-stream.binance.com`.
 
 ---
 
-## 2022-09-30
+### 2022-09-30
 
 Scheduled changes to the removal of `!bookTicker` around November 2022.
 
@@ -847,7 +1074,7 @@ Scheduled changes to the removal of `!bookTicker` around November 2022.
 
 ---
 
-## 2022-09-15
+### 2022-09-15
 
 Note that these are rolling changes, so it may take a few days for it to rollout to all our servers.
 
@@ -860,7 +1087,7 @@ Note that these are rolling changes, so it may take a few days for it to rollout
 
 ---
 
-## 2022-08-23
+### 2022-08-23
 
 Note that these are rolling changes, so it may take a few days for it to rollout to all our servers.
 
@@ -877,7 +1104,7 @@ Note that these are rolling changes, so it may take a few days for it to rollout
 
 ---
 
-## 2022-08-08
+### 2022-08-08
 
 REST API
 
@@ -905,7 +1132,7 @@ USER DATA STREAM
 
 ---
 
-## 2022-06-20
+### 2022-06-20
 
 Changes to `GET /api/v3/ticker`
 
@@ -923,7 +1150,7 @@ Changes to `GET /api/v3/ticker`
 
 ---
 
-## 2022-06-15
+### 2022-06-15
 
 **Note:** The update is being rolled out over the next few days, so these changes may not be visible right away.
 
@@ -947,7 +1174,7 @@ SPOT API
 
 ---
 
-## 2022-05-23
+### 2022-05-23
 * Changes to Order Book Depth Levels
     * Quantities in the Depth levels were returning negative values in situations where they were exceeding the max value, resulting in an overflow.
     * Going forward depth levels will not overflow, but will be capped at the max value based on the precision of the base asset. This means that the depth level is at max value *or more*.
@@ -966,7 +1193,7 @@ SPOT API
     * If an order's `quantity` can cause the position to overflow, this will now fail the `MAX_POSITION` filter.
 ---
 
-## 2022-05-17
+### 2022-05-17
 
 * Changes to GET `api/v3/aggTrades`
     * When providing `startTime` and `endTime`, the oldest items are returned.
@@ -994,7 +1221,7 @@ SPOT API
 
 ---
 
-## 2022-04-13
+### 2022-04-13
 
 REST API
 
@@ -1022,7 +1249,7 @@ USER DATA STREAM
 
 ---
 
-## 2022-04-12
+### 2022-04-12
 
 **Note:** The changes are being rolled out during the next few days, so these will not appear right away.
 
@@ -1047,13 +1274,13 @@ USER DATA STREAM
 
 ---
 
-## 2022-02-28
+### 2022-02-28
 
 * New field `allowTrailingStop` has been added to `GET /api/v3/exchangeInfo`
 
 ---
 
-## 2022-02-24
+### 2022-02-24
 
 * `(price-minPrice) % tickSize == 0` rule in `PRICE_FILTER` has been changed to `price % tickSize == 0`.
 * A new filter `PERCENT_PRICE_BY_SIDE` has been added.
@@ -1073,30 +1300,30 @@ USER DATA STREAM
     * When providing `startTime` and `endTime`, the oldest items are returned.
 ---
 
-## 2021-12-29
+### 2021-12-29
 * Removed out dated "Symbol Type" enum; added "Permissions" enum.
 
-## 2021-11-01
+### 2021-11-01
 * `GET /api/v3/rateLimit/order` added
     * The endpoint will display the user's current order count usage for all intervals.
     * This endpoint will have a request weight of 20.
 
-## 2021-09-14
+### 2021-09-14
 * Add a [YAML file](https://github.com/binance/binance-api-swagger) with OpenApi specification on the RESTful API.
 
-## 2021-08-12
+### 2021-08-12
 * GET `api/v3/myTrades` has a new optional field `orderId`
 
 ---
 
-## 2021-05-12
+### 2021-05-12
 * Added `Data Source` in the documentation to explain where each endpoint is retrieving its data.
 * Added field `Data Source` to each API endpoint in the documentation
 * GET `api/v3/exchangeInfo` now supports single or multi-symbol query
 
 ---
 
-## 2021-04-26
+### 2021-04-26
 
 On **April 28, 2021 00:00 UTC** the weights to the following endpoints will be adjusted:
 
@@ -1111,7 +1338,7 @@ On **April 28, 2021 00:00 UTC** the weights to the following endpoints will be a
 
 ---
 
-## 2021-01-01
+### 2021-01-01
 
 **USER DATA STREAM**
 
@@ -1119,7 +1346,7 @@ On **April 28, 2021 00:00 UTC** the weights to the following endpoints will be a
 
 ---
 
-## 2020-11-27
+### 2020-11-27
 
 New API clusters have been added in order to improve performance.
 
@@ -1131,7 +1358,7 @@ If there are any performance issues with accessing `api.binance.com` please try 
 * https://api2.binance.com/api/v3/*
 * https://api3.binance.com/api/v3/*
 
-## 2020-09-09
+### 2020-09-09
 
 USER DATA STREAM
 
@@ -1141,7 +1368,7 @@ USER DATA STREAM
 
 ---
 
-## 2020-05-01
+### 2020-05-01
 * From 2020-05-01 UTC 00:00, all symbols will have a limit of 200 open orders using the [MAX_NUM_ORDERS](./rest-api.md#max_num_orders) filter.
     * No existing orders will be removed or canceled.
     * Accounts that have 200 or more open orders on a symbol will not be able to place new orders on that symbol until the open order count is below 200.
@@ -1149,7 +1376,7 @@ USER DATA STREAM
 
 ---
 
-## 2020-04-25
+### 2020-04-25
 
 REST API
 
@@ -1176,7 +1403,7 @@ USER DATA STREAM
 
 ---
 
-## 2020-04-23
+### 2020-04-23
 
 WEB SOCKET STREAM
 
@@ -1189,7 +1416,7 @@ WEB SOCKET STREAM
 
 
 ---
-## 2020-03-24
+### 2020-03-24
 
 * `MAX_POSITION` filter added.
     * This filter defines the allowed maximum position an account can have on the base asset of a symbol. An account's position defined as the sum of the account's:
@@ -1200,7 +1427,7 @@ WEB SOCKET STREAM
     * `BUY` orders will be rejected if the account's position is greater than the maximum position allowed.
 
 ---
-## 2019-11-22
+### 2019-11-22
 
 * Quote Order Qty Market orders have been enabled on all symbols.
     * Quote Order Qty `MARKET` orders allow a user to specify the total `quoteOrderQty` spent or received in the `MARKET` order.
@@ -1210,7 +1437,7 @@ WEB SOCKET STREAM
         * On the `SELL` side, the order will sell as much BNB as needed to receive `quoteOrderQty` BTC.
 
 ---
-## 2019-11-13
+### 2019-11-13
 
 REST API
 
@@ -1279,11 +1506,11 @@ WEB SOCKET STREAMS
 * WSS now supports live subscribing/unsubscribing to streams.
 
 ---
-## 2019-09-09
+### 2019-09-09
 * New WebSocket streams for bookTickers added: `<symbol>@bookTicker` and `!bookTicker`. See `web-socket-streams.md` for details.
 
 ---
-## 2019-09-03
+### 2019-09-03
 * Faster order book data with 100ms updates: `<symbol>@depth@100ms` and `<symbol>@depth#@100ms`
 * Added "Update Speed:" to `web-socket-streams.md`
 * Removed deprecated v1 endpoints as per previous announcement:
@@ -1296,11 +1523,11 @@ WEB SOCKET STREAMS
     * GET api/v1/myTrades
 
 ---
-## 2019-08-16 (Update 2)
+### 2019-08-16 (Update 2)
 * GET api/v1/depth `limit` of 10000 has been temporarily removed
 
 ---
-## 2019-08-16
+### 2019-08-16
 * In Q4 2017, the following endpoints were deprecated and removed from the API documentation. They have been permanently removed from the API as of this version. We apologize for the omission from the original changelog:
     * GET api/v1/order
     * GET api/v1/openOrders
@@ -1313,7 +1540,7 @@ WEB SOCKET STREAMS
 * Streams, endpoints, parameters, payloads, etc. described in the documents in this repository are **considered official** and **supported**. The use of any other streams, endpoints, parameters, or payloads, etc. is **not supported; use them at your own risk and with no guarantees.**
 
 ---
-## 2019-08-15
+### 2019-08-15
 
 REST API
 * New order type: OCO ("One Cancels the Other")
@@ -1389,7 +1616,7 @@ NEW -2011 ERRORS
     * OCO orders are not supported for this symbol.
 
 ---
-## 2019-03-12
+### 2019-03-12
 
 REST API 
 * X-MBX-USED-WEIGHT header added to Rest API responses.
@@ -1406,7 +1633,7 @@ SYSTEM IMPROVEMENTS
 * Rest API performance improvements.
 
 ---
-## 2018-11-13
+### 2018-11-13
 REST API
 * Can now cancel orders through the Rest API during a trading ban.
 * New filters: `PERCENT_PRICE`, `MARKET_LOT_SIZE`, `MAX_NUM_ICEBERG_ORDERS`.
@@ -1434,7 +1661,7 @@ USER DATA STREAM
 * `Last quote asset transacted quantity` (as variable `Y`) added to execution reports. Represents the `lastPrice` * `lastQty` (`L` * `l`).
 
 ---
-## 2018-07-18
+### 2018-07-18
 REST API
 *  New filter: `ICEBERG_PARTS`
 *  `POST api/v3/order` new defaults for `newOrderRespType`. `ACK`, `RESULT`, or `FULL`; `MARKET` and `LIMIT` order types default to `FULL`, all other orders default to `ACK`.
@@ -1454,7 +1681,7 @@ USER DATA STREAM
 *  `O` (order creation time) added to execution reports
 
 ---
-## 2018-01-23
+### 2018-01-23
 * GET /api/v1/historicalTrades weight decreased to 5
 * GET /api/v1/aggTrades weight decreased to 1
 * GET /api/v1/klines weight decreased to 1
@@ -1467,7 +1694,7 @@ USER DATA STREAM
 * -1003 error message updated to direct users to websockets
 
 ---
-## 2018-01-20
+### 2018-01-20
 * GET /api/v1/ticker/24hr single symbol weight decreased to 1
 * GET /api/v3/openOrders all symbols weight decreased to number of trading symbols / 2
 * GET /api/v3/allOrders weight decreased to 15
@@ -1476,7 +1703,7 @@ USER DATA STREAM
 * myTrades will now return both sides of a self-trade/wash-trade
 
 ---
-## 2018-01-14
+### 2018-01-14
 * GET /api/v1/aggTrades weight changed to 2
 * GET /api/v1/klines weight changed to 2
 * GET /api/v3/order weight changed to 2

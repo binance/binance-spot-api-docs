@@ -71,7 +71,7 @@
     "avgPriceMins": 1
   }
 ```
-
+<a id="lotsize"></a>
 ### LOT_SIZE 订单尺寸
 "lots" 是拍卖术语，这个过滤器对订单中的 `quantity` 也就是数量参数进行合法性检查。包含三个部分：
 

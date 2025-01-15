@@ -2,7 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [General WSS information](#general-wss-information)
+  - [General WSS information](#general-wss-information)
   - [Websocket Limits](#websocket-limits)
   - [Live Subscribing/Unsubscribing to streams](#live-subscribingunsubscribing-to-streams)
     - [Subscribe to a stream](#subscribe-to-a-stream)
@@ -30,15 +30,19 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Web Socket Streams for Binance SPOT Testnet (2024-06-05)
+# Web Socket Streams for Binance SPOT Testnet 
 
-# General WSS information
+**Last Updated: 2024-12-04** 
+
+## General WSS information
 * The base endpoint is: **wss://testnet.binance.vision/ws**.
 * Streams can be accessed either in a single raw stream or in a combined stream
 * Raw streams are accessed at **/ws/\<streamName\>**
 * Combined streams are accessed at **/stream?streams=\<streamName1\>/\<streamName2\>/\<streamName3\>**
 * Combined stream events are wrapped as follows: **{"stream":"\<streamName\>","data":\<rawPayload\>}**
 * All symbols for streams are **lowercase**
+* All time and timestamp related fields are **milliseconds by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND` or `timeUnit=microsecond` in the URL.  
+  * For example: `/stream?streams=btcusdt@trade&timeUnit=MICROSECOND`
 * A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark
 * Websocket server will send a `ping frame` every 3 minutes. 
   * If the websocket server does not receive a `pong frame` back from the connection within a 10 minute period, the connection will be disconnected. 
@@ -582,15 +586,23 @@ Order book price and quantity depth updates used to locally manage an order book
 ```
 
 ## How to manage a local order book correctly
-1. Open a stream to **wss://testnet.binance.vision/ws/bnbbtc@depth**.
-2. Buffer the events you receive from the stream.
-3. Get a depth snapshot from **https://testnet.binance.vision/api/v3/depth?symbol=BNBBTC&limit=1000** .
-4. Drop any event where `u` is <= `lastUpdateId` in the snapshot.
-5. The first processed event should have `U` <= `lastUpdateId`+1 **AND** `u` >= `lastUpdateId`+1.
-6. While listening to the stream, each new event's `U` should be equal to the previous event's `u`+1.
-7. The data in each event is the **absolute** quantity for a price level.
-8. If the quantity is 0, **remove** the price level.
-9. Receiving an event that removes a price level that is not in your local order book can happen and is normal.
+1. Open a WebSocket connection to `wss://stream.testnet.binance.vision:9443/ws/bnbbtc@depth`.
+1. Buffer the events received from the stream. Note the `U` of the first event you received.
+1. Get a depth snapshot from `https://testnet.binance.vision/api/v3/depth?symbol=BNBBTC&limit=5000`.
+1. If the `lastUpdateId` from the snapshot is strictly less than the `U` from step 2, go back to step 3.
+1. In the buffered events, discard any event where `u` is <= `lastUpdateId` of the snapshot. The first buffered event should now have `lastUpdateId` within its `[U;u]` range.
+1. Set your local order book to the snapshot. Its update ID is `lastUpdateId`.
+1. Apply the update procedure below to all buffered events, and then to all subsequent events received.
 
-Note:
-Due to depth snapshots having a limit on the number of price levels, a price level outside of the initial snapshot that doesn't have a quantity change won't have an update in the Diff. Depth Stream. Consequently, those price levels will not be visible in the local order book even when applying all updates from the Diff. Depth Stream correctly and cause the local order book to have some slight differences with the real order book. However, for most use cases the depth limit of 5000 is enough to understand the market and trade effectively.
+To apply an event to your local order book, follow this update procedure:
+1. If the event `u` (last update ID) is < the update ID of your local order book, ignore the event.
+1. If the event `U` (first update ID) is > the update ID of your local order book, something went wrong. Discard your local order book and restart the process from the beginning.
+1. For each price level in bids (`b`) and asks (`a`), set the new quantity in the order book:
+    * If the price level does not exist in the order book, insert it with new quantity.
+    * If the quantity is zero, remove the price level from the order book.
+1. Set the order book update ID to the last update ID (`u`) in the processed event.
+
+> [!NOTE]
+> Since depth snapshots retrieved from the API have a limit on the number of price levels (5000 on each side maximum), you won't learn the quantities for the levels outside of the initial snapshot unless they change. <br>
+> So be careful when using the information for those levels, since they might not reflect the full view of the order book. <br>
+> However, for most use cases, seeing 5000 levels on each side is enough to understand the market and trade effectively.
