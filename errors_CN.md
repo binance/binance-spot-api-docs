@@ -73,6 +73,8 @@
  * A mandatory parameter was not sent, was empty/null, or malformed.
  * Mandatory parameter '%s' was not sent, was empty/null, or malformed.
  * Param '%s' or '%s' must be sent, but both were empty/null!
+ * '%s' contains unexpected value. Cannot be greater than '%s'.
+ * Required tag '%s' missing.
 
 ### -1103 无法识别的参数
  * An unknown parameter was sent.
@@ -183,9 +185,6 @@
 ### -1166 卖出 OCO 限价单必须较高
 * A limit order in a sell OCO must be above.
 
-### -1167 两个 OCO 订单不能都是依存订单
-* Both OCO orders cannot be contingent.
-
 ### -1168 两个 OCO 订单不能都是是限价单
 * At least one OCO order must be contingent.
 
@@ -277,6 +276,7 @@
 
 ### -1191 订阅数量过多 
 * Too many subscriptions. Connection may create up to '%s' subscriptions at a time.
+* Similar subscription is already active on this connection. Symbol='%s', active subscription id: '%s'.
 
 ### -2010 新订单被拒绝
  * NEW_ORDER_REJECTED

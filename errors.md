@@ -74,6 +74,8 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * A mandatory parameter was not sent, was empty/null, or malformed.
  * Mandatory parameter '%s' was not sent, was empty/null, or malformed.
  * Param '%s' or '%s' must be sent, but both were empty/null!
+ * '%s' contains unexpected value. Cannot be greater than '%s'.
+ * Required tag '%s' missing.
 
 ### -1103 UNKNOWN_PARAM
  * An unknown parameter was sent.
@@ -184,9 +186,6 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 ### -1166 SELL_OCO_LIMIT_MUST_BE_ABOVE
 * A limit order in a sell OCO must be above.
 
-### -1167 BOTH_OCO_ORDERS_CANNOT_BE_CONTINGENT
-* Both OCO orders cannot be contingent.
-
 ### -1168 BOTH_OCO_ORDERS_CANNOT_BE_LIMIT
 * At least one OCO order must be contingent.
 
@@ -263,6 +262,7 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 ### -1191 TOO_MANY_SUBSCRIPTIONS 
 * Too many subscriptions. Connection may create up to '%s' subscriptions at a time. 
+* Similar subscription is already active on this connection. Symbol='%s', active subscription id: '%s'.
 
 #### -1194 INVALID_TIME_UNIT
 * Invalid value for time unit; expected either MICROSECOND or MILLISECOND.

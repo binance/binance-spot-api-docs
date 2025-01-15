@@ -203,9 +203,6 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 ### -1166 SELL_OCO_LIMIT_MUST_BE_ABOVE
 * A limit order in a sell OCO must be above.
 
-### -1167 BOTH_OCO_ORDERS_CANNOT_BE_CONTINGENT
-* Both OCO orders cannot be contingent.
-
 ### -1168 BOTH_OCO_ORDERS_CANNOT_BE_LIMIT
 * At least one OCO order must be contingent.
 
@@ -263,6 +260,16 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 ### -1185 DROP_COPY_SESSION_REQUIRED
  * Only DropCopy sessions are supported on this server. Either reconnect to order entry server or send `DropCopyFlag (9406)` field.
+
+### -1188 INCORRECT_NUM_IN_GROUP_COUNT 
+* Incorrect NumInGroup count for repeating group '%s'. 
+
+### -1189 DUPLICATE_ENTRIES_IN_A_GROUP
+* Group '%s' contains duplicate entries.
+
+### -1191 TOO_MANY_SUBSCRIPTIONS 
+* Too many subscriptions. Connection may create up to '%s' subscriptions at a time. 
+* Similar subscription is already active on this connection. Symbol='%s', active subscription id: '%s'.
 
 ### -1194 INVALID_TIME_UNIT
   * Invalid value for time unit; expected either MICROSECOND or MILLISECOND.
