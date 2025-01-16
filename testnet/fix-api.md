@@ -178,7 +178,7 @@ Resulting Logon `<A>` message:
   breach and the current limit.
 * The limit is 5 concurrent TCP connections per account for the order entry sessions.
 * The limit is 10 concurrent TCP connections per account for the Drop Copy sessions.
-* The limit is 5 concurrent TCP connections per account for Market Data sessions.
+* The limit is 100 concurrent TCP connections per account for Market Data sessions.
 
 ### Unfilled Order Count
 
