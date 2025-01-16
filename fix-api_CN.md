@@ -197,7 +197,7 @@ MC4CAQAwBQYDK2VwBCIEIIJEYWtGBrhACmb9Dvy+qa8WEf0lQOl1s4CLIAB9m89u
 * 违反限制时， [Reject `<3>`](#reject) 消息会被发送给用户。该消息包含了有关违反连接限制和当前限制的信息。
 * 对于订单接入会话，其限制为每个账户 5 个并发 TCP 连接。
 * 对于 Drop Copy 会话，其限制为每个账户 10 个并发 TCP 连接。
-* 对于市场数据会话，每个账户的并发 TCP 连接数限制为 5 个。
+* 对于市场数据会话，每个账户的并发 TCP 连接数限制为 100 个。
 
 
 ## 错误处理
