@@ -1,7 +1,7 @@
 
 # Web Socket 行情接口
 
-**最近更新： 2024-12-17**
+**最近更新： 2025-01-28**
 
 ## 基本信息
 * 本篇所列出的所有wss接口的baseurl为: **wss://stream.binance.com:9443** 或者 **wss://stream.binance.com:443**
@@ -11,10 +11,10 @@
 * 订阅组合streams时，事件payload会以这样的格式封装 **{"stream":"\<streamName\>","data":\<rawPayload\>}**
 * stream名称中所有交易对均为**小写**
 * 每个到**stream.binance.com**的链接有效期不超过24小时，请妥善处理断线重连。
-* Websocket 服务器每3分钟发送Ping消息。
-    * 如果Websocket服务器在10分钟之内没有收到Pong消息应答，连接会被断开。
-    * 当客户收到ping消息，必需尽快回复pong消息，同时payload需要和ping消息一致。
-    * 未经请求的pong消息是被允许的，但是不会保证连接不断开。**对于这些pong消息，建议payload为空**
+* WebSocket 服务器**每20秒**发送 PING 消息。  
+  * 如果websocket 服务器没有在一分钟之内收到PONG 消息应答，连接会被断开。  
+  * 当客户收到PING消息，必须尽快回复PONG消息，同时payload需要和PING消息一致。  
+  * 服务器允许未经请求的PONG消息，但这不会保证连接不断开。**对于这些PONG 消息，建议payload为空。**
 * **wss://data-stream.binance.vision** 可以用来订阅仅有市场信息的数据流。账户信息**无法**从此URL获得。
 * 所有时间和时间戳相关字段均以**毫秒为默认单位**。 要以微秒为单位接收信息，请在 URL 中添加参数 `timeUnit=MICROSECOND` 或 `timeUnit=microsecond`。 
   * 例如： `/stream?streams=btcusdt@trade&timeUnit=MICROSECOND`

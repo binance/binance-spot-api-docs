@@ -1,6 +1,6 @@
 # Binance 的公共 WebSocket API
 
-**最近更新： 2024-12-17**
+**最近更新： 2025-01-28**
 
 
 ## API 基本信息
@@ -9,10 +9,10 @@
   * 如果使用标准443端口时遇到问题，可以使用替代端口9443。
   * [现货测试网](https://testnet.binance.vision)的 base URL 是 `wss://testnet.binance.vision/ws-api/v3`。
 * 每个到 base URL 的链接有效期不超过24小时，请妥善处理断线重连。
-* Websocket 服务器每3分钟发送Ping消息。
-    * 如果Websocket服务器在10分钟之内没有收到Pong消息应答，连接会被断开。
-    * 当客户收到ping消息，必需尽快回复pong消息，同时payload需要和ping消息一致。
-    * 未经请求的pong消息是被允许的，但是不会保证连接不断开。**对于这些pong消息，建议payload为空**
+* WebSocket 服务器**每20秒**发送 PING 消息。  
+  * 如果websocket 服务器没有在一分钟之内收到PONG 消息应答，连接会被断开。  
+  * 当客户收到PING消息，必须尽快回复PONG消息，同时payload需要和PING消息一致。  
+  * 服务器允许未经请求的PONG消息，但这不会保证连接不断开。**对于这些PONG 消息，建议payload为空。**
 * 响应中如有数组，数组元素以时间**时间顺序**排列，越早的数据越提前。
 * JSON 响应中的所有时间和时间戳相关字段均以**UTC 毫秒为默认单位**。要以微秒为单位接收信息，请在 URL 中添加参数 `timeUnit=MICROSECOND` 或 `timeUnit=microsecond`。 
 * 时间戳参数（例如 `startTime`、`endTime`、`timestamp`）可以以毫秒或微秒为单位传递。
