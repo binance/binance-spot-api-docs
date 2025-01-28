@@ -5,7 +5,7 @@
 ### 2025-01-28
 
 * **Notice: These changes will be gradually rolled out between February 3, 2025 and February 14, 2025.**   
-  **The following changes will apply to both WebSocket Market Data Streams, User Data Streams, and the WebSocket API:**   
+  **The following changes will apply to WebSocket Market Data Streams, User Data Streams, and the WebSocket API:**   
     * Our WebSocket services will send a ping frame **every 20 seconds** instead of 3 minutes.  
     * The allowed pong delay will be **every 1 minute** instead of 10 minutes.   
     * The documentation for these services have been updated to reflect the change.
