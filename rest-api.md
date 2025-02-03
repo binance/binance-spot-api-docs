@@ -1870,11 +1870,11 @@ With `computeCommissionRates`
 {
   "standardCommissionForOrder": {  //Standard commission rates on trades from the order.
     "maker": "0.00000112",
-    "taker": "0.00000114",
+    "taker": "0.00000114"
   },
   "taxCommissionForOrder": {       //Tax commission rates for trades from the order.
     "maker": "0.00000112",
-    "taker": "0.00000114",
+    "taker": "0.00000114"
   },
   "discount": {                    //Discount on standard commissions when paying in BNB.
     "enabledForAccount": true,
@@ -1916,7 +1916,7 @@ Memory => Database
 {
   "symbol": "LTCBTC",
   "orderId": 1,
-  "orderListId": -1                 // This field will always have a value of -1 if not an order list.
+  "orderListId": -1,                 // This field will always have a value of -1 if not an order list.
   "clientOrderId": "myOrder1",
   "price": "0.1",
   "origQty": "1.0",
@@ -2640,7 +2640,7 @@ timestamp | LONG | YES |
     "isWorking": true,
     "origQuoteOrderQty": "0.000000",
     "workingTime": 1499827319559,
-    "selfTradePreventionMode": "NONE",
+    "selfTradePreventionMode": "NONE"
   }
 ]
 ```
@@ -3569,11 +3569,11 @@ With `computeCommissionRates`
 {
   "standardCommissionForOrder": {  //Standard commission rates on trades from the order.
     "maker": "0.00000112",
-    "taker": "0.00000114",
+    "taker": "0.00000114"
   },
   "taxCommissionForOrder": {       //Tax commission rates for trades from the order
     "maker": "0.00000112",
-    "taker": "0.00000114",
+    "taker": "0.00000114"
   },
   "discount": {                    //Discount on standard commissions when paying in BNB.
     "enabledForAccount": true,
