@@ -83,7 +83,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public WebSocket API for Binance SPOT Testnet 
+# Public WebSocket API for Binance SPOT Testnet
 
 **Last Updated: 2024-11-27**
 
@@ -92,8 +92,8 @@
 * The base endpoint is: **`wss://testnet.binance.vision/ws-api/v3`**
   * If you experience issues with the standard 443 port, alternative port 9443 is also available.
 * A single connection to the API is only valid for 24 hours; expect to be disconnected after the 24-hour mark.
-* Websocket server will send a `ping frame` every 3 minutes. 
-  * If the websocket server does not receive a `pong frame` back from the connection within a 10 minute period, the connection will be disconnected. 
+* Websocket server will send a `ping frame` every 3 minutes.
+  * If the websocket server does not receive a `pong frame` back from the connection within a 10 minute period, the connection will be disconnected.
   * When you receive a ping, you must send a pong with a copy of ping's payload as soon as possible.
   * Unsolicited `pong frames` are allowed, but will not prevent disconnection. **It is recommended that the payload for these pong frames are empty.**
 * Lists are returned in **chronological order**, unless noted otherwise.
@@ -340,7 +340,7 @@ Event fields:
 
 ## Connection limits
 
-There is a limit of **300 connections per attempt every 5 minutes**. 
+There is a limit of **300 connections per attempt every 5 minutes**.
 
 The connection is per **IP address**.
 
@@ -450,7 +450,7 @@ the `rateLimits` field can be omitted from responses to reduce their size.
 
 ### IP limits
 
-* Every request has a certain **weight**, added to your limit as you perform requests. 
+* Every request has a certain **weight**, added to your limit as you perform requests.
   * The heavier the request (e.g. querying data from multiple symbols), the more weight the request will cost.
   * Connecting to WebSocket API costs 2 weight.
 * Current weight usage is indicated by the `REQUEST_WEIGHT` rate limit type.
@@ -846,7 +846,7 @@ Parameter     | Value
 `price`       | 0.2
 `timestamp`   | 1668481559918
 
-This is a sample code in Python to show how to sign the payload with an Ed25519 key. 
+This is a sample code in Python to show how to sign the payload with an Ed25519 key.
 
 ```python
 #!/usr/bin/env python3
@@ -907,7 +907,7 @@ print(result)
 
 ## Session Authentication
 
-**Note:** Only _Ed25519_ keys are supported for this feature. 
+**Note:** Only _Ed25519_ keys are supported for this feature.
 
 If you do not want to specify `apiKey` and `signature` in each individual request,
 you can authenticate your API key for the active WebSocket session.
@@ -935,7 +935,7 @@ If during an active session the API key becomes invalid for _any reason_ (e.g. I
   "status": 401,
   "error": {
     "code": -2015,
-    "msg": "Invalid API-key, IP, or permissions for action." 
+    "msg": "Invalid API-key, IP, or permissions for action."
   }
 }
 ```
@@ -1137,8 +1137,8 @@ Notes:
 
 **Examples of Symbol Permissions Interpretation from the Response:**
 
-* `[["A","B"]]` means you may place an order if your account has either permission "A" **or** permission "B". 
-* `[["A"],["B"]]` means you can place an order if your account has permission "A" **and** permission "B". 
+* `[["A","B"]]` means you may place an order if your account has either permission "A" **or** permission "B".
+* `[["A"],["B"]]` means you can place an order if your account has permission "A" **and** permission "B".
 * `[["A"],["B","C"]]` means you can place an order if your account has permission "A" **and** permission "B" or permission "C". (Inclusive or is applied here, not exclusive or, so your account may have both permission "B" and permission "C".)
 
 **Data Source:**
@@ -1437,7 +1437,7 @@ Memory
 }
 ```
 
-### Historical trades 
+### Historical trades
 
 ```javascript
 {
@@ -2740,7 +2740,7 @@ If more than one symbol is requested, response returns an array:
 
 ## Authentication requests
 
-**Note:** Only _Ed25519_ keys are supported for this feature. 
+**Note:** Only _Ed25519_ keys are supported for this feature.
 
 <a id="session-logon"></a>
 
@@ -3312,7 +3312,7 @@ Response format is selected by using the `newOrderRespType` parameter.
 
 **Conditional fields in Order Responses**
 
-There are fields in the order responses (e.g. order placement, order query, order cancellation) that appear only if certain conditions are met. 
+There are fields in the order responses (e.g. order placement, order query, order cancellation) that appear only if certain conditions are met.
 
 These fields can apply to Order lists.
 
@@ -3410,7 +3410,7 @@ With `computeCommissionRates`:
     "taxCommissionForOrder": {                //Tax commission rates for trades from the order
       "maker": "0.00000112",
       "taker": "0.00000114"
-    },  
+    },
     "discount": {                             //Discount on standard commissions when paying in BNB.
       "enabledForAccount": true,
       "enabledForSymbol": true,
@@ -3794,7 +3794,7 @@ When an order list is canceled:
 
 **Regarding `cancelRestrictions`**
 
-* If the `cancelRestrictions` value is not any of the supported values, the error will be: 
+* If the `cancelRestrictions` value is not any of the supported values, the error will be:
 ```json
 {
     "code": -1145,
@@ -4880,13 +4880,13 @@ Cancellation reports for orders and order lists have the same format as in [`ord
 Send in an one-cancels-the-other (OCO) pair, where activation of one order immediately cancels the other.
 
 * An OCO has 2 orders called the **above order** and **below order**.
-* One of the orders must be a `LIMIT_MAKER/TAKE_PROFIT/TAKE_PROFIT_LIMIT` order and the other must be `STOP_LOSS` or `STOP_LOSS_LIMIT` order.  
-* Price restrictions:  
-  * If the OCO is on the `SELL` side:   
-    * `LIMIT_MAKER/TAKE_PROFIT_LIMIT` `price` \> Last Traded Price \> `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`  
-    * `TAKE_PROFIT stopPrice` \> Last Traded Price \> `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`  
-  * If the OCO is on the `BUY` side:  
-    * `LIMIT_MAKER` `price` \< Last Traded Price \< `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`  
+* One of the orders must be a `LIMIT_MAKER/TAKE_PROFIT/TAKE_PROFIT_LIMIT` order and the other must be `STOP_LOSS` or `STOP_LOSS_LIMIT` order.
+* Price restrictions:
+  * If the OCO is on the `SELL` side:
+    * `LIMIT_MAKER/TAKE_PROFIT_LIMIT` `price` \> Last Traded Price \> `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`
+    * `TAKE_PROFIT stopPrice` \> Last Traded Price \> `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
+  * If the OCO is on the `BUY` side:
+    * `LIMIT_MAKER` `price` \< Last Traded Price \< `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`
     * `TAKE_PROFIT stopPrice >` Last Traded Price `> STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
 * OCOs add **2 orders** to the unfilled order count, `EXCHANGE_MAX_ORDERS` filter, and `MAX_NUM_ORDERS` filter.
 
@@ -4901,27 +4901,27 @@ Name                     |Type    | Mandatory | Description
 `aboveType`              |ENUM    |YES        |Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
 `aboveClientOrderId`     |STRING  |NO        |Arbitrary unique ID among open orders for the above leg order. Automatically generated if not sent
 `aboveIcebergQty`        |LONG    |NO         |Note that this can only be used if `aboveTimeInForce` is `GTC`.
-`abovePrice`             |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price. 
+`abovePrice`             |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
 `aboveStopPrice`         |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`. <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
 `aboveTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](..faqs/trailing-stop-faq.md).
 `aboveTimeInForce`       |DECIMAL |NO         |Required if `aboveType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`.
-`aboveStrategyId`        |LONG     |NO         |Arbitrary numeric value identifying the above order within an order strategy. 
+`aboveStrategyId`        |LONG     |NO         |Arbitrary numeric value identifying the above order within an order strategy.
 `aboveStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the above order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
 `belowType`              |ENUM    |YES        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 `belowClientOrderId`     |STRING  |NO         |
 `belowIcebergQty`        |LONG    |NO         |Note that this can only be used if `belowTimeInForce` is `GTC`.
 `belowPrice`             |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
-`belowStopPrice`         |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`.  
+`belowStopPrice`         |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`.
 Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
-`belowTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](..faqs/trailing-stop-faq.md). 
+`belowTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](..faqs/trailing-stop-faq.md).
 `belowTimeInForce`       |ENUM    |NO         |Required if `belowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`
-`belowStrategyId`        |LONG    |NO          |Arbitrary numeric value identifying the below order within an order strategy. 
+`belowStrategyId`        |LONG    |NO          |Arbitrary numeric value identifying the below order within an order strategy.
 `belowStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the below order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
 `newOrderRespType`       |ENUM    |NO         |Select response format: `ACK`, `RESULT`, `FULL`
 `selfTradePreventionMode`|ENUM    |NO         |The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
 `apiKey`                 |STRING |YES         |
 `recvWindow`             |LONG   |NO         |The value cannot be greater than `60000`.
-`timestamp`              |LONG   |YES          | 
+`timestamp`              |LONG   |YES          |
 `signature`              | STRING  | YES       |
 
 **Data Source:**
@@ -5102,8 +5102,8 @@ Name                   |Type   |Mandatory | Description
 Depending on the `pendingType` or `workingType`, some optional parameters will become mandatory.
 
 |Type                                                  |Additional mandatory parameters|Additional information|
-|----                                                  |----                           |------  
-|`workingType` = `LIMIT`                               |`workingTimeInForce`           | 
+|----                                                  |----                           |------
+|`workingType` = `LIMIT`                               |`workingTimeInForce`           |
 |`pendingType` = `LIMIT`                                |`pendingPrice`, `pendingTimeInForce`          |
 |`pendingType` = `STOP_LOSS` or `TAKE_PROFIT`           |`pendingStopPrice` and/or `pendingTrailingDelta`|
 |`pendingType` =`STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`|`pendingPrice`, `pendingStopPrice` and/or `pendingTrailingDelta`, `pendingTimeInForce`|
@@ -5242,7 +5242,7 @@ Name                     |Type   |Mandatory | Description
 ----                     |----   |------    |------
 `symbol`                   |STRING |YES       |
 `listClientOrderId`        |STRING |NO        |Arbitrary unique ID among open order lists. Automatically generated if not sent. <br>A new order list with the same listClientOrderId is accepted only when the previous one is filled or completely expired. <br> `listClientOrderId` is distinct from the `workingClientOrderId`, `pendingAboveClientOrderId`, and the `pendingBelowClientOrderId`.
-`newOrderRespType`         |ENUM   |NO        |Format of the JSON response. Supported values: [Order Response Type](./enums.md#order-response-type-neworderresptype) 
+`newOrderRespType`         |ENUM   |NO        |Format of the JSON response. Supported values: [Order Response Type](./enums.md#order-response-type-neworderresptype)
 `selfTradePreventionMode`  |ENUM   |NO        |The allowed values are dependent on what is configured on the symbol. Supported values: [STP Modes](./enums.md#stpmodes)
 `workingType`              |ENUM   |YES       |Supported values: `LIMIT`, `LIMIT_MAKER`
 `workingSide`              |ENUM   |YES       |Supported values: [Order Side](./enums.md#side)
@@ -5257,7 +5257,7 @@ Name                     |Type   |Mandatory | Description
 `pendingQuantity`          |DECIMAL|YES       |
 `pendingAboveType`         |ENUM   |YES       |Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
 `pendingAboveClientOrderId`|STRING |NO        |Arbitrary unique ID among open orders for the pending above order.<br> Automatically generated if not sent.
-`pendingAbovePrice`        |DECIMAL|NO        |Can be used if `pendingAboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price. 
+`pendingAbovePrice`        |DECIMAL|NO        |Can be used if `pendingAboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
 `pendingAboveStopPrice`    |DECIMAL|NO        |Can be used if \`pending`AboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
 `pendingAboveTrailingDelta`|DECIMAL|NO        |See [Trailing Stop FAQ](../faqs/trailing_stop_faq.md)
 `pendingAboveIcebergQty`   |DECIMAL|NO        |This can only be used if `pendingAboveTimeInForce` is `GTC`.
@@ -5267,7 +5267,7 @@ Name                     |Type   |Mandatory | Description
 `pendingBelowType`         |ENUM   |NO        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 `pendingBelowClientOrderId`|STRING |NO        |Arbitrary unique ID among open orders for the pending below order.<br> Automatically generated if not sent.
 `pendingBelowPrice`        |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT` to specify the limit price.
-`pendingBelowStopPrice`    |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`.  
+`pendingBelowStopPrice`    |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`.
 Either `pendingBelowStopPrice` or `pendingBelowTrailingDelta` or both, must be specified.
 `pendingBelowTrailingDelta`|DECIMAL|NO        |
 `pendingBelowIcebergQty`   |DECIMAL|NO        |This can only be used if `pendingBelowTimeInForce` is `GTC`.
@@ -5285,8 +5285,8 @@ Either `pendingBelowStopPrice` or `pendingBelowTrailingDelta` or both, must be s
 Depending on the `pendingType` or `workingType`, some optional parameters will become mandatory.
 
 |Type                                                       |Additional mandatory parameters|Additional information|
-|----                                                       |----                           |------  
-|`workingType` = `LIMIT`                                    |`workingTimeInForce`           | 
+|----                                                       |----                           |------
+|`workingType` = `LIMIT`                                    |`workingTimeInForce`           |
 |`pendingAboveType` = `STOP_LOSS/TAKE_PROFIT`       |`pendingAboveTrailingDelta` and/or `pendingAboveStopPrice`|
 |`pendingAboveType=STOP_LOSS_LIMIT/TAKE_PROFIT_LIMIT` |`pendingAbovePrice`, `pendingAboveTrailingDelta` and/or `pendingAboveStopPrice`, `pendingAboveTimeInForce`|
 |`pendingAboveType` =`LIMIT_MAKER` |`pendingAbovePrice`|
@@ -6499,7 +6499,7 @@ Database
       "symbol": "BTCUSDT",
       "preventedMatchId": 1,
       "takerOrderId": 5,
-      "makerSymbol": "BTCUSDT", 
+      "makerSymbol": "BTCUSDT",
       "makerOrderId": 3,
       "tradeGroupId": 1,
       "selfTradePreventionMode": "EXPIRE_MAKER",
@@ -6642,35 +6642,28 @@ Database
 {
   "id": "d3df8a61-98ea-4fe0-8f4e-0fcea5d418b0",
   "status": 200,
-  "result":
-  [
-    {
-      "symbol": "BTCUSDT",
-      "standardCommission":              //Standard commission rates on trades from the order.
-      {
-        "maker": "0.00000010",
-        "taker": "0.00000020",
-        "buyer": "0.00000030",
-        "seller": "0.00000040"
-      },
-      "taxCommission":                   //Tax commission rates on trades from the order.
-      {
-        "maker": "0.00000112",
-        "taker": "0.00000114",
-        "buyer": "0.00000118",
-        "seller": "0.00000116"
-      },
-      "discount":                        //Discount on standard commissions when paying in BNB.
-      {
-        "enabledForAccount": true,
-        "enabledForSymbol": true,
-        "discountAsset": "BNB",
-        "discount": "0.75000000"         //Standard commission is reduced by this rate when paying commission in BNB.
-      }
+  "result": {
+    "symbol": "BTCUSDT",
+    "standardCommission": {     //Standard commission rates on trades from the order.
+      "maker": "0.00000010",
+      "taker": "0.00000020",
+      "buyer": "0.00000030",
+      "seller": "0.00000040"
+    },
+    "taxCommission": {          //Tax commission rates on trades from the order.
+      "maker": "0.00000112",
+      "taker": "0.00000114",
+      "buyer": "0.00000118",
+      "seller": "0.00000116"
+    },
+    "discount": {                //Discount on standard commissions when paying in BNB.
+      "enabledForAccount": true,
+      "enabledForSymbol": true,
+      "discountAsset": "BNB",
+      "discount": "0.75000000"   //Standard commission is reduced by this rate when paying commission in BNB.
     }
-  ],
-  "rateLimits":
-  [
+  },
+  "rateLimits": [
     {
       "rateLimitType": "REQUEST_WEIGHT",
       "interval": "MINUTE",
@@ -6857,15 +6850,15 @@ Subscribe to the User Data Stream in the current WebSocket connection.
 
 **Notes:**
 
-* This method requires an authenticated WebSocket connection using Ed25519 keys. Please refer to [`session.logon`](#session-logon).  
-* User Data Stream events are available in both JSON and SBE sessions.  
-  * Please refer to [User Data Streams](user-data-stream.md) for the event format details.  
+* This method requires an authenticated WebSocket connection using Ed25519 keys. Please refer to [`session.logon`](#session-logon).
+* User Data Stream events are available in both JSON and SBE sessions.
+  * Please refer to [User Data Streams](user-data-stream.md) for the event format details.
   * For SBE, only SBE schema 2:1 or later is supported.
 
-**Weight**:  
+**Weight**:
 2
 
-**Parameters**:  
+**Parameters**:
 NONE
 
 **Response**:
@@ -6912,9 +6905,9 @@ Sample user data stream payload from the WebSocket API:
 }
 ```
 
-Stop listening to the User Data Stream in the current WebSocket connection. 
+Stop listening to the User Data Stream in the current WebSocket connection.
 
-**Weight**:  
+**Weight**:
 2
 
 **Parameters**:
@@ -6930,4 +6923,3 @@ NONE
   "result": {}
 }
 ```
-

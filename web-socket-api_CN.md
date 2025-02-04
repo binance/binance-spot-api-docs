@@ -9,12 +9,12 @@
   * 如果使用标准443端口时遇到问题，可以使用替代端口9443。
   * [现货测试网](https://testnet.binance.vision)的 base URL 是 `wss://testnet.binance.vision/ws-api/v3`。
 * 每个到 base URL 的链接有效期不超过24小时，请妥善处理断线重连。
-* WebSocket 服务器**每20秒**发送 PING 消息。  
-  * 如果websocket 服务器没有在一分钟之内收到PONG 消息应答，连接会被断开。  
-  * 当客户收到PING消息，必须尽快回复PONG消息，同时payload需要和PING消息一致。  
+* WebSocket 服务器**每20秒**发送 PING 消息。
+  * 如果websocket 服务器没有在一分钟之内收到PONG 消息应答，连接会被断开。
+  * 当客户收到PING消息，必须尽快回复PONG消息，同时payload需要和PING消息一致。
   * 服务器允许未经请求的PONG消息，但这不会保证连接不断开。**对于这些PONG 消息，建议payload为空。**
 * 响应中如有数组，数组元素以时间**时间顺序**排列，越早的数据越提前。
-* JSON 响应中的所有时间和时间戳相关字段均以**UTC 毫秒为默认单位**。要以微秒为单位接收信息，请在 URL 中添加参数 `timeUnit=MICROSECOND` 或 `timeUnit=microsecond`。 
+* JSON 响应中的所有时间和时间戳相关字段均以**UTC 毫秒为默认单位**。要以微秒为单位接收信息，请在 URL 中添加参数 `timeUnit=MICROSECOND` 或 `timeUnit=microsecond`。
 * 时间戳参数（例如 `startTime`、`endTime`、`timestamp`）可以以毫秒或微秒为单位传递。
 * 除非另有说明，所有字段名称和值都**大小写敏感**。
 
@@ -59,7 +59,7 @@
 
 * `params` 的顺序不重要。
 
-## 响应格式 
+## 响应格式
 
 响应在 **text 帧** 中以 JSON 格式返回，每帧一个响应。
 
@@ -548,7 +548,7 @@ Key          | Value
 apiKey       | `vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A`
 secretKey    | `NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j`
 
-**警告：请勿与任何人共享您的私钥。** 
+**警告：请勿与任何人共享您的私钥。**
 
 示例密钥仅供参考。
 
@@ -776,7 +776,7 @@ with open(PRIVATE_KEY_PATH, 'rb') as f:
     private_key = load_pem_private_key(data=f.read(), password=None)
 # 设置请求参数：
 params = {
-    'apiKey':        API_KEY,	
+    'apiKey':        API_KEY,
     'symbol':       'BTCUSDT',
     'side':         'SELL',
     'type':         'LIMIT',
@@ -792,15 +792,15 @@ payload = '&'.join([f'{param}={value}' for param, value in sorted(params.items()
 signature = base64.b64encode(private_key.sign(payload.encode('ASCII')))
 params['signature'] = signature.decode('ASCII')
 # 发送请求：
-request = {	
-    'id': 'my_new_order',	
-    'method': 'order.place',	
+request = {
+    'id': 'my_new_order',
+    'method': 'order.place',
     'params': params
 }
-ws = create_connection('wss://ws-api.binance.com:443/ws-api/v3')	
-ws.send(json.dumps(request))	
-result =  ws.recv()	
-ws.close()	
+ws = create_connection('wss://ws-api.binance.com:443/ws-api/v3')
+ws.send(json.dumps(request))
+result =  ws.recv()
+ws.close()
 print(result)
 ```
 
@@ -835,7 +835,7 @@ print(result)
   "status": 401,
   "error": {
     "code": -2015,
-    "msg": "Invalid API-key, IP, or permissions for action." 
+    "msg": "Invalid API-key, IP, or permissions for action."
   }
 }
 ```
@@ -1684,7 +1684,7 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
   "id": "ddbfb65f-9ebf-42ec-8240-8f0f91de0867",
   "status": 200,
   "result": {
-    "mins": 5,              // 以分钟为单位的价格平均间隔 
+    "mins": 5,              // 以分钟为单位的价格平均间隔
     "price": "0.01378135",
     "closeTime": 1694061154503
   },
@@ -1933,7 +1933,7 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
 
 **权重:**
 
-每个<tt>交易对</tt>占用4个权重. <br/><br/> 
+每个<tt>交易对</tt>占用4个权重. <br/><br/>
 当请求中的交易对数量超过50，此请求的权重将限制在200。
 
 **参数:**
@@ -3001,7 +3001,7 @@ NONE
 
 <a id="timeInForce"></a>
 
-可用的 `timeInForce` 选项，设置订单在到期前应该活跃多长时间： 
+可用的 `timeInForce` 选项，设置订单在到期前应该活跃多长时间：
 
  TIF  | 描述
 ----- | --------------
@@ -3291,7 +3291,7 @@ NONE
     "taxCommissionForOrder": {                 // 根据订单的角色（例如，Maker或Taker）确定的税收扣除率。
       "maker": "0.00000112",
       "taker": "0.00000114"
-    },  
+    },
     "discount": {                              // 以BNB支付时的标准佣金折扣。
       "enabledForAccount": true,
       "enabledForSymbol": true,
@@ -3425,7 +3425,7 @@ NONE
     "time": 1660801715639,              // 下单时间
     "updateTime": 1660801717945,        // 最后一次更新订单的时间
     "isWorking": true,
-    "workingTime": 1660801715639,  
+    "workingTime": 1660801715639,
     "origQuoteOrderQty": "0.00000000"   // 始终存在，如果订单类型不使用 quoteOrderQty，则为零
     "strategyId": 37463720,             // 如果订单设置了 strategyId  会出现
     "strategyType": 1000000,            // 如果订单设置了 strategyType 会出现
@@ -3871,7 +3871,7 @@ NONE
         <td>ENUM</td>
         <td>NO</td>
         <td>支持的值： <br> <code>DO_NOTHING</code> （默认值） - 仅在账户未超过未成交订单频率限制时，会尝试取消订单。<br> <code>CANCEL_ONLY</code> - 将始终取消订单。</td>
-    </tr>    
+    </tr>
     <tr>
         <td><code>recvWindow</code></td>
         <td>INT</td>
@@ -4934,10 +4934,10 @@ NONE
 * 其中一个订单必须是 `LIMIT_MAKER/TAKE_PROFIT/TAKE_PROFIT_LIMIT` 订单，另一个订单必须是 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 订单。
 * 针对价格限制：
   * 如果 OCO 订单方向是 `SELL`：
-    * `LIMIT_MAKER/TAKE_PROFIT_LIMIT` `price` > 最后交易价格 > `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`  
-    * `TAKE_PROFIT` `stopPrice` > 最后交易价格 > `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`  
+    * `LIMIT_MAKER/TAKE_PROFIT_LIMIT` `price` > 最后交易价格 > `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`
+    * `TAKE_PROFIT` `stopPrice` > 最后交易价格 > `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`
   * 如果 OCO 订单方向是 `BUY`：
-    * `LIMIT_MAKER` `price` < 最后交易价格 < `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`  
+    * `LIMIT_MAKER` `price` < 最后交易价格 < `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`
     * `TAKE_PROFIT` `stopPrice` > 最后交易价格 > `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`
 * OCO 将**2 个订单**添加到未成交订单计数、`EXCHANGE_MAX_ORDERS`过滤器和 `MAX_NUM_ORDERS` 过滤器中。
 
@@ -4972,7 +4972,7 @@ NONE
 `apiKey`                 |STRING  |YES        |
 `recvWindow`             |LONG    |NO         |不能大于 `60000`。
 `signature`              |STRING  |YES        |
-`timestamp`              |LONG    |YES        | 
+`timestamp`              |LONG    |YES        |
 
 **数据源:**
 撮合引擎
@@ -5123,7 +5123,7 @@ NONE
 `workingSide`            |ENUM   |YES       |支持的数值： [订单方向](./enums_CN.md#side)
 `workingClientOrderId`   |STRING |NO        |用于标识生效订单的唯一ID。 <br> 如果未发送则自动生成。
 `workingPrice`           |DECIMAL|YES       |
-`workingQuantity`        |DECIMAL|YES       |用于设置生效订单的数量。 
+`workingQuantity`        |DECIMAL|YES       |用于设置生效订单的数量。
 `workingIcebergQty`      |DECIMAL|NO       |只有当 `workingTimeInForce` 为 `GTC` 时才能使用。
 `workingTimeInForce`     |ENUM   |NO        |支持的数值： [生效时间](#timeinforce)
 `workingStrategyId`      |LONG    |NO        |订单策略中用于标识生效订单的 ID。
@@ -5134,7 +5134,7 @@ NONE
 `pendingPrice`           |DECIMAL|NO        |
 `pendingStopPrice`       |DECIMAL|NO        |
 `pendingTrailingDelta`   |DECIMAL|NO        |
-`pendingQuantity`        |DECIMAL|YES       |用于设置待处理订单的数量。 
+`pendingQuantity`        |DECIMAL|YES       |用于设置待处理订单的数量。
 `pendingIcebergQty`      |DECIMAL|NO        |只有当 `pendingTimeInForce` 为 `GTC` 时才能使用。
 `pendingTimeInForce`     |ENUM   |NO        |支持的数值： [生效时间](#timeinforce)
 `pendingStrategyId`      |LONG    |NO        |订单策略中用于标识待处理订单的 ID。
@@ -5150,8 +5150,8 @@ NONE
 根据 `pendingType` 或者`workingType`的不同值，对于某些可选参数有强制要求，具体如下：
 
 |类型                                                   | 强制要求的参数                  | 其他信息|
-|----                                                  |----                           |------  
-|`workingType` = `LIMIT`                               |`workingTimeInForce`           | 
+|----                                                  |----                           |------
+|`workingType` = `LIMIT`                               |`workingTimeInForce`           |
 |`pendingType` = `LIMIT`                                |`pendingPrice`， `pendingTimeInForce`          |
 |`pendingType` = `STOP_LOSS` 或 `TAKE_PROFIT`           |`pendingStopPrice` 与/或 `pendingTrailingDelta`|
 |`pendingType` = `STOP_LOSS_LIMIT` 或 `TAKE_PROFIT_LIMIT`|`pendingPrice`， `pendingStopPrice` 与/或 `pendingTrailingDelta`， `pendingTimeInForce`|
@@ -5306,7 +5306,7 @@ NONE
 `pendingAboveClientOrderId`|STRING |NO        |用于标识待处理上方订单的唯一ID。 <br> 如果未发送则自动生成。
 `pendingAbovePrice`        |DECIMAL|NO        |当 `pendingAboveType` 是 `STOP_LOSS_LIMIT`, `LIMIT_MAKER` 或 `TAKE_PROFIT_LIMIT` 时，可用以指定限价。
 `pendingAboveStopPrice`    |DECIMAL|NO        |如果 `pendingAboveType` 是 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` 才能使用。
-`pendingAboveTrailingDelta`|DECIMAL|NO        |参见 [追踪止盈止损(Trailing Stop)订单常见问题](./faqs/trailing-stop-faq_CN.md) 
+`pendingAboveTrailingDelta`|DECIMAL|NO        |参见 [追踪止盈止损(Trailing Stop)订单常见问题](./faqs/trailing-stop-faq_CN.md)
 `pendingAboveIcebergQty`   |DECIMAL|NO        |只有当 `pendingAboveTimeInForce` 为 `GTC` 时才能使用。
 `pendingAboveTimeInForce`  |ENUM   |NO        |
 `pendingAboveStrategyId`   |LONG    |NO        |订单策略中用于标识待处理上方订单的 ID。
@@ -5331,8 +5331,8 @@ NONE
 根据 `pendingAboveType`， `pendingBelowType` 或者`workingType`的不同值，对于某些可选参数有强制要求，具体如下：
 
 |类型                                                        | 强制要求的参数                  | 其他信息|
-|----                                                       |----                           |------  
-|`workingType` = `LIMIT`                                    |`workingTimeInForce`           | 
+|----                                                       |----                           |------
+|`workingType` = `LIMIT`                                    |`workingTimeInForce`           |
 |`pendingAboveType` = `STOP_LOSS/TAKE_PROFIT` | `pendingAboveStopPrice` 与/或  `pendingAboveTrailingDelta` |
 |`pendingAboveType` = `STOP_LOSS_LIMIT/TAKE_PROFIT_LIMIT` | `pendingAbovePrice`， `pendingAboveStopPrice` 与/或 `pendingAboveTrailingDelta`， `pendingAboveTimeInForce` |
 |`pendingAboveType` = `LIMIT_MAKER`                                |`pendingAbovePrice`     |
@@ -6504,14 +6504,14 @@ NONE
 * `symbol` + `preventedMatchId`
 * `symbol` + `orderId`
 * `symbol` + `orderId` + `fromPreventedMatchId` (`limit`  默认为 500)
-* `symbol` + `orderId` + `fromPreventedMatchId` + `limit` 
+* `symbol` + `orderId` + `fromPreventedMatchId` + `limit`
 
 **参数:**
 
 名称                 | 类型   | 是否必需	     | 描述
 ------------        | ----   | ------------ | ------------
 symbol              | STRING | YES          |
-preventedMatchId    |LONG    | NO           | 
+preventedMatchId    |LONG    | NO           |
 orderId             |LONG    | NO           |
 fromPreventedMatchId|LONG    | NO           |
 limit               |INT     | NO           | 默认：`500`；最大：`1000`
@@ -6524,7 +6524,7 @@ timestamp           | LONG   | YES          |
 --------------------------------| -----
 如果 `symbol` 不合法          | 2
 用 `preventedMatchId` 查询 | 2
-用 `orderId` 查询         | 20 
+用 `orderId` 查询         | 20
 
 **数据源:**
 
@@ -6687,7 +6687,6 @@ timestamp           | LONG   | YES          |
   "id": "d3df8a61-98ea-4fe0-8f4e-0fcea5d418b0",
   "status": 200,
   "result":
-  [
     {
       "symbol": "BTCUSDT",
       "standardCommission":               // 订单交易的标准佣金率。
@@ -6711,8 +6710,7 @@ timestamp           | LONG   | YES          |
         "discountAsset": "BNB",
         "discount": "0.75000000"         // 当用BNB支付佣金时，在标准佣金上按此比率打折。
       }
-    }
-  ],
+    },
   "rateLimits":
   [
     {
@@ -6748,7 +6746,7 @@ timestamp           | LONG   | YES          |
 
 开始新的用户数据流
 
-**注意：** 
+**注意：**
 数据流将在 60 分钟后关闭，除非定期发送 [`userDataStream.ping`](#user_data_stream_ping) 请求。
 
 **权重:**
@@ -6761,7 +6759,7 @@ timestamp           | LONG   | YES          |
 `apiKey`            | STRING  | YES       |
 
 
-**数据源:** 
+**数据源:**
 缓存
 
 **响应:**
@@ -6899,9 +6897,9 @@ timestamp           | LONG   | YES          |
 
 **注意：**
 
-* 此方法需要使用 Ed25519 密钥并经过鉴权的 WebSocket 连接。请参考 [`session.logon`](#session-logon)。 
-* 账户数据流在 JSON 和 SBE 会话中均可用。 
-  * 有关事件格式详情，请参阅 [WebSocket 账户接口](user-data-stream_CN.md)。 
+* 此方法需要使用 Ed25519 密钥并经过鉴权的 WebSocket 连接。请参考 [`session.logon`](#session-logon)。
+* 账户数据流在 JSON 和 SBE 会话中均可用。
+  * 有关事件格式详情，请参阅 [WebSocket 账户接口](user-data-stream_CN.md)。
   * 对于 SBE，仅支持 SBE 模式 2:1 或更高版本。
 
 **权重:**
