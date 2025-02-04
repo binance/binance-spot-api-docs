@@ -268,19 +268,15 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 * Invalid value for time unit; expected either MICROSECOND or MILLISECOND.
 
 ### -1196 BUY_OCO_STOP_LOSS_MUST_BE_ABOVE
-
 * A stop loss order in a buy OCO must be above.
 
 ### -1197 SELL_OCO_STOP_LOSS_MUST_BE_BELOW
-
 * A stop loss order in a sell OCO must be below.
 
 ### -1198 BUY_OCO_TAKE_PROFIT_MUST_BE_BELOW
-
 * A take profit order in a buy OCO must be below.
 
 ### -1199 SELL_OCO_TAKE_PROFIT_MUST_BE_ABOVE
-
 * A take profit order in a sell OCO must be above.
 
 ### -2010 NEW_ORDER_REJECTED
@@ -348,12 +344,10 @@ Error message                                                   | Description
 ## Errors regarding POST /api/v3/order/cancelReplace
 
 ### -2021 Order cancel-replace partially failed
-
-This code is sent when either the cancellation of the order failed or the new order placement failed but not both.
+* This code is sent when either the cancellation of the order failed or the new order placement failed but not both.
 
 ### -2022 Order cancel-replace failed.
-
-This code is sent when both the cancellation of the order failed and the new order placement failed.
+* This code is sent when both the cancellation of the order failed and the new order placement failed.
 
 <a id="filter_failures"></a>
 

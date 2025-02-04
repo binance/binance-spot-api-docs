@@ -3548,7 +3548,7 @@ Memory => Database
     "updateTime": 1660801717945,        // time of the last update to the order
     "isWorking": true,
     "workingTime": 1660801715639,
-    "origQuoteOrderQty": "0.00000000"   // always present, zero if order type does not use quoteOrderQty
+    "origQuoteOrderQty": "0.00000000",   // always present, zero if order type does not use quoteOrderQty
     "strategyId": 37463720,             // present only if strategyId set for the order
     "strategyType": 1000000,            // present only if strategyType set for the order
     "selfTradePreventionMode": "NONE",
@@ -4714,7 +4714,7 @@ If all symbols are requested, use the `symbol` field to tell which symbol the or
 ```javascript
 {
   "id": "778f938f-9041-4b88-9914-efbf64eeacc8",
-  "method": "openOrders.cancelAll"
+  "method": "openOrders.cancelAll",
   "params": {
     "symbol": "BTCUSDT",
     "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
@@ -5099,8 +5099,7 @@ Name                     |Type    | Mandatory | Description
 `belowClientOrderId`     |STRING  |NO         |
 `belowIcebergQty`        |LONG    |NO         |Note that this can only be used if `belowTimeInForce` is `GTC`.
 `belowPrice`             |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
-`belowStopPrice`         |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT` or `TAKE_PROFIT_LIMIT`.  
-Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
+`belowStopPrice`         |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT` or `TAKE_PROFIT_LIMIT`. Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
 `belowTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md). 
 `belowTimeInForce`       |ENUM    |NO         |Required if `belowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`
 `belowStrategyId`        |LONG    |NO          |Arbitrary numeric value identifying the below order within an order strategy. 
@@ -5452,8 +5451,7 @@ Name                     |Type   |Mandatory | Description
 `pendingBelowType`         |ENUM   |NO        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 `pendingBelowClientOrderId`|STRING |NO        |Arbitrary unique ID among open orders for the pending below order.<br> Automatically generated if not sent.
 `pendingBelowPrice`        |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT` to specify limit price
-`pendingBelowStopPrice`    |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`.  
-Either `pendingBelowStopPrice` or `pendingBelowTrailingDelta` or both, must be specified.
+`pendingBelowStopPrice`    |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`. Either `pendingBelowStopPrice` or `pendingBelowTrailingDelta` or both, must be specified.
 `pendingBelowTrailingDelta`|DECIMAL|NO        |
 `pendingBelowIcebergQty`   |DECIMAL|NO        |This can only be used if `pendingBelowTimeInForce` is `GTC`, or if `pendingBelowType` is `LIMIT_MAKER`.
 `pendingBelowTimeInForce`  |ENUM   |NO        |Supported values: [Time In Force](#timeInForce)
@@ -5599,7 +5597,7 @@ Depending on the `pendingAboveType`/`pendingBelowType` or `workingType`, some op
   "id": "b53fd5ff-82c7-4a04-bd64-5f9dc42c2100",
   "method": "orderList.status",
   "params": {
-    "origClientOrderId": "08985fedd9ea2cf6b28996"
+    "origClientOrderId": "08985fedd9ea2cf6b28996",
     "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
     "signature": "d12f4e8892d46c0ddfbd43d556ff6d818581b3be22a02810c2c20cb719aed6a4",
     "timestamp": 1660801713965

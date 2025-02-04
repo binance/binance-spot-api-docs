@@ -480,7 +480,7 @@ Note that only tickers that have changed will be present in the array.
 ```javascript
 [
   {
-    // Same as <symbol>@ticker_<window-size> payload,
+    // Same as <symbol>@ticker_<window_size> payload,
     // one for each symbol updated within the interval.
   }
 ]
