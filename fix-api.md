@@ -18,22 +18,22 @@ on how to set up an Ed25519 key pair.
 - Supports placing orders, canceling orders, and querying current limit usage.
 - Supports receiving all of the account's [ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
 - Only API keys with `FIX_API` are allowed to connect.
-- QuickFix Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml).
+- QuickFIX Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml).
 
 ### FIX API Drop Copy sessions
 
 - Endpoint is: `tcp+tls://fix-dc.binance.com:9000`
 - Supports receiving all of the account's [ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
 - Only API keys with `FIX_API` or `FIX_API_READ_ONLY` are allowed to connect.
-- QuickFix Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml).
+- QuickFIX Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml).
 
-### Fix Market Data sessions
+### FIX Market Data sessions
 
-* Endpoint is: `tcp+tls://fix-md.binance.com:9000`  
-* Supports market data streams and active instruments queries.  
-* Does not support placing or canceling orders.   
+* Endpoint is: `tcp+tls://fix-md.binance.com:9000`
+* Supports market data streams and active instruments queries.
+* Does not support placing or canceling orders.
 * Only API keys with `FIX_API` or `FIX_API_READ_ONLY` are allowed to connect.
-* QuickFix Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml).
+* QuickFIX Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml).
 
 ### API Key Permissions
 
@@ -179,8 +179,8 @@ Resulting Logon `<A>` message:
 * To understand current limits and usage, please send a [LimitQuery`<XLQ>`](#limitquery) message.
   A [LimitResponse`<XLR>`](#limitresponse) message will be sent in response, containing information about Order Rate
   Limits and Message Limits.
-* FIX Order entry sessions have a limit of 10,000 messages every 10 seconds.  
-* FIX Market Data sessions have a limit of 10,000 messages every 60 seconds. 
+* FIX Order entry sessions have a limit of 10,000 messages every 10 seconds.
+* FIX Market Data sessions have a limit of 10,000 messages every 60 seconds.
 
 <a id="connection-limits"></a>
 
@@ -199,7 +199,7 @@ Resulting Logon `<A>` message:
 
 * To understand how many orders you have placed within a certain time interval, please send a [LimitQuery`<XLQ>`](#limitquery) message.
   A [LimitResponse`<XLR>`](#limitresponse) message will be sent in response, containing information about Unfilled Order Count and Message Limits.
-* **Please note that if your orders are consistently filled by trades, you can continuously place orders on the API**. For more information, please see [Spot Unfilled Order Count Rules](./faqs/order_count_decrement.md). 
+* **Please note that if your orders are consistently filled by trades, you can continuously place orders on the API**. For more information, please see [Spot Unfilled Order Count Rules](./faqs/order_count_decrement.md).
 * If you exceed the unfilled order count your message will be rejected, and information will be transferred back to you in a reject message specific to that endpoint.
 * **The number of unfilled orders is tracked for each account.**
 
@@ -425,7 +425,7 @@ Sent by the server when the connection is about to be closed.
 
 ## Application Messages
 
-### Order Entry Messages 
+### Order Entry Messages
 
 > [!NOTE]
 > The messages below can only be used for the FIX Order Entry and FIX Drop Copy Sessions.
@@ -518,7 +518,7 @@ Required fields based on Binance OrderType:
 | `STOP_LOSS`         | 38, 1102 or 25009               | This will execute a `MARKET` order when the conditions are met. (e.g. `TriggerPrice (1102)` is met or `TriggerTrailingDeltaBips (25009)` is activated)  |
 | `STOP_LOSS_LIMIT`   | 38, 44, 59, 1102 or 25009       |                           |
 | `TAKE_PROFIT`       | 38, 1102 or 25009               | This will execute a `MARKET` order when the conditions are met. (e.g. `TriggerPrice (1102)` is met or `TriggerTrailingDeltaBips (25009)` is activated)   |
-| `TAKE_PROFIT_LIMIT` | 38, 44, 59, 1102 or 25009       |                           
+| `TAKE_PROFIT_LIMIT` | 38, 44, 59, 1102 or 25009       |
 | `LIMIT_MAKER`       | 38, 44                          | This is a `LIMIT` order that will be rejected if the order immediately matches and trades as a taker. <br/> This is also known as a POST-ONLY order. |
 
 <a id="executionreport"></a>
@@ -870,7 +870,7 @@ Sent by the client to query current limits.
 
 | Tag  | Name  | Type   | Required | Description        |
 |------|-------|--------|----------|--------------------|
-| 6136 | ReqID | STRING | Y        | ID of this request | 
+| 6136 | ReqID | STRING | Y        | ID of this request |
 
 **Sample message:**
 
@@ -886,7 +886,7 @@ Sent by the server in response to [LimitQuery`<XLQ>`](#limitquery).
 
 | Tag     | Name                         | Type       | Required | Description                                                                                                            |
 |---------|------------------------------|------------|----------|------------------------------------------------------------------------------------------------------------------------|
-| 6136    | ReqID                        | STRING     | Y        | `ReqID` from the request.                                                                                              | 
+| 6136    | ReqID                        | STRING     | Y        | `ReqID` from the request.                                                                                              |
 | 25003   | NoLimitIndicators            | NUMINGROUP | Y        | The length of the array for LimitIndicators.                                                                      |
 | =>25004 | LimitType                    | CHAR       | Y        | Possible values: <br></br> `1` - ORDER_LIMIT <br></br> `2` - MESSAGE_LIMIT                                                       |
 | =>25005 | LimitCount                   | INT        | Y        | The current use of this limit.                                                                                         |
@@ -976,7 +976,7 @@ The Trade Streams push raw trade information; each trade has a unique buyer and 
 
 **Individual Symbol Book Ticker Stream**
 
-Pushes any update to the best bid or offers price or quantity in real-time for a specified symbol. 
+Pushes any update to the best bid or offers price or quantity in real-time for a specified symbol.
 
 **Fields required to subscribe:**
 

@@ -12,14 +12,14 @@ This is not always synced with the live exchange.
     * Our WebSocket services will send a ping frame **every 20 seconds** instead of 3 minutes.
     * The allowed pong delay will be **1 minute** instead of 10 minutes.
     * The documentation for these services have been updated to reflect the change.
-* `AggressorSide (2446)` is now rendered in the [FIX Market Data Trade Stream](fix-api.md#tradestream). The QuickFix schema [file](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml) has also been updated. Please download the latest schema before the Spot Testnet upgrade is completed.
+* `AggressorSide (2446)` is now rendered in the [FIX Market Data Trade Stream](fix-api.md#tradestream). The QuickFIX schema [file](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml) has also been updated. Please download the latest schema before the Spot Testnet upgrade is completed.
 
 ---
 
 ### 2024-12-17
 
 * FIX Market Data is now available. The [FIX API](fix-api.md) documentation for SPOT Testnet has been updated regarding this feature.
-* Please refer to this [link](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml) for the QuickFix Schema for FIX Market Data.
+* Please refer to this [link](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml) for the QuickFIX Schema for FIX Market Data.
 
 ---
 
@@ -216,7 +216,7 @@ General Changes:
 
 ### 2024-08-07
 
-* The [QuickFix schema](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml) has been modified.
+* The [QuickFIX schema](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml) has been modified.
 
 ---
 

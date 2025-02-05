@@ -17,27 +17,27 @@ FIX 连接需要 TLS 加密。请使用本地 TCP+TLS 连接或设置本地代�
 - 支持下单，取消订单和查询当前限制使用情况。
 - 支持接收账户的所有 [ExecutionReport`<8>`](#executionreport) 和 [List Status`<N>`](#liststatus)。
 - 仅允许带有 `FIX_API` 的 API Key 连接。
-- 关于 QuickFix 模式文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
+- 关于 QuickFIX 模式文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
 
 ### FIX API Drop Copy 会话
 
 - 端点为：`tcp+tls://fix-dc.binance.com:9000`
 - 支持接收账户的所有 [ExecutionReport`<8>`](#executionreport) 和 [List Status`<N>`](#liststatus)。
 - 仅允许连接带有 `FIX_API` 或 `FIX_API_READ_ONLY` 的 API Key。
-- 关于 QuickFix 模式文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
+- 关于 QuickFIX 模式文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
 
 ### FIX API Market Data 会话
 
 * 端点为：`tcp+tls：//fix-md.binance.com：9000`
-* 支持市场数据流和活动工具查询。 
-* 不支持下订单或取消订单。  
+* 支持市场数据流和活动工具查询。
+* 不支持下订单或取消订单。
 * 仅允许连接带有“FIX_API”或“FIX_API_READ_ONLY”的 API 密钥。
 
-关于 QuickFix 模式 (Schema) 文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
+关于 QuickFIX 模式 (Schema) 文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
 
 FIX 连接需要 TLS 加密。请使用本地 TCP+TLS 连接或设置本地代理如 [stunnel](https://www.stunnel.org/) 来处理 TLS 加密。
 
-FIX Market Data 的 QuickFix Schema 可以在 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml)
+FIX Market Data 的 QuickFIX Schema 可以在 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml)
 
 ### API Key 权限
 
@@ -173,7 +173,7 @@ MC4CAQAwBQYDK2VwBCIEIIJEYWtGBrhACmb9Dvy+qa8WEf0lQOl1s4CLIAB9m89u
 * 违反消息限制会立即导致 [Logout `<5>`](#logout) 并断开连接。
 * 要了解当前的限制和使用情况，请发送 [LimitQuery`<XLQ>`](#limitquery) 消息。
   接口将发送 [LimitResponse`<XLR>`](#limitresponse) 消息作为响应，其中包含了有关订单速率限制和消息限制的信息。
-* FIX 订单输入会话限制为每 10 秒 10,000 条消息。 
+* FIX 订单输入会话限制为每 10 秒 10,000 条消息。
 * FIX 市场数据会话限制为每 60 秒 10,000 条消息
 
 
@@ -257,7 +257,7 @@ MC4CAQAwBQYDK2VwBCIEIIJEYWtGBrhACmb9Dvy+qa8WEf0lQOl1s4CLIAB9m89u
 
 出现在每条消息的开头。
 
-| Tag   | 名称         | 类型         | 是否必须 | 描述 
+| Tag   | 名称         | 类型         | 是否必须 | 描述
 |-------|--------------|--------------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 8     | BeginString  | STRING       | Y        | 始终为 `FIX.4.4`。 <br></br> 必须是消息的第一个字段。|
 | 9     | BodyLength   | LENGTH       | Y        | 消息长度（以字节为单位）。 <br></br> 必须是消息的第二个字段。|
@@ -354,7 +354,7 @@ Logon`<A>` 必须是客户端发送的第一条消息。
 | 141   | ResetSeqNumFlag | BOOLEAN | Y        | 必须为 `Y`。                                                                                                                                |
 | 553   | Username        | STRING  | Y        | API key。**仅支持 Ed25519 API keys。**                                                                                                  |
 | 25035 | MessageHandling | INT     | Y        | 可能的值: <br></br> `1` - UNORDERED <br></br> `2` - SEQUENTIAL <br></br> 请参阅 [关于消息处理顺序](#orderedmode) 了解更多信息。 |
-| 25036 | ResponseMode    | INT     | N        | 请参阅 [响应模式](#responsemode)。      
+| 25036 | ResponseMode    | INT     | N        | 请参阅 [响应模式](#responsemode)。
 | 9406  | DropCopyFlag    |BOOLEAN   | N       |登录到 Drop Copy 会话时，必须设置为"Y"。|                                                                                              |
 
 **示例消息:**
@@ -422,7 +422,7 @@ Logout 响应
 
 ## Application Messages
 
-### 下单消息 
+### 下单消息
 
 > [!NOTE]
 > 以下消息只能用于 FIX 订单接入会话和 FIX Drop Copy 会话
@@ -509,7 +509,7 @@ Logout 响应
 
 基于 Binance OrderType 的必填字段:
 
-| Binance OrderType   | 额外的必填字段                    | 额外的信息      
+| Binance OrderType   | 额外的必填字段                    | 额外的信息
 |---------------------|---------------------------------|---------------|
 | `LIMIT`             | 38, 44, 59                      |               |
 | `MARKET`            | 38 或 152                       | `MARKET` 订单使用 `OrderQty (38)` 字段来指定用户希望以市场价格买入或卖出的 `base asset` 数量。<br></br>  例如，用户可以使用交易对为 `BTCUSDT` 的 `MARKET` 订单来指定买入或卖出多少 BTC。<br></br><br></br> 用户使用 `MARKET` 订单中的 `quoteOrderQty` 字段来指定花费（买入时）或接收（卖出时）`quote` 资产。正确的 `quantity` 将由市场流动性和 `quoteOrderQty` 来决定。 <br></br> 用交易对 BTCUSDT来举例：<br></br> `BUY` 方订单将使用由 `quoteOrderQty` 定义的 USDT 数额来购买尽可能多的 BTC。<br></br> `SELL` 方订单将出售 BTC 来换取尽可能多的由 `CashOrderQty（152)` 定义的 USDT 数额。 |
@@ -600,7 +600,7 @@ Logout 响应
 由客户发送的，用以取消订单或订单列表。
 * 要取消订单，需要 `OrderID (11)` 或 `OrigClOrdID (41)`。
 * 要取消订单列表，需要 `ListID (66)` 或 `OrigClListID (25015)`。
-  
+
 如果已取消的订单是订单列表的一部分，则整个订单列表将被取消。
 
 | Tag | 名称     | 类型   | 是否必须 | 描述|
@@ -667,7 +667,7 @@ Logout 响应
 | 25034 | CancelClOrdID                           | STRING | N        | 待取消的 `ClOrdID`。                             |
 | 41    | OrigClOrdID                             | STRING | N        | 来自待取消订单的 `ClOrdID`。                      |
 | 11    | ClOrdID                                 | STRING | Y        | 用于分配给新订单的 `ClOrdID`。                    |
-| 25002 | CancelRestrictions                      | INT    | N        | 取消的限制。可能值 ：<br></br> `1` - ONLY_NEW <br></br> `2` - ONLY_PARTIALLY_FILLED|  
+| 25002 | CancelRestrictions                      | INT    | N        | 取消的限制。可能值 ：<br></br> `1` - ONLY_NEW <br></br> `2` - ONLY_PARTIALLY_FILLED|
 | 38    | OrderQty                                | QTY    | N        | 新订单的数量                                                      |
 | 40    | OrdType                                 | CHAR   | Y        | 请参阅 [表格]（#ordertype）以了解支持的订单类型以及相关的必填字段 。 <br></br> 可能的值 ：<br></br> `1` - MARKET <br></br> `2` - LIMIT <br></br> `3` - STOP <br></br> `4` - STOP_LIMIT         |
 | 18    | ExecInst                                | CHAR   | N        | 可能的值： <br></br> `6` - PARTICIPATE_DONT_INITIATE  |
@@ -861,7 +861,7 @@ Logout 响应
 
 | Tag | 名称     | 类型   | 是否必须 | 描述        |
 |------|-------|--------|----------|--------------------|
-| 6136 | ReqID | STRING | Y        | 此请求的 ID | 
+| 6136 | ReqID | STRING | Y        | 此请求的 ID |
 
 **示例消息：**
 
@@ -877,7 +877,7 @@ Logout 响应
 
 | Tag | 名称     | 类型   | 是否必须 | 描述|
 |------|-------|--------|----------|--------------------|
-| 6136    | ReqID                        | STRING     | Y        | `ReqID`。        | 
+| 6136    | ReqID                        | STRING     | Y        | `ReqID`。        |
 | 25003   | NoLimitIndicators            | NUMINGROUP | Y        | `LimitIndicator` 数组中的元素个数。  |
 | =>25004 | LimitType                    | CHAR       | Y        | 可能的值 <br></br> `1` - ORDER_LIMIT <br></br> `2` - MESSAGE_LIMIT   |
 | =>25005 | LimitCount                   | INT        | Y        | 此限制的当前使用情况。 |
@@ -961,7 +961,7 @@ Logout 响应
 **订阅所需的字段：**
 
 - `SubscriptionRequestType` 的值为 `SUBSCRIBE(1)`
-- `MDEntryType` 的值为 `TRADE(2)` 
+- `MDEntryType` 的值为 `TRADE(2)`
 
 **更新速度：** 实时
 
@@ -974,9 +974,9 @@ Logout 响应
 **订阅所需的字段**
 
 - `SubscriptionRequestType` 值为 `SUBSCRIBE(1)`
-- `MDEntryType` 值为 `BID (0)` 
-- `MDEntryType` 值为 `OFFER(1)`  
-- `MarketDepth` 值为 `1` 
+- `MDEntryType` 值为 `BID (0)`
+- `MDEntryType` 值为 `OFFER(1)`
+- `MarketDepth` 值为 `1`
 \
 **Individual Symbol Book Ticker Stream**
 
@@ -1002,8 +1002,8 @@ Logout 响应
 
 **订阅所需的字段**
 
-- `SubscriptionRequestType` 值为 `SUBSCRIBE(1)`  
-- `MDEntryType` 值为 `BID (0)` 
+- `SubscriptionRequestType` 值为 `SUBSCRIBE(1)`
+- `MDEntryType` 值为 `BID (0)`
 - `MDEntryType` 值为 `OFFER (1)`
 - `MarketDepth` 值介于 `2` 和 `5000` 之间，用于控制初始快照的大小，对后续的 [MarketDataIncrementalRefresh `<X>` ](#marketdataincrementalrefresh) 消息没有影响
 
