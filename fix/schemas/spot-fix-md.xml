@@ -108,6 +108,7 @@
     <field name='Symbol' required='N'/>
     <field name='TransactTime' required='N'/>
     <field name='TradeID' required='N'/>
+    <field name='AggressorSide' required='N'/>
     <field name='FirstBookUpdateID' required='N'/>
     <field name='LastBookUpdateID' required='N'/>
    </group>
@@ -223,6 +224,10 @@
   <field number='969' name='MinPriceIncrement' type='PRICE'/>
   <field number='1003' name='TradeID' type='INT'/>
   <field number='1140' name='MaxTradeVol' type='QTY'/>
+  <field number='2446' name='AggressorSide' type='CHAR'>
+   <value enum='1' description='BUY'/>
+   <value enum='2' description='SELL'/>
+  </field>
   <field number='6136' name='ReqID' type='STRING'/>
   <field number='25000' name='RecvWindow' type='INT'/>
   <field number='25003' name='NoLimitIndicators' type='NUMINGROUP'/>

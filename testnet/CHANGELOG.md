@@ -1,11 +1,22 @@
-# CHANGELOG for Binance SPOT Testnet 
+# CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2024-12-17**
+**Last Updated: 2025-02-05**
 
-**Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/). 
-This is not always synced with the live exchange. 
+**Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
+This is not always synced with the live exchange.
 
-### 2024-12-17 
+### 2025-02-05
+
+* **Notice: These changes will be deployed starting at 7:00 UTC, and may take several hours to complete.**
+  **The following changes will apply to WebSocket Market Data Streams, User Data Streams, and the WebSocket API:**
+    * Our WebSocket services will send a ping frame **every 20 seconds** instead of 3 minutes.
+    * The allowed pong delay will be **1 minute** instead of 10 minutes.
+    * The documentation for these services have been updated to reflect the change.
+* `AggressorSide (2446)` is now rendered in the [FIX Market Data Trade Stream](fix-api.md#tradestream). The QuickFix schema [file](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml) has also been updated. Please download the latest schema before the Spot Testnet upgrade is completed.
+
+---
+
+### 2024-12-17
 
 * FIX Market Data is now available. The [FIX API](fix-api.md) documentation for SPOT Testnet has been updated regarding this feature.
 * Please refer to this [link](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml) for the QuickFix Schema for FIX Market Data.
@@ -19,79 +30,79 @@ This is not always synced with the live exchange.
 
 **New Feature: Microsecond support:**
 
-The system now supports microseconds in all related time and/or timestamp fields. Microsecond support is **opt-in**, by default the requests and responses still use milliseconds.<br></br> 
+The system now supports microseconds in all related time and/or timestamp fields. Microsecond support is **opt-in**, by default the requests and responses still use milliseconds.<br></br>
 Examples in documentation are also using milliseconds for the foreseeable future.
 
 WebSocket Streams
 
-* A new optional parameter `timeUnit` can be used in the connection URL to select the time unit.  
-  * For example: `/stream?streams=btcusdt@trade&timeUnit=millisecond`  
-  * Supported values are:  
-    * `MILLISECOND`  
-    * `millisecond`  
-    * `MICROSECOND`  
-    * `microsecond`  
+* A new optional parameter `timeUnit` can be used in the connection URL to select the time unit.
+  * For example: `/stream?streams=btcusdt@trade&timeUnit=millisecond`
+  * Supported values are:
+    * `MILLISECOND`
+    * `millisecond`
+    * `MICROSECOND`
+    * `microsecond`
   * If the time unit is not selected, milliseconds will be used by default.
 
 REST API
 
-* A new optional header `X-MBX-TIME-UNIT` can be sent in the request to select the time unit.  
-  * Supported values:  
-    * `MILLISECOND`  
-    * `millisecond`  
-    * `MICROSECOND`  
+* A new optional header `X-MBX-TIME-UNIT` can be sent in the request to select the time unit.
+  * Supported values:
+    * `MILLISECOND`
+    * `millisecond`
+    * `MICROSECOND`
     * `microsecond`
-  * The time unit affects time-related parameters in requests (e.g, `startTime`, `endTime`, `timestamp`).  
-  * The time unit affects timestamp fields in responses (e.g., `time`, `transactTime`).  
-  * If the time unit is not selected, milliseconds will be used by default. 
+  * The time unit affects time-related parameters in requests (e.g, `startTime`, `endTime`, `timestamp`).
+  * The time unit affects timestamp fields in responses (e.g., `time`, `transactTime`).
+  * If the time unit is not selected, milliseconds will be used by default.
 
 WebSocket API
 
-* A new optional parameter `timeUnit` can be used in the connection URL to select the time unit.   
-  * Supported values:  
-    * `MILLISECOND`   
-    * `millisecond`  
-    * `MICROSECOND`  
+* A new optional parameter `timeUnit` can be used in the connection URL to select the time unit.
+  * Supported values:
+    * `MILLISECOND`
+    * `millisecond`
+    * `MICROSECOND`
     * `microsecond`
-  * The time unit affects time-related parameters in requests (e.g, `startTime`, `endTime`, `timestamp`).  
-  * The time unit affects timestamp fields in responses (e.g., `time`, `transactTime`).  
-  * If the time unit is not selected, milliseconds will be used by default. 
+  * The time unit affects time-related parameters in requests (e.g, `startTime`, `endTime`, `timestamp`).
+  * The time unit affects timestamp fields in responses (e.g., `time`, `transactTime`).
+  * If the time unit is not selected, milliseconds will be used by default.
 
 User Data Streams
 
-* A new optional parameter `timeUnit` can be used in the connection URL to select the time unit.   
-  * Supported values   
-    * `MILLISECOND`   
-    * `MICROSECOND`.  
-    * `microsecond`  
+* A new optional parameter `timeUnit` can be used in the connection URL to select the time unit.
+  * Supported values
+    * `MILLISECOND`
+    * `MICROSECOND`.
+    * `microsecond`
     * `millisecond`
 
 General Changes:
 
 * Fixed a bug that prevented orders from being placed when submitting OCOs on the `BUY` side without providing a `stopPrice`.
-* `TAKE_PROFIT` and `TAKE_PROFIT_LIMIT` support has been added for OCOs.  
-  * Previously OCOs could only be composed by the following order types:  
-    * `LIMIT_MAKER` \+ `STOP_LOSS`  
-    * `LIMIT_MAKER` \+ `STOP_LOSS_LIMIT`  
-  * Now OCOs can be composed of the following order types:  
-    * `LIMIT_MAKER` \+ `STOP_LOSS`  
-    * `LIMIT_MAKER` \+ `STOP_LOSS_LIMIT`  
-    * `TAKE_PROFIT` \+ `STOP_LOSS`  
-    * `TAKE_PROFIT` \+ `STOP_LOSS_LIMIT`   
-    * `TAKE_PROFIT_LIMIT` \+ `STOP_LOSS`  
-    * `TAKE_PROFIT_LIMIT` \+ `STOP_LOSS_LIMIT`  
-  * This is supported by the following requests:   
-    * `POST /api/v3/orderList/oco`  
-    * `POST /api/v3/orderList/otoco`  
-    * `orderList.place.oco`  
-    * `orderList.place.otoco`  
-    * `NewOrderList<E>`  
+* `TAKE_PROFIT` and `TAKE_PROFIT_LIMIT` support has been added for OCOs.
+  * Previously OCOs could only be composed by the following order types:
+    * `LIMIT_MAKER` \+ `STOP_LOSS`
+    * `LIMIT_MAKER` \+ `STOP_LOSS_LIMIT`
+  * Now OCOs can be composed of the following order types:
+    * `LIMIT_MAKER` \+ `STOP_LOSS`
+    * `LIMIT_MAKER` \+ `STOP_LOSS_LIMIT`
+    * `TAKE_PROFIT` \+ `STOP_LOSS`
+    * `TAKE_PROFIT` \+ `STOP_LOSS_LIMIT`
+    * `TAKE_PROFIT_LIMIT` \+ `STOP_LOSS`
+    * `TAKE_PROFIT_LIMIT` \+ `STOP_LOSS_LIMIT`
+  * This is supported by the following requests:
+    * `POST /api/v3/orderList/oco`
+    * `POST /api/v3/orderList/otoco`
+    * `orderList.place.oco`
+    * `orderList.place.otoco`
+    * `NewOrderList<E>`
   * Error code `-1167` will be obsolete after this update and will be removed from the documentation in a later update.
-* Timestamp parameters now reject values too far into the past or the future. To be specific, the parameter will be rejected if:  
-  * `timestamp` before 2017-01-01 (less than 1483228800000\)  
-  * `timestamp` is more than 10 seconds after the current time (e.g., if current time is 1729745280000 then it is an error to use 1729745291000 or greater)  
-* If `startTime` and/or `endTime` values are outside of range, the values will be adjusted to fit the correct range. 
-* The field for quote order quantity (`origQuoteOrderQty`) has been added to responses that previously did not have it. Note that for order placement endpoints the field will only appear for requests with `newOrderRespType` set to `RESULT` or `FULL`. 
+* Timestamp parameters now reject values too far into the past or the future. To be specific, the parameter will be rejected if:
+  * `timestamp` before 2017-01-01 (less than 1483228800000\)
+  * `timestamp` is more than 10 seconds after the current time (e.g., if current time is 1729745280000 then it is an error to use 1729745291000 or greater)
+* If `startTime` and/or `endTime` values are outside of range, the values will be adjusted to fit the correct range.
+* The field for quote order quantity (`origQuoteOrderQty`) has been added to responses that previously did not have it. Note that for order placement endpoints the field will only appear for requests with `newOrderRespType` set to `RESULT` or `FULL`.
 
   * Please refer to the table for requests with `origQuoteOrderQty`:
 
@@ -118,45 +129,45 @@ General Changes:
 
 SBE
 
-* A new schema 2:1 [spot_2_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_2_1.xml) has been released. The current schema 2:0 [spot_2_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_2_0.xml) will thus be deprecated, and retired from the API in 6 months as per our schema deprecation policy.  
-* Schema 2:1 is a backward compatible update of schema 2:0. You will always receive payloads in 2:1 format when you request either schema 2:0 or 2:1.  
-* Changes in SBE schema 2:1:  
-  * New field `origQuoteOrderQty` in order placement/cancellation responses (Note: Decoders generated using the 2:0 schema will skip this field.):  
-    * `NewOrderResultResponse`  
-    * `NewOrderFullResponse`  
-    * `CancelOrderResponse`  
-    * `NewOrderListResultResponse`  
-    * `NewOrderListFullResponse`  
-    * `CancelOrderListResponse`  
-  * WebSocket API only: New field `userDataStream` in session status responses:  
-    * `WebSocketSessionLogonResponse`  
-    * `WebSocketSessionStatusResponse`  
-    * `WebSocketSessionLogoutResponse`  
-  * WebSocket API only: New messages for User Data Stream support:  
-    * `UserDataStreamSubscribeResponse`  
-    * `UserDataStreamUnsubscribeResponse`  
-    * `BalanceUpdateEvent`  
-    * `EventStreamTerminatedEvent`  
-    * `ExecutionReportEvent`  
-    * `ExternalLockUpdateEvent`  
-    * `ListStatusEvent`  
+* A new schema 2:1 [spot_2_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_2_1.xml) has been released. The current schema 2:0 [spot_2_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_2_0.xml) will thus be deprecated, and retired from the API in 6 months as per our schema deprecation policy.
+* Schema 2:1 is a backward compatible update of schema 2:0. You will always receive payloads in 2:1 format when you request either schema 2:0 or 2:1.
+* Changes in SBE schema 2:1:
+  * New field `origQuoteOrderQty` in order placement/cancellation responses (Note: Decoders generated using the 2:0 schema will skip this field.):
+    * `NewOrderResultResponse`
+    * `NewOrderFullResponse`
+    * `CancelOrderResponse`
+    * `NewOrderListResultResponse`
+    * `NewOrderListFullResponse`
+    * `CancelOrderListResponse`
+  * WebSocket API only: New field `userDataStream` in session status responses:
+    * `WebSocketSessionLogonResponse`
+    * `WebSocketSessionStatusResponse`
+    * `WebSocketSessionLogoutResponse`
+  * WebSocket API only: New messages for User Data Stream support:
+    * `UserDataStreamSubscribeResponse`
+    * `UserDataStreamUnsubscribeResponse`
+    * `BalanceUpdateEvent`
+    * `EventStreamTerminatedEvent`
+    * `ExecutionReportEvent`
+    * `ExternalLockUpdateEvent`
+    * `ListStatusEvent`
     * `OutboundAccountPositionEvent`
 
 WebSocket API
 
-* You can now subscribe to User Data Stream events through your WebSocket API connection.   
-  * Note: This feature is only available for users of Ed25519 API keys.  
-  * Note: New SBE schema 2:1 is required for User Data Stream subscriptions in SBE format.  
-* New requests:  
-  * `userDataStream.subscribe`  
-  * `userDataStream.unsubscribe`  
-* Changes to `session.logon`, `session.status`, and `session.logout`  
-  * Added a new field `userDataStream` indicating if the user data stream subscription is active.   
-* Fixed a bug where you wouldn't receive a new listenKey using `userDataStream.start` after `session.logon` 
+* You can now subscribe to User Data Stream events through your WebSocket API connection.
+  * Note: This feature is only available for users of Ed25519 API keys.
+  * Note: New SBE schema 2:1 is required for User Data Stream subscriptions in SBE format.
+* New requests:
+  * `userDataStream.subscribe`
+  * `userDataStream.unsubscribe`
+* Changes to `session.logon`, `session.status`, and `session.logout`
+  * Added a new field `userDataStream` indicating if the user data stream subscription is active.
+* Fixed a bug where you wouldn't receive a new listenKey using `userDataStream.start` after `session.logon`
 
 User Data Stream
 
-* WebSocket API only: New event `eventStreamTerminated` is emitted when you either logout from your websocket session or you have unsubscribed from the user data stream.   
+* WebSocket API only: New event `eventStreamTerminated` is emitted when you either logout from your websocket session or you have unsubscribed from the user data stream.
 * New event `externalLockUpdate` is sent when your spot wallet balance is locked/unlocked by an external system.
 
 FIX API
@@ -168,7 +179,7 @@ FIX API
 ---
 
 
-### 2024-11-05 
+### 2024-11-05
 
 **Note:** This is in the process of being deployed. Please consult the Spot Test Network's [homepage](https://testnet.binance.vision/) to be informed of the release completion.
 
@@ -179,16 +190,16 @@ Changes to Exchange Information (i.e. [`GET /api/v3/exchangeInfo`](rest-api.md#e
 
 ---
 
-### 2024-10-02 
+### 2024-10-02
 
 REST and WebSocket API:
 
 * Reminder that SBE 1:0 schema will be disabled on 2024-10-04, [6 months after being deprecated](../faqs/sbe_faq.md), as per our SBE policy.
-* The [SBE lifecycle for Testnet](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_schema_lifecycle_testnet.json) has been updated to reflect this change. 
+* The [SBE lifecycle for Testnet](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_schema_lifecycle_testnet.json) has been updated to reflect this change.
 
 ---
 
-### 2024-09-04 
+### 2024-09-04
 
 * Spot Testnet now supports Unfilled Order Count. Please refer to this [page](../faqs/order_count_decrement.md) on how you can decrement your unfilled order count when placing orders.
 * The documentation has been updated to reflect the wording.
@@ -218,7 +229,7 @@ General Changes:
 
 ---
 
-### 2024-07-17 
+### 2024-07-17
 
 General changes:
 
@@ -246,7 +257,7 @@ WebSocket Streams
 
 ---
 
-### 2024-05-30 
+### 2024-05-30
 
 WebSocket API
 
@@ -258,7 +269,7 @@ WebSocket Streams
 
 ---
 
-### 2024-05-23 
+### 2024-05-23
 
 REST API
 
@@ -287,7 +298,7 @@ WebSocket Streams
 
 ---
 
-### 2024-04-04 
+### 2024-04-04
 
 General changes:
 
@@ -295,7 +306,7 @@ General changes:
 * Field `permissions` will be empty and will be removed in a future release.
 * Previously, `"permissions":["SPOT","MARGIN"]` meant that you could place an order on the symbol if your account had `SPOT` or `MARGIN` permissions. The equivalent is `"permissionSets":[["SPOT","MARGIN"]]`. (Note the extra set of square brackets.) Each array of permissions inside the `permissionSets` array is called a "permission set".
 * Symbol permissions can now be more complex. `"permissionSets":[["SPOT","MARGIN"],["TRD_GRP_004","TRD_GRP_005"]]` means that you may place an order on the symbol if your account has SPOT or MARGIN permissions **and** `TRD_GRP_004` or `TRD_GRP_005` permissions. There may be an arbitrary number of permission sets in a symbol's `permissionSets`.
-* **The weight of the following requests has increased from 10 to 25**: 
+* **The weight of the following requests has increased from 10 to 25**:
 	* `GET /api/v3/trades`
 	* `GET /api/v3/historicalTrades`
 	* `trades.recent`
@@ -334,4 +345,3 @@ General changes:
 User Data Stream:
 
 * New event `listenKeyExpired` is now emitted when a `listenKey` expires.
-

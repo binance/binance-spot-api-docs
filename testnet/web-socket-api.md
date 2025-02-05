@@ -6,20 +6,20 @@
   - [Request format](#request-format)
   - [Response format](#response-format)
     - [Status codes](#status-codes)
-  - [Event Format](#event-format)
-  - [Rate limits](#rate-limits)
+  - [Event format](#event-format)
+- [Rate limits](#rate-limits)
   - [Connection limits](#connection-limits)
-    - [General information on rate limits](#general-information-on-rate-limits)
-      - [How to interpret rate limits](#how-to-interpret-rate-limits)
-      - [How to show/hide rate limit information](#how-to-showhide-rate-limit-information)
-    - [IP limits](#ip-limits)
-    - [Unfilled Order Count](#unfilled-order-count)
-  - [Request security](#request-security)
-    - [SIGNED (TRADE and USER_DATA) request security](#signed-trade-and-user_data-request-security)
-    - [Timing security](#timing-security)
-    - [SIGNED request example (HMAC)](#signed-request-example-hmac)
-    - [SIGNED request example (RSA)](#signed-request-example-rsa)
-    - [SIGNED Request Example (Ed25519)](#signed-request-example-ed25519)
+  - [General information on rate limits](#general-information-on-rate-limits)
+    - [How to interpret rate limits](#how-to-interpret-rate-limits)
+    - [How to show/hide rate limit information](#how-to-showhide-rate-limit-information)
+  - [IP limits](#ip-limits)
+  - [Unfilled Order Count](#unfilled-order-count)
+- [Request security](#request-security)
+  - [SIGNED (TRADE and USER_DATA) request security](#signed-trade-and-user_data-request-security)
+  - [Timing security](#timing-security)
+  - [SIGNED request example (HMAC)](#signed-request-example-hmac)
+  - [SIGNED request example (RSA)](#signed-request-example-rsa)
+  - [SIGNED Request Example (Ed25519)](#signed-request-example-ed25519)
   - [Session Authentication](#session-authentication)
     - [Authenticate after connection](#authenticate-after-connection)
     - [Authorize _ad hoc_ requests](#authorize-_ad-hoc_-requests)
@@ -56,20 +56,21 @@
     - [Current open orders (USER_DATA)](#current-open-orders-user_data)
     - [Cancel open orders (TRADE)](#cancel-open-orders-trade)
     - [Order lists](#order-lists)
+      - [Place new OCO - Deprecated (TRADE)](#place-new-oco---deprecated-trade)
       - [Place new Order list - OCO (TRADE)](#place-new-order-list---oco-trade)
       - [Place new Order list - OTO (TRADE)](#place-new-order-list---oto-trade)
       - [Place new Order list - OTOCO (TRADE)](#place-new-order-list---otoco-trade)
       - [Query Order list (USER_DATA)](#query-order-list-user_data)
       - [Cancel Order list (TRADE)](#cancel-order-list-trade)
-      - [Current open order lists (USER_DATA)](#current-open-order-lists-user_data)
+      - [Current open Order lists (USER_DATA)](#current-open-order-lists-user_data)
     - [SOR](#sor)
       - [Place new order using SOR (TRADE)](#place-new-order-using-sor-trade)
       - [Test new order using SOR (TRADE)](#test-new-order-using-sor-trade)
   - [Account requests](#account-requests)
     - [Account information (USER_DATA)](#account-information-user_data)
-    - [Account unfilled order count (USER_DATA)](#account-unfilled-order-count-user_data)
+    - [Unfilled Order Count (USER_DATA)](#unfilled-order-count-user_data)
     - [Account order history (USER_DATA)](#account-order-history-user_data)
-    - [Account order list history (USER_DATA)](#account-order-list-history-user_data)
+    - [Account Order list history (USER_DATA)](#account-order-list-history-user_data)
     - [Account trade history (USER_DATA)](#account-trade-history-user_data)
     - [Account prevented matches (USER_DATA)](#account-prevented-matches-user_data)
     - [Account allocations (USER_DATA)](#account-allocations-user_data)
@@ -83,22 +84,23 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Public WebSocket API for Binance SPOT Testnet
+# Public WebSocket API for Binance
 
-**Last Updated: 2024-11-27**
+**Last Updated: 2025-01-28**
 
 ## General API Information
 
-* The base endpoint is: **`wss://testnet.binance.vision/ws-api/v3`**
+* The base endpoint is: **`wss://ws-api.binance.com:443/ws-api/v3`**.
   * If you experience issues with the standard 443 port, alternative port 9443 is also available.
+  * The base endpoint for [testnet](https://testnet.binance.vision/) is: `wss://testnet.binance.vision/ws-api/v3`
 * A single connection to the API is only valid for 24 hours; expect to be disconnected after the 24-hour mark.
-* Websocket server will send a `ping frame` every 3 minutes.
-  * If the websocket server does not receive a `pong frame` back from the connection within a 10 minute period, the connection will be disconnected.
+* The websocket server will send a `ping frame` every 20 seconds.
+  * If the websocket server does not receive a `pong frame` back from the connection within a minute the connection will be disconnected.
   * When you receive a ping, you must send a pong with a copy of ping's payload as soon as possible.
   * Unsolicited `pong frames` are allowed, but will not prevent disconnection. **It is recommended that the payload for these pong frames are empty.**
 * Lists are returned in **chronological order**, unless noted otherwise.
 * All timestamps in the JSON responses are in **milliseconds in UTC by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND` or `timeUnit=microsecond` in the URL.
-* Timestamp parameters (e.g. `startTime`, `endTime`, `timestamp`) can be passed in milliseconds or microseconds.
+* Timestamp parameters (e.g. `startTime`, `endTime`, `timestamp)` can be passed in milliseconds or microseconds.
 * All field names and values are **case-sensitive**, unless noted otherwise.
 
 ## Request format
@@ -163,6 +165,7 @@ Example of successful response:
     "price": "0.10000000",
     "origQty": "10.00000000",
     "executedQty": "0.00000000",
+    "origQuoteOrderQty": "0.000000",
     "cummulativeQuoteQty": "0.00000000",
     "status": "NEW",
     "timeInForce": "GTC",
@@ -298,13 +301,13 @@ Here are some common status codes that you might encounter:
 
 See [Error codes for Binance](errors.md) for a list of error codes and messages.
 
-## Event Format
+## Event format
 
 User Data Stream events for non-SBE sessions are sent as JSON in **text frames**, one event per frame.
 
-Events in SBE sessions will be sent as **binary frames**.
+Events in SBE sessions will be sent as **binary frames.**
 
-Please refer to [`userDataStream.subscribe`](#user-data-stream-subscribe) for details on how to subscribe to User Data Stream in WebSocket API.
+Please refer to [`userDataStream.subscribe`](#user_data_stream_susbcribe) for details on how to subscribe to User Data Stream in WebSocket API.
 
 Example of an event:
 
@@ -338,7 +341,7 @@ Event fields:
 
 ## Rate limits
 
-## Connection limits
+### Connection limits
 
 There is a limit of **300 connections per attempt every 5 minutes**.
 
@@ -514,12 +517,13 @@ Failed response indicating that you are banned and the ban will last until epoch
 
 * Successfully placed orders update the `ORDERS` rate limit type.
 * Rejected or unsuccessful orders might or might not update the `ORDERS` rate limit type.
-* **Please note that if your orders are consistently filled by trades, you can continuously place orders on the API**. For more information, please see [Spot Unfilled Order Count Rules](../faqs/order_count_decrement.md).
+* **Please note that if your orders are consistently filled by trades, you can continuously place orders on the API**. For more information, please see [Spot Unfilled Order Count Rules](./faqs/order_count_decrement.md).
 * Use the [`account.rateLimits.orders`](#query-unfilled-order-count) request to keep track of how many orders you have placed within this interval.
 * If you exceed this, requests fail with status `429`.
   * This status code indicates you should back off and stop spamming the API.
   * Responses that have a status `429` include a `retryAfter` field, indicating when you can retry the request.
 * This is maintained **per account** and is shared by all API keys of the account.
+
 
 Successful response indicating that you have placed 12 orders in 10 seconds, and 4043 orders in the past 24 hours:
 
@@ -2924,7 +2928,7 @@ Name                | Type    | Mandatory | Description
 `icebergQty`        | DECIMAL | NO        |
 `strategyId`        | LONG     | NO        | Arbitrary numeric value identifying the order within an order strategy.
 `strategyType`      | INT     | NO        | <p>Arbitrary numeric value identifying the order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
-`selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
+`selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. Supported values: [STP Modes](./enums.md#stpmodes)
 `apiKey`            | STRING  | YES       |
 `recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
@@ -3544,7 +3548,7 @@ Memory => Database
     "updateTime": 1660801717945,        // time of the last update to the order
     "isWorking": true,
     "workingTime": 1660801715639,
-    "origQuoteOrderQty": "0.00000000"   // always present, zero if order type does not use quoteOrderQty
+    "origQuoteOrderQty": "0.00000000",   // always present, zero if order type does not use quoteOrderQty
     "strategyId": 37463720,             // present only if strategyId set for the order
     "strategyType": 1000000,            // present only if strategyType set for the order
     "selfTradePreventionMode": "NONE",
@@ -3661,7 +3665,7 @@ Notes:
 
 * `newClientOrderId` will replace `clientOrderId` of the canceled order, freeing it up for new orders.
 
-* If you cancel an order that is a part of an order List, the entire order list is canceled.
+* If you cancel an order that is a part of an order list, the entire order list is canceled.
 
 **Data Source:**
 Matching Engine
@@ -3735,7 +3739,7 @@ When an order list is canceled:
         "clientOrderId": "Tnu2IP0J5Y4mxw3IATBfmW"
       }
     ],
-    // order list's leg status format is the same as for individual orders.
+    //order list's leg status format is the same as for individual orders.
     "orderReports": [
       {
         "symbol": "BTCUSDT",
@@ -3766,7 +3770,6 @@ When an order list is canceled:
         "price": "23400.00000000",
         "origQty": "0.00850000"
         "executedQty": "0.00000000",
-        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.00000000",
         "status": "CANCELED",
         "timeInForce": "GTC",
@@ -3941,7 +3944,7 @@ Cancel an existing order and immediately place a new order instead of the cancel
         <td><code>trailingDelta</code></td>
         <td>DECIMAL</td>
         <td>NO *</td>
-        <td>See <a href="../faqs/trailing-stop-faq.md">Trailing Stop order FAQ</a></td>
+        <td>See <a href="faqs/trailing-stop-faq.md">Trailing Stop order FAQ</a></td>
     </tr>
     <tr>
         <td><code>icebergQty</code></td>
@@ -4019,7 +4022,6 @@ Available `cancelReplaceMode` options:
 
 * `STOP_ON_FAILURE` – if cancellation request fails, new order placement will not be attempted.
 * `ALLOW_FAILURE` – new order placement will be attempted even if the cancel request fails.
-
 
 <table>
 <thead>
@@ -4212,7 +4214,7 @@ Notes:
 
 * If new order placement is not attempted, your order count is still incremented.
 
-* Like [`order.cancel`](#cancel-order-trade), if you cancel a order of an order list, the entire order list is canceled.
+* Like [`order.cancel`](#cancel-order-trade), if you cancel an individual order from an order list, the entire order list is cancelled.
 
 **Data Source:**
 Matching Engine
@@ -4517,7 +4519,7 @@ If `orderRateLimitExceededMode` is `DO_NOTHING` regardless of `cancelReplaceMode
 ```javascript
 {
   "id": "3b3ac45c-1002-4c7d-88e8-630c408ecd87",
-  "status": 400,
+  "status": 429,
   "error": {
     "code": -1015,
     "msg": "Too many new orders; current limit is 50 orders per 10 SECOND."
@@ -4677,6 +4679,7 @@ If all symbols are requested, use the `symbol` field to tell which symbol the or
       "price": "23416.10000000",
       "origQty": "0.00847000",
       "executedQty": "0.00720000",
+      "origQuoteOrderQty": "0.000000",
       "cummulativeQuoteQty": "172.43931000",
       "status": "PARTIALLY_FILLED",
       "timeInForce": "GTC",
@@ -4711,7 +4714,7 @@ If all symbols are requested, use the `symbol` field to tell which symbol the or
 ```javascript
 {
   "id": "778f938f-9041-4b88-9914-efbf64eeacc8",
-  "method": "openOrders.cancelAll"
+  "method": "openOrders.cancelAll",
   "params": {
     "symbol": "BTCUSDT",
     "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
@@ -4850,6 +4853,191 @@ Cancellation reports for orders and order lists have the same format as in [`ord
 
 ### Order lists
 
+#### Place new OCO - Deprecated (TRADE)
+
+```javascript
+{
+  "id": "56374a46-3061-486b-a311-99ee972eb648",
+  "method": "orderList.place",
+  "params": {
+    "symbol": "BTCUSDT",
+    "side": "SELL",
+    "price": "23420.00000000",
+    "quantity": "0.00650000",
+    "stopPrice": "23410.00000000",
+    "stopLimitPrice": "23405.00000000",
+    "stopLimitTimeInForce": "GTC",
+    "newOrderRespType": "RESULT",
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "6689c2a36a639ff3915c2904871709990ab65f3c7a9ff13857558fd350315c35",
+    "timestamp": 1660801713767
+  }
+}
+```
+
+Send in a new one-cancels-the-other (OCO) pair:
+`LIMIT_MAKER` + `STOP_LOSS`/`STOP_LOSS_LIMIT` orders (called *legs*),
+where activation of one order immediately cancels the other.
+
+**Weight:**
+1
+
+**Parameters:**
+
+Name                | Type    | Mandatory | Description
+------------------- | ------- | --------- | ------------
+`symbol`            | STRING  | YES       |
+`side`              | ENUM    | YES       | `BUY` or `SELL`
+`price`             | DECIMAL | YES       | Price for the limit order
+`quantity`          | DECIMAL | YES       |
+`listClientOrderId` | STRING  | NO        | Arbitrary unique ID among open order lists. Automatically generated if not sent
+`limitClientOrderId`| STRING  | NO        | Arbitrary unique ID among open orders for the limit order. Automatically generated if not sent
+`limitIcebergQty`   | DECIMAL | NO        |
+`limitStrategyId`   | LONG     | NO        | Arbitrary numeric value identifying the limit order within an order strategy.
+`limitStrategyType` | INT     | NO        | <p>Arbitrary numeric value identifying the limit order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
+`stopPrice`         | DECIMAL | YES *     | Either `stopPrice` or `trailingDelta`, or both must be specified
+`trailingDelta`     | INT     | YES *     | See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md)
+`stopClientOrderId` | STRING  | NO        | Arbitrary unique ID among open orders for the stop order. Automatically generated if not sent
+`stopLimitPrice`    | DECIMAL | NO *      |
+`stopLimitTimeInForce` | ENUM | NO *      | See [`order.place`](#timeInForce) for available options
+`stopIcebergQty`    | DECIMAL | NO *      |
+`stopStrategyId`    | LONG     | NO        | Arbitrary numeric value identifying the stop order within an order strategy.
+`stopStrategyType`  | INT     | NO        | <p>Arbitrary numeric value identifying the stop order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
+`newOrderRespType`  | ENUM    | NO        | Select response format: `ACK`, `RESULT`, `FULL` (default)
+`selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](./enums.md#stpmodes)
+`apiKey`            | STRING  | YES       |
+`recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
+`signature`         | STRING  | YES       |
+`timestamp`         | INT     | YES       |
+
+Notes:
+
+* `listClientOrderId` parameter specifies `listClientOrderId` for the OCO pair.
+
+  A new OCO with the same `listClientOrderId` is accepted only when the previous one is filled or completely expired.
+
+  `listClientOrderId` is distinct from `clientOrderId` of individual orders.
+
+* `limitClientOrderId` and `stopClientOrderId` specify `clientOrderId` values for both legs of the OCO.
+
+  A new order with the same `clientOrderId` is accepted only when the previous one is filled or expired.
+
+* Price restrictions on the legs:
+
+  | `side` | Price relation |
+  | ------ | -------------- |
+  | `BUY`  | `price` < market price < `stopPrice` |
+  | `SELL` | `price` > market price > `stopPrice` |
+
+* Both legs have the same `quantity`.
+
+  However, you can set different iceberg quantity for individual legs.
+
+  If `stopIcebergQty` is used, `stopLimitTimeInForce` must be `GTC`.
+
+* `trailingDelta` applies only to the `STOP_LOSS`/`STOP_LOSS_LIMIT` leg of the OCO.
+
+* OCOs add **2 orders** to the unfilled order count, `EXCHANGE_MAX_ORDERS` filter, and `MAX_NUM_ORDERS` filter.
+
+**Data Source:**
+Matching Engine
+
+**Response:**
+
+Response format for `orderReports` is selected using the `newOrderRespType` parameter.
+The following example is for `RESULT` response type.
+See [`order.place`](#place-new-order-trade) for more examples.
+
+```javascript
+{
+  "id": "57833dc0-e3f2-43fb-ba20-46480973b0aa",
+  "status": 200,
+  "result": {
+    "orderListId": 1274512,
+    "contingencyType": "OCO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "08985fedd9ea2cf6b28996",
+    "transactionTime": 1660801713793,
+    "symbol": "BTCUSDT",
+    "orders": [
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 12569138901,
+        "clientOrderId": "BqtFCj5odMoWtSqGk2X9tU"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 12569138902,
+        "clientOrderId": "jLnZpj5enfMXTuhKB1d0us"
+      }
+    ],
+    "orderReports": [
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 12569138901,
+        "orderListId": 1274512,
+        "clientOrderId": "BqtFCj5odMoWtSqGk2X9tU",
+        "transactTime": 1660801713793,
+        "price": "23410.00000000",
+        "origQty": "0.00650000",
+        "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "STOP_LOSS_LIMIT",
+        "side": "SELL",
+        "stopPrice": "23405.00000000",
+        "workingTime": -1,
+        "selfTradePreventionMode": "NONE"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 12569138902,
+        "orderListId": 1274512,
+        "clientOrderId": "jLnZpj5enfMXTuhKB1d0us",
+        "transactTime": 1660801713793,
+        "price": "23420.00000000",
+        "origQty": "0.00650000",
+        "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT_MAKER",
+        "side": "SELL",
+        "workingTime": 1660801713793,
+        "selfTradePreventionMode": "NONE"
+      }
+    ]
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "SECOND",
+      "intervalNum": 10,
+      "limit": 50,
+      "count": 2
+    },
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "DAY",
+      "intervalNum": 1,
+      "limit": 160000,
+      "count": 2
+    },
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 1
+    }
+  ]
+}
+```
+
 #### Place new Order list - OCO (TRADE)
 
 ```javascript
@@ -4877,17 +5065,17 @@ Cancellation reports for orders and order lists have the same format as in [`ord
 **Weight:**
 1
 
-Send in an one-cancels-the-other (OCO) pair, where activation of one order immediately cancels the other.
+Send in an one-cancels the other (OCO) pair, where activation of one order immediately cancels the other.
 
 * An OCO has 2 orders called the **above order** and **below order**.
 * One of the orders must be a `LIMIT_MAKER/TAKE_PROFIT/TAKE_PROFIT_LIMIT` order and the other must be `STOP_LOSS` or `STOP_LOSS_LIMIT` order.
 * Price restrictions:
   * If the OCO is on the `SELL` side:
-    * `LIMIT_MAKER/TAKE_PROFIT_LIMIT` `price` \> Last Traded Price \> `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`
-    * `TAKE_PROFIT stopPrice` \> Last Traded Price \> `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
+    * `LIMIT_MAKER/TAKE_PROFIT_LIMIT` `price` > Last Traded Price > `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`
+    * `TAKE_PROFIT stopPrice` > Last Traded Price > `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
   * If the OCO is on the `BUY` side:
-    * `LIMIT_MAKER` `price` \< Last Traded Price \< `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`
-    * `TAKE_PROFIT stopPrice >` Last Traded Price `> STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
+    * `LIMIT_MAKER` `price` < Last Traded Price < `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`
+    * `TAKE_PROFIT stopPrice` > Last Traded Price > `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
 * OCOs add **2 orders** to the unfilled order count, `EXCHANGE_MAX_ORDERS` filter, and `MAX_NUM_ORDERS` filter.
 
 **Parameters:**
@@ -4899,33 +5087,31 @@ Name                     |Type    | Mandatory | Description
 `side`                   |ENUM    |YES        |`BUY` or `SELL`
 `quantity`               |DECIMAL |YES        |Quantity for both orders of the order list.
 `aboveType`              |ENUM    |YES        |Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
-`aboveClientOrderId`     |STRING  |NO        |Arbitrary unique ID among open orders for the above leg order. Automatically generated if not sent
+`aboveClientOrderId`     |STRING  |NO        |Arbitrary unique ID among open orders for the above order. Automatically generated if not sent
 `aboveIcebergQty`        |LONG    |NO         |Note that this can only be used if `aboveTimeInForce` is `GTC`.
 `abovePrice`             |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
-`aboveStopPrice`         |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`. <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
-`aboveTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](..faqs/trailing-stop-faq.md).
+`aboveStopPrice`         |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
+`aboveTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md).
 `aboveTimeInForce`       |DECIMAL |NO         |Required if `aboveType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`.
 `aboveStrategyId`        |LONG     |NO         |Arbitrary numeric value identifying the above order within an order strategy.
 `aboveStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the above order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
 `belowType`              |ENUM    |YES        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 `belowClientOrderId`     |STRING  |NO         |
 `belowIcebergQty`        |LONG    |NO         |Note that this can only be used if `belowTimeInForce` is `GTC`.
-`belowPrice`             |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
-`belowStopPrice`         |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`.
-Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
-`belowTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](..faqs/trailing-stop-faq.md).
+`belowPrice`             |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
+`belowStopPrice`         |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT` or `TAKE_PROFIT_LIMIT`. Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
+`belowTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md).
 `belowTimeInForce`       |ENUM    |NO         |Required if `belowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`
 `belowStrategyId`        |LONG    |NO          |Arbitrary numeric value identifying the below order within an order strategy.
 `belowStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the below order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
 `newOrderRespType`       |ENUM    |NO         |Select response format: `ACK`, `RESULT`, `FULL`
-`selfTradePreventionMode`|ENUM    |NO         |The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
-`apiKey`                 |STRING |YES         |
+`selfTradePreventionMode`|ENUM    |NO         |The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](./enums.md#stpmodes).
+`apiKey`                  |STRING|YES|
 `recvWindow`             |LONG   |NO         |The value cannot be greater than `60000`.
-`timestamp`              |LONG   |YES          |
-`signature`              | STRING  | YES       |
+`timestamp`              |LONG   |YES        |
+`signature`              |STRING  | YES       |
 
 **Data Source:**
-
 Matching Engine
 
 **Response:**
@@ -5058,7 +5244,6 @@ Places an OTO.
 * The first order is called the **working order** and must be `LIMIT` or `LIMIT_MAKER`. Initially, only the working order goes on the order book.
 * The second order is called the **pending order**. It can be any order type except for `MARKET` orders using parameter `quoteOrderQty`. The pending order is only placed on the order book when the working order gets **fully filled**.
 * If either the working order or the pending order is cancelled individually, the other order in the order list will also be canceled or expired.
-* When the order list is placed, if the working order gets **immediately fully filled**, the placement response will show the working order as `FILLED` but the pending order will still appear as `PENDING_NEW`. You need to query the status of the pending order again to see its updated status.
 * OTOs add **2 orders** to the unfilled order count, `EXCHANGE_MAX_NUM_ORDERS` filter and `MAX_NUM_ORDERS` filter.
 
 **Weight:** 1
@@ -5069,26 +5254,26 @@ Name                   |Type   |Mandatory | Description
 ----                   |----   |------    |------
 `symbol`                 |STRING |YES       |
 `listClientOrderId`      |STRING |NO        |Arbitrary unique ID among open order lists. Automatically generated if not sent. <br>A new order list with the same listClientOrderId is accepted only when the previous one is filled or completely expired. <br> `listClientOrderId` is distinct from the `workingClientOrderId` and the `pendingClientOrderId`.
-`newOrderRespType`       |ENUM   |NO        |Format of the JSON response. Supported values: [Order Response Type](./enums.md#orderresponsetype)
-`selfTradePreventionMode`|ENUM   |NO        |The allowed values are dependent on what is configured on the symbol. Supported values: [STP Modes](./enums.md#stpmodes)
+`newOrderRespType`       |ENUM   |NO        |Format of the JSON response. Supported values: [Order Response Type](./enums.md#order-response-type-neworderresptype)
+`selfTradePreventionMode`|ENUM   |NO        |The allowed values are dependent on what is configured on the symbol. See [STP Modes](./enums.md#stp-modes)
 `workingType`            |ENUM   |YES       |Supported values: `LIMIT`,`LIMIT_MAKER`
-`workingSide`            |ENUM   |YES       |Supported values: [Order side](./enums.md#side)
+`workingSide`            |ENUM   |YES       |Supported values: [Order Side](./enums.md#order-side-side)
 `workingClientOrderId`   |STRING |NO        |Arbitrary unique ID among open orders for the working order.<br> Automatically generated if not sent.
 `workingPrice`           |DECIMAL|YES       |
 `workingQuantity`        |DECIMAL|YES       |Sets the quantity for the working order.
-`workingIcebergQty`      |DECIMAL|NO       |This can only be used if `workingTimeInForce` is `GTC`.
-`workingTimeInForce`     |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
+`workingIcebergQty`      |DECIMAL|NO       |This can only be used if `workingTimeInForce` is `GTC`, or if `workingType` is `LIMIT_MAKER`.
+`workingTimeInForce`     |ENUM   |NO        |Supported values: [Time In Force](#timeInForce)
 `workingStrategyId`      |LONG    |NO        |Arbitrary numeric value identifying the working order within an order strategy.
 `workingStrategyType`    |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
-`pendingType`            |ENUM   |YES       |Supported values: [Order Types](#order-type)  <br> Note that `MARKET` orders using `quoteOrderQty` are not supported.
-`pendingSide`            |ENUM   |YES       |Supported values: [Order side](./enums.md#side)
+`pendingType`            |ENUM   |YES       |Supported values: [Order Types](#order-type) Note that `MARKET` orders using `quoteOrderQty` are not supported.
+`pendingSide`            |ENUM   |YES       |Supported values: [Order Side](./enums.md#order-side-side)
 `pendingClientOrderId`   |STRING |NO        |Arbitrary unique ID among open orders for the pending order.<br> Automatically generated if not sent.
 `pendingPrice`           |DECIMAL|NO        |
 `pendingStopPrice`       |DECIMAL|NO        |
 `pendingTrailingDelta`   |DECIMAL|NO        |
 `pendingQuantity`        |DECIMAL|YES       |Sets the quantity for the pending order.
-`pendingIcebergQty`      |DECIMAL|NO        |This can only be used if `pendingTimeInForce` is `GTC`.
-`pendingTimeInForce`     |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
+`pendingIcebergQty`      |DECIMAL|NO        |This can only be used if `pendingTimeInForce` is `GTC`, or if `pendingType` is `LIMIT_MAKER`.
+`pendingTimeInForce`     |ENUM   |NO        |Supported values: [Time In Force](#timeInForce)
 `pendingStrategyId`      |LONG    |NO        |Arbitrary numeric value identifying the pending order within an order strategy.
 `pendingStrategyType`    |INT    |NO        |Arbitrary numeric value identifying the pending order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
 `recvWindow`             |LONG   |NO        |The value cannot be greater than `60000`.
@@ -5104,9 +5289,9 @@ Depending on the `pendingType` or `workingType`, some optional parameters will b
 |Type                                                  |Additional mandatory parameters|Additional information|
 |----                                                  |----                           |------
 |`workingType` = `LIMIT`                               |`workingTimeInForce`           |
-|`pendingType` = `LIMIT`                                |`pendingPrice`, `pendingTimeInForce`          |
-|`pendingType` = `STOP_LOSS` or `TAKE_PROFIT`           |`pendingStopPrice` and/or `pendingTrailingDelta`|
-|`pendingType` =`STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`|`pendingPrice`, `pendingStopPrice` and/or `pendingTrailingDelta`, `pendingTimeInForce`|
+|`pendingType`= `LIMIT`                                |`pendingPrice`, `pendingTimeInForce`          |
+|`pendingType`= `STOP_LOSS` or `TAKE_PROFIT`           |`pendingStopPrice` and/or `pendingTrailingDelta`|
+|`pendingType`=`STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`|`pendingStopPrice` and/or `pendingTrailingDelta`, `pendingTimeInForce`|
 
 **Data Source:**
 
@@ -5225,13 +5410,12 @@ Matching Engine
 }
 ```
 
-Places an OTOCO.
+Place an OTOCO.
 
 * An OTOCO (One-Triggers-One-Cancels-the-Other) is an order list comprised of 3 orders.
 * The first order is called the **working order** and must be `LIMIT` or `LIMIT_MAKER`. Initially, only the working order goes on the order book.
-  * The behavior of the working order is the same as the [OTO](#new-order-list---oto-trade).
+  * The behavior of the working order is the same as the [OTO](#place-new-order-list---oto-trade).
 * OTOCO has 2 pending orders (pending above and pending below), forming an OCO pair. The pending orders are only placed on the order book when the working order gets **fully filled**.
-    * The rules of the pending above and pending below follow the same rules as the [Order List OCO](#new-order-list---oco-trade).
 * OTOCOs add **3 orders** to the unfilled order count, `EXCHANGE_MAX_NUM_ORDERS` filter, and `MAX_NUM_ORDERS` filter.
 
 **Weight:** 1
@@ -5242,13 +5426,13 @@ Name                     |Type   |Mandatory | Description
 ----                     |----   |------    |------
 `symbol`                   |STRING |YES       |
 `listClientOrderId`        |STRING |NO        |Arbitrary unique ID among open order lists. Automatically generated if not sent. <br>A new order list with the same listClientOrderId is accepted only when the previous one is filled or completely expired. <br> `listClientOrderId` is distinct from the `workingClientOrderId`, `pendingAboveClientOrderId`, and the `pendingBelowClientOrderId`.
-`newOrderRespType`         |ENUM   |NO        |Format of the JSON response. Supported values: [Order Response Type](./enums.md#order-response-type-neworderresptype)
-`selfTradePreventionMode`  |ENUM   |NO        |The allowed values are dependent on what is configured on the symbol. Supported values: [STP Modes](./enums.md#stpmodes)
+`newOrderRespType`         |ENUM   |NO        |Format the JSON response. Supported values: [Order Response Type](./enums.md#order-response-type-neworderresptype)
+`selfTradePreventionMode`  |ENUM   |NO        |The allowed values are dependent on what is configured on the symbol. See [STP Modes](./enums.md#stpmodes)
 `workingType`              |ENUM   |YES       |Supported values: `LIMIT`, `LIMIT_MAKER`
 `workingSide`              |ENUM   |YES       |Supported values: [Order Side](./enums.md#side)
 `workingClientOrderId`     |STRING |NO        |Arbitrary unique ID among open orders for the working order.<br> Automatically generated if not sent.
 `workingPrice`             |DECIMAL|YES       |
-`workingQuantity`          |DECIMAL|YES       |
+`workingQuantity`          |DECIMAL|YES        |
 `workingIcebergQty`        |DECIMAL|NO        |This can only be used if `workingTimeInForce` is `GTC`.
 `workingTimeInForce`       |ENUM   |NO        |Supported values: [Time In Force](#timeInForce)
 `workingStrategyId`        |LONG    |NO        |Arbitrary numeric value identifying the working order within an order strategy.
@@ -5258,19 +5442,18 @@ Name                     |Type   |Mandatory | Description
 `pendingAboveType`         |ENUM   |YES       |Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
 `pendingAboveClientOrderId`|STRING |NO        |Arbitrary unique ID among open orders for the pending above order.<br> Automatically generated if not sent.
 `pendingAbovePrice`        |DECIMAL|NO        |Can be used if `pendingAboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
-`pendingAboveStopPrice`    |DECIMAL|NO        |Can be used if \`pending`AboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
-`pendingAboveTrailingDelta`|DECIMAL|NO        |See [Trailing Stop FAQ](../faqs/trailing_stop_faq.md)
-`pendingAboveIcebergQty`   |DECIMAL|NO        |This can only be used if `pendingAboveTimeInForce` is `GTC`.
+`pendingAboveStopPrice`    |DECIMAL|NO        |Can be used if `pendingAboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
+`pendingAboveTrailingDelta`|DECIMAL|NO        |See [Trailing Stop FAQ](faqs/trailing-stop-faq.md)
+`pendingAboveIcebergQty`   |DECIMAL|NO        |This can only be used if `pendingAboveTimeInForce` is `GTC` or if `pendingAboveType` is `LIMIT_MAKER`.
 `pendingAboveTimeInForce`  |ENUM   |NO        |
 `pendingAboveStrategyId`   |LONG    |NO        |Arbitrary numeric value identifying the pending above order within an order strategy.
 `pendingAboveStrategyType` |INT    |NO        |Arbitrary numeric value identifying the pending above order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
 `pendingBelowType`         |ENUM   |NO        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 `pendingBelowClientOrderId`|STRING |NO        |Arbitrary unique ID among open orders for the pending below order.<br> Automatically generated if not sent.
-`pendingBelowPrice`        |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT` to specify the limit price.
-`pendingBelowStopPrice`    |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`.
-Either `pendingBelowStopPrice` or `pendingBelowTrailingDelta` or both, must be specified.
+`pendingBelowPrice`        |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT` to specify limit price
+`pendingBelowStopPrice`    |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`. Either `pendingBelowStopPrice` or `pendingBelowTrailingDelta` or both, must be specified.
 `pendingBelowTrailingDelta`|DECIMAL|NO        |
-`pendingBelowIcebergQty`   |DECIMAL|NO        |This can only be used if `pendingBelowTimeInForce` is `GTC`.
+`pendingBelowIcebergQty`   |DECIMAL|NO        |This can only be used if `pendingBelowTimeInForce` is `GTC`, or if `pendingBelowType` is `LIMIT_MAKER`.
 `pendingBelowTimeInForce`  |ENUM   |NO        |Supported values: [Time In Force](#timeInForce)
 `pendingBelowStrategyId`   |LONG    |NO        |Arbitrary numeric value identifying the pending below order within an order strategy.
 `pendingBelowStrategyType` |INT    |NO        |Arbitrary numeric value identifying the pending below order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
@@ -5282,17 +5465,18 @@ Either `pendingBelowStopPrice` or `pendingBelowTrailingDelta` or both, must be s
 
 **Mandatory parameters based on `pendingAboveType`, `pendingBelowType` or `workingType`**
 
-Depending on the `pendingType` or `workingType`, some optional parameters will become mandatory.
+Depending on the `pendingAboveType`/`pendingBelowType` or `workingType`, some optional parameters will become mandatory.
 
 |Type                                                       |Additional mandatory parameters|Additional information|
 |----                                                       |----                           |------
 |`workingType` = `LIMIT`                                    |`workingTimeInForce`           |
-|`pendingAboveType` = `STOP_LOSS/TAKE_PROFIT`       |`pendingAboveTrailingDelta` and/or `pendingAboveStopPrice`|
-|`pendingAboveType=STOP_LOSS_LIMIT/TAKE_PROFIT_LIMIT` |`pendingAbovePrice`, `pendingAboveTrailingDelta` and/or `pendingAboveStopPrice`, `pendingAboveTimeInForce`|
-|`pendingAboveType` =`LIMIT_MAKER` |`pendingAbovePrice`|
-|`pendingBelowType= STOP_LOSS/TAKE_PROFIT`         |`pendingBelowTrailingDelta` and/or `pendingBelowStopPrice`|
-|`pendingBelowType=STOP_LOSS_LIMIT/TAKE_PROFIT_LIMIT`|`pendingBelowPrice`, `pendingBelowTrailingDelta` and/or `pendingBelowStopPrice`, `pendingBelowTimeInForce`|
-|`pendingBelowType` =`LIMIT_MAKER` |`pendingBelowPrice`|
+|`pendingAboveType`= `LIMIT_MAKER`                                |`pendingAbovePrice`          |
+|`pendingAboveType` = `STOP_LOSS/TAKE_PROFIT`         |`pendingAboveStopPrice` and/or `pendingAboveTrailingDelta`|
+|`pendingAboveType=STOP_LOSS_LIMIT/TAKE_PROFIT_LIMIT`|`pendingAbovePrice`, `pendingAboveStopPrice` and/or `pendingAboveTrailingDelta`, `pendingAboveTimeInForce`|
+|`pendingBelowType`= `LIMIT_MAKER`                                |`pendingBelowPrice`          |
+`pendingBelowType= STOP_LOSS/TAKE_PROFIT`         |`pendingBelowStopPrice` and/or `pendingBelowTrailingDelta`|
+|`pendingBelowType=STOP_LOSS_LIMIT/TAKE_PROFIT_LIMIT`|`pendingBelowPrice`, `pendingBelowStopPrice` and/or `pendingBelowTrailingDelta`, `pendingBelowTimeInForce`|
+
 
 **Data Source:** Matching Engine
 
@@ -5413,7 +5597,7 @@ Depending on the `pendingType` or `workingType`, some optional parameters will b
   "id": "b53fd5ff-82c7-4a04-bd64-5f9dc42c2100",
   "method": "orderList.status",
   "params": {
-    "origClientOrderId": "08985fedd9ea2cf6b28996"
+    "origClientOrderId": "08985fedd9ea2cf6b28996",
     "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
     "signature": "d12f4e8892d46c0ddfbd43d556ff6d818581b3be22a02810c2c20cb719aed6a4",
     "timestamp": 1660801713965
@@ -5615,7 +5799,7 @@ Notes:
 * If both `orderListId` and `listClientOrderId` parameters are specified,
   only `orderListId` is used and `listClientOrderId` is ignored.
 
-* Canceling an individual order with [`order.cancel`](#cancel-order-trade) will cancel the entire order list as well.
+* Canceling an individual leg with [`order.cancel`](#cancel-order-trade) will cancel the entire order list as well.
 
 **Data Source:**
 Matching Engine
@@ -5696,7 +5880,7 @@ Matching Engine
 }
 ```
 
-#### Current open order lists (USER_DATA)
+#### Current open Order lists (USER_DATA)
 
 ```javascript
 {
@@ -5816,7 +6000,7 @@ Name                | Type    | Mandatory | Description
 `icebergQty`        | DECIMAL | NO        |
 `strategyId`        | LONG     | NO        | Arbitrary numeric value identifying the order within an order strategy.
 `strategyType`      | INT     | NO        | <p>Arbitrary numeric value identifying the order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
-`selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
+`selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](./enums.md#stpmodes).
 `apiKey`            | STRING  | YES       |
 `timestamp`         | INT     | YES       |
 `recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
@@ -6002,7 +6186,7 @@ Query information about your account.
 Name                | Type    | Mandatory | Description
 ------------------- | ------- | --------- | ------------
 `apiKey`            | STRING  | YES       |
-`omitZeroBalances` | BOOLEAN | NO | When set to `true`, emits only the non-zero balances of an account. <br>Default value: false
+`omitZeroBalances`  | BOOLEAN | NO        | When set to `true`, emits only the non-zero balances of an account. <br>Default value: false
 `recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
 `timestamp`         | INT     | YES       |
@@ -6071,7 +6255,7 @@ Memory => Database
 
 <a id="query-unfilled-order-count"></a>
 
-### Account unfilled order count (USER_DATA)
+### Unfilled Order Count (USER_DATA)
 
 ```javascript
 {
@@ -6239,7 +6423,7 @@ Note that some fields are optional and included only for orders that set them.
 }
 ```
 
-### Account order list history (USER_DATA)
+### Account Order list history (USER_DATA)
 
 ```javascript
 {
@@ -6278,7 +6462,7 @@ Notes:
 
 * If `startTime` and/or `endTime` are specified, `fromId` is ignored.
 
-  Order lists are filtered by `transactionTime` of the last execution status update.
+  Order lists are filtered by `transactionTime` of the last order list execution status update.
 
 * If `fromId` is specified, return order lists with order list ID >= `fromId`.
 
@@ -6291,7 +6475,7 @@ Database
 
 **Response:**
 
-Status reports for Order lists are identical to [`orderList.status`](#query-order-list-user_data).
+Status reports for order lists are identical to [`orderList.status`](#query-order-list-user_data).
 
 ```javascript
 {
@@ -6834,8 +7018,7 @@ Memory
   ]
 }
 ```
-
-<a id="user-data-stream-subscribe"></a>
+<a id="user_data_stream_susbcribe"></a>
 
 ### Subscribe to User Data Stream (USER_STREAM)
 
