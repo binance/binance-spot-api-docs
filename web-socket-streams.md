@@ -1,6 +1,10 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+http://id.loc.gov/authorities/names/n2009073240
+https://chng.it/xvPf5nK4TB
+0xdE2A668A2A3489072A66B6E4e70Bb2EbA0520498
+
 
   - [General WSS information](#general-wss-information)
   - [Websocket Limits](#websocket-limits)
