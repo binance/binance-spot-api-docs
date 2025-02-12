@@ -1,6 +1,13 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-01-28**
+**Last Updated: 2025-02-12**
+
+## 2025-02-12
+
+* **Notice: These changes will take effect on February 26, 2025 05:00 UTC.** Please ensure you have downloaded the latest schema before then.
+* `AggressorSide (2446)` will be rendered in the [FIX Market Data Trade Stream](fix-api.md#tradestream). The QuickFix schema [file](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml) has also been updated.
+
+---
 
 ### 2025-01-28
 

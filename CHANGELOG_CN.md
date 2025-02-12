@@ -1,14 +1,21 @@
-# 更新日志 
+# 更新日志
 
-**最近更新： 2025-01-28**
+**最近更新： 2025-02-12**
+
+### 2025-02-12
+
+* **注意：这些更改将于 2025 年 2 月 26 日 05：00 UTC 生效。请确保在此之前您已下载最新的模式。
+* `AggressorSide （2446)` 将在 FIX 市场数据流中提供。QuickFIX 模式 [file](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml) 也已更新。
+
+---
 
 ### 2024-01-28
 
-**注意: 该变更会在2025年2月3日到2025年2月14日之间逐步推出。** 
+**注意: 该变更会在2025年2月3日到2025年2月14日之间逐步推出。**
 
 * **以下变更将会同时应用于WebSocket 市场数据流，WebSocket 账户接口 和 WebSocket API:**
-    * WebSocket 服务将会**每20秒**发送发送 PING 消息而不是每3分钟。  
-    * PONG 消息的延迟将会是每1分钟而不是每10分钟。  
+    * WebSocket 服务将会**每20秒**发送发送 PING 消息而不是每3分钟。
+    * PONG 消息的延迟将会是每1分钟而不是每10分钟。
     * 相关服务的更改所对应的文档都已经更新。
 
 ---
@@ -28,51 +35,51 @@
 
 WebSocket Streams
 
-* 可以在连接 URL 中使用新的可选参数 `timeUnit` 来选择时间单位。 
-  * 例如：`/stream？streams=btcusdt@trade&timeUnit=millisecond` 
-  * 支持的值为： 
-    * `MILLISECOND`  
-    * `millisecond`  
-    * `MICROSECOND`  
-    * `microsecond`  
+* 可以在连接 URL 中使用新的可选参数 `timeUnit` 来选择时间单位。
+  * 例如：`/stream？streams=btcusdt@trade&timeUnit=millisecond`
+  * 支持的值为：
+    * `MILLISECOND`
+    * `millisecond`
+    * `MICROSECOND`
+    * `microsecond`
   * 如果未选择时间单位，则默认使用毫秒。
 
 REST API
 
-* 可以在请求中发送新的可选报文头 `X-MBX-TIME-UNIT` 来选择时间单位。 
-  * 支持的值： 
-    * `MILLISECOND`  
-    * `millisecond`  
-    * `MICROSECOND`  
-    * `microsecond`  
-  * 时间单位会影响 JSON 响应中的时间戳字段（例如，`time`、`transactTime`）。 
-    * 无论时间单位如何，SBE 响应都将继续以微秒为单位。 
-  * 如果未选择时间单位，则默认使用毫秒。  
+* 可以在请求中发送新的可选报文头 `X-MBX-TIME-UNIT` 来选择时间单位。
+  * 支持的值：
+    * `MILLISECOND`
+    * `millisecond`
+    * `MICROSECOND`
+    * `microsecond`
+  * 时间单位会影响 JSON 响应中的时间戳字段（例如，`time`、`transactTime`）。
+    * 无论时间单位如何，SBE 响应都将继续以微秒为单位。
+  * 如果未选择时间单位，则默认使用毫秒。
 * 时间戳参数（例如 'startTime'、'endTime'、'timestamp）' 现在可以以毫秒或微秒为单位传递。
 
 WebSocket API
 
-* 可以在连接 URL 中使用新的可选参数 `timeUnit` 来选择时间单位。  
-  * 支持的值： 
-    * `MILLISECOND`   
-    * `millisecond`  
-    * `MICROSECOND`  
+* 可以在连接 URL 中使用新的可选参数 `timeUnit` 来选择时间单位。
+  * 支持的值：
+    * `MILLISECOND`
+    * `millisecond`
+    * `MICROSECOND`
     * `microsecond`
-  * 时间单位会影响 JSON 响应中的时间戳字段（例如，`time`、`transactTime`）。 
-    * 无论时间单位如何，SBE 响应都将继续以微秒为单位。 
-  * 如果未选择时间单位，则默认使用毫秒。  
+  * 时间单位会影响 JSON 响应中的时间戳字段（例如，`time`、`transactTime`）。
+    * 无论时间单位如何，SBE 响应都将继续以微秒为单位。
+  * 如果未选择时间单位，则默认使用毫秒。
 * 时间戳参数（例如 `startTime`、`endTime`、`timestamp`） 现在可以以毫秒或微秒为单位传递。
 
 User Data Streams
 
-* 可以在连接 URL 中使用新的可选参数 `timeUnit` 来选择时间单位。  
-  * 支持的值  
-    * `MILLISECOND`   
+* 可以在连接 URL 中使用新的可选参数 `timeUnit` 来选择时间单位。
+  * 支持的值
+    * `MILLISECOND`
     * `MICROSECOND`
-    * `microsecond`  
+    * `microsecond`
     * `millisecond`
 
---- 
+---
 
 **最近更新： 2024-12-09**
 
@@ -82,8 +89,8 @@ User Data Streams
 
 常规更改：
 
- * 现在会拒绝距离过去或未来太远的时间戳参数值。 
-  * 时间戳数值在 2017 年 1 月 1 日之前（小于 1483228800000） 
+ * 现在会拒绝距离过去或未来太远的时间戳参数值。
+  * 时间戳数值在 2017 年 1 月 1 日之前（小于 1483228800000）
   * 时间戳数值超过当前时间 10 秒以后（例如，如果当前时间为 1729745280000, 那么使用 1729745290000 或更大是错误的）
 * 如果 `startTime` 和/或 `endTime` 的值超出范围，数值会被调整至正确的范围。
 * 已将 `quote order quantity` （`origQuoteOrderQty`） 字段添加到原先没有该字段的响应中。请注意，对于下单相关的接口，该字段将仅针对 `newOrderRespType` 设置为 `RESULT` 或 `FULL` 的请求显示。
@@ -115,39 +122,39 @@ User Data Streams
 SBE
 
 * 已发布新模式 2:1 [spot_2_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_2_1.xml)。 当前模式 2:0 [spot_2_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_2_0.xml) 将被弃用。根据我们的模式弃用政策，当前模式 2:0 会将在 6个月内从 API 中停用。
-* 模式 2：1 是 模式 2：0 的向后兼容更新版本。当您请求模式 2：0 或 2：1 时，您将始终收到 2：1 格式的有效载荷。 
-* SBE 模式 2：1 中的更改： 
-  * 下单/取消订单响应中的新字段 `origQuoteOrderQty` （注意：使用 2：0 模式生成的解码器将忽略此字段）： 
-    * `NewOrderResultResponse` 
+* 模式 2：1 是 模式 2：0 的向后兼容更新版本。当您请求模式 2：0 或 2：1 时，您将始终收到 2：1 格式的有效载荷。
+* SBE 模式 2：1 中的更改：
+  * 下单/取消订单响应中的新字段 `origQuoteOrderQty` （注意：使用 2：0 模式生成的解码器将忽略此字段）：
+    * `NewOrderResultResponse`
     * `NewOrderFullResponse`
-    * `CancelOrderResponse` 
+    * `CancelOrderResponse`
     * `NewOrderListResultResponse`
     * `NewOrderListFullResponse`
-    * `CancelOrderListResponse` 
-  * 仅限 WebSocket API：会话状态响应中的新字段 `userDataStream`： 
-    * `WebSocketSessionLogonResponse` 
-    * `WebSocketSessionStatusResponse` 
-    * `WebSocketSessionLogoutResponse` 
+    * `CancelOrderListResponse`
+  * 仅限 WebSocket API：会话状态响应中的新字段 `userDataStream`：
+    * `WebSocketSessionLogonResponse`
+    * `WebSocketSessionStatusResponse`
+    * `WebSocketSessionLogoutResponse`
   * 仅限 WebSocket API：在 User Data Stream 中会支持的新消息：
-    * `UserDataStreamSubscribeResponse` 
-    * `UserDataStreamUnsubscribeResponse` 
+    * `UserDataStreamSubscribeResponse`
+    * `UserDataStreamUnsubscribeResponse`
     * `BalanceUpdateEvent`
     * `EventStreamTerminatedEvent`
-    * `ExecutionReportEvent` 
-    * `ExternalLockUpdateEvent` 
-    * `ListStatusEvent` 
+    * `ExecutionReportEvent`
+    * `ExternalLockUpdateEvent`
+    * `ListStatusEvent`
     * `OutboundAccountPositionEvent`
 
 WebSocket API
 
-* 您现在可以通过 WebSocket API 连接订阅账户数据流事件。  
-  * 请注意：此功能仅适用于使用 Ed25519 API 密钥的用户。 
-  * 请注意：如果您要订阅使用 SBE 格式的账户数据流，则需使用新的 SBE 模式 2:1。 
-* 新请求： 
+* 您现在可以通过 WebSocket API 连接订阅账户数据流事件。
+  * 请注意：此功能仅适用于使用 Ed25519 API 密钥的用户。
+  * 请注意：如果您要订阅使用 SBE 格式的账户数据流，则需使用新的 SBE 模式 2:1。
+* 新请求：
   * `userDataStream.subscribe`
-  * `userDataStream.unsubscribe` 
-* 对于 `session.logon`、 `session.status` 和 `session.logout` 的更改。 
-  * 添加了一个新字段 `userDataStream`，用于显示账户数据流订阅是否处于活跃状态。  
+  * `userDataStream.unsubscribe`
+* 对于 `session.logon`、 `session.status` 和 `session.logout` 的更改。
+  * 添加了一个新字段 `userDataStream`，用于显示账户数据流订阅是否处于活跃状态。
 * 修复了在 `session.logon` 之后使用 `userDataStream.start` 不会收到新 listenKey 的错误。
 
 User Data Stream
@@ -161,27 +168,27 @@ FIX API
 
 以下更改将在**2024 年 12 月 16 日到 2024 年 12 月 20日之间**发生：
 
-* 修复一个错误： `BUY` 方 OCO 单如果不提供 `stopPrice` 就会被阻止下单。 
-* 在 OCO 中添加了对 `TAKE_PROFIT` 和 `TAKE_PROFIT_LIMIT` 的支持。 
-  * 以前，OCO 只能由以下订单类型组成： 
-    * `LIMIT_MAKER` + '`STOP_LOSS` 
-    * `LIMIT_MAKER` + `STOP_LOSS_LIMIT` 
-  * 现在，OCO 可以由以下订单类型组成： 
+* 修复一个错误： `BUY` 方 OCO 单如果不提供 `stopPrice` 就会被阻止下单。
+* 在 OCO 中添加了对 `TAKE_PROFIT` 和 `TAKE_PROFIT_LIMIT` 的支持。
+  * 以前，OCO 只能由以下订单类型组成：
+    * `LIMIT_MAKER` + '`STOP_LOSS`
+    * `LIMIT_MAKER` + `STOP_LOSS_LIMIT`
+  * 现在，OCO 可以由以下订单类型组成：
     * `LIMIT_MAKER` + `STOP_LOSS`
-    * `LIMIT_MAKER` + `STOP_LOSS_LIMIT` 
-    * `TAKE_PROFIT` + `STOP_LOSS` 
-    * `TAKE_PROFIT` + `STOP_LOSS_LIMIT`  
-    * `TAKE_PROFIT_LIMIT` + `STOP_LOSS` 
+    * `LIMIT_MAKER` + `STOP_LOSS_LIMIT`
+    * `TAKE_PROFIT` + `STOP_LOSS`
+    * `TAKE_PROFIT` + `STOP_LOSS_LIMIT`
+    * `TAKE_PROFIT_LIMIT` + `STOP_LOSS`
     * `TAKE_PROFIT_LIMIT` + `STOP_LOSS_LIMIT`
-  * 以下请求支持此功能：  
-    * `POST /api/v3/orderList/oco` 
+  * 以下请求支持此功能：
+    * `POST /api/v3/orderList/oco`
     * `POST /api/v3/orderList/otoco`
-    * `orderList.place.oco` 
+    * `orderList.place.oco`
     * `orderList.place.otoco`
     * `NewOrderList<E>`
   * 错误代码 -1167 将在此次更新后过时，并将在以后的更新中从文档中删除。
 
----  
+---
 
 ### 2024-10-18
 
@@ -202,7 +209,7 @@ Exchange Information 的更改 （即 REST API 的 [`GET /api/v3/exchangeInfo`](
 
 ---
 
-### 2024-08-26 
+### 2024-08-26
 
 * [现货未成交订单计数规则](./faqs/order_count_decrement_CN.md)  已更新，解释了如何在下订单时减少未成交的订单数量。
 
@@ -235,7 +242,7 @@ Exchange Information 的更改 （即 REST API 的 [`GET /api/v3/exchangeInfo`](
 常规更改：
 
 * 修复了 klines 的时间戳不正确的 bug。
-  * REST API： 带有 `timeZone` 参数的 `GET /api/v3/klines` 和 `GET /api/v3/uiKlines` 
+  * REST API： 带有 `timeZone` 参数的 `GET /api/v3/klines` 和 `GET /api/v3/uiKlines`
   * WebSocket API： 带有 `timeZone` 参数的 `klines` 和 `uiKlines`
   * WebSocket Streams: `<symbol>@kline_<interval>@+08：00`
 
@@ -253,7 +260,7 @@ Exchange Information 的更改 （即 REST API 的 [`GET /api/v3/exchangeInfo`](
             * `orderList.place.otoco`
 * 在 **6月18日 UTC 时间 05:00**，我们将会把买方的订单 ID（`b`） 和卖方的订单 ID（`a`） 从交易流中删除（i.e. `<symbol>@trade`）。 （请注意，我们可能需要花几个小时来部署到所有服务器。）
     * [WebSocket 账户接口](web-socket-streams_CN.md) 与其相关的文档已经被更改了。
-    * 要监控您的订单是否是交易的一部分，请订阅 [WebSocket 账户接口](user-data-stream_CN.md)。          
+    * 要监控您的订单是否是交易的一部分，请订阅 [WebSocket 账户接口](user-data-stream_CN.md)。
 
 ---
 
@@ -281,7 +288,7 @@ WebSocket Streams
 
 ### 2024-04-10
 
-以下更新的生效时间已被推迟到 **4月25日 05：00 UTC** 
+以下更新的生效时间已被推迟到 **4月25日 05：00 UTC**
 
 * "交易规范信息"响应中的交易对权限信息已从字段 `permissions` 移至字段 `permissionSets`。
 * 字段 `permissions` 将为空，并将在未来版本中删除。
@@ -590,8 +597,8 @@ USER DATA STREAM
 
 * `executionReport` 变动：
     * 以下这些字段只适用于下单时使用 SOR 的情况：
-        * 新字段 `b` 代表 `matchType` 
-        * 新字段 `a` 代表 `allocId` 
+        * 新字段 `b` 代表 `matchType`
+        * 新字段 `a` 代表 `allocId`
         * 新字段 `k` 代表 `workingFloor`
     * 这个字段只适用于订单因为触发 STP 而将过期的情况：
         * 新字段 `Cs` 代表 `counterSymbol`
@@ -728,14 +735,14 @@ Websocket API
     ```json
     {
         "code": -2013,
-        "msg": "Order does not exist." 
+        "msg": "Order does not exist."
     }
     ```
     * 现在，错误消息为：
     ```json
     {
         "code": -2026,
-        "msg": "Order was canceled or expired with no executed qty over 90 days ago and has been archived." 
+        "msg": "Order was canceled or expired with no executed qty over 90 days ago and has been archived."
     }
     ```
 * API 请求使用 `startTime` 和 `endTime` 的行为：
@@ -772,7 +779,7 @@ REST API
     * 如果由于 `cancelRestrictions` 而取消订单失败，错误将是：
     ```json
     {
-        "code": -2011, 
+        "code": -2011,
         "msg": "Order was not canceled due to cancel restrictions."
     }
     ```
@@ -784,7 +791,7 @@ WEBSOCKET API
     * 如果由于 `cancelRestrictions` 而取消订单失败，错误将是：
     ```json
     {
-        "code": -2011, 
+        "code": -2011,
         "msg": "Order was not canceled due to cancel restrictions."
     }
     ```
@@ -808,7 +815,7 @@ WEBSOCKET API
 
 ---
 
-### 2023-01-23 
+### 2023-01-23
 
 * 添加了新的 API 集群 https://api4.binance.com
 

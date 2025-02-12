@@ -1097,6 +1097,7 @@ Logout 响应
 | =>55    | Symbol            | STRING       | N        | 如果未指定`交易对`，则默认使用同一市场数据流消息中前一个消息的交易对 |
 | =>60    | TransactTime      | UTCTIMESTAMP | N        |                                                                                                                                                  |
 | =>1003  | TradeID           | INT          | N        |                                                                                                                                                  |
+| =>2446  | AggressorSide     | CHAR         | N        | 可能的值： <br></br> `1` - BUY <br></br> `2` - SELL |
 | =>25043 | FirstBookUpdateID | INT          | N        |   只会在 [增量深度数据流](#diffdepthstream) 中出现. <br></br> 如果 `LastBookUpdateID` 没有指定，市场数据消息的 `FirstBookUpdateID` 将会默认设置为与之前消息一样的 `FirstBookUpdateID`  |
 | =>25044 | LastBookUpdateID  | INT          | N        |   只会在 [增量深度数据流](#diffdepthstream) 和 [单个交易对订单簿数据流](#symbolbooktickerstream) 中出现. <br></br> 如果 `LastBookUpdateID` 没有指定，市场数据消息的 `LastBookUpdateID` 将会默认设置为与之前消息一样的 `LastBookUpdateID`  |
 
