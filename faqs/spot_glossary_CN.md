@@ -17,7 +17,7 @@ allocation
 * 此字段是一个唯一识别码，用来标识针对某个交易对上进行的分配(allocation)。
 
 `allocationType`
-* 参考 [ 分配类型 ](../enums_CN.md#allocationtype) 
+* 参考 [ 分配类型 ](../enums_CN.md#allocationtype)
 
 `askPrice`
 * `ticker` 请求返回的来自“卖"方的最低价格。
@@ -168,7 +168,7 @@ Last Prevented Quantity
 * 最新一笔交易的成交价格。
 
 `lastQty`
-* 最新一笔交易的成交量。
+* 以 'lastPrice' 交易的总数量。
 
 `LIMIT`
 * 限价; 一种订单形式，其订单的成交价格会是指定价格，或者更好的价格。

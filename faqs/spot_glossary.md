@@ -17,7 +17,7 @@ allocation
 * Unique identifier of an allocation on a symbol.
 
 `allocationType`
-* See [AllocationType](../enums.md#allocationtype) 
+* See [AllocationType](../enums.md#allocationtype)
 
 `askPrice`
 * In ticker responses: the lowest price on the `SELL` side.
@@ -168,7 +168,7 @@ Last Prevented Quantity
 * Price of the latest trade.
 
 `lastQty`
-* Quantity filled by the last trade.
+* Total quantity traded at the `lastPrice`.
 
 `LIMIT`
 * a `type` of order where the execution price will be no worse than the order's set price. The execution price is limited to be the set price or better.
@@ -422,4 +422,3 @@ Working order
 
 `X-MBX-USED-WEIGHT-XX`
 * Response header that is emitted when a user sends any request to the API, indicating the current used request weight for the XX interval by the user's IP.
-
