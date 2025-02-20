@@ -408,6 +408,10 @@ Sent by the server when the connection is about to be closed.
 8=FIX.4.4|9=0000113|35=B|49=SPOT|56=OE|34=4|52=20240924-21:07:35.773537|148=Your connection is about to be closed. Please reconnect.|10=165|
 ```
 
+### Resend Request <code>&lt;2&gt;</code>
+
+Resend requests are currently not supported.
+
 ## Application Messages
 
 ### Order Entry Messages

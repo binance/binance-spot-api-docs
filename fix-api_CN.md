@@ -420,6 +420,10 @@ Logout 响应
 8=FIX.4.4|9=0000113|35=B|49=SPOT|56=OE|34=4|52=20240924-21:07:35.773537|148=Your connection is about to be closed. Please reconnect.|10=165|
 ```
 
+### Resend Request <code>&lt;2&gt;</code>
+
+目前不支持重新发送请求。
+
 ## Application Messages
 
 ### 下单消息
