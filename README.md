@@ -90,3 +90,14 @@ Please refer to [CHANGELOG](./CHANGELOG.md) for latest changes on our APIs and S
     * For any questions/help regarding code implementation with API and/or Websockets.
 * [Binance Customer Support](https://www.binance.com/en/support-center)
     * For cases such as missing funds, help with 2FA, etc.
+https://app.binance.com/uni-qr/cpro/Square-Creator-b08e6bfc5a87?l=en&r=818739537&uc=app_square_share_link&us=more
+https://minepi.com/Ewaznazari
+ZEN@Keyinternationalun.onmicrosoft.com
+http://id.loc.gov/authorities/names/n2009073240
+I am Mohammad Ewaz Nazari, a former Deputy and Acting Education Director of Kandahar’s Education Department. My dedication to education advocacy, particularly for girls, made me a target. My family and I were forced to flee Afghanistan on the advice of U.S. allies, and we have been waiting in Pakistan since October 2, 2021, for resettlement.
+
+
+We need urgent financial assistance to survive and continue our journey toward safety. Any support, no matter how small, would change our lives and help us join the American dream we once stood for. If you can assist, you may use the following details:
+
+USDT (BNB Smart Chain – BEP20)
+Wallet Address: 0x6a3c77a0b6ba80cec73f5989b6273f8533885b84
