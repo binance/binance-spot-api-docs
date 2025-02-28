@@ -1,9 +1,21 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-02-05**
+**Last Updated: 2025-02-28**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+## 2025-02-28
+
+* **SBE Market Data Streams** are now available. These streams offer a smaller payload and should offer better latency than the equivalent JSON streams for a subset of latency-sensitive market data streams.
+* Streams available in SBE format:
+  * Real-time: trade stream
+  * Real-time: best bid/ask
+  * Every 100 ms: diff. depth
+  * Every 100 ms: partial book depth
+* For more information please refer to the [SBE Market Data Streams](sbe-market-data-streams.md).
+
+---
 
 ### 2025-02-05
 
