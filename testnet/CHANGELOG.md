@@ -13,7 +13,7 @@ This is not always synced with the live exchange.
   * Real-time: best bid/ask
   * Every 100 ms: diff. depth
   * Every 100 ms: partial book depth
-* For more information please refer to the [SBE Market Data Streams](https://github.com/binance/binance-spot-api-docs/blob/master/testnet/sbe-market-data-streams.md).
+* For more information please refer to the [SBE Market Data Streams](sbe-market-data-streams.md).
 
 ---
 
