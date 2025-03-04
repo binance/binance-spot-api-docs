@@ -33,6 +33,17 @@ You can setup and configure your API key permissions on [Spot Test Network](http
 * Only API keys with `FIX_API` or `FIX_API_READ_ONLY` are allowed to connect.
 * QuickFIX Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml).
 
+## FIX Connection Lifecycle
+
+* All FIX API sessions will remain open for as long as possible, on a best-effort basis.
+* There is no minimum connection time guarantee; a server can enter maintenance at any time.
+  * When a server enters maintenance, a [News `<B>`](#news) message will be sent, prompting clients to reconnect. Upon receiving this message, a client is expected to establish a new session and close the old one **within 10 seconds**. If the client does not close the old session within the time frame, the server will proceed to log it out and close the session.
+* After connecting, the client must send a Logon `<A>` request. For more information please refer to [How to sign a Logon request](#signaturecomputation).
+* The client should send a Logout `<5>` message to close the session before disconnecting. Failure to send the logout message will result in the session’s `SenderCompID (49)` being unusable for new session establishment for a duration of 2x the `HeartInt (108)` interval.
+* The system allows negotiation of the `HeartInt (108)` value during the logon process. Accepted values range between 5 and 60 seconds.
+  * If the server has not sent any messages within a `HeartInt (108)` interval, a [HeartBeat `<0>`](#heartbeat)  will be sent.
+  * If the server has not received any messages within a `HeartInt (108)` interval, a [TestRequest `<1>`](#testrequest) will be sent. If the server does not receive a HeartBeat `<0>` containing the expected `TestReqID (112)` from the client within `HeartInt (108)` seconds, the server will send a Logout `<5>` message and close the connection.
+  * If the client has not received any messages within a `HeartInt (108)` interval, the client is responsible for sending a TestRequest `<1>` to ensure the connection is healthy. Upon receiving such a TestRequest `<1>`, the server will respond with a Heartbeat `<0>` containing the expected `TestReqID (112)`. If the client does not receive the server’s response within a `HeartInt (108)` interval, the client should close the session and connection and establish new ones.
 
 <a id="orderedmode"></a>
 
@@ -397,6 +408,8 @@ Logout Response
 ### News <code>&lt;B&gt;</code>
 
 Sent by the server when the connection is about to be closed.
+
+Upon receiving this message, a client is expected to establish a new session and close the old one **within 10 seconds**. If the client does not close the old session within the time frame, the server will proceed to log it out and close the session.
 
 | Tag | Name | Type | Required | Description |
 | :---- | :---- | :---- | :---- | :---- |
