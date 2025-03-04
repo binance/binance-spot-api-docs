@@ -35,7 +35,7 @@ on how to set up an Ed25519 key pair.
 * Only API keys with `FIX_API` or `FIX_API_READ_ONLY` are allowed to connect.
 * QuickFIX Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml).
 
-## FIX Connection Lifecycle
+### FIX Connection Lifecycle
 
 * All FIX API sessions will remain open for as long as possible, on a best-effort basis.
 * There is no minimum connection time guarantee; a server can enter maintenance at any time.
