@@ -4,7 +4,7 @@
 
 ### 2025-03-05
 
-* **注意：以下变更将于 2025 年 3 月 10 日 12:00 UTC 发生。**
+* **注意：以下变更将于 2025 年 3 月 10 日 12:00 UTC 发生。**<br> 
   以下请求权重将从 2 增加到 4：
   * REST API： `GET /api/v3/aggTrade`
   * WebSocket API： `trades.aggregate`

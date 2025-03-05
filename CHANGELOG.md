@@ -4,7 +4,7 @@
 
 ### 2025-03-05
 
-* **Notice: The following changes will happen on March 10, 2025 12:00 UTC.**
+* **Notice: The following changes will happen on March 10, 2025 12:00 UTC.** <br>
   The following request weights will be increased from 2 to 4:
   * REST API: `GET /api/v3/aggTrade`
   * WebSocket API: `trades.aggregate`
