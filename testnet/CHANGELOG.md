@@ -7,7 +7,7 @@ This is not always synced with the live exchange.
 
 ## 2025-03-05
 
-* **Notice: This is in the process of being deployed. Please consult the Spot Test Network's [homepage](https://testnet.binance.vision/) to be informed of the release completion.**
+* **Notice: This is in the process of being deployed. Please consult the Spot Test Network's [homepage](https://testnet.binance.vision/) to be informed of the release completion.** <br>
   The following request weights will be increased from 2 to 4:
   * REST API: `GET /api/v3/aggTrade`
   * WebSocket API: `trades.aggregate`
