@@ -5,7 +5,7 @@
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
 
-## 2025-03-05
+### 2025-03-05
 
 * **Notice: This is in the process of being deployed. Please consult the Spot Test Network's [homepage](https://testnet.binance.vision/) to be informed of the release completion.**
   The following request weights will be increased from 2 to 4:
@@ -15,7 +15,7 @@ This is not always synced with the live exchange.
 
 ---
 
-## 2025-02-28
+### 2025-02-28
 
 * **SBE Market Data Streams** are now available. These streams offer a smaller payload and should offer better latency than the equivalent JSON streams for a subset of latency-sensitive market data streams.
 * Streams available in SBE format:
