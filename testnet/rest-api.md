@@ -76,7 +76,7 @@
 
 # Public Rest API for Binance SPOT Testnet 
 
-**Last Updated: 2024-11-27**
+**Last Updated: 2025-03-05**
 
 ## General API Information
 * The base endpoint is **https://testnet.binance.vision/api**
@@ -725,7 +725,7 @@ GET /api/v3/aggTrades
 Get compressed, aggregate trades. Trades that fill at the time, from the same taker order, with the same price will have the quantity aggregated.
 
 **Weight:**
-2
+4
 
 **Parameters:**
 

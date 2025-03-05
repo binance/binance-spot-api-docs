@@ -1,9 +1,19 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-02-28**
+**Last Updated: 2025-03-05**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+## 2025-03-05
+
+* **Notice: This is in the process of being deployed. Please consult the Spot Test Network's [homepage](https://testnet.binance.vision/) to be informed of the release completion.**
+  The following request weights will be increased from 2 to 4:
+  * REST API: `GET /api/v3/aggTrade`
+  * WebSocket API: `trades.aggregate`
+* The documentation for both REST and WebSocket API has been updated to reflect the upcoming changes.
+
+---
 
 ## 2025-02-28
 

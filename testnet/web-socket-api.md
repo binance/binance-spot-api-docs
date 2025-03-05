@@ -86,7 +86,7 @@
 
 # Public WebSocket API for Binance
 
-**Last Updated: 2025-01-28**
+**Last Updated: 2025-03-05**
 
 ## General API Information
 
@@ -1531,7 +1531,7 @@ If you need historical aggregate trade data,
 please consider using [data.binance.vision](https://github.com/binance/binance-public-data/#aggtrades).
 
 **Weight:**
-2
+4
 
 **Parameters:**
 
