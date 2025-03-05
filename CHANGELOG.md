@@ -1,6 +1,16 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-02-12**
+**Last Updated: 2025-03-05**
+
+## 2025-03-05
+
+* **Notice: The following changes will happen on March 10, 2025 12:00 UTC.**
+  The following request weights will be increased from 2 to 4:
+  * REST API: `GET /api/v3/aggTrade`
+  * WebSocket API: `trades.aggregate`
+* The documentation for both REST and WebSocket API has been updated to reflect the upcoming changes.
+
+---
 
 ## 2025-02-12
 

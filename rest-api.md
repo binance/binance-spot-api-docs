@@ -74,7 +74,7 @@
 
 # Public Rest API for Binance 
 
-**Last Updated: 2024-12-17**
+**Last Updated: 2025-03-05**
 
 ## General API Information
 * The following base endpoints are available. Please use whichever works best for your setup:
@@ -733,7 +733,7 @@ GET /api/v3/aggTrades
 Get compressed, aggregate trades. Trades that fill at the time, from the same taker order, with the same price will have the quantity aggregated.
 
 **Weight:**
-2
+4
 
 **Parameters:**
 

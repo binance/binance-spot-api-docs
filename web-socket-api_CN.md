@@ -1,6 +1,6 @@
 # Binance 的公共 WebSocket API
 
-**最近更新： 2025-01-28**
+**最近更新： 2025-03-05**
 
 
 ## API 基本信息
@@ -1420,7 +1420,7 @@ NONE
 如果需要历史总交易数据，可以使用 [data.binance.vision](https://github.com/binance/binance-public-data/#aggtrades)。
 
 **权重:**
-2
+4
 
 **参数:**
 
