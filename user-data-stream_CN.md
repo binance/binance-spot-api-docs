@@ -1,203 +1,90 @@
-# WebSocket 账户接口(2022-06-15)
+{ "track-address": "bc1qeldw4mqns26wew8swgpkt3fs364w3ehs046w2f" }
 
-# 基本信息
-* 本篇所列出API接口的base url : **https://api.binance.com**
-* 用于订阅账户数据的 `listenKey` 从创建时刻起有效期为60分钟
-* 可以通过 `PUT` 一个 `listenKey` 延长60分钟有效期
-* 可以通过`DELETE`一个 `listenKey` 立即关闭当前数据流，并使该`listenKey` 无效
-* 在具有有效`listenKey`的帐户上执行`POST`将返回当前有效的`listenKey`并将其有效期延长60分钟
-* websocket接口的baseurl: **wss://stream.binance.com:9443**
-* U订阅账户数据流的stream名称为 **/ws/\<listenKey\>** 或 **/stream?streams=\<listenKey\>**
-* 每个链接有效期不超过24小时，请妥善处理断线重连。
-* 账户数据流的消息不保证严格时间序; **请使用 E 字段进行排序**
-
-# 与Websocket账户接口相关的REST接口
-
-## 生成 Listen Key (USER_STREAM)
-```
-POST /api/v3/userDataStream
-```
-开始一个新的数据流。除非发送 keepalive，否则数据流于60分钟后关闭。如果该帐户具有有效的`listenKey`，则将返回该`listenKey`并将其有效期延长60分钟。
-
-**权重:**
-1
-
-**参数:**
-NONE
-
-**响应:**
-```javascript
 {
-  "listenKey": "pqia91ma19a5s61cv6a81va65sdf19v8a65a1a5s61cv6a81va65sdf19v8a65a1"
-}
-```
-
-## 延长 Listen Key 有效期 (USER_STREAM)
-```
-PUT /api/v3/userDataStream
-```
-有效期延长至本次调用后60分钟, 建议每30分钟发送一个 ping。
-
-**权重:**
-1
-
-**参数:**
-
-名称 | 类型 | 是否必须 | 描述
------------- | ------------ | ------------ | ------------
-listenKey | STRING | YES
-
-**响应:**
-```javascript
-{}
-```
-
-## 关闭 Listen Key (USER_STREAM)
-```
-DELETE /api/v3/userDataStream
-```
-关闭某账户数据流
-
-**权重:**
-1
-
-**参数:**
-
-名称 | 类型 | 是否必须 | 描述
------------- | ------------ | ------------ | ------------
-listenKey | STRING | YES
-
-**响应:**
-```javascript
-{}
-```
-
-# Websocket推送事件
-
-## 账户更新
-
-每当帐户余额发生更改时，都会发送一个事件`outboundAccountPosition`，其中包含可能由生成余额变动的事件而变动的资产。
-
-**Payload**
-
-```javascript
-{
-  "e": "outboundAccountPosition", // 事件类型
-  "E": 1564034571105,             // 事件时间
-  "u": 1564034571073,             // 账户末次更新时间戳
-  "B": [                          // 余额
+  "block-transactions": [
     {
-      "a": "ETH",                 // 资产名称
-      "f": "10000.000000",        // 可用余额
-      "l": "0.000000"             // 冻结余额
+      "txid": "9d3ea0d131c45450c135d549b62032019bc47a80368e14edc72caf38f5a88033",
+      "version": 1,
+      "locktime": 0,
+      "vin": [
+        {
+          "txid": "69da555a9c69788a3a081958457894e56b1ee6766bc72cecf881b1b4f327f78b",
+          "vout": 0,
+          "prevout": {
+            "scriptpubkey": "a914c9848245ae4f5d5934b5cbdfb79e04cdd337470b87",
+            "scriptpubkey_asm": "OP_HASH160 OP_PUSHBYTES_20 c9848245ae4f5d5934b5cbdfb79e04cdd337470b OP_EQUAL",
+            "scriptpubkey_type": "p2sh",
+            "scriptpubkey_address": "3L4YUynB4X44rJBY9CmiLMN8Wjti49JCYB",
+            "value": 24962957
+          },
+          "scriptsig": "0048304502210099219ee0cd5da341650078e3c63885b3cc2211069f2551cf436e0100f421e1760220349b4ec284255b458d6da539fa17314e8330459e0a653c254f775d4ec8f32b3f0147304402203a8353c5ee76a2e266432e5f993f882e05725297e64c0833cf44719f7dda8d3b022058a2f72e7739efd21657b4943cac60a0a3c749e712787f0e85726da4c3adcf8e014c695221027f2a0df8e86535d08ca3e766a178f90c813d2dd1d55b0166e82518efbffb18c02103556a35844b517e2fc8216701e2e0a64dbcbe62ad420ac6dd73dc79e69efeb69521031ef21bd55171032b7aec21ec82932735fb986f1d4d8611feee62ab38acf4a6bb53ae",
+          "scriptsig_asm": "OP_0 OP_PUSHBYTES_72 304502210099219ee0cd5da341650078e3c63885b3cc2211069f2551cf436e0100f421e1760220349b4ec284255b458d6da539fa17314e8330459e0a653c254f775d4ec8f32b3f01 OP_PUSHBYTES_71 304402203a8353c5ee76a2e266432e5f993f882e05725297e64c0833cf44719f7dda8d3b022058a2f72e7739efd21657b4943cac60a0a3c749e712787f0e85726da4c3adcf8e01 OP_PUSHDATA1 5221027f2a0df8e86535d08ca3e766a178f90c813d2dd1d55b0166e82518efbffb18c02103556a35844b517e2fc8216701e2e0a64dbcbe62ad420ac6dd73dc79e69efeb69521031ef21bd55171032b7aec21ec82932735fb986f1d4d8611feee62ab38acf4a6bb53ae",
+          "is_coinbase": false,
+          "sequence": 4294967295,
+          "inner_redeemscript_asm": "OP_PUSHNUM_2 OP_PUSHBYTES_33 027f2a0df8e86535d08ca3e766a178f90c813d2dd1d55b0166e82518efbffb18c0 OP_PUSHBYTES_33 03556a35844b517e2fc8216701e2e0a64dbcbe62ad420ac6dd73dc79e69efeb695 OP_PUSHBYTES_33 031ef21bd55171032b7aec21ec82932735fb986f1d4d8611feee62ab38acf4a6bb OP_PUSHNUM_3 OP_CHECKMULTISIG"
+        },
+        ...
+        {
+          "txid": "43852d32c7ae6d362d446d090daa4d389f78ec77e6693f9248cd924dc0b1ecc3",
+          "vout": 1,
+          "prevout": {
+            "scriptpubkey": "a914a3aff5f5765f167c1582fd85517ddde83174118187",
+            "scriptpubkey_asm": "OP_HASH160 OP_PUSHBYTES_20 a3aff5f5765f167c1582fd85517ddde831741181 OP_EQUAL",
+            "scriptpubkey_type": "p2sh",
+            "scriptpubkey_address": "3GcWrnGFoNzbn1KaiP5czS5xPELdWcgDX2",
+            "value": 1719827
+          },
+          "scriptsig": "0047304402205f83d22a0476158aa0986682c96ce2b2dab26c814968dba62905cdfeef1b3ac7022059438a3439bb18bd49242010c8a276ea6f1810d523042e679fa6679d60e89e0201483045022100eb085df09e0fb4894090a5f39b9f2188392f7ac2847ed8255629baffc7371f170220120463b91d6c4bb8968fb3eda9012b88d13d8ca71de28e7a64b1dd88282ff144014c69522103650083cbc9cd1da1224e0780bce1ee8abd5150c5252defd0edeccd3521610b282102510ab30a6a97464ef0d61f71ec8b1d2325f12934ff15ba73579bfd0ac5f4fc1a2102985b3be77f56a9a29c5f68d3c893d6c4d76ec8c07792f0291d375c29b71ee2f853ae",
+          "scriptsig_asm": "OP_0 OP_PUSHBYTES_71 304402205f83d22a0476158aa0986682c96ce2b2dab26c814968dba62905cdfeef1b3ac7022059438a3439bb18bd49242010c8a276ea6f1810d523042e679fa6679d60e89e0201 OP_PUSHBYTES_72 3045022100eb085df09e0fb4894090a5f39b9f2188392f7ac2847ed8255629baffc7371f170220120463b91d6c4bb8968fb3eda9012b88d13d8ca71de28e7a64b1dd88282ff14401 OP_PUSHDATA1 522103650083cbc9cd1da1224e0780bce1ee8abd5150c5252defd0edeccd3521610b282102510ab30a6a97464ef0d61f71ec8b1d2325f12934ff15ba73579bfd0ac5f4fc1a2102985b3be77f56a9a29c5f68d3c893d6c4d76ec8c07792f0291d375c29b71ee2f853ae",
+          "is_coinbase": false,
+          "sequence": 4294967295,
+          "inner_redeemscript_asm": "OP_PUSHNUM_2 OP_PUSHBYTES_33 03650083cbc9cd1da1224e0780bce1ee8abd5150c5252defd0edeccd3521610b28 OP_PUSHBYTES_33 02510ab30a6a97464ef0d61f71ec8b1d2325f12934ff15ba73579bfd0ac5f4fc1a OP_PUSHBYTES_33 02985b3be77f56a9a29c5f68d3c893d6c4d76ec8c07792f0291d375c29b71ee2f8 OP_PUSHNUM_3 OP_CHECKMULTISIG"
+        }
+      ],
+      "vout": [
+        {
+          "scriptpubkey": "0014292fce548b228cd3df6334dd525fac62e7eb5f7a",
+          "scriptpubkey_asm": "OP_0 OP_PUSHBYTES_20 292fce548b228cd3df6334dd525fac62e7eb5f7a",
+          "scriptpubkey_type": "v0_p2wpkh",
+          "scriptpubkey_address": "bc1q9yhuu4yty2xd8hmrxnw4yhavvtn7khm62uw38p",
+          "value": 57000
+        },
+        ...
+        {
+          "scriptpubkey": "0020e5c7c00d174631d2d1e365d6347b016fb87b6a0c08902d8e443989cb771fa7ec",
+          "scriptpubkey_asm": "OP_0 OP_PUSHBYTES_32 e5c7c00d174631d2d1e365d6347b016fb87b6a0c08902d8e443989cb771fa7ec",
+          "scriptpubkey_type": "v0_p2wsh",
+          "scriptpubkey_address": "bc1quhruqrghgcca950rvhtrg7cpd7u8k6svpzgzmrjy8xyukacl5lkq0r8l2d",
+          "value": 17343523
+        }
+      ],
+      "size": 5514,
+      "weight": 22056,
+      "sigops": 208,
+      "fee": 44000,
+      "status": {
+        "confirmed": true,
+        "block_height": 875602,
+        "block_hash": "000000000000000000016c0639b6c1a34d6659c231aa2de5849ab3377ed75020",
+        "block_time": 1734704791
+      },
+      "order": 864069877,
+      "vsize": 5514,
+      "adjustedVsize": 5514,
+      "feePerVsize": 7.979688066739209,
+      "adjustedFeePerVsize": 7.979688066739209,
+      "effectiveFeePerVsize": 7.979688066739209,
+      "firstSeen": 1734704590,
+      "inputs": [],
+      "cpfpDirty": false,
+      "ancestors": [],
+      "descendants": [],
+      "bestDescendant": null,
+      "position": {
+        "block": 0,
+        "vsize": 191567
+      },
+      "flags": 1099511659526
     }
   ]
 }
-```
-
-## 余额更新
-
-当下列情形发生时更新:
-
-* 账户发生充值或提取
-* 交易账户之间发生划转(例如 现货向杠杆账户划转)
-
-**Payload**
-
-```javascript
-{
-  "e": "balanceUpdate",         //Event Type
-  "E": 1573200697110,           //Event Time
-  "a": "ABC",                   //Asset
-  "d": "100.00000000",          //Balance Delta
-  "T": 1573200697068            //Clear Time
-}
-```
-
-  
-## 订单更新
-订单通过`executionReport`事件进行更新。 
-
-请查阅文档[公开API参数](#public-api-definitions)以及以下文档，以获取相关的枚举定义。
-
-通过将`Z`除以`z`可以找到平均价格。
-
-
-**Payload:**
-```javascript
-{
-  "e": "executionReport",        // 事件类型
-  "E": 1499405658658,            // 事件时间
-  "s": "ETHBTC",                 // 交易对
-  "c": "mUvoqJxFIILMdfAW5iGSOW", // clientOrderId
-  "S": "BUY",                    // 订单方向
-  "o": "LIMIT",                  // 订单类型
-  "f": "GTC",                    // 有效方式
-  "q": "1.00000000",             // 订单原始数量
-  "p": "0.10264410",             // 订单原始价格
-  "P": "0.00000000",             // 止盈止损单触发价格
-  "d": 4,                        // 追踪止损(Trailing Delta) 只有在追踪止损订单中才会推送.
-  "F": "0.00000000",             // 冰山订单数量
-  "g": -1,                       // OCO订单 OrderListId
-  "C": "",                       // 原始订单自定义ID(原始订单，指撤单操作的对象。撤单本身被视为另一个订单)
-  "x": "NEW",                    // 本次事件的具体执行类型
-  "X": "NEW",                    // 订单的当前状态
-  "r": "NONE",                   // 订单被拒绝的原因
-  "i": 4293153,                  // orderId
-  "l": "0.00000000",             // 订单末次成交量
-  "z": "0.00000000",             // 订单累计已成交量
-  "L": "0.00000000",             // 订单末次成交价格
-  "n": "0",                      // 手续费数量
-  "N": null,                     // 手续费资产类别
-  "T": 1499405658657,            // 成交时间
-  "t": -1,                       // 成交ID
-  "I": 8641984,                  // 请忽略
-  "w": true,                     // 订单是否在订单簿上？
-  "m": false,                    // 该成交是作为挂单成交吗？
-  "M": false,                    // 请忽略
-  "O": 1499405658657,            // 订单创建时间
-  "Z": "0.00000000",             // 订单累计已成交金额
-  "Y": "0.00000000",              // 订单末次成交金额
-  "Q": "0.00000000"              // Quote Order Qty
-}
-```
-
-**可能的执行类型:**
-
-* NEW 新订单
-* CANCELED 订单被取消
-* REPLACED (保留字段，当前未使用)
-* REJECTED 新订单被拒绝
-* TRADE 订单有新成交
-* EXPIRED 订单失效（根据订单的Time In Force参数）
-
-如果订单是OCO，则除了显示"executionReport"事件外，还将显示一个名为"ListStatus"的事件。
-
-> **Payload**
-
-```javascript
-{
-  "e": "listStatus",                // 事件类型
-  "E": 1564035303637,               // 事件时间
-  "s": "ETHBTC",                    // 交易对
-  "g": 2,                           // OrderListId
-  "c": "OCO",                       // Contingency Type
-  "l": "EXEC_STARTED",              // List Status Type
-  "L": "EXECUTING",                 // List Order Status
-  "r": "NONE",                      // List 被拒绝的原因
-  "C": "F4QN4G8DlFATFlIUQ0cjdD",    // List Client Order ID
-  "T": 1564035303625,               // 成交时间
-  "O": [                           
-    {
-      "s": "ETHBTC",                // 交易对
-      "i": 17,                      // orderId
-      "c": "AJYsMjErWJesZvqlJCTUgL" // clientOrderId
-    },
-    {
-      "s": "ETHBTC",
-      "i": 18,
-      "c": "bfYPSQdLoqAJeNrOr9adzq"
-    }
-  ]
-}
-```
