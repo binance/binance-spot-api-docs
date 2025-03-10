@@ -1,6 +1,18 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-03-05**
+**Last Updated: 2025-03-10**
+
+### 2025-03-10
+
+* **SBE Market Data Streams will be available on March 18 2025, 07:00 UTC.** These streams offer a smaller payload and should offer better latency than the equivalent JSON streams for a subset of latency-sensitive market data streams.
+* Streams available in SBE format:
+  * Real-time: trade stream
+  * Real-time: best bid/ask
+  * Every 100 ms: diff. depth
+  * Every 100 ms: partial book depth
+* For more information please refer to the [SBE Market Data Streams](sbe-market-data-streams.md).
+
+---
 
 ### 2025-03-05
 
@@ -12,7 +24,7 @@
 
 ---
 
-## 2025-02-12
+### 2025-02-12
 
 * **Notice: These changes will take effect on February 26, 2025 05:00 UTC.** Please ensure you have downloaded the latest schema before then.
 * `AggressorSide (2446)` will be rendered in the [FIX Market Data Trade Stream](fix-api.md#tradestream). The QuickFix schema [file](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml) has also been updated.
