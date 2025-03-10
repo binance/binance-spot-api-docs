@@ -4,13 +4,17 @@
 
 ### 2025-03-10
 
+* **Notice: The following changes will happen on 2025-03-13 09:00 UTC**
+  * FIX Drop Copy sessions will have a limit of **60 messages per minute**.
+  * FIX Market Data sessions will have a limit of **2000 messages per minute**.
+  * The FIX API documentation has been updated to reflect the upcoming changes.
 * **SBE Market Data Streams will be available on March 18 2025, 07:00 UTC.** These streams offer a smaller payload and should offer better latency than the equivalent JSON streams for a subset of latency-sensitive market data streams.
-* Streams available in SBE format:
-  * Real-time: trade stream
-  * Real-time: best bid/ask
-  * Every 100 ms: diff. depth
-  * Every 100 ms: partial book depth
-* For more information please refer to the [SBE Market Data Streams](sbe-market-data-streams.md).
+  * Streams available in SBE format:
+    * Real-time: trade stream
+    * Real-time: best bid/ask
+    * Every 100 ms: diff. depth
+    * Every 100 ms: partial book depth
+  * For more information please refer to the [SBE Market Data Streams](sbe-market-data-streams.md).
 
 ---
 

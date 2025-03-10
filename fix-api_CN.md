@@ -186,9 +186,9 @@ MC4CAQAwBQYDK2VwBCIEIIJEYWtGBrhACmb9Dvy+qa8WEf0lQOl1s4CLIAB9m89u
 * 违反消息限制会立即导致 [Logout `<5>`](#logout) 并断开连接。
 * 要了解当前的限制和使用情况，请发送 [LimitQuery`<XLQ>`](#limitquery) 消息。
   接口将发送 [LimitResponse`<XLR>`](#limitresponse) 消息作为响应，其中包含了有关订单速率限制和消息限制的信息。
-* FIX 订单输入会话限制为每 10 秒 10,000 条消息。
-* FIX 市场数据会话限制为每 60 秒 10,000 条消息
-
+* FIX API 订单输入会话的限制为每 10 秒 10,000 条消息。
+* FIX Drop Copy 会话的限制为每 60 秒 60 条消息。
+* FIX Market Data 会话的限制为每 60 秒 2000 条消息。
 
 <a id="unfilled-order-count"></a>
 
