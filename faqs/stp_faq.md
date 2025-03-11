@@ -1,17 +1,17 @@
 # Self Trade Prevention (STP) FAQ
 
-## What is Self Trade Prevention?
+### What is Self Trade Prevention?
 
 Self Trade Prevention (or STP) prevents orders of users, or the user's `tradeGroupId` to match against their own.
 
-## What defines a self-trade?
+### What defines a self-trade?
 
 A self-trade can occur in either scenario:
 
 * The order traded against the same account.
 * The order traded against an account with the same `tradeGroupId`.
 
-## What happens when STP is triggered?
+### What happens when STP is triggered?
 
 There are four possible modes for what the system will do if an order could create a self-trade.
 
@@ -25,7 +25,7 @@ There are four possible modes for what the system will do if an order could crea
 
 The STP event will occur depending on the STP mode of the **taker order**. <br> Thus, the STP mode of an order that goes on the book is no longer relevant and will be ignored for all future order processing.
 
-## What is a Trade Group Id?
+### What is a Trade Group Id?
 
 Different accounts with the same `tradeGroupId` are considered part of the same "trade group". Orders submitted by members of a trade group are eligible for STP according to the taker-order's STP mode.
 
@@ -35,7 +35,7 @@ The field is also present in the response for `GET /api/v3/preventedMatches` (Re
 
 If the value is `-1`, then the `tradeGroupId` has not been set for that account, so the STP may only take place between orders of the same account.
 
-## What is a Prevented Match?
+### What is a Prevented Match?
 
 When one or more orders are expired due to STP, this creates a prevented match.
 
@@ -64,7 +64,7 @@ This is a sample of the output request for reference:
 ]
 ```
 
-## What is "prevented quantity?"
+### What is "prevented quantity?"
 
 STP events expire quantity from open orders. The STP modes `EXPIRE_TAKER`, `EXPIRE_MAKER`, and `EXPIRE_BOTH` expire all remaining quantity on the affected orders, resulting in the entire open order being expired.
 
@@ -95,7 +95,7 @@ When an order has status `EXPIRED_IN_MATCH` or `FILLED`, the followiung equation
 executed quantity + prevented quantity = original order quantity
 ```
 
-## How do I know which symbol uses STP?
+### How do I know which symbol uses STP?
 
 Symbols may be configured to allow different sets of STP modes and take different default STP modes.
 
@@ -127,11 +127,11 @@ If a user tries to specify `EXPIRE_MAKER` for orders on this symbol, they will r
 }
 ```
 
-## How do I know if an order expired due to STP?
+### How do I know if an order expired due to STP?
 
 The order will have the status `EXPIRED_IN_MATCH`.
 
-## STP Examples:
+### STP Examples
 
 For all these cases, assume that all orders for these examples are made on the same account.
 
@@ -475,7 +475,7 @@ Maker Order
 
 ```json
 {
-  "symbol": "ABCDEF",
+  "symbol": "BTCUSDT",
   "orderId": 2,
   "orderListId": -1,
   "clientOrderId": "2JPC8xjpLq6Q0665uYWAcs",
@@ -504,7 +504,7 @@ Taker Order
 
 ```json
 {
-  "symbol": "ABCDEF",
+  "symbol": "BTCUSDT",
   "orderId": 5,
   "orderListId": -1,
   "clientOrderId": "qMaz8yrOXk2iUIz74cFkiZ",
@@ -546,7 +546,7 @@ Taker Order: symbol=BTCUSDT side=SELL type=LIMIT quantity=1 price=1 selfTradePre
 Maker Order
 ```json
 {
-    "symbol": "ABCDEF",
+    "symbol": "BTCUSDT",
     "orderId": 0,
     "orderListId": -1,
     "clientOrderId": "jFUap8iFwwgqIpOfAL60GS",
@@ -572,7 +572,7 @@ Maker Order
 Taker Order
 ```json
 {
-    "symbol": "ABCDEF",
+    "symbol": "BTCUSDT",
     "orderId": 1,
     "orderListId": -1,
     "clientOrderId": "zxrvnNNm1RXC3rkPLUPrc1",
@@ -604,8 +604,8 @@ Taker Order
 **Scenario F - A user sends a market order with `EXPIRE_MAKER` which would match with an existing order.**
 
 ```
-Maker Order: symbol=ABCDEF side=BUY  type=LIMIT  quantity=1 price=1  selfTradePreventionMode=NONE
-Taker Order: symbol=ABCDEF side=SELL type=MARKET quantity=1          selfTradePreventionMode=EXPIRE_MAKER
+Maker Order: symbol=BTCUSDT side=BUY  type=LIMIT  quantity=1 price=1  selfTradePreventionMode=NONE
+Taker Order: symbol=BTCUSDT side=SELL type=MARKET quantity=1          selfTradePreventionMode=EXPIRE_MAKER
 ```
 
 **Result**: The existing order expires with the status `EXPIRED_IN_MATCH`, due to STP.
@@ -615,7 +615,7 @@ Maker Order
 
 ```json
 {
-  "symbol": "ABCDEF",
+  "symbol": "BTCUSDT",
   "orderId": 2,
   "orderListId": -1,
   "clientOrderId": "7sgrQQInL69XDMQpiqMaG2",
@@ -643,7 +643,7 @@ Maker Order
 Taker Order
 ```json
 {
-  "symbol": "ABCDEF",
+  "symbol": "BTCUSDT",
   "orderId": 3,
   "orderListId": -1,
   "clientOrderId": "zqhsgGDEcdhxy2oza2Ljxd",

@@ -1,17 +1,17 @@
 # 自我交易预防 (Self Trade Prevention - STP) 常见问题
 
-## 什么是 Self Trade Prevention - STP?
+### 什么是 Self Trade Prevention - STP?
 
 自我交易预防是指阻止订单与来自同一账户或者同一 `tradeGroupId` 账户的订单交易。
 
-## 什么是自我交易（self-trade）?
+### 什么是自我交易（self-trade）?
 
 在以下任一情况下都可能发生自我交易：
 
 * 属于同一账户的订单之间交易。
 * 属于相同 `tradeGroupId` 的账户的订单之间交易。
 
-## STP 触发时会发生什么？
+### STP 触发时会发生什么？
 
 如果订单会触发自我交易，系统将执行四种可能的模式：
 
@@ -25,7 +25,7 @@
 
 STP 的发生取决于 **Taker 订单** 的 STP 模式。 <br> 因此，订单薄上的订单的 STP 模式不再有效果，并且将在所有未来的订单处理中被忽略。
 
-## 什么是交易组 Id（Trade Group Id）?
+### 什么是交易组 Id（Trade Group Id）?
 
 属于同一 `tradeGroupId` 的账户被视为同一交易组。相同交易组成员提交的订单有 STP 资格。
 
@@ -35,7 +35,7 @@ STP 的发生取决于 **Taker 订单** 的 STP 模式。 <br> 因此，订单�
 
 如果该值为 `-1`，这表示账户未设置 `tradeGroupId`，因此 STP 只能发生在同一账户的订单之间。
 
-## 什么是 Prevented Match?
+### 什么是 Prevented Match?
 
 当一个或多个订单因 STP 而过期时，这会创建一个被阻止的撮合交易事务。
 
@@ -60,7 +60,7 @@ STP 的发生取决于 **Taker 订单** 的 STP 模式。 <br> 因此，订单�
 ]
 ```
 
-## 什么是 "prevented quantity"?
+### 什么是 "prevented quantity"?
 
 STP事件会导致挂单的数量失效; STP的模式 `EXPIRE_TAKER`, `EXPIRE_MAKER` 以及 `EXPIRE_BOTH` 会使挂单中剩余的数量全部失效，从而使整个订单失效。
 
@@ -95,7 +95,7 @@ executed quantity + prevented quantity = original order quantity
 ```
 
 
-## 如何知道有那些交易对支持 STP?
+### 如何知道有那些交易对支持 STP?
 
 交易对可以配置为允许不同的 STP 模式集并采用不同的默认 STP 模式。
 
@@ -127,11 +127,11 @@ executed quantity + prevented quantity = original order quantity
 }
 ```
 
-## 如何知道订单因为 STP 而过期？
+### 如何知道订单因为 STP 而过期？
 
 订单的状态会是 `EXPIRED_IN_MATCH`.
 
-## STP 的一些示例:
+### STP 的一些示例
 
 假设以下示例的所有订单都是在同一个账户下发送。
 
@@ -476,7 +476,7 @@ Maker 订单
 
 ```json
 {
-  "symbol": "ABCDEF",
+  "symbol": "BTCUSDT",
   "orderId": 2,
   "orderListId": -1,
   "clientOrderId": "2JPC8xjpLq6Q0665uYWAcs",
@@ -505,7 +505,7 @@ Taker 订单
 
 ```json
 {
-  "symbol": "ABCDEF",
+  "symbol": "BTCUSDT",
   "orderId": 5,
   "orderListId": -1,
   "clientOrderId": "qMaz8yrOXk2iUIz74cFkiZ",
@@ -548,7 +548,7 @@ Taker 订单: symbol=BTCUSDT side=SELL type=LIMIT quantity=1 price=1 selfTradePr
 Maker 订单
 ```json
 {
-    "symbol": "ABCDEF",
+    "symbol": "BTCUSDT",
     "orderId": 0,
     "orderListId": -1,
     "clientOrderId": "jFUap8iFwwgqIpOfAL60GS",
@@ -574,7 +574,7 @@ Maker 订单
 Taker 订单
 ```json
 {
-    "symbol": "ABCDEF",
+    "symbol": "BTCUSDT",
     "orderId": 1,
     "orderListId": -1,
     "clientOrderId": "zxrvnNNm1RXC3rkPLUPrc1",
@@ -607,8 +607,8 @@ Taker 订单
 
 
 ```
-Maker 订单: symbol=ABCDEF side=BUY type=LIMIT quantity=1 price=1  selfTradePreventionMode=NONE
-Taker 订单: symbol=ABCDEF side=SELL type=MARKET quantity=1 selfTradePreventionMode=EXPIRE_MAKER
+Maker 订单: symbol=BTCUSDT side=BUY type=LIMIT quantity=1 price=1  selfTradePreventionMode=NONE
+Taker 订单: symbol=BTCUSDT side=SELL type=MARKET quantity=1 selfTradePreventionMode=EXPIRE_MAKER
 ```
 
 **结果:** 由于 STP，订单薄上的订单会过期，状态为 `EXPIRED_IN_MATCH`。
@@ -618,7 +618,7 @@ Maker 订单
 
 ```json
 {
-  "symbol": "ABCDEF",
+  "symbol": "BTCUSDT",
   "orderId": 2,
   "orderListId": -1,
   "clientOrderId": "7sgrQQInL69XDMQpiqMaG2",
@@ -646,7 +646,7 @@ Maker 订单
 Taker 订单
 ```json
 {
-  "symbol": "ABCDEF",
+  "symbol": "BTCUSDT",
   "orderId": 3,
   "orderListId": -1,
   "clientOrderId": "zqhsgGDEcdhxy2oza2Ljxd",
