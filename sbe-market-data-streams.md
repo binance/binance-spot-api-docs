@@ -8,7 +8,7 @@
 * All symbols in stream names are **lowercase**.
 * You can subscribe to a single stream at **/ws/\<streamName\>**.
 * You can subscribe to multiple streams at **/stream?streams=\<streamName1\>/\<streamName2\>/\<streamName3\>**.
-* A single connection to SBE Market Data Stream is **only valid for 1 hour**; expect to be disconnected after an hour.
+* A single connection to **stream-sbe-binance.com** is **only valid for 24 hours**; expect to be disconnected at the 24 hour mark
 * All time and timestamp fields are in **microseconds**.
 * **An API Key is necessary for access**.
   * Only Ed25519 keys are allowed.
