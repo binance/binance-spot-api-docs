@@ -176,7 +176,8 @@ Resulting Logon `<A>` message:
   A [LimitResponse`<XLR>`](#limitresponse) message will be sent in response, containing information about Order Rate
   Limits and Message Limits.
 * FIX Order entry sessions have a limit of 10,000 messages every 10 seconds.
-* FIX Market Data sessions have a limit of 10,000 messages every 60 seconds.
+* FIX Drop Copy sessions have a limit of 60 messages every 60 seconds.
+* FIX Market Data sessions have a limit of 2000 messages every 60 seconds.
 
 <a id="connection-limits"></a>
 

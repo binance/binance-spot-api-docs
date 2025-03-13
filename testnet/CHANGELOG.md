@@ -1,9 +1,18 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-03-05**
+**Last Updated: 2025-03-13**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-03-13
+
+* **Notice: The following changes will happen on March 13,2025 at 05:00 UTC:**
+  * FIX Drop Copy sessions will have a limit of **60 messages per minute**.
+  * FIX Market Data sessions will have a limit of **2000 messages per minute**.
+  * The FIX API documentation has been updated to reflect the upcoming changes.
+
+---
 
 ### 2025-03-05
 
