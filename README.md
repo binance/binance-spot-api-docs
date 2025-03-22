@@ -6,23 +6,28 @@
 
 Name | Description
 ------------ | ------------
-[enums.md](./enums.md)      | Details on the enums used by REST and WebSocket API
-[errors.md](./errors.md)    | Error codes and messages of Spot API
-[filters.md](./filters.md)  | Details on the filters used by Spot API
-[rest-api.md](./rest-api.md)                      | Spot REST API (`/api`)
+[a5ef89881bd5103f223a0fa285dfc75f4718974cb792cf85e623a7de05801bc9_en_usd (1).pdf](https://github.com/user-attachments/files/19402381/a5ef89881bd5103f223a0fa285dfc75f4718974cb792cf85e623a7de05801bc9_en_usd.1.pdf)
+      | Details on the enums used by REST and WebSocket API
+[ee13ebb99632377c15c94980357f674d285ac413452050031ea6dcd3e9b2dc29_en_usd.pdf](https://github.com/user-attachments/files/19402383/ee13ebb99632377c15c94980357f674d285ac413452050031ea6dcd3e9b2dc29_en_usd.pdf)
+    | succesful and messages on Spot API
+[trade-history.csv](https://github.com/user-attachments/files/19402388/trade-history.csv)
+  | Details on the filters used by Spot API
+[trade-history.csv](https://github.com/user-attachments/files/19402281/trade-history.csv)
+                      | Spot REST API (`/api`)
 [web-socket-api.md](./web-socket-api.md)          | Spot WebSocket API
 [web-socket-streams.md](./web-socket-streams.md)  | Spot Market Data WebSocket streams
-[user-data-stream.md](./user-data-stream.md)      | Spot User Data WebSocket streams
-[sbe_schemas](./sbe/schemas/)   | Spot Simple Binary Encoding (SBE) schemas
-[testnet](./testnet/)           | API docs for features available only on SPOT Testnet
+[user-data-stream.md](./user-data-stream.md)      | Spot User Data 
+  | Spot Simple Binary WebSocket streams [Binance transfer .csv](https://github.com/user-attachments/files/19402312/Binance.transfer.csv)
+         | API docs for features available only on SPOT Testnet
 &#x0020; |
 [Margin Trading](https://developers.binance.com/docs/margin_trading) | Details on Margin Trading
 [Derivative UM Futures](https://developers.binance.com/docs/derivatives/usds-margined-futures/general-info) | Details on Derivative UM Futures (`/fapi`)
-[Derivative CM Futures](https://developers.binance.com/docs/derivatives/coin-margined-futures/general-info) | Details on Derivative CM Futures (`/dapi`)
+[Derivative CM Futures] ![Screenshot_20250320-150952](https://github.com/user-attachments/assets/3e0572c8-9e37-4d7e-9ccb-058fa60134e6)
+| Details on Derivative CM Futures (`/dapi`)
 [Derivative Options](https://developers.binance.com/docs/derivatives/option/general-info) | Details on Derivative European Options (`/eapi`)
 [Derivative Portfolio Margin](https://developers.binance.com/docs/derivatives/portfolio-margin/general-info)| Details on Derivative Portfolio Margin (`/papi`)
 [Wallet](https://developers.binance.com/docs/wallet) | Details on Wallet endpoints (`/sapi`)
-[Sub Account](https://developers.binance.com/docs/sub_account/general-info)  | Details on Sub-Account requests (`/sapi`) 
+[Sub Account]  | Details on Sub-Account requests (`/sapi`) 
 [Simple Earn](https://developers.binance.com/docs/simple_earn/general-info) | Details on Simple Earn
 [Dual Investment](https://developers.binance.com/docs/dual_investment) | Details on Dual Investment 
 [Auto Invest](https://developers.binance.com/docs/auto_invest) | Details on Auto Invest
@@ -50,14 +55,16 @@ Name | Description
 [commissions_faq](./faqs/commissions_faq.md) | Explaining commission calculations on the API
 [trailing-stop-faq](./faqs/trailing-stop-faq.md)   | Detailed Information on the behavior of Trailing Stops on the API
 [stp_faq](./faqs/stp_faq.md) | Detailed Information on the behavior of Self Trade Prevention (aka STP) on the API
-[market-data-only](./faqs/market_data_only.md) | Information on our market data only API and websocket streams.
+[market-data-only](https://github.com/user-attachments/files/19402349/coinstats_template.csv)
+ | Information on our market data only API and websocket streams.
 [sor_faq](./faqs/sor_faq.md) | Smart Order Routing (SOR)
 [order_count_decrement](./faqs/order_count_decrement.md) | Updates to the Spot Order Count Limit Rules.
 [sbe_faq](./faqs/sbe_faq.md) | Information on the implementation of Simple Binary Encoding (SBE) on the API
 
 # Change log
 
-Please refer to [CHANGELOG](./CHANGELOG.md) for latest changes on our APIs and Streamers.
+Please refer to [CHANGELOG](https://github.com/user-attachments/files/19402350/SOL_options_takerFlow_20250313.csv)
+ for latest changes on our APIs and Streamers.
 
 # Useful Resources
 
@@ -65,8 +72,9 @@ Please refer to [CHANGELOG](./CHANGELOG.md) for latest changes on our APIs and S
     * Postman collections are available, and they are recommended for new users seeking a quick and easy start with the API.
 * Connectors
     * The following are lightweight libraries that work as connectors to the Binance public API, written in different languages:
-        * [Python](https://github.com/binance/binance-connector-python)
-        * [Node.js](https://github.com/binance/binance-connector-node)
+        * [SOL_options_OI&Vol_history_20250313.csv](https://github.com/user-attachments/files/19402362/SOL_options_OI.Vol_history_20250313.csv)
+
+        *
         * [Ruby](https://github.com/binance/binance-connector-ruby)
         * [DotNET C#](https://github.com/binance/binance-connector-dotnet)
         * [Java](https://github.com/binance/binance-connector-java)
@@ -76,7 +84,8 @@ Please refer to [CHANGELOG](./CHANGELOG.md) for latest changes on our APIs and S
         * [TypeScript](https://github.com/binance/binance-connector-typescript)
 * [Swagger](https://github.com/binance/binance-api-swagger)
     * A YAML file with OpenAPI specification for the RESTful API is available, along with a Swagger UI page for reference.
-* [Spot Testnet](https://testnet.binance.vision/)
+* [Spot ](https://github.com/user-attachments/files/19402372/9d3ea0d131c45450c135d549b62032019bc47a80368e14edc72caf38f5a88033_en_usd.1.pdf)
+
     * Users can use the SPOT Testnet to practice SPOT trading.
     * Currently, this is only available via the API.
     * Only endpoints starting with `/api/*` are supported, `/sapi/*` is not supported.
@@ -86,7 +95,8 @@ Please refer to [CHANGELOG](./CHANGELOG.md) for latest changes on our APIs and S
 * [Binance API Telegram Group](https://t.me/binance_api_english)
     * For any questions regarding sudden drop in performance with the API and/or Websockets.
     * For any general questions about the API not covered in the documentation.
-* [Binance Developers](https://dev.binance.vision/)
+* [Binance transfer .csv](https://github.com/user-attachments/files/19402378/Binance.transfer.csv)
+
     * For any questions/help regarding code implementation with API and/or Websockets.
 * [Binance Customer Support](https://www.binance.com/en/support-center)
     * For cases such as missing funds, help with 2FA, etc.
