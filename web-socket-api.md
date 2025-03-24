@@ -6864,8 +6864,6 @@ Database
 
 The following requests manage [User Data Stream](user-data-stream.md) subscriptions.
 
-**Note:** The user data can ONLY be retrieved by *a separate* Websocket connection via the **User Data Streams** url (i.e. `wss://stream.binance.com:443`).
-
 ### Start user data stream (USER_STREAM)
 
 ```javascript

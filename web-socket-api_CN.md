@@ -6730,8 +6730,6 @@ timestamp           | LONG   | YES          |
 
 以下请求管理 [Websocket 帐户信息](user-data-stream_CN.md) 订阅。
 
-**注意：** 账户信息只能在连接到用户数据流服务器的连接上获取, 其服务器URL是 `wss://stream.binance.com:443`.
-
 ### 开始用户数据流 (USER_STREAM)
 
 ```javascript
