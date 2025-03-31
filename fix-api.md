@@ -625,6 +625,10 @@ Sent by the client to cancel an order or an order list.
 
 If the canceled order is part of an order list, the entire list will be canceled.
 
+**Note:**
+
+* The performance for canceling an order (single cancel or as part of a cancel-replace) is always better when only `orderId` is sent. Sending `origClientOrderId` or both `orderId` + `origClientOrderId` will be slower.
+
 | Tag   | Name               | Type   | Required | Description                                                                                       |
 |-------|--------------------|--------|----------|---------------------------------------------------------------------------------------------------|
 | 11    | ClOrdID            | STRING | Y        | `ClOrdID` of this request.                                                                        |

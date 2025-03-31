@@ -620,6 +620,8 @@ Logout 响应
 * 要取消订单，需要 `OrderID (11)` 或 `OrigClOrdID (41)`。
 * 要取消订单列表，需要 `ListID (66)` 或 `OrigClListID (25015)`。
 
+* 当仅发送 `orderId` 时,取消订单的执行(单个 Cancel 或作为 Cancel-Replace 的一部分)总是更快。发送 `origClientOrderId` 或同时发送 `orderId` + `origClientOrderId` 会稍慢。
+
 如果已取消的订单是订单列表的一部分，则整个订单列表将被取消。
 
 | Tag | 名称     | 类型   | 是否必须 | 描述|

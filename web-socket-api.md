@@ -3667,6 +3667,8 @@ Notes:
 
 * If you cancel an order that is a part of an order list, the entire order list is canceled.
 
+* The performance for canceling an order (single cancel or as part of a cancel-replace) is always better when only `orderId` is sent. Sending `origClientOrderId` or both `orderId` + `origClientOrderId` will be slower.
+
 **Data Source:**
 Matching Engine
 
@@ -4215,6 +4217,8 @@ Notes:
 * If new order placement is not attempted, your order count is still incremented.
 
 * Like [`order.cancel`](#cancel-order-trade), if you cancel an individual order from an order list, the entire order list is cancelled.
+
+* The performance for canceling an order (single cancel or as part of a cancel-replace) is always better when only `orderId` is sent. Sending `origClientOrderId` or both `orderId` + `origClientOrderId` will be slower.
 
 **Data Source:**
 Matching Engine

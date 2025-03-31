@@ -3545,6 +3545,8 @@ NONE
 
 * 如果您取消属于订单列表的订单，则整个订单列表将被取消。
 
+* 当仅发送 `orderId` 时,取消订单的执行(单个 Cancel 或作为 Cancel-Replace 的一部分)总是更快。发送 `origClientOrderId` 或同时发送 `orderId` + `origClientOrderId` 会稍慢。
+
 **数据源:**
 撮合引擎
 
@@ -4091,6 +4093,8 @@ NONE
 * 如果未尝试下新订单，订单次数仍会增加。
 
 * 与 [`order.cancel`](#order-cancel) 一样，如果您撤销订单列表内的某个订单，则整个订单列表将被撤销。
+
+* 当仅发送 `orderId` 时,取消订单的执行(单个 Cancel 或作为 Cancel-Replace 的一部分)总是更快。发送 `origClientOrderId` 或同时发送 `orderId` + `origClientOrderId` 会稍慢。
 
 **数据源:**
 撮合引擎

@@ -1987,7 +1987,9 @@ Matching Engine
 }
 ```
 
-**Note:** The payload above does not show all fields that can appear in the order response. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+**Note:** 
+* The payload above does not show all fields that can appear in the order response. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+* The performance for canceling an order (single cancel or as part of a cancel-replace) is always better when only orderId is sent. Sending `origClientOrderId` or both `orderId` + `origClientOrderId` will be slower.
 
 <a id="regarding-cancelrestrictions"></a>
 
@@ -2533,7 +2535,10 @@ Matching Engine
 }
 ```
 
-**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+**Notes:** 
+
+* The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+* The performance for canceling an order (single cancel or as part of a cancel-replace) is always better when only `orderId` is sent. Sending `origClientOrderId` or both `orderId` + `origClientOrderId` will be slower.
 
 ### Current open orders (USER_DATA)
 ```

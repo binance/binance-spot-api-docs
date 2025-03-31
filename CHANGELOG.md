@@ -1,6 +1,12 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-03-10**
+**Last Updated: 2025-03-31**
+
+### 2025-03-31
+
+* Added a clarification on the performance of canceling an order.
+
+---
 
 ### 2025-03-10
 
