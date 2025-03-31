@@ -1,9 +1,15 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-03-13**
+**Last Updated: 2025-03-31**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-03-31
+
+* Added a clarification on the performance of canceling an order.
+
+---
 
 ### 2025-03-13
 
