@@ -2,9 +2,9 @@
   "environment": "TESTNET",
   "latestSchema":
   {
-    "id": 2,
-    "version": 1,
-    "releaseDate": "2024-11-28"
+    "id": 3,
+    "version": 0,
+    "releaseDate": "2025-04-02"
   },
   "deprecatedSchemas":
   [
@@ -13,6 +13,12 @@
       "version": 0,
       "releaseDate": "2024-04-04",
       "deprecatedDate": "2024-11-28"
+    },
+    {
+      "id": 2,
+      "version": 1,
+      "releaseDate": "2024-11-28",
+      "deprecatedDate": "2025-04-02"
     }
   ],
   "retiredSchemas":
