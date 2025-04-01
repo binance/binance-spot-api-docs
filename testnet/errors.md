@@ -1,6 +1,6 @@
-# Error codes for Binance SPOT Testnet 
+# Error codes for Binance SPOT Testnet
 
-**Last Updated: 2024-12-17** 
+**Last Updated: 2025-04-01**
 
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload when using the REST API:
@@ -34,10 +34,10 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * Timeout waiting for response from backend server. Send status unknown; execution status unknown.
 
 ### -1008 SERVER_BUSY
-  * Server is currently overloaded with other requests. Please try again in a few minutes. 
+  * Server is currently overloaded with other requests. Please try again in a few minutes.
 
 ### -1013 INVALID_MESSAGE
-  * The request is rejected by the API. (i.e. The request didn't reach the Matching Engine.) 
+  * The request is rejected by the API. (i.e. The request didn't reach the Matching Engine.)
   * Potential error messages can be found in [Filter Failures](#filter-failures) or [Failures during order placement](#other-errors).
 
 ### -1014 UNKNOWN_ORDER_COMPOSITION
@@ -64,7 +64,9 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * `SenderCompId(49)` is currently in use. Concurrent use of the same SenderCompId within one account is not allowed.
 
 ### -1034 TOO_MANY_CONNECTIONS
- * Too many concurrent connections; current limit is '%d'.
+ * Too many concurrent connections; current limit is '%s'.
+ * Too many connection attempts for account; current limit is %s per '%s'.
+ * Too many connection attempts from IP; current limit is %s per '%s'.
 
 ### -1035 LOGGED_OUT
  * Please send [Logout`<5>`](fix-api.md#logout) message to close the session.
@@ -151,14 +153,14 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * Combination of optional parameters invalid.
  * Combination of optional fields invalid. Recommendation: '%s' and '%s' must both be sent.
  * Fields [%s] must be sent together or omitted entirely.
- * Invalid 'MDEntryType (269)' combination. BID and OFFER must be requested together. 
+ * Invalid 'MDEntryType (269)' combination. BID and OFFER must be requested together.
 
 ### -1130 INVALID_PARAMETER
  * Invalid data sent for a parameter.
  * Data sent for parameter '%s' is not valid.
 
 ### -1134 BAD_STRATEGY_TYPE
- * `strategyType` was less than 1000000. 
+ * `strategyType` was less than 1000000.
  * `TargetStrategy (847)` was less than 1000000.
 
 ### -1135 INVALID_JSON
@@ -184,7 +186,7 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * SBE is not enabled.
 
 ### -1158 OCO_ORDER_TYPE_REJECTED
- * Order type not supported in OCO. 
+ * Order type not supported in OCO.
  * If the order type provided in the `aboveType` and/or `belowType` is not supported.
 
 ### -1160 OCO_ICEBERGQTY_TIMEINFORCE
@@ -237,7 +239,7 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * `BodyLength (9)` does not contain the correct byte count.
  * Only printable ASCII characters and SOH (Start of Header) are allowed.
 
-### -1178 BAD_SENDER_COMPID  
+### -1178 BAD_SENDER_COMPID
  * `SenderCompId(49)` contains an incorrect value. The SenderCompID value should not change throughout the lifetime of a session.
 
 ### -1179 BAD_SEQ_NUM
@@ -261,19 +263,19 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 ### -1185 DROP_COPY_SESSION_REQUIRED
  * Only DropCopy sessions are supported on this server. Either reconnect to order entry server or send `DropCopyFlag (9406)` field.
 
-### -1188 INCORRECT_NUM_IN_GROUP_COUNT 
-* Incorrect NumInGroup count for repeating group '%s'. 
+### -1188 INCORRECT_NUM_IN_GROUP_COUNT
+* Incorrect NumInGroup count for repeating group '%s'.
 
 ### -1189 DUPLICATE_ENTRIES_IN_A_GROUP
 * Group '%s' contains duplicate entries.
 
-### -1191 TOO_MANY_SUBSCRIPTIONS 
-* Too many subscriptions. Connection may create up to '%s' subscriptions at a time. 
+### -1191 TOO_MANY_SUBSCRIPTIONS
+* Too many subscriptions. Connection may create up to '%s' subscriptions at a time.
 * Similar subscription is already active on this connection. Symbol='%s', active subscription id: '%s'.
 
 ### -1194 INVALID_TIME_UNIT
   * Invalid value for time unit; expected either MICROSECOND or MILLISECOND.
-  
+
 ### -1196 BUY_OCO_STOP_LOSS_MUST_BE_ABOVE
 
 * A stop loss order in a buy OCO must be above.
@@ -291,23 +293,23 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 * A take profit order in a sell OCO must be above.
 
 ### -1186 NOT_ALLOWED_IN_ORDER_ENTRY_SESSIONS
-* Requested operation is not allowed in order entry sessions. 
+* Requested operation is not allowed in order entry sessions.
 
 #### -1187 NOT_ALLOWED_IN_MARKET_DATA_SESSIONS
-* Requested operation is not allowed in market data sessions. 
+* Requested operation is not allowed in market data sessions.
 
-#### -1188 INCORRECT_NUM_IN_GROUP_COUNT 
-* Incorrect NumInGroup count for repeating group '%s'. 
+#### -1188 INCORRECT_NUM_IN_GROUP_COUNT
+* Incorrect NumInGroup count for repeating group '%s'.
 
 #### -1189 DUPLICATE_ENTRIES_IN_A_GROUP
 * Group '%s' contains duplicate entries.
 
-#### -1190 INVALID_REQUEST_ID 
-* 'MDReqID (262)' contains a subscription request id that is already in use on this connection.   
-* 'MDReqID (262)' contains an unsubscription request id that does not match any active subscription. 
+#### -1190 INVALID_REQUEST_ID
+* 'MDReqID (262)' contains a subscription request id that is already in use on this connection.
+* 'MDReqID (262)' contains an unsubscription request id that does not match any active subscription.
 
-#### -1191 TOO_MANY_SUBSCRIPTIONS 
-* Too many subscriptions. Connection may create up to '%s' subscriptions at a time. 
+#### -1191 TOO_MANY_SUBSCRIPTIONS
+* Too many subscriptions. Connection may create up to '%s' subscriptions at a time.
 
 #### -2010 NEW_ORDER_REJECTED
  * NEW_ORDER_REJECTED
@@ -330,9 +332,12 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 ### -2026 ORDER_ARCHIVED
   * Order was canceled or expired with no executed qty over 90 days ago and has been archived.
 
+### -2039 CLIENT_ORDER_ID_INVALID
+* Client order ID is not correct for this order ID.
+
 <a id="other-errors"></a>
 
-## Messages for -1010 ERROR_MSG_RECEIVED, -2010 NEW_ORDER_REJECTED, and -2011 CANCEL_REJECTED
+## Messages for -1010 ERROR_MSG_RECEIVED, -2010 NEW_ORDER_REJECTED, -2011 CANCEL_REJECTED, and -2038 ORDER_AMEND_REJECTED
 This code is sent when an error has been returned by the matching engine.
 The following messages which will indicate the specific error:
 
@@ -349,6 +354,7 @@ Error message                                                   | Description
 "Stop loss limit orders are not supported for this symbol."     | `STOP_LOSS_LIMIT` is not enabled on the symbol.
 "Take profit orders are not supported for this symbol."         | `TAKE_PROFIT` is not enabled on the symbol.
 "Take profit limit orders are not supported for this symbol."   | `TAKE_PROFIT_LIMIT` is not enabled on the symbol.
+"Order amend is not supported for this symbol."              | Order amend keep priority is not enabled on the symbol.
 "Price * QTY is zero or less."                                  | `price` * `quantity` is too low.
 "IcebergQty exceeds QTY."                                       | `icebergQty` must be less than the order quantity.
 "This action is disabled on this account."                      | Contact customer support; some actions have been disabled on the account.
@@ -364,12 +370,14 @@ Error message                                                   | Description
 "Order cancel-replace is not supported for this symbol."        | `POST /api/v3/order/cancelReplace` (REST API) or `order.cancelReplace` (WebSocket API) is not enabled on the symbol.
 "This symbol is not permitted for this account."                | Account and symbol do not have the same permissions. (e.g. `SPOT`, `MARGIN`, etc)
 "This symbol is restricted for this account."                   | Account is unable to trade on that symbol. (e.g. An `ISOLATED_MARGIN` account cannot place `SPOT` orders.)
-"Order was not canceled due to cancel restrictions."            | Either `cancelRestrictions` was set to `ONLY_NEW` but the order status was not `NEW` <br/> or <br/> `cancelRestrictions` was set to `ONLY_PARTIALLY_FILLED` but the order status was not `PARTIALLY_FILLED`. 
+"Order was not canceled due to cancel restrictions."            | Either `cancelRestrictions` was set to `ONLY_NEW` but the order status was not `NEW` <br/> or <br/> `cancelRestrictions` was set to `ONLY_PARTIALLY_FILLED` but the order status was not `PARTIALLY_FILLED`.
 "Rest API trading is not enabled." / "WebSocket API trading is not enabled." | Order is being placed or a server that is not configured to allow access to `TRADE` endpoints.
 "FIX API trading is not enabled.                                | Order is placed on a FIX server that is not TRADE enabled.
 "Order book liquidity is less than `LOT_SIZE` filter minimum quantity." |Quote quantity market orders cannot be placed when the order book liquidity is less than minimum quantity configured for the `LOT_SIZE` filter.
 "Order book liquidity is less than `MARKET_LOT_SIZE` filter minimum quantity."|Quote quantity market orders cannot be placed when the order book liquidity is less than the minimum quantity for `MARKET_LOT_SIZE` filter.
 "Order book liquidity is less than symbol minimum quantity." | Quote quantity market orders cannot be placed when there are no orders on the book.
+"Order amend (quantity increase) is not supported." | `newQty` must be less than the order quantity.
+"The requested action would change no state; rejecting". | The request sent would not have changed the status quo.<br></br>(e.g. `newQty` cannot equal the order quantity.)
 
 
 ## Errors regarding placing orders via cancelReplace
