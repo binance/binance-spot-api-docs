@@ -72,9 +72,10 @@ General Changes:
 
 FIX API
 
-* The connection limits have been updated. Note that these limits are checked independently for both the API key and the IP address.
+* The connection rate limits have been updated. Note that these limits are checked independently for both the API key and the IP address.
   * FIX Order Entry and FIX Drop Copy will each have a **limit of 15 connection attempts within 10 seconds.**
   * FIX Market Data will have a **limit of 300 connection attempts within 300 seconds**.
+  * FIX Order Entry will now have 10 concurrent TCP connections per account.
 * FIX API verifies that `EncryptMethod(98)` is 0 at Logon `<A>`.
 * News `<B>` contains a countdown until disconnection in the Headline field.
   * Following the completion of this update, when this message has been received the expectation is to establish a new connection **within 10 minutes**. Every 10 seconds there will be a reminder that the connection will close and to reconnect.
