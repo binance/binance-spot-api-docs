@@ -59,6 +59,14 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 ### -1022 INVALID_SIGNATURE
  * Signature for this request is not valid.
 
+### -1033 COMP_ID_IN_USE
+ * `SenderCompId(49)` is currently in use. Concurrent use of the same SenderCompId within one account is not allowed.
+
+### -1034 TOO_MANY_CONNECTIONS
+ * Too many concurrent connections; current limit is '%d'.
+
+### -1035 LOGGED_OUT
+ * Please send [Logout`<5>`](fix-api.md#logout) message to close the session.
 
 ## 11xx - Request issues
 ### -1100 ILLEGAL_CHARS
@@ -74,11 +82,13 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * A mandatory parameter was not sent, was empty/null, or malformed.
  * Mandatory parameter '%s' was not sent, was empty/null, or malformed.
  * Param '%s' or '%s' must be sent, but both were empty/null!
- * '%s' contains unexpected value. Cannot be greater than '%s'.
  * Required tag '%s' missing.
+ * Field value was empty or malformed.
+ * '%s' contains unexpected value. Cannot be greater than %s.
 
 ### -1103 UNKNOWN_PARAM
  * An unknown parameter was sent.
+ * Undefined Tag.
 
 ### -1104 UNREAD_PARAMETERS
  * Not all sent parameters were read.
@@ -91,6 +101,7 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 ### -1106 PARAM_NOT_REQUIRED
  * A parameter was sent when not required.
  * Parameter '%s' sent when not required.
+ * A tag '%s' was sent when not required.
 
 ### -1108 PARAM_OVERFLOW
  * Parameter '%s' overflowed.
@@ -137,6 +148,7 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 ### -1128 OPTIONAL_PARAMS_BAD_COMBO
  * Combination of optional parameters invalid.
+ * Combination of optional fields invalid. Recommendation: '%s' and '%s' must both be sent.
  * Fields [%s] must be sent together or omitted entirely.
  * Invalid 'MDEntryType (269)' combination. BID and OFFER must be requested together. 
 
@@ -146,6 +158,7 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 ### -1134 BAD_STRATEGY_TYPE
  * `strategyType` was less than 1000000. 
+ * `TargetStrategy (847)` was less than 1000000.
 
 ### -1135 INVALID_JSON
  * Invalid JSON Request
@@ -176,6 +189,7 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 ### -1160 OCO_ICEBERGQTY_TIMEINFORCE
 * Parameter '%s' is not supported if `aboveTimeInForce`/`belowTimeInForce` is not GTC.
 * If the order type for the above or below leg is `STOP_LOSS_LIMIT`, and `icebergQty` is provided for that leg, the `timeInForce` has to be `GTC` else it will throw an error.
+* `TimeInForce (59)` must be `GTC (1)` when `MaxFloor (111)` is used.
 
 ### -1161 DEPRECATED_SCHEMA
 * Unable to encode the response in SBE schema 'x'. Please use schema 'y' or higher.
@@ -264,7 +278,7 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 * Too many subscriptions. Connection may create up to '%s' subscriptions at a time. 
 * Similar subscription is already active on this connection. Symbol='%s', active subscription id: '%s'.
 
-#### -1194 INVALID_TIME_UNIT
+### -1194 INVALID_TIME_UNIT
 * Invalid value for time unit; expected either MICROSECOND or MILLISECOND.
 
 ### -1196 BUY_OCO_STOP_LOSS_MUST_BE_ABOVE
@@ -337,11 +351,12 @@ Error message                                                   | Description
 "This symbol is restricted for this account."                   | Account is unable to trade on that symbol. (e.g. An `ISOLATED_MARGIN` account cannot place `SPOT` orders.)
 "Order was not canceled due to cancel restrictions."            | Either `cancelRestrictions` was set to `ONLY_NEW` but the order status was not `NEW` <br/> or <br/> `cancelRestrictions` was set to `ONLY_PARTIALLY_FILLED` but the order status was not `PARTIALLY_FILLED`. 
 "Rest API trading is not enabled." / "WebSocket API trading is not enabled." | Order is being placed or a server that is not configured to allow access to `TRADE` endpoints.
+"FIX API trading is not enabled.                                | Order is placed on a FIX server that is not TRADE enabled.
 "Order book liquidity is less than `LOT_SIZE` filter minimum quantity." |Quote quantity market orders cannot be placed when the order book liquidity is less than minimum quantity configured for the `LOT_SIZE` filter.
 "Order book liquidity is less than `MARKET_LOT_SIZE` filter minimum quantity."|Quote quantity market orders cannot be placed when the order book liquidity is less than the minimum quantity for `MARKET_LOT_SIZE` filter.
 "Order book liquidity is less than symbol minimum quantity." | Quote quantity market orders cannot be placed when there are no orders on the book.
 
-## Errors regarding POST /api/v3/order/cancelReplace
+## Errors regarding placing orders via cancelReplace
 
 ### -2021 Order cancel-replace partially failed
 * This code is sent when either the cancellation of the order failed or the new order placement failed but not both.

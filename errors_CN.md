@@ -58,6 +58,11 @@
 ### -1022 签名不正确
  * 请求中携带的signature与服务器根据规则计算得到的signature不一致。通常是因为客户端代码中使用的apisecret错误。
 
+### -1033 正在使用的 Comp ID
+ * `SenderCompId(49)` is currently in use. Concurrent use of the same SenderCompId within one account is not allowed.
+
+### -1034 连接太多
+ * Too many concurrent connections; current limit is '%d'.
 
 ## 11xx - 请求内容中的问题
 ### -1100 非法字符
@@ -73,11 +78,13 @@
  * A mandatory parameter was not sent, was empty/null, or malformed.
  * Mandatory parameter '%s' was not sent, was empty/null, or malformed.
  * Param '%s' or '%s' must be sent, but both were empty/null!
- * '%s' contains unexpected value. Cannot be greater than '%s'.
  * Required tag '%s' missing.
+ * Field value was empty or malformed.
+ * '%s' contains unexpected value. Cannot be greater than %s.
 
 ### -1103 无法识别的参数
  * An unknown parameter was sent.
+ * Undefined Tag.
 
 ### -1104 冗余参数
  * Not all sent parameters were read.
@@ -90,6 +97,7 @@
 ### -1106 非必需参数
  * A parameter was sent when not required.
  * Parameter '%s' sent when not required.
+ * A tag '%s' was sent when not required.
 
 ### -1108 参数溢出
  * Parameter '%s' overflowed.
@@ -136,6 +144,7 @@
 
 ### -1128 无效的可选参数组合
  * Combination of optional parameters invalid.
+ * Combination of optional fields invalid. Recommendation: '%s' and '%s' must both be sent.
  * Fields [%s] must be sent together or omitted entirely.
  * Invalid 'MDEntryType (269)' combination. BID and OFFER must be requested together. 
 
@@ -145,6 +154,7 @@
 
 ### -1134 strategyType不符合需求
  * `strategyType` was less than 1000000. 
+ * `TargetStrategy (847)` was less than 1000000.
 
 ### -1135 无效的JSON
  * Invalid JSON Request
@@ -175,6 +185,7 @@
 ### -1160 OCO 订单类型的冰山数量参数与 time in force 参数的组合有问题
 * Parameter '%s' is not supported if `aboveTimeInForce`/`belowTimeInForce` is not GTC.
 * If the order type for the above or below leg is `STOP_LOSS_LIMIT`, and `icebergQty` is provided for that leg, the `timeInForce` has to be `GTC` else it will throw an error.
+* `TimeInForce (59)` must be `GTC (1)` when `MaxFloor (111)` is used.
 
 ### -1161 被弃用的模式
 * Unable to encode the response in SBE schema 'x'. Please use schema 'y' or higher.
@@ -333,17 +344,18 @@
 "This symbol is restricted for this account."                    | 账户没有权限在此交易对交易 (比如账户只拥有 `ISOLATED_MARGIN`权限，则无法下`SPOT` 订单)。
 "Order was not canceled due to cancel restrictions."             | `cancelRestrictions` 设置为 `ONLY_NEW` 但订单状态不是 `NEW` <br/> 或 <br/> `cancelRestrictions` 设置为 `ONLY_PARTIALLY_FILLED` 但订单状态不是 `PARTIALLY_FILLED`。
 "Rest API trading is not enabled." / "WebSocket API trading is not enabled." | 下单时，服务器没有设置为允许访问 `TRADE` 的接口。
+"FIX API trading is not enabled.                                | 订单放置在未启用 TRADE 的 FIX 服务器上.
 "Order book liquidity is less than `LOT_SIZE` filter minimum quantity." |当订单簿流动性小于 `LOT_SIZE` 过滤器配置的最小数量时，无法提交包含 `quoteOrderQty` 的市价单。
 "Order book liquidity is less than `MARKET_LOT_SIZE` filter minimum quantity."|当订单簿流动性小于 `MARKET_LOT_SIZE` 过滤器的最小数量时，无法提交包含 `quoteOrderQty` 的市价单。
 "Order book liquidity is less than symbol minimum quantity." |当订单簿里没有订单时，无法提交包含 `quoteOrderQty` 的市价单。
 
-## 关于 POST /api/v3/order/cancelReplace 的错误
+## 有关使用 cancelReplace 下订单的错误
 
 ### -2021 Order cancel-replace partially failed
-收到该错误码代表撤单**或者**下单失败。
+* 收到该错误码代表撤单**或者**下单失败。
 
 ### -2022 Order cancel-replace failed.
-收到该错误码代表撤单**和**下单都失败。
+* 收到该错误码代表撤单**和**下单都失败。
 
 <a id="filter-failures"></a>
 
