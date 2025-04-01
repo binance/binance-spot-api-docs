@@ -1,9 +1,120 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-03-31**
+**Last Updated: 2025-04-01**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-04-01
+
+**Notice:** The following changes will be deployed tomorrow **April 2, 2025 starting at 7:00 UTC** and may take several hours to complete. <br>
+Please consult the Spot Test Network's [homepage](https://testnet.binance.vision/) to be informed of the release completion.
+
+General Changes:
+
+* **Important:** The following legacy urls will be removed **next month**; <br> Please change to the latest URLs as soon as possible:
+
+|Legacy URL | Latest URL|
+|---        | ---|
+|`wss://testnet.binance.vision/ws-api/v3`|`wss://ws-api.testnet.binance.vision/ws-api/v3`|
+|`wss://testnet.binance.vision/ws` |`wss://stream.testnet.binance.vision/ws`|
+
+* New Error code `-2038` for order amend keep priority requests that fail.
+* New messages for error code `-1034`.
+* If the unfilled order count for `intervalNum:DAY` is exceeded, the unfilled order count for `intervalNum:SECOND` is no longer incremented.
+* Previously, the request weight for myTrades was 20 regardless of the parameters provided. Now, if you provide `orderId`, the request weight is 5.
+  * REST API: `GET /api/v3/myTrades`
+  * WebSocket API: `myTrades`
+* Change when querying and deleting orders:
+  * When neither `orderId` nor `origClientOrderId` are present, the request is now rejected with `-1102` instead of `-1128`.
+  * Affected requests:
+    * REST API:
+      * `GET /api/v3/order`
+      * `DELETE /api/v3/order`
+    * WebSocket API
+      * `order.status`
+      * `order.cancel`
+    * FIX API
+      * OrderCancelRequest `<F>`
+* [Order Amend Keep Priority](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/order_amend_keep_priority.md) will be available. (Note that the symbol has to have the feature enabled to be used.)
+  * New order type `allowAmend` will be visible in Exchange Information Requests.
+    * REST API: `GET /api/v3/exchangeInfo`
+    * WebSocket API: `exchangeInfo`
+  * FIX API: New Order Entry Messages **OrderAmendKeepPriorityRequest** and **OrderAmendReject**
+  * REST API: `PUT /api/v3/order/amend/keepPriority`
+  * WebSocket API: `order.amend.keepPriority`
+* STP mode `DECREMENT` becomes visible in Exchange Information if the symbol has it configured.
+  * Instead of expiring only the maker, only the taker, or unconditionally both orders, STP decrement decreases the available quantity of **both** orders and increases the `prevented quantity` of **both** orders by the amount of the prevented match.
+  * This expires the order with less available quantity as (`filled quantity` \+ `prevented quantity`) equals `order quantity`. Both orders expire if their available quantities are equal. It is called a "decrement" because it reduces available quantity.
+* Behavior when querying and/or canceling with `orderId` and `origClientOrderId/cancelOrigClientOrderId`:
+  * The behavior when both parameters were provided was not consistent across all endpoints.
+  * Moving forward, when both parameters are provided, the order is first searched for using its `orderId`, and if found, `origClientOrderId`/`cancelOrigClientOrderId` is checked against that order. If both conditions pass, the request succeeds. If both conditions are not met the request is rejected.
+  * Affected requests:
+    * REST API:
+      * `GET /api/v3/order`
+      * `DELETE /api/v3/order`
+      * `POST /api/v3/order/cancelReplace`
+    * WebSocket API:
+      * `order.status`
+      * `order.cancel`
+      * `order.cancelReplace`
+    * FIX API
+      * OrderCancelRequest `<F>`
+      * OrderCancelRequestAndNewOrderSingle `<XCN>`
+* Behavior when canceling with `listOrderId` and `listClientOrderId`:
+  * The behavior when both parameters were provided was not consistent across all endpoints.
+  * Moving forward, when both parameters are passed, the order list is first searched for using its `listOrderId`, and if found, `listClientOrderId` is checked against that order list. If both conditions are not met the request is rejected.
+  * Affected requests:
+    * REST API
+      * `DELETE /api/v3/orderList`
+    * WebSocket API
+      * `orderList.cancel`
+
+FIX API
+
+* The connection limits have been updated. Note that these limits are checked independently for both the API key and the IP address.
+  * FIX Order Entry and FIX Drop Copy will each have a **limit of 15 connection attempts within 10 seconds.**
+  * FIX Market Data will have a **limit of 300 connection attempts within 300 seconds**.
+* FIX API verifies that `EncryptMethod(98)` is 0 at Logon `<A>`.
+* News `<B>` contains a countdown until disconnection in the Headline field.
+  * Following the completion of this update, when this message has been received the expectation is to establish a new connection **within 10 minutes**. Every 10 seconds there will be a reminder that the connection will close and to reconnect.
+* OrderCancelRequest `<F>` and OrderCancelRequestAndNewOrderSingle `<XCN>` will now allow both `orderId` and `clientOrderId`.
+* The [QuickFix schema for FIX OE](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml) is updated to support the Order Amend Keep Priority feature and new STP mode, `DECREMENT`.
+
+User Data Streams
+
+* Listening to your account information using the `listenKey` **is deprecated**.
+  * This means we will be removing this feature from our system in the future.
+* Receive user data updates by subscribing to the User Data Stream using the WebSocket API.
+* In a future update, information about the base WebSocket endpoint for the User Data Streams will be removed.
+* In a future update, the following requests will be removed from the documentation:
+  * `POST /api/v3/userDataStream`
+  * `PUT /api/v3/userDataStream`
+  * `DELETE /api/v3/userDataStream`
+  * `userDataStream.start`
+  * `userDataStream.ping`
+  * `userDataStream.stop`
+* The [User Data Stream documentation](user-data-stream.md) will remain as reference for the payloads you can receive.
+
+* SBE
+  * A new schema 3:0 ([spot_3_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_0.xml)) becomes available. The current schema 2:1 ([spot_2_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_2_1.xml)) becomes deprecated and will be retired in 6 months as per our schema deprecation policy.
+  * Note that trying to use schema 3:0 before it is released will result in an error.
+  * This is a **breaking change** due to the addition of Order Amend Keep Priority and new STP mode.
+  * Changes in 3:0:
+    * symbolStatus `AUCTION_MATCH`, `PRE_TRADING`, and `POST_TRADING` have been removed.
+    * Support for Order Amend Keep Priority:
+      * Added field `amendAllowed` to ExchangeInfoResponse.
+      * New Messages `OrderAmendmentsResponse` and `OrderAmendKeepPriorityResponse`
+    * Fields `usedSor`, `orderCapacity`, `workingFloor`, `preventedQuantity`, and `matchType` are always emitted by default.
+    * New enum variant `DECREMENT` for `selfTradePreventionMode` and `allowedSelfTradePreventionModes`
+    * Changed `ExecutionReportEvent`: field `orderCreationTime` is now optional.
+  * When using a schema below 3:0 for WebSocket API to listen to the User Data Stream:
+    * `ListStatusEvent` field `listStatusType` is rendered as `ExecStarted` when it is `Updated`. Upgrade to schema 3:0 to get the correct value.
+    * `ExecutionReportEvent` field `selfTradePreventionMode` is rendered as `None` when it is `Decrement`. This only happens when `executionType` is `TradePrevention`.
+    * `ExecutionReportEvent`  field `orderCreationTime` will be rendered as -1 when it has no value.
+  * All schemas below 3:0 are unable to represent responses for Order Amend Keep Priority requests and any response that could contain the STP mode `DECREMENT` (e.g. Exchange Information, order placement, order cancelation, or querying the status of your order). When a response cannot be represented in the schema requested, an error is returned.
+
+---
 
 ### 2025-03-31
 
