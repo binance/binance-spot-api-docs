@@ -21,7 +21,7 @@
 
 # User Data Streams for Binance Spot TESTNET
 
-**Last Updated: 2024-11-27**
+**Last Updated: 2025-04-01**
 
 # General WSS information
 
@@ -260,7 +260,7 @@ For additional information on these parameters, please refer to the [Spot Glossa
     <td><code>pY</code></td>
     <td>Prevented Execution Quote Qty</td>
     <td><code>"pY":"0.21234562"</code></td>
-  </tr>  
+  </tr>
   <tr>
     <td><code>W</code></td>
     <td>Working Time</td>
@@ -326,7 +326,7 @@ If the order is an order list, an event named `ListStatus` will be sent in addit
 
 * `NEW` - The order has been accepted into the engine.
 * `CANCELED` - The order has been canceled by the user.
-* `REPLACED` (currently unused)
+* `REPLACED` - The order has been amended.
 * `REJECTED` - The order has been rejected and was not processed. (e.g. Cancel Replace orders where the new order placement was rejected even if the cancel request succeeded.)
 * `TRADE` - Part of the order or all of the order's quantity has filled.
 * `EXPIRED` - The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance).
@@ -334,7 +334,7 @@ If the order is an order list, an event named `ListStatus` will be sent in addit
 
 Check the [Rest API Documentation](./rest-api.md#enum-definitions) for more relevant enum definitions.
 
-### Listen Key Expired 
+### Listen Key Expired
 
 This event is sent when the listen key expires.
 
@@ -348,13 +348,13 @@ This event will not be pushed when the stream is closed normally.
 {
   "e": "listenKeyExpired",  // Event type
   "E": "1699596037418",     // Event time
-  "listenKey": "OfYGbUzi3PraNagEkdKuFwUHn48brFsItTdsuiIXrucEvD0rhRXZ7I6URWfE8YE8" 
+  "listenKey": "OfYGbUzi3PraNagEkdKuFwUHn48brFsItTdsuiIXrucEvD0rhRXZ7I6URWfE8YE8"
 }
 ```
 
 ### Event Stream Terminated
 
-This event appears only for WebSocket API. 
+This event appears only for WebSocket API.
 
 `eventStreamTerminated` is sent when the User Data Stream is stopped. For example, after you send a `userDataStream.stop` request, or a `session.logout` request.
 
