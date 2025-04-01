@@ -53,6 +53,7 @@
     - [Query order (USER_DATA)](#query-order-user_data)
     - [Cancel order (TRADE)](#cancel-order-trade)
     - [Cancel and replace order (TRADE)](#cancel-and-replace-order-trade)
+    - [Order Amend Keep Priority (TRADE)](#order-amend-keep-priority-trade)
     - [Current open orders (USER_DATA)](#current-open-orders-user_data)
     - [Cancel open orders (TRADE)](#cancel-open-orders-trade)
     - [Order lists](#order-lists)
@@ -74,6 +75,7 @@
     - [Account prevented matches (USER_DATA)](#account-prevented-matches-user_data)
     - [Account allocations (USER_DATA)](#account-allocations-user_data)
     - [Account Commission Rates (USER_DATA)](#account-commission-rates-user_data)
+    - [Query Order Amendments (USER_DATA)](#query-order-amendments-user_data)
   - [User Data Stream requests](#user-data-stream-requests)
     - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
     - [Ping user data stream (USER_STREAM)](#ping-user-data-stream-user_stream)
@@ -85,11 +87,11 @@
 
 # Public WebSocket API for Binance SPOT Testnet
 
-**Last Updated: 2025-03-05**
+**Last Updated: 2025-04-01**
 
 ## General API Information
 
-* The base endpoint is: **`wss://testnet.binance.vision/ws-api/v3`**
+* The base endpoint is: **`wss://ws-api.testnet.binance.vision/ws-api/v3`**
   * If you experience issues with the standard 443 port, alternative port 9443 is also available.
 * A single connection to the API is only valid for 24 hours; expect to be disconnected after the 24-hour mark.
 * The websocket server will send a `ping frame` every 20 seconds.
@@ -1207,6 +1209,7 @@ Memory
         "quoteOrderQtyMarketAllowed": true,
         "allowTrailingStop": true,
         "cancelReplaceAllowed": true,
+        "allowAmend":false,
         "isSpotTradingAllowed": true,
         "isMarginTradingAllowed": true,
         // Symbol filters are explained on the "Filters" page:
@@ -1305,7 +1308,7 @@ Adjusted based on the limit:
 Name      | Type    | Mandatory | Description
 --------- | ------- | --------- | -----------
 `symbol`  | STRING  | YES       |
-`limit`   | INT     | NO        | Default 100; max 5000
+`limit`   | INT     | NO        | Default: 100; Maximum: 5000
 
 **Data Source:**
 Memory
@@ -1404,7 +1407,7 @@ If you need access to real-time trading activity, please consider using WebSocke
 Name      | Type    | Mandatory | Description
 --------- | ------- | --------- | -----------
 `symbol`  | STRING  | YES       |
-`limit`   | INT     | NO        | Default 500; max 1000
+`limit`   | INT     | NO        | Default: 500; Maximum: 1000
 
 **Data Source:**
 Memory
@@ -1462,7 +1465,7 @@ Name      | Type    | Mandatory | Description
 --------- | ------- | --------- | -----------
 `symbol`  | STRING  | YES       |
 `fromId`  | INT     | NO        | Trade ID to begin at
-`limit`   | INT     | NO        | Default 500; max 1000
+`limit`   | INT     | NO        | Default: 500; Maximum: 1000
 
 Notes:
 
@@ -1537,7 +1540,7 @@ Name        | Type    | Mandatory | Description
 `fromId`    | INT     | NO        | Aggregate trade ID to begin at
 `startTime` | INT     | NO        |
 `endTime`   | INT     | NO        |
-`limit`     | INT     | NO        | Default 500; max 1000
+`limit`     | INT     | NO        | Default: 500; Maximum: 1000
 
 Notes:
 
@@ -1621,7 +1624,7 @@ Name        | Type    | Mandatory | Description
 `startTime` | INT     | NO        |
 `endTime`   | INT     | NO        |
 `timeZone`   |STRING  | NO        | Default: 0 (UTC)
-`limit`     | INT     | NO        | Default 500; max 1000
+`limit`     | INT     | NO        | Default: 500; Maximum: 1000
 
 
 <a id="kline-intervals"></a>
@@ -1714,7 +1717,7 @@ Name        | Type    | Mandatory | Description
 `startTime` | INT     | NO        |
 `endTime`   | INT     | NO        |
 `timeZone`   |STRING  | NO        | Default: 0 (UTC)
-`limit`     | INT     | NO        | Default 500; max 1000
+`limit`     | INT     | NO        | Default 500; Maximum: 1000
 
 Notes:
 
@@ -2924,7 +2927,7 @@ Name                | Type    | Mandatory | Description
 `icebergQty`        | DECIMAL | NO        |
 `strategyId`        | LONG     | NO        | Arbitrary numeric value identifying the order within an order strategy.
 `strategyType`      | INT     | NO        | <p>Arbitrary numeric value identifying the order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
-`selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
+`selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`, `DECREMENT`.
 `apiKey`            | STRING  | YES       |
 `recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
@@ -3509,8 +3512,7 @@ Check execution status of an order.
 
 Notes:
 
-* If both `orderId` and `origClientOrderId` parameters are specified,
-  only `orderId` is used and `origClientOrderId` is ignored.
+* If both `orderId` and `origClientOrderId` are provided, the `orderId` is searched first, then the `origClientOrderId` from that result is checked against that order. If both conditions are not met the request will be rejected.
 
 * For some historical orders the `cummulativeQuoteQty` response field may be negative,
   meaning the data is not available at this time.
@@ -3656,8 +3658,7 @@ Cancel an active order.
 
 Notes:
 
-* If both `orderId` and `origClientOrderId` parameters are specified,
-  only `orderId` is used and `origClientOrderId` is ignored.
+* If both `orderId` and `origClientOrderId` parameters are provided, the `orderId` is searched first, then the `origClientOrderId` from that result is checked against that order. If both conditions are not met the request will be rejected.
 
 * `newClientOrderId` will replace `clientOrderId` of the canceled order, freeing it up for new orders.
 
@@ -3972,7 +3973,7 @@ Cancel an existing order and immediately place a new order instead of the cancel
         <td>NO</td>
         <td>
             <p>The allowed enums is dependent on what is configured on the symbol.</p>
-            <p>The possible supported values are <tt>EXPIRE_TAKER</tt>, <tt>EXPIRE_MAKER</tt>, <tt>EXPIRE_BOTH</tt>, <tt>NONE</tt>.</p>
+            <p>The possible supported values are <tt>EXPIRE_TAKER</tt>, <tt>EXPIRE_MAKER</tt>, <tt>EXPIRE_BOTH</tt>, <tt>NONE</tt>, <tt>DECREMENT</tt>.</p>
         </td>
     </tr>
     <tr>
@@ -4193,8 +4194,7 @@ Available `cancelReplaceMode` options:
 
 Notes:
 
-* If both `cancelOrderId` and `cancelOrigClientOrderId` parameters are specified,
-  only `cancelOrderId` is used and `cancelOrigClientOrderId` is ignored.
+* If both `cancelOrderId` and `cancelOrigClientOrderId` parameters are provided, the `cancelOrderId` is searched first, then the `cancelOrigClientOrderId` from that result is checked against that order. If both conditions are not met the request will be rejected.
 
 * `cancelNewClientOrderId` will replace `clientOrderId` of the canceled order, freeing it up for new orders.
 
@@ -4616,6 +4616,151 @@ If `orderRateLimitExceededMode` is `CANCEL_ONLY` regardless of `cancelReplaceMod
 
 **Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
+### Order Amend Keep Priority (TRADE)
+
+```json
+{
+  "id": "56374a46-3061-486b-a311-89ee972eb648",
+  "method": "order.amend.keepPriority",
+  "params": {
+  "newQty": "5",
+  "origClientOrderId": "my_test_order1",
+  "recvWindow": 5000,
+  "symbol": "BTCUSDT",
+  "timestamp": 1741922620419,
+  "apiKey": "Rl1KOMDCpSg6xviMYOkNk9ENUB5QOTnufXukVe0Ijd40yduAlpHn78at3rJyJN4F",
+  "signature": "fa49c0c4ebc331c6ebd3fcb20deb387f60081ea858eebe6e35aa6fcdf2a82e08"
+  }
+}
+```
+
+Reduce the quantity of an existing open order.
+
+**Weight**: 1
+
+**Parameters:**
+
+| Name | Type | Mandatory | Description |
+| :---- | :---- | :---- | :---- |
+| symbol | STRING | YES |  |
+| orderId | LONG | NO\* | `orderId` or `origClientOrderId` must be sent  |
+| origClientOrderId | STRING | NO\* | `orderId` or `origClientOrderId` must be sent  |
+| newClientOrderId | STRING | NO\* | The new client order ID for the order after being amended. <br> If not sent, one will be randomly generated. <br> It is possible to reuse the current clientOrderId by sending it as the `newClientOrderId`. |
+| newQty | DECIMAL | YES | `newQty` must be greater than 0 and less than the order's quantity. |
+
+**Data Source**: Matching Engine
+
+Response for a single order:
+
+```json
+{
+  "id": "56374a46-3061-486b-a311-89ee972eb648",
+  "status": 200,
+  "result":
+  {
+    "transactTime": 1741923284382,
+    "executionId": 16,
+    "amendedOrder":
+    {
+      "symbol": "BTCUSDT",
+      "orderId": 12,
+      "orderListId": -1,
+      "origClientOrderId": "my_test_order1",
+      "clientOrderId": "4zR9HFcEq8gM1tWUqPEUHc",
+      "price": "5.00000000",
+      "qty": "5.00000000",
+      "executedQty": "0.00000000",
+      "preventedQty": "0.00000000",
+      "quoteOrderQty": "0.00000000",
+      "cumulativeQuoteQty": "0.00000000",
+      "status": "NEW",
+      "timeInForce": "GTC",
+      "type": "LIMIT",
+      "side": "BUY",
+      "workingTime": 1741923284364,
+      "selfTradePreventionMode": "NONE"
+    }
+  },
+  "rateLimits":
+  [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 1
+    }
+  ]
+}
+```
+
+Response for an order which is part of an Order list:
+
+```json
+{
+  "id": "56374b46-3061-486b-a311-89ee972eb648",
+  "status": 200,
+  "result":
+  {
+    "transactTime": 1741924229819,
+    "executionId": 60,
+    "amendedOrder":
+    {
+      "symbol": "BTUCSDT",
+      "orderId": 23,
+      "orderListId": 4,
+      "origClientOrderId": "my_pending_order",
+      "clientOrderId": "xbxXh5SSwaHS7oUEOCI88B",
+      "price": "1.00000000",
+      "qty": "5.00000000",
+      "executedQty": "0.00000000",
+      "preventedQty": "0.00000000",
+      "quoteOrderQty": "0.00000000",
+      "cumulativeQuoteQty": "0.00000000",
+      "status": "NEW",
+      "timeInForce": "GTC",
+      "type": "LIMIT",
+      "side": "BUY",
+      "workingTime": 1741924204920,
+      "selfTradePreventionMode": "NONE"
+    },
+    "listStatus":
+    {
+      "orderListId": 4,
+      "contingencyType": "OTO",
+      "listOrderStatus": "EXECUTING",
+      "listClientOrderId": "8nOGLLawudj1QoOiwbroRH",
+      "symbol": "BTCUSDT",
+      "orders":
+      [
+        {
+          "symbol": "BTCUSDT",
+          "orderId": 22,
+          "clientOrderId": "g04EWsjaackzedjC9wRkWD"
+        },
+        {
+          "symbol": "BTCUSDT",
+          "orderId": 23,
+          "clientOrderId": "xbxXh5SSwaHS7oUEOCI88B"
+        }
+      ]
+    }
+  },
+  "rateLimits":
+  [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 1
+    }
+  ]
+}
+```
+
+**Note:** The payloads above do not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+
 ### Current open orders (USER_DATA)
 
 ```javascript
@@ -4922,7 +5067,7 @@ Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
 `belowStrategyId`        |LONG    |NO          |Arbitrary numeric value identifying the below order within an order strategy.
 `belowStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the below order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
 `newOrderRespType`       |ENUM    |NO         |Select response format: `ACK`, `RESULT`, `FULL`
-`selfTradePreventionMode`|ENUM    |NO         |The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
+`selfTradePreventionMode`|ENUM    |NO         |The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`, `DECREMENT`.
 `apiKey`                 |STRING |YES         |
 `recvWindow`             |LONG   |NO         |The value cannot be greater than `60000`.
 `timestamp`              |LONG   |YES          |
@@ -5616,8 +5761,7 @@ Cancel an active order list.
 
 Notes:
 
-* If both `orderListId` and `listClientOrderId` parameters are specified,
-  only `orderListId` is used and `listClientOrderId` is ignored.
+* If both `orderListId` and `listClientOrderId` parameters are provided, the `orderListId` is searched first, then the `listClientOrderId` from that result is checked against that order. If both conditions are not met the request will be rejected.
 
 * Canceling an individual order with [`order.cancel`](#cancel-order-trade) will cancel the entire order list as well.
 
@@ -5820,7 +5964,7 @@ Name                | Type    | Mandatory | Description
 `icebergQty`        | DECIMAL | NO        |
 `strategyId`        | LONG     | NO        | Arbitrary numeric value identifying the order within an order strategy.
 `strategyType`      | INT     | NO        | <p>Arbitrary numeric value identifying the order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
-`selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`.
+`selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`, `DECREMENT`.
 `apiKey`            | STRING  | YES       |
 `timestamp`         | INT     | YES       |
 `recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
@@ -6171,7 +6315,7 @@ Name                | Type    | Mandatory | Description
 `orderId`           | INT     | NO        | Order ID to begin at
 `startTime`         | INT     | NO        |
 `endTime`           | INT     | NO        |
-`limit`             | INT     | NO        | Default 500; max 1000
+`limit`             | INT     | NO        | Default: 500; Maximum: 1000
 `apiKey`            | STRING  | YES       |
 `recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
@@ -6272,7 +6416,7 @@ Name                | Type    | Mandatory | Description
 `fromId`            | INT     | NO        | Order list ID to begin at
 `startTime`         | INT     | NO        |
 `endTime`           | INT     | NO        |
-`limit`             | INT     | NO        | Default 500; max 1000
+`limit`             | INT     | NO        | Default: 500; Maximum: 1000
 `apiKey`            | STRING  | YES       |
 `recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
@@ -6356,7 +6500,11 @@ Status reports for Order lists are identical to [`orderList.status`](#query-orde
 Query information about all your trades, filtered by time range.
 
 **Weight:**
-20
+
+Condition| Weight|
+---| ---
+|Without orderId|20|
+|With orderId|5|
 
 **Parameters:**
 
@@ -6367,7 +6515,7 @@ Name                | Type    | Mandatory | Description
 `startTime`         | INT     | NO        |
 `endTime`           | INT     | NO        |
 `fromId`            | INT     | NO        | First trade ID to query
-`limit`             | INT     | NO        | Default 500; max 1000
+`limit`             | INT     | NO        | Default: 500; Maximum: 1000
 `apiKey`            | STRING  | YES       |
 `recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
@@ -6476,7 +6624,7 @@ symbol              | STRING | YES          |
 preventedMatchId    |LONG    | NO           |
 orderId             |LONG    | NO           |
 fromPreventedMatchId|LONG    | NO           |
-limit               |INT     | NO           | Default: `500`; Max: `1000`
+limit               |INT     | NO           | Default: `500`; Maximum: `1000`
 recvWindow          | LONG   | NO           | The value cannot be greater than `60000`
 timestamp           | LONG   | YES          |
 
@@ -6553,7 +6701,7 @@ Name                       | Type  |Mandatory | Description
 `startTime`                |LONG   |No        |
 `endTime`                  |LONG   |No        |
 `fromAllocationId`         |INT    |No        |
-`limit`                    |INT    |No        |Default 500;Max 1000
+`limit`                    |INT    |No        |Default: 500; Maximum: 1000
 `orderId`                  |LONG   |No        |
 `recvWindow`               |LONG   |No        |The value cannot be greater than `60000`
 `timestamp`                |LONG   |No        |
@@ -6679,12 +6827,73 @@ Database
 }
 ```
 
+### Query Order Amendments (USER_DATA)
+
+```json
+{
+  "id": "6f5ebe91-01d9-43ac-be99-57cf062e0e30",
+  "method": "order.amendments",
+  "params": {
+  "orderId": "23",
+  "recvWindow": 5000,
+  "symbol": "BTCUSDT",
+  "timestamp": 1741925524887,
+  "apiKey": "N3Swv7WaBF7S2rzA12UkPunM3udJiDddbgv1W7CzFGnsQXH9H62zzSCST0CndjeE",
+  "signature": "0eed2e9d95b6868ea5ec21da0d14538192ef344c30ecf9fe83d58631699334dc"
+  }
+}
+```
+
+Queries all amendments of a single order.
+
+**Weight**:
+4
+
+**Parameters:**
+
+| Name | Type | Mandatory | Description |
+| :---- | :---- | :---- | :---- |
+| symbol | STRING | YES |  |
+| orderId | LONG | YES |  |
+| fromExecutionId | LONG | NO |  |
+| limit | LONG | NO | Default:500; Maximum: 1000 |
+
+**Response:**
+
+```json
+{
+  "id": "6f5ebe91-01d9-43ac-be99-57cf062e0e30",
+  "status": 200,
+  "result":
+  [
+    {
+      "symbol": "BTCUSDT",
+      "orderId": 23,
+      "executionId": 60,
+      "origClientOrderId": "my_pending_order",
+      "newClientOrderId": "xbxXh5SSwaHS7oUEOCI88B",
+      "origQty": "7.00000000",
+      "newQty": "5.00000000",
+      "time": 1741924229819
+    }
+  ],
+  "rateLimits":
+  [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 4
+    }
+  ]
+}
+```
+
 
 ## User Data Stream requests
 
 The following requests manage [User Data Stream](user-data-stream.md) subscriptions.
-
-**Note:** The user data can ONLY be retrieved by *a separate* Websocket connection via the **User Data Streams** url (i.e. `wss://stream.binance.com:443`).
 
 ### Start user data stream (USER_STREAM)
 
