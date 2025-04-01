@@ -170,6 +170,22 @@
    <field name='ErrorCode' required='N'/>
    <field name='Text' required='N'/>
   </message>
+  <message name='OrderAmendKeepPriorityRequest' msgcat='app' msgtype='XAK'>
+   <field name='ClOrdID' required='Y'/>
+   <field name='OrigClOrdID' required='N'/>
+   <field name='OrderID' required='N'/>
+   <field name='Symbol' required='Y'/>
+   <field name='OrderQty' required='Y'/>
+  </message>
+  <message name='OrderAmendReject' msgcat='app' msgtype='XAR'>
+   <field name='ClOrdID' required='Y'/>
+   <field name='OrigClOrdID' required='N'/>
+   <field name='OrderID' required='N'/>
+   <field name='Symbol' required='Y'/>
+   <field name='OrderQty' required='Y'/>
+   <field name='ErrorCode' required='Y'/>
+   <field name='Text' required='Y'/>
+  </message>
   <message name='LimitQuery' msgcat='app' msgtype='XLQ'>
    <field name='ReqID' required='Y'/>
   </message>
@@ -225,7 +241,7 @@
  </components>
  <fields>
   <field number='8' name='BeginString' type='STRING'>
-    <value enum='FIX.4.4' description='FIX44'/>
+   <value enum='FIX.4.4' description='FIX44'/>
   </field>
   <field number='9' name='BodyLength' type='LENGTH'/>
   <field number='10' name='CheckSum' type='STRING'/>
@@ -253,6 +269,8 @@
    <value enum='N' description='LIST_STATUS'/>
    <value enum='q' description='ORDER_MASS_CANCEL_REQUEST'/>
    <value enum='r' description='ORDER_MASS_CANCEL_REPORT'/>
+   <value enum='XAK' description='ORDER_AMEND_KEEP_PRIORITY_REQUEST'/>
+   <value enum='XAR' description='ORDER_AMEND_REJECT'/>
    <value enum='XCN' description='ORDER_CANCEL_REQUEST_AND_NEW_ORDER_SINGLE'/>
    <value enum='XLQ' description='LIMIT_QUERY'/>
    <value enum='XLR' description='LIMIT_RESPONSE'/>
@@ -349,6 +367,7 @@
    <value enum='2' description='RESPONSE'/>
    <value enum='4' description='EXEC_STARTED'/>
    <value enum='5' description='ALL_DONE'/>
+   <value enum='100' description='UPDATED'/>
   </field>
   <field number='431' name='ListOrderStatus' type='INT'>
    <value enum='3' description='EXECUTING'/>
@@ -414,6 +433,7 @@
    <value enum='2' description='EXPIRE_TAKER'/>
    <value enum='3' description='EXPIRE_MAKER'/>
    <value enum='4' description='EXPIRE_BOTH'/>
+   <value enum='5' description='DECREMENT'/>
   </field>
   <field number='25002' name='CancelRestrictions' type='INT'>
    <value enum='1' description='ONLY_NEW'/>
