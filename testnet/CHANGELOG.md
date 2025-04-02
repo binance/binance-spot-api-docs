@@ -12,7 +12,7 @@ Please consult the Spot Test Network's [homepage](https://testnet.binance.vision
 
 General Changes:
 
-* **Important:** The following legacy urls will be removed **next month**; <br> Please change to the latest URLs as soon as possible:
+* **Important:** The following legacy URLs will be removed **next month**; <br> Please change to the latest URLs as soon as possible:
 
 |Legacy URL | Latest URL|
 |---        | ---|
@@ -97,7 +97,7 @@ User Data Streams
   * `userDataStream.stop`
 * The [User Data Stream documentation](user-data-stream.md) will remain as reference for the payloads you can receive.
 
-* SBE
+SBE
   * A new schema 3:0 ([spot_3_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_0.xml)) becomes available. The current schema 2:1 ([spot_2_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_2_1.xml)) becomes deprecated and will be retired in 6 months as per our schema deprecation policy.
   * Note that trying to use schema 3:0 before it is released will result in an error.
   * This is a **breaking change** due to the addition of Order Amend Keep Priority and new STP mode.
@@ -106,7 +106,7 @@ User Data Streams
     * Support for Order Amend Keep Priority:
       * Added field `amendAllowed` to ExchangeInfoResponse.
       * New Messages `OrderAmendmentsResponse` and `OrderAmendKeepPriorityResponse`
-    * Fields `usedSor`, `orderCapacity`, `workingFloor`, `preventedQuantity`, and `matchType` are always emitted by default.
+    * Fields usedSor, orderCapacity, workingFloor, preventedQuantity, and matchType are no longer marked as optional.
     * New enum variant `DECREMENT` for `selfTradePreventionMode` and `allowedSelfTradePreventionModes`
     * Changed `ExecutionReportEvent`: field `orderCreationTime` is now optional.
   * When using a schema below 3:0 for WebSocket API to listen to the User Data Stream:
