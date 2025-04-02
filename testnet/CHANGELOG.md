@@ -10,7 +10,7 @@ This is not always synced with the live exchange.
 **Notice:** The following changes will be deployed tomorrow **April 2, 2025 starting at 7:00 UTC** and may take several hours to complete. <br>
 Please consult the Spot Test Network's [homepage](https://testnet.binance.vision/) to be informed of the release completion.
 
-### New Features
+#### New Features
 
 * **[Order Amend Keep Priority](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/order_amend_keep_priority.md) is now available.**
     * FIX API: New Order Entry Messages **OrderAmendKeepPriorityRequest** and **OrderAmendReject**
@@ -25,7 +25,7 @@ Please consult the Spot Test Network's [homepage](https://testnet.binance.vision
     * You can check the `allowedSelfTradePreventionModes` field in Exchange Information Requests to see if this mode is enabled on a given symbol.
 
 
-### General Changes
+#### General Changes
 
 * **Important:** The following legacy URLs will be **removed in May 2025**. Please change to the new URLs as soon as possible:
 
@@ -76,7 +76,7 @@ Please consult the Spot Test Network's [homepage](https://testnet.binance.vision
 * New messages for error code `-1034`.
 
 
-### FIX API
+#### FIX API
 
 * The [QuickFix schema for FIX OE](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml) is updated to support the Order Amend Keep Priority feature and new STP mode, `DECREMENT`.
 * The connection rate limits have been updated. Note that these limits are checked independently for both the API key and the IP address.
@@ -92,7 +92,7 @@ Please consult the Spot Test Network's [homepage](https://testnet.binance.vision
 * FIX API verifies that `EncryptMethod(98)` is 0 at Logon `<A>`.
 
 
-### User Data Streams
+#### User Data Streams
 
 * **Receiving user data streams on stream.testnet.binance.vision using a `listenKey` is now deprecated.**
     * This feature will be removed from our systems at a later date.
@@ -109,7 +109,7 @@ Please consult the Spot Test Network's [homepage](https://testnet.binance.vision
     * `userDataStream.stop`
 * The [User Data Stream documentation](user-data-stream.md) will remain as reference for the payloads you can receive.
 
-### SBE
+#### SBE
 
 * **A new schema 3:0 ([spot_3_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_0.xml)) is now available.**
     * The current schema 2:1 ([spot_2_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_2_1.xml)) is now deprecated and will be retired in 6 months as per our schema deprecation policy.
@@ -124,7 +124,7 @@ Please consult the Spot Test Network's [homepage](https://testnet.binance.vision
         * `symbolStatus` enum values `AUCTION_MATCH`, `PRE_TRADING` and `POST_TRADING` have been removed.
         * Fields `usedSor`, `orderCapacity`, `workingFloor`, `preventedQuantity`, and `matchType` are no longer optional.
         * Field `orderCreationTime` in `ExecutionReportEvent` is now optional.
-* When using deprecated schema 2:0 on the WebSocket API to listen to the User Data Stream:
+* When using deprecated schema 2:1 on the WebSocket API to listen to the User Data Stream:
     * `ListStatusEvent` field `listStatusType` will be rendered as `ExecStarted` when it should have been `Updated`. Upgrade to schema 3:0 to get the correct value.
     * `ExecutionReportEvent` field `selfTradePreventionMode` will be rendered as `None` when it should have been `Decrement`. This only happens when `executionType` is `TradePrevention`.
     * `ExecutionReportEvent`  field `orderCreationTime` will be rendered as -1 when it has no value.
