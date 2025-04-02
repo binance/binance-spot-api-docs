@@ -12,7 +12,7 @@ Please consult the Spot Test Network's [homepage](https://testnet.binance.vision
 
 General Changes:
 
-* **Important:** The following legacy URLs will be removed **next month**; <br> Please change to the latest URLs as soon as possible:
+* **Important:** The following legacy URLs will be **removed in May 2025**; <br> Please change to the latest URLs as soon as possible:
 
 |Legacy URL | Latest URL|
 |---        | ---|
