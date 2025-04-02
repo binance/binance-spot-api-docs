@@ -84,7 +84,7 @@ Please consult the Spot Test Network's [homepage](https://testnet.binance.vision
         * 15 connection attempts within 30 seconds
         * maximum 10 concurrent connections per account
     * FIX Drop Copy: 15 connection attempts within 30 seconds
-    * FIX Market Data: 300 connection attempts within 30 seconds
+    * FIX Market Data: 300 connection attempts within 300 seconds
 * News `<B>` contains a countdown until disconnection in the Headline field.
     * Following the completion of this update, when you receive a News message, please establish a new connection **within 10 minutes**.
     * The server will send a News message every 10 seconds until the old connection is closed.
