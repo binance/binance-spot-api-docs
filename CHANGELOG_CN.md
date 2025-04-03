@@ -1,6 +1,12 @@
 # 更新日志
 
-**最近更新： 2025-03-31**
+**最近更新： 2025-04-03**
+
+### 2025-04-03
+
+关注 SPOT 测试网的最新更新,将 WebSocket API 中的 URL 更新为 [SPOT Testnet] 的最新 URL(https://testnet.binance.vision/).
+
+---
 
 ### 2025-03-31
 

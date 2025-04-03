@@ -1,6 +1,12 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-03-31**
+**Last Updated: 2025-04-03**
+
+### 2025-04-03
+
+* Following SPOT Testnet's latest announcement, updating the URL in the WebSocket API to the latest URL for [SPOT Testnet](https://testnet.binance.vision/).
+
+---
 
 ### 2025-03-31
 

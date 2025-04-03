@@ -86,15 +86,15 @@
 
 # Public WebSocket API for Binance
 
-**Last Updated: 2025-03-05**
+**Last Updated: 2025-04-03**
 
 ## General API Information
 
 * The base endpoint is: **`wss://ws-api.binance.com:443/ws-api/v3`**.
   * If you experience issues with the standard 443 port, alternative port 9443 is also available.
-  * The base endpoint for [testnet](https://testnet.binance.vision/) is: `wss://testnet.binance.vision/ws-api/v3`
+  * The base endpoint for [testnet](https://testnet.binance.vision/) is: `wss://ws-api.testnet.binance.vision/ws-api/v3`
 * A single connection to the API is only valid for 24 hours; expect to be disconnected after the 24-hour mark.
-* The websocket server will send a `ping frame` every 20 seconds.
+* The websocket server will send a `ping frame` every 20 seconds.`
   * If the websocket server does not receive a `pong frame` back from the connection within a minute the connection will be disconnected.
   * When you receive a ping, you must send a pong with a copy of ping's payload as soon as possible.
   * Unsolicited `pong frames` are allowed, but will not prevent disconnection. **It is recommended that the payload for these pong frames are empty.**
