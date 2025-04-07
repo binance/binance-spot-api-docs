@@ -37,7 +37,7 @@ You can setup and configure your API key permissions on [Spot Test Network](http
 
 * All FIX API sessions will remain open for as long as possible, on a best-effort basis.
 * There is no minimum connection time guarantee; a server can enter maintenance at any time.
-  * When a server enters maintenance, a [News `<B>`](#news) message will be sent, prompting clients to reconnect. Upon receiving this message, a client is expected to establish a new session and close the old one **within 10 seconds**. If the client does not close the old session within the time frame, the server will proceed to log it out and close the session.
+  * When a server enters maintenance, a [News `<B>`](#news) message will be sent to clients **every 10 seconds for 10 minutes**, prompting clients to reconnect. Upon receiving this message, a client is expected to establish a new session and close the old one. If the client does not close the old session within the time frame, the server will proceed to log it out and close the session.
 * After connecting, the client must send a Logon `<A>` request. For more information please refer to [How to sign a Logon request](#signaturecomputation).
 * The client should send a Logout `<5>` message to close the session before disconnecting. Failure to send the logout message will result in the session’s `SenderCompID (49)` being unusable for new session establishment for a duration of 2x the `HeartInt (108)` interval.
 * The system allows negotiation of the `HeartInt (108)` value during the logon process. Accepted values range between 5 and 60 seconds.
@@ -408,11 +408,22 @@ Logout Response
 
 ### News <code>&lt;B&gt;</code>
 
-Sent by the server when the connection is about to be closed.
+When the server enters maintenance, a `News` message will be sent to clients **every 10 seconds for 10 minutes**.
+After this period, clients will be logged out and their sessions will be closed.
 
-Upon receiving this message, a client is expected to establish a new session and close the old one **within 10 minutes**. This message will be sent **every 10 seconds** until the connection closes.
+Upon receiving this message, clients are expected to establish a new session and close the old one.
 
-If the client does not close the old session within the time frame, the server will proceed to log it out and close the session.
+
+The countdown message sent will be:
+
+```
+You'll be disconnected in %d seconds. Please reconnect.
+```
+When there are 10 seconds remaining, the following message will be sent:
+```
+Your connection is about to be closed. Please reconnect.
+```
+If the client does not close the old session within 10 seconds of receiving the above message, the server will log it out and close the session.
 
 | Tag | Name | Type | Required | Description |
 | :---- | :---- | :---- | :---- | :---- |
