@@ -1,6 +1,6 @@
 # Error codes for Binance 
 
-**Last Updated: 2025-01-09**
+**Last Updated: 2025-04-07**
 
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
@@ -334,6 +334,7 @@ Error message                                                   | Description
 "Stop loss limit orders are not supported for this symbol."     | `STOP_LOSS_LIMIT` is not enabled on the symbol.
 "Take profit orders are not supported for this symbol."         | `TAKE_PROFIT` is not enabled on the symbol.
 "Take profit limit orders are not supported for this symbol."   | `TAKE_PROFIT_LIMIT` is not enabled on the symbol.
+"Order amend is not supported for this symbol."                 | Order amend keep priority is not enabled on the symbol.
 "Price * QTY is zero or less."                                  | `price` * `quantity` is too low.
 "IcebergQty exceeds QTY."                                       | `icebergQty` must be less than the order quantity.
 "This action is disabled on this account."                      | Contact customer support; some actions have been disabled on the account.
@@ -355,6 +356,8 @@ Error message                                                   | Description
 "Order book liquidity is less than `LOT_SIZE` filter minimum quantity." |Quote quantity market orders cannot be placed when the order book liquidity is less than minimum quantity configured for the `LOT_SIZE` filter.
 "Order book liquidity is less than `MARKET_LOT_SIZE` filter minimum quantity."|Quote quantity market orders cannot be placed when the order book liquidity is less than the minimum quantity for `MARKET_LOT_SIZE` filter.
 "Order book liquidity is less than symbol minimum quantity." | Quote quantity market orders cannot be placed when there are no orders on the book.
+"Order amend (quantity increase) is not supported." | `newQty` must be less than the order quantity.
+"The requested action would change no state; rejecting". | The request sent would not have changed the status quo.<br></br>(e.g. `newQty` cannot equal the order quantity.)
 
 ## Errors regarding placing orders via cancelReplace
 

@@ -1,6 +1,6 @@
 # Binance 的公共 WebSocket API
 
-**最近更新： 2025-04-03**
+**最近更新： 2025-04-07**
 
 
 ## API 基本信息
@@ -1102,6 +1102,7 @@ NONE
         "quoteOrderQtyMarketAllowed": true,
         "allowTrailingStop": true,
         "cancelReplaceAllowed": true,
+        "allowAmend":false,
         "isSpotTradingAllowed": true,
         "isMarginTradingAllowed": true,
         // 交易对过滤器在"过滤器"页面上进行了说明：
@@ -1200,7 +1201,7 @@ NONE
 名称      | 类型    | 是否必需 | 描述
 --------- | ------- | --------- | -----------
 `symbol`  | STRING  | YES       |
-`limit`   | INT     | NO        | 默认 100; 最大值 5000
+`limit`   | INT     | NO        | 默认值： 100； 最大值： 5000
 
 **数据源:**
 缓存
@@ -1299,7 +1300,7 @@ NONE
 名称      | 类型    | 是否必需 | 描述
 --------- | ------- | --------- | -----------
 `symbol`  | STRING  | YES       |
-`limit`   | INT     | NO        | 默认 500; 最大值 1000
+`limit`   | INT     | NO        | 默认值： 500； 最大值： 1000
 
 **数据源:**
 缓存
@@ -1357,7 +1358,7 @@ NONE
 --------- | ------- | --------- | -----------
 `symbol`  | STRING  | YES       |
 `fromId`  | INT     | NO        | 起始交易ID
-`limit`   | INT     | NO        | 默认 500; 最大值 1000
+`limit`   | INT     | NO        | 默认值 500； 最大值 1000
 
 备注：
 
@@ -1430,7 +1431,7 @@ NONE
 `fromId`    | INT     | NO        | 起始归集交易ID
 `startTime` | INT     | NO        |
 `endTime`   | INT     | NO        |
-`limit`     | INT     | NO        | 默认 500; 最大值 1000
+`limit`     | INT     | NO        | 默认值： 500； 最大值： 1000
 
 备注：
 
@@ -1514,7 +1515,7 @@ Klines 由其开盘时间和收盘时间为唯一标识。
 `startTime` | INT     | NO        |
 `endTime`   | INT     | NO        |
 `timeZone` |STRING | NO | 默认: 0 (UTC)
-`limit`     | INT     | NO        | 默认 500; 最大值 1000
+`limit`     | INT     | NO        | 默认值： 500； 最大值： 1000
 
 <a id="kline-intervals"></a>
 支持的 kline 间隔（大小写敏感）：
@@ -1604,7 +1605,7 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
 `startTime` | INT     | NO        |
 `endTime`   | INT     | NO        |
 `timeZone` |STRING | NO | 默认: 0 (UTC)
-`limit`     | INT     | NO        | 默认 500; 最大值 1000
+`limit`     | INT     | NO        | 默认值： 500； 最大值： 1000
 
 备注:
 
@@ -3249,7 +3250,7 @@ NONE
 
 参数名                   |类型          | 是否必需    | 描述
 ------------           | ------------ | ------------ | ------------
-`computeCommissionRates` | BOOLEAN      | NO         | 默认: `false`
+`computeCommissionRates` | BOOLEAN      | NO         | 默认值： `false`
 
 
 **数据源:**
@@ -3392,7 +3393,7 @@ NONE
 
 备注：
 
-* 如果同时指定了 `orderId` 和 `origClientOrderId` 参数，仅使用 `orderId` 并忽略 `origClientOrderId`。
+* 当同时提供 `orderId` 和 `origClientOrderId` 两个参数时，系统首先将会使用 `orderId` 来搜索订单。然后， 查找结果中的 `origClientOrderId` 的值将会被用来验证订单。如果两个条件都不满足，则请求将被拒绝。
 
 * 对于某些历史订单，`cummulativeQuoteQty` 响应字段可能为负数，意味着此时数据不可用。
 
@@ -3539,7 +3540,7 @@ NONE
 
 备注：
 
-* 如果同时指定了 `orderId` 和 `origClientOrderId` 参数，仅使用 `orderId` 并忽略 `origClientOrderId`。
+* 当同时提供 `orderId` 和 `origClientOrderId` 两个参数时，系统首先将会使用 `orderId` 来搜索订单。然后， 查找结果中的 `origClientOrderId` 的值将会被用来验证订单。如果两个条件都不满足，则请求将被拒绝。
 
 * `newClientOrderId` 将替换已取消订单的 `clientOrderId`，为新订单腾出空间。
 
@@ -3853,7 +3854,7 @@ NONE
         <td>NO</td>
         <td>
             <p>允许的 ENUM 取决于交易对的配置。</p>
-            <p>支持的值有： <tt>EXPIRE_TAKER</tt>, <tt>EXPIRE_MAKER</tt>, <tt>EXPIRE_BOTH</tt>, <tt>NONE</tt>.</p>
+            <p>支持的值有： <tt>EXPIRE_TAKER</tt>, <tt>EXPIRE_MAKER</tt>, <tt>EXPIRE_BOTH</tt>, <tt>NONE</tt>, <tt>DECREMENT</tt>.</p>
         </td>
     </tr>
     <tr>
@@ -4072,7 +4073,7 @@ NONE
 
 备注：
 
-* 如果同时指定了 `cancelOrderId` 和 `cancelOrigClientOrderId` 参数，仅使用 `cancelOrderId` 并忽略 `cancelOrigClientOrderId`。
+* 当同时提供 `cancelOrderId` 和 `cancelOrigClientOrderId` 两个参数时，系统首先将会使用 `cancelOrderId` 来搜索订单。然后， 查找结果中的 `cancelOrigClientOrderId` 的值将会被用来验证订单。如果两个条件都不满足，则请求将被拒绝。
 
 * `cancelNewClientOrderId` 将替换已撤销订单的 `clientOrderId`，为新订单腾出空间。
 
@@ -4490,6 +4491,155 @@ NONE
 
 **注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 [订单响应中的特定条件时才会出现的字段](#conditional-fields-in-order-responses) 部分。
 
+### 修改订单并保留优先级 (TRADE)
+
+```json
+{
+  "id": "56374a46-3061-486b-a311-89ee972eb648",
+  "method": "order.amend.keepPriority",
+  "params": {
+  "newQty": "5",
+  "origClientOrderId": "my_test_order1",
+  "recvWindow": 5000,
+  "symbol": "BTCUSDT",
+  "timestamp": 1741922620419,
+  "apiKey": "Rl1KOMDCpSg6xviMYOkNk9ENUB5QOTnufXukVe0Ijd40yduAlpHn78at3rJyJN4F",
+  "signature": "fa49c0c4ebc331c6ebd3fcb20deb387f60081ea858eebe6e35aa6fcdf2a82e08"
+  }
+}
+```
+
+由客户发送以减少其现有当前挂单的原始数量。
+
+**权重:**
+1
+
+**参数:**
+
+名称 | 类型 | 是否必需 | 描述
+------------ | ------------ | ------------ | ------------
+ symbol | STRING | YES |
+ orderId | LONG | NO\* | 需提供 `orderId` 或 `origClientOrderId`。
+ origClientOrderId | STRING | NO\* | 需提供 `orderId` 或 `origClientOrderId`。
+ newClientOrderId | STRING | NO\* | 订单在被修改后被赋予的新 client order ID。 <br> 如果未发送则自动生成。 <br> 可以将当前 clientOrderId 作为 `newClientOrderId` 发送来重用当前 clientOrderId 的值。
+ newQty | DECIMAL | YES | 交易的新数量。 `newQty` 必须大于0, 但是必须比订单的原始数量小。
+
+**数据源:**
+撮合引擎
+
+**响应:**
+
+来自单个订单的响应：
+
+```json
+{
+  "id": "56374a46-3061-486b-a311-89ee972eb648",
+  "status": 200,
+  "result":
+  {
+    "transactTime": 1741923284382,
+    "executionId": 16,
+    "amendedOrder":
+    {
+      "symbol": "BTCUSDT",
+      "orderId": 12,
+      "orderListId": -1,
+      "origClientOrderId": "my_test_order1",
+      "clientOrderId": "4zR9HFcEq8gM1tWUqPEUHc",
+      "price": "5.00000000",
+      "qty": "5.00000000",
+      "executedQty": "0.00000000",
+      "preventedQty": "0.00000000",
+      "quoteOrderQty": "0.00000000",
+      "cumulativeQuoteQty": "0.00000000",
+      "status": "NEW",
+      "timeInForce": "GTC",
+      "type": "LIMIT",
+      "side": "BUY",
+      "workingTime": 1741923284364,
+      "selfTradePreventionMode": "NONE"
+    }
+  },
+  "rateLimits":
+  [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 1
+    }
+  ]
+}
+```
+
+来自订单列表中单个订单的响应：
+
+```json
+{
+  "id": "56374b46-3061-486b-a311-89ee972eb648",
+  "status": 200,
+  "result":
+  {
+    "transactTime": 1741924229819,
+    "executionId": 60,
+    "amendedOrder":
+    {
+      "symbol": "BTUCSDT",
+      "orderId": 23,
+      "orderListId": 4,
+      "origClientOrderId": "my_pending_order",
+      "clientOrderId": "xbxXh5SSwaHS7oUEOCI88B",
+      "price": "1.00000000",
+      "qty": "5.00000000",
+      "executedQty": "0.00000000",
+      "preventedQty": "0.00000000",
+      "quoteOrderQty": "0.00000000",
+      "cumulativeQuoteQty": "0.00000000",
+      "status": "NEW",
+      "timeInForce": "GTC",
+      "type": "LIMIT",
+      "side": "BUY",
+      "workingTime": 1741924204920,
+      "selfTradePreventionMode": "NONE"
+    },
+    "listStatus":
+    {
+      "orderListId": 4,
+      "contingencyType": "OTO",
+      "listOrderStatus": "EXECUTING",
+      "listClientOrderId": "8nOGLLawudj1QoOiwbroRH",
+      "symbol": "BTCUSDT",
+      "orders":
+      [
+        {
+          "symbol": "BTCUSDT",
+          "orderId": 22,
+          "clientOrderId": "g04EWsjaackzedjC9wRkWD"
+        },
+        {
+          "symbol": "BTCUSDT",
+          "orderId": 23,
+          "clientOrderId": "xbxXh5SSwaHS7oUEOCI88B"
+        }
+      ]
+    }
+  },
+  "rateLimits":
+  [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 1
+    }
+  ]
+}
+```
+
+**注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 [订单响应中的特定条件时才会出现的字段](#conditional-fields-in-order-responses) 部分。
+
 ### 当前挂单 (USER_DATA)
 
 ```javascript
@@ -4515,7 +4665,7 @@ NONE
 **权重:**
 根据交易对的数量进行调整：
 
-| 参数 | 重量 |
+| 参数 | 权重 |
 | --------- | ------ |
 | `symbol`  |      6 |
 | none      |     80 |
@@ -5966,7 +6116,7 @@ NONE
 
 参数名                   |类型          | 是否必需    | 描述
 ------------           | ------------ | ------------ | ------------
-`computeCommissionRates` | BOOLEAN      | NO           | 默认: `false`
+`computeCommissionRates` | BOOLEAN      | NO           | 默认值： `false`
 
 **数据源:**
 缓存
@@ -6216,7 +6366,7 @@ NONE
 `orderId`           | INT     | NO        | 起始订单ID
 `startTime`         | INT     | NO        |
 `endTime`           | INT     | NO        |
-`limit`             | INT     | NO        | 默认 500; 最大值 1000
+`limit`             | INT     | NO        | 默认值： 500； 最大值： 1000
 `apiKey`            | STRING  | YES       |
 `recvWindow`        | INT     | NO        | 值不能大于 `60000`
 `signature`         | STRING  | YES       |
@@ -6315,7 +6465,7 @@ NONE
 `fromId`            | INT     | NO        | 起始的 Order list ID
 `startTime`         | INT     | NO        |
 `endTime`           | INT     | NO        |
-`limit`             | INT     | NO        | 默认 500; 最大值 1000
+`limit`             | INT     | NO        | 默认值： 500； 最大值： 1000
 `apiKey`            | STRING  | YES       |
 `recvWindow`        | INT     | NO        | 值不能大于 `60000`
 `signature`         | STRING  | YES       |
@@ -6399,7 +6549,12 @@ NONE
 获取账户指定交易对的成交历史，按时间范围过滤。
 
 **权重:**
-20
+
+条件| 权重|
+ ---| ---
+ |没有 orderId|20|
+ |有 orderId|5|
+
 
 **参数:**
 
@@ -6410,7 +6565,7 @@ NONE
 `startTime`         | INT     | NO        |
 `endTime`           | INT     | NO        |
 `fromId`            | INT     | NO        | 起始交易 ID
-`limit`             | INT     | NO        | 默认 500; 最大值 1000
+`limit`             | INT     | NO        | 默认值： 500； 最大值： 1000
 `apiKey`            | STRING  | YES       |
 `recvWindow`        | INT     | NO        | 值不能大于 `60000`
 `signature`         | STRING  | YES       |
@@ -6518,7 +6673,7 @@ symbol              | STRING | YES          |
 preventedMatchId    |LONG    | NO           |
 orderId             |LONG    | NO           |
 fromPreventedMatchId|LONG    | NO           |
-limit               |INT     | NO           | 默认：`500`；最大：`1000`
+limit               |INT     | NO           | 默认值：`500`； 最大值：`1000`
 recvWindow          | LONG   | NO           | 赋值不得大于 `60000`
 timestamp           | LONG   | YES          |
 
@@ -6595,7 +6750,7 @@ timestamp           | LONG   | YES          |
 `startTime`                |LONG   |NO        |
 `endTime`                  |LONG   |NO        |
 `fromAllocationId`         |INT    |NO        |
-`limit`                    |INT    |NO        |默认值 500； 最大值 1000
+`limit`                    |INT    |NO        |默认值： 500； 最大值： 1000
 `orderId`                  |LONG   |NO        |
 `recvWindow`               |LONG   |NO        |不能大于 `60000`
 `timestamp`                |LONG   |NO        |
@@ -6728,9 +6883,76 @@ timestamp           | LONG   | YES          |
 }
 ```
 
+### 查询改单 (USER_DATA)
+
+```json
+{
+  "id": "6f5ebe91-01d9-43ac-be99-57cf062e0e30",
+  "method": "order.amendments",
+  "params": {
+  "orderId": "23",
+  "recvWindow": 5000,
+  "symbol": "BTCUSDT",
+  "timestamp": 1741925524887,
+  "apiKey": "N3Swv7WaBF7S2rzA12UkPunM3udJiDddbgv1W7CzFGnsQXH9H62zzSCST0CndjeE",
+  "signature": "0eed2e9d95b6868ea5ec21da0d14538192ef344c30ecf9fe83d58631699334dc"
+  }
+}
+```
+
+查询对一个订单的所有改单操作。
+
+**权重:**
+4
+
+**参数:**
+
+名称                       | 类型   | 是否必需         | 描述
+-----                      | ---   |----      | ---------
+ symbol | STRING | YES |
+ orderId | LONG | YES |
+ fromExecutionId | LONG | NO |
+ limit | LONG | NO | 默认值： 500； 最大值： 1000
+
+**响应:**
+
+```json
+{
+  "id": "6f5ebe91-01d9-43ac-be99-57cf062e0e30",
+  "status": 200,
+  "result":
+  [
+    {
+      "symbol": "BTCUSDT",
+      "orderId": 23,
+      "executionId": 60,
+      "origClientOrderId": "my_pending_order",
+      "newClientOrderId": "xbxXh5SSwaHS7oUEOCI88B",
+      "origQty": "7.00000000",
+      "newQty": "5.00000000",
+      "time": 1741924229819
+    }
+  ],
+  "rateLimits":
+  [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 4
+    }
+  ]
+}
+```
+
 <a id="user-data-stream-requests"></a>
 
 ## Websocket 账户信息
+
+> [!IMPORTANT]
+> 这些请求已被弃用，这意味着我们以后会删除这些请求。
+> 请通过订阅 [WebSocket API](#user_data_stream_susbcribe) 来获得用户账户更新。
 
 以下请求管理 [Websocket 帐户信息](user-data-stream_CN.md) 订阅。
 

@@ -44,6 +44,7 @@
     - [Cancel order (TRADE)](#cancel-order-trade)
     - [Cancel All Open Orders on a Symbol (TRADE)](#cancel-all-open-orders-on-a-symbol-trade)
     - [Cancel an Existing Order and Send a New Order (TRADE)](#cancel-an-existing-order-and-send-a-new-order-trade)
+    - [Order Amend Keep Priority (TRADE)](#order-amend-keep-priority-trade)
     - [Current open orders (USER_DATA)](#current-open-orders-user_data)
     - [All orders (USER_DATA)](#all-orders-user_data)
     - [Order lists](#order-lists)
@@ -65,6 +66,7 @@
     - [Query Prevented Matches (USER_DATA)](#query-prevented-matches-user_data)
     - [Query Allocations (USER_DATA)](#query-allocations-user_data)
     - [Query Commission Rates (USER_DATA)](#query-commission-rates-user_data)
+    - [Query Order Amendments (USER_DATA)](#query-order-amendments-user_data)
   - [User data stream endpoints](#user-data-stream-endpoints)
     - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
     - [Keepalive user data stream (USER_STREAM)](#keepalive-user-data-stream-user_stream)
@@ -74,7 +76,7 @@
 
 # Public Rest API for Binance 
 
-**Last Updated: 2025-03-05**
+**Last Updated: 2025-04-07**
 
 ## General API Information
 * The following base endpoints are available. Please use whichever works best for your setup:
@@ -578,6 +580,7 @@ Memory
       "quoteOrderQtyMarketAllowed": true,
       "allowTrailingStop": false,
       "cancelReplaceAllowed":false,
+      "allowAmend":false,
       "isSpotTradingAllowed": true,
       "isMarginTradingAllowed": true,
       "filters": [
@@ -632,7 +635,7 @@ Adjusted based on the limit:
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-limit | INT | NO | Default 100; max 5000. <br/> If limit > 5000. then the response will truncate to 5000.
+limit | INT | NO | Default: 100; Maximum: 5000. <br/> If limit > 5000, only 5000 entries will be returned.
 
 **Data Source:**
 Memory
@@ -671,7 +674,7 @@ Get recent trades.
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-limit | INT | NO | Default 500; max 1000.
+limit | INT | NO | Default: 500; Maximum: 1000.
 
 **Data Source:**
 Memory
@@ -705,7 +708,7 @@ Get older trades.
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-limit | INT | NO | Default 500; max 1000.
+limit | INT | NO | Default: 500; Maximum: 1000.
 fromId | LONG | NO | TradeId to fetch from. Default gets most recent trades.
 
 **Data Source:**
@@ -743,7 +746,7 @@ symbol | STRING | YES |
 fromId | LONG | NO | ID to get aggregate trades from INCLUSIVE.
 startTime | LONG | NO | Timestamp in ms to get aggregate trades from INCLUSIVE.
 endTime | LONG | NO | Timestamp in ms to get aggregate trades until INCLUSIVE.
-limit | INT | NO | Default 500; max 1000.
+limit | INT | NO | Default: 500; Maximum: 1000.
 
 * If fromId, startTime, and endTime are not sent, the most recent aggregate trades will be returned.
 
@@ -787,7 +790,7 @@ interval | ENUM | YES |
 startTime | LONG | NO |
 endTime | LONG | NO |
 timeZone |STRING| NO| Default: 0 (UTC)
-limit | INT | NO | Default 500; max 1000.
+limit | INT | NO | Default: 500; Maximum: 1000.
 
 <a id="kline-intervals"></a>
 Supported kline intervals (case-sensitive):
@@ -856,7 +859,7 @@ interval  | ENUM   | YES          |See [`klines`](#kline-intervals)
 startTime | LONG   | NO           |
 endTime   | LONG   | NO           |
 timeZone  |STRING  | NO           | Default: 0 (UTC)
-limit     | INT    | NO           | Default 500; max 1000.
+limit     | INT    | NO           | Default: 500; Maximum: 1000.
 
 * If `startTime` and `endTime` are not sent, the most recent klines are returned.
 * Supported values for `timeZone`:
@@ -1906,6 +1909,7 @@ timestamp | LONG | YES |
 
 **Notes:**
 * Either `orderId` or `origClientOrderId` must be sent.
+* If both `orderId` and `origClientOrderId` are provided, the `orderId` is searched first, then the `origClientOrderId` from that result is checked against that order. If both conditions are not met the request will be rejected.
 * For some historical orders `cummulativeQuoteQty` will be < 0, meaning the data is not available at this time.
 
 **Data Source:**
@@ -1960,8 +1964,9 @@ cancelRestrictions| ENUM   | NO           | Supported values: <br>`ONLY_NEW` - C
 recvWindow        | LONG   | NO           | The value cannot be greater than `60000`.
 timestamp         | LONG   | YES          |
 
-Either `orderId` or `origClientOrderId` must be sent.
-If both parameters are sent, `orderId` takes precedence.
+Notes:
+* Either `orderId` or `origClientOrderId` must be sent.
+* If both `orderId` and `origClientOrderId` are provided, the `orderId` is searched first, then the `origClientOrderId` from that result is checked against that order. If both conditions are not met the request will be rejected.
 
 **Data Source:**
 Matching Engine
@@ -2158,8 +2163,8 @@ quantity|DECIMAL|NO|
 quoteOrderQty |DECIMAL|NO
 price |DECIMAL|NO
 cancelNewClientOrderId|STRING|NO| Used to uniquely identify this cancel. Automatically generated by default.
-cancelOrigClientOrderId|STRING| NO| Either the `cancelOrigClientOrderId` or `cancelOrderId` must be provided. If both are provided, `cancelOrderId` takes precedence.
-cancelOrderId|LONG|NO| Either the `cancelOrigClientOrderId` or `cancelOrderId` must be provided. If both are provided, `cancelOrderId` takes precedence.
+cancelOrigClientOrderId|STRING| NO| Either `cancelOrderId` or `cancelOrigClientOrderId` must be sent. <br></br> If both `cancelOrderId` and `cancelOrigClientOrderId` parameters are provided, the `cancelOrderId` is searched first, then the `cancelOrigClientOrderId` from that result is checked against that order. <br></br> If both conditions are not met the request will be rejected.
+cancelOrderId|LONG|NO| Either `cancelOrderId` or `cancelOrigClientOrderId` must be sent. <br></br>If both `cancelOrderId` and `cancelOrigClientOrderId` parameters are provided, the `cancelOrderId` is searched first, then the `cancelOrigClientOrderId` from that result is checked against that order. <br></br>If both conditions are not met the request will be rejected.
 newClientOrderId |STRING|NO| Used to identify the new order.
 strategyId |LONG| NO|
 strategyType |INT| NO| The value cannot be less than `1000000`.
@@ -2540,6 +2545,109 @@ Matching Engine
 * The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 * The performance for canceling an order (single cancel or as part of a cancel-replace) is always better when only `orderId` is sent. Sending `origClientOrderId` or both `orderId` + `origClientOrderId` will be slower.
 
+### Order Amend Keep Priority (TRADE)
+
+```
+PUT /api/v3/order/amend/keepPriority
+```
+
+Reduce the quantity of an existing open order.
+
+**Weight**:
+1
+
+**Parameters:**
+
+| Name | Type | Mandatory | Description |
+| :---- | :---- | :---- | :---- |
+| symbol | STRING | YES |  |
+| orderId | LONG | NO\* | `orderId` or `origClientOrderId` must be sent  |
+| origClientOrderId | STRING | NO\* | `orderId` or `origClientOrderId` must be sent  |
+| newClientOrderId | STRING | NO\* | The new client order ID for the order after being amended.  <br> If not sent, one will be randomly generated. <br> It is possible to reuse the current clientOrderId by sending it as the `newClientOrderId`. |
+| newQty | DECIMAL | YES | `newQty` must be greater than 0 and less than the order's quantity.|
+
+**Data Source**: Matching Engine
+
+Response for a single order:
+
+```json
+{
+  "transactTime": 1741926410255,
+  "executionId": 75,
+  "amendedOrder":
+  {
+    "symbol": "BTCUSDT",
+    "orderId": 33,
+    "orderListId": -1,
+    "origClientOrderId": "5xrgbMyg6z36NzBn2pbT8H",
+    "clientOrderId": "PFaq6hIHxqFENGfdtn4J6Q",
+    "price": "6.00000000",
+    "qty": "5.00000000",
+    "executedQty": "0.00000000",
+    "preventedQty": "0.00000000",
+    "quoteOrderQty": "0.00000000",
+    "cumulativeQuoteQty": "0.00000000",
+    "status": "NEW",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "SELL",
+    "workingTime": 1741926410242,
+    "selfTradePreventionMode": "NONE"
+  }
+}
+```
+
+Response for an order that is part of an Order list:
+
+```json
+{
+  "transactTime": 1741669661670,
+  "executionId": 22,
+  "amendedOrder":
+  {
+    "symbol": "BTCUSDT",
+    "orderId": 9,
+    "orderListId": 1,
+    "origClientOrderId": "W0fJ9fiLKHOJutovPK3oJp",
+    "clientOrderId": "UQ1Np3bmQ71jJzsSDW9Vpi",
+    "price": "0.00000000",
+    "qty": "4.00000000",
+    "executedQty": "0.00000000",
+    "preventedQty": "0.00000000",
+    "quoteOrderQty": "0.00000000",
+    "cumulativeQuoteQty": "0.00000000",
+    "status": "PENDING_NEW",
+    "timeInForce": "GTC",
+    "type": "MARKET",
+    "side": "BUY",
+    "selfTradePreventionMode": "NONE"
+  },
+  "listStatus":
+  {
+    "orderListId": 1,
+    "contingencyType": "OTO",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "AT7FTxZXylVSwRoZs52mt3",
+    "symbol": "BTCUSDT",
+    "orders":
+    [
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 8,
+        "clientOrderId": "GkwwHZUUbFtZOoH1YsZk9Q"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 9,
+        "clientOrderId": "UQ1Np3bmQ71jJzsSDW9Vpi"
+      }
+    ]
+  }
+}
+```
+
+**Note:** The payloads above do not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+
 ### Current open orders (USER_DATA)
 ```
 GET /api/v3/openOrders
@@ -2612,7 +2720,7 @@ symbol | STRING | YES |
 orderId | LONG | NO |
 startTime | LONG | NO |
 endTime | LONG | NO |
-limit | INT | NO | Default 500; max 1000.
+limit | INT | NO | Default: 500; Maximum: 1000.
 recvWindow | LONG | NO | The value cannot be greater than ```60000```
 timestamp | LONG | YES |
 
@@ -3217,7 +3325,7 @@ timestamp|LONG|YES|
 
 **Notes:**
 * Canceling an individual order from an order list will cancel the entire order list.
-* If both `orderListId` and `listClientOrderId` are sent, `orderListId` takes precedence.
+* If both `orderListId` and `listClientOrderId` parameters are provided, the `orderListId` is searched first, then the `listClientOrderId` from that result is checked against that order. If both conditions are not met the request will be rejected.
 
 **Data Source:**
 Matching Engine
@@ -3356,7 +3464,7 @@ Name|Type| Mandatory| Description
 fromId|LONG|NO| If supplied, neither ```startTime``` or ```endTime``` can be provided
 startTime|LONG|NO|
 endTime|LONG|NO|
-limit|INT|NO| Default Value: 500; Max Value: 1000
+limit|INT|NO| Default: 500; Maximum: 1000
 recvWindow|LONG|NO| The value cannot be greater than ```60000```
 timestamp|LONG|YES|
 
@@ -3660,7 +3768,12 @@ GET /api/v3/myTrades
 Get trades for a specific account and symbol.
 
 **Weight:**
-20 
+
+Condition| Weight|
+---| ---
+|Without orderId|20|
+|With orderId|5|
+
 
 **Parameters:**
 
@@ -3671,7 +3784,7 @@ orderId|LONG|NO| This can only be used in combination with `symbol`.
 startTime | LONG | NO |
 endTime | LONG | NO |
 fromId | LONG | NO | TradeId to fetch from. Default gets most recent trades.
-limit | INT | NO | Default 500; max 1000.
+limit | INT | NO | Default: 500; Maximum: 1000.
 recvWindow | LONG | NO | The value cannot be greater than ```60000```
 timestamp | LONG | YES |
 
@@ -3779,7 +3892,7 @@ symbol              | STRING | YES          |
 preventedMatchId    |LONG    | NO           |
 orderId             |LONG    | NO           |
 fromPreventedMatchId|LONG    | NO           |
-limit               |INT     | NO           | Default: `500`; Max: `1000`
+limit               |INT     | NO           | Default: `500`; Maximum: `1000`
 recvWindow          | LONG   | NO           | The value cannot be greater than `60000`
 timestamp           | LONG   | YES          |
 
@@ -3833,7 +3946,7 @@ symbol                   |STRING |Yes        |
 startTime                |LONG   |No        |
 endTime                  |LONG   |No        |
 fromAllocationId         |INT    |No        |
-limit                    |INT    |No        |Default 500;Max 1000
+limit                    |INT    |No        |Default: 500; Maximum: 1000
 orderId                  |LONG   |No        |
 recvWindow               |LONG   |No        |The value cannot be greater than `60000`.
 timestamp                |LONG   |No        |
@@ -3925,8 +4038,59 @@ Database
 }
 ```
 
+### Query Order Amendments (USER_DATA)
+
+```
+GET /api/v3/order/amendments
+```
+
+Queries all amendments of a single order.
+
+**Weight**:
+4
+
+**Parameters:**
+
+| Name | Type | Mandatory | Description |
+| :---- | :---- | :---- | :---- |
+| symbol | STRING | YES |  |
+| orderId | LONG | YES |  |
+| fromExecutionId | LONG | NO |  |
+| limit | LONG | NO | Default:500; Maximum: 1000 |
+
+**Response:**
+
+```json
+[
+  {
+      "symbol": "BTCUSDT",
+      "orderId": 9,
+      "executionId": 22,
+      "origClientOrderId": "W0fJ9fiLKHOJutovPK3oJp",
+      "newClientOrderId": "UQ1Np3bmQ71jJzsSDW9Vpi",
+      "origQty": "5.00000000",
+      "newQty": "4.00000000",
+      "time": 1741669661670
+  },
+  {
+      "symbol": "BTCUDST",
+      "orderId": 9,
+      "executionId": 25,
+      "origClientOrderId": "UQ1Np3bmQ71jJzsSDW9Vpi",
+      "newClientOrderId": "5uS0r35ohuQyDlCzZuYXq2",
+      "origQty": "4.00000000",
+      "newQty": "3.00000000",
+      "time": 1741672924895
+  }
+]
+```
 
 ## User data stream endpoints
+
+> [!IMPORTANT]  
+> These requests have been deprecated, which means we will remove them in the future.
+> Please subscribe to the User Data Stream through the [WebSocket API](web-socket-api.md) instead.
+
 Specifics on how user data streams work can be found [here.](user-data-stream.md)
 
 ### Start user data stream (USER_STREAM)

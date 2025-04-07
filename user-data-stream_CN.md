@@ -1,6 +1,6 @@
 # WebSocket 账户接口
 
-**最近更新： 2024-12-17**
+**最近更新： 2025-04-07**
 
 ## 基本信息
 * 本篇所列出API接口的base url : **https://api.binance.com**
@@ -12,7 +12,7 @@
 * U订阅账户数据流的stream名称为 **/ws/\<listenKey\>** 或 **/stream?streams=\<listenKey\>**
 * 每个链接有效期不超过24小时，请妥善处理断线重连。
 * 账户数据流的消息不保证严格时间序; **请使用 E 字段进行排序**
-* JSON 响应中的所有时间和时间戳相关字段均以**毫秒为默认单位**。要以微秒为单位接收信息，请在 URL 中添加参数 `timeUnit=MICROSECOND` 或 `timeUnit=microsecond`。 
+* JSON 响应中的所有时间和时间戳相关字段均以**毫秒为默认单位**。要以微秒为单位接收信息，请在 URL 中添加参数 `timeUnit=MICROSECOND` 或 `timeUnit=microsecond`。
   * 例如：`/ws/<listenKey>?timeUnit=MICROSECOND`
 
 ## 与Websocket账户接口相关的REST接口
@@ -246,7 +246,7 @@ listenKey | STRING | YES
     <td><code>pY</code></td>
     <td>Prevented Execution Quote Qty</td>
     <td><code>"pY":"0.21234562"</code></td>
-  </tr>  
+  </tr>
   <tr>
     <td><code>W</code></td>
     <td>Working Time</td>
@@ -313,7 +313,7 @@ listenKey | STRING | YES
 
 * `NEW` - 新订单已被引擎接受。
 * `CANCELED` - 订单被用户取消。
-* `REPLACED` - (保留字段，当前未使用)
+* `REPLACED` - 订单已被修改。
 * `REJECTED` - 新订单被拒绝 （这信息只会在撤消挂单再下单中发生，下新订单被拒绝但撤消挂单请求成功）。
 * `TRADE` - 订单有新成交。
 * `EXPIRED` - 订单已根据 Time In Force 参数的规则取消（e.g. 没有成交的 LIMIT FOK 订单或部分成交的 LIMIT IOC 订单）或者被交易所取消（e.g. 强平或维护期间取消的订单）。
@@ -333,7 +333,7 @@ listenKey | STRING | YES
 {
   "e": "listenKeyExpired",  // 事件类型
   "E": 1699596037418,      // 事件时间
-  "listenKey": "OfYGbUzi3PraNagEkdKuFwUHn48brFsItTdsuiIXrucEvD0rhRXZ7I6URWfE8YE8" 
+  "listenKey": "OfYGbUzi3PraNagEkdKuFwUHn48brFsItTdsuiIXrucEvD0rhRXZ7I6URWfE8YE8"
 }
 ```
 

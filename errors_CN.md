@@ -1,6 +1,6 @@
-# 错误代码汇总 
+# 错误代码汇总
 
-**最近更新： 2025-01-09**
+**最近更新： 2025-04-07**
 
 币安Rest接口(包括wapi)返回的错误包含两部分，错误码与错误信息. 错误码是大类，一个错误码可能对应多个不同的错误信息。
 以下是一个完整错误码实例
@@ -40,7 +40,7 @@
   * 潜在的错误信息可以在 [订单未能通过过滤器](#filter-failures) 或 [下单失败](#other-errors) 中找到。
 
 ### -1014 不支持的订单参数(组合)
- * 不支持的订单参数组合. 
+ * 不支持的订单参数组合.
 
 ### -1015 订单太多
  * 下单(撤单)太多
@@ -146,7 +146,7 @@
  * Combination of optional parameters invalid.
  * Combination of optional fields invalid. Recommendation: '%s' and '%s' must both be sent.
  * Fields [%s] must be sent together or omitted entirely.
- * Invalid 'MDEntryType (269)' combination. BID and OFFER must be requested together. 
+ * Invalid 'MDEntryType (269)' combination. BID and OFFER must be requested together.
 
 ### -1130 无效参数(值)
  * Invalid data sent for a parameter.
@@ -179,7 +179,7 @@
 * SBE is not enabled.
 
 ### -1158 OCO 订单类型被拒绝
-* Order type not supported in OCO. 
+* Order type not supported in OCO.
 * If the order type provided in the `aboveType` and/or `belowType` is not supported.
 
 ### -1160 OCO 订单类型的冰山数量参数与 time in force 参数的组合有问题
@@ -253,9 +253,9 @@
 
 ### -1185 需要使用 Drop Copy 会话
  * Only DropCopy sessions are supported on this server. Either reconnect to order entry server or send `DropCopyFlag (9406)` field.
- 
+
 ### -1194 错误的时间单位
-* Invalid value for time unit; expected either MICROSECOND or MILLISECOND. 
+* Invalid value for time unit; expected either MICROSECOND or MILLISECOND.
 
 ### -1196 买方 `OCO` 单的止损限价单必须是上方（`above`） 订单
 * A stop loss order in a buy OCO must be above.
@@ -270,22 +270,22 @@
 * A take profit order in a sell OCO must be above.
 
 ### -1186 不允许在订单输入会话中使用
-* Requested operation is not allowed in order entry sessions. 
+* Requested operation is not allowed in order entry sessions.
 
 ### -1187 不允许在市场数据会话使用
-* Requested operation is not allowed in market data sessions. 
+* Requested operation is not allowed in market data sessions.
 
-### -1188 组计数中的数字不正确 
-* Incorrect NumInGroup count for repeating group '%s'. 
+### -1188 组计数中的数字不正确
+* Incorrect NumInGroup count for repeating group '%s'.
 
 ### -1189 组中包含重复条目
 * Group '%s' contains duplicate entries.
 
-### -1190 无效的请求 ID 
-* 'MDReqID (262)' contains a subscription request id that is already in use on this connection.   
-* 'MDReqID (262)' contains an unsubscription request id that does not match any active subscription. 
+### -1190 无效的请求 ID
+* 'MDReqID (262)' contains a subscription request id that is already in use on this connection.
+* 'MDReqID (262)' contains an unsubscription request id that does not match any active subscription.
 
-### -1191 订阅数量过多 
+### -1191 订阅数量过多
 * Too many subscriptions. Connection may create up to '%s' subscriptions at a time.
 * Similar subscription is already active on this connection. Symbol='%s', active subscription id: '%s'.
 
@@ -327,13 +327,14 @@
 "Stop loss limit orders are not supported for this symbol."      | 该交易对无法发起止损限价单。
 "Take profit orders are not supported for this symbol."          | 该交易对无法发起止盈单。
 "Take profit limit orders are not supported for this symbol."    | 该交易对无法发起止盈限价单。
+"Order amend is not supported for this symbol."                  | 该交易对无法发起保持优先级的修改订单操作。
 "Price * QTY is zero or less."                                   | 订单金额必须大于0。
 "IcebergQty exceeds QTY."                                        | 冰山订单中小订单的Quantity必须小于总的Quantity。
 "This action is disabled on this account."                       | 联系客户支持； 该账户已禁用了某些操作。
 "This account may not place or cancel orders."                   | 联系客户支持： 该账户已被禁用了交易操作。
 "Unsupported order combination"                                  | `orderType`, `timeInForce`, `stopPrice`, `icebergQty` 某些参数取某些值的时候另一些参数必须/不得提供。
 "Order would trigger immediately."                               | 止盈、止损单必须在未来触发，如果条件太弱现在的市场行情就可以触发（通常是误操作填错了条件），就会报这个错误。
-"Cancel order is invalid. Check origClOrdId and orderId."        | 撤销订单必须提供 `origClOrdId` 或者 `orderId` 中的一个。 
+"Cancel order is invalid. Check origClOrdId and orderId."        | 撤销订单必须提供 `origClOrdId` 或者 `orderId` 中的一个。
 "Order would immediately match and take."                        | `LIMIT_MAKER` 订单如果按照规则会成为Taker，就会报此错。
 "The relationship of the prices for the orders is not correct."  | `OCO`订单中设置的价格不符合报价规则：<br/> 请参考以下示例： <br/> `BUY`：`LIMIT_MAKER` `price` < Last Traded Price < `stopPrice` <br/> `SELL`：`LIMIT_MAKER` `price` > Last Traded Price > `stopPrice` <br/>
 "OCO orders are not supported for this symbol"                   | `OCO`订单不支持该交易对。
@@ -348,6 +349,8 @@
 "Order book liquidity is less than `LOT_SIZE` filter minimum quantity." |当订单簿流动性小于 `LOT_SIZE` 过滤器配置的最小数量时，无法提交包含 `quoteOrderQty` 的市价单。
 "Order book liquidity is less than `MARKET_LOT_SIZE` filter minimum quantity."|当订单簿流动性小于 `MARKET_LOT_SIZE` 过滤器的最小数量时，无法提交包含 `quoteOrderQty` 的市价单。
 "Order book liquidity is less than symbol minimum quantity." |当订单簿里没有订单时，无法提交包含 `quoteOrderQty` 的市价单。
+"Order amend (quantity increase) is not supported." | `newQty` 必须小于原来订单的数量 (`quantity`)。
+"The requested action would change no state; rejecting". | 发送的请求将不会改变现状；拒绝。<br></br>(比如， `newQty` 不能和原来订单的数量 (`quantity`)是一样的。)
 
 ## 有关使用 cancelReplace 下订单的错误
 
@@ -377,5 +380,3 @@
 "Filter failure: EXCHANGE_MAX_NUM_ORDERS" | 账户在交易所有太多未结订单。
 "Filter failure: EXCHANGE_MAX_NUM_ALGO_ORDERS" | 账户在交易所有太多的未平仓止损和/或止盈订单。
 "Filter failure: EXCHANGE_MAX_NUM_ICEBERG_ORDERS" | 账户在交易所有太多未平仓的冰山订单。
-
-

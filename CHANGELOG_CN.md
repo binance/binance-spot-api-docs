@@ -1,6 +1,120 @@
 # 更新日志
 
-**最近更新： 2025-04-03**
+**最近更新： 2025-04-07**
+
+### 2025-04-07
+
+#### 常规更改
+
+**通知:** 本节中的更改将逐步推出,需要一周时间才能完成.
+
+* 在2025 年 1 月 16 日，FIX Market Data 会话的连接限制从 5 个增加到了 100 个。这个改变没有在之前的更改日志中被明示。
+* 新的错误代码 `-2038`，将在保留优先权的修改订单请求失败时出现。
+* 错误代码 `-1034` 有了新消息。
+* 如果未成交订单计数超过了在 `intervalNum:DAY` 里定义的限制, 那么 `intervalNum:SECOND` 下的未成交订单计数将不再递增。
+* 以前，无论提供的参数如何，myTrades 请求的权重都是 20。现在，如果您提供 `orderId` ，请求的权重将为 5。
+  * REST API：`GET /api/v3/myTrades`
+  * WebSocket API：`myTrades`
+* 查询和删除订单的变化：
+  * 现在，当 `orderId` 和 `origClientOrderId` 都不存在时，请求将被拒绝，并显示 `-1102` 而不是 `-1128`。
+  * 受影响的请求：
+    * REST API：
+      * `GET /api/v3/order`
+      * `DELETE /api/v3/order`
+    * WebSocket API：
+      * `order.status`
+      * `order.cancel`
+    * FIX API：
+      * OrderCancelRequest `<F>`
+
+#### FIX API
+
+**通知:** 以下变更将于 2025 年 4 月 21 日期间发生。
+
+* FIX API 会验证 `EncryptMethod(98)` 在登录 Logon `<A>` 时是否为 0。
+* FIX 订单接入会话的每个账户有 10 个并发 TCP 连接的限制。
+* FIX 现在加强了对连接速率限制。请注意，这些限制是根据 API 密钥和 IP 地址来进行独立检查的。
+  * FIX 订单接入会话：在 30 秒内 15 次连接尝试的限制
+  * FIX Drop Copy 会话：在 30 秒内 15 次连接尝试的限制。
+  * FIX Market Data 会话：在 300 秒内 300 次连接尝试的限制。
+* News `<B>` 在 Headline 字段中包括了一个倒计时消息。
+  * 在本次更新完成后： 当服务器进入维护状态时，将向客户端**每隔 10 秒发送一条** `News` 消息，并**持续 10 分钟**。在10分钟过后，客户端将被注销，其会话将被关闭。
+* OrderCancelRequest `<F>` 和 OrderCancelRequestAndNewOrderSingle `<XCN>` 现在允许使用 `orderId` 和 `clientOrderId`。
+* [FIX 订单接入会话的 QuickFix 模式](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml) 已被更新，将支持保留优先级的修改订单请求（Order Amend Keep Priority）和新的 STP 方式 `DECREMENT`。
+
+#### User Data Streams
+
+* **我们将弃用此功能： 通过使用 `listenKey` 来访问 wss://stream.binance.com:9443 以监听账户信息的。**
+    * 以后但不是当前，此功将被能从我们的系统中删除。
+* **您应该通过订阅 [在 WebSocket API 内的账户信息流](web-socket-api_CN.md) 来获得用户账户更新。**
+  * 这个方式会提供稍好的性能 **（较低的延迟）**。
+  * 必须使用 Ed25519 API 密钥
+* 在未来的更新中，将删除有关账户数据流的 WebSocket 基本访问地址的信息。
+* 在未来的更新中，以下请求将被从文档中删除：
+    * `POST /api/v3/userDataStream`
+    * `PUT /api/v3/userDataStream`
+    * `DELETE /api/v3/userDataStream`
+    * `userDataStream.start`
+    * `userDataStream.ping`
+    * `userDataStream.stop`
+* [WebSocket 账户接口文档](user-data-stream_CN.md) 将保留可以接收的有效负载，以供您参考。
+
+#### 将会发生的更改
+
+以下变更将于**2025 年 4 月 24 日 07:00 UTC**发生：
+
+* [保留优先级的修改订单请求（Order Amend Keep Priority）](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/order_amend_keep_priority_CN.md) 将可以使用。 (请注意，必须在相应交易对上启用该功能后才能使用。)
+  * 新字段 `amendAllowed` 会出现在 Exchange Information 响应中。
+    * REST API： `GET /api/v3/exchangeInfo`
+    * WebSocket API： `exchangeInfo`
+  * FIX API：新的 Order Entry 消息 **OrderAmendKeepPriorityRequest** 和 **OrderAmendReject**
+  * REST API：`PUT /api/v3/order/amend/keepPriority`
+  * WebSocket API： `order.amend.keepPriority`
+* 如果已在交易对上作了相应配置，那么 STP 方式 `DECREMENT` （递减） 将在 Exchange Information 中可见。
+  * 通过不仅仅使挂单或吃单过期,或无条件地让两种订单都过期，STP 递减会减少**两种**订单的可用数量，并将通过阻止匹配的数量来增加**两种**订单的 `prevented quantity` 值。
+  * 这将使可用数量较少的订单过期，因为(`filled quantity` \+ `prevented quantity`)等于 `order quantity`。如果两个订单的可用数量相等，那么两个订单都将过期。这种情况被称为“递减”，因为可用数量减少了。
+* 使用 `orderId` 和 `origClientOrderId/cancelOrigClientOrderId` 来查询和/或取消订单：
+  * 以前，当两个参数都提供时，在各个端点的上行为并不一致。
+  * 以后，当同时提供两个参数时，系统首先将会使用订单的 `orderId` 来搜索订单。如果订单被找到， `origClientOrderId`/`cancelOrigClientOrderId` 的值将会被用来验证被找到的订单。如果两个检测条件都通过，那么请求成功。如果两个条件都不满足，则请求将被拒绝。
+  * 受影响的请求：
+    * REST API：
+      * `GET /api/v3/order`
+      * `DELETE /api/v3/order`
+      * `POST /api/v3/order/cancelReplace`
+    * WebSocket API：
+      * `order.status`
+      * `order.cancel`
+      * `order.cancelReplace`
+    * FIX API：
+      * OrderCancelRequest `<F>`
+      * OrderCancelRequestAndNewOrderSingle `<XCN>`
+* 使用 `listOrderId` 和 `listClientOrderId` 来取消订单:
+  * 以前，当两个参数都提供时，在各个端点的上行为并不一致。
+  * 以后，当同时提供两个参数时，系统首先将会使用 `listOrderId` 来搜索订单列表。如果找到相应的订单列表，`listClientOrderId` 将会被用来验证被找到的订单列表。如果两个条件都不满足，请求将被拒绝。
+  * 受影响的请求
+    * REST API
+      * `DELETE /api/v3/orderList`
+    * WebSocket API
+      * `orderList.cancel`
+* **SBE： 新模式 3:0 ([spot_3_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_0.xml)) 将可以使用。**
+  * 现行模式 2:1 ([spot_2_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_2_1.xml)) 将会被废止并根据我们的废止政策，在6个月内停止使用。
+  * 请注意：在新模式被发布前，尝试使用模式 3:0 将导致错误。
+  * 3:0 中的更改：
+    * 将会支持保留优先级的修改订单（Order Amend Keep Priority）请求:
+      * 在 ExchangeInfoResponse 中添加了 `amendAllowed` 字段。
+      * 新消息 `OrderAmendmentsResponse` 和 `OrderAmendKeepPriorityResponse`。
+    * 所有的枚举类型都有了新变量：`NON_REPRESENTABLE`。这将用于将来，对新的枚举值进行编码。新模式的枚举类型可能会与 3:0 不兼容。
+    * 新增针对 `selfTradePreventionMode` 和 `allowedSelfTradePreventionModes` 的新枚举变量 `DECREMENT`。
+    * `symbolStatus` 枚举下的值 `AUCTION_MATCH`， `PRE_TRADING` 以及 `POST_TRADING` 已被删除。
+    * 字段 `usedSor`, `orderCapacity`， `workingFloor`，`preventedQuantity` 以及 `matchType` 将不再是可选的参数。
+    * 更改了 `ExecutionReportEvent`：现在，字段 `orderCreationTime` 是可选的。
+  * 通过 WebSocket API 来使用被废止的 2:1 版本的模式来侦听账户数据流：
+    * `ListStatusEvent` 的字段 `listStatusType` 在 `Updated` 时，会呈现为 `ExecStarted`。升级到模式 3:0 来获取正确的值。
+    * `ExecutionReportEvent` 的字段 `selfTradePreventionMode` 在 `Decrement` 时，会呈现为 `None`。 这将只在 `executionType` 为 `TradePrevention` 时发生。
+    * `ExecutionReportEvent` 的字段 `orderCreationTime` 在没有值时将呈现为 -1。
+  * 所有低于 3:0 版本的模式不会支持对保留优先级修改订单请求（Order Amend Keep Priority）的响应，以及任何可能包含 STP 方式 `DECREMENT` 的响应（比如，Exchange Information，下单，取消订单或查询您的订单状态）。当响应无法用被指定的模式来表达时，系统将返回错误。
+
+---
 
 ### 2025-04-03
 
