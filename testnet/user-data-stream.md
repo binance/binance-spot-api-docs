@@ -356,7 +356,7 @@ This event will not be pushed when the stream is closed normally.
 
 This event appears only for WebSocket API.
 
-`eventStreamTerminated` is sent when the User Data Stream is stopped. For example, after you send a `userDataStream.stop` request, or a `session.logout` request.
+`eventStreamTerminated` is sent when the User Data Stream is stopped. For example, after you send a `userDataStream.unsubscribe` request, or a `session.logout` request.
 
 **Payload:**
 

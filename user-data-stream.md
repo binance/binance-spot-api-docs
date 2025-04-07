@@ -30,7 +30,7 @@
 * Doing a `POST` on an account with an active `listenKey` will return the currently active `listenKey` and extend its validity for 60 minutes.
 * The base websocket endpoint is: **wss://stream.binance.com:9443**
 * User Data Streams are accessed at **/ws/\<listenKey\>** or **/stream?streams=\<listenKey\>**
-* A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark
+* A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark.
 * All time and timestamp related fields in the JSON responses are **milliseconds by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND` or `timeUnit=microsecond` in the URL.  
   * For example `/ws/<listenKey>?timeUnit=MICROSECOND`
     
@@ -356,7 +356,7 @@ This event will not be pushed when the stream is closed normally.
 
 This event appears only for WebSocket API. 
 
-`eventStreamTerminated` is sent when the User Data Stream is stopped. For example, after you send a `userDataStream.stop` request, or a `session.logout` request.
+`eventStreamTerminated` is sent when the User Data Stream is stopped. For example, after you send a `userDataStream.unsubscribe` request, or a `session.logout` request.
 
 **Payload:**
 

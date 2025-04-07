@@ -342,7 +342,7 @@ listenKey | STRING | YES
 
 此事件仅在使用 WebSocket API 时才会发生。
 
-当账户数据流被终止时，`eventStreamTerminated` 会被发送。例如，在您发送 `userDataStream.stop` 请求或 `session.logout` 请求之后。
+当账户数据流被终止时，`eventStreamTerminated` 会被发送。例如，在您发送 `userDataStream.unsubscribe` 请求或 `session.logout` 请求之后。
 
 **Payload:**
 
