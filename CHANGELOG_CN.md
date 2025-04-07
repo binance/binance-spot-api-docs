@@ -233,8 +233,6 @@ User Data Streams
 
 ---
 
-**最近更新： 2024-12-09**
-
 ### 2024-12-09
 
 **注意：** 以下的变更会从**2024 年 12 月 12日**开始推出，可能需要大约一周的时间才能完成。
@@ -669,6 +667,8 @@ User Data Streams
 * **下单量的退回(`Order decrement`)功能在 06:15 UTC上线.**
 * 此功能的更详细信息, 请参考 [FAQ](./faqs/order_count_decrement_CN.md)
 
+---
+
 ### 2023-08-25
 
 * Websocket API 的 `exchangeInfo` 中的 `RAW REQUESTS` 被移除，新增了用于表示WebSocket连接数限制的 `CONNECTIONS`。
@@ -681,6 +681,7 @@ User Data Streams
 * 下表的 REST API 和 WebSocket API 请求的权重被调整:
 
 |请求接口|之前请求权重| 新请求权重|
+|----   |----                   | ----                   |
 |`GET /api/v3/order` <br> `order.status` |2 | 4|
 |`GET /api/v3/orderList` <br> orderList.status| 2|4|
 |`GET /api/v3/openOrders` <br> `openOrders.status` - **带 `symbol`**|3|6|
@@ -718,6 +719,7 @@ User Data Streams
 |`PUT /api/v3/userDataStream` <br> `userDataStream.ping`|1|2|
 |`DELETE /api/v3/userDataStream`<br> `userDataStream.stop`|1|2|
 
+---
 
 ### 2023-08-08
 
@@ -950,8 +952,6 @@ WEBSOCKET API
 
 ---
 
-# 更新日志 (2023-02-17)
-
 ### 2023-02-17
 
 **WebSocket频率限制变动**
@@ -1055,6 +1055,8 @@ USER DATA STREAM
 
 * 现货 WebSocket API 文档已更新，添加了如何使用 RSA key 签署请求。
 
+---
+
 ### 2022-12-26
 
 * 现货的 Websocket API 发布到生产系统中。
@@ -1077,6 +1079,8 @@ USER DATA STREAM
 
 **WEBSOCKET API 会晚些时候在生产系统中可用。**
 
+---
+
 ### 2022-12-13
 
 REST API
@@ -1091,6 +1095,7 @@ Too much request weight used; current limit is %s request weight per %s. Please 
 Way too much request weight used; IP banned until %s Please use WebSocket Streams for live updates to avoid bans.
 ```
 
+---
 
 ### 2022-12-05
 
@@ -1341,8 +1346,6 @@ WEBSOCKETS
 * `MAX_POSITION` 的更新
     * 如果一个订单的数量(`quantity`) 可能导致持有仓位溢出, 会触发过滤器 `MAX_POSITION`.
 
----
-
 
 * `GET api/v3/aggTrades` 更新
     * 如果同时提供 `startTime` 和 `endTime`, 旧的记录会返回.
@@ -1399,6 +1402,8 @@ USER DATA STREAM
 * User Data Stream 的`executionReport`添加新参数
   * "d" 代表`trailingDelta`
 
+---
+
 ### 2022-04-12
 
 **Note:** 下面的变更会在后面几天上线.
@@ -1423,10 +1428,13 @@ USER DATA STREAM
         * f = -1 // ﬁrst_trade_id
         * l = -1 // last_trade_id
 
+---
+
 ### 2022-02-28
 
 * 在接口`GET /api/v3/exchangeInfo`中添加新字段`allowTrailingStop`.
 
+---
 
 ### 2022-02-24
 
@@ -1450,26 +1458,35 @@ USER DATA STREAM
 ---
 
 
-# 2021-12-29
+### 2021-12-29
 * 移除交易对类型枚举
 * 新增权限枚举
+
+---
 
 ### 2021-11-01
 * 新增接口 `GET /api/v3/rateLimit/order`
     * 回传用户在当前时间区间内的下单总数
     * 此接口的权重为20
 
+---
+
 ### 2021-09-14
 * 添加一个基于OpenAPI规范的RESTful API接口定义的[YAML文件](https://github.com/binance/binance-api-swagger)
+
+---
 
 ### 2021-08-12
 * GET `api/v3/myTrades` 添加新的参数 `orderId`
 
+---
 
 ### 2021-05-12
 * 在文档中添加接口的数据来源说明
 * 在每个接口中添加相应的数据源
 * GET `api/v3/exchangeInfo` 现在支持单个或者多个交易对查询
+
+---
 
 ### 2021-04-26
 
@@ -1483,6 +1500,8 @@ USER DATA STREAM
 * `GET /api/v3/account` 权重改为 10
 * `GET /api/v3/myTrades` 权重改为 10
 * `GET /api/v3/exchangeInfo` 权重改为 10
+
+---
 
 ### 2021-01-01
 
@@ -1564,6 +1583,8 @@ REST API
 USER DATA STREAM
   * 成交报告中增加了 `末次成交金额` (`Y`)，等于 `末次成交量` * `末次成交价格` (`L` * `l`).
 
+---
+
 ### 2018-07-18
 REST API
   *  新过滤器: `ICEBERG_PARTS`
@@ -1584,6 +1605,7 @@ USER DATA STREAM
   *  `cummulativeQuoteQty`/`cummulativeQty` 可以用来计算该订单已经成交部分的平均价格。
   *  成交报告中增加了 `O`字段 (订单创建时间)
 
+---
 
 ### 2018-01-23
   * GET /api/v1/historicalTrades权重降为 5
@@ -1597,6 +1619,8 @@ USER DATA STREAM
   * GET /api/v1/depth limit=1000 权重降为 10
   * websocket 用户增加 -1003 error code
 
+---
+
 ### 2018-01-20
   * GET /api/v1/ticker/24hr 单symbol参数调用权重降为 1
   * GET /api/v3/openOrders 不带symbol参数的权重降为 symbols总数 / 2
@@ -1604,6 +1628,8 @@ USER DATA STREAM
   * GET /api/v3/myTrades  权重降为  15
   * GET /api/v3/order  权重降为  1
   * 自成交现在会在myTrades结果中有两条记录。
+
+---
 
 ### 2018-01-14
   * GET /api/v1/aggTrades 权重改为 2
