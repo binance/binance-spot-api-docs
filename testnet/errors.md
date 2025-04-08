@@ -1,16 +1,15 @@
 # Error codes for Binance SPOT Testnet
 
-**Last Updated: 2025-04-01**
+**Last Updated: 2025-04-08**
 
 Errors consist of two parts: an error code and a message. Codes are universal,
- but messages can vary. Here is the error JSON payload when using the REST API:
+ but messages can vary. Here is the error JSON payload:
 ```javascript
 {
   "code":-1121,
   "msg":"Invalid symbol."
 }
 ```
-
 
 ## 10xx - General Server or Network issues
 ### -1000 UNKNOWN
@@ -139,10 +138,10 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 ### -1121 BAD_SYMBOL
  * Invalid symbol.
 
-#### -1122 INVALID_SYMBOLSTATUS
+### -1122 INVALID_SYMBOLSTATUS
  * Invalid symbolStatus.
 
-#### -1125 INVALID_LISTEN_KEY
+### -1125 INVALID_LISTEN_KEY
  * This listenKey does not exist.
 
 ### -1127 MORE_THAN_XX_HOURS
@@ -153,7 +152,7 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * Combination of optional parameters invalid.
  * Combination of optional fields invalid. Recommendation: '%s' and '%s' must both be sent.
  * Fields [%s] must be sent together or omitted entirely.
- * Invalid 'MDEntryType (269)' combination. BID and OFFER must be requested together.
+ * Invalid `MDEntryType (269)` combination. BID and OFFER must be requested together.
 
 ### -1130 INVALID_PARAMETER
  * Invalid data sent for a parameter.
@@ -195,11 +194,9 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * `TimeInForce (59)` must be `GTC (1)` when `MaxFloor (111)` is used.
 
 ### -1161 DEPRECATED_SCHEMA
-
 * Unable to encode the response in SBE schema 'x'. Please use schema 'y' or higher.
 
 ### -1165 BUY_OCO_LIMIT_MUST_BE_BELOW
-
 * A limit order in a buy OCO must be below.
 
 ### -1166 SELL_OCO_LIMIT_MUST_BE_ABOVE
@@ -263,11 +260,21 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 ### -1185 DROP_COPY_SESSION_REQUIRED
  * Only DropCopy sessions are supported on this server. Either reconnect to order entry server or send `DropCopyFlag (9406)` field.
 
+### -1186 NOT_ALLOWED_IN_ORDER_ENTRY_SESSIONS
+* Requested operation is not allowed in order entry sessions.
+
+### -1187 NOT_ALLOWED_IN_MARKET_DATA_SESSIONS
+* Requested operation is not allowed in market data sessions.
+
 ### -1188 INCORRECT_NUM_IN_GROUP_COUNT
 * Incorrect NumInGroup count for repeating group '%s'.
 
 ### -1189 DUPLICATE_ENTRIES_IN_A_GROUP
 * Group '%s' contains duplicate entries.
+
+### -1190 INVALID_REQUEST_ID
+* `MDReqID (262)` contains a subscription request id that is already in use on this connection.
+* `MDReqID (262)` contains an unsubscription request id that does not match any active subscription.
 
 ### -1191 TOO_MANY_SUBSCRIPTIONS
 * Too many subscriptions. Connection may create up to '%s' subscriptions at a time.
@@ -277,41 +284,18 @@ Errors consist of two parts: an error code and a message. Codes are universal,
   * Invalid value for time unit; expected either MICROSECOND or MILLISECOND.
 
 ### -1196 BUY_OCO_STOP_LOSS_MUST_BE_ABOVE
-
 * A stop loss order in a buy OCO must be above.
 
 ### -1197 SELL_OCO_STOP_LOSS_MUST_BE_BELOW
-
 * A stop loss order in a sell OCO must be below.
 
 ### -1198 BUY_OCO_TAKE_PROFIT_MUST_BE_BELOW
-
 * A take profit order in a buy OCO must be below.
 
 ### -1199 SELL_OCO_TAKE_PROFIT_MUST_BE_ABOVE
-
 * A take profit order in a sell OCO must be above.
 
-### -1186 NOT_ALLOWED_IN_ORDER_ENTRY_SESSIONS
-* Requested operation is not allowed in order entry sessions.
-
-#### -1187 NOT_ALLOWED_IN_MARKET_DATA_SESSIONS
-* Requested operation is not allowed in market data sessions.
-
-#### -1188 INCORRECT_NUM_IN_GROUP_COUNT
-* Incorrect NumInGroup count for repeating group '%s'.
-
-#### -1189 DUPLICATE_ENTRIES_IN_A_GROUP
-* Group '%s' contains duplicate entries.
-
-#### -1190 INVALID_REQUEST_ID
-* 'MDReqID (262)' contains a subscription request id that is already in use on this connection.
-* 'MDReqID (262)' contains an unsubscription request id that does not match any active subscription.
-
-#### -1191 TOO_MANY_SUBSCRIPTIONS
-* Too many subscriptions. Connection may create up to '%s' subscriptions at a time.
-
-#### -2010 NEW_ORDER_REJECTED
+### -2010 NEW_ORDER_REJECTED
  * NEW_ORDER_REJECTED
 
 ### -2011 CANCEL_REJECTED
@@ -383,12 +367,10 @@ Error message                                                   | Description
 ## Errors regarding placing orders via cancelReplace
 
 ### -2021 Order cancel-replace partially failed
-
-This code is sent when either the cancellation of the order failed or the new order placement failed but not both.
+* This code is sent when either the cancellation of the order failed or the new order placement failed but not both.
 
 ### -2022 Order cancel-replace failed.
-
-This code is sent when both the cancellation of the order failed and the new order placement failed.
+* This code is sent when both the cancellation of the order failed and the new order placement failed.
 
 <a id="filter_failures"></a>
 
