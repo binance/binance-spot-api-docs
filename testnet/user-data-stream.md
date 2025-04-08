@@ -22,7 +22,7 @@
 # General WSS information
 
 * There are currently two ways to subscribe to the User Data Stream:
-  * **[Preferred]** Subscribing directly through the [WebSocket API](web-socket-api.md#user_data_stream_subscribe) using an API Key.
+  * **[Preferred]** Subscribing directly through the [WebSocket API](web-socket-api.md#user-data-stream-subscribe) using an API Key.
   * **[Deprecated]** Generating a **listen key** using [the REST API](rest-api.md#user-data-stream-requests) or [the WebSocket API](web-socket-api.md#user-data-stream-requests) and using it to listen on **stream.binance.com**
 * Both sources will push all events related to your account **in real-time**.
 * How to use a listen key on **stream.testnet.binance.vision**:
