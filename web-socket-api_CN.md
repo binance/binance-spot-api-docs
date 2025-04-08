@@ -4518,11 +4518,14 @@ NONE
 
 名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
- symbol | STRING | YES |
- orderId | LONG | NO\* | 需提供 `orderId` 或 `origClientOrderId`。
- origClientOrderId | STRING | NO\* | 需提供 `orderId` 或 `origClientOrderId`。
- newClientOrderId | STRING | NO\* | 订单在被修改后被赋予的新 client order ID。 <br> 如果未发送则自动生成。 <br> 可以将当前 clientOrderId 作为 `newClientOrderId` 发送来重用当前 clientOrderId 的值。
- newQty | DECIMAL | YES | 交易的新数量。 `newQty` 必须大于0, 但是必须比订单的原始数量小。
+ `symbol` | STRING | YES |
+ `orderId` | LONG | NO\* | 需提供 `orderId` 或 `origClientOrderId`。
+ `origClientOrderId` | STRING | NO\* | 需提供 `orderId` 或 `origClientOrderId`。
+ `newClientOrderId` | STRING | NO\* | 订单在被修改后被赋予的新 client order ID。 <br> 如果未发送则自动生成。 <br> 可以将当前 clientOrderId 作为 `newClientOrderId` 发送来重用当前 clientOrderId 的值。
+ `newQty` | DECIMAL | YES | 交易的新数量。 `newQty` 必须大于0, 但是必须比订单的原始数量小。
+`recvWindow`               |LONG   |NO        |不能大于 `60000`
+`timestamp`                |LONG   |NO        |
+
 
 **数据源:**
 撮合引擎
@@ -6909,10 +6912,12 @@ timestamp           | LONG   | YES          |
 
 名称                       | 类型   | 是否必需         | 描述
 -----                      | ---   |----      | ---------
- symbol | STRING | YES |
- orderId | LONG | YES |
- fromExecutionId | LONG | NO |
- limit | LONG | NO | 默认值： 500； 最大值： 1000
+ `symbol` | STRING | YES |
+ `orderId` | LONG | YES |
+ `fromExecutionId` | LONG | NO |
+ `limit` | LONG | NO | 默认值： 500； 最大值： 1000
+ `recvWindow`               |LONG   |NO        |不能大于 `60000`
+`timestamp`                |LONG   |NO        |
 
 **响应:**
 
