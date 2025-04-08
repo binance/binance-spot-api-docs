@@ -80,7 +80,7 @@ Please consult the Spot Test Network's [homepage](https://testnet.binance.vision
 
 * The [QuickFix schema for FIX OE](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml) is updated to support the Order Amend Keep Priority feature and new STP mode, `DECREMENT`.
 * FIX Order Entry connection limits will be a maximum of 10 concurrent connections per account.
-* The connection rate limits are now enforced. Note that these limits are checked independently for both the API key and the IP address.
+* The connection rate limits are now enforced. Note that these limits are checked independently for both the account and the IP address.
     * FIX Order Entry: 15 connection attempts within 30 seconds
     * FIX Drop Copy: 15 connection attempts within 30 seconds
     * FIX Market Data: 300 connection attempts within 300 seconds

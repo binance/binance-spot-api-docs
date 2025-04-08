@@ -45,7 +45,7 @@
 
 * FIX API verifies that `EncryptMethod(98)` is 0 at Logon `<A>`.
 * FIX Order Entry connection limits will be a maximum of 10 concurrent connections per account.
-* The connection rate limits are now enforced. Note that these limits are checked independently for both the API key and the IP address.
+* The connection rate limits are now enforced. Note that these limits are checked independently for both the account and the IP address.
     * FIX Order Entry: 15 connection attempts within 30 seconds
     * FIX Drop Copy: 15 connection attempts within 30 seconds
     * FIX Market Data: 300 connection attempts within 300 seconds
