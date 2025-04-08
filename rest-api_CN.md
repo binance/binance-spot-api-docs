@@ -375,6 +375,7 @@ NONE
 缓存
 
 **响应:**
+
 ```javascript
 {}
 ```
@@ -397,6 +398,7 @@ NONE
 缓存
 
 **响应:**
+
 ```javascript
 {
   "serverTime": 1499827319559
@@ -445,6 +447,7 @@ symbolStatus|ENUM|No|用于过滤具有此 `tradingStatus` 的交易对。有效
 缓存
 
 **响应:**
+
 ```javascript
 {
   "timezone": "UTC",
@@ -571,6 +574,7 @@ limit | INT | NO | 默认： 100; 最大： 5000。 <br/> 如果 limit > 5000, �
 缓存
 
 **响应:**
+
 ```javascript
 {
   "lastUpdateId": 1027024,
@@ -613,6 +617,7 @@ limit | INT | NO | 默认值： 500； 最大值： 1000。
 缓存
 
 **响应:**
+
 ```javascript
 [
   {
@@ -648,6 +653,7 @@ fromId | LONG | NO | 从哪一条成交id开始返回，缺省返回最近的成
 
 
 **响应:**
+
 ```javascript
 [
   {
@@ -688,6 +694,7 @@ limit | INT | NO | 默认值： 500； 最大值： 1000。
 数据库
 
 **响应:**
+
 ```javascript
 [
   {
@@ -754,6 +761,7 @@ months -> 月  | `1M`
 
 
 **响应:**
+
 ```javascript
 [
   [
@@ -810,6 +818,7 @@ limit     | INT    | NO           | 默认值： 500； 最大值： 1000。
 数据库
 
 **响应:**
+
 ```javascript
 [
   [
@@ -849,6 +858,7 @@ symbol | STRING | YES |
 
 
 **响应:**
+
 ```javascript
 {
   "mins": 5,
@@ -946,6 +956,7 @@ GET /api/v3/ticker/24hr
 缓存
 
 **响应 - FULL:**
+
 ```javascript
 {
   "symbol": "BNBBTC",
@@ -1307,6 +1318,7 @@ GET /api/v3/ticker/price
 缓存
 
 **响应:**
+
 ```javascript
 {
   "symbol": "LTCBTC",
@@ -1314,6 +1326,7 @@ GET /api/v3/ticker/price
 }
 ```
 OR
+
 ```javascript
 [
   {
@@ -1403,6 +1416,7 @@ GET /api/v3/ticker/bookTicker
 
 
 **响应:**
+
 ```javascript
 {
   "symbol": "LTCBTC",
@@ -1866,6 +1880,7 @@ timestamp | LONG | YES |
 缓存 => 数据库
 
 **响应:**
+
 ```javascript
 {
   "symbol": "LTCBTC",               // 交易对
@@ -4039,13 +4054,15 @@ timestamp | LONG | YES |
 ]
 ```
 
+<a id="user-data-stream-requests"></a>
+
 ## 用户数据流订阅接口
 
 > [!IMPORTANT]
 > 这些请求已被弃用，这意味着我们以后会删除这些请求。
 > 请通过订阅 [WebSocket API](web-socket-api_CN.md) 来获得用户账户更新。
 
-有关账户信息流的相关信息请参考 [此处。](user-data-stream_CN.md)
+以下请求管理 [WebSocket 帐户信息](user-data-stream_CN.md) 订阅。
 
 ### 新建用户数据流 (USER_STREAM)
 ```
@@ -4064,6 +4081,7 @@ NONE
 
 
 **响应:**
+
 ```javascript
 {
   "listenKey": "pqia91ma19a5s61cv6a81va65sdf19v8a65a1a5s61cv6a81va65sdf19v8a65a1" // 用于订阅的数据流名
@@ -4089,6 +4107,7 @@ listenKey | STRING | YES
 缓存
 
 **响应:**
+
 ```javascript
 {}
 ```
@@ -4112,6 +4131,7 @@ listenKey | STRING | YES
 缓存
 
 **响应:**
+
 ```javascript
 {}
 ```

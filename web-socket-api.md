@@ -78,17 +78,19 @@
     - [Account Commission Rates (USER_DATA)](#account-commission-rates-user_data)
     - [Query Order Amendments (USER_DATA)](#query-order-amendments-user_data)
   - [User Data Stream requests](#user-data-stream-requests)
-    - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
-    - [Ping user data stream (USER_STREAM)](#ping-user-data-stream-user_stream)
-    - [Stop user data stream (USER_STREAM)](#stop-user-data-stream-user_stream)
-    - [Subscribe to User Data Stream (USER_STREAM)](#subscribe-to-user-data-stream-user_stream)
-    - [Unsubscribe from User Data Stream (USER_STREAM)](#unsubscribe-from-user-data-stream-user_stream)
+    - [Listen Key Management (Deprecated)](#listen-key-management-deprecated)
+      - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
+      - [Ping user data stream (USER_STREAM)](#ping-user-data-stream-user_stream)
+      - [Stop user data stream (USER_STREAM)](#stop-user-data-stream-user_stream)
+    - [User Data Stream subscription](#user-data-stream-subscription)
+      - [Subscribe to User Data Stream (USER_STREAM)](#subscribe-to-user-data-stream-user_stream)
+      - [Unsubscribe from User Data Stream (USER_STREAM)](#unsubscribe-from-user-data-stream-user_stream)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # Public WebSocket API for Binance
 
-**Last Updated: 2025-04-07**
+**Last Updated: 2025-04-08**
 
 ## General API Information
 
@@ -96,8 +98,8 @@
   * If you experience issues with the standard 443 port, alternative port 9443 is also available.
   * The base endpoint for [testnet](https://testnet.binance.vision/) is: `wss://ws-api.testnet.binance.vision/ws-api/v3`
 * A single connection to the API is only valid for 24 hours; expect to be disconnected after the 24-hour mark.
-* The websocket server will send a `ping frame` every 20 seconds.`
-  * If the websocket server does not receive a `pong frame` back from the connection within a minute the connection will be disconnected.
+* The WebSocket server will send a `ping frame` every 20 seconds.`
+  * If the WebSocket server does not receive a `pong frame` back from the connection within a minute the connection will be disconnected.
   * When you receive a ping, you must send a pong with a copy of ping's payload as soon as possible.
   * Unsolicited `pong frames` are allowed, but will not prevent disconnection. **It is recommended that the payload for these pong frames are empty.**
 * Lists are returned in **chronological order**, unless noted otherwise.
@@ -7080,7 +7082,11 @@ timestamp | LONG | YES |
 }
 ```
 
+<a id="user-data-stream-requests"></a>
+
 ## User Data Stream requests
+
+### Listen Key Management (Deprecated)
 
 > [!IMPORTANT]
 > These requests have been deprecated, which means we will remove them in the future.
@@ -7088,7 +7094,7 @@ timestamp | LONG | YES |
 
 The following requests manage [User Data Stream](user-data-stream.md) subscriptions.
 
-### Start user data stream (USER_STREAM)
+#### Start user data stream (USER_STREAM)
 
 ```javascript
 {
@@ -7142,7 +7148,7 @@ Subscribe to the received listen key on WebSocket Stream afterwards.
 }
 ```
 
-### Ping user data stream (USER_STREAM)
+#### Ping user data stream (USER_STREAM)
 
 ```javascript
 {
@@ -7195,7 +7201,7 @@ Memory
 }
 ```
 
-### Stop user data stream (USER_STREAM)
+#### Stop user data stream (USER_STREAM)
 
 ```javascript
 {
@@ -7224,6 +7230,7 @@ Name                | Type    | Mandatory | Description
 Memory
 
 **Response:**
+
 ```javascript
 {
   "id": "819e1b1b-8c06-485b-a13e-131326c69599",
@@ -7240,9 +7247,12 @@ Memory
   ]
 }
 ```
+
+### User Data Stream subscription
+
 <a id="user_data_stream_susbcribe"></a>
 
-### Subscribe to User Data Stream (USER_STREAM)
+#### Subscribe to User Data Stream (USER_STREAM)
 
 ```javascript
 {
@@ -7269,7 +7279,6 @@ NONE
 **Response**:
 
 ```javascript
-
 {
   "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
   "status": 200,
@@ -7277,31 +7286,8 @@ NONE
 }
 ```
 
-Sample user data stream payload from the WebSocket API:
 
-```javascript
-{
-  "event": {
-    "e": "outboundAccountPosition",
-    "E": 1728972148778,
-    "u": 1728972148778,
-    "B": [
-      {
-        "a": "ABC",
-        "f": "11818.00000000",
-        "l": "182.00000000"
-      },
-      {
-        "a": "DEF",
-        "f": "10580.00000000",
-        "l": "70.00000000"
-      }
-    ]
-  }
-}
-```
-
-### Unsubscribe from User Data Stream (USER_STREAM)
+#### Unsubscribe from User Data Stream (USER_STREAM)
 
 ```javascript
 {

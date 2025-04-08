@@ -1,6 +1,6 @@
 # Binance 的公共 WebSocket API
 
-**最近更新： 2025-04-07**
+**最近更新： 2025-04-08**
 
 
 ## API 基本信息
@@ -217,11 +217,11 @@
 
 ## 事件格式
 
-非 SBE 会话的账户数据流事件以 JSON 格式在 **text 帧** 中发送，每帧一个事件。
+非 SBE 会话的用户数据流事件以 JSON 格式在 **text 帧** 中发送，每帧一个事件。
 
 SBE 会话中的事件将作为 **二进制帧** 发送。
 
-有关如何在 WebSocket API 中订阅账户数据流的详细信息，请参阅 [`订阅账户数据流`](#user_data_stream_susbcribe)。
+有关如何在 WebSocket API 中订阅用户数据流的详细信息，请参阅 [`订阅用户数据流`](#user_data_stream_susbcribe)。
 
 事件示例:
 
@@ -251,7 +251,7 @@ SBE 会话中的事件将作为 **二进制帧** 发送。
 
 | 名称             | 类型    | 是否必须    | 描述
 | --------------- | ------- | --------- | -----------
-| `event` | OBJECT    | YES       | 事件 payload。请看 [WebSocket 账户接口](user-data-stream_CN.md)
+| `event` | OBJECT    | YES       | 事件 payload。请看 [用户数据流](user-data-stream_CN.md)
 
 
 <a id="ratelimits"></a>
@@ -6953,15 +6953,17 @@ timestamp           | LONG   | YES          |
 
 <a id="user-data-stream-requests"></a>
 
-## Websocket 账户信息
+## 用户数据流请求
+
+### Listen Key 管理 (已弃用)
 
 > [!IMPORTANT]
 > 这些请求已被弃用，这意味着我们以后会删除这些请求。
 > 请通过订阅 [WebSocket API](#user_data_stream_susbcribe) 来获得用户账户更新。
 
-以下请求管理 [Websocket 帐户信息](user-data-stream_CN.md) 订阅。
+以下请求管理 [用户数据流](user-data-stream_CN.md) 订阅。
 
-### 开始用户数据流 (USER_STREAM)
+#### 开始用户数据流 (USER_STREAM)
 
 ```javascript
 {
@@ -7017,7 +7019,7 @@ timestamp           | LONG   | YES          |
 
 <a id="user_data_stream_ping"></a>
 
-### Ping 账户数据流 (USER_STREAM)
+#### Ping 用户数据流 (USER_STREAM)
 
 ```javascript
 {
@@ -7031,7 +7033,7 @@ timestamp           | LONG   | YES          |
 ```
 
 即使在监听, 用户数据流也会在60分钟后会自动关闭。
-若要保持账户数据流的活动状态，必须使用 `userDataStream.ping` 请求定期发送 ping，建议的是在每30分钟发送一次 ping。
+若要保持用户数据流的活动状态，必须使用 `userDataStream.ping` 请求定期发送 ping，建议的是在每30分钟发送一次 ping。
 
 **权重:**
 2
@@ -7065,7 +7067,7 @@ timestamp           | LONG   | YES          |
 }
 ```
 
-### 关闭账户数据流 (USER_STREAM)
+#### 关闭用户数据流 (USER_STREAM)
 
 ```javascript
 {
@@ -7078,7 +7080,7 @@ timestamp           | LONG   | YES          |
 }
 ```
 
-强制停止和关闭账户数据流
+强制停止和关闭用户数据流
 
 **权重:**
 2
@@ -7094,6 +7096,7 @@ timestamp           | LONG   | YES          |
 缓存
 
 **响应:**
+
 ```javascript
 {
   "id": "819e1b1b-8c06-485b-a13e-131326c69599",
@@ -7111,9 +7114,11 @@ timestamp           | LONG   | YES          |
 }
 ```
 
+### 用户数据流订阅
+
 <a id="user_data_stream_susbcribe"></a>
 
-### 订阅账户数据流 (USER_STREAM)
+#### 订阅用户数据流 (USER_STREAM)
 
 ```javascript
 {
@@ -7122,13 +7127,13 @@ timestamp           | LONG   | YES          |
 }
 ```
 
-订阅当前 WebSocket 连接中的账户数据流。
+订阅当前 WebSocket 连接中的用户数据流。
 
 **注意：**
 
 * 此方法需要使用 Ed25519 密钥并经过鉴权的 WebSocket 连接。请参考 [`session.logon`](#session-logon)。
-* 账户数据流在 JSON 和 SBE 会话中均可用。
-  * 有关事件格式详情，请参阅 [WebSocket 账户接口](user-data-stream_CN.md)。
+* 用户数据流在 JSON 和 SBE 会话中均可用。
+  * 有关事件格式详情，请参阅 [用户数据流](user-data-stream_CN.md)。
   * 对于 SBE，仅支持 SBE 模式 2:1 或更高版本。
 
 **权重:**
@@ -7138,8 +7143,8 @@ timestamp           | LONG   | YES          |
 无
 
 **响应:**
-```javascript
 
+```javascript
 {
   "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
   "status": 200,
@@ -7147,31 +7152,7 @@ timestamp           | LONG   | YES          |
 }
 ```
 
-来自 WebSocket API 的 账户数据流 payload 示例:
-
-```javascript
-{
-  "event": {
-    "e": "outboundAccountPosition",
-    "E": 1728972148778,
-    "u": 1728972148778,
-    "B": [
-      {
-        "a": "ABC",
-        "f": "11818.00000000",
-        "l": "182.00000000"
-      },
-      {
-        "a": "DEF",
-        "f": "10580.00000000",
-        "l": "70.00000000"
-      }
-    ]
-  }
-}
-```
-
-### 取消订阅账户数据流 (USER_STREAM)
+#### 取消订阅用户数据流 (USER_STREAM)
 
 ```javascript
 {
@@ -7180,7 +7161,7 @@ timestamp           | LONG   | YES          |
 }
 ```
 
-取消订阅当前 WebSocket 连接中的账户数据流。
+取消订阅当前 WebSocket 连接中的用户数据流。
 
 **权重:**
 2
@@ -7189,6 +7170,7 @@ timestamp           | LONG   | YES          |
 无
 
 **响应:**
+
 ```javascript
 {
   "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",

@@ -3969,8 +3969,15 @@ Queries all amendments of a single order.
 ]
 ```
 
+<a id="user-data-stream-requests"></a>
+
 ## User data stream endpoints
-Specifics on how user data streams work can be found [here.](user-data-stream.md)
+
+> [!IMPORTANT]
+> These requests have been deprecated, which means we will remove them in the future.
+> Please subscribe to the User Data Stream through the [WebSocket API](web-socket-api.md) instead.
+
+The following requests manage [User Data Stream](user-data-stream.md) subscriptions.
 
 ### Start user data stream (USER_STREAM)
 ```

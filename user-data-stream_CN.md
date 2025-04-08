@@ -3,19 +3,18 @@
 **最近更新： 2025-04-07**
 
 ## 基本信息
-* 本篇所列出API接口的base url : **https://api.binance.com**
-* 用于订阅账户数据的 `listenKey` 从创建时刻起有效期为60分钟
-* 可以通过 `PUT` 一个 `listenKey` 延长60分钟有效期
-* 可以通过`DELETE`一个 `listenKey` 立即关闭当前数据流，并使该`listenKey` 无效
-* 在具有有效`listenKey`的帐户上执行`POST`将返回当前有效的`listenKey`并将其有效期延长60分钟
-* websocket接口的baseurl: **wss://stream.binance.com:9443**
-* U订阅账户数据流的stream名称为 **/ws/\<listenKey\>** 或 **/stream?streams=\<listenKey\>**
-* 每个链接有效期不超过24小时，请妥善处理断线重连。
-* 账户数据流的消息不保证严格时间序; **请使用 E 字段进行排序**
-* JSON 响应中的所有时间和时间戳相关字段均以**毫秒为默认单位**。要以微秒为单位接收信息，请在 URL 中添加参数 `timeUnit=MICROSECOND` 或 `timeUnit=microsecond`。
-  * 例如：`/ws/<listenKey>?timeUnit=MICROSECOND`
+* 目前有两种方法可以订阅 User Data Stream:
+  * **[首选]** 直接通过 [WebSocket API](web-socket-api_CN.md#user_data_stream_susbcribe) 使用 API 密钥.
+  * **[已弃用]** 通过使用 [REST API](rest-api_CN.md#user-data-stream-requests)或 [WebSocket API](web-socket-api_CN.md#user-data-stream-requests)生成一个 **listen key** 并使用它来监听 **stream.binance.com**。
+* 两个源都将**实时** 推送与您的帐户相关的所有事件.
+* 如何在 **stream.binance.com** 使用 `listen key`:
+  * 基本端点是**wss://stream.binance.com:9443** 或 **wss://stream.binance.com:443**。
+  * 连接到 **stream.binance.com** 的连接仅在 24 小时内有效;将会在到达 24 小时时断开连接。
+  * 用户数据流可通过 **/WS/\<listenKey\>** 或 **/stream？streams=\<listenKey\>** 访问。
+  * JSON payload 中所有与时间和时间戳相关的字段默认为 **毫秒**。以微秒为单位接收信息,请在连接 URL 中添加参数 `timeUnit=MICROSECOND` 或 `timeUnit=microsecond`。
+    * 例如 `/WS/<listenKey>？timeUnit=MICROSECOND`
 
-## 与Websocket账户接口相关的REST接口
+## 用户数据流事件
 
 ### 生成 Listen Key (USER_STREAM)
 ```
@@ -30,6 +29,7 @@ POST /api/v3/userDataStream
 NONE
 
 **响应:**
+
 ```javascript
 {
   "listenKey": "pqia91ma19a5s61cv6a81va65sdf19v8a65a1a5s61cv6a81va65sdf19v8a65a1"
@@ -52,6 +52,7 @@ PUT /api/v3/userDataStream
 listenKey | STRING | YES
 
 **响应:**
+
 ```javascript
 {}
 ```
@@ -72,6 +73,7 @@ DELETE /api/v3/userDataStream
 listenKey | STRING | YES
 
 **响应:**
+
 ```javascript
 {}
 ```
@@ -126,6 +128,7 @@ listenKey | STRING | YES
 
 
 **Payload:**
+
 ```javascript
 {
   "e": "executionReport",        // 事件类型
@@ -340,7 +343,7 @@ listenKey | STRING | YES
 
 ## 事件流已终止
 
-此事件仅在使用 WebSocket API 时才会发生。
+此事件仅在订阅 WebSocket API 时显示。
 
 当账户数据流被终止时，`eventStreamTerminated` 会被发送。例如，在您发送 `userDataStream.unsubscribe` 请求或 `session.logout` 请求之后。
 

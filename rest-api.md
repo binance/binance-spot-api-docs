@@ -67,7 +67,7 @@
     - [Query Allocations (USER_DATA)](#query-allocations-user_data)
     - [Query Commission Rates (USER_DATA)](#query-commission-rates-user_data)
     - [Query Order Amendments (USER_DATA)](#query-order-amendments-user_data)
-  - [User data stream endpoints](#user-data-stream-endpoints)
+  - [User data stream endpoints - Deprecated](#user-data-stream-endpoints---deprecated)
     - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
     - [Keepalive user data stream (USER_STREAM)](#keepalive-user-data-stream-user_stream)
     - [Close user data stream (USER_STREAM)](#close-user-data-stream-user_stream)
@@ -4089,13 +4089,15 @@ Queries all amendments of a single order.
 ]
 ```
 
-## User data stream endpoints
+<a id="user-data-stream-requests"></a>
+
+## User data stream endpoints - Deprecated
 
 > [!IMPORTANT]
 > These requests have been deprecated, which means we will remove them in the future.
 > Please subscribe to the User Data Stream through the [WebSocket API](web-socket-api.md) instead.
 
-Specifics on how user data streams work can be found [here.](user-data-stream.md)
+The following requests manage [User Data Stream](user-data-stream.md) subscriptions.
 
 ### Start user data stream (USER_STREAM)
 ```

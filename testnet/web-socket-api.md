@@ -77,11 +77,13 @@
     - [Account Commission Rates (USER_DATA)](#account-commission-rates-user_data)
     - [Query Order Amendments (USER_DATA)](#query-order-amendments-user_data)
   - [User Data Stream requests](#user-data-stream-requests)
-    - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
-    - [Ping user data stream (USER_STREAM)](#ping-user-data-stream-user_stream)
-    - [Stop user data stream (USER_STREAM)](#stop-user-data-stream-user_stream)
-    - [Subscribe to User Data Stream (USER_STREAM)](#subscribe-to-user-data-stream-user_stream)
-    - [Unsubscribe from User Data Stream (USER_STREAM)](#unsubscribe-from-user-data-stream-user_stream)
+    - [Listen Key Management (Deprecated)](#listen-key-management-deprecated)
+      - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
+      - [Ping user data stream (USER_STREAM)](#ping-user-data-stream-user_stream)
+      - [Stop user data stream (USER_STREAM)](#stop-user-data-stream-user_stream)
+    - [User Data Stream subscription](#user-data-stream-subscription)
+      - [Subscribe to User Data Stream (USER_STREAM)](#subscribe-to-user-data-stream-user_stream)
+      - [Unsubscribe from User Data Stream (USER_STREAM)](#unsubscribe-from-user-data-stream-user_stream)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -6897,9 +6899,15 @@ Queries all amendments of a single order.
 
 ## User Data Stream requests
 
+### Listen Key Management (Deprecated)
+
+> [!IMPORTANT]
+> These requests have been deprecated, which means we will remove them in the future.
+> Please subscribe to the User Data Stream through the [WebSocket API](#user_data_stream_susbcribe) instead.
+
 The following requests manage [User Data Stream](user-data-stream.md) subscriptions.
 
-### Start user data stream (USER_STREAM)
+#### Start user data stream (USER_STREAM)
 
 ```javascript
 {
@@ -6953,7 +6961,7 @@ Subscribe to the received listen key on WebSocket Stream afterwards.
 }
 ```
 
-### Ping user data stream (USER_STREAM)
+#### Ping user data stream (USER_STREAM)
 
 ```javascript
 {
@@ -7006,7 +7014,7 @@ Memory
 }
 ```
 
-### Stop user data stream (USER_STREAM)
+#### Stop user data stream (USER_STREAM)
 
 ```javascript
 {
@@ -7052,9 +7060,11 @@ Memory
 }
 ```
 
+### User Data Stream subscription
+
 <a id="user-data-stream-subscribe"></a>
 
-### Subscribe to User Data Stream (USER_STREAM)
+#### Subscribe to User Data Stream (USER_STREAM)
 
 ```javascript
 {
@@ -7089,31 +7099,7 @@ NONE
 }
 ```
 
-Sample user data stream payload from the WebSocket API:
-
-```javascript
-{
-  "event": {
-    "e": "outboundAccountPosition",
-    "E": 1728972148778,
-    "u": 1728972148778,
-    "B": [
-      {
-        "a": "ABC",
-        "f": "11818.00000000",
-        "l": "182.00000000"
-      },
-      {
-        "a": "DEF",
-        "f": "10580.00000000",
-        "l": "70.00000000"
-      }
-    ]
-  }
-}
-```
-
-### Unsubscribe from User Data Stream (USER_STREAM)
+#### Unsubscribe from User Data Stream (USER_STREAM)
 
 ```javascript
 {
