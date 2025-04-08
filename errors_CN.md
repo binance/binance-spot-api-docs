@@ -1,6 +1,6 @@
 # 错误代码汇总
 
-**最近更新： 2025-04-07**
+**最近更新： 2025-04-08**
 
 币安Rest接口(包括wapi)返回的错误包含两部分，错误码与错误信息. 错误码是大类，一个错误码可能对应多个不同的错误信息。
 以下是一个完整错误码实例
@@ -62,7 +62,12 @@
  * `SenderCompId(49)` is currently in use. Concurrent use of the same SenderCompId within one account is not allowed.
 
 ### -1034 连接太多
- * Too many concurrent connections; current limit is '%d'.
+ * Too many concurrent connections; current limit is '%s'.
+ * Too many connection attempts for account; current limit is  %s per '%s'.
+ * Too many connection attempts from IP; current limit is %s
+
+### -1035 会话注销
+ * Please send [Logout`<5>`](fix-api_CN.md#logout) message to close the session.
 
 ## 11xx - 请求内容中的问题
 ### -1100 非法字符
@@ -153,7 +158,7 @@
  * Data sent for parameter '%s' is not valid.
 
 ### -1134 strategyType不符合需求
- * `strategyType` was less than 1000000. 
+ * `strategyType` was less than 1000000.
  * `TargetStrategy (847)` was less than 1000000.
 
 ### -1135 无效的JSON
@@ -202,7 +207,7 @@
 ### -1169 Tag无效
  * Invalid tag number.
 
-### -1170 Tag无效
+### -1170 Tag未被定义
  * Tag '%s' not defined for this message type.
 
 ### -1171 Tag重复出现
@@ -237,7 +242,7 @@
  * `MsgSeqNum(34)` contains an unexpected value. Expected: '%d'.
 
 ### -1180 登陆消息错误
- * [Logon`<A>`](fix-api.md#logon-main) must be the first message in the session.
+ * [Logon`<A>`](fix-api_CN.md#logon-main) must be the first message in the session.
 
 ### -1181 消息太多
  * Too many messages; current limit is '%d' messages per '%s'.
@@ -254,6 +259,26 @@
 ### -1185 需要使用 Drop Copy 会话
  * Only DropCopy sessions are supported on this server. Either reconnect to order entry server or send `DropCopyFlag (9406)` field.
 
+### -1186 不允许在订单输入会话中使用
+* Requested operation is not allowed in order entry sessions.
+
+### -1187 不允许在 Market Data 会话中使用
+* Requested operation is not allowed in market data sessions.
+
+### -1188 组计数中的数字不正确
+* Incorrect NumInGroup count for repeating group '%s'.
+
+### -1189 组中包含重复条目
+* Group '%s' contains duplicate entries.
+
+### -1190 无效的请求 ID
+* `MDReqID (262)` contains a subscription request id that is already in use on this connection.
+* `MDReqID (262)` contains an unsubscription request id that does not match any active subscription.
+
+### -1191 订阅数量过多
+* Too many subscriptions. Connection may create up to '%s' subscriptions at a time.
+* Similar subscription is already active on this connection. Symbol='%s', active subscription id: '%s'.
+
 ### -1194 错误的时间单位
 * Invalid value for time unit; expected either MICROSECOND or MILLISECOND.
 
@@ -269,30 +294,10 @@
 ### -1199 卖方 `OCO` 单的止盈单必须是上方（`above`） 订单
 * A take profit order in a sell OCO must be above.
 
-### -1186 不允许在订单输入会话中使用
-* Requested operation is not allowed in order entry sessions.
-
-### -1187 不允许在市场数据会话使用
-* Requested operation is not allowed in market data sessions.
-
-### -1188 组计数中的数字不正确
-* Incorrect NumInGroup count for repeating group '%s'.
-
-### -1189 组中包含重复条目
-* Group '%s' contains duplicate entries.
-
-### -1190 无效的请求 ID
-* 'MDReqID (262)' contains a subscription request id that is already in use on this connection.
-* 'MDReqID (262)' contains an unsubscription request id that does not match any active subscription.
-
-### -1191 订阅数量过多
-* Too many subscriptions. Connection may create up to '%s' subscriptions at a time.
-* Similar subscription is already active on this connection. Symbol='%s', active subscription id: '%s'.
-
 ### -2010 新订单被拒绝
  * NEW_ORDER_REJECTED
 
-### -2011 订单取消被拒绝
+### -2011 撤销订单被拒绝
  * CANCEL_REJECTED
 
 ### -2013 不存在的订单
@@ -310,10 +315,14 @@
 ### -2026 交易被归档
   * Order was canceled or expired with no executed qty over 90 days ago and has been archived.
 
+### -2039 ClientOrderId 无效
+  * Client order ID is not correct for this order ID.
+
 <a id="other-errors"></a>
 
-## -1010 收到了错误消息
-这个错误代码是由撮合引擎抛出的，引擎还会抛出2010和2011，具体原因需要参考下面列出的具体消息
+## 消息 -1010 收到了错误消息， -2010 新订单被拒绝，-2011 撤销订单被拒绝，还有 -2038 保留优先权的修改订单被拒绝
+这个错误代码是由撮合引擎抛出的。
+下面的消息会指明具体的错误：
 
 错误消息                                                          | 描述
 ------------                                                     | ------------

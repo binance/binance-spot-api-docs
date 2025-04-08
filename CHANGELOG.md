@@ -1,6 +1,18 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-04-07**
+**Last Updated: 2025-04-08**
+
+### 2025-04-08
+
+**Notice:** The changes in this section will be gradually rolled out, and will take a week to complete.
+
+* New Error code `-2039` where if querying an order with both `orderId` and `origClientOrderId` and no order is found with this combination.
+  * Affected requests:
+    * REST API: `GET /api/v3/order`
+    * WebSocket API: `order.status`
+* The [Errors Documentation](errors.md) has also been updated with the new error messages for code `-1034` when the FIX connection rate limits have exceeded. (More details can be found in yesterday's [update](#2025-04-07))
+
+---
 
 ### 2025-04-07
 
