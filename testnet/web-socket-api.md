@@ -6903,7 +6903,7 @@ Queries all amendments of a single order.
 
 > [!IMPORTANT]
 > These requests have been deprecated, which means we will remove them in the future.
-> Please subscribe to the User Data Stream through the [WebSocket API](#user_data_stream_susbcribe) instead.
+> Please subscribe to the User Data Stream through the [WebSocket API](#user_data_stream_subscribe) instead.
 
 The following requests manage [User Data Stream](user-data-stream.md) subscriptions.
 
