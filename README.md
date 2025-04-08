@@ -11,6 +11,7 @@ Name | Description
 [filters.md](./filters.md)  | Details on the filters used by Spot API
 [rest-api.md](./rest-api.md)                      | Spot REST API (`/api`)
 [web-socket-api.md](./web-socket-api.md)          | Spot WebSocket API
+[fix-api.md](fix-api.md)                             | FIX API
 [web-socket-streams.md](./web-socket-streams.md)  | Spot Market Data WebSocket streams
 [user-data-stream.md](./user-data-stream.md)      | Spot User Data WebSocket streams
 [sbe_schemas](./sbe/schemas/)   | Spot Simple Binary Encoding (SBE) schemas
@@ -22,9 +23,9 @@ Name | Description
 [Derivative Options](https://developers.binance.com/docs/derivatives/option/general-info) | Details on Derivative European Options (`/eapi`)
 [Derivative Portfolio Margin](https://developers.binance.com/docs/derivatives/portfolio-margin/general-info)| Details on Derivative Portfolio Margin (`/papi`)
 [Wallet](https://developers.binance.com/docs/wallet) | Details on Wallet endpoints (`/sapi`)
-[Sub Account](https://developers.binance.com/docs/sub_account/general-info)  | Details on Sub-Account requests (`/sapi`) 
+[Sub Account](https://developers.binance.com/docs/sub_account/general-info)  | Details on Sub-Account requests (`/sapi`)
 [Simple Earn](https://developers.binance.com/docs/simple_earn/general-info) | Details on Simple Earn
-[Dual Investment](https://developers.binance.com/docs/dual_investment) | Details on Dual Investment 
+[Dual Investment](https://developers.binance.com/docs/dual_investment) | Details on Dual Investment
 [Auto Invest](https://developers.binance.com/docs/auto_invest) | Details on Auto Invest
 [Staking](https://developers.binance.com/docs/staking) | Details on Staking
 [Mining](https://developers.binance.com/docs/mining) |Details on Mining
@@ -41,8 +42,7 @@ Name | Description
 [NFT](https://developers.binance.com/docs/nft) |Details on NFT requests
 [Gift Card](https://developers.binance.com/docs/gift_card) | Details on Gift Card API
 
-# FAQ
-
+### FAQ
 
 Name | Description
 ------------ | ------------
@@ -55,11 +55,11 @@ Name | Description
 [order_count_decrement](./faqs/order_count_decrement.md) | Updates to the Spot Order Count Limit Rules.
 [sbe_faq](./faqs/sbe_faq.md) | Information on the implementation of Simple Binary Encoding (SBE) on the API
 
-# Change log
+### Change log
 
 Please refer to [CHANGELOG](./CHANGELOG.md) for latest changes on our APIs and Streamers.
 
-# Useful Resources
+### Useful Resources
 
 * [Postman Collections](https://github.com/binance/binance-api-postman)
     * Postman collections are available, and they are recommended for new users seeking a quick and easy start with the API.
@@ -74,6 +74,8 @@ Please refer to [CHANGELOG](./CHANGELOG.md) for latest changes on our APIs and S
         * [PHP](https://github.com/binance/binance-connector-php)
         * [Go](https://github.com/binance/binance-connector-go)
         * [TypeScript](https://github.com/binance/binance-connector-typescript)
+* FIX Connector - This provides access to the exchange using the FIX protocol.
+    * [Python](https://github.com/binance/binance-fix-connector-python)
 * [Swagger](https://github.com/binance/binance-api-swagger)
     * A YAML file with OpenAPI specification for the RESTful API is available, along with a Swagger UI page for reference.
 * [Spot Testnet](https://testnet.binance.vision/)
@@ -81,7 +83,7 @@ Please refer to [CHANGELOG](./CHANGELOG.md) for latest changes on our APIs and S
     * Currently, this is only available via the API.
     * Only endpoints starting with `/api/*` are supported, `/sapi/*` is not supported.
 
-# Contact Us
+### Contact Us
 
 * [Binance API Telegram Group](https://t.me/binance_api_english)
     * For any questions regarding sudden drop in performance with the API and/or Websockets.

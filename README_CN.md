@@ -1,7 +1,7 @@
 # 关于本中文翻译版
 * 中文文档由英文文档翻译而来，当中文文档内容与英文文档冲突时，以英文文档为准。
 
-# 币安API文档
+### 币安API文档
 * 有关 API 和数据流的更改、停机等官方公告将在此处发布：**https://t.me/binance_api_announcements**
 * 所有于本文档内给出定义的包括但不限于接口，数据流，参数，响应等，可认为是币安官方提供的内容。
 * 而所有未于本文档内给出的内容，币安均不承诺提供任何支持。
@@ -12,7 +12,8 @@
 [errors_CN.md](./errors_CN.md)     | 现货 API 的错误代码及含义
 [filters_CN.md](./filters_CN.md)   | 现货 API 使用的过滤器的详细信息
 [rest-api_CN.md](./rest-api_CN.md) | 现货 Rest API 接口定义 (`/api`)
-[web-socket-api_CN.md](./web-socket-api_CN.md)         | 现货 Websocket API
+[fix-api_CN.md](fix-api_CN.md)            | 现货 FIX API
+[web-socket-api_CN.md](./web-socket-api_CN.md)         | 现货 WebSocket API
 [web-socket-streams_CN.md](./web-socket-streams_CN.md) | 现货行情数据流接口的描述
 [user-data-stream_CN.md](./user-data-stream_CN.md)     | 现货用户数据流接口的描述
 [sbe_schemas](./sbe/schemas/) | 现货API的简单二进制编码 (SBE)模式 (Schema)
@@ -24,8 +25,8 @@
 [Derivative Portfolio Margin](https://developers.binance.com/docs/zh-CN/derivatives/portfolio-margin/general-info)| 关于统一账户的描述 (`/papi`)
 [Wallet](https://developers.binance.com/docs/zh-CN/wallet/Introduction) | 关于钱包的描述 (`/sapi`)
 [Sub Account](https://developers.binance.com/docs/zh-CN/sub_account/Introduction)  | 关于子母账户接口的描述 (`/sapi`)
-[Simple Earn](https://developers.binance.com/docs/zh-CN/simple_earn/Introduction) | 关于赚币的描述 
-[Dual Investment](https://developers.binance.com/docs/binance-spot-api-docs/CHANGELOG) | 关于双币投资接口的描述 
+[Simple Earn](https://developers.binance.com/docs/zh-CN/simple_earn/Introduction) | 关于赚币的描述
+[Dual Investment](https://developers.binance.com/docs/binance-spot-api-docs/CHANGELOG) | 关于双币投资接口的描述
 [Auto Invest](https://developers.binance.com/docs/zh-CN/auto_invest/Introduction) | 关于定投接口的描述
 [Staking](https://developers.binance.com/docs/zh-CN/staking/Introduction) | 关于ETH质押接口的描述
 [Mining](https://developers.binance.com/docs/zh-CN/mining/Introduction) | 关于矿池接口的描述
@@ -42,7 +43,7 @@
 [NFT](https://developers.binance.com/docs/zh-CN/nft/Introduction) | 关于 NFT 的描述
 [Gift Card](https://developers.binance.com/docs/zh-CN/gift_card/Introduction) | 关于礼品卡的描述
 
-# 常见问题
+### 常见问题
 
 
 名称 | 描述
@@ -56,12 +57,12 @@
 [order_count_decrement_CN](./faqs/order_count_decrement_CN.md) | 现货下单频率限制的更新
 [sbe_faq_CN](./faqs/sbe_faq_CN.md) | 关于在 API 上实施简单二进制编码 (SBE) 的信息
 
-# 更新日志
+### 更新日志
 
 关于 API 和数据流方面的最新变动，请参考 [更新日志](./CHANGELOG_CN.md)。
 
 
-# 相关信息
+### 相关信息
 
 * [Postman Collections](https://github.com/binance/binance-api-postman)
     * 现在你可以通过使用 Postman Collections 来快速体验和使用 API 接口。
@@ -76,6 +77,8 @@
         * [PHP](https://github.com/binance/binance-connector-php)
         * [Go](https://github.com/binance/binance-connector-go)
         * [TypeScript](https://github.com/binance/binance-connector-typescript)
+* FIX Connector - 这提供了使用 FIX 协议对交易所的访问.
+    * [Python](https://github.com/binance/binance-fix-connector-python)
 * [Swagger](https://github.com/binance/binance-api-swagger)
     * 一个基于 OpenAPI 规范的 RESTful API 接口定义的 YAML 文件，还有便于交互的 Swagger UI 页面。
 * [Spot Testnet](https://testnet.binance.vision/)
@@ -83,7 +86,7 @@
     * 现在只能通过 API 来测试交易，没有 UI。
     * 只支持以 `/api/*`开头的接口，`/sapi/*`接口不支持。
 
-# 联系我们
+### 联系我们
 
 * [Binance API 中文电报群](https://t.me/binance_api_chinese) 或 [Binance API 英文电报群](https://t.me/binance_api_english)
     * 适合咨询关于 API 或者 Websocket 性能方面的疑问和困扰。
