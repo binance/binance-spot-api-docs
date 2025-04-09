@@ -268,7 +268,7 @@ If the order is an order list, an event named `ListStatus` will be sent in addit
 * `EXPIRED` - The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance).
 * `TRADE_PREVENTION` - The order has expired due to STP.
 
-Check the [Rest API Documentation](./rest-api.md#enum-definitions) for more relevant enum definitions.
+Check the [Enums Documentation](enums.md) for more relevant enum definitions.
 
 ### Listen Key Expired
 

@@ -1,6 +1,6 @@
 # WebSocket 账户接口
 
-**最近更新： 2025-04-07**
+**最近更新： 2025-04-09**
 
 ## 基本信息
 * 目前有两种方法可以订阅 User Data Stream:
@@ -15,70 +15,6 @@
     * 例如 `/WS/<listenKey>？timeUnit=MICROSECOND`
 
 ## 用户数据流事件
-
-### 生成 Listen Key (USER_STREAM)
-```
-POST /api/v3/userDataStream
-```
-开始一个新的数据流。除非发送 keepalive，否则数据流于60分钟后关闭。如果该帐户具有有效的`listenKey`，则将返回该`listenKey`并将其有效期延长60分钟。
-
-**权重:**
-1
-
-**参数:**
-NONE
-
-**响应:**
-
-```javascript
-{
-  "listenKey": "pqia91ma19a5s61cv6a81va65sdf19v8a65a1a5s61cv6a81va65sdf19v8a65a1"
-}
-```
-
-### 延长 Listen Key 有效期 (USER_STREAM)
-```
-PUT /api/v3/userDataStream
-```
-有效期延长至本次调用后60分钟, 建议每30分钟发送一个 ping。
-
-**权重:**
-1
-
-**参数:**
-
-名称 | 类型 | 是否必须 | 描述
------------- | ------------ | ------------ | ------------
-listenKey | STRING | YES
-
-**响应:**
-
-```javascript
-{}
-```
-
-### 关闭 Listen Key (USER_STREAM)
-```
-DELETE /api/v3/userDataStream
-```
-关闭某账户数据流
-
-**权重:**
-1
-
-**参数:**
-
-名称 | 类型 | 是否必须 | 描述
------------- | ------------ | ------------ | ------------
-listenKey | STRING | YES
-
-**响应:**
-
-```javascript
-{}
-```
-
-## Websocket推送事件
 
 ### 账户更新
 
