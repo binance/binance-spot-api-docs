@@ -4064,7 +4064,7 @@ timestamp | LONG | YES |
 
 以下请求管理 [WebSocket 帐户信息](user-data-stream_CN.md) 订阅。
 
-### 新建用户数据流 (USER_STREAM)
+### 新建用户数据流 (USER_STREAM) (已弃用)
 ```
 POST /api/v3/userDataStream
 ```
@@ -4088,7 +4088,7 @@ NONE
 }
 ```
 
-### Keepalive (USER_STREAM)
+### Keepalive (USER_STREAM) (已弃用)
 ```
 PUT /api/v3/userDataStream
 ```
@@ -4112,7 +4112,7 @@ listenKey | STRING | YES
 {}
 ```
 
-### 关闭用户数据流 (USER_STREAM)
+### 关闭用户数据流 (USER_STREAM) (已弃用)
 ```
 DELETE /api/v3/userDataStream
 ```

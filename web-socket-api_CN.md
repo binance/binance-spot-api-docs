@@ -2682,7 +2682,7 @@ days    | `1d`, `2d` ... `7d`
     "connectedSince": 1649729873021,
     "returnRateLimits": false,
     "serverTime": 1649729878630,
-    "userDataStream": true
+    "userDataStream": false   //User Data Stream 订阅是否有效？
   }
 }
 ```
@@ -2722,7 +2722,7 @@ NONE
     "connectedSince": 1649729873021,
     "returnRateLimits": false,
     "serverTime": 1649730611671,
-    "userDataStream": true
+    "userDataStream": true //User Data Stream 订阅是否有效？
   }
 }
 ```
@@ -2765,7 +2765,7 @@ NONE
     "connectedSince": 1649729873021,
     "returnRateLimits": false,
     "serverTime": 1649730611671,
-    "userDataStream": true
+    "userDataStream": false //User Data Stream 订阅是否有效？
   }
 }
 ```
@@ -6955,6 +6955,69 @@ timestamp           | LONG   | YES          |
 
 ## 用户数据流请求
 
+#### 订阅用户数据流 (USER_STREAM)
+
+```javascript
+{
+  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+  "method": "userDataStream.subscribe"
+}
+```
+
+订阅当前 WebSocket 连接中的用户数据流。
+
+**注意：**
+
+* 此方法需要使用 Ed25519 密钥并经过鉴权的 WebSocket 连接。请参考 [`session.logon`](#session-logon)。
+* 如果需要查看订阅状态,可以通过 [`session.status `](#query-session-status)查询，当`userDataStream` 字段值为 `true` 时,表示您有一个有效的订阅.
+* 用户数据流在 JSON 和 SBE 会话中均可用。
+  * 有关事件格式详情，请参阅 [用户数据流](user-data-stream_CN.md)。
+  * 对于 SBE，仅支持 SBE 模式 2:1 或更高版本。
+
+**权重:**
+2
+
+**参数:**
+无
+
+**响应:**
+
+```javascript
+{
+  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+  "status": 200,
+  "result": {}
+}
+```
+
+#### 取消订阅用户数据流 (USER_STREAM)
+
+```javascript
+{
+  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+  "method": "userDataStream.unsubscribe"
+}
+```
+
+取消订阅当前 WebSocket 连接中的用户数据流。
+
+**权重:**
+2
+
+**参数:**
+无
+
+**响应:**
+
+```javascript
+{
+  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+  "status": 200,
+  "result": {}
+}
+```
+
+
 ### Listen Key 管理 (已弃用)
 
 > [!IMPORTANT]
@@ -6963,7 +7026,7 @@ timestamp           | LONG   | YES          |
 
 以下请求管理 [用户数据流](user-data-stream_CN.md) 订阅。
 
-#### 开始用户数据流 (USER_STREAM)
+#### 开始用户数据流 (USER_STREAM) （已弃用）
 
 ```javascript
 {
@@ -7019,7 +7082,7 @@ timestamp           | LONG   | YES          |
 
 <a id="user_data_stream_ping"></a>
 
-#### Ping 用户数据流 (USER_STREAM)
+#### Ping 用户数据流 (USER_STREAM) （已弃用）
 
 ```javascript
 {
@@ -7067,7 +7130,7 @@ timestamp           | LONG   | YES          |
 }
 ```
 
-#### 关闭用户数据流 (USER_STREAM)
+#### 关闭用户数据流 (USER_STREAM) （已弃用）
 
 ```javascript
 {
@@ -7111,70 +7174,5 @@ timestamp           | LONG   | YES          |
       "count": 2
     }
   ]
-}
-```
-
-### 用户数据流订阅
-
-<a id="user_data_stream_susbcribe"></a>
-
-#### 订阅用户数据流 (USER_STREAM)
-
-```javascript
-{
-  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
-  "method": "userDataStream.subscribe"
-}
-```
-
-订阅当前 WebSocket 连接中的用户数据流。
-
-**注意：**
-
-* 此方法需要使用 Ed25519 密钥并经过鉴权的 WebSocket 连接。请参考 [`session.logon`](#session-logon)。
-* 用户数据流在 JSON 和 SBE 会话中均可用。
-  * 有关事件格式详情，请参阅 [用户数据流](user-data-stream_CN.md)。
-  * 对于 SBE，仅支持 SBE 模式 2:1 或更高版本。
-
-**权重:**
-2
-
-**参数:**
-无
-
-**响应:**
-
-```javascript
-{
-  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
-  "status": 200,
-  "result": {}
-}
-```
-
-#### 取消订阅用户数据流 (USER_STREAM)
-
-```javascript
-{
-  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
-  "method": "userDataStream.unsubscribe"
-}
-```
-
-取消订阅当前 WebSocket 连接中的用户数据流。
-
-**权重:**
-2
-
-**参数:**
-无
-
-**响应:**
-
-```javascript
-{
-  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
-  "status": 200,
-  "result": {}
 }
 ```

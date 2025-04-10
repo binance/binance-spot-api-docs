@@ -311,7 +311,7 @@ User Data Stream events for non-SBE sessions are sent as JSON in **text frames**
 
 Events in SBE sessions will be sent as **binary frames.**
 
-Please refer to [`userDataStream.subscribe`](#user_data_stream_susbcribe) for details on how to subscribe to User Data Stream in WebSocket API.
+Please refer to [`userDataStream.subscribe`](#user_data_stream_subscribe) for details on how to subscribe to User Data Stream in WebSocket API.
 
 Example of an event:
 
@@ -2801,11 +2801,12 @@ Memory
     "connectedSince": 1649729873021,
     "returnRateLimits": false,
     "serverTime": 1649729878630,
-    "userDataStream": true
+    "userDataStream": false // is User Data Stream subscription active?
   }
 }
 ```
 
+<a id="session-status"></a>
 
 ### Query session status
 
@@ -2841,7 +2842,7 @@ Memory
     "connectedSince": 1649729873021,
     "returnRateLimits": false,
     "serverTime": 1649730611671,
-    "userDataStream": true
+    "userDataStream": true    // is User Data Stream subscription active?
   }
 }
 ```
@@ -2883,7 +2884,7 @@ Memory
     "connectedSince": 1649729873021,
     "returnRateLimits": false,
     "serverTime": 1649730611671,
-    "userDataStream": true
+    "userDataStream": false // is User Data Stream subscription active?
   }
 }
 ```
@@ -7082,19 +7083,88 @@ timestamp | LONG | YES |
 }
 ```
 
-<a id="user-data-stream-requests"></a>
 
 ## User Data Stream requests
+
+### User Data Stream subscription
+
+<a id="user_data_stream_subscribe"></a>
+
+#### Subscribe to User Data Stream (USER_STREAM)
+
+```javascript
+{
+  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+  "method": "userDataStream.subscribe"
+}
+```
+
+Subscribe to the User Data Stream in the current WebSocket connection.
+
+**Notes:**
+
+* This method requires an authenticated WebSocket connection using Ed25519 keys. Please refer to [`session.logon`](#session-logon).
+* To check the subscription status, use [`session.status`](#session-status), see the `userDataStream` flag indicating you have have an active subscription.
+* User Data Stream events are available in both JSON and SBE sessions.
+  * Please refer to [User Data Streams](user-data-stream.md) for the event format details.
+  * For SBE, only SBE schema 2:1 or later is supported.
+
+**Weight**:
+2
+
+**Parameters**:
+NONE
+
+**Response**:
+
+```javascript
+{
+  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+  "status": 200,
+  "result": {}
+}
+```
+
+
+#### Unsubscribe from User Data Stream (USER_STREAM)
+
+```javascript
+{
+  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+  "method": "userDataStream.unsubscribe"
+}
+```
+
+Stop listening to the User Data Stream in the current WebSocket connection.
+
+**Weight**:
+2
+
+**Parameters**:
+
+NONE
+
+**Response**:
+
+```javascript
+{
+  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+  "status": 200,
+  "result": {}
+}
+```
+
+<a id="user-data-stream-requests"></a>
 
 ### Listen Key Management (Deprecated)
 
 > [!IMPORTANT]
 > These requests have been deprecated, which means we will remove them in the future.
-> Please subscribe to the User Data Stream through the [WebSocket API](#user_data_stream_susbcribe) instead.
+> Please subscribe to the User Data Stream through the [WebSocket API](#user_data_stream_subscribe) instead.
 
 The following requests manage [User Data Stream](user-data-stream.md) subscriptions.
 
-#### Start user data stream (USER_STREAM)
+#### Start user data stream (USER_STREAM) (Deprecated)
 
 ```javascript
 {
@@ -7148,7 +7218,7 @@ Subscribe to the received listen key on WebSocket Stream afterwards.
 }
 ```
 
-#### Ping user data stream (USER_STREAM)
+#### Ping user data stream (USER_STREAM) (Deprecated)
 
 ```javascript
 {
@@ -7201,7 +7271,7 @@ Memory
 }
 ```
 
-#### Stop user data stream (USER_STREAM)
+#### Stop user data stream (USER_STREAM) (Deprecated)
 
 ```javascript
 {
@@ -7245,72 +7315,5 @@ Memory
       "count": 2
     }
   ]
-}
-```
-
-### User Data Stream subscription
-
-<a id="user_data_stream_susbcribe"></a>
-
-#### Subscribe to User Data Stream (USER_STREAM)
-
-```javascript
-{
-  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
-  "method": "userDataStream.subscribe"
-}
-```
-
-Subscribe to the User Data Stream in the current WebSocket connection.
-
-**Notes:**
-
-* This method requires an authenticated WebSocket connection using Ed25519 keys. Please refer to [`session.logon`](#session-logon).
-* User Data Stream events are available in both JSON and SBE sessions.
-  * Please refer to [User Data Streams](user-data-stream.md) for the event format details.
-  * For SBE, only SBE schema 2:1 or later is supported.
-
-**Weight**:
-2
-
-**Parameters**:
-NONE
-
-**Response**:
-
-```javascript
-{
-  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
-  "status": 200,
-  "result": {}
-}
-```
-
-
-#### Unsubscribe from User Data Stream (USER_STREAM)
-
-```javascript
-{
-  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
-  "method": "userDataStream.unsubscribe"
-}
-```
-
-Stop listening to the User Data Stream in the current WebSocket connection.
-
-**Weight**:
-2
-
-**Parameters**:
-
-NONE
-
-**Response**:
-
-```javascript
-{
-  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
-  "status": 200,
-  "result": {}
 }
 ```

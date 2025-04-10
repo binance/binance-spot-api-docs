@@ -67,10 +67,10 @@
     - [Query Allocations (USER_DATA)](#query-allocations-user_data)
     - [Query Commission Rates (USER_DATA)](#query-commission-rates-user_data)
     - [Query Order Amendments (USER_DATA)](#query-order-amendments-user_data)
-  - [User data stream endpoints - Deprecated](#user-data-stream-endpoints---deprecated)
-    - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
-    - [Keepalive user data stream (USER_STREAM)](#keepalive-user-data-stream-user_stream)
-    - [Close user data stream (USER_STREAM)](#close-user-data-stream-user_stream)
+  - [User data stream endpoints (Deprecated)](#user-data-stream-endpoints-deprecated)
+    - [Start user data stream (USER_STREAM) (Deprecated)](#start-user-data-stream-user_stream-deprecated)
+    - [Keepalive user data stream (USER_STREAM) (Deprecated)](#keepalive-user-data-stream-user_stream-deprecated)
+    - [Close user data stream (USER_STREAM) (Deprecated)](#close-user-data-stream-user_stream-deprecated)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -4091,7 +4091,7 @@ Queries all amendments of a single order.
 
 <a id="user-data-stream-requests"></a>
 
-## User data stream endpoints - Deprecated
+## User data stream endpoints (Deprecated)
 
 > [!IMPORTANT]
 > These requests have been deprecated, which means we will remove them in the future.
@@ -4099,7 +4099,7 @@ Queries all amendments of a single order.
 
 The following requests manage [User Data Stream](user-data-stream.md) subscriptions.
 
-### Start user data stream (USER_STREAM)
+### Start user data stream (USER_STREAM) (Deprecated)
 ```
 POST /api/v3/userDataStream
 ```
@@ -4121,7 +4121,7 @@ Memory
 }
 ```
 
-### Keepalive user data stream (USER_STREAM)
+### Keepalive user data stream (USER_STREAM) (Deprecated)
 ```
 PUT /api/v3/userDataStream
 ```
@@ -4144,7 +4144,7 @@ listenKey | STRING | YES
 {}
 ```
 
-### Close user data stream (USER_STREAM)
+### Close user data stream (USER_STREAM) (Deprecated)
 ```
 DELETE /api/v3/userDataStream
 ```

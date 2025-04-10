@@ -77,13 +77,13 @@
     - [Account Commission Rates (USER_DATA)](#account-commission-rates-user_data)
     - [Query Order Amendments (USER_DATA)](#query-order-amendments-user_data)
   - [User Data Stream requests](#user-data-stream-requests)
-    - [Listen Key Management (Deprecated)](#listen-key-management-deprecated)
-      - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
-      - [Ping user data stream (USER_STREAM)](#ping-user-data-stream-user_stream)
-      - [Stop user data stream (USER_STREAM)](#stop-user-data-stream-user_stream)
     - [User Data Stream subscription](#user-data-stream-subscription)
       - [Subscribe to User Data Stream (USER_STREAM)](#subscribe-to-user-data-stream-user_stream)
       - [Unsubscribe from User Data Stream (USER_STREAM)](#unsubscribe-from-user-data-stream-user_stream)
+    - [Listen Key Management (Deprecated)](#listen-key-management-deprecated)
+      - [Start user data stream (USER_STREAM) (Deprecated)](#start-user-data-stream-user_stream-deprecated)
+      - [Ping user data stream (USER_STREAM) (Deprecated)](#ping-user-data-stream-user_stream-deprecated)
+      - [Stop user data stream (USER_STREAM) (Deprecated)](#stop-user-data-stream-user_stream-deprecated)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -96,8 +96,8 @@
 * The base endpoint is: **`wss://ws-api.testnet.binance.vision/ws-api/v3`**
   * If you experience issues with the standard 443 port, alternative port 9443 is also available.
 * A single connection to the API is only valid for 24 hours; expect to be disconnected after the 24-hour mark.
-* The websocket server will send a `ping frame` every 20 seconds.
-  * If the websocket server does not receive a `pong frame` back from the connection within a minute, the connection will be disconnected.
+* The WebSocket server will send a `ping frame` every 20 seconds.
+  * If the WebSocket server does not receive a `pong frame` back from the connection within a minute, the connection will be disconnected.
   * When you receive a ping, you must send a pong with a copy of ping's payload as soon as possible.
   * Unsolicited `pong frames` are allowed, but will not prevent disconnection. **It is recommended that the payload for these pong frames are empty.**
 * Lists are returned in **chronological order**, unless noted otherwise.
@@ -2797,11 +2797,12 @@ Memory
     "connectedSince": 1649729873021,
     "returnRateLimits": false,
     "serverTime": 1649729878630,
-    "userDataStream": true
+    "userDataStream": false // is User Data Stream subscription active?
   }
 }
 ```
 
+<a id="session-status"></a>
 
 ### Query session status
 
@@ -2837,7 +2838,7 @@ Memory
     "connectedSince": 1649729873021,
     "returnRateLimits": false,
     "serverTime": 1649730611671,
-    "userDataStream": true
+    "userDataStream": true // is User Data Stream subscription active?
   }
 }
 ```
@@ -2879,7 +2880,7 @@ Memory
     "connectedSince": 1649729873021,
     "returnRateLimits": false,
     "serverTime": 1649730611671,
-    "userDataStream": true
+    "userDataStream": false // is User Data Stream subscription active?
   }
 }
 ```
@@ -6899,6 +6900,74 @@ Queries all amendments of a single order.
 
 ## User Data Stream requests
 
+### User Data Stream subscription
+
+<a id="user-data-stream-subscribe"></a>
+
+#### Subscribe to User Data Stream (USER_STREAM)
+
+```javascript
+{
+  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+  "method": "userDataStream.subscribe"
+}
+```
+
+Subscribe to the User Data Stream in the current WebSocket connection.
+
+**Notes:**
+
+* This method requires an authenticated WebSocket connection using Ed25519 keys. Please refer to [`session.logon`](#session-logon).
+* To check the subscription status, use [`session.status`](#session-status), see the `userDataStream` flag indicating you have have an active subscription.
+* User Data Stream events are available in both JSON and SBE sessions.
+  * Please refer to [User Data Streams](user-data-stream.md) for the event format details.
+  * For SBE, only SBE schema 2:1 or later is supported.
+
+**Weight**:
+2
+
+**Parameters**:
+NONE
+
+**Response**:
+
+```javascript
+
+{
+  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+  "status": 200,
+  "result": {}
+}
+```
+
+#### Unsubscribe from User Data Stream (USER_STREAM)
+
+```javascript
+{
+  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+  "method": "userDataStream.unsubscribe"
+}
+```
+
+Stop listening to the User Data Stream in the current WebSocket connection.
+
+**Weight**:
+2
+
+**Parameters**:
+
+NONE
+
+**Response**:
+
+```javascript
+{
+  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+  "status": 200,
+  "result": {}
+}
+```
+
 ### Listen Key Management (Deprecated)
 
 > [!IMPORTANT]
@@ -6907,7 +6976,7 @@ Queries all amendments of a single order.
 
 The following requests manage [User Data Stream](user-data-stream.md) subscriptions.
 
-#### Start user data stream (USER_STREAM)
+#### Start user data stream (USER_STREAM) (Deprecated)
 
 ```javascript
 {
@@ -6961,7 +7030,7 @@ Subscribe to the received listen key on WebSocket Stream afterwards.
 }
 ```
 
-#### Ping user data stream (USER_STREAM)
+#### Ping user data stream (USER_STREAM) (Deprecated)
 
 ```javascript
 {
@@ -7014,7 +7083,7 @@ Memory
 }
 ```
 
-#### Stop user data stream (USER_STREAM)
+#### Stop user data stream (USER_STREAM) (Deprecated)
 
 ```javascript
 {
@@ -7057,72 +7126,5 @@ Memory
       "count": 2
     }
   ]
-}
-```
-
-### User Data Stream subscription
-
-<a id="user-data-stream-subscribe"></a>
-
-#### Subscribe to User Data Stream (USER_STREAM)
-
-```javascript
-{
-  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
-  "method": "userDataStream.subscribe"
-}
-```
-
-Subscribe to the User Data Stream in the current WebSocket connection.
-
-**Notes:**
-
-* This method requires an authenticated WebSocket connection using Ed25519 keys. Please refer to [`session.logon`](#session-logon).
-* User Data Stream events are available in both JSON and SBE sessions.
-  * Please refer to [User Data Streams](user-data-stream.md) for the event format details.
-  * For SBE, only SBE schema 2:1 or later is supported.
-
-**Weight**:
-2
-
-**Parameters**:
-NONE
-
-**Response**:
-
-```javascript
-
-{
-  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
-  "status": 200,
-  "result": {}
-}
-```
-
-#### Unsubscribe from User Data Stream (USER_STREAM)
-
-```javascript
-{
-  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
-  "method": "userDataStream.unsubscribe"
-}
-```
-
-Stop listening to the User Data Stream in the current WebSocket connection.
-
-**Weight**:
-2
-
-**Parameters**:
-
-NONE
-
-**Response**:
-
-```javascript
-{
-  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
-  "status": 200,
-  "result": {}
 }
 ```
