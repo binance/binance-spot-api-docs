@@ -9,6 +9,7 @@
   * 如果使用标准443端口时遇到问题，可以使用替代端口9443。
   * [现货测试网](https://testnet.binance.vision)的 base URL 是 `wss://ws-api.testnet.binance.vision/ws-api/v3`。
 * 每个到 base URL 的链接有效期不超过24小时，请妥善处理断线重连。
+* 响应默认为 JSON 格式。如果您想接收 SBE 格式的响应，请参考 [简单二进制编码 （SBE） 常见问题](./faqs/sbe_faq_CN.md)。
 * WebSocket 服务器**每20秒**发送 PING 消息。
   * 如果websocket 服务器没有在一分钟之内收到PONG 消息应答，连接会被断开。
   * 当客户收到PING消息，必须尽快回复PONG消息，同时payload需要和PING消息一致。
@@ -6970,7 +6971,7 @@ timestamp           | LONG   | YES          |
 
 * 此方法需要使用 Ed25519 密钥并经过鉴权的 WebSocket 连接。请参考 [`session.logon`](#session-logon)。
 * 如果需要查看订阅状态,可以通过 [`session.status `](#query-session-status)查询，当`userDataStream` 字段值为 `true` 时,表示您有一个有效的订阅.
-* 用户数据流在 JSON 和 SBE 会话中均可用。
+* 用户数据流在 JSON 和 [SBE 会话](./faqs/sbe_faq_CN.md) 中均可用。
   * 有关事件格式详情，请参阅 [用户数据流](user-data-stream_CN.md)。
   * 对于 SBE，仅支持 SBE 模式 2:1 或更高版本。
 

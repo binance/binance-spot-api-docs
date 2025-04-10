@@ -79,7 +79,7 @@
 
 ## General API Information
 * The base endpoint is **https://testnet.binance.vision/api**
-* All endpoints return either a JSON object or array.
+* Responses are in JSON by default. To receive responses in SBE, refer to the [SBE FAQ](../faqs/sbe_faq.md) page.
 * Data is returned in **ascending** order. Oldest first, newest last.
 * All time and timestamp related fields in the JSON responses are in **milliseconds by default.** To receive the information in microseconds, please add the header `X-MBX-TIME-UNIT:MICROSECOND` or `X-MBX-TIME-UNIT:microsecond`.
 * Timestamp parameters (e.g. `startTime`, `endTime`, `timestamp`) can be passed in milliseconds or microseconds.
