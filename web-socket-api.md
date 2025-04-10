@@ -98,7 +98,7 @@
   * If you experience issues with the standard 443 port, alternative port 9443 is also available.
   * The base endpoint for [testnet](https://testnet.binance.vision/) is: `wss://ws-api.testnet.binance.vision/ws-api/v3`
 * A single connection to the API is only valid for 24 hours; expect to be disconnected after the 24-hour mark.
-* Responses are in JSON by default. To receive responses in SBE, refer to the [SBE FAQ](../faqs/sbe_faq.md) page.
+* Responses are in JSON by default. To receive responses in SBE, refer to the [SBE FAQ](faqs/sbe_faq.md) page.
 * The WebSocket server will send a `ping frame` every 20 seconds.`
   * If the WebSocket server does not receive a `pong frame` back from the connection within a minute the connection will be disconnected.
   * When you receive a ping, you must send a pong with a copy of ping's payload as soon as possible.
