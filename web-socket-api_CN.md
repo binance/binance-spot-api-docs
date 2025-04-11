@@ -18,6 +18,7 @@
 * JSON 响应中的所有时间和时间戳相关字段均以**UTC 毫秒为默认单位**。要以微秒为单位接收信息，请在 URL 中添加参数 `timeUnit=MICROSECOND` 或 `timeUnit=microsecond`。
 * 时间戳参数（例如 `startTime`、`endTime`、`timestamp`）可以以毫秒或微秒为单位传递。
 * 除非另有说明，所有字段名称和值都**大小写敏感**。
+* 如需进一步了解枚举或术语，请参考 [现货交易API术语表](faqs/spot_glossary_CN.md) 页面。
 
 ## 请求格式
 
@@ -869,13 +870,6 @@ WebSocket连接只能通过一个API密钥进行身份验证。
 # 公共 API 请求
 
 ## 常用请求信息
-
-### 术语
-
-这些术语将在整个文档中使用，因此特别建议新用户阅读。
-
-* `base asset` 是指作为交易对中的 `quantity` 资产。对于交易对 BTCUSDT，BTC 将是 `base asset`。
-* `quote asset` 是指作为交易对中的 `price` 资产。对于交易对 BTCUSDT，USDT 将是 `quote asset`。
 
 ### 测试连通性
 
@@ -6908,6 +6902,9 @@ timestamp           | LONG   | YES          |
 
 **权重:**
 4
+
+**数据源:**
+数据库
 
 **参数:**
 

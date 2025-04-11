@@ -20,7 +20,6 @@
       - [Ed25519 Keys](#ed25519-keys)
 - [Public API Endpoints](#public-api-endpoints)
   - [General endpoints](#general-endpoints)
-    - [Terminology](#terminology)
     - [Test connectivity](#test-connectivity)
     - [Check server time](#check-server-time)
     - [Exchange information](#exchange-information)
@@ -90,8 +89,9 @@
 * Responses are in JSON by default. To receive responses in SBE, refer to the [SBE FAQ](./faqs/sbe_faq.md) page.
 * Data is returned in **ascending** order. Oldest first, newest last.
 * All time and timestamp related fields in the JSON responses are in **milliseconds by default.** To receive the information in microseconds, please add the header `X-MBX-TIME-UNIT:MICROSECOND` or `X-MBX-TIME-UNIT:microsecond`.
-* Timestamp parameters (e.g. `startTime`, `endTime`, `timestamp)` can be passed in milliseconds or microseconds.
+* Timestamp parameters (e.g. `startTime`, `endTime`, `timestamp`) can be passed in milliseconds or microseconds.
 * For APIs that only send public market data, please use the base endpoint **https://data-api.binance.vision**. Please refer to [Market Data Only](./faqs/market_data_only.md) page.
+* If there are enums or terms you want clarification on, please see the [SPOT Glossary](faqs/spot_glossary.md) for more information.
 
 ## HTTP Return Codes
 
@@ -450,13 +450,6 @@ print(response.json())
 # Public API Endpoints
 
 ## General endpoints
-
-### Terminology
-
-These terms will be used throughout the documentation, so it is recommended especially for new users to read to help their understanding of the API.
-
-* `base asset` refers to the asset that is the `quantity` of a symbol. For the symbol BTCUSDT, BTC would be the `base asset`.
-* `quote asset` refers to the asset that is the `price` of a symbol. For the symbol BTCUSDT, USDT would be the `quote asset`.
 
 ### Test connectivity
 ```
@@ -1688,7 +1681,7 @@ trailingDelta|LONG|NO| Used with `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, 
 icebergQty | DECIMAL | NO | Used with `LIMIT`, `STOP_LOSS_LIMIT`, and `TAKE_PROFIT_LIMIT` to create an iceberg order.
 newOrderRespType | ENUM | NO | Set the response JSON. `ACK`, `RESULT`, or `FULL`; `MARKET` and `LIMIT` order types default to `FULL`, all other orders default to `ACK`.
 selfTradePreventionMode |ENUM| NO | The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](./enums.md#stpmodes).
-recvWindow | LONG | NO |The value cannot be greater than ```60000```
+recvWindow | LONG | NO |The value cannot be greater than `60000`
 timestamp | LONG | YES |
 
 
@@ -1904,7 +1897,7 @@ Name | Type | Mandatory | Description
 symbol | STRING | YES |
 orderId | LONG | NO |
 origClientOrderId | STRING | NO |
-recvWindow | LONG | NO | The value cannot be greater than ```60000```
+recvWindow | LONG | NO | The value cannot be greater than `60000`
 timestamp | LONG | YES |
 
 **Notes:**
@@ -2030,7 +2023,7 @@ This includes orders that are part of an order list.
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-recvWindow | LONG | NO | The value cannot be greater than ```60000```
+recvWindow | LONG | NO | The value cannot be greater than `60000`
 timestamp | LONG | YES |
 
 **Data Source:**
@@ -2169,7 +2162,7 @@ newClientOrderId |STRING|NO| Used to identify the new order.
 strategyId |LONG| NO|
 strategyType |INT| NO| The value cannot be less than `1000000`.
 stopPrice|DECIMAL|NO|
-trailingDelta|LONG|NO|
+trailingDelta|LONG|NO| See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md)
 icebergQty|DECIMAL|NO|
 newOrderRespType|ENUM|NO|Allowed values: <br/> `ACK`, `RESULT`, `FULL` <br/> `MARKET` and `LIMIT` orders types default to `FULL`; all other orders default to `ACK`
 selfTradePreventionMode |ENUM| NO | The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](./enums.md#stpmodes).
@@ -2664,7 +2657,7 @@ Get all open orders on a symbol. **Careful** when accessing this with no symbol.
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | NO |
-recvWindow | LONG | NO | The value cannot be greater than ```60000```
+recvWindow | LONG | NO | The value cannot be greater than `60000`
 timestamp | LONG | YES |
 
 * If the symbol is not sent, orders for all symbols will be returned in an array.
@@ -2723,7 +2716,7 @@ orderId | LONG | NO |
 startTime | LONG | NO |
 endTime | LONG | NO |
 limit | INT | NO | Default: 500; Maximum: 1000.
-recvWindow | LONG | NO | The value cannot be greater than ```60000```
+recvWindow | LONG | NO | The value cannot be greater than `60000`
 timestamp | LONG | YES |
 
 **Notes:**
@@ -3318,10 +3311,10 @@ Cancel an entire Order list
 Name| Type| Mandatory| Description
 ----| ----|------|------
 symbol|STRING| YES|
-orderListId|LONG|NO| Either ```orderListId``` or ```listClientOrderId``` must be provided
-listClientOrderId|STRING|NO| Either ```orderListId``` or ```listClientOrderId``` must be provided
+orderListId|LONG|NO| Either `orderListId` or `listClientOrderId` must be provided
+listClientOrderId|STRING|NO| Either `orderListId` or `listClientOrderId` must be provided
 newClientOrderId|STRING|NO| Used to uniquely identify this cancel. Automatically generated by default
-recvWindow|LONG|NO| The value cannot be greater than ```60000```
+recvWindow|LONG|NO| The value cannot be greater than `60000`
 timestamp|LONG|YES|
 
 
@@ -3412,9 +3405,9 @@ Retrieves a specific order list based on provided optional parameters.
 
 Name| Type|Mandatory| Description
 ----|-----|----|----------
-orderListId|LONG|NO|  Either ```orderListId``` or ```listClientOrderId``` must be provided
-origClientOrderId|STRING|NO| Either ```orderListId``` or ```listClientOrderId``` must be provided
-recvWindow|LONG|NO| The value cannot be greater than ```60000```
+orderListId|LONG|NO|  Either `orderListId` or `listClientOrderId` must be provided
+origClientOrderId|STRING|NO| Either `orderListId` or `listClientOrderId` must be provided
+recvWindow|LONG|NO| The value cannot be greater than `60000`
 timestamp|LONG|YES|
 
 **Data Source:**
@@ -3463,11 +3456,11 @@ Note that the time between `startTime` and `endTime` can't be longer than 24 hou
 
 Name|Type| Mandatory| Description
 ----|----|----|---------
-fromId|LONG|NO| If supplied, neither ```startTime``` or ```endTime``` can be provided
+fromId|LONG|NO| If supplied, neither `startTime` or `endTime` can be provided
 startTime|LONG|NO|
 endTime|LONG|NO|
 limit|INT|NO| Default: 500; Maximum: 1000
-recvWindow|LONG|NO| The value cannot be greater than ```60000```
+recvWindow|LONG|NO| The value cannot be greater than `60000`
 timestamp|LONG|YES|
 
 **Data Source:**
@@ -3535,7 +3528,7 @@ GET /api/v3/openOrderList
 
 Name| Type|Mandatory| Description
 ----|-----|---|------------------
-recvWindow|LONG|NO| The value cannot be greater than ```60000```
+recvWindow|LONG|NO| The value cannot be greater than `60000`
 timestamp|LONG|YES|
 
 **Data Source:**
@@ -3577,6 +3570,8 @@ Database
 POST /api/v3/sor/order
 ```
 Places an order using smart order routing (SOR).
+
+Read [SOR FAQ](faqs/sor_faq.md) to learn more.
 
 **Weight:**
 1
@@ -3787,7 +3782,7 @@ startTime | LONG | NO |
 endTime | LONG | NO |
 fromId | LONG | NO | TradeId to fetch from. Default gets most recent trades.
 limit | INT | NO | Default: 500; Maximum: 1000.
-recvWindow | LONG | NO | The value cannot be greater than ```60000```
+recvWindow | LONG | NO | The value cannot be greater than `60000`
 timestamp | LONG | YES |
 
 **Notes:**
@@ -3843,7 +3838,7 @@ Displays the user's unfilled order count for all intervals.
 
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
-recvWindow | LONG | NO | The value cannot be greater than ```60000```
+recvWindow | LONG | NO | The value cannot be greater than `60000`
 timestamp | LONG | YES |
 
 **Data Source:**
@@ -3853,7 +3848,6 @@ Memory
 
 ```json
 [
-
   {
     "rateLimitType": "ORDERS",
     "interval": "SECOND",
@@ -4061,6 +4055,10 @@ Queries all amendments of a single order.
 | limit | LONG | NO | Default:500; Maximum: 1000 |
 |recvWindow | LONG | NO | The value cannot be greater than `60000`.
 |timestamp | LONG | YES |
+
+**Data Source:**
+
+Database
 
 **Response:**
 

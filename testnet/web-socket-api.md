@@ -26,7 +26,6 @@
   - [Data sources](#data-sources)
 - [Public API requests](#public-api-requests)
   - [General requests](#general-requests)
-    - [Terminology](#terminology)
     - [Test connectivity](#test-connectivity)
     - [Check server time](#check-server-time)
     - [Exchange information](#exchange-information)
@@ -105,6 +104,7 @@
 * All timestamps in the JSON responses are in **milliseconds in UTC by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND` or `timeUnit=microsecond` in the URL.
 * Timestamp parameters (e.g. `startTime`, `endTime`, `timestamp`) can be passed in milliseconds or microseconds.
 * All field names and values are **case-sensitive**, unless noted otherwise.
+* If there are enums or terms you want clarification on, please see [SPOT Glossary](../faqs/spot_glossary.md) for more information.
 
 ## Request format
 
@@ -975,13 +975,6 @@ Database        | moderate | Data is retrieved from the database
 # Public API requests
 
 ## General requests
-
-### Terminology
-
-These terms will be used throughout the documentation, so it is recommended especially for new users to read to help their understanding of the API.
-
-* `base asset` refers to the asset that is the `quantity` of a symbol. For the symbol BTCUSDT, BTC would be the `base asset`.
-* `quote asset` refers to the asset that is the `price` of a symbol. For the symbol BTCUSDT, USDT would be the `quote asset`.
 
 ### Test connectivity
 
@@ -4640,6 +4633,8 @@ If `orderRateLimitExceededMode` is `CANCEL_ONLY` regardless of `cancelReplaceMod
 
 Reduce the quantity of an existing open order.
 
+Read [Order Amend Keep Priority FAQ](../faqs/order_amend_keep_priority.md) to learn more.
+
 **Weight**: 1
 
 **Parameters:**
@@ -5467,17 +5462,17 @@ Depending on the `pendingType` or `workingType`, some optional parameters will b
     "symbol": "1712544378871",
     "orders": [
       {
-        "symbol": "1712544378871",
+        "symbol": "LTCBNB",
         "orderId": 23,
         "clientOrderId": "OVQOpKwfmPCfaBTD0n7e7H"
       },
       {
-        "symbol": "1712544378871",
+        "symbol": "LTCBNB",
         "orderId": 24,
         "clientOrderId": "YcCPKCDMQIjNvLtNswt82X"
       },
       {
-        "symbol": "1712544378871",
+        "symbol": "LTCBNB",
         "orderId": 25,
         "clientOrderId": "ilpIoShcFZ1ZGgSASKxMPt"
       }
@@ -5951,6 +5946,8 @@ Database
 ```
 
 Places an order using smart order routing (SOR).
+
+Read [SOR FAQ](../faqs/sor_faq.md) to learn more.
 
 **Weight:**
 1
@@ -6865,6 +6862,10 @@ Queries all amendments of a single order.
 | limit | LONG | NO | Default:500; Maximum: 1000 |
 |recvWindow | LONG | NO | The value cannot be greater than `60000`.
 |timestamp | LONG | YES |
+
+**Data Source:**
+
+Database
 
 **Response:**
 

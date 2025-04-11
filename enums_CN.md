@@ -1,6 +1,6 @@
 # 枚举定义
 
-这将适用于 Rest API 和 WebSocket API。
+这将适用于 REST API 和 WebSocket API。
 
 ## 交易对的状态（status）
 
@@ -172,6 +172,8 @@
 <a id="stpmodes"></a>
 
 ## STP 模式
+
+请参阅 [自我交易预防 (Self Trade Prevention - STP) 常见问题](faqs/stp_faq_CN.md)。
 
 * `NONE`
 * `EXPIRE_MAKER`

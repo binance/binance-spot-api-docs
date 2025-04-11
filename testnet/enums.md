@@ -1,6 +1,6 @@
 # ENUM Definitions
 
-This will apply for both Rest API and WebSocket API.
+This will apply for both REST API and WebSocket API.
 
 ## Symbol status (status):
 
@@ -145,6 +145,8 @@ Status | Description
 <a id="stpmodes"></a>
 
 ## STP Modes
+
+Read [Self Trade Prevention (STP) FAQ](../faqs/stp_faq.md) to learn more.
 
 * `NONE`
 * `EXPIRE_MAKER`

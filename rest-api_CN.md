@@ -16,6 +16,7 @@
 * JSON 响应中的所有时间和时间戳相关字段均以**毫秒为默认单位**。要以微秒为单位接收信息，请添加报文头 `X-MBX-TIME-UNIT：MICROSECOND` 或 `X-MBX-TIME-UNIT：microsecond`。
 * 时间戳参数（例如 `startTime`、`endTime`、`timestamp`）可以以毫秒或微秒为单位传递。
 * 对于仅发送公开市场数据的 API，您可以使用接口的 base URL https://data-api.binance.vision 。请参考 [Market Data Only_CN](./faqs/market_data_only_CN.md) 页面。
+* 如需进一步了解枚举或术语，请参考 [现货交易API术语表](faqs/spot_glossary_CN.md) 页面。
 
 ## HTTP 返回代码
 
@@ -350,12 +351,6 @@ print(response.json())
 # 公开API接口
 
 ## 通用接口
-
-### 术语解释
-这里的术语适用于全部文档，建议特别是新手熟读，也便于理解。
-
-* `base asset` 指一个交易对的交易对象，即写在靠前部分的资产名, 比如`BTCUSDT`, `BTC`是`base asset`。
-* `quote asset` 指一个交易对的定价资产，即写在靠后部分的资产名, 比如`BTCUSDT`, `USDT`是`quote asset`。
 
 <a id="ping"></a>
 
@@ -1996,7 +1991,7 @@ DELETE /api/v3/openOrders
 名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-recvWindow | LONG | NO | 不能大于 ```60000```
+recvWindow | LONG | NO | 不能大于 `60000`
 timestamp | LONG | YES |
 
 **数据源:**
@@ -2140,7 +2135,7 @@ newClientOrderId |STRING|NO| 用于辨识新订单。
 strategyId |LONG| NO|
 strategyType |INT| NO| 不能低于 `1000000`。
 stopPrice|DECIMAL|NO|
-trailingDelta|LONG|NO|
+trailingDelta|LONG|NO| 参考 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md)
 icebergQty|DECIMAL|NO|
 newOrderRespType|ENUM|NO|指定响应类型: <br/> 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`， 其他默认为`ACK`。
 selfTradePreventionMode|ENUM|NO|允许的 ENUM 取决于交易对的配置。支持的值有：[STP 模式](./enums_CN.md#stpmodes)。
@@ -3382,9 +3377,9 @@ GET /api/v3/orderList
 
 名称| 类型|是否必需| 描述
 ----|-----|----|----------
-orderListId|LONG|NO|   ```orderListId``` 或 ```origClientOrderId``` 必须提供一个。
-origClientOrderId|STRING|NO|  ```orderListId``` 或 ```origClientOrderId``` 必须提供一个。
-recvWindow|LONG|NO| 赋值不得大于 ```60000```
+orderListId|LONG|NO|   `orderListId` 或 `origClientOrderId` 必须提供一个。
+origClientOrderId|STRING|NO|  `orderListId` 或 `origClientOrderId` 必须提供一个。
+recvWindow|LONG|NO| 赋值不得大于 `60000`
 timestamp|LONG|YES|
 
 **数据源:**
@@ -3503,7 +3498,7 @@ GET /api/v3/openOrderList
 
 名称| 类型|是否必需| 描述
 ----|-----|---|------------------
-recvWindow|LONG|NO| 赋值不能大于 ```60000```
+recvWindow|LONG|NO| 赋值不能大于 `60000`
 timestamp|LONG|YES|
 
 
@@ -4026,6 +4021,9 @@ GET /api/v3/order/amendments
  limit | LONG | NO | 默认值： 500； 最大值： 1000
  recvWindow | LONG | NO | 不能大于 `60000`
 timestamp | LONG | YES |
+
+**数据源:**
+数据库
 
 **响应:**
 

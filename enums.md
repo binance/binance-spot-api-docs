@@ -1,6 +1,6 @@
 # ENUM Definitions
 
-This will apply for both Rest API and WebSocket API.
+This will apply for both REST API and WebSocket API.
 
 ## Symbol status (status)
 
@@ -63,7 +63,6 @@ Status | Description
 `EXEC_STARTED`| The order list has been placed or there is an update to the order list status.
  `UPDATED` | The clientOrderId of an order in the order list has been changed.
 `ALL_DONE` | The order list has finished executing and thus is no longer active.
-
 
 
 ## Order List Order Status (listOrderStatus)
@@ -174,6 +173,8 @@ Status | Description
 <a id="stpmodes"></a>
 
 ## STP Modes
+
+Read [Self Trade Prevention (STP) FAQ](faqs/stp_faq.md) to learn more.
 
 * `NONE`
 * `EXPIRE_MAKER`
