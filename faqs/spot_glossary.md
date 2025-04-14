@@ -39,10 +39,10 @@ allocation
 * The first asset in the symbol (e.g. `BTC` is the `base asset` of symbol `BTCUSDT`), which represents the asset being bought and sold (the `quantity`).
 
 `baseAssetPrecision`
-* A field found in `GET /api/v3/exchangeInfo` that shows the number of decimals allowed on the `baseAsset`.
+* A field found in Exchange Information that shows the number of decimals allowed on the `baseAsset`.
 
 `baseCommissionPrecision`
-* A field found in `GET /api/v3/exchangeInfo` that represents the number of decimals base asset commission will be calculated to.
+* A field found in Exchange Information that represents the number of decimals base asset commission will be calculated to.
 
 `bidPrice`
 * In ticker responses: the highest price on the `BUY` side.
@@ -67,7 +67,7 @@ allocation
 * Order `status` indicating the order has been canceled by the user.
 
 `clientOrderId`
-* A field, which can be set by the user, in the JSON response for `POST /api/v3/order` to identify the newly placed order.
+* A field, which can be set by the user, in the JSON response for order placement requests to identify the newly placed order.
 
 `commission`
 * The fee that was paid on a trade.
@@ -76,7 +76,7 @@ allocation
 * The asset the commission fees were deducted from.
 
 `cancelReplaceMode`
-* Parameter used in Cancel Replace orders (i.e. `POST /api/v3/order/cancelReplace`) that define whether the New Order Placement should proceed if the Cancel Request fails.
+* Parameter used in Cancel Replace orders that define whether the New Order Placement should proceed if the Cancel Request fails.
 
 `cummulativeQuoteQty`
 * The accumulation of the `price` * `qty` for each fill of an order.
@@ -177,10 +177,10 @@ Last Prevented Quantity
 * A `type` of order where the order can only be a maker order (i.e. The order cannot immediately match and take).
 
 `limitClientOrderId`
-* A parameter used in placing OCO orders (i.e. `POST /api/v3/order/oco`) that identifies the `LIMIT_MAKER` pair of the OCO Order.
+* A parameter used in placing OCO orders that identifies the `LIMIT_MAKER` pair of the OCO Order.
 
 `listClientOrderId`
-* A parameter used in placing OCO Orders (e.g. `POST /api/v3/order/oco`) that identifies the pair of orders.
+* A parameter used in placing OCO Orders that identifies the pair of orders.
 
 `listenKey`
 * Individual key used on User Data Stream to get live updates on the associated account.
@@ -258,7 +258,6 @@ Pending order
 * A single order list can contain either a single pending order, or 2 pending orders forming an OCO.
 * In the single order case, almost any order type is supported, with the exception of `MARKET` orders using `quoteOrderQty`.
 
-
 `PENDING_NEW`
 * Order `status` indicating that the pending orders of an order list have been accepted by the engine, but are not yet placed on the order book.
 
@@ -282,10 +281,10 @@ Prevented Match
 * The second asset in the symbol (e.g. `USDT` is the `quote asset` of symbol `BTCUSDT`) which represents the asset being used to quote prices (the `price`).
 
 `quoteAssetPrecision`
-* A field found in `GET /api/v3/exchangeInfo` that shows the number of decimals allowed on the `quoteAsset`.
+* A field found in Exchange Information that shows the number of decimals allowed on the `quoteAsset`.
 
 `quoteCommissionPrecision`
-* A field found in `GET /api/v3/exchangeInfo` that represents the number of decimals quote asset commission will be calculated to.
+* A field found in Exchange Information that represents the number of decimals quote asset commission will be calculated to.
 
 `quoteOrderQty`
 * `MARKET` order parameter that specifies the amount of the quote asset one wants to spend/receive in a "Reverse MARKET order".
@@ -311,7 +310,7 @@ Reverse `MARKET` order
 ### S
 
 Self Trade Prevention (STP)
-* Self Trade Prevention is a feature that prevents orders of users, or the user's `tradeGroupId` from matching against their own.
+* Self Trade Prevention is a feature that prevents orders of users, or the user's `tradeGroupId` from matching against their own. Read [STP FAQ](./stp_faq.md) to learn more.
 
 `selfTradePreventionMode`
 * A parameter used to specify what the system will do if an order could cause a self-trade.
@@ -320,13 +319,13 @@ Self Trade Prevention (STP)
 * An enum in the `side` used when a user wants to sell an asset (e.g. BTC).
 
 Smart Order Routing (SOR)
-* Smart Order Routing uses interchangeable quote assets to improve liquidity. [Read SOR FAQ](./sor_faq.md) to learn more.
+* Smart Order Routing uses interchangeable quote assets to improve liquidity. Read [SOR FAQ](./sor_faq.md) to learn more.
 
 `SPOT`
 * This is to distinguish a type of trading, where the purchase and delivery of a asset is made immediately.
 
 `stopClientOrderId`
-* A parameter used in placing OCO orders (i.e. `POST /api/v3/order/oco`) that identifies the `STOP_LOSS` or `STOP_LOSS_LIMIT` pair of the OCO Order.
+* A parameter used in placing OCO orders that identifies the `STOP_LOSS` or `STOP_LOSS_LIMIT` pair of the OCO Order.
 
 `stopPrice`
 * The price used in algorithmic orders (e.g. `STOP_LOSS`, `TAKE_PROFIT`) that determines when an order will be triggered to be placed on the order book.
@@ -394,7 +393,7 @@ Smart Order Routing (SOR)
 * Last update to the order. This field (as well as all timestamp related fields) will be in milliseconds by default in JSON responses.
 
 User Data Stream
-* Websocket stream used to get real-time information of a user's account. (e.g. Changes to Balances, Order Updates, etc.)
+* WebSocket stream used to get real-time information of a user's account. (e.g. Changes to Balances, Order Updates, etc.) Read [User Data Streams](../user-data-stream.md) to learn more.
 
 ---
 
