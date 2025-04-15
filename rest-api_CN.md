@@ -2512,6 +2512,8 @@ PUT /api/v3/order/amend/keepPriority
 
 由客户发送以减少其现有当前订单的原始数量。
 
+请阅读 [保留优先权的修改订单常见问题](faqs/order_amend_keep_priority_CN.md) 了解更多信息。
+
 **权重:**
 1
 
