@@ -2546,19 +2546,20 @@ Read [Order Amend Keep Priority FAQ](../faqs/order_amend_keep_priority.md) to le
 
 **Parameters:**
 
-| Name | Type | Mandatory | Description |
-| :---- | :---- | :---- | :---- |
-| symbol | STRING | YES |  |
-| orderId | LONG | NO\* | `orderId` or `origClientOrderId` must be sent  |
-| origClientOrderId | STRING | NO\* | `orderId` or `origClientOrderId` must be sent  |
-| newClientOrderId | STRING | NO\* | The new client order ID for the order after being amended.  <br> If not sent, one will be randomly generated. <br> It is possible to reuse the current clientOrderId by sending it as the `newClientOrderId`. |
-| newQty | DECIMAL | YES | `newQty` must be greater than 0 and less than the order's quantity.|
-|recvWindow | LONG | NO | The value cannot be greater than `60000`.
-|timestamp | LONG | YES |
+Name | Type | Mandatory | Description |
+:---- | :---- | :---- | :---- |
+symbol | STRING | YES |  |
+orderId | LONG | NO\* | `orderId` or `origClientOrderId` must be sent  |
+origClientOrderId | STRING | NO\* | `orderId` or `origClientOrderId` must be sent  |
+newClientOrderId | STRING | NO\* | The new client order ID for the order after being amended.  <br> If not sent, one will be randomly generated. <br> It is possible to reuse the current clientOrderId by sending it as the `newClientOrderId`. |
+newQty | DECIMAL | YES | `newQty` must be greater than 0 and less than the order's quantity.|
+recvWindow | LONG | NO | The value cannot be greater than `60000`.
+timestamp | LONG | YES |
 
 
 **Data Source**: Matching Engine
 
+**Response:**
 Response for a single order:
 
 ```json
@@ -3932,14 +3933,14 @@ Queries all amendments of a single order.
 
 **Parameters:**
 
-| Name | Type | Mandatory | Description |
-| :---- | :---- | :---- | :---- |
-| symbol | STRING | YES |  |
-| orderId | LONG | YES |  |
-| fromExecutionId | LONG | NO |  |
-| limit | LONG | NO | Default:500; Maximum: 1000 |
-|recvWindow | LONG | NO | The value cannot be greater than `60000`.
-|timestamp | LONG | YES |
+Name | Type | Mandatory | Description |
+:---- | :---- | :---- | :---- |
+symbol | STRING | YES |  |
+orderId | LONG | YES |  |
+fromExecutionId | LONG | NO |  |
+limit | LONG | NO | Default:500; Maximum: 1000 |
+recvWindow | LONG | NO | The value cannot be greater than `60000`.
+timestamp | LONG | YES |
 
 **Data Source:**
 

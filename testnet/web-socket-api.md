@@ -1534,8 +1534,8 @@ Name        | Type    | Mandatory | Description
 ----------- | ------- | --------- | -----------
 `symbol`    | STRING  | YES       |
 `fromId`    | INT     | NO        | Aggregate trade ID to begin at
-`startTime` | INT     | NO        |
-`endTime`   | INT     | NO        |
+`startTime` | LONG    | NO        |
+`endTime`   | LONG    | NO        |
 `limit`     | INT     | NO        | Default: 500; Maximum: 1000
 
 Notes:
@@ -1617,9 +1617,9 @@ Name        | Type    | Mandatory | Description
 ----------- | ------- | --------- | -----------
 `symbol`    | STRING  | YES       |
 `interval`  | ENUM    | YES       |
-`startTime` | INT     | NO        |
-`endTime`   | INT     | NO        |
-`timeZone`   |STRING  | NO        | Default: 0 (UTC)
+`startTime` | LONG    | NO        |
+`endTime`   | LONG    | NO        |
+`timeZone`  | STRING  | NO        | Default: 0 (UTC)
 `limit`     | INT     | NO        | Default: 500; Maximum: 1000
 
 
@@ -1710,9 +1710,9 @@ Name        | Type    | Mandatory | Description
 ----------- | ------- | --------- | -----------
 `symbol`    | STRING  | YES       |
 `interval`  | ENUM    | YES       | See [`klines`](#kline-intervals)
-`startTime` | INT     | NO        |
-`endTime`   | INT     | NO        |
-`timeZone`   |STRING  | NO        | Default: 0 (UTC)
+`startTime` | LONG    | NO        |
+`endTime`   | LONG    | NO        |
+`timeZone`  | STRING  | NO        | Default: 0 (UTC)
 `limit`     | INT     | NO        | Default 500; Maximum: 1000
 
 Notes:
@@ -2772,9 +2772,9 @@ Calling `session.logon` multiple times changes the current authenticated API key
 Name          | Type    | Mandatory | Description
 ------------- | ------- | --------- | ------------
 `apiKey`      | STRING  | YES       |
-`recvWindow`  | INT     | NO        | The value cannot be greater than `60000`
+`recvWindow`  | LONG    | NO        | The value cannot be greater than `60000`
 `signature`   | STRING  | YES       |
-`timestamp`   | INT     | YES       |
+`timestamp`   | LONG    | YES       |
 
 **Data Source:**
 Memory
@@ -2926,9 +2926,9 @@ Name                | Type    | Mandatory | Description
 `strategyType`      | INT     | NO        | <p>Arbitrary numeric value identifying the order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
 `selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`, `DECREMENT`.
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
+`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
-`timestamp`         | INT     | YES       |
+`timestamp`         | LONG    | YES       |
 
 <a id="order-type">Certain parameters (*)</a> become mandatory based on the order `type`:
 
@@ -3488,7 +3488,7 @@ Check execution status of an order.
     </tr>
     <tr>
         <td><code>recvWindow</code></td>
-        <td>INT</td>
+        <td>LONG</td>
         <td>NO</td>
         <td>The value cannot be greater than <tt>60000</tt></td>
     </tr>
@@ -3500,7 +3500,7 @@ Check execution status of an order.
     </tr>
     <tr>
         <td><code>timestamp</code></td>
-        <td>INT</td>
+        <td>LONG</td>
         <td>YES</td>
         <td></td>
     </tr>
@@ -3634,7 +3634,7 @@ Cancel an active order.
     </tr>
     <tr>
         <td><code>recvWindow</code></td>
-        <td>INT</td>
+        <td>LONG</td>
         <td>NO</td>
         <td>The value cannot be greater than <tt>60000</tt></td>
     </tr>
@@ -3646,7 +3646,7 @@ Cancel an active order.
     </tr>
     <tr>
         <td><code>timestamp</code></td>
-        <td>INT</td>
+        <td>LONG</td>
         <td>YES</td>
         <td></td>
     </tr>
@@ -3993,7 +3993,7 @@ Cancel an existing order and immediately place a new order instead of the cancel
     </tr>
     <tr>
         <td><code>recvWindow</code></td>
-        <td>INT</td>
+        <td>LONG</td>
         <td>NO</td>
         <td>The value cannot be greater than <tt>60000</tt></td>
     </tr>
@@ -4005,7 +4005,7 @@ Cancel an existing order and immediately place a new order instead of the cancel
     </tr>
     <tr>
         <td><code>timestamp</code></td>
-        <td>INT</td>
+        <td>LONG</td>
         <td>YES</td>
         <td></td>
     </tr>
@@ -4615,7 +4615,7 @@ If `orderRateLimitExceededMode` is `CANCEL_ONLY` regardless of `cancelReplaceMod
 
 ### Order Amend Keep Priority (TRADE)
 
-```json
+```javascript
 {
   "id": "56374a46-3061-486b-a311-89ee972eb648",
   "method": "order.amend.keepPriority",
@@ -4639,21 +4639,23 @@ Read [Order Amend Keep Priority FAQ](../faqs/order_amend_keep_priority.md) to le
 
 **Parameters:**
 
-| Name | Type | Mandatory | Description |
-| :---- | :---- | :---- | :---- |
-| symbol | STRING | YES |  |
-| orderId | LONG | NO\* | `orderId` or `origClientOrderId` must be sent  |
-| origClientOrderId | STRING | NO\* | `orderId` or `origClientOrderId` must be sent  |
-| newClientOrderId | STRING | NO\* | The new client order ID for the order after being amended. <br> If not sent, one will be randomly generated. <br> It is possible to reuse the current clientOrderId by sending it as the `newClientOrderId`. |
-| newQty | DECIMAL | YES | `newQty` must be greater than 0 and less than the order's quantity. |
-|recvWindow | LONG | NO | The value cannot be greater than `60000`.
-|timestamp | LONG | YES |
+Name | Type | Mandatory | Description |
+:---- | :---- | :---- | :---- |
+symbol | STRING | YES |  |
+orderId | LONG | NO\* | `orderId` or `origClientOrderId` must be sent  |
+origClientOrderId | STRING | NO\* | `orderId` or `origClientOrderId` must be sent  |
+newClientOrderId | STRING | NO\* | The new client order ID for the order after being amended. <br> If not sent, one will be randomly generated. <br> It is possible to reuse the current clientOrderId by sending it as the `newClientOrderId`. |
+newQty | DECIMAL | YES | `newQty` must be greater than 0 and less than the order's quantity. |
+recvWindow | LONG | NO | The value cannot be greater than `60000`.
+timestamp | LONG | YES |
 
 **Data Source**: Matching Engine
 
+**Response:**
+
 Response for a single order:
 
-```json
+```javascript
 {
   "id": "56374a46-3061-486b-a311-89ee972eb648",
   "status": 200,
@@ -4697,7 +4699,7 @@ Response for a single order:
 
 Response for an order which is part of an Order list:
 
-```json
+```javascript
 {
   "id": "56374b46-3061-486b-a311-89ee972eb648",
   "status": 200,
@@ -4798,9 +4800,9 @@ Name                | Type    | Mandatory | Description
 ------------------- | ------- | --------- | ------------
 `symbol`            | STRING  | NO        | If omitted, open orders for all symbols are returned
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
+`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
-`timestamp`         | INT     | YES       |
+`timestamp`         | LONG    | YES       |
 
 **Data Source:**
 Memory => Database
@@ -4883,9 +4885,9 @@ Name                | Type    | Mandatory | Description
 ------------------- | ------- | --------- | ------------
 `symbol`            | STRING  | YES       |
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
+`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
-`timestamp`         | INT     | YES       |
+`timestamp`         | LONG    | YES       |
 
 **Data Source:**
 Matching Engine
@@ -5055,7 +5057,7 @@ Name                     |Type    | Mandatory | Description
 `aboveStopPrice`         |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`. <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
 `aboveTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](..faqs/trailing-stop-faq.md).
 `aboveTimeInForce`       |DECIMAL |NO         |Required if `aboveType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`.
-`aboveStrategyId`        |LONG     |NO         |Arbitrary numeric value identifying the above order within an order strategy.
+`aboveStrategyId`        |LONG    |NO         |Arbitrary numeric value identifying the above order within an order strategy.
 `aboveStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the above order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
 `belowType`              |ENUM    |YES        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 `belowClientOrderId`     |STRING  |NO         |
@@ -5069,10 +5071,10 @@ Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
 `belowStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the below order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
 `newOrderRespType`       |ENUM    |NO         |Select response format: `ACK`, `RESULT`, `FULL`
 `selfTradePreventionMode`|ENUM    |NO         |The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`, `DECREMENT`.
-`apiKey`                 |STRING |YES         |
-`recvWindow`             |LONG   |NO         |The value cannot be greater than `60000`.
-`timestamp`              |LONG   |YES          |
-`signature`              | STRING  | YES       |
+`apiKey`                 |STRING  |YES        |
+`recvWindow`             |LONG    |NO         |The value cannot be greater than `60000`.
+`timestamp`              |LONG    |YES        |
+`signature`              |STRING  | YES       |
 
 **Data Source:**
 
@@ -5215,8 +5217,8 @@ Places an OTO.
 
 **Parameters:**
 
-Name                   |Type   |Mandatory | Description
-----                   |----   |------    |------
+Name                     |Type   |Mandatory | Description
+------------------------ |------ |--------- |------
 `symbol`                 |STRING |YES       |
 `listClientOrderId`      |STRING |NO        |Arbitrary unique ID among open order lists. Automatically generated if not sent. <br>A new order list with the same listClientOrderId is accepted only when the previous one is filled or completely expired. <br> `listClientOrderId` is distinct from the `workingClientOrderId` and the `pendingClientOrderId`.
 `newOrderRespType`       |ENUM   |NO        |Format of the JSON response. Supported values: [Order Response Type](./enums.md#orderresponsetype)
@@ -5228,7 +5230,7 @@ Name                   |Type   |Mandatory | Description
 `workingQuantity`        |DECIMAL|YES       |Sets the quantity for the working order.
 `workingIcebergQty`      |DECIMAL|NO       |This can only be used if `workingTimeInForce` is `GTC`.
 `workingTimeInForce`     |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
-`workingStrategyId`      |LONG    |NO        |Arbitrary numeric value identifying the working order within an order strategy.
+`workingStrategyId`      |LONG   |NO        |Arbitrary numeric value identifying the working order within an order strategy.
 `workingStrategyType`    |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
 `pendingType`            |ENUM   |YES       |Supported values: [Order Types](#order-type)  <br> Note that `MARKET` orders using `quoteOrderQty` are not supported.
 `pendingSide`            |ENUM   |YES       |Supported values: [Order side](./enums.md#side)
@@ -5239,7 +5241,7 @@ Name                   |Type   |Mandatory | Description
 `pendingQuantity`        |DECIMAL|YES       |Sets the quantity for the pending order.
 `pendingIcebergQty`      |DECIMAL|NO        |This can only be used if `pendingTimeInForce` is `GTC`.
 `pendingTimeInForce`     |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
-`pendingStrategyId`      |LONG    |NO        |Arbitrary numeric value identifying the pending order within an order strategy.
+`pendingStrategyId`      |LONG   |NO        |Arbitrary numeric value identifying the pending order within an order strategy.
 `pendingStrategyType`    |INT    |NO        |Arbitrary numeric value identifying the pending order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
 `recvWindow`             |LONG   |NO        |The value cannot be greater than `60000`.
 `timestamp`              |LONG   |YES       |
@@ -5609,7 +5611,7 @@ For execution status of individual orders, use [`order.status`](#query-order-use
     </tr>
     <tr>
         <td><code>recvWindow</code></td>
-        <td>INT</td>
+        <td>LONG</td>
         <td>NO</td>
         <td>The value cannot be greater than <tt>60000</tt></td>
     </tr>
@@ -5621,7 +5623,7 @@ For execution status of individual orders, use [`order.status`](#query-order-use
     </tr>
     <tr>
         <td><code>timestamp</code></td>
-        <td>INT</td>
+        <td>LONG</td>
         <td>YES</td>
         <td></td>
     </tr>
@@ -5741,7 +5743,7 @@ Cancel an active order list.
     </tr>
     <tr>
         <td><code>recvWindow</code></td>
-        <td>INT</td>
+        <td>LONG</td>
         <td>NO</td>
         <td>The value cannot be greater than <tt>60000</tt></td>
     </tr>
@@ -5753,7 +5755,7 @@ Cancel an active order list.
     </tr>
     <tr>
         <td><code>timestamp</code></td>
-        <td>INT</td>
+        <td>LONG</td>
         <td>YES</td>
         <td></td>
     </tr>
@@ -5874,9 +5876,9 @@ If you need to continuously monitor order status updates, please consider using 
 Name                | Type    | Mandatory | Description
 ------------------- | ------- | --------- | ------------
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
+`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
-`timestamp`         | INT     | YES       |
+`timestamp`         | LONG    | YES       |
 
 **Data Source:**
 Database
@@ -5969,8 +5971,8 @@ Name                | Type    | Mandatory | Description
 `strategyType`      | INT     | NO        | <p>Arbitrary numeric value identifying the order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
 `selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`, `NONE`, `DECREMENT`.
 `apiKey`            | STRING  | YES       |
-`timestamp`         | INT     | YES       |
-`recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
+`timestamp`         | LONG    | YES       |
+`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
 
 **Note:** `sor.order.place` only supports `LIMIT` and `MARKET` orders. `quoteOrderQty` is not supported.
@@ -6153,10 +6155,10 @@ Query information about your account.
 Name                | Type    | Mandatory | Description
 ------------------- | ------- | --------- | ------------
 `apiKey`            | STRING  | YES       |
-`omitZeroBalances` | BOOLEAN | NO | When set to `true`, emits only the non-zero balances of an account. <br>Default value: false
-`recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
+`omitZeroBalances`  | BOOLEAN | NO | When set to `true`, emits only the non-zero balances of an account. <br>Default value: false
+`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
-`timestamp`         | INT     | YES       |
+`timestamp`         | LONG    | YES       |
 
 **Data Source:**
 Memory => Database
@@ -6246,9 +6248,9 @@ Query your current unfilled order count for all intervals.
 Name                | Type    | Mandatory | Description
 ------------------- | ------- | --------- | ------------
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
+`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
-`timestamp`         | INT     | YES       |
+`timestamp`         | LONG    | YES       |
 
 **Data Source:**
 Memory
@@ -6316,13 +6318,13 @@ Name                | Type    | Mandatory | Description
 ------------------- | ------- | --------- | ------------
 `symbol`            | STRING  | YES       |
 `orderId`           | INT     | NO        | Order ID to begin at
-`startTime`         | INT     | NO        |
-`endTime`           | INT     | NO        |
+`startTime`         | LONG    | NO        |
+`endTime`           | LONG    | NO        |
 `limit`             | INT     | NO        | Default: 500; Maximum: 1000
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
+`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
-`timestamp`         | INT     | YES       |
+`timestamp`         | LONG    | YES       |
 
 Notes:
 
@@ -6417,13 +6419,13 @@ Query information about all your order lists, filtered by time range.
 Name                | Type    | Mandatory | Description
 ------------------- | ------- | --------- | ------------
 `fromId`            | INT     | NO        | Order list ID to begin at
-`startTime`         | INT     | NO        |
-`endTime`           | INT     | NO        |
+`startTime`         | LONG    | NO        |
+`endTime`           | LONG    | NO        |
 `limit`             | INT     | NO        | Default: 500; Maximum: 1000
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
+`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
-`timestamp`         | INT     | YES       |
+`timestamp`         | LONG    | YES       |
 
 Notes:
 
@@ -6515,14 +6517,14 @@ Name                | Type    | Mandatory | Description
 ------------------- | ------- | --------- | ------------
 `symbol`            | STRING  | YES       |
 `orderId`           | INT     | NO        |
-`startTime`         | INT     | NO        |
-`endTime`           | INT     | NO        |
+`startTime`         | LONG    | NO        |
+`endTime`           | LONG    | NO        |
 `fromId`            | INT     | NO        | First trade ID to query
 `limit`             | INT     | NO        | Default: 500; Maximum: 1000
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | INT     | NO        | The value cannot be greater than `60000`
+`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
-`timestamp`         | INT     | YES       |
+`timestamp`         | LONG    | YES       |
 
 Notes:
 
@@ -6624,10 +6626,10 @@ These are the combinations supported:
 Name                | Type   | Mandatory    | Description
 ------------        | ----   | ------------ | ------------
 symbol              | STRING | YES          |
-preventedMatchId    |LONG    | NO           |
-orderId             |LONG    | NO           |
-fromPreventedMatchId|LONG    | NO           |
-limit               |INT     | NO           | Default: `500`; Maximum: `1000`
+preventedMatchId    | LONG   | NO           |
+orderId             | LONG   | NO           |
+fromPreventedMatchId| LONG   | NO           |
+limit               | INT    | NO           | Default: `500`; Maximum: `1000`
 recvWindow          | LONG   | NO           | The value cannot be greater than `60000`
 timestamp           | LONG   | YES          |
 
@@ -6832,7 +6834,7 @@ Database
 
 ### Query Order Amendments (USER_DATA)
 
-```json
+```javascript
 {
   "id": "6f5ebe91-01d9-43ac-be99-57cf062e0e30",
   "method": "order.amendments",
@@ -6854,14 +6856,14 @@ Queries all amendments of a single order.
 
 **Parameters:**
 
-| Name | Type | Mandatory | Description |
-| :---- | :---- | :---- | :---- |
-| symbol | STRING | YES |  |
-| orderId | LONG | YES |  |
-| fromExecutionId | LONG | NO |  |
-| limit | LONG | NO | Default:500; Maximum: 1000 |
-|recvWindow | LONG | NO | The value cannot be greater than `60000`.
-|timestamp | LONG | YES |
+Name | Type | Mandatory | Description |
+:---- | :---- | :---- | :---- |
+symbol | STRING | YES |  |
+orderId | LONG | YES |  |
+fromExecutionId | LONG | NO |  |
+limit | LONG | NO | Default:500; Maximum: 1000 |
+recvWindow | LONG | NO | The value cannot be greater than `60000`.
+timestamp | LONG | YES |
 
 **Data Source:**
 
@@ -6869,7 +6871,7 @@ Database
 
 **Response:**
 
-```json
+```javascript
 {
   "id": "6f5ebe91-01d9-43ac-be99-57cf062e0e30",
   "status": 200,
