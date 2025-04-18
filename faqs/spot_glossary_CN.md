@@ -391,7 +391,7 @@ Smart Order Routing (SOR)
 * 订单的上次更新时间。默认情况下，此字段（以及所有与时间戳相关的字段）在 JSON 响应中单位是毫秒。
 
 User Data Stream
-* 通过 WebSocket 推送及时的个人用户信息，包括了账户余额的变动，订单的更新等。
+* 通过 WebSocket 推送及时的个人用户信息，包括了账户余额的变动，订单的更新等。请阅读 [WebSocket 账户接口](../user-data-stream_CN.md) 来了解更多详情。
 
 ---
 
