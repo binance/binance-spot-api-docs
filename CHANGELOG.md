@@ -8,7 +8,7 @@
 * At **2025-05-07 07:00 UTC**
   * Order Amend Keep Priority will be enabled on all symbols.
   * STP Decrement will be allowed on all symbols.
-* At **April 24, 2025 07:00 UTC**, the field `amendAllowed` will become visible on Exchange Information requests, but the feature will not be enabled yet.
+* At **2025-04-24, 07:00 UTC**, the field `amendAllowed` will become visible on Exchange Information requests, but the feature will not be enabled yet.
 * [SPOT Testnet](https://testnet.binance.vision/) has both features enabled/allowed on all symbols.
 
 ---
