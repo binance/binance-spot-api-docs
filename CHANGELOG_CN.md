@@ -1,6 +1,17 @@
 # 更新日志
 
-**最近更新： 2025-04-08**
+**最近更新： 2025-04-21**
+
+### 2025-04-21
+
+**关于 [保留优先级的修改订单请求 (Order Amend Keep Priority)](./faqs/order_amend_keep_priority_CN.md) 和 [STP 方式 `DECREMENT`（递减）](./faqs/stp_faq_CN.md) 发布的说明：**
+* 于 **2025-05-07 07:00 UTC**
+  * 所有交易对将启用 ”保留优先级的修改订单请求“ 功能。
+  * 所有交易对将允许 “STP 递减”。
+* 自**2025年4月24日 07:00 UTC**起，`amendAllowed` 字段将在交易所信息请求中可见，但该功能尚未启用。
+* [SPOT 测试网](https://testnet.binance.vision/) 在所有交易对上都启用了这两项功能。
+
+---
 
 **通知:** 本节中的更改将逐步推出,需要一周时间才能完成.
 
@@ -73,14 +84,16 @@
 
 以下变更将于**2025 年 4 月 24 日 07:00 UTC**发生：
 
-* [保留优先级的修改订单请求（Order Amend Keep Priority）](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/order_amend_keep_priority_CN.md) 将可以使用。 (请注意，必须在相应交易对上启用该功能后才能使用。)
+* ~~[保留优先级的修改订单请求（Order Amend Keep Priority）](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/order_amend_keep_priority_CN.md) 将可以使用。 (请注意，必须在相应交易对上启用该功能后才能使用。)~~
   * 新字段 `amendAllowed` 会出现在 Exchange Information 响应中。
+    * **2025-04-21 更新 ："保留优先级的修改订单请求" 的具体启用日期尚未确定**
     * REST API： `GET /api/v3/exchangeInfo`
     * WebSocket API： `exchangeInfo`
   * FIX API：新的 Order Entry 消息 **OrderAmendKeepPriorityRequest** 和 **OrderAmendReject**
   * REST API：`PUT /api/v3/order/amend/keepPriority`
   * WebSocket API： `order.amend.keepPriority`
-* 如果已在交易对上作了相应配置，那么 STP 方式 `DECREMENT` （递减） 将在 Exchange Information 中可见。
+* ~~如果已在交易对上作了相应配置，那么 STP 方式 `DECREMENT` （递减） 将在 Exchange Information 中可见。~~
+  * **2025-04-21 更新 ："STP 方式 DECREMENT" 的具体启用日期尚未确定。**
   * 通过不仅仅使挂单或吃单过期,或无条件地让两种订单都过期，STP 递减会减少**两种**订单的可用数量，并将通过阻止匹配的数量来增加**两种**订单的 `prevented quantity` 值。
   * 这将使可用数量较少的订单过期，因为(`filled quantity` \+ `prevented quantity`)等于 `order quantity`。如果两个订单的可用数量相等，那么两个订单都将过期。这种情况被称为“递减”，因为可用数量减少了。
 * 使用 `orderId` 和 `origClientOrderId/cancelOrigClientOrderId` 来查询和/或取消订单：

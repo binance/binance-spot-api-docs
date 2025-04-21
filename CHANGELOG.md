@@ -1,6 +1,17 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-04-08**
+**Last Updated: 2025-04-21**
+
+### 2025-04-21
+
+**Clarification on the release of [Order Amend Keep Priority](./faqs/order_amend_keep_priority.md) and [STP Decrement](./faqs/stp_faq.md):**
+* At **2025-05-07 07:00 UTC**
+  * Order Amend Keep Priority will be enabled on all symbols.
+  * STP Decrement will be allowed on all symbols.
+* At **April 24, 2025 07:00 UTC**, the field `amendAllowed` will become visible on Exchange Information requests, but the feature will not be enabled yet.
+* [SPOT Testnet](https://testnet.binance.vision/) has both features enabled/allowed on all symbols.
+
+---
 
 ### 2025-04-08
 
@@ -75,14 +86,16 @@
 
 The following changes will occur at **April 24, 2025, 07:00 UTC**:
 
-* [Order Amend Keep Priority](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/order_amend_keep_priority.md) becomes available. (Note that the symbol has to have the feature enabled to be used.)
+* ~~[Order Amend Keep Priority](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/order_amend_keep_priority.md) becomes available. (Note that the symbol has to have the feature enabled to be used.)~~
+  * **UPDATE 2025-04-21: The exact date "Order Amend Keep Priority" will be enabled has not yet been determined.**
   * New field `amendAllowed` becomes visible in Exchange Information responses.
     * REST API: `GET /api/v3/exchangeInfo`
     * WebSocket API: `exchangeInfo`
   * FIX API: New Order Entry Messages **OrderAmendKeepPriorityRequest** and **OrderAmendReject**
   * REST API: `PUT /api/v3/order/amend/keepPriority`
   * WebSocket API: `order.amend.keepPriority`
-* STP mode `DECREMENT` becomes visible in Exchange Information if the symbol has it configured.
+* ~~STP mode `DECREMENT` becomes visible in Exchange Information if the symbol has it configured.~~
+  * **UPDATE 2025-04-21: The exact date `DECREMENT` STP will be enabled has not yet been determined.**
   * Instead of expiring only the maker, only the taker, or unconditionally both orders, STP decrement decreases the available quantity of **both** orders and increases the `prevented quantity` of **both** orders by the amount of the prevented match.
   * This expires the order with less available quantity as (`filled quantity` \+ `prevented quantity`) equals `order quantity`. Both orders expire if their available quantities are equal. It is called a "decrement" because it reduces available quantity.
 * Behavior when querying and/or canceling with `orderId` and `origClientOrderId/cancelOrigClientOrderId`:
