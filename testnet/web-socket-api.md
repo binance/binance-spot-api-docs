@@ -2920,7 +2920,7 @@ Name                | Type    | Mandatory | Description
 `newClientOrderId`  | STRING  | NO        | Arbitrary unique ID among open orders. Automatically generated if not sent
 `newOrderRespType`  | ENUM    | NO        | <p>Select response format: `ACK`, `RESULT`, `FULL`.</p><p>`MARKET` and `LIMIT` orders use `FULL` by default, other order types default to `ACK`.</p>
 `stopPrice`         | DECIMAL | NO *      |
-`trailingDelta`     | INT     | NO *      | See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md)
+`trailingDelta`     | INT     | NO *      | See [Trailing Stop order FAQ](../faqs/trailing-stop-faq.md)
 `icebergQty`        | DECIMAL | NO        |
 `strategyId`        | LONG     | NO        | Arbitrary numeric value identifying the order within an order strategy.
 `strategyType`      | INT     | NO        | <p>Arbitrary numeric value identifying the order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
