@@ -1,9 +1,16 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-04-01**
+**Last Updated: 2025-04-21**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-04-21
+
+* **[Order Amend Keep Priority](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/order_amend_keep_priority.md) is now enabled on all symbols.**
+* **[Self-trade prevention mode `DECREMENT`](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/stp_faq.md) is now enabled on all symbols.**
+
+---
 
 ### 2025-04-01
 
