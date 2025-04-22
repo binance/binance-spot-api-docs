@@ -66,6 +66,9 @@ allocation
 `CANCELED`
 * Order `status` indicating the order has been canceled by the user.
 
+`cancelReplaceMode`
+* Parameter used in Cancel Replace orders that define whether the New Order Placement should proceed if the Cancel Request fails.
+
 `clientOrderId`
 * A field, which can be set by the user, in the JSON response for order placement requests to identify the newly placed order.
 
@@ -75,8 +78,11 @@ allocation
 `commissionAsset`
 * The asset the commission fees were deducted from.
 
-`cancelReplaceMode`
-* Parameter used in Cancel Replace orders that define whether the New Order Placement should proceed if the Cancel Request fails.
+Counter Order Id
+* A field in User Data Stream execution reports that indicates the counterparty order in a prevented match.
+
+Counter Symbol
+* A field in User Data Stream execution reports that indicates the symbol of the counterparty order in a prevented match.
 
 `cummulativeQuoteQty`
 * The accumulation of the `price` * `qty` for each fill of an order.
@@ -199,6 +205,9 @@ Matching Engine
 * This can either refer to a Data Source in the documentation which means the response is coming from the engine.
 * Or this is referred to as the system that handles all the requests and matches orders.
 
+Match Type
+* Field in the order response or execution report indicating if the order was filled by the [SOR](./sor_faq.md)
+
 Memory
 * Data Source where the response is coming from the API's internal memory or cache.
 
@@ -260,6 +269,15 @@ Pending order
 
 `PENDING_NEW`
 * Order `status` indicating that the pending orders of an order list have been accepted by the engine, but are not yet placed on the order book.
+
+Prevented execution price
+* A field in User Data Stream execution reports showing the price of a prevented self-trade. See [STP](stp_faq.md).
+
+Prevented execution quantity
+* A field in the User Data Stream showing the quantity of a prevented self-trade. See [STP](stp_faq.md).
+
+Prevented execution quote quantity
+* A field in the User data Stream showing the quote quantity of the prevented self-trade. See [STP](stp_faq.md).
 
 `preventedQuantity`
 * Order quantity expired due to STP events.
@@ -394,6 +412,9 @@ Smart Order Routing (SOR)
 
 User Data Stream
 * WebSocket stream used to get real-time information of a user's account. (e.g. Changes to Balances, Order Updates, etc.) Read [User Data Streams](../user-data-stream.md) to learn more.
+
+`usedSor`
+* Indicates if the order was placed through [SOR](sor_faq.md).
 
 ---
 

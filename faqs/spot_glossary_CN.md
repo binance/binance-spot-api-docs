@@ -66,6 +66,9 @@ allocation
 `CANCELED`
 * 订单的一个状态，用来表示订单被用户取消。
 
+`cancelReplaceMode`
+* 撤消挂单再下单接口的一个参数，用来定义如果取消订单的请求失败之后，是否继续下新的订单。
+
 `clientOrderId`
 * 用于下单请求，用户可以用此字段来设置自定义值，便于用来跟踪订单。
 
@@ -75,8 +78,11 @@ allocation
 `commissionAsset`
 * 用于计算交易费的资产。
 
-`cancelReplaceMode`
-* 撤消挂单再下单接口的一个参数，用来定义如果取消订单的请求失败之后，是否继续下新的订单。
+Counter Order Id
+* 用户数据流 execution reports 中的一个字段，用来表示被阻止的撮合交易事务中的对手方订单。
+
+Counter Symbol
+* 用户数据流 execution reports 中的一个字段，用来表示被阻止的撮合交易事务中的对手方订单所使用的交易对。
 
 `cummulativeQuoteQty`
 * 订单的成交交易记录里面所有价格（`price`）乘以数量（`qty`）的和。
@@ -199,6 +205,9 @@ Matching Engine
 * 在数据源（`Data Source`）的部分指代的是请求获得数据的地方。
 * 也可以指代的是处理所有请求，撮合所有订单的后台系统。
 
+Match Type
+* 订单响应或 execution reports 中的一个字段，用来表示该订单是否通过 [智能指令路由 (SOR)](./sor_faq_CN.md) 成交。
+
 Memory
 * 数据源（`Data Source`）中指代数据存储在系统内部的缓冲。
 
@@ -261,6 +270,15 @@ Pending order
 
 `PENDING_NEW`
 * 订单 `status`；表示引擎已接受订单列表的待处理订单，但是待处理订单并没有被放到订单簿上。
+
+Prevented execution price
+* 用户数据流 execution reports 中的一个字段，用来表示被阻止的自我交易中的价格。参阅 [自我交易预防 (Self Trade Prevention - STP) 常见问题](stp_faq_CN.md)。
+
+Prevented execution quantity
+* 用户数据流 execution reports 中的一个字段，用来表示被阻止的自我交易中的订单量。参阅 [自我交易预防 (Self Trade Prevention - STP) 常见问题](stp_faq_CN.md)。
+
+Prevented execution quote quantity
+* 用户数据流 execution reports 中的一个字段，用来表示被阻止的自我交易中的报价订单量。参阅 [自我交易预防 (Self Trade Prevention - STP) 常见问题](stp_faq_CN.md)。
 
 `preventedQuantity`
 * 因为 STP 导致订单失效的数量。
@@ -392,6 +410,9 @@ Smart Order Routing (SOR)
 
 User Data Stream
 * 通过 WebSocket 推送及时的个人用户信息，包括了账户余额的变动，订单的更新等。请阅读 [WebSocket 账户接口](../user-data-stream_CN.md) 来了解更多详情。
+
+`usedSor`
+* 用以标识该订单是否是通过 [智能指令路由 (SOR)](sor_faq_CN.md) 提交的。
 
 ---
 
