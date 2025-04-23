@@ -15,6 +15,7 @@
 [fix-api_CN.md](fix-api_CN.md)            | 现货 FIX API
 [web-socket-api_CN.md](./web-socket-api_CN.md)         | 现货 WebSocket API
 [web-socket-streams_CN.md](./web-socket-streams_CN.md) | 现货行情数据流接口的描述
+[sbe-market-data-streams_CN.md](./sbe-market-data-streams_CN.md)|SBE 市场数据流
 [user-data-stream_CN.md](./user-data-stream_CN.md)     | 现货用户数据流接口的描述
 [sbe_schemas](./sbe/schemas/) | 现货API的简单二进制编码 (SBE)模式 (Schema)
 &#x0020; |
@@ -52,8 +53,10 @@
 [commission_faq_CN](./faqs/commission_faq_CN.md) | 解释 API 上所使用的佣金计算方式
 [trailing_stop_faq_CN](./faqs/trailing-stop-faq_CN.md)   | 追踪止盈止损订单(Trailing Stop)详细信息和常见问题
 [stp_faq_CN](./faqs/stp_faq_CN.md) | 关于 Self Trade Prevention (STP) 的详细信息
-[market_data_only_CN](./faqs/market_data_only_CN.md) | 仅提供市场数据的 API 和 Websocket Streams
+[market_orders_faq_CN](./faqs/market_orders_faq_CN.md)| 关于市价单行为的详细信息
+[market_data_only_CN](./faqs/market_data_only_CN.md) | 仅提供市场数据的 API 和 WebSocket Streams
 [sor_faq_CN](./faqs/sor_faq_CN.md) | 智能指令路由 (SOR)
+[order_amend_keep_priority_CN](./faqs/order_amend_keep_priority_CN.md)| 关于修改订单并保留其优先级的详细信息
 [order_count_decrement_CN](./faqs/order_count_decrement_CN.md) | 现货下单频率限制的更新
 [sbe_faq_CN](./faqs/sbe_faq_CN.md) | 关于在 API 上实施简单二进制编码 (SBE) 的信息
 

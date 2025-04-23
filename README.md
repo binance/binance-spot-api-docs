@@ -13,6 +13,7 @@ Name | Description
 [web-socket-api.md](./web-socket-api.md)          | Spot WebSocket API
 [fix-api.md](fix-api.md)                             | FIX API
 [web-socket-streams.md](./web-socket-streams.md)  | Spot Market Data WebSocket streams
+[sbe-market-data-streams.md](./sbe-market-data-streams.md) | SBE Market Data Streams
 [user-data-stream.md](./user-data-stream.md)      | Spot User Data WebSocket streams
 [sbe_schemas](./sbe/schemas/)   | Spot Simple Binary Encoding (SBE) schemas
 [testnet](./testnet/)           | API docs for features available only on SPOT Testnet
@@ -50,9 +51,11 @@ Name | Description
 [commissions_faq](./faqs/commissions_faq.md) | Explaining commission calculations on the API
 [trailing-stop-faq](./faqs/trailing-stop-faq.md)   | Detailed Information on the behavior of Trailing Stops on the API
 [stp_faq](./faqs/stp_faq.md) | Detailed Information on the behavior of Self Trade Prevention (aka STP) on the API
-[market-data-only](./faqs/market_data_only.md) | Information on our market data only API and websocket streams.
+[market_orders_faq](./faqs/market_orders_faq.md)| Detailed information on the behavior of Market Orders
+[market-data-only](./faqs/market_data_only.md) | Information on our market data only API and WebSocket streams.
 [sor_faq](./faqs/sor_faq.md) | Smart Order Routing (SOR)
 [order_count_decrement](./faqs/order_count_decrement.md) | Updates to the Spot Order Count Limit Rules.
+[order_amend_keep_priority](./faqs/order_amend_keep_priority.md) | Detailed Information on the behavior of Order Amend Keep Priority
 [sbe_faq](./faqs/sbe_faq.md) | Information on the implementation of Simple Binary Encoding (SBE) on the API
 
 ### Change log
