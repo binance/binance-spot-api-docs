@@ -79,10 +79,10 @@
   "P": "0.00000000",             // 止盈止损单触发价格
   "F": "0.00000000",             // 冰山订单数量
   "g": -1,                       // OCO订单 OrderListId
-  "C": "",                       // 原始订单自定义ID(原始订单，指撤单操作的对象。撤单本身被视为另一个订单)
+  "C": "",                       // 原始订单自定义ID（原始订单，指撤单操作的对象。撤单本身被视为另一个订单）
   "x": "NEW",                    // 本次事件的具体执行类型
   "X": "NEW",                    // 订单的当前状态
-  "r": "NONE",                   // 订单被拒绝的原因
+  "r": "NONE",                   // 订单被拒绝的原因；请参阅订单被拒绝的原因（下文）了解更多信息
   "i": 4293153,                  // orderId
   "l": "0.00000000",             // 订单末次成交量
   "z": "0.00000000",             // 订单累计已成交量
@@ -217,7 +217,19 @@
   </tr>
 </table>
 
-如果是一个订单组，则除了显示`executionReport`事件外，还将显示一个名为`ListStatus`的事件。
+#### 订单拒绝原因
+
+有关更多详细信息，请查阅 [错误代码汇总](errors_CN.md#other-errors) 文档中的错误消息。
+
+|拒绝原因 (`r`)| 错误信息|
+|---             | ---          |
+|`NONE`           | N/A (i.e. The order was not rejected.)|
+|`INSUFFICIENT_BALANCES`|"Account has insufficient balance for requested action."|
+|`STOP_PRICE_WOULD_TRIGGER_IMMEDIATELY`|"Order would trigger immediately."|
+|`WOULD_MATCH_IMMEDIATELY`|"Order would immediately match and take."|
+|`OCO_BAD_PRICES`|"The relationship of the prices for the orders is not correct."|
+
+如果是一个订单组，则除了显示 `executionReport` 事件外，还将显示一个名为 `ListStatus` 的事件。
 
 **Payload**
 

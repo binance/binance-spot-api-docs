@@ -8,6 +8,7 @@
     - [Balance Update](#balance-update)
     - [Order Update](#order-update)
       - [Conditional Fields in Execution Report](#conditional-fields-in-execution-report)
+      - [Order Reject Reason](#order-reject-reason)
       - [Execution types](#execution-types)
     - [Listen Key Expired](#listen-key-expired)
     - [Event Stream Terminated](#event-stream-terminated)
@@ -90,7 +91,7 @@ Orders are updated with the `executionReport` event.
   "C": "",                       // Original client order ID; This is the ID of the order being canceled
   "x": "NEW",                    // Current execution type
   "X": "NEW",                    // Current order status
-  "r": "NONE",                   // Order reject reason; will be an error code.
+  "r": "NONE",                   // Order reject reason; Please see Order Reject Reason (below) for more information.
   "i": 4293153,                  // Order ID
   "l": "0.00000000",             // Last executed quantity
   "z": "0.00000000",             // Cumulative filled quantity
@@ -227,6 +228,18 @@ For additional information on these parameters, please refer to the [Spot Glossa
     <td><code>"uS":true</code></td>
   </tr>
 </table>
+
+#### Order Reject Reason
+
+For additional details, look up the Error Message in the [Errors](errors.md#other-errors) documentation.
+
+|Rejection Reason (`r`)| Error Message|
+|---             | ---          |
+|`NONE`           | N/A (i.e. The order was not rejected.)|
+|`INSUFFICIENT_BALANCES`|"Account has insufficient balance for requested action."|
+|`STOP_PRICE_WOULD_TRIGGER_IMMEDIATELY`|"Order would trigger immediately."|
+|`WOULD_MATCH_IMMEDIATELY`|"Order would immediately match and take."|
+|`OCO_BAD_PRICES`|"The relationship of the prices for the orders is not correct."|
 
 If the order is an order list, an event named `ListStatus` will be sent in addition to the `executionReport` event.
 
