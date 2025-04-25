@@ -215,18 +215,18 @@ The list of error codes can be found on the [Error codes](errors.md) page.
 
 Only printable ASCII characters and SOH are supported.
 
-| Type           | Description                                                     |
-|----------------|-----------------------------------------------------------------|
-| `BOOLEAN`      | Enum: `Y` or `N`.                                               |
-| `CHAR`         | Single character.                                               |
-| `INT`          | Signed 64-bit integer.                                          |
-| `LENGTH`       | Unsigned 64-bit integer.                                        |
-| `NUMINGROUP`   | Unsigned 64-bit integer.                                        |
-| `PRICE`        | Fixed-point number. Precision depends on the symbol definition. |
-| `QTY`          | Fixed-point number. Precision depends on the symbol definition. |
-| `SEQNUM`       | Unsigned 64-bit integer.                                        |
-| `STRING`       | Sequence of printable ASCII characters.                         |
-| `UTCTIMESTAMP` | String representing datetime in UTC.                            |
+| Type           | Description                                                                                 |
+|----------------|---------------------------------------------------------------------------------------------|
+| `BOOLEAN`      | Enum: `Y` or `N`.                                                                           |
+| `CHAR`         | Single character.                                                                           |
+| `INT`          | Signed 64-bit integer.                                                                      |
+| `LENGTH`       | Unsigned 64-bit integer.                                                                    |
+| `NUMINGROUP`   | Unsigned 64-bit integer.                                                                    |
+| `PRICE`        | Fixed-point number. Precision depends on the symbol definition.                             |
+| `QTY`          | Fixed-point number. Precision depends on the symbol definition.                             |
+| `SEQNUM`       | Unsigned 32-bit integer. Rolls over to 0 after reaching its maximum value of 4,294,967,295. |
+| `STRING`       | Sequence of printable ASCII characters.                                                     |
+| `UTCTIMESTAMP` | String representing datetime in UTC.                                                        |
 
 Supported `UTCTIMESTAMP` formats:
 

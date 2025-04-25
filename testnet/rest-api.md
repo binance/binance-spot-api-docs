@@ -75,7 +75,7 @@
 
 # Public Rest API for Binance SPOT Testnet
 
-**Last Updated: 2025-04-01**
+**Last Updated: 2025-04-25**
 
 ## General API Information
 * The base endpoint is **https://testnet.binance.vision/api**
@@ -2542,7 +2542,7 @@ Reduce the quantity of an existing open order.
 Read [Order Amend Keep Priority FAQ](../faqs/order_amend_keep_priority.md) to learn more.
 
 **Weight**:
-1
+4
 
 **Parameters:**
 

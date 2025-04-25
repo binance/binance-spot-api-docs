@@ -1,9 +1,20 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-04-21**
+**Last Updated: 2025-04-25**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-04-25
+
+* **Notice: The following changes will happen at 2025-04-25 09:00 UTC.**
+* The following request weights will be increased from 1 to 4:
+  * REST API: `PUT /api/v3/order/amend/keepPriority`
+  * WebSocket API: `order.amend.keepPriority`
+  * The documentation for both REST and WebSocket API has been updated to reflect the upcoming changes.
+* Clarified that `SEQNUM` in the FIX-API is a 32-bit unsigned integer that rolls over. This has been the `SEQNUM` data type since the inception of the FIX-API.
+
+---
 
 ### 2025-04-21
 
