@@ -2515,7 +2515,7 @@ PUT /api/v3/order/amend/keepPriority
 请阅读 [保留优先权的修改订单常见问题](faqs/order_amend_keep_priority_CN.md) 了解更多信息。
 
 **权重:**
-1
+4
 
 **参数:**
 

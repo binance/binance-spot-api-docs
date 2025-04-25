@@ -75,7 +75,7 @@
 
 # Public Rest API for Binance
 
-**Last Updated: 2025-04-07**
+**Last Updated: 2025-04-25**
 
 ## General API Information
 * The following base endpoints are available. Please use whichever works best for your setup:
@@ -2549,7 +2549,7 @@ Reduce the quantity of an existing open order.
 Read [Order Amend Keep Priority FAQ](faqs/order_amend_keep_priority.md) to learn more.
 
 **Weight**:
-1
+4
 
 **Parameters:**
 

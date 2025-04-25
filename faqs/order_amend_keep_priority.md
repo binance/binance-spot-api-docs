@@ -67,7 +67,7 @@ Note that the order ID stays the same and the order keeps its priority in the qu
 
 ## Does Order Amend Keep Priority affect unfilled order count (rate limits)?
 
-Amending an existing order **does not increase your unfilled order count.**
+Currently, Order Amend Keep Priority requests charge 0 for unfilled order count.
 
 ## How do I know if my order has been amended?
 

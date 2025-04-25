@@ -243,7 +243,7 @@ MC4CAQAwBQYDK2VwBCIEIIJEYWtGBrhACmb9Dvy+qa8WEf0lQOl1s4CLIAB9m89u
 | `NUMINGROUP`   | 无符号的 64 位整数。                                        |
 | `PRICE`        | 定点数。精度取决于 symbol 定义。 |
 | `QTY`          | 定点数。精度取决于 symbol 定义。 |
-| `SEQNUM`       | 无符号的 64 位整数。                                        |
+| `SEQNUM`       | 无符号的 32 位整数。达到最大值 4,294,967,295 后会归 0，然后重新开始计数。|
 | `STRING`       | 可打印的 ASCII 字符串。                         |
 | `UTCTIMESTAMP` | 表示 UTC 日期时间的字符串。                            |
 

@@ -89,7 +89,7 @@
 
 # Public WebSocket API for Binance
 
-**Last Updated: 2025-04-08**
+**Last Updated: 2025-04-25**
 
 ## General API Information
 
@@ -4637,7 +4637,7 @@ Reduce the quantity of an existing open order.
 
 Read [Order Amend Keep Priority FAQ](faqs/order_amend_keep_priority.md) to learn more.
 
-**Weight**: 1
+**Weight**: 4
 
 **Parameters:**
 

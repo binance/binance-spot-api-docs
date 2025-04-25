@@ -1,6 +1,16 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-04-21**
+**Last Updated: 2025-04-25**
+
+### 2025-04-25
+
+* The following request weights have been increased from 1 to 4:
+  * REST API: `PUT /api/v3/order/amend/keepPriority`
+  * WebSocket API: `order.amend.keepPriority`
+  * The documentation for both REST and WebSocket API has been updated to reflect these changes.
+* Clarified that `SEQNUM` in the FIX-API is a 32-bit unsigned integer that rolls over. This has been the `SEQNUM` data type since the inception of the FIX-API.
+
+---
 
 ### 2025-04-21
 
