@@ -2791,7 +2791,12 @@ NONE
 
 下新的订单。
 
+这个请求会把1个订单添加到 `EXCHANGE_MAX_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
+
 **权重:**
+1
+
+**未成交的订单计数:**
 1
 
 **参数:**
@@ -3712,7 +3717,12 @@ NONE
 
 撤消挂单并在同个交易对上重新下单。
 
+即使请求中没有尝试发送新订单，比如(`newOrderResult: NOT_ATTEMPTED`)，未成交订单的数量仍然会加1。
+
 **权重:**
+1
+
+**未成交的订单计数:**
 1
 
 **参数:**
@@ -4506,10 +4516,15 @@ NONE
 
 由客户发送以减少其现有当前挂单的原始数量。
 
+这个请求会把0个订单添加到 `EXCHANGE_MAX_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
+
 请阅读 [保留优先权的修改订单常见问题](faqs/order_amend_keep_priority_CN.md) 了解更多信息。
 
 **权重:**
 4
+
+**未成交的订单计数:**
+0
 
 **参数:**
 
@@ -4901,7 +4916,12 @@ NONE
 发送新的OCO(one-cancels-the-other) 订单:
 `LIMIT_MAKER` 订单 + `STOP_LOSS`/`STOP_LOSS_LIMIT` 订单(称呼为 *legs*), 其中一个订单的激活会立即取消另一个订单。
 
+这个请求会把1个订单添加到 `EXCHANGE_MAX_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
+
 **权重:**
+1
+
+**未成交的订单计数:**
 1
 
 **参数:**
@@ -5080,8 +5100,6 @@ NONE
 }
 ```
 
-**权重:** 1
-
 发送新 one-cancels-the-other (OCO) 订单，激活其中一个订单会立即取消另一个订单。
 
 * OCO 包含了两个订单，分别被称为 **上方订单** 和 **下方订单**。
@@ -5093,7 +5111,13 @@ NONE
   * 如果 OCO 订单方向是 `BUY`：
     * `LIMIT_MAKER` `price` < 最后交易价格 < `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`
     * `TAKE_PROFIT` `stopPrice` > 最后交易价格 > `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`
-* OCO 将**2 个订单**添加到未成交订单计数、`EXCHANGE_MAX_ORDERS`过滤器和 `MAX_NUM_ORDERS` 过滤器中。
+* OCO 将**2 个订单**添加到 `EXCHANGE_MAX_ORDERS`过滤器和 `MAX_NUM_ORDERS` 过滤器中。
+
+**权重:**
+1
+
+**未成交的订单计数:**
+2
 
 **参数:**
 
@@ -5261,9 +5285,13 @@ NONE
 * 第二个订单被称为**待处理订单**。它可以是任何订单类型，但不包括使用参数 `quoteOrderQty` 的 `MARKET` 订单。只有当生效订单**完全成交**时，待处理订单才会被自动下单。
 * 如果生效订单或者待处理订单中的任意一个被单独取消，订单列表中剩余的那个订单也会被随之取消或过期。
 * 如果生效订单在下订单列表后**立即完全成交**，则可能会得到订单响应。其中，生效订单的状态为 `FILLED` ，但待处理订单的状态为 `PENDING_NEW`。针对这类情况，如果需要检查当前状态，您可以查询相关的待处理订单。
-* `OTO` 订单将**2 个订单**添加到未成交订单计数，`EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
+* `OTO` 订单将**2 个订单**添加到 `EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
 
-**权重:** 1
+**权重:**
+1
+
+**未成交的订单计数:**
+2
 
 **参数:**
 
@@ -5433,9 +5461,13 @@ NONE
     * 生效订单的行为与此一致 [OTO](#orderList-place-oto)
 * 一个OTOCO订单有两个待处理订单（pending above 和 pending below），它们构成了一个 OCO 订单列表。只有当生效订单**完全成交**时，待处理订单们才会被自动下单。
     * 待处理上方(pending above)订单和待处理下方(pending below)订单都遵循与 OCO 订单列表相同的规则 [Order List OCO](#orderlist-place-oco)。
-* `OTOCO` 在未成交订单计数，`EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器的基础上添加**3个订单**。
+* `OTOCO` 在 `EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器的基础上添加**3个订单**。
 
-**权重:** 1
+**权重:**
+1
+
+**未成交的订单计数:**
+3
 
 **参数:**
 
@@ -5513,17 +5545,17 @@ NONE
     "symbol": "1712544378871",
     "orders": [
       {
-        "symbol": "1712544378871",
+        "symbol": "LTCBNB",
         "orderId": 23,
         "clientOrderId": "OVQOpKwfmPCfaBTD0n7e7H"
       },
       {
-        "symbol": "1712544378871",
+        "symbol": "LTCBNB",
         "orderId": 24,
         "clientOrderId": "YcCPKCDMQIjNvLtNswt82X"
       },
       {
-        "symbol": "1712544378871",
+        "symbol": "LTCBNB",
         "orderId": 25,
         "clientOrderId": "ilpIoShcFZ1ZGgSASKxMPt"
       }
@@ -5999,7 +6031,12 @@ NONE
 
 下使用智能订单路由 (SOR) 的新订单。
 
+这个请求会把1个订单添加到 `EXCHANGE_MAX_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
+
 **权重:**
+1
+
+**未成交的订单计数:**
 1
 
 **参数:**
