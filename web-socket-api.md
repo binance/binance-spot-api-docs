@@ -5109,8 +5109,6 @@ Notes:
 
 * `trailingDelta` applies only to the `STOP_LOSS`/`STOP_LOSS_LIMIT` leg of the OCO.
 
-* OCOs add **2 orders** to the unfilled order count, `EXCHANGE_MAX_ORDERS` filter, and `MAX_NUM_ORDERS` filter.
-
 **Data Source:**
 Matching Engine
 

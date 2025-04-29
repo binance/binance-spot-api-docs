@@ -4975,8 +4975,6 @@ NONE
 
 * `trailingDelta` 仅适用于 OCO 的 `STOP_LOSS`/`STOP_LOSS_LIMIT` leg。
 
-* `OCO` 将**2个订单**添加到未成交的订单计数， `EXCHANGE_MAX_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
-
 **数据源:**
 撮合引擎
 
