@@ -1,9 +1,18 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-04-25**
+**Last Updated: 2025-04-29**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-04-29
+
+* Features that currently require an Ed25519 API key will soon be opened up to HMAC and RSA keys.
+  * For example, subscribing to User Data Stream in WebSocket API will be possible with any API key type before listenKeys are removed.
+  * Users are still encouraged to migrate to Ed25519 API keys as they are more secure and performant on Binance Spot Trading.
+  * More details to come.
+
+---
 
 ### 2025-04-25
 

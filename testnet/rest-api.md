@@ -20,7 +20,6 @@
       - [Ed25519 Keys](#ed25519-keys)
 - [Public API Endpoints](#public-api-endpoints)
   - [General endpoints](#general-endpoints)
-    - [Terminology](#terminology)
     - [Test connectivity](#test-connectivity)
     - [Check server time](#check-server-time)
     - [Exchange information](#exchange-information)
@@ -61,12 +60,12 @@
   - [Account Endpoints](#account-endpoints)
     - [Account information (USER_DATA)](#account-information-user_data)
     - [Account trade list (USER_DATA)](#account-trade-list-user_data)
-    - [Query Unfilled Order Count (TRADE)](#query-unfilled-order-count-trade)
+    - [Query Unfilled Order Count (USER_DATA)](#query-unfilled-order-count-user_data)
     - [Query Prevented Matches (USER_DATA)](#query-prevented-matches-user_data)
     - [Query Allocations (USER_DATA)](#query-allocations-user_data)
     - [Query Commission Rates (USER_DATA)](#query-commission-rates-user_data)
     - [Query Order Amendments (USER_DATA)](#query-order-amendments-user_data)
-  - [User data stream endpoints (Deprecated)](#user-data-stream-endpoints---deprecated)
+  - [User data stream endpoints (Deprecated)](#user-data-stream-endpoints-deprecated)
     - [Start user data stream (USER_STREAM) (Deprecated)](#start-user-data-stream-user_stream-deprecated)
     - [Keepalive user data stream (USER_STREAM) (Deprecated)](#keepalive-user-data-stream-user_stream-deprecated)
     - [Close user data stream (USER_STREAM) (Deprecated)](#close-user-data-stream-user_stream-deprecated)
@@ -1648,7 +1647,12 @@ POST /api/v3/order
 ```
 Send in a new order.
 
+This adds 1 order to the `EXCHANGE_MAX_ORDERS` filter and the `MAX_NUM_ORDERS` filter.
+
 **Weight:**
+1
+
+**Unfilled Order Count:**
 1
 
 **Parameters:**
@@ -2131,9 +2135,12 @@ Cancels an existing order and places a new order on the same symbol.
 
 Filters and Order Count are evaluated before the processing of the cancellation and order placement occurs.
 
-A new order that was not attempted (i.e. when `newOrderResult: NOT_ATTEMPTED` ), will still increase the order count by 1.
+A new order that was not attempted (i.e. when `newOrderResult: NOT_ATTEMPTED`), will still increase the unfilled order count by 1.
 
 **Weight:**
+1
+
+**Unfilled Order Count:**
 1
 
 **Parameters:**
@@ -2539,10 +2546,15 @@ PUT /api/v3/order/amend/keepPriority
 
 Reduce the quantity of an existing open order.
 
+This adds 0 orders to the `EXCHANGE_MAX_ORDERS` filter and the `MAX_NUM_ORDERS` filter.
+
 Read [Order Amend Keep Priority FAQ](../faqs/order_amend_keep_priority.md) to learn more.
 
 **Weight**:
 4
+
+**Unfilled Order Count:**
+0
 
 **Parameters:**
 
@@ -2761,9 +2773,6 @@ timestamp | LONG | YES |
 POST /api/v3/orderList/oco
 ```
 
-**Weight:**
-1
-
 Send in an one-cancels-the-other (OCO) pair, where activation of one order immediately cancels the other.
 
 * An OCO has 2 orders called the **above order** and **below order**.
@@ -2775,7 +2784,13 @@ Send in an one-cancels-the-other (OCO) pair, where activation of one order immed
   * If the OCO is on the `BUY` side:
     * `LIMIT_MAKER/TAKE_PROFIT_LIMIT price` \< Last Traded Price \< `stopPrice`
     * `TAKE_PROFIT stopPrice` \< Last Traded Price \< `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
-* OCOs add **2 orders** to the unfilled order count, `EXCHANGE_MAX_ORDERS` filter, and the `MAX_NUM_ORDERS` filter.
+* OCOs add **2 orders** to the `EXCHANGE_MAX_ORDERS` filter and the `MAX_NUM_ORDERS` filter.
+
+**Weight:**
+1
+
+**Unfilled Order Count:**
+2
 
 **Parameters:**
 
@@ -2893,9 +2908,12 @@ Place an OTO.
 * The second order is called the **pending order**. It can be any order type except for `MARKET` orders using parameter `quoteOrderQty`. The pending order is only placed on the order book when the working order gets **fully filled**.
 * If either the working order or the pending order is cancelled individually, the other order in the order list will also be canceled or expired.
 * When the order list is placed, if the working order gets **immediately fully filled**, the placement response will show the working order as `FILLED` but the pending order will still appear as `PENDING_NEW`. You need to query the status of the pending order again to see its updated status.
-* OTOs add **2 orders** to the unfilled order count, `EXCHANGE_MAX_NUM_ORDERS` filter and `MAX_NUM_ORDERS` filter.
+* OTOs add **2 orders** to the `EXCHANGE_MAX_NUM_ORDERS` filter and `MAX_NUM_ORDERS` filter.
 
 **Weight:** 1
+
+**Unfilled Order Count:**
+2
 
 **Parameters:**
 
@@ -3024,9 +3042,12 @@ Place an OTOCO.
   * The behavior of the working order is the same as the [OTO](#new-order-list---oto-trade).
 * OTOCO has 2 pending orders (pending above and pending below), forming an OCO pair. The pending orders are only placed on the order book when the working order gets **fully filled**.
     * The rules of the pending above and pending below follow the same rules as the [Order list OCO](#new-order-list---oco-trade).
-* OTOCOs add **3 orders** against the unfilled order count, `EXCHANGE_MAX_NUM_ORDERS` filter, and `MAX_NUM_ORDERS` filter.
+* OTOCOs add **3 orders** to the `EXCHANGE_MAX_NUM_ORDERS` filter and `MAX_NUM_ORDERS` filter.
 
 **Weight:** 1
+
+**Unfilled Order Count:**
+3
 
 **Parameters:**
 
@@ -3457,9 +3478,14 @@ POST /api/v3/sor/order
 ```
 Places an order using smart order routing (SOR).
 
+This adds 1 order to the `EXCHANGE_MAX_ORDERS` filter and the `MAX_NUM_ORDERS` filter.
+
 Read [SOR FAQ](../faqs/sor_faq.md) to learn more.
 
 **Weight:**
+1
+
+**Unfilled Order Count:**
 1
 
 **Parameters:**
@@ -3709,7 +3735,7 @@ Memory => Database
 ```
 <a id="query-unfilled-order-count"></a>
 
-### Query Unfilled Order Count (TRADE)
+### Query Unfilled Order Count (USER_DATA)
 ```
 GET /api/v3/rateLimit/order
 ```
