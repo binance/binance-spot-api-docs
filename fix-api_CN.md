@@ -474,6 +474,10 @@ Your connection is about to be closed. Please reconnect.
 
 由客户端发送，用以提交新订单并进行执行。
 
+这个请求会把1个订单添加到 `EXCHANGE_MAX_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
+
+**未成交的订单计数:** 1
+
 请参阅 [支持的订单类型](#ordertype) 了解支持的字段组合。
 
 > [!NOTE]
@@ -705,6 +709,12 @@ Your connection is about to be closed. Please reconnect.
 * 要取消订单，需要 `OrderID (11)` 或 `OrigClOrdId (41)`。
 * 当同时提供 `OrderID (37)` 和 `OrigClOrdID (41)` 两个参数时，系统首先将会使用 `OrderID` 来搜索订单。然后， 查找结果中的 `OrigClOrdID` 的值将会被用来验证订单。如果两个条件都不满足，则请求将被拒绝。
 
+在撤消订单和下单前会判断: 1) 过滤器参数, 以及 2) 目前下单数量。
+
+即使请求中没有尝试发送新订单，比如(`newOrderResult: NOT_ATTEMPTED`)，未成交订单的数量仍然会加1。
+
+**未成交的订单计数:** 1
+
 在描述新订单时，请参阅 [支持的订单类型](#ordertype) 了解支持的字段组合。
 
 > [!NOTE]
@@ -805,6 +815,14 @@ Your connection is about to be closed. Please reconnect.
 #### NewOrderList<code>&lt;E&gt;</code>
 
 由客户发送，用以提交需要执行的订单列表。
+* `OTO` 或 `OTO` 订单将**2 个订单**添加到 `EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
+* `OTOCO` 在 `EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器的基础上添加**3个订单**。
+
+**未成交的订单计数:**
+* OCO: 2
+* OTO: 2
+* OTOCO: 3
+
 订单列表中的订单是相互依赖的。
 欲了解支持的订单类型和触发说明，请参考[支持的订单列表类型](#order-list-types)。
 
@@ -907,6 +925,10 @@ Your connection is about to be closed. Please reconnect.
 #### OrderAmendKeepPriorityRequest<code>&lt;XAK&gt;</code>
 
 由客户发送以减少其订单的原始数量。
+
+这个请求将添加0个订单到 `EXCHANGE_MAX_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
+
+**未成交的订单计数:** 0
 
 **注意：**
 
