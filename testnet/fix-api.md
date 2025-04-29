@@ -452,6 +452,10 @@ Resend requests are currently not supported.
 
 Sent by the client to submit a new order for execution.
 
+This adds 1 order to the `EXCHANGE_MAX_ORDERS` filter and the `MAX_NUM_ORDERS` filter.
+
+**Unfilled Order Count:** 1
+
 Please refer to [Supported Order Types](#ordertype) for supported field combinations.
 
 > [!NOTE]
@@ -682,9 +686,14 @@ Sent by the server when [OrderCancelRequest`<F>`](#ordercancelrequest) has faile
 #### OrderCancelRequestAndNewOrderSingle<code>&lt;XCN&gt;</code>
 
 Sent by the client to cancel an order and submit a new one for execution.
-
 * To cancel an order either `OrderID (11)` or `OrigClOrdId (41)` are required.
 * If both `OrderID (37)` and `OrigClOrdID (41)` are provided, the `OrderID` is searched first, then the `OrigClOrdID` from that result is checked against that order. If both conditions are not met the request will be rejected.
+
+Filters and Order Count are evaluated before the processing of the cancellation and order placement occurs.
+
+A new order that was not attempted (i.e. when `newOrderResult: NOT_ATTEMPTED`), will still increase the unfilled order count by 1.
+
+**Unfilled Order Count:** 1
 
 Please refer to [Supported Order Types](#ordertype) for supported field combinations when describing the new order.
 
@@ -789,6 +798,14 @@ Sent by the server in response to [OrderMassCancelRequest`<q>`](#ordermasscancel
 
 Sent by the client to submit a list of orders for execution.
 
+* OCOs or OTOs add **2 orders** to the `EXCHANGE_MAX_ORDERS` filter and the `MAX_NUM_ORDERS` filter.
+* OTOCOs add **3 orders** to the `EXCHANGE_MAX_NUM_ORDERS` filter and `MAX_NUM_ORDERS` filter.
+
+**Unfilled Order Count:**
+* OCO: 2
+* OTO: 2
+* OTOCO: 3
+
 Orders in an order list are contingent on one another.
 Please refer to [Supported Order List Types](#order-list-types) for supported order types and triggering instructions.
 
@@ -892,11 +909,16 @@ Sent by the server whenever an order list state changes.
 
 Sent by the client to reduce the original quantity of their order.
 
+This adds 0 orders to the `EXCHANGE_MAX_ORDERS` filter and the `MAX_NUM_ORDERS` filter.
+
+**Unfilled Order Count:** 0
+
+Read [Order Amend Keep Priority FAQ](faqs/order_amend_keep_priority.md) to learn more.
+
 **Notes:**
 
 * The `ClOrdID (11)` is not required to be different from the `ClOrdID` of the order. When the `ClOrdID` of the request is the same as the `ClOrdID` of the order being amended, the `ClOrdID` will remain unchanged.
 * If both `OrderID (37)` and `OrigClOrdID (41)` are provided, the `OrderID` is searched first, then the `OrigClOrdID (41)` from that result is checked against that order. If both conditions are not met the request will be rejected.
-
 
 | Tag | Name | Type | Required | Description |
 | :---- | :---- | :---- | :---- | ----- |
