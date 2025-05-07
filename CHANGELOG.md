@@ -2,7 +2,7 @@
 
 **Last Updated: 2025-04-29**
 
-## 2025-04-29
+### 2025-04-29
 
 * Features that currently require an Ed25519 API key will soon be opened up to HMAC and RSA keys.
   * For example, subscribing to User Data Stream in WebSocket API will be possible with any API key type before listenKeys are removed.
