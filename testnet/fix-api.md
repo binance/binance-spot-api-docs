@@ -10,7 +10,7 @@ FIX connections require TLS encryption. Please either use native TCP+TLS connect
 **FIX sessions only support Ed25519 keys.** </br>
 You can setup and configure your API key permissions on [Spot Test Network](https://testnet.binance.vision/).
 
-### FIX API order entry sessions
+### FIX API Order Entry sessions
 
 - Endpoint is: `tcp+tls://fix-oe.testnet.binance.vision:9000`
 - Supports placing orders, canceling orders, and querying current limit usage.

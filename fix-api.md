@@ -12,7 +12,7 @@ FIX connections require TLS encryption. Please either use native TCP+TLS connect
 Please refer to [this tutorial](https://www.binance.com/en/support/faq/how-to-generate-an-ed25519-key-pair-to-send-api-requests-on-binance-6b9a63f1e3384cf48a2eedb82767a69a)
 on how to set up an Ed25519 key pair.
 
-### FIX API order entry sessions
+### FIX API Order Entry sessions
 
 - Endpoint is: `tcp+tls://fix-oe.binance.com:9000`
 - Supports placing orders, canceling orders, and querying current limit usage.
