@@ -3406,8 +3406,8 @@ GET /api/v3/orderList
 
 名称| 类型|是否必需| 描述
 ----|-----|----|----------
-orderListId|LONG|NO|   `orderListId` 或 `origClientOrderId` 必须提供一个。
-origClientOrderId|STRING|NO|  `orderListId` 或 `origClientOrderId` 必须提供一个。
+orderListId|LONG|NO*|  通过 `orderListId` 获取订单列表。 <br>必须提供 `orderListId` 或 `origClientOrderId`。
+origClientOrderId|STRING|NO*| 通过 `listClientOrderId` 获取订单列表。<br>必须提供 `orderListId` 或 `origClientOrderId`。
 recvWindow|LONG|NO| 赋值不得大于 `60000`
 timestamp|LONG|YES|
 

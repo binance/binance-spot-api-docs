@@ -5619,13 +5619,13 @@ For execution status of individual orders, use [`order.status`](#query-order-use
     <tr>
         <td><code>origClientOrderId</code></td>
         <td>STRING</td>
-        <td rowspan="2">YES</td>
-        <td>Query order list by <code>listClientOrderId</code></td>
+        <td rowspan="2">NO*</td>
+        <td>Query order list by <code>listClientOrderId</code>.<br><code>orderListId</code> or <code>origClientOrderId</code> must be provided.</td>
     </tr>
     <tr>
         <td><code>orderListId</code></td>
         <td>INT</td>
-        <td>Query order list by <code>orderListId</code></td>
+        <td>Query order list by <code>orderListId</code>.<br><code>orderListId</code> or <code>origClientOrderId</code> must be provided.</td>
     </tr>
     <tr>
         <td><code>apiKey</code></td>

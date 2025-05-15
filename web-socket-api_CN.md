@@ -5676,13 +5676,13 @@ NONE
     <tr>
         <td><code>origClientOrderId</code></td>
         <td>STRING</td>
-        <td rowspan="2">YES</td>
-        <td>通过 <code>listClientOrderId</code> 获取订单列表 </td>
+        <td rowspan="2">NO*</td>
+        <td>通过 <code>listClientOrderId</code> 获取订单列表。 <br> 必须提供 <code>orderListId</code> 或 <code>origClientOrderId</code>。</td>
     </tr>
     <tr>
         <td><code>orderListId</code></td>
         <td>INT</td>
-        <td>通过 <code>orderListId</code> 获取订单列表</td>
+        <td>通过 <code>orderListId</code> 获取订单列表。<br> 必须提供 <code>orderListId</code> 或 <code>origClientOrderId</code>。</td>
     </tr>
     <tr>
         <td><code>apiKey</code></td>
