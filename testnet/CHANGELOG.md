@@ -1,9 +1,27 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-04-29**
+**Last Updated: 2025-05-21**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-05-21
+
+**Notice: The following changes will happen at 2025-05-21 7:00 UTC.**
+
+* The previous behavior of `recvWindow` on FIX, REST, and WebSocket APIs will be augmented by an additional check.
+  * To review, the existing behavior is:
+    * If `timestamp` is greater than `serverTime` + 1 second at receipt of the request, the request is rejected. Rejection by this check increments message limits (FIX API) and IP limits (REST and WebSocket APIs), but not Unfilled Order Count (order placement endpoints of all APIs).
+    * If the difference between `timestamp` and `serverTime` at receipt of the request is greater than `recvWindow`, the request is rejected. Rejection by this check increments message limits (FIX API) and IP limits (REST and WebSocket APIs) but not Unfilled Order Count (order placement endpoints of all APIs).
+  * The additional check is:
+    * Just before a request is forwarded to the Matching Engine, if the difference between `timestamp` and the current `serverTime` is greater than `recvWindow`, the request is rejected. Rejection by this check increments message limits (FIX API), IP limits (REST and WebSocket APIs), and Unfilled Order Count (order placement endpoints of all APIs).
+  * The documentation for Timing security has been updated to reflect the additional check.
+    * [REST API](rest-api.md#timing-security)
+    * [WebSocket API](web-socket-api.md#timing-security)
+    * [FIX API](fix-api.md#timing-security)
+* Fixed a bug in FIX Market Data message InstrumentList `<y>`. Previously, the value of `NoRelatedSym(146)` could have been incorrect.
+
+---
 
 ### 2025-04-29
 
