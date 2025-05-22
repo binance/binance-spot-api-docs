@@ -87,6 +87,32 @@ FIX Market Data 的 QuickFIX Schema 可以在 [这里](https://github.com/binanc
 - `EVERYTHING(1)`： 默认模式。
 - `ONLY_ACKS(2)`： 无论操作成功还是失败，都只接收 ACK 消息。禁用 `ExecutionReport` 推送。
 
+<a id="timingsecurity"></a>
+
+### 时间同步安全
+
+* 所有请求都需要一个 `SendingTime(52)` 字段，该字段应为当前时间戳。
+* 另有一个可选字段 `RecvWindow(25000)` ，用以指定请求的有效期（以毫秒为单位）。
+* 如果未指定 `RecvWindow(25000)`，则仅对 Logon`<A>` 请求默认为 5000 毫秒。对于其他请求，如果未设置，则不会执行 RecvWindow 检查。
+  * `RecvWindow(25000)` 的最大有效时间为 60000 毫秒。
+* 请求处理逻辑如下：
+
+```javascript
+serverTime = getCurrentTime()
+if (SendingTime < (serverTime + 1 second) && (serverTime - SendingTime) <= RecvWindow) {
+  // 开始处理请求
+  serverTime = getCurrentTime()
+  if (serverTime - SendingTime) <= RecvWindow {
+    // 将请求转发到撮合引擎
+  } else {
+    // 拒绝请求
+  }
+  // 结束处理请求
+} else {
+  // 拒绝请求
+}
+```
+
 <a id="signaturecomputation"></a>
 
 ### 如何签署 Logon<code>&lt;A&gt;</code> 请求

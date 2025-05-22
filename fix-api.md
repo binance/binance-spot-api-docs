@@ -88,6 +88,32 @@ to change this behavior.
 - `EVERYTHING(1)`: The default mode.
 - `ONLY_ACKS(2)`: Receive only ACK messages whether operation succeeded or failed. Disables ExecutionReport push.
 
+<a id="timingsecurity"></a>
+
+### Timing Security
+
+* All requests require a `SendingTime(52)` field which should be the current timestamp.
+* An additional optional field, `RecvWindow(25000)`, specifies for how long the request stays valid in milliseconds.
+* If `RecvWindow(25000)` is not specified, it defaults to 5000 milliseconds only for the Logon`<A>` request. For other requests if unset, the RecvWindow check is not executed.
+  * Maximum `RecvWindow(25000)` is 60000 milliseconds.
+* Request processing logic is as follows:
+
+```javascript
+serverTime = getCurrentTime()
+if (SendingTime < (serverTime + 1 second) && (serverTime - SendingTime) <= RecvWindow) {
+  // begin processing request
+  serverTime = getCurrentTime()
+  if (serverTime - SendingTime) <= RecvWindow {
+    // forward request to Matching Engine
+  } else {
+    // reject request
+  }
+  // finish processing request
+} else {
+  // reject request
+}
+```
+
 <a id="signaturecomputation"></a>
 
 ### How to sign Logon<code>&lt;A&gt;</code> request

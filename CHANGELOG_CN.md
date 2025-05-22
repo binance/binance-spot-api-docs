@@ -1,6 +1,24 @@
 # 更新日志
 
-**最近更新： 2025-04-29**
+**最近更新： 2025-05-22**
+
+### 2025-05-22
+
+**注意：以下变更将于 2025 年 6 月 6 日 7:00 (UTC) 生效。**
+
+* 将通过一项额外的检查，对 FIX、REST 和 WebSocket API 上先前关于`recvWindow` 的行为进行强化。
+  * 让我们回顾一下现有行为：
+    * 如果在接收请求时， `timestamp` 大于 `serverTime` + 1 秒，则请求会被拒绝。此检查被拒绝的话，将会增加消息限制（FIX API）和 IP 限制（REST 和 WebSocket API），但不会增加未成交订单计数（所有 API 的下单端点）。
+    * 如果在接收请求时， `timestamp` 和 `serverTime` 之间的差值大于 `recvWindow`，则请求被拒绝。此检查被拒绝的话，将会增加消息限制（FIX API）和 IP 限制（REST 和 WebSocket API），但不会增加未成交订单计数（所有 API 的下单端点）。
+  * 附加检查：
+    * 在请求转发到撮合引擎之前，如果 `timestamp` 与当前 `serverTime` 之间的差值大于 `recvWindow`，则拒绝该请求。此检查被拒绝的话，将会增加消息限制（FIX API）、IP 限制（REST 和 WebSocket API）以及未成交订单计数（所有 API 的下单端点）。
+  * 已更新 Timing 安全性文档，以反映新增的附加检查。
+    * [REST API](rest-api_CN.md#timingsecurity)
+    * [WebSocket API](web-socket-api_CN.md#timingsecurity)
+    * [FIX API](fix-api_CN.md#timingsecurity)
+* 修复了 FIX Market Data 消息 InstrumentList `<y>` 中的一个错误。之前，`NoRelatedSym(146)` 的值可能会不正确。
+
+---
 
 ### 2025-04-29
 

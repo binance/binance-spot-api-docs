@@ -1,7 +1,8 @@
 # REST行情与交易接口
 
-**最近更新： 2025-04-07**
+**最近更新： 2025-05-22**
 
+<a id="general-api-information"></a>
 ## API 基本信息
 * 本篇列出接口的 base URL 有:
   * **https://api.binance.com**
@@ -110,18 +111,29 @@ MARKET_DATA | 需要有效的API-KEY
 * `签名` **大小写不敏感**.
 * 请参考下面 [签名示例](#post-apiv3order-%E7%9A%84%E7%A4%BA%E4%BE%8B) 以了解具体如何做计算签名。
 
+<a id="timingsecurity"></a>
 ### 时间同步安全
-* 签名接口均需要传递 `timestamp`参数，其值应当是请求发送时刻的unix时间戳(毫秒)。
-* 服务器收到请求时会判断请求中的时间戳，如果是5000毫秒之前发出的，则请求会被认为无效。这个时间空窗值可以通过发送可选参数 `recvWindow`来定义。
-* 逻辑伪代码：
+* `SIGNED` 请求还需要一个 `timestamp` 参数，该参数应为当前时间戳，单位为毫秒或微秒。（参见 [通用 API 信息](#general-api-information)）
+* 另一个可选参数 `recvWindow`，用以指定请求的有效期，只能以毫秒为单位。
+  * 如果未发送 `recvWindow`，则 **默认值为 5000 毫秒**。
+  * `recvWindow` 的最大值为 60000 毫秒。
+* 请求处理逻辑如下：
 
-  ```javascript
-  if (timestamp < (serverTime + 1000) && (serverTime - timestamp) <= recvWindow) {
-    // process request
+```javascript
+serverTime = getCurrentTime()
+if (timestamp < (serverTime + 1 second) && (serverTime - timestamp) <= recvWindow) {
+  // 开始处理请求
+  serverTime = getCurrentTime()
+  if (serverTime - timestamp) <= recvWindow {
+    // 将请求转发到撮合引擎
   } else {
-    // reject request
+    // 拒绝请求
   }
-  ```
+  // 结束处理请求
+} else {
+  // 拒绝请求
+}
+```
 
 **关于交易时效性**
 互联网状况并不100%可靠，不可完全依赖,因此你的程序本地到币安服务器的时延会有抖动.
