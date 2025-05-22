@@ -1,12 +1,20 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-05-21**
+**Last Updated: 2025-05-22**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
 
-### 2025-05-21
+### 2025-05-22
 
+REST and WebSocket API:
+
+* Reminder that SBE 2:0 schema will be retired on 2025-05-28, [6 months after being deprecated](../faqs/sbe_faq.md).
+* The [SBE lifecycle for Testnet](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_schema_lifecycle_testnet.json) has been updated to reflect this change.
+
+---
+
+### 2025-05-21
 **Notice: The following changes will happen at 2025-05-21 7:00 UTC.**
 
 * The previous behavior of `recvWindow` on FIX, REST, and WebSocket APIs will be augmented by an additional check.
