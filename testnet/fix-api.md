@@ -45,6 +45,16 @@ You can setup and configure your API key permissions on [Spot Test Network](http
   * If the server has not received any messages within a `HeartInt (108)` interval, a [TestRequest `<1>`](#testrequest) will be sent. If the server does not receive a HeartBeat `<0>` containing the expected `TestReqID (112)` from the client within `HeartInt (108)` seconds, the server will send a Logout `<5>` message and close the connection.
   * If the client has not received any messages within a `HeartInt (108)` interval, the client is responsible for sending a TestRequest `<1>` to ensure the connection is healthy. Upon receiving such a TestRequest `<1>`, the server will respond with a Heartbeat `<0>` containing the expected `TestReqID (112)`. If the client does not receive the server’s response within a `HeartInt (108)` interval, the client should close the session and connection and establish new ones.
 
+### API Key Permissions
+
+To access the FIX API order entry sessions, your API key must be configured with the `FIX_API` permission.
+
+To access the FIX Drop Copy sessions, your API key must be configured with either `FIX_API_READ_ONLY` or `FIX_API` permission.
+
+To access the FIX Market Data sessions, your API key must be configured with either `FIX_API` or `FIX_API_READ_ONLY` permission.
+
+**FIX sessions only support Ed25519 keys.**
+
 <a id="orderedmode"></a>
 
 ### On message processing order
@@ -214,9 +224,15 @@ Resulting Logon `<A>` message:
   For example, if the current value of `HeartBtInt` is 5, please wait up to 10 seconds.
 * Upon breaching the limit a [Reject `<3>`](#reject) will be sent containing information about the connection limit
   breach and the current limit.
-* The limit is 10 concurrent TCP connections per account for the Order Entry sessions. There is a limit of 15 connection attempts within 30 seconds.
-* The limit is 10 concurrent TCP connections per account for the Drop Copy sessions. There is a limit of 15 connection attempts within 30 seconds.
-* The limit is 100 concurrent TCP connections per account for Market Data sessions. There is a limit of 300 connection attempts within 300 seconds.
+* FIX Order Entry limits:
+   * 15 connection attempts within 30 seconds
+   * Maximum of 10 concurrent TCP connections per account
+* FIX Drop Copy limits:
+    * 15 connection attempts within 30 seconds
+    * Maximum of 10 concurrent TCP connections per account
+* FIX Market Data limits
+  * 300 connection attempts within 300 seconds
+  * Maximum of 100 concurrent TCP connections per account
 
 ### Unfilled Order Count
 
@@ -652,12 +668,11 @@ Sent by the client to cancel an order or an order list.
 * To cancel an order list either `ListID (66)` or `OrigClListID (25015)` are required.
   * If both `ListID (66)` and `OrigClListID (25015)` are provided, the `ListID` is searched first, then the `OrigClListID` from that result is checked against that order. If both conditions are not met the request will be rejected.
 
-
 If the canceled order is part of an order list, the entire list will be canceled.
 
 **Note:**
 
-The performance for canceling an order (single cancel or as part of a cancel-replace) is always better when only `orderId` is sent. Sending `origClientOrderId` or both `orderId` + `origClientOrderId` will be slower.
+* The performance for canceling an order (single cancel or as part of a cancel-replace) is always better when only `orderId` is sent. Sending `origClientOrderId` or both `orderId` + `origClientOrderId` will be slower.
 
 | Tag   | Name               | Type   | Required | Description                                                                                       |
 |-------|--------------------|--------|----------|---------------------------------------------------------------------------------------------------|
@@ -931,7 +946,7 @@ Sent by the server whenever an order list state changes.
 
 <a id="orderamendkeeppriorityrequest"></a>
 
-#### OrderAmendKeepPriorityRequest `&lt;XAK&gt;`
+#### OrderAmendKeepPriorityRequest<code>&lt;XAK&gt;</code>
 
 Sent by the client to reduce the original quantity of their order.
 
@@ -969,7 +984,7 @@ Read [Order Amend Keep Priority FAQ](faqs/order_amend_keep_priority.md) to learn
 
 <a id="orderamendreject"></a>
 
-### OrderAmendReject `&lt;XAR&gt;`
+#### OrderAmendReject<code>&lt;XAR&gt;</code>
 
 Sent by the server when the OrderAmendKeepPriorityRequest `<XAK>` has failed.
 

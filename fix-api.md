@@ -73,7 +73,6 @@ messages may get reordered before they are processed by the engine.
 > [!TIP]
 > `UNORDERED(1)` should offer better performance when there are multiple messages in flight from the client to the server.
 
-
 <a id="responsemode"></a>
 
 ### Response Mode
@@ -467,13 +466,10 @@ The countdown message sent will be:
 ```
 You'll be disconnected in %d seconds. Please reconnect.
 ```
-
 When there are 10 seconds remaining, the following message will be sent:
-
 ```
 Your connection is about to be closed. Please reconnect.
 ```
-
 If the client does not close the old session within 10 seconds of receiving the above message, the server will log it out and close the session.
 
 | Tag | Name | Type | Required | Description |

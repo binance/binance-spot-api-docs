@@ -1647,9 +1647,9 @@ POST /api/v3/order
 名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-side | ENUM | YES | 详见枚举定义：[订单方向](./enums_CN.md#side)
-type | ENUM | YES | 详见枚举定义：[订单类型](./enums_CN.md#ordertype)
-timeInForce | ENUM | NO | 详见枚举定义：[生效时间](./enums.md#timeinforce)
+side | ENUM | YES |详见枚举定义：[订单方向](./enums_CN.md#side)
+type | ENUM | YES |详见枚举定义：[订单类型](./enums_CN.md#ordertype)
+timeInForce | ENUM | NO |详见枚举定义：[生效时间](./enums.md#timeinforce)
 quantity | DECIMAL | NO |
 quoteOrderQty | DECIMAL | NO |
 price | DECIMAL | NO |
@@ -1657,10 +1657,10 @@ newClientOrderId | STRING | NO | 用户自定义的orderid，如空缺系统会�
 strategyId |LONG| NO|
 strategyType |INT| NO| 不能低于 `1000000`.
 stopPrice | DECIMAL | NO | 仅 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` 需要此参数。
-trailingDelta|LONG|NO| 用于 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, 和 `TAKE_PROFIT_LIMIT` 类型的订单。
+trailingDelta|LONG|NO| 参见 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md)。
 icebergQty | DECIMAL | NO | 仅有限价单(包括条件限价单与限价做事单)可以使用该参数，含义为创建冰山订单并指定冰山订单的数量。
 newOrderRespType | ENUM | NO | 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`, 其他默认为`ACK`。
-selfTradePreventionMode |ENUM| NO | 允许的 ENUM 取决于交易对的配置。支持的值有：[STP 模式](./enums_CN.md#stpmodes)。
+selfTradePreventionMode |ENUM| NO | 允许的 ENUM 取决于交易对的配置。支持的值有：[STP 模式](enums_CN.md#stpmodes)。
 recvWindow | LONG | NO |
 timestamp | LONG | YES |
 
@@ -2155,12 +2155,12 @@ newClientOrderId |STRING|NO| 用于辨识新订单。
 strategyId |LONG| NO|
 strategyType |INT| NO| 不能低于 `1000000`。
 stopPrice|DECIMAL|NO|
-trailingDelta|LONG|NO| 参考 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md)
+trailingDelta|LONG|NO|参考 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md)
 icebergQty|DECIMAL|NO|
 newOrderRespType|ENUM|NO|指定响应类型: <br/> 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`， 其他默认为`ACK`。
 selfTradePreventionMode|ENUM|NO|允许的 ENUM 取决于交易对的配置。支持的值有：[STP 模式](./enums_CN.md#stpmodes)。
 cancelRestrictions| ENUM | NO | 支持的值: <br>`ONLY_NEW` - 如果订单状态为 `NEW`，撤销将成功。<br> `ONLY_PARTIALLY_FILLED` - 如果订单状态为 `PARTIALLY_FILLED`，撤销将成功。
-orderRateLimitExceededMode| ENUM | NO |支持的值： <br></br> “DO_NOTHING”（默认值）- 仅在账户未超过未成交订单频率限制时，会尝试取消订单。<br></br> “CANCEL_ONLY” - 将始终取消订单。
+orderRateLimitExceededMode| ENUM | NO |支持的值： <br></br> `DO_NOTHING`（默认值）- 仅在账户未超过未成交订单频率限制时，会尝试取消订单。<br></br> `CANCEL_ONLY` - 将始终取消订单。|
 recvWindow | LONG | NO | 不能大于 `60000`
 timestamp | LONG | YES |
 
@@ -2341,7 +2341,7 @@ timestamp | LONG | YES |
 </table>
 
 
-**响应：没有超出未成交订单计数时的 Response SUCCESS**
+**响应：账户没有超出未成交订单计数时的 Response SUCCESS**
 ```javascript
 // 撤单和下单都成功
 {
@@ -3080,7 +3080,7 @@ timestamp              |LONG   |YES       |
     "listOrderStatus": "EXECUTING",
     "listClientOrderId": "yl2ERtcar1o25zcWtqVBTC",
     "transactionTime": 1712289389158,
-    "symbol": "ABCDEF",
+    "symbol": "LTCBTC",
     "orders": [
         {
             "symbol": "LTCBTC",
@@ -3183,7 +3183,7 @@ pendingAboveType         |ENUM   |YES       |支持的数值： `STOP_LOSS_LIMIT
 pendingAboveClientOrderId|STRING |NO        |用于标识待处理上方订单的唯一ID。 <br> 如果未发送则自动生成。
 pendingAbovePrice        |DECIMAL|NO        |当 `pendingAboveType` 是 `STOP_LOSS_LIMIT`, `LIMIT_MAKER` 或 `TAKE_PROFIT_LIMIT` 时，可用以指定限价。
 pendingAboveStopPrice    |DECIMAL|NO        |如果 `pendingAboveType` 是 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` 才能使用。
-pendingAboveTrailingDelta|DECIMAL|NO        |参见 [追踪止盈止损(Trailing Stop)订单常见问题](./faqs/trailing-stop-faq_CN.md)
+pendingAboveTrailingDelta|DECIMAL|NO        |参见 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md)
 pendingAboveIcebergQty   |DECIMAL|NO        |只有当 `pendingAboveTimeInForce` 为 `GTC` 时才能使用。
 pendingAboveTimeInForce  |ENUM   |NO        |
 pendingAboveStrategyId   |LONG    |NO        |订单策略中用于标识待处理上方订单的 ID。
@@ -3231,7 +3231,7 @@ timestamp                |LONG   |YES       |
     "listOrderStatus": "EXECUTING",
     "listClientOrderId": "RumwQpBaDctlUu5jyG5rs0",
     "transactionTime": 1712291372842,
-    "symbol": "ABCDEF",
+    "symbol": "LTCBTC",
     "orders": [
         {
             "symbol": "LTCBTC",
@@ -3611,7 +3611,7 @@ strategyType            |INT     | NO| 赋值不能小于 `1000000`.
 icebergQty              | DECIMAL| NO | 仅有限价单可以使用该参数，含义为创建冰山订单并指定冰山订单的数量。
 newOrderRespType        | ENUM   | NO | 指定响应类型:
 指定响应类型 `ACK`, `RESULT` 或 `FULL`; 默认为 `FULL`。
-selfTradePreventionMode |ENUM    | NO | 允许的 ENUM 取决于交易对的配置。支持的值有：[STP 模式](./enums_CN.md#stpmodes)。
+selfTradePreventionMode |ENUM    | NO | 允许的 ENUM 取决于交易对的配置。支持的值有：[STP 模式](enums_CN.md#stpmodes)。
 recvWindow              | LONG   | NO | 赋值不能大于 `60000`
 timestamp               | LONG | YES |
 

@@ -464,13 +464,10 @@ Logout 响应
 ```
 You'll be disconnected in %d seconds. Please reconnect.
 ```
-
 剩余 10 秒时，系统将发送以下消息：
-
 ```
 Your connection is about to be closed. Please reconnect.
 ```
-
 如果客户端在收到上述消息后的 10 秒内没有关闭旧会话，那么服务器会将其注销并关闭会话。
 
 |Tag | 名称     | 类型   | 是否必须 | 描述  |

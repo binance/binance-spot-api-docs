@@ -438,7 +438,6 @@ API 有多种频率限制间隔。
 * 这是按 **每一个账户** 维护的，并由该账户的所有 API 密钥共享。
 
 表示在10秒内下了12个订单和在24小时内下了4043个订单的成功响应：
-
 ```json
 {
   "id": "e2a85d9f-07a5-4f94-8d5f-789dc3deb097",
@@ -2824,7 +2823,7 @@ NONE
 `icebergQty`        | DECIMAL | NO        |
 `strategyId`        | LONG    | NO        | 标识订单策略中订单的任意ID。
 `strategyType`      | INT     | NO        | <p>标识订单策略的任意数值。</p><p>小于`1000000`的值是保留的，不能使用。</p>
-`selfTradePreventionMode` |ENUM| NO | 允许的 ENUM 取决于交易对的配置。支持值：[STP 模式](./enums_CN.md#stpmodes)
+`selfTradePreventionMode` |ENUM| NO | 允许的 ENUM 取决于交易对的配置。支持值：[STP 模式](enums_CN.md#stpmodes)
 `apiKey`            | STRING  | YES       |
 `recvWindow`        | LONG    | NO        | 值不能大于 `60000`
 `signature`         | STRING  | YES       |
@@ -3866,7 +3865,7 @@ NONE
         <td>NO</td>
         <td>
             <p>允许的 ENUM 取决于交易对的配置。</p>
-            <p>支持的值有： <tt>EXPIRE_TAKER</tt>, <tt>EXPIRE_MAKER</tt>, <tt>EXPIRE_BOTH</tt>, <tt>NONE</tt>, <tt>DECREMENT</tt>.</p>
+            <p>支持的值有： <a href="enums_CN.md#stpmodes">STP 模式</a>。</p>
         </td>
     </tr>
     <tr>
@@ -5129,7 +5128,7 @@ NONE
 名称                      | 类型   | 是否必需 | 描述
 ----                     |------  | -----     |----
 `symbol`                 |STRING  |YES        |
-`listClientOrderId`      |STRING  |NO         |整个订单列表的唯一ID。 如果未发送则自动生成。 <br> 仅当前一个订单已填满或完全过期时，才会接受具有相同的`listClientOrderId`。 <br> `listClientOrderId` 与 `aboveClientOrderId` 和 `belowCLientOrderId` 不同。
+`listClientOrderId`      |STRING  |NO         |整个订单列表的唯一ID。 如果未发送则自动生成。 <br> 仅当前一个订单已填满或完全过期时，才会接受具有相同的`listClientOrderId`。<br> `listClientOrderId` 与 `aboveClientOrderId` 和 `belowCLientOrderId` 不同。
 `side`                   |ENUM    |YES        |订单方向：`BUY` or `SELL`
 `quantity`               |DECIMAL |YES        |两个订单的数量。
 `aboveType`              |ENUM    |YES        |支持值：`STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`。
@@ -5312,7 +5311,7 @@ NONE
 `workingPrice`           |DECIMAL|YES       |
 `workingQuantity`        |DECIMAL|YES       |用于设置生效订单的数量。
 `workingIcebergQty`      |DECIMAL|NO       |只有当 `workingTimeInForce` 为 `GTC` 时才能使用。
-`workingTimeInForce`     |ENUM   |NO        |支持的数值： [生效时间](#timeinforce)
+`workingTimeInForce`     |ENUM   |NO        |支持的数值： [生效时间](./enums_CN.md#timeinforce)
 `workingStrategyId`      |LONG   |NO        |订单策略中用于标识生效订单的 ID。
 `workingStrategyType`    |INT    |NO        |用于标识生效订单策略的任意数值。<br> 小于 `1000000` 的值被保留，无法使用。
 `pendingType`            |ENUM   |YES       |支持的数值： [订单类型](#order-type)<br> 请注意，系统不支持使用 `quoteOrderQty` 的 `MARKET` 订单。
@@ -5323,7 +5322,7 @@ NONE
 `pendingTrailingDelta`   |DECIMAL|NO        |
 `pendingQuantity`        |DECIMAL|YES       |用于设置待处理订单的数量。
 `pendingIcebergQty`      |DECIMAL|NO        |只有当 `pendingTimeInForce` 为 `GTC` 时才能使用。
-`pendingTimeInForce`     |ENUM   |NO        |支持的数值： [生效时间](#timeinforce)
+`pendingTimeInForce`     |ENUM   |NO        |支持的数值： [生效时间](./enums_CN.md#timeinforce)
 `pendingStrategyId`      |LONG   |NO        |订单策略中用于标识待处理订单的 ID。
 `pendingStrategyType`    |INT    |NO        |用于标识待处理订单策略的任意数值。 <br> 小于 `1000000` 的值被保留，无法使用。
 `recvWindow`             |LONG   |NO        |不能大于 `60000`。
@@ -5481,14 +5480,14 @@ NONE
 `symbol`                   |STRING |YES       |
 `listClientOrderId`        |STRING |NO        |整个订单列表的唯一ID。 如果未发送则自动生成。 <br> 仅当前一个订单列表已填满或完全过期时，才会接受含有相同 `listClientOrderId` 值的新订单列表。 <br>  `listClientOrderId` 与 `workingClientOrderId`， `pendingAboveClientOrderId` 以及 `pendingBelowClientOrderId` 不同。
 `newOrderRespType`         |ENUM   |NO        |用于设置JSON响应的格式。 支持的数值： [订单返回类型](./enums_CN.md#orderresponsetype)
-`selfTradePreventionMode`  |ENUM   |NO        |允许的数值取决于交易对上的配置。参考 [STP 模式](./enums_CN.md#stpmodes)
+`selfTradePreventionMode`  |ENUM   |NO        |允许的数值取决于交易对上的配置。支持的数值： [STP 模式](./enums_CN.md#stpmodes)
 `workingType`              |ENUM   |YES       |支持的数值： `LIMIT`，`LIMIT_MAKER`
 `workingSide`              |ENUM   |YES       |支持的数值： [订单方向](./enums_CN.md#side)
 `workingClientOrderId`     |STRING |NO        |用于标识生效订单的唯一ID。 <br> 如果未发送则自动生成。
 `workingPrice`             |DECIMAL|YES       |
-`workingQuantity`          |DECIMAL|YES        |
+`workingQuantity`          |DECIMAL|YES       |
 `workingIcebergQty`        |DECIMAL|NO        |只有当 `workingTimeInForce` 为 `GTC` 时才能使用。
-`workingTimeInForce`       |ENUM   |NO        |支持的数值： [生效时间](#timeinforce)
+`workingTimeInForce`       |ENUM   |NO        |支持的数值： [生效时间](./enums_CN.md#timeinforce)
 `workingStrategyId`        |LONG    |NO        |订单策略中用于标识生效订单的 ID。
 `workingStrategyType`      |INT    |NO        |用于标识生效订单策略的任意数值。<br> 小于 `1000000` 的值被保留，无法使用。
 `pendingSide`              |ENUM   |YES       |支持的数值： [订单方向](./enums_CN.md#side)
@@ -5508,7 +5507,7 @@ NONE
 `pendingBelowStopPrice`    |DECIMAL|NO        |如果 `pendingBelowType` 是 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` 才能使用。<br> 必须指定 `pendingBelowStopPrice` 或 `pendingBelowTrailingDelta` 或两者。
 `pendingBelowTrailingDelta`|DECIMAL|NO        |
 `pendingBelowIcebergQty`   |DECIMAL|NO        |只有当 `pendingBelowTimeInForce` 为 `GTC` 时才能使用。
-`pendingBelowTimeInForce`  |ENUM   |NO        |支持的数值： [生效时间](#timeinforce)
+`pendingBelowTimeInForce`  |ENUM   |NO        |支持的数值： [生效时间](./enums_CN.md#timeinforce)
 `pendingBelowStrategyId`   |LONG    |NO        |订单策略中用于标识待处理下方订单的 ID。
 `pendingBelowStrategyType` |INT    |NO        |用于标识待处理下方订单策略的任意数值。 <br> 小于 `1000000` 的值被保留，无法使用。
 `recvWindow`               |LONG  |NO        |不能大于 `60000`。
@@ -5851,7 +5850,7 @@ NONE
 
 备注：
 
-* 如果同时指定了 `orderListId` 和 `listClientOrderId` 参数，仅使用 `orderListId` 并忽略 `listClientOrderId`。
+* 如果同时指定了 `orderListId` 和 `listClientOrderId` 参数，首先将会用`orderListId` 进行搜索，然后将检索结果中的 `listClientOrderId` 与订单进行比对。如果两个条件都不满足，则请求将被拒绝。
 
 * 使用 [`order.cancel`](#order-cancel) 撤销订单列表内的某个订单，则整个订单列表将被撤销。
 
@@ -6037,6 +6036,8 @@ NONE
 下使用智能订单路由 (SOR) 的新订单。
 
 这个请求会把1个订单添加到 `EXCHANGE_MAX_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
+
+请参阅 [智能指令路由 (SOR)](../faqs/sor_faq_CN.md) 来了解更多详情。
 
 **权重:**
 1
@@ -6312,7 +6313,7 @@ NONE
 
 <a id="query-unfilled-order-count"></a>
 
-### 查询未成交的订单计数 (USER_DATA)
+### 查询账户下未成交的订单计数 (USER_DATA)
 
 ```javascript
 {
@@ -6947,9 +6948,6 @@ timestamp           | LONG   | YES          |
 **权重:**
 4
 
-**数据源:**
-数据库
-
 **参数:**
 
 名称              | 类型    | 是否必需 | 描述
@@ -6960,6 +6958,9 @@ timestamp           | LONG   | YES          |
 `limit`           | LONG   | NO      | 默认值： 500； 最大值： 1000
 `recvWindow`      | LONG   | NO      | 不能大于 `60000`
 `timestamp`       | LONG   | NO      |
+
+**数据源:**
+数据库
 
 **响应:**
 

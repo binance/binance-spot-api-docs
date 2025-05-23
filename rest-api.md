@@ -768,9 +768,7 @@ Database
   }
 ]
 ```
-
 <a id="klines"></a>
-
 ### Kline/Candlestick data
 ```
 GET /api/v3/klines
@@ -836,9 +834,7 @@ Database
   ]
 ]
 ```
-
 <a id="uiKlines"></a>
-
 ### UIKlines
 ```
 GET /api/v3/uiKlines
@@ -1679,9 +1675,9 @@ This adds 1 order to the `EXCHANGE_MAX_ORDERS` filter and the `MAX_NUM_ORDERS` f
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-side | ENUM | YES | Please see [Enums](enums.md#side) for supported values.
-type | ENUM | YES | Please see [Enums](enums.md#ordertypes) for supported values
-timeInForce | ENUM | NO | Please see [Enums](enums.md#timeinforce) for supported values.
+side | ENUM | YES |Please see [Enums](enums.md#side) for supported values.
+type | ENUM | YES |Please see [Enums](enums.md#ordertypes) for supported values.
+timeInForce | ENUM | NO |Please see [Enums](enums.md#timeinforce) for supported values.
 quantity | DECIMAL | NO |
 quoteOrderQty|DECIMAL|NO|
 price | DECIMAL | NO |
@@ -1689,10 +1685,10 @@ newClientOrderId | STRING | NO | A unique id among open orders. Automatically ge
 strategyId |LONG| NO|
 strategyType |INT| NO| The value cannot be less than `1000000`.
 stopPrice | DECIMAL | NO | Used with `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, and `TAKE_PROFIT_LIMIT` orders.
-trailingDelta|LONG|NO| Used with `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, and `TAKE_PROFIT_LIMIT` orders.
+trailingDelta|LONG|NO| See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md).
 icebergQty | DECIMAL | NO | Used with `LIMIT`, `STOP_LOSS_LIMIT`, and `TAKE_PROFIT_LIMIT` to create an iceberg order.
 newOrderRespType | ENUM | NO | Set the response JSON. `ACK`, `RESULT`, or `FULL`; `MARKET` and `LIMIT` order types default to `FULL`, all other orders default to `ACK`.
-selfTradePreventionMode |ENUM| NO | The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](./enums.md#stpmodes).
+selfTradePreventionMode |ENUM| NO | The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](enums.md#stpmodes).
 recvWindow | LONG | NO |The value cannot be greater than `60000`
 timestamp | LONG | YES |
 
@@ -1814,9 +1810,7 @@ Matching Engine
   ]
 }
 ```
-
 <a id="conditional-fields-in-order-responses"></a>
-
 **Conditional fields in Order Responses**
 
 There are fields in the order responses (e.g. order placement, order query, order cancellation) that appear only if certain conditions are met.
@@ -1925,7 +1919,7 @@ Memory => Database
 {
   "symbol": "LTCBTC",
   "orderId": 1,
-  "orderListId": -1,                 // This field will always have a value of -1 if not an order list.
+  "orderListId": -1,                // This field will always have a value of -1 if not an order list.
   "clientOrderId": "myOrder1",
   "price": "0.1",
   "origQty": "1.0",
@@ -1988,6 +1982,7 @@ Matching Engine
   "price": "2.00000000",
   "origQty": "1.00000000",
   "executedQty": "0.00000000",
+  "origQuoteOrderQty": "0.000000",
   "cummulativeQuoteQty": "0.00000000",
   "status": "CANCELED",
   "timeInForce": "GTC",
@@ -1999,7 +1994,7 @@ Matching Engine
 
 **Notes:**
 * The payload above does not show all fields that can appear in the order response. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
-* The performance for canceling an order (single cancel or as part of a cancel-replace) is always better when only orderId is sent. Sending `origClientOrderId` or both `orderId` + `origClientOrderId` will be slower.
+* The performance for canceling an order (single cancel or as part of a cancel-replace) is always better when only `orderId` is sent. Sending `origClientOrderId` or both `orderId` + `origClientOrderId` will be slower.
 
 <a id="regarding-cancelrestrictions"></a>
 
@@ -2054,6 +2049,7 @@ Matching Engine
     "price": "0.089853",
     "origQty": "0.178622",
     "executedQty": "0.000000",
+    "origQuoteOrderQty": "0.000000",
     "cummulativeQuoteQty": "0.000000",
     "status": "CANCELED",
     "timeInForce": "GTC",
@@ -2071,6 +2067,7 @@ Matching Engine
     "price": "0.090430",
     "origQty": "0.178622",
     "executedQty": "0.000000",
+    "origQuoteOrderQty": "0.000000",
     "cummulativeQuoteQty": "0.000000",
     "status": "CANCELED",
     "timeInForce": "GTC",
@@ -2109,6 +2106,7 @@ Matching Engine
         "price": "0.668611",
         "origQty": "0.690354",
         "executedQty": "0.000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.000000",
         "status": "CANCELED",
         "timeInForce": "GTC",
@@ -2128,6 +2126,7 @@ Matching Engine
         "price": "0.008791",
         "origQty": "0.690354",
         "executedQty": "0.000000",
+        "origQuoteOrderQty": "0.000000",
         "cummulativeQuoteQty": "0.000000",
         "status": "CANCELED",
         "timeInForce": "GTC",
@@ -2177,12 +2176,12 @@ newClientOrderId |STRING|NO| Used to identify the new order.
 strategyId |LONG| NO|
 strategyType |INT| NO| The value cannot be less than `1000000`.
 stopPrice|DECIMAL|NO|
-trailingDelta|LONG|NO| See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md)
+trailingDelta|LONG|NO|See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md)
 icebergQty|DECIMAL|NO|
 newOrderRespType|ENUM|NO|Allowed values: <br/> `ACK`, `RESULT`, `FULL` <br/> `MARKET` and `LIMIT` orders types default to `FULL`; all other orders default to `ACK`
-selfTradePreventionMode |ENUM| NO | The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](./enums.md#stpmodes).
+selfTradePreventionMode |ENUM| NO |The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](./enums.md#stpmodes).
 cancelRestrictions| ENUM   | NO           | Supported values: <br>`ONLY_NEW` - Cancel will succeed if the order status is `NEW`.<br> `ONLY_PARTIALLY_FILLED ` - Cancel will succeed if order status is `PARTIALLY_FILLED`. For more information please refer to [Regarding `cancelRestrictions`](#regarding-cancelrestrictions)
-orderRateLimitExceededMode|ENUM|No| Supported values: <br> `DO_NOTHING` (default)- will only attempt to cancel the order if account has not exceeded the unfilled order rate limit<br> `CANCEL_ONLY` - will always cancel the order
+orderRateLimitExceededMode|ENUM|No| Supported values: <br> `DO_NOTHING` (default)- will only attempt to cancel the order if account has not exceeded the unfilled order rate limit<br> `CANCEL_ONLY` - will always cancel the order|
 recvWindow | LONG | NO | The value cannot be greater than `60000`
 timestamp | LONG | YES |
 
@@ -2362,7 +2361,7 @@ Matching Engine
 </tbody>
 </table>
 
-**Response SUCCESS unfilled order count is not exceeded:**
+**Response SUCCESS and account has not exceeded the unfilled order count:**
 
 ```javascript
 // Both the cancel order placement and new order placement succeeded.
@@ -2396,8 +2395,8 @@ Matching Engine
     "price": "0.02000000",
     "origQty": "0.040000",
     "executedQty": "0.00000000",
-    "cummulativeQuoteQty": "0.00000000",
     "origQuoteOrderQty": "0.000000",
+    "cummulativeQuoteQty": "0.00000000",
     "status": "NEW",
     "timeInForce": "GTC",
     "type": "LIMIT",
@@ -2409,7 +2408,7 @@ Matching Engine
 }
 ```
 
-**Response when Cancel Order Fails with STOP_ON FAILURE and account has not exceeded unfilled order count:**
+**Response when Cancel Order Fails with STOP_ON FAILURE and account has not exceeded their unfilled order count:**
 ```javascript
 {
   "code": -2022,
@@ -2426,7 +2425,7 @@ Matching Engine
 }
 ```
 
-**Response when Cancel Order Succeeds but New Order Placement Fails and account has not exceeded the unfilled order count:**
+**Response when Cancel Order Succeeds but New Order Placement Fails and account has not exceeded their unfilled order count:**
 ```javascript
 {
   "code": -2021,
@@ -2459,7 +2458,7 @@ Matching Engine
 }
 ```
 
-**Response when Cancel Order fails with ALLOW_FAILURE and account has not exceeded the unfilled order count:**
+**Response when Cancel Order fails with ALLOW_FAILURE and account has not exceeded their unfilled order count:**
 
 ```javascript
 {
@@ -2483,7 +2482,7 @@ Matching Engine
 }
 ```
 
-**Response when both Cancel Order and New Order Placement fail using `cancelReplaceMode=ALLOW_FAILURE` and account has not exceeded the unfilled order count:**
+**Response when both Cancel Order and New Order Placement fail using `cancelReplaceMode=ALLOW_FAILURE` and account has not exceeded their unfilled order count:**
 
 ```javascript
 {
@@ -2549,7 +2548,6 @@ Matching Engine
 ```
 
 **Notes:**
-
 * The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 * The performance for canceling an order (single cancel or as part of a cancel-replace) is always better when only `orderId` is sent. Sending `origClientOrderId` or both `orderId` + `origClientOrderId` will be slower.
 
@@ -2936,7 +2934,7 @@ aboveType              |ENUM    |Yes        |Supported values: `STOP_LOSS_LIMIT`
 aboveClientOrderId     |STRING  |No         |Arbitrary unique ID among open orders for the above order. Automatically generated if not sent
 aboveIcebergQty        |LONG    |No         |Note that this can only be used if `aboveTimeInForce` is `GTC`.
 abovePrice             |DECIMAL |No         |Can be used if `aboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
-aboveStopPrice         |DECIMAL |No         |Can be used if `aboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
+aboveStopPrice         |DECIMAL |No         |Can be used if `aboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`. <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
 aboveTrailingDelta     |LONG    |No         |See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md).
 aboveTimeInForce       |DECIMAL |No         |Required if `aboveType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`
 aboveStrategyId        |LONG     |No         |Arbitrary numeric value identifying the above order within an order strategy.
@@ -2944,7 +2942,7 @@ aboveStrategyType      |INT     |No         |Arbitrary numeric value identifying
 belowType              |ENUM    |Yes        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 belowClientOrderId     |STRING  |No         |Arbitrary unique ID among open orders for the below order. Automatically generated if not sent
 belowIcebergQty        |LONG    |No         |Note that this can only be used if `belowTimeInForce` is `GTC`.
-belowPrice             |DECIMAL |No         |Can be used if `belowType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
+belowPrice             |DECIMAL |No         |Can be used if `belowType` is `STOP_LOSS_LIMIT`, `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
 belowStopPrice         |DECIMAL |No         |Can be used if `belowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT` or `TAKE_PROFIT_LIMIT` <br>Either belowStopPrice or belowTrailingDelta or both, must be specified.
 belowTrailingDelta     |LONG    |No         |See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md).
 belowTimeInForce       |ENUM    |No         |Required if `belowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`.
@@ -3032,7 +3030,7 @@ Response format for `orderReports` is selected using the `newOrderRespType` para
 POST /api/v3/orderList/oto
 ```
 
-Places an OTO.
+Place an OTO.
 
 * An OTO (One-Triggers-the-Other) is an order list comprised of 2 orders.
 * The first order is called the **working order** and must be `LIMIT` or `LIMIT_MAKER`. Initially, only the working order goes on the order book.
@@ -3104,7 +3102,7 @@ Matching Engine
     "listOrderStatus": "EXECUTING",
     "listClientOrderId": "yl2ERtcar1o25zcWtqVBTC",
     "transactionTime": 1712289389158,
-    "symbol": "ABCDEF",
+    "symbol": "LTCBTC",
     "orders": [
         {
             "symbol": "LTCBTC",
@@ -3211,7 +3209,7 @@ pendingAboveStrategyType |INT    |NO        |Arbitrary numeric value identifying
 pendingBelowType         |ENUM   |NO        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 pendingBelowClientOrderId|STRING |NO        |Arbitrary unique ID among open orders for the pending below order.<br> Automatically generated if not sent.
 pendingBelowPrice        |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT` to specify limit price
-pendingBelowStopPrice    |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`. <br> Either `pendingBelowStopPrice` or `pendingBelowTrailingDelta` or both, must be specified.
+pendingBelowStopPrice    |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`. <br>Either `pendingBelowStopPrice` or `pendingBelowTrailingDelta` or both, must be specified.
 pendingBelowTrailingDelta|DECIMAL|NO        |
 pendingBelowIcebergQty   |DECIMAL|NO        |This can only be used if `pendingBelowTimeInForce` is `GTC`, or if `pendingBelowType` is `LIMIT_MAKER`.
 pendingBelowTimeInForce  |ENUM   |NO        |Supported values: [Time In Force](enums.md#timeinforce)
@@ -3250,7 +3248,7 @@ Matching Engine
     "listOrderStatus": "EXECUTING",
     "listClientOrderId": "RumwQpBaDctlUu5jyG5rs0",
     "transactionTime": 1712291372842,
-    "symbol": "ABCDEF",
+    "symbol": "LTCBTC",
     "orders": [
         {
             "symbol": "LTCBTC",
@@ -3350,7 +3348,6 @@ listClientOrderId|STRING|NO| Either `orderListId` or `listClientOrderId` must be
 newClientOrderId|STRING|NO| Used to uniquely identify this cancel. Automatically generated by default
 recvWindow|LONG|NO| The value cannot be greater than `60000`
 timestamp|LONG|YES|
-
 
 **Notes:**
 * Canceling an individual order from an order list will cancel the entire order list.
@@ -3630,7 +3627,7 @@ strategyId              |LONG     | NO|
 strategyType            |INT     | NO| The value cannot be less than `1000000`.
 icebergQty              | DECIMAL| NO | Used with `LIMIT` to create an iceberg order.
 newOrderRespType        | ENUM   | NO | Set the response JSON. `ACK`, `RESULT`, or `FULL`. Default to `FULL`
-selfTradePreventionMode |ENUM    | NO | The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](./enums.md#stpmodes).
+selfTradePreventionMode |ENUM    | NO | The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](enums.md#stpmodes).
 recvWindow              | LONG   | NO |The value cannot be greater than `60000`
 timestamp               | LONG | YES |
 
@@ -3860,9 +3857,7 @@ Memory => Database
   }
 ]
 ```
-
 <a id="query-unfilled-order-count"></a>
-
 ### Query Unfilled Order Count (USER_DATA)
 ```
 GET /api/v3/rateLimit/order
