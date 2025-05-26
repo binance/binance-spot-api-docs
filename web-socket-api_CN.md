@@ -3318,141 +3318,6 @@ NONE
 }
 ```
 
-<a id="order-status"></a>
-
-### 查询订单 (USER_DATA)
-
-```javascript
-{
-  "id": "aa62318a-5a97-4f3b-bdc7-640bbe33b291",
-  "method": "order.status",
-  "params": {
-    "symbol": "BTCUSDT",
-    "orderId": 12569099453,
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "2c3aab5a078ee4ea465ecd95523b77289f61476c2f238ec10c55ea6cb11a6f35",
-    "timestamp": 1660801720951
-  }
-}
-```
-
-查询订单状态。
-
-**权重:**
-4
-
-**参数:**
-
-<table>
-<thead>
-    <tr>
-        <th>名称</th>
-        <th>类型</th>
-        <th>是否必需</th>
-        <th>描述</th>
-    </tr>
-</thead>
-<tbody>
-    <tr>
-        <td><code>symbol</code></td>
-        <td>STRING</td>
-        <td>YES</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><code>orderId</code></td>
-        <td>INT</td>
-        <td rowspan="2">YES</td>
-        <td>按 <code>orderId</code> 查找顺序</td>
-    </tr>
-    <tr>
-        <td><code>origClientOrderId</code></td>
-        <td>STRING</td>
-        <td>按 <code>clientOrderId</code> 查找顺序</td>
-    </tr>
-    <tr>
-        <td><code>apiKey</code></td>
-        <td>STRING</td>
-        <td>YES</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><code>recvWindow</code></td>
-        <td>LONG</td>
-        <td>NO</td>
-        <td>值不能大于 <tt>60000</tt></td>
-    </tr>
-    <tr>
-        <td><code>signature</code></td>
-        <td>STRING</td>
-        <td>YES</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><code>timestamp</code></td>
-        <td>LONG</td>
-        <td>YES</td>
-        <td></td>
-    </tr>
-</tbody>
-</table>
-
-备注：
-
-* 当同时提供 `orderId` 和 `origClientOrderId` 两个参数时，系统首先将会使用 `orderId` 来搜索订单。然后， 查找结果中的 `origClientOrderId` 的值将会被用来验证订单。如果两个条件都不满足，则请求将被拒绝。
-
-* 对于某些历史订单，`cummulativeQuoteQty` 响应字段可能为负数，意味着此时数据不可用。
-
-**数据源:**
-缓存 => 数据库
-
-**响应:**
-```javascript
-{
-  "id": "aa62318a-5a97-4f3b-bdc7-640bbe33b291",
-  "status": 200,
-  "result": {
-    "symbol": "BTCUSDT",
-    "orderId": 12569099453,
-    "orderListId": -1,                  // 如果是属于订单列表的订单时会出现
-    "clientOrderId": "4d96324ff9d44481926157",
-    "price": "23416.10000000",
-    "origQty": "0.00847000",
-    "executedQty": "0.00847000",
-    "origQuoteOrderQty": "0.000000",
-    "cummulativeQuoteQty": "198.33521500",
-    "status": "FILLED",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "SELL",
-    "stopPrice": "0.00000000",          // 始终存在，如果订单类型不使用 stopPrice，则为零
-    "trailingDelta": 10,                // 如果订单设置了 trailingDelta 会出现
-    "trailingTime": -1,                 // 如果订单设置了 trailingDelta 会出现
-    "icebergQty": "0.00000000",         // 始终存在，非冰山订单为零
-    "time": 1660801715639,              // 下单时间
-    "updateTime": 1660801717945,        // 最后一次更新订单的时间
-    "isWorking": true,
-    "workingTime": 1660801715639,
-    "origQuoteOrderQty": "0.00000000"   // 始终存在，如果订单类型不使用 quoteOrderQty，则为零
-    "strategyId": 37463720,             // 如果订单设置了 strategyId  会出现
-    "strategyType": 1000000,            // 如果订单设置了 strategyType 会出现
-    "selfTradePreventionMode": "NONE",
-    "preventedMatchId": 0,              // 这仅在订单因 STP 而过期时可见
-    "preventedQuantity": "1.200000"     // 这仅在订单因 STP 而过期时可见
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 4
-    }
-  ]
-}
-```
-**注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 [订单响应中的特定条件时才会出现的字段](#conditional-fields-in-order-responses) 部分。
-
 <a id=order-cancel></a>
 
 ### 撤销订单 (TRADE)
@@ -4661,101 +4526,6 @@ NONE
 
 **注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 [订单响应中的特定条件时才会出现的字段](#conditional-fields-in-order-responses) 部分。
 
-### 当前挂单 (USER_DATA)
-
-```javascript
-{
-  "id": "55f07876-4f6f-4c47-87dc-43e5fff3f2e7",
-  "method": "openOrders.status",
-  "params": {
-    "symbol": "BTCUSDT",
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "d632b3fdb8a81dd44f82c7c901833309dd714fe508772a89b0a35b0ee0c48b89",
-    "timestamp": 1660813156812
-  }
-}
-```
-
-查询所有挂订单的执行状态。
-
-如果您需要持续监控订单状态更新，请考虑使用 WebSocket Streams：
-
-* [`userDataStream.start`](#user-data-stream-requests) 请求
-* [`executionReport`](./user-data-stream_CN.md#executionReport) 更新
-
-**权重:**
-根据交易对的数量进行调整：
-
-| 参数 | 权重 |
-| --------- | ------ |
-| `symbol`  |      6 |
-| none      |     80 |
-
-**参数:**
-
-名称                | 类型    | 是否必需 | 描述
-------------------- | ------- | --------- | ------------
-`symbol`            | STRING  | NO        | 如果省略，则返回所有交易对的挂单
-`apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | 值不能大于 `60000`
-`signature`         | STRING  | YES       |
-`timestamp`         | LONG    | YES       |
-
-**数据源:**
-缓存 => 数据库
-
-**响应:**
-
-挂单的状态报告与 [`order.status`](#order-status) 相同。
-
-请注意，某些字段是可选的，仅在订单中有设置它们时才包括。
-
-挂订单始终作为平面列表返回。
-如果所有交易对被请求，请使用 `symbol` 字段来告知订单属于哪个交易对。
-
-```javascript
-{
-  "id": "55f07876-4f6f-4c47-87dc-43e5fff3f2e7",
-  "status": 200,
-  "result": [
-    {
-      "symbol": "BTCUSDT",
-      "orderId": 12569099453,
-      "orderListId": -1,
-      "clientOrderId": "4d96324ff9d44481926157",
-      "price": "23416.10000000",
-      "origQty": "0.00847000",
-      "executedQty": "0.00720000",
-      "origQuoteOrderQty": "0.000000",
-      "cummulativeQuoteQty": "172.43931000",
-      "status": "PARTIALLY_FILLED",
-      "timeInForce": "GTC",
-      "type": "LIMIT",
-      "side": "SELL",
-      "stopPrice": "0.00000000",
-      "icebergQty": "0.00000000",
-      "time": 1660801715639,
-      "updateTime": 1660801717945,
-      "isWorking": true,
-      "workingTime": 1660801715639,
-      "origQuoteOrderQty": "0.00000000",
-      "selfTradePreventionMode": "NONE"
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 6
-    }
-  ]
-}
-```
-
-**注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 [订单响应中的特定条件时才会出现的字段](#conditional-fields-in-order-responses) 部分。
-
 ### 撤销单一交易对的所有挂单 (TRADE)
 
 ```javascript
@@ -5643,128 +5413,6 @@ NONE
 
 **注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 [订单响应中的特定条件时才会出现的字段](#conditional-fields-in-order-responses) 部分。
 
-<a id="orderList-status"></a>
-
-#### 查询订单列表 (USER_DATA)
-
-```javascript
-{
-  "id": "b53fd5ff-82c7-4a04-bd64-5f9dc42c2100",
-  "method": "orderList.status",
-  "params": {
-    "origClientOrderId": "08985fedd9ea2cf6b28996"
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "d12f4e8892d46c0ddfbd43d556ff6d818581b3be22a02810c2c20cb719aed6a4",
-    "timestamp": 1660801713965
-  }
-}
-```
-
-检查订单列表的执行状态。
-
-对于单个订单的执行状态，使用 [`order.status`](#order-status)。
-
-**权重:**
-4
-
-**Parameters**:
-
-<table>
-<thead>
-    <tr>
-        <th>名称</th>
-        <th>类型</th>
-        <th>是否必需</th>
-        <th>描述</th>
-    </tr>
-</thead>
-<tbody>
-    <tr>
-        <td><code>origClientOrderId</code></td>
-        <td>STRING</td>
-        <td rowspan="2">NO*</td>
-        <td>通过 <code>listClientOrderId</code> 获取订单列表。 <br> 必须提供 <code>orderListId</code> 或 <code>origClientOrderId</code>。</td>
-    </tr>
-    <tr>
-        <td><code>orderListId</code></td>
-        <td>INT</td>
-        <td>通过 <code>orderListId</code> 获取订单列表。<br> 必须提供 <code>orderListId</code> 或 <code>origClientOrderId</code>。</td>
-    </tr>
-    <tr>
-        <td><code>apiKey</code></td>
-        <td>STRING</td>
-        <td>YES</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><code>recvWindow</code></td>
-        <td>LONG</td>
-        <td>NO</td>
-        <td>值不能大于 <tt>60000</tt></td>
-    </tr>
-    <tr>
-        <td><code>signature</code></td>
-        <td>STRING</td>
-        <td>YES</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><code>timestamp</code></td>
-        <td>LONG</td>
-        <td>YES</td>
-        <td></td>
-    </tr>
-</tbody>
-</table>
-
-备注：
-
-* `origClientOrderId` 指的是订单列表本身的 `listClientOrderId`。
-
-* 如果同时指定了 `origClientOrderId` 和 `orderListId` 参数，仅使用 `origClientOrderId` 并忽略 `orderListId`。
-
-**数据源:**
-数据库
-
-**响应:**
-
-```javascript
-{
-  "id": "b53fd5ff-82c7-4a04-bd64-5f9dc42c2100",
-  "status": 200,
-  "result": {
-    "orderListId": 1274512,
-    "contingencyType": "OCO",
-    "listStatusType": "EXEC_STARTED",
-    "listOrderStatus": "EXECUTING",
-    "listClientOrderId": "08985fedd9ea2cf6b28996",
-    "transactionTime": 1660801713793,
-    "symbol": "BTCUSDT",
-    "orders": [
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 12569138901,
-        "clientOrderId": "BqtFCj5odMoWtSqGk2X9tU"
-      },
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 12569138902,
-        "clientOrderId": "jLnZpj5enfMXTuhKB1d0us"
-      }
-    ]
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 4
-    }
-  ]
-}
-```
-
 #### 撤销订单列表订单(TRADE)
 
 ```javascript
@@ -5928,83 +5576,6 @@ NONE
       "intervalNum": 1,
       "limit": 6000,
       "count": 1
-    }
-  ]
-}
-```
-
-#### 查询订单列表挂单 (USER_DATA)
-
-```javascript
-{
-  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
-  "method": "openOrderLists.status",
-  "params": {
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "1bea8b157dd78c3da30359bddcd999e4049749fe50b828e620e12f64e8b433c9",
-    "timestamp": 1660801713831
-  }
-}
-```
-
-查询所有订单列表挂单的执行状态。
-
-如果您需要持续监控订单状态更新，请考虑使用 WebSocket Streams：
-
-* [`userDataStream.start`](#user-data-stream-requests) 请求
-* [`executionReport`](./user-data-stream_CN.md#executionReport) 更新
-
-**权重:**
-6
-
-**参数:**
-
-名称                | 类型    | 是否必需 | 描述
-------------------- | ------- | --------- | ------------
-`apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | 值不能大于 `60000`
-`signature`         | STRING  | YES       |
-`timestamp`         | LONG    | YES       |
-
-**数据源:**
-数据库
-
-**响应:**
-
-```javascript
-{
-  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
-  "status": 200,
-  "result": [
-    {
-      "orderListId": 0,
-      "contingencyType": "OCO",
-      "listStatusType": "EXEC_STARTED",
-      "listOrderStatus": "EXECUTING",
-      "listClientOrderId": "08985fedd9ea2cf6b28996",
-      "transactionTime": 1660801713793,
-      "symbol": "BTCUSDT",
-      "orders": [
-        {
-          "symbol": "BTCUSDT",
-          "orderId": 4,
-          "clientOrderId": "CUhLgTXnX5n2c0gWiLpV4d"
-        },
-        {
-          "symbol": "BTCUSDT",
-          "orderId": 5,
-          "clientOrderId": "1ZqG7bBuYwaF4SU8CwnwHm"
-        }
-      ]
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 6
     }
   ]
 }
@@ -6311,59 +5882,220 @@ NONE
 }
 ```
 
-<a id="query-unfilled-order-count"></a>
+<a id="order-status"></a>
 
-### 查询账户下未成交的订单计数 (USER_DATA)
+### 查询订单 (USER_DATA)
 
 ```javascript
 {
-  "id": "d3783d8d-f8d1-4d2c-b8a0-b7596af5a664",
-  "method": "account.rateLimits.orders",
+  "id": "aa62318a-5a97-4f3b-bdc7-640bbe33b291",
+  "method": "order.status",
   "params": {
+    "symbol": "BTCUSDT",
+    "orderId": 12569099453,
     "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "76289424d6e288f4dc47d167ac824e859dabf78736f4348abbbac848d719eb94",
-    "timestamp": 1660801839500
+    "signature": "2c3aab5a078ee4ea465ecd95523b77289f61476c2f238ec10c55ea6cb11a6f35",
+    "timestamp": 1660801720951
   }
 }
 ```
 
-显示用户在所有时间间隔内的未成交订单计数。
+查询订单状态。
 
 **权重:**
-40
+4
+
+**参数:**
+
+<table>
+<thead>
+    <tr>
+        <th>名称</th>
+        <th>类型</th>
+        <th>是否必需</th>
+        <th>描述</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td><code>symbol</code></td>
+        <td>STRING</td>
+        <td>YES</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><code>orderId</code></td>
+        <td>INT</td>
+        <td rowspan="2">YES</td>
+        <td>按 <code>orderId</code> 查找顺序</td>
+    </tr>
+    <tr>
+        <td><code>origClientOrderId</code></td>
+        <td>STRING</td>
+        <td>按 <code>clientOrderId</code> 查找顺序</td>
+    </tr>
+    <tr>
+        <td><code>apiKey</code></td>
+        <td>STRING</td>
+        <td>YES</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><code>recvWindow</code></td>
+        <td>LONG</td>
+        <td>NO</td>
+        <td>值不能大于 <tt>60000</tt></td>
+    </tr>
+    <tr>
+        <td><code>signature</code></td>
+        <td>STRING</td>
+        <td>YES</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><code>timestamp</code></td>
+        <td>LONG</td>
+        <td>YES</td>
+        <td></td>
+    </tr>
+</tbody>
+</table>
+
+备注：
+
+* 当同时提供 `orderId` 和 `origClientOrderId` 两个参数时，系统首先将会使用 `orderId` 来搜索订单。然后， 查找结果中的 `origClientOrderId` 的值将会被用来验证订单。如果两个条件都不满足，则请求将被拒绝。
+
+* 对于某些历史订单，`cummulativeQuoteQty` 响应字段可能为负数，意味着此时数据不可用。
+
+**数据源:**
+缓存 => 数据库
+
+**响应:**
+```javascript
+{
+  "id": "aa62318a-5a97-4f3b-bdc7-640bbe33b291",
+  "status": 200,
+  "result": {
+    "symbol": "BTCUSDT",
+    "orderId": 12569099453,
+    "orderListId": -1,                  // 如果是属于订单列表的订单时会出现
+    "clientOrderId": "4d96324ff9d44481926157",
+    "price": "23416.10000000",
+    "origQty": "0.00847000",
+    "executedQty": "0.00847000",
+    "origQuoteOrderQty": "0.000000",
+    "cummulativeQuoteQty": "198.33521500",
+    "status": "FILLED",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "SELL",
+    "stopPrice": "0.00000000",          // 始终存在，如果订单类型不使用 stopPrice，则为零
+    "trailingDelta": 10,                // 如果订单设置了 trailingDelta 会出现
+    "trailingTime": -1,                 // 如果订单设置了 trailingDelta 会出现
+    "icebergQty": "0.00000000",         // 始终存在，非冰山订单为零
+    "time": 1660801715639,              // 下单时间
+    "updateTime": 1660801717945,        // 最后一次更新订单的时间
+    "isWorking": true,
+    "workingTime": 1660801715639,
+    "origQuoteOrderQty": "0.00000000"   // 始终存在，如果订单类型不使用 quoteOrderQty，则为零
+    "strategyId": 37463720,             // 如果订单设置了 strategyId  会出现
+    "strategyType": 1000000,            // 如果订单设置了 strategyType 会出现
+    "selfTradePreventionMode": "NONE",
+    "preventedMatchId": 0,              // 这仅在订单因 STP 而过期时可见
+    "preventedQuantity": "1.200000"     // 这仅在订单因 STP 而过期时可见
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 4
+    }
+  ]
+}
+```
+**注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 [订单响应中的特定条件时才会出现的字段](#conditional-fields-in-order-responses) 部分。
+
+### 当前挂单 (USER_DATA)
+
+```javascript
+{
+  "id": "55f07876-4f6f-4c47-87dc-43e5fff3f2e7",
+  "method": "openOrders.status",
+  "params": {
+    "symbol": "BTCUSDT",
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "d632b3fdb8a81dd44f82c7c901833309dd714fe508772a89b0a35b0ee0c48b89",
+    "timestamp": 1660813156812
+  }
+}
+```
+
+查询所有挂订单的执行状态。
+
+如果您需要持续监控订单状态更新，请考虑使用 WebSocket Streams：
+
+* [`userDataStream.start`](#user-data-stream-requests) 请求
+* [`executionReport`](./user-data-stream_CN.md#executionReport) 更新
+
+**权重:**
+根据交易对的数量进行调整：
+
+| 参数 | 权重 |
+| --------- | ------ |
+| `symbol`  |      6 |
+| none      |     80 |
 
 **参数:**
 
 名称                | 类型    | 是否必需 | 描述
 ------------------- | ------- | --------- | ------------
+`symbol`            | STRING  | NO        | 如果省略，则返回所有交易对的挂单
 `apiKey`            | STRING  | YES       |
 `recvWindow`        | LONG    | NO        | 值不能大于 `60000`
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
 **数据源:**
-缓存
+缓存 => 数据库
 
 **响应:**
 
+挂单的状态报告与 [`order.status`](#order-status) 相同。
+
+请注意，某些字段是可选的，仅在订单中有设置它们时才包括。
+
+挂订单始终作为平面列表返回。
+如果所有交易对被请求，请使用 `symbol` 字段来告知订单属于哪个交易对。
+
 ```javascript
 {
-  "id": "d3783d8d-f8d1-4d2c-b8a0-b7596af5a664",
+  "id": "55f07876-4f6f-4c47-87dc-43e5fff3f2e7",
   "status": 200,
   "result": [
     {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 10,
-      "limit": 50,
-      "count": 0
-    },
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "DAY",
-      "intervalNum": 1,
-      "limit": 160000,
-      "count": 0
+      "symbol": "BTCUSDT",
+      "orderId": 12569099453,
+      "orderListId": -1,
+      "clientOrderId": "4d96324ff9d44481926157",
+      "price": "23416.10000000",
+      "origQty": "0.00847000",
+      "executedQty": "0.00720000",
+      "origQuoteOrderQty": "0.000000",
+      "cummulativeQuoteQty": "172.43931000",
+      "status": "PARTIALLY_FILLED",
+      "timeInForce": "GTC",
+      "type": "LIMIT",
+      "side": "SELL",
+      "stopPrice": "0.00000000",
+      "icebergQty": "0.00000000",
+      "time": 1660801715639,
+      "updateTime": 1660801717945,
+      "isWorking": true,
+      "workingTime": 1660801715639,
+      "origQuoteOrderQty": "0.00000000",
+      "selfTradePreventionMode": "NONE"
     }
   ],
   "rateLimits": [
@@ -6372,11 +6104,13 @@ NONE
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 40
+      "count": 6
     }
   ]
 }
 ```
+
+**注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 [订单响应中的特定条件时才会出现的字段](#conditional-fields-in-order-responses) 部分。
 
 ### 账户订单历史 (USER_DATA)
 
@@ -6474,6 +6208,205 @@ NONE
       "intervalNum": 1,
       "limit": 6000,
       "count": 20
+    }
+  ]
+}
+```
+
+<a id="orderList-status"></a>
+
+#### 查询订单列表 (USER_DATA)
+
+```javascript
+{
+  "id": "b53fd5ff-82c7-4a04-bd64-5f9dc42c2100",
+  "method": "orderList.status",
+  "params": {
+    "origClientOrderId": "08985fedd9ea2cf6b28996"
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "d12f4e8892d46c0ddfbd43d556ff6d818581b3be22a02810c2c20cb719aed6a4",
+    "timestamp": 1660801713965
+  }
+}
+```
+
+检查订单列表的执行状态。
+
+对于单个订单的执行状态，使用 [`order.status`](#order-status)。
+
+**权重:**
+4
+
+**Parameters**:
+
+<table>
+<thead>
+    <tr>
+        <th>名称</th>
+        <th>类型</th>
+        <th>是否必需</th>
+        <th>描述</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td><code>origClientOrderId</code></td>
+        <td>STRING</td>
+        <td rowspan="2">NO*</td>
+        <td>通过 <code>listClientOrderId</code> 获取订单列表。 <br> 必须提供 <code>orderListId</code> 或 <code>origClientOrderId</code>。</td>
+    </tr>
+    <tr>
+        <td><code>orderListId</code></td>
+        <td>INT</td>
+        <td>通过 <code>orderListId</code> 获取订单列表。<br> 必须提供 <code>orderListId</code> 或 <code>origClientOrderId</code>。</td>
+    </tr>
+    <tr>
+        <td><code>apiKey</code></td>
+        <td>STRING</td>
+        <td>YES</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><code>recvWindow</code></td>
+        <td>LONG</td>
+        <td>NO</td>
+        <td>值不能大于 <tt>60000</tt></td>
+    </tr>
+    <tr>
+        <td><code>signature</code></td>
+        <td>STRING</td>
+        <td>YES</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><code>timestamp</code></td>
+        <td>LONG</td>
+        <td>YES</td>
+        <td></td>
+    </tr>
+</tbody>
+</table>
+
+备注：
+
+* `origClientOrderId` 指的是订单列表本身的 `listClientOrderId`。
+
+* 如果同时指定了 `origClientOrderId` 和 `orderListId` 参数，仅使用 `origClientOrderId` 并忽略 `orderListId`。
+
+**数据源:**
+数据库
+
+**响应:**
+
+```javascript
+{
+  "id": "b53fd5ff-82c7-4a04-bd64-5f9dc42c2100",
+  "status": 200,
+  "result": {
+    "orderListId": 1274512,
+    "contingencyType": "OCO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "08985fedd9ea2cf6b28996",
+    "transactionTime": 1660801713793,
+    "symbol": "BTCUSDT",
+    "orders": [
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 12569138901,
+        "clientOrderId": "BqtFCj5odMoWtSqGk2X9tU"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 12569138902,
+        "clientOrderId": "jLnZpj5enfMXTuhKB1d0us"
+      }
+    ]
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 4
+    }
+  ]
+}
+```
+
+#### 查询订单列表挂单 (USER_DATA)
+
+```javascript
+{
+  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+  "method": "openOrderLists.status",
+  "params": {
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "1bea8b157dd78c3da30359bddcd999e4049749fe50b828e620e12f64e8b433c9",
+    "timestamp": 1660801713831
+  }
+}
+```
+
+查询所有订单列表挂单的执行状态。
+
+如果您需要持续监控订单状态更新，请考虑使用 WebSocket Streams：
+
+* [`userDataStream.start`](#user-data-stream-requests) 请求
+* [`executionReport`](./user-data-stream_CN.md#executionReport) 更新
+
+**权重:**
+6
+
+**参数:**
+
+名称                | 类型    | 是否必需 | 描述
+------------------- | ------- | --------- | ------------
+`apiKey`            | STRING  | YES       |
+`recvWindow`        | LONG    | NO        | 值不能大于 `60000`
+`signature`         | STRING  | YES       |
+`timestamp`         | LONG    | YES       |
+
+**数据源:**
+数据库
+
+**响应:**
+
+```javascript
+{
+  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+  "status": 200,
+  "result": [
+    {
+      "orderListId": 0,
+      "contingencyType": "OCO",
+      "listStatusType": "EXEC_STARTED",
+      "listOrderStatus": "EXECUTING",
+      "listClientOrderId": "08985fedd9ea2cf6b28996",
+      "transactionTime": 1660801713793,
+      "symbol": "BTCUSDT",
+      "orders": [
+        {
+          "symbol": "BTCUSDT",
+          "orderId": 4,
+          "clientOrderId": "CUhLgTXnX5n2c0gWiLpV4d"
+        },
+        {
+          "symbol": "BTCUSDT",
+          "orderId": 5,
+          "clientOrderId": "1ZqG7bBuYwaF4SU8CwnwHm"
+        }
+      ]
+    }
+  ],
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 6
     }
   ]
 }
@@ -6678,6 +6611,73 @@ NONE
       "intervalNum": 1,
       "limit": 6000,
       "count": 20
+    }
+  ]
+}
+```
+
+<a id="query-unfilled-order-count"></a>
+
+### 查询未成交的订单计数 (USER_DATA)
+
+```javascript
+{
+  "id": "d3783d8d-f8d1-4d2c-b8a0-b7596af5a664",
+  "method": "account.rateLimits.orders",
+  "params": {
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "76289424d6e288f4dc47d167ac824e859dabf78736f4348abbbac848d719eb94",
+    "timestamp": 1660801839500
+  }
+}
+```
+
+显示用户在所有时间间隔内的未成交订单计数。
+
+**权重:**
+40
+
+**参数:**
+
+名称                | 类型    | 是否必需 | 描述
+------------------- | ------- | --------- | ------------
+`apiKey`            | STRING  | YES       |
+`recvWindow`        | LONG    | NO        | 值不能大于 `60000`
+`signature`         | STRING  | YES       |
+`timestamp`         | LONG    | YES       |
+
+**数据源:**
+缓存
+
+**响应:**
+
+```javascript
+{
+  "id": "d3783d8d-f8d1-4d2c-b8a0-b7596af5a664",
+  "status": 200,
+  "result": [
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "SECOND",
+      "intervalNum": 10,
+      "limit": 50,
+      "count": 0
+    },
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "DAY",
+      "intervalNum": 1,
+      "limit": 160000,
+      "count": 0
+    }
+  ],
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 40
     }
   ]
 }

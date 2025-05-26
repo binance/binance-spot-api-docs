@@ -49,28 +49,28 @@
   - [Trading requests](#trading-requests)
     - [Place new order (TRADE)](#place-new-order-trade)
     - [Test new order (TRADE)](#test-new-order-trade)
-    - [Query order (USER_DATA)](#query-order-user_data)
     - [Cancel order (TRADE)](#cancel-order-trade)
     - [Cancel and replace order (TRADE)](#cancel-and-replace-order-trade)
     - [Order Amend Keep Priority (TRADE)](#order-amend-keep-priority-trade)
-    - [Current open orders (USER_DATA)](#current-open-orders-user_data)
     - [Cancel open orders (TRADE)](#cancel-open-orders-trade)
     - [Order lists](#order-lists)
       - [Place new Order list - OCO (TRADE)](#place-new-order-list---oco-trade)
       - [Place new Order list - OTO (TRADE)](#place-new-order-list---oto-trade)
       - [Place new Order list - OTOCO (TRADE)](#place-new-order-list---otoco-trade)
-      - [Query Order list (USER_DATA)](#query-order-list-user_data)
       - [Cancel Order list (TRADE)](#cancel-order-list-trade)
-      - [Current open order lists (USER_DATA)](#current-open-order-lists-user_data)
     - [SOR](#sor)
       - [Place new order using SOR (TRADE)](#place-new-order-using-sor-trade)
       - [Test new order using SOR (TRADE)](#test-new-order-using-sor-trade)
   - [Account requests](#account-requests)
     - [Account information (USER_DATA)](#account-information-user_data)
-    - [Account unfilled order count (USER_DATA)](#account-unfilled-order-count-user_data)
+    - [Query order (USER_DATA)](#query-order-user_data)
+    - [Current open orders (USER_DATA)](#current-open-orders-user_data)
     - [Account order history (USER_DATA)](#account-order-history-user_data)
+    - [Query Order list (USER_DATA)](#query-order-list-user_data)
+    - [Current open order lists (USER_DATA)](#current-open-order-lists-user_data)
     - [Account order list history (USER_DATA)](#account-order-list-history-user_data)
     - [Account trade history (USER_DATA)](#account-trade-history-user_data)
+    - [Account unfilled order count (USER_DATA)](#account-unfilled-order-count-user_data)
     - [Account prevented matches (USER_DATA)](#account-prevented-matches-user_data)
     - [Account allocations (USER_DATA)](#account-allocations-user_data)
     - [Account Commission Rates (USER_DATA)](#account-commission-rates-user_data)
@@ -3443,140 +3443,6 @@ With `computeCommissionRates`:
 }
 ```
 
-### Query order (USER_DATA)
-
-```javascript
-{
-  "id": "aa62318a-5a97-4f3b-bdc7-640bbe33b291",
-  "method": "order.status",
-  "params": {
-    "symbol": "BTCUSDT",
-    "orderId": 12569099453,
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "2c3aab5a078ee4ea465ecd95523b77289f61476c2f238ec10c55ea6cb11a6f35",
-    "timestamp": 1660801720951
-  }
-}
-```
-
-Check execution status of an order.
-
-**Weight:**
-4
-
-**Parameters:**
-
-<table>
-<thead>
-    <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Mandatory</th>
-        <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-    <tr>
-        <td><code>symbol</code></td>
-        <td>STRING</td>
-        <td>YES</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><code>orderId</code></td>
-        <td>INT</td>
-        <td rowspan="2">YES</td>
-        <td>Lookup order by <code>orderId</code></td>
-    </tr>
-    <tr>
-        <td><code>origClientOrderId</code></td>
-        <td>STRING</td>
-        <td>Lookup order by <code>clientOrderId</code></td>
-    </tr>
-    <tr>
-        <td><code>apiKey</code></td>
-        <td>STRING</td>
-        <td>YES</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><code>recvWindow</code></td>
-        <td>LONG</td>
-        <td>NO</td>
-        <td>The value cannot be greater than <tt>60000</tt></td>
-    </tr>
-    <tr>
-        <td><code>signature</code></td>
-        <td>STRING</td>
-        <td>YES</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><code>timestamp</code></td>
-        <td>LONG</td>
-        <td>YES</td>
-        <td></td>
-    </tr>
-</tbody>
-</table>
-
-Notes:
-
-* If both `orderId` and `origClientOrderId` are provided, the `orderId` is searched first, then the `origClientOrderId` from that result is checked against that order. If both conditions are not met the request will be rejected.
-
-* For some historical orders the `cummulativeQuoteQty` response field may be negative,
-  meaning the data is not available at this time.
-
-**Data Source:**
-Memory => Database
-
-**Response:**
-```javascript
-{
-  "id": "aa62318a-5a97-4f3b-bdc7-640bbe33b291",
-  "status": 200,
-  "result": {
-    "symbol": "BTCUSDT",
-    "orderId": 12569099453,
-    "orderListId": -1,                  // set only for orders of an order list
-    "clientOrderId": "4d96324ff9d44481926157",
-    "price": "23416.10000000",
-    "origQty": "0.00847000",
-    "executedQty": "0.00847000",
-    "cummulativeQuoteQty": "198.33521500",
-    "status": "FILLED",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "SELL",
-    "stopPrice": "0.00000000",          // always present, zero if order type does not use stopPrice
-    "trailingDelta": 10,                // present only if trailingDelta set for the order
-    "trailingTime": -1,                 // present only if trailingDelta set for the order
-    "icebergQty": "0.00000000",         // always present, zero for non-iceberg orders
-    "time": 1660801715639,              // time when the order was placed
-    "updateTime": 1660801717945,        // time of the last update to the order
-    "isWorking": true,
-    "workingTime": 1660801715639,
-    "origQuoteOrderQty": "0.00000000",   // always present, zero if order type does not use quoteOrderQty
-    "strategyId": 37463720,             // present only if strategyId set for the order
-    "strategyType": 1000000,            // present only if strategyType set for the order
-    "selfTradePreventionMode": "NONE",
-    "preventedMatchId": 0,              // present only if the order expired due to STP
-    "preventedQuantity": "1.200000"     // present only if the order expired due to STP
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 4
-    }
-  ]
-}
-```
-
-**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
-
 ### Cancel order (TRADE)
 
 ```javascript
@@ -4786,101 +4652,6 @@ Response for an order which is part of an Order list:
 
 **Note:** The payloads above do not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
-### Current open orders (USER_DATA)
-
-```javascript
-{
-  "id": "55f07876-4f6f-4c47-87dc-43e5fff3f2e7",
-  "method": "openOrders.status",
-  "params": {
-    "symbol": "BTCUSDT",
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "d632b3fdb8a81dd44f82c7c901833309dd714fe508772a89b0a35b0ee0c48b89",
-    "timestamp": 1660813156812
-  }
-}
-```
-
-Query execution status of all open orders.
-
-If you need to continuously monitor order status updates, please consider using WebSocket Streams:
-
-* [`userDataStream.start`](#user-data-stream-requests) request
-* [`executionReport`](./user-data-stream.md#order-update) user data stream event
-
-**Weight:**
-Adjusted based on the number of requested symbols:
-
-| Parameter | Weight |
-| --------- | ------ |
-| `symbol`  |      6 |
-| none      |     80 |
-
-**Parameters:**
-
-Name                | Type    | Mandatory | Description
-------------------- | ------- | --------- | ------------
-`symbol`            | STRING  | NO        | If omitted, open orders for all symbols are returned
-`apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
-`signature`         | STRING  | YES       |
-`timestamp`         | LONG    | YES       |
-
-**Data Source:**
-Memory => Database
-
-**Response:**
-
-Status reports for open orders are identical to [`order.status`](#query-order-user_data).
-
-Note that some fields are optional and included only for orders that set them.
-
-Open orders are always returned as a flat list.
-If all symbols are requested, use the `symbol` field to tell which symbol the orders belong to.
-
-```javascript
-{
-  "id": "55f07876-4f6f-4c47-87dc-43e5fff3f2e7",
-  "status": 200,
-  "result": [
-    {
-      "symbol": "BTCUSDT",
-      "orderId": 12569099453,
-      "orderListId": -1,
-      "clientOrderId": "4d96324ff9d44481926157",
-      "price": "23416.10000000",
-      "origQty": "0.00847000",
-      "executedQty": "0.00720000",
-      "origQuoteOrderQty": "0.000000",
-      "cummulativeQuoteQty": "172.43931000",
-      "status": "PARTIALLY_FILLED",
-      "timeInForce": "GTC",
-      "type": "LIMIT",
-      "side": "SELL",
-      "stopPrice": "0.00000000",
-      "icebergQty": "0.00000000",
-      "time": 1660801715639,
-      "updateTime": 1660801717945,
-      "isWorking": true,
-      "workingTime": 1660801715639,
-      "origQuoteOrderQty": "0.00000000",
-      "selfTradePreventionMode": "NONE"
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 6
-    }
-  ]
-}
-```
-
-**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
-
 ### Cancel open orders (TRADE)
 
 ```javascript
@@ -5587,127 +5358,6 @@ Depending on the `pendingAboveType`/`pendingBelowType` or `workingType`, some op
 
 **Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
-#### Query Order list (USER_DATA)
-
-```javascript
-{
-  "id": "b53fd5ff-82c7-4a04-bd64-5f9dc42c2100",
-  "method": "orderList.status",
-  "params": {
-    "origClientOrderId": "08985fedd9ea2cf6b28996",
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "d12f4e8892d46c0ddfbd43d556ff6d818581b3be22a02810c2c20cb719aed6a4",
-    "timestamp": 1660801713965
-  }
-}
-```
-
-Check execution status of an Order list.
-
-For execution status of individual orders, use [`order.status`](#query-order-user_data).
-
-**Weight:**
-4
-
-**Parameters**:
-
-<table>
-<thead>
-    <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Mandatory</th>
-        <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-    <tr>
-        <td><code>origClientOrderId</code></td>
-        <td>STRING</td>
-        <td rowspan="2">NO*</td>
-        <td>Query order list by <code>listClientOrderId</code>.<br><code>orderListId</code> or <code>origClientOrderId</code> must be provided.</td>
-    </tr>
-    <tr>
-        <td><code>orderListId</code></td>
-        <td>INT</td>
-        <td>Query order list by <code>orderListId</code>.<br><code>orderListId</code> or <code>origClientOrderId</code> must be provided.</td>
-    </tr>
-    <tr>
-        <td><code>apiKey</code></td>
-        <td>STRING</td>
-        <td>YES</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><code>recvWindow</code></td>
-        <td>LONG</td>
-        <td>NO</td>
-        <td>The value cannot be greater than <tt>60000</tt></td>
-    </tr>
-    <tr>
-        <td><code>signature</code></td>
-        <td>STRING</td>
-        <td>YES</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><code>timestamp</code></td>
-        <td>LONG</td>
-        <td>YES</td>
-        <td></td>
-    </tr>
-</tbody>
-</table>
-
-Notes:
-
-* `origClientOrderId` refers to `listClientOrderId` of the order list itself.
-
-* If both `origClientOrderId` and `orderListId` parameters are specified,
-  only `origClientOrderId` is used and `orderListId` is ignored.
-
-**Data Source:**
-Database
-
-**Response:**
-
-```javascript
-{
-  "id": "b53fd5ff-82c7-4a04-bd64-5f9dc42c2100",
-  "status": 200,
-  "result": {
-    "orderListId": 1274512,
-    "contingencyType": "OCO",
-    "listStatusType": "EXEC_STARTED",
-    "listOrderStatus": "EXECUTING",
-    "listClientOrderId": "08985fedd9ea2cf6b28996",
-    "transactionTime": 1660801713793,
-    "symbol": "BTCUSDT",
-    "orders": [
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 12569138901,
-        "clientOrderId": "BqtFCj5odMoWtSqGk2X9tU"
-      },
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 12569138902,
-        "clientOrderId": "jLnZpj5enfMXTuhKB1d0us"
-      }
-    ]
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 4
-    }
-  ]
-}
-```
-
 #### Cancel Order list (TRADE)
 
 ```javascript
@@ -5871,83 +5521,6 @@ Matching Engine
       "intervalNum": 1,
       "limit": 6000,
       "count": 1
-    }
-  ]
-}
-```
-
-#### Current open order lists (USER_DATA)
-
-```javascript
-{
-  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
-  "method": "openOrderLists.status",
-  "params": {
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "1bea8b157dd78c3da30359bddcd999e4049749fe50b828e620e12f64e8b433c9",
-    "timestamp": 1660801713831
-  }
-}
-```
-
-Query execution status of all open order lists.
-
-If you need to continuously monitor order status updates, please consider using WebSocket Streams:
-
-* [`userDataStream.start`](#user-data-stream-requests) request
-* [`executionReport`](./user-data-stream.md#order-update) user data stream event
-
-**Weight**:
-6
-
-**Parameters:**
-
-Name                | Type    | Mandatory | Description
-------------------- | ------- | --------- | ------------
-`apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
-`signature`         | STRING  | YES       |
-`timestamp`         | LONG    | YES       |
-
-**Data Source:**
-Database
-
-**Response:**
-
-```javascript
-{
-  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
-  "status": 200,
-  "result": [
-    {
-      "orderListId": 0,
-      "contingencyType": "OCO",
-      "listStatusType": "EXEC_STARTED",
-      "listOrderStatus": "EXECUTING",
-      "listClientOrderId": "08985fedd9ea2cf6b28996",
-      "transactionTime": 1660801713793,
-      "symbol": "BTCUSDT",
-      "orders": [
-        {
-          "symbol": "BTCUSDT",
-          "orderId": 4,
-          "clientOrderId": "CUhLgTXnX5n2c0gWiLpV4d"
-        },
-        {
-          "symbol": "BTCUSDT",
-          "orderId": 5,
-          "clientOrderId": "1ZqG7bBuYwaF4SU8CwnwHm"
-        }
-      ]
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 6
     }
   ]
 }
@@ -6256,59 +5829,218 @@ Memory => Database
 }
 ```
 
-<a id="query-unfilled-order-count"></a>
-
-### Account unfilled order count (USER_DATA)
+### Query order (USER_DATA)
 
 ```javascript
 {
-  "id": "d3783d8d-f8d1-4d2c-b8a0-b7596af5a664",
-  "method": "account.rateLimits.orders",
+  "id": "aa62318a-5a97-4f3b-bdc7-640bbe33b291",
+  "method": "order.status",
   "params": {
+    "symbol": "BTCUSDT",
+    "orderId": 12569099453,
     "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "76289424d6e288f4dc47d167ac824e859dabf78736f4348abbbac848d719eb94",
-    "timestamp": 1660801839500
+    "signature": "2c3aab5a078ee4ea465ecd95523b77289f61476c2f238ec10c55ea6cb11a6f35",
+    "timestamp": 1660801720951
   }
 }
 ```
 
-Query your current unfilled order count for all intervals.
+Check execution status of an order.
 
 **Weight:**
-40
+4
+
+**Parameters:**
+
+<table>
+<thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Mandatory</th>
+        <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td><code>symbol</code></td>
+        <td>STRING</td>
+        <td>YES</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><code>orderId</code></td>
+        <td>INT</td>
+        <td rowspan="2">YES</td>
+        <td>Lookup order by <code>orderId</code></td>
+    </tr>
+    <tr>
+        <td><code>origClientOrderId</code></td>
+        <td>STRING</td>
+        <td>Lookup order by <code>clientOrderId</code></td>
+    </tr>
+    <tr>
+        <td><code>apiKey</code></td>
+        <td>STRING</td>
+        <td>YES</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><code>recvWindow</code></td>
+        <td>LONG</td>
+        <td>NO</td>
+        <td>The value cannot be greater than <tt>60000</tt></td>
+    </tr>
+    <tr>
+        <td><code>signature</code></td>
+        <td>STRING</td>
+        <td>YES</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><code>timestamp</code></td>
+        <td>LONG</td>
+        <td>YES</td>
+        <td></td>
+    </tr>
+</tbody>
+</table>
+
+Notes:
+
+* If both `orderId` and `origClientOrderId` are provided, the `orderId` is searched first, then the `origClientOrderId` from that result is checked against that order. If both conditions are not met the request will be rejected.
+
+* For some historical orders the `cummulativeQuoteQty` response field may be negative,
+  meaning the data is not available at this time.
+
+**Data Source:**
+Memory => Database
+
+**Response:**
+```javascript
+{
+  "id": "aa62318a-5a97-4f3b-bdc7-640bbe33b291",
+  "status": 200,
+  "result": {
+    "symbol": "BTCUSDT",
+    "orderId": 12569099453,
+    "orderListId": -1,                  // set only for orders of an order list
+    "clientOrderId": "4d96324ff9d44481926157",
+    "price": "23416.10000000",
+    "origQty": "0.00847000",
+    "executedQty": "0.00847000",
+    "cummulativeQuoteQty": "198.33521500",
+    "status": "FILLED",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "SELL",
+    "stopPrice": "0.00000000",          // always present, zero if order type does not use stopPrice
+    "trailingDelta": 10,                // present only if trailingDelta set for the order
+    "trailingTime": -1,                 // present only if trailingDelta set for the order
+    "icebergQty": "0.00000000",         // always present, zero for non-iceberg orders
+    "time": 1660801715639,              // time when the order was placed
+    "updateTime": 1660801717945,        // time of the last update to the order
+    "isWorking": true,
+    "workingTime": 1660801715639,
+    "origQuoteOrderQty": "0.00000000"   // always present, zero if order type does not use quoteOrderQty
+    "strategyId": 37463720,             // present only if strategyId set for the order
+    "strategyType": 1000000,            // present only if strategyType set for the order
+    "selfTradePreventionMode": "NONE",
+    "preventedMatchId": 0,              // present only if the order expired due to STP
+    "preventedQuantity": "1.200000"     // present only if the order expired due to STP
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 4
+    }
+  ]
+}
+```
+
+**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+
+### Current open orders (USER_DATA)
+
+```javascript
+{
+  "id": "55f07876-4f6f-4c47-87dc-43e5fff3f2e7",
+  "method": "openOrders.status",
+  "params": {
+    "symbol": "BTCUSDT",
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "d632b3fdb8a81dd44f82c7c901833309dd714fe508772a89b0a35b0ee0c48b89",
+    "timestamp": 1660813156812
+  }
+}
+```
+
+Query execution status of all open orders.
+
+If you need to continuously monitor order status updates, please consider using WebSocket Streams:
+
+* [`userDataStream.start`](#user-data-stream-requests) request
+* [`executionReport`](./user-data-stream.md#order-update) user data stream event
+
+**Weight:**
+Adjusted based on the number of requested symbols:
+
+| Parameter | Weight |
+| --------- | ------ |
+| `symbol`  |      6 |
+| none      |     80 |
 
 **Parameters:**
 
 Name                | Type    | Mandatory | Description
 ------------------- | ------- | --------- | ------------
+`symbol`            | STRING  | NO        | If omitted, open orders for all symbols are returned
 `apiKey`            | STRING  | YES       |
 `recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
 **Data Source:**
-Memory
+Memory => Database
 
 **Response:**
 
+Status reports for open orders are identical to [`order.status`](#query-order-user_data).
+
+Note that some fields are optional and included only for orders that set them.
+
+Open orders are always returned as a flat list.
+If all symbols are requested, use the `symbol` field to tell which symbol the orders belong to.
+
 ```javascript
 {
-  "id": "d3783d8d-f8d1-4d2c-b8a0-b7596af5a664",
+  "id": "55f07876-4f6f-4c47-87dc-43e5fff3f2e7",
   "status": 200,
   "result": [
     {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 10,
-      "limit": 50,
-      "count": 0
-    },
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "DAY",
-      "intervalNum": 1,
-      "limit": 160000,
-      "count": 0
+      "symbol": "BTCUSDT",
+      "orderId": 12569099453,
+      "orderListId": -1,
+      "clientOrderId": "4d96324ff9d44481926157",
+      "price": "23416.10000000",
+      "origQty": "0.00847000",
+      "executedQty": "0.00720000",
+      "cummulativeQuoteQty": "172.43931000",
+      "status": "PARTIALLY_FILLED",
+      "timeInForce": "GTC",
+      "type": "LIMIT",
+      "side": "SELL",
+      "stopPrice": "0.00000000",
+      "icebergQty": "0.00000000",
+      "time": 1660801715639,
+      "updateTime": 1660801717945,
+      "isWorking": true,
+      "workingTime": 1660801715639,
+      "origQuoteOrderQty": "0.00000000",
+      "selfTradePreventionMode": "NONE"
     }
   ],
   "rateLimits": [
@@ -6317,11 +6049,13 @@ Memory
       "interval": "MINUTE",
       "intervalNum": 1,
       "limit": 6000,
-      "count": 40
+      "count": 6
     }
   ]
 }
 ```
+
+**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 ### Account order history (USER_DATA)
 
@@ -6425,6 +6159,205 @@ Note that some fields are optional and included only for orders that set them.
   ]
 }
 ```
+
+### Query Order list (USER_DATA)
+
+```javascript
+{
+  "id": "b53fd5ff-82c7-4a04-bd64-5f9dc42c2100",
+  "method": "orderList.status",
+  "params": {
+    "origClientOrderId": "08985fedd9ea2cf6b28996"
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "d12f4e8892d46c0ddfbd43d556ff6d818581b3be22a02810c2c20cb719aed6a4",
+    "timestamp": 1660801713965
+  }
+}
+```
+
+Check execution status of an Order list.
+
+For execution status of individual orders, use [`order.status`](#query-order-user_data).
+
+**Weight:**
+4
+
+**Parameters**:
+
+<table>
+<thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Mandatory</th>
+        <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td><code>origClientOrderId</code></td>
+        <td>STRING</td>
+        <td rowspan="2">NO*</td>
+        <td>Query order list by <code>listClientOrderId</code>.<br><code>orderListId</code> or <code>origClientOrderId</code> must be provided.</td>
+    </tr>
+    <tr>
+        <td><code>orderListId</code></td>
+        <td>INT</td>
+        <td>Query order list by <code>orderListId</code>.<br><code>orderListId</code> or <code>origClientOrderId</code> must be provided.</td>
+    </tr>
+    <tr>
+        <td><code>apiKey</code></td>
+        <td>STRING</td>
+        <td>YES</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><code>recvWindow</code></td>
+        <td>LONG</td>
+        <td>NO</td>
+        <td>The value cannot be greater than <tt>60000</tt></td>
+    </tr>
+    <tr>
+        <td><code>signature</code></td>
+        <td>STRING</td>
+        <td>YES</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><code>timestamp</code></td>
+        <td>LONG</td>
+        <td>YES</td>
+        <td></td>
+    </tr>
+</tbody>
+</table>
+
+Notes:
+
+* `origClientOrderId` refers to `listClientOrderId` of the order list itself.
+
+* If both `origClientOrderId` and `orderListId` parameters are specified,
+  only `origClientOrderId` is used and `orderListId` is ignored.
+
+**Data Source:**
+Database
+
+**Response:**
+
+```javascript
+{
+  "id": "b53fd5ff-82c7-4a04-bd64-5f9dc42c2100",
+  "status": 200,
+  "result": {
+    "orderListId": 1274512,
+    "contingencyType": "OCO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "08985fedd9ea2cf6b28996",
+    "transactionTime": 1660801713793,
+    "symbol": "BTCUSDT",
+    "orders": [
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 12569138901,
+        "clientOrderId": "BqtFCj5odMoWtSqGk2X9tU"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 12569138902,
+        "clientOrderId": "jLnZpj5enfMXTuhKB1d0us"
+      }
+    ]
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 4
+    }
+  ]
+}
+```
+
+### Current open order lists (USER_DATA)
+
+```javascript
+{
+  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+  "method": "openOrderLists.status",
+  "params": {
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "1bea8b157dd78c3da30359bddcd999e4049749fe50b828e620e12f64e8b433c9",
+    "timestamp": 1660801713831
+  }
+}
+```
+
+Query execution status of all open order lists.
+
+If you need to continuously monitor order status updates, please consider using WebSocket Streams:
+
+* [`userDataStream.start`](#user-data-stream-requests) request
+* [`executionReport`](./user-data-stream.md#order-update) user data stream event
+
+**Weight**:
+6
+
+**Parameters:**
+
+Name                | Type    | Mandatory | Description
+------------------- | ------- | --------- | ------------
+`apiKey`            | STRING  | YES       |
+`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
+`signature`         | STRING  | YES       |
+`timestamp`         | LONG    | YES       |
+
+**Data Source:**
+Database
+
+**Response:**
+
+```javascript
+{
+  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+  "status": 200,
+  "result": [
+    {
+      "orderListId": 0,
+      "contingencyType": "OCO",
+      "listStatusType": "EXEC_STARTED",
+      "listOrderStatus": "EXECUTING",
+      "listClientOrderId": "08985fedd9ea2cf6b28996",
+      "transactionTime": 1660801713793,
+      "symbol": "BTCUSDT",
+      "orders": [
+        {
+          "symbol": "BTCUSDT",
+          "orderId": 4,
+          "clientOrderId": "CUhLgTXnX5n2c0gWiLpV4d"
+        },
+        {
+          "symbol": "BTCUSDT",
+          "orderId": 5,
+          "clientOrderId": "1ZqG7bBuYwaF4SU8CwnwHm"
+        }
+      ]
+    }
+  ],
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 6
+    }
+  ]
+}
+```
+
 
 ### Account order list history (USER_DATA)
 
@@ -6629,6 +6562,72 @@ Memory => Database
 }
 ```
 
+<a id="query-unfilled-order-count"></a>
+
+### Account unfilled order count (USER_DATA)
+
+```javascript
+{
+  "id": "d3783d8d-f8d1-4d2c-b8a0-b7596af5a664",
+  "method": "account.rateLimits.orders",
+  "params": {
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "76289424d6e288f4dc47d167ac824e859dabf78736f4348abbbac848d719eb94",
+    "timestamp": 1660801839500
+  }
+}
+```
+
+Query your current unfilled order count for all intervals.
+
+**Weight:**
+40
+
+**Parameters:**
+
+Name                | Type    | Mandatory | Description
+------------------- | ------- | --------- | ------------
+`apiKey`            | STRING  | YES       |
+`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
+`signature`         | STRING  | YES       |
+`timestamp`         | LONG    | YES       |
+
+**Data Source:**
+Memory
+
+**Response:**
+
+```javascript
+{
+  "id": "d3783d8d-f8d1-4d2c-b8a0-b7596af5a664",
+  "status": 200,
+  "result": [
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "SECOND",
+      "intervalNum": 10,
+      "limit": 50,
+      "count": 0
+    },
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "DAY",
+      "intervalNum": 1,
+      "limit": 160000,
+      "count": 0
+    }
+  ],
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 40
+    }
+  ]
+}
+```
 
 ### Account prevented matches (USER_DATA)
 

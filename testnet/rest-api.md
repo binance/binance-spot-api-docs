@@ -1,6 +1,5 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
   - [General API Information](#general-api-information)
   - [HTTP Return Codes](#http-return-codes)
@@ -44,21 +43,21 @@
     - [Cancel All Open Orders on a Symbol (TRADE)](#cancel-all-open-orders-on-a-symbol-trade)
     - [Cancel an Existing Order and Send a New Order (TRADE)](#cancel-an-existing-order-and-send-a-new-order-trade)
     - [Order Amend Keep Priority (TRADE)](#order-amend-keep-priority-trade)
-    - [Current open orders (USER_DATA)](#current-open-orders-user_data)
-    - [All orders (USER_DATA)](#all-orders-user_data)
     - [Order lists](#order-lists)
       - [New Order list - OCO (TRADE)](#new-order-list---oco-trade)
       - [New Order list - OTO (TRADE)](#new-order-list---oto-trade)
       - [New Order list - OTOCO (TRADE)](#new-order-list---otoco-trade)
       - [Cancel Order list (TRADE)](#cancel-order-list-trade)
-      - [Query Order list (USER_DATA)](#query-order-list-user_data)
-      - [Query all Order lists (USER_DATA)](#query-all-order-lists-user_data)
-      - [Query Open Order lists (USER_DATA)](#query-open-order-lists-user_data)
     - [SOR](#sor)
       - [New order using SOR (TRADE)](#new-order-using-sor-trade)
       - [Test new order using SOR (TRADE)](#test-new-order-using-sor-trade)
   - [Account Endpoints](#account-endpoints)
     - [Account information (USER_DATA)](#account-information-user_data)
+    - [Current open orders (USER_DATA)](#current-open-orders-user_data)
+    - [All orders (USER_DATA)](#all-orders-user_data)
+    - [Query Order list (USER_DATA)](#query-order-list-user_data)
+    - [Query all Order lists (USER_DATA)](#query-all-order-lists-user_data)
+    - [Query Open Order lists (USER_DATA)](#query-open-order-lists-user_data)
     - [Account trade list (USER_DATA)](#account-trade-list-user_data)
     - [Query Unfilled Order Count (USER_DATA)](#query-unfilled-order-count-user_data)
     - [Query Prevented Matches (USER_DATA)](#query-prevented-matches-user_data)
@@ -2654,118 +2653,6 @@ Response for an order that is part of an Order list:
 
 **Note:** The payloads above do not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
-### Current open orders (USER_DATA)
-```
-GET /api/v3/openOrders
-```
-Get all open orders on a symbol. **Careful** when accessing this with no symbol.
-
-**Weight:**
-6 for a single symbol; **80** when the symbol parameter is omitted
-
-**Parameters:**
-
-Name | Type | Mandatory | Description
------------- | ------------ | ------------ | ------------
-symbol | STRING | NO |
-recvWindow | LONG | NO | The value cannot be greater than `60000`
-timestamp | LONG | YES |
-
-* If the symbol is not sent, orders for all symbols will be returned in an array.
-
-**Data Source:**
-Memory => Database
-
-**Response:**
-```javascript
-[
-  {
-    "symbol": "LTCBTC",
-    "orderId": 1,
-    "orderListId": -1, // Unless it's part of an order list, value will be -1
-    "clientOrderId": "myOrder1",
-    "price": "0.1",
-    "origQty": "1.0",
-    "executedQty": "0.0",
-    "cummulativeQuoteQty": "0.0",
-    "status": "NEW",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "BUY",
-    "stopPrice": "0.0",
-    "icebergQty": "0.0",
-    "time": 1499827319559,
-    "updateTime": 1499827319559,
-    "isWorking": true,
-    "origQuoteOrderQty": "0.000000",
-    "workingTime": 1499827319559,
-    "selfTradePreventionMode": "NONE"
-  }
-]
-```
-
-**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
-
-### All orders (USER_DATA)
-```
-GET /api/v3/allOrders
-```
-Get all account orders; active, canceled, or filled.
-
-**Weight:**
-20
-
-**Data Source:**
-Database
-
-**Parameters:**
-
-Name | Type | Mandatory | Description
------------- | ------------ | ------------ | ------------
-symbol | STRING | YES |
-orderId | LONG | NO |
-startTime | LONG | NO |
-endTime | LONG | NO |
-limit | INT | NO | Default: 500; Maximum: 1000.
-recvWindow | LONG | NO | The value cannot be greater than `60000`
-timestamp | LONG | YES |
-
-**Notes:**
-* If `orderId` is set, it will get orders >= that `orderId`. Otherwise most recent orders are returned.
-* For some historical orders `cummulativeQuoteQty` will be < 0, meaning the data is not available at this time.
-* If `startTime` and/or `endTime` provided, `orderId`  is not required.
-* The time between `startTime` and `endTime` can't be longer than 24 hours.
-
-**Response:**
-```javascript
-[
-  {
-    "symbol": "LTCBTC",
-    "orderId": 1,
-    "orderListId": -1, //Unless it's part of an order list, value will be -1
-    "clientOrderId": "myOrder1",
-    "price": "0.1",
-    "origQty": "1.0",
-    "executedQty": "0.0",
-    "cummulativeQuoteQty": "0.0",
-    "status": "NEW",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "BUY",
-    "stopPrice": "0.0",
-    "icebergQty": "0.0",
-    "time": 1499827319559,
-    "updateTime": 1499827319559,
-    "isWorking": true,
-    "origQuoteOrderQty": "0.000000",
-    "workingTime": 1499827319559,
-    "selfTradePreventionMode": "NONE"
-  }
-]
-```
-
-**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
-
 ### Order lists
 
 #### New Order list - OCO (TRADE)
@@ -3292,178 +3179,6 @@ Matching Engine
 }
 ```
 
-
-#### Query Order list (USER_DATA)
-
-```
-GET /api/v3/orderList
-```
-Retrieves a specific order list based on provided optional parameters.
-
-**Weight:**
-4
-
-**Parameters:**
-
-Name| Type|Mandatory| Description
-----|-----|----|----------
-orderListId|LONG|NO*| Query order list by `orderListId`. <br>`orderListId` or `origClientOrderId` must be provided.
-origClientOrderId|STRING|NO*| Query order list by `listClientOrderId`. <br>`orderListId` or `origClientOrderId` must be provided.
-recvWindow|LONG|NO| The value cannot be greater than `60000`
-timestamp|LONG|YES|
-
-**Data Source:**
-Database
-
-**Response:**
-
-```javascript
-{
-  "orderListId": 27,
-  "contingencyType": "OCO",
-  "listStatusType": "EXEC_STARTED",
-  "listOrderStatus": "EXECUTING",
-  "listClientOrderId": "h2USkA5YQpaXHPIrkd96xE",
-  "transactionTime": 1565245656253,
-  "symbol": "LTCBTC",
-  "orders": [
-    {
-      "symbol": "LTCBTC",
-      "orderId": 4,
-      "clientOrderId": "qD1gy3kc3Gx0rihm9Y3xwS"
-    },
-    {
-      "symbol": "LTCBTC",
-      "orderId": 5,
-      "clientOrderId": "ARzZ9I00CPM8i3NhmU9Ega"
-    }
-  ]
-}
-```
-
-
-#### Query all Order lists (USER_DATA)
-
-```
-GET /api/v3/allOrderList
-```
-Retrieves all order lists based on provided optional parameters.
-
-Note that the time between `startTime` and `endTime` can't be longer than 24 hours.
-
-**Weight:**
-20
-
-**Parameters:**
-
-Name|Type| Mandatory| Description
-----|----|----|---------
-fromId|LONG|NO| If supplied, neither `startTime` or `endTime` can be provided
-startTime|LONG|NO|
-endTime|LONG|NO|
-limit|INT|NO| Default: 500; Maximum: 1000
-recvWindow|LONG|NO| The value cannot be greater than `60000`
-timestamp|LONG|YES|
-
-**Data Source:**
-Database
-
-**Response:**
-
-```javascript
-[
-  {
-    "orderListId": 29,
-    "contingencyType": "OCO",
-    "listStatusType": "EXEC_STARTED",
-    "listOrderStatus": "EXECUTING",
-    "listClientOrderId": "amEEAXryFzFwYF1FeRpUoZ",
-    "transactionTime": 1565245913483,
-    "symbol": "LTCBTC",
-    "orders": [
-      {
-        "symbol": "LTCBTC",
-        "orderId": 4,
-        "clientOrderId": "oD7aesZqjEGlZrbtRpy5zB"
-      },
-      {
-        "symbol": "LTCBTC",
-        "orderId": 5,
-        "clientOrderId": "Jr1h6xirOxgeJOUuYQS7V3"
-      }
-    ]
-  },
-  {
-    "orderListId": 28,
-    "contingencyType": "OCO",
-    "listStatusType": "EXEC_STARTED",
-    "listOrderStatus": "EXECUTING",
-    "listClientOrderId": "hG7hFNxJV6cZy3Ze4AUT4d",
-    "transactionTime": 1565245913407,
-    "symbol": "LTCBTC",
-    "orders": [
-      {
-        "symbol": "LTCBTC",
-        "orderId": 2,
-        "clientOrderId": "j6lFOfbmFMRjTYA7rRJ0LP"
-      },
-      {
-        "symbol": "LTCBTC",
-        "orderId": 3,
-        "clientOrderId": "z0KCjOdditiLS5ekAFtK81"
-      }
-    ]
-  }
-]
-```
-
-#### Query Open Order lists (USER_DATA)
-
-```
-GET /api/v3/openOrderList
-```
-
-**Weight:**
-6
-
-**Parameters:**
-
-Name| Type|Mandatory| Description
-----|-----|---|------------------
-recvWindow|LONG|NO| The value cannot be greater than `60000`
-timestamp|LONG|YES|
-
-**Data Source:**
-Database
-
-**Response:**
-
-```javascript
-[
-  {
-    "orderListId": 31,
-    "contingencyType": "OCO",
-    "listStatusType": "EXEC_STARTED",
-    "listOrderStatus": "EXECUTING",
-    "listClientOrderId": "wuB13fmulKj3YjdqWEcsnp",
-    "transactionTime": 1565246080644,
-    "symbol": "LTCBTC",
-    "orders": [
-      {
-        "symbol": "LTCBTC",
-        "orderId": 4,
-        "clientOrderId": "r3EH2N76dHfLoSZWIUw1bT"
-      },
-      {
-        "symbol": "LTCBTC",
-        "orderId": 5,
-        "clientOrderId": "Cv1SnyPD3qhqpbjpYEHbd2"
-      }
-    ]
-  }
-]
-```
-
 ### SOR
 
 #### New order using SOR (TRADE)
@@ -3482,6 +3197,7 @@ Read [SOR FAQ](../faqs/sor_faq.md) to learn more.
 
 **Unfilled Order Count:**
 1
+
 
 **Parameters:**
 
@@ -3557,6 +3273,7 @@ Creates and validates a new order but does not send it into the matching engine.
 | --------- | -------------- |
 | Without `computeCommissionRates`  |  1 |
 | With `computeCommissionRates`     | 20 |
+
 
 **Parameters:**
 
@@ -3663,6 +3380,291 @@ Memory => Database
   ],
   "uid": 354937868
 }
+```
+
+### Current open orders (USER_DATA)
+```
+GET /api/v3/openOrders
+```
+Get all open orders on a symbol. **Careful** when accessing this with no symbol.
+
+**Weight:**
+6 for a single symbol; **80** when the symbol parameter is omitted
+
+**Parameters:**
+
+Name | Type | Mandatory | Description
+------------ | ------------ | ------------ | ------------
+symbol | STRING | NO |
+recvWindow | LONG | NO | The value cannot be greater than `60000`
+timestamp | LONG | YES |
+
+* If the symbol is not sent, orders for all symbols will be returned in an array.
+
+**Data Source:**
+Memory => Database
+
+**Response:**
+```javascript
+[
+  {
+    "symbol": "LTCBTC",
+    "orderId": 1,
+    "orderListId": -1, // Unless it's part of an order list, value will be -1
+    "clientOrderId": "myOrder1",
+    "price": "0.1",
+    "origQty": "1.0",
+    "executedQty": "0.0",
+    "cummulativeQuoteQty": "0.0",
+    "status": "NEW",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "stopPrice": "0.0",
+    "icebergQty": "0.0",
+    "time": 1499827319559,
+    "updateTime": 1499827319559,
+    "isWorking": true,
+    "origQuoteOrderQty": "0.000000",
+    "workingTime": 1499827319559,
+    "selfTradePreventionMode": "NONE"
+  }
+]
+```
+
+**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+
+### All orders (USER_DATA)
+```
+GET /api/v3/allOrders
+```
+Get all account orders; active, canceled, or filled.
+
+**Weight:**
+20
+
+**Data Source:**
+Database
+
+**Parameters:**
+
+Name | Type | Mandatory | Description
+------------ | ------------ | ------------ | ------------
+symbol | STRING | YES |
+orderId | LONG | NO |
+startTime | LONG | NO |
+endTime | LONG | NO |
+limit | INT | NO | Default 500; Maximum: 1000.
+recvWindow | LONG | NO | The value cannot be greater than `60000`
+timestamp | LONG | YES |
+
+**Notes:**
+* If `orderId` is set, it will get orders >= that `orderId`. Otherwise most recent orders are returned.
+* For some historical orders `cummulativeQuoteQty` will be < 0, meaning the data is not available at this time.
+* If `startTime` and/or `endTime` provided, `orderId`  is not required.
+* The time between `startTime` and `endTime` can't be longer than 24 hours.
+
+**Response:**
+```javascript
+[
+  {
+    "symbol": "LTCBTC",
+    "orderId": 1,
+    "orderListId": -1, //Unless it's part of an order list, value will be -1
+    "clientOrderId": "myOrder1",
+    "price": "0.1",
+    "origQty": "1.0",
+    "executedQty": "0.0",
+    "cummulativeQuoteQty": "0.0",
+    "status": "NEW",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "stopPrice": "0.0",
+    "icebergQty": "0.0",
+    "time": 1499827319559,
+    "updateTime": 1499827319559,
+    "isWorking": true,
+    "origQuoteOrderQty": "0.000000",
+    "workingTime": 1499827319559,
+    "selfTradePreventionMode": "NONE",
+  }
+]
+```
+
+**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+
+### Query Order list (USER_DATA)
+
+```
+GET /api/v3/orderList
+```
+Retrieves a specific order list based on provided optional parameters.
+
+**Weight:**
+
+4
+
+**Parameters**:
+
+Name| Type|Mandatory| Description
+----|-----|----|----------
+orderListId|LONG|NO*| Query order list by `orderListId`. <br>`orderListId` or `origClientOrderId` must be provided.
+origClientOrderId|STRING|NO*| Query order list by `listClientOrderId`. <br>`orderListId` or `origClientOrderId` must be provided.
+recvWindow|LONG|NO| The value cannot be greater than `60000`
+timestamp|LONG|YES|
+
+**Data Source:**
+Database
+
+**Response:**
+
+```javascript
+{
+  "orderListId": 27,
+  "contingencyType": "OCO",
+  "listStatusType": "EXEC_STARTED",
+  "listOrderStatus": "EXECUTING",
+  "listClientOrderId": "h2USkA5YQpaXHPIrkd96xE",
+  "transactionTime": 1565245656253,
+  "symbol": "LTCBTC",
+  "orders": [
+    {
+      "symbol": "LTCBTC",
+      "orderId": 4,
+      "clientOrderId": "qD1gy3kc3Gx0rihm9Y3xwS"
+    },
+    {
+      "symbol": "LTCBTC",
+      "orderId": 5,
+      "clientOrderId": "ARzZ9I00CPM8i3NhmU9Ega"
+    }
+  ]
+}
+```
+
+### Query all Order lists (USER_DATA)
+
+```
+GET /api/v3/allOrderList
+```
+
+Retrieves all order lists based on provided optional parameters
+
+Note that the time between `startTime` and `endTime` can't be longer than 24 hours.
+
+**Weight:**
+
+20
+
+**Parameters:**
+
+Name|Type| Mandatory| Description
+----|----|----|---------
+fromId|LONG|NO| If supplied, neither `startTime` or `endTime` can be provided
+startTime|LONG|NO|
+endTime|LONG|NO|
+limit|INT|NO| Default: 500; Maximum: 1000
+recvWindow|LONG|NO| The value cannot be greater than `60000`
+timestamp|LONG|YES|
+
+**Data Source:**
+Database
+
+**Response:**
+
+```javascript
+[
+  {
+    "orderListId": 29,
+    "contingencyType": "OCO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "amEEAXryFzFwYF1FeRpUoZ",
+    "transactionTime": 1565245913483,
+    "symbol": "LTCBTC",
+    "orders": [
+      {
+        "symbol": "LTCBTC",
+        "orderId": 4,
+        "clientOrderId": "oD7aesZqjEGlZrbtRpy5zB"
+      },
+      {
+        "symbol": "LTCBTC",
+        "orderId": 5,
+        "clientOrderId": "Jr1h6xirOxgeJOUuYQS7V3"
+      }
+    ]
+  },
+  {
+    "orderListId": 28,
+    "contingencyType": "OCO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "hG7hFNxJV6cZy3Ze4AUT4d",
+    "transactionTime": 1565245913407,
+    "symbol": "LTCBTC",
+    "orders": [
+      {
+        "symbol": "LTCBTC",
+        "orderId": 2,
+        "clientOrderId": "j6lFOfbmFMRjTYA7rRJ0LP"
+      },
+      {
+        "symbol": "LTCBTC",
+        "orderId": 3,
+        "clientOrderId": "z0KCjOdditiLS5ekAFtK81"
+      }
+    ]
+  }
+]
+```
+
+### Query Open Order lists (USER_DATA)
+
+```
+GET /api/v3/openOrderList
+```
+
+**Weight**:
+6
+
+**Parameters:**
+
+Name| Type|Mandatory| Description
+----|-----|---|------------------
+recvWindow|LONG|NO| The value cannot be greater than `60000`
+timestamp|LONG|YES|
+
+**Data Source:**
+Database
+
+**Response:**
+
+```javascript
+[
+  {
+    "orderListId": 31,
+    "contingencyType": "OCO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "wuB13fmulKj3YjdqWEcsnp",
+    "transactionTime": 1565246080644,
+    "symbol": "LTCBTC",
+    "orders": [
+      {
+        "symbol": "LTCBTC",
+        "orderId": 4,
+        "clientOrderId": "r3EH2N76dHfLoSZWIUw1bT"
+      },
+      {
+        "symbol": "LTCBTC",
+        "orderId": 5,
+        "clientOrderId": "Cv1SnyPD3qhqpbjpYEHbd2"
+      }
+    ]
+  }
+]
 ```
 
 ### Account trade list (USER_DATA)
