@@ -88,7 +88,7 @@
 
 # Public WebSocket API for Binance SPOT Testnet
 
-**Last Updated: 2025-05-21**
+**Last Updated: 2025-05-28**
 
 ## General API Information
 
@@ -105,6 +105,9 @@
 * Timestamp parameters (e.g. `startTime`, `endTime`, `timestamp`) can be passed in milliseconds or microseconds.
 * All field names and values are **case-sensitive**, unless noted otherwise.
 * If there are enums or terms you want clarification on, please see [SPOT Glossary](../faqs/spot_glossary.md) for more information.
+* APIs have a timeout of 10 seconds when processing a request. If a response from the Matching Engine takes longer than this, the API responds with "Timeout waiting for response from backend server. Send status unknown; execution status unknown." [(-1007 TIMEOUT)](errors.md#-1007-timeout)
+  * This does not always mean that the request failed in the Matching Engine.
+  * If the status of the request has not appeared in [User Data Stream](user-data-stream.md), please perform an API query for its status.
 
 ## Request format
 

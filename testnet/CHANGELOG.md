@@ -1,9 +1,18 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-05-22**
+**Last Updated: 2025-05-28**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-05-28
+
+* Documented API timeout value and error under General API Information for each API:
+    * [FIX](fix-api.md#general-api-information)
+    * [REST](rest-api.md#general-api-information)
+    * [WebSocket](web-socket-api.md#general-api-information)
+
+---
 
 ### 2025-05-22
 

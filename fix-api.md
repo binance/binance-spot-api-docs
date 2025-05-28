@@ -3,9 +3,12 @@
 > [!NOTE]
 > This API can only be used with the SPOT Exchange.
 
-## General Information
+## General API Information
 
-FIX connections require TLS encryption. Please either use native TCP+TLS connection or set up a local proxy such as [stunnel](https://www.stunnel.org/) to handle TLS encryption.
+* FIX connections require TLS encryption. Please either use native TCP+TLS connection or set up a local proxy such as [stunnel](https://www.stunnel.org/) to handle TLS encryption.
+* APIs have a timeout of 10 seconds when processing a request. If a response from the Matching Engine takes longer than this, the API responds with "Timeout waiting for response from backend server. Send status unknown; execution status unknown." [(-1007 TIMEOUT)](errors.md#-1007-timeout)
+  * This does not always mean that the request failed in the Matching Engine.
+  * If the status of the request has not appeared in [User Data Stream](user-data-stream.md), please perform an API query for its status.
 
 **FIX sessions only support Ed25519 keys.** </br>
 

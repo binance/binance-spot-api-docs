@@ -1,6 +1,15 @@
 # 更新日志
 
-**最近更新： 2025-05-22**
+**最近更新： 2025-05-28**
+
+### 2025-05-28
+
+* 在 “API 基本信息” 下，记录每个 API 的超时值和错误：
+  * [FIX](fix-api_CN.md#general-api-information)
+  * [REST](rest-api_CN.md#general-api-information)
+  * [WebSocket](web-socket-api_CN.md#general-api-information)
+
+---
 
 ### 2025-05-22
 
@@ -28,8 +37,6 @@
   * 更多详情即将公布，敬请关注，不要错过。
 
 ---
-
-**最近更新： 2025-04-25**
 
 ### 2025-04-25
 

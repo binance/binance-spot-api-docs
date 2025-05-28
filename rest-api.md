@@ -74,7 +74,7 @@
 
 # Public Rest API for Binance
 
-**Last Updated: 2025-05-22**
+**Last Updated: 2025-05-28**
 
 ## General API Information
 * The following base endpoints are available. Please use whichever works best for your setup:
@@ -91,6 +91,9 @@
 * Timestamp parameters (e.g. `startTime`, `endTime`, `timestamp`) can be passed in milliseconds or microseconds.
 * For APIs that only send public market data, please use the base endpoint **https://data-api.binance.vision**. Please refer to [Market Data Only](./faqs/market_data_only.md) page.
 * If there are enums or terms you want clarification on, please see the [SPOT Glossary](faqs/spot_glossary.md) for more information.
+* APIs have a timeout of 10 seconds when processing a request. If a response from the Matching Engine takes longer than this, the API responds with "Timeout waiting for response from backend server. Send status unknown; execution status unknown." [(-1007 TIMEOUT)](errors.md#-1007-timeout)
+  * This does not always mean that the request failed in the Matching Engine.
+  * If the status of the request has not appeared in [User Data Stream](user-data-stream.md), please perform an API query for its status.
 
 ## HTTP Return Codes
 
