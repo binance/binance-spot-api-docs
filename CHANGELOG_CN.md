@@ -1,6 +1,15 @@
 # 更新日志
 
-**最近更新： 2025-05-28**
+**最近更新： 2025-06-04**
+
+### 2025-06-04
+
+REST 和 WebSocket API：
+
+* 注意：根据我们的 SBE 政策，[在被废止 6 个月后](faqs/sbe_faq_CN.md#sbe-schema)， SBE 2：0 模式将于 2025 年 06 月 12 日被禁用。
+* [面向生产的 SBE 生命周期](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) 已基于本次更改进行了更新。
+
+---
 
 ### 2025-05-28
 
