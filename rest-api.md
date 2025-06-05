@@ -1,6 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+- [Public Rest API for Binance](#public-rest-api-for-binance)
   - [General API Information](#general-api-information)
   - [HTTP Return Codes](#http-return-codes)
   - [Error Codes](#error-codes)
@@ -11,7 +12,7 @@
     - [Unfilled Order Count](#unfilled-order-count)
   - [Data Sources](#data-sources)
   - [Endpoint security type](#endpoint-security-type)
-    - [SIGNED (TRADE and USER_DATA) Endpoint security](#signed-trade-and-user_data-endpoint-security)
+    - [SIGNED (TRADE and USER\_DATA) Endpoint security](#signed-trade-and-user_data-endpoint-security)
     - [Timing security](#timing-security)
     - [SIGNED Endpoint Examples for POST /api/v3/order](#signed-endpoint-examples-for-post-apiv3order)
       - [HMAC Keys](#hmac-keys)
@@ -52,23 +53,23 @@
       - [New order using SOR (TRADE)](#new-order-using-sor-trade)
       - [Test new order using SOR (TRADE)](#test-new-order-using-sor-trade)
   - [Account Endpoints](#account-endpoints)
-    - [Account information (USER_DATA)](#account-information-user_data)
-    - [Query order (USER_DATA)](#query-order-user_data)
-    - [Current open orders (USER_DATA)](#current-open-orders-user_data)
-    - [All orders (USER_DATA)](#all-orders-user_data)
-    - [Query Order list (USER_DATA)](#query-order-list-user_data)
-    - [Query all Order lists (USER_DATA)](#query-all-order-lists-user_data)
-    - [Query Open Order lists (USER_DATA)](#query-open-order-lists-user_data)
-    - [Account trade list (USER_DATA)](#account-trade-list-user_data)
-    - [Query Unfilled Order Count (USER_DATA)](#query-unfilled-order-count-user_data)
-    - [Query Prevented Matches (USER_DATA)](#query-prevented-matches-user_data)
-    - [Query Allocations (USER_DATA)](#query-allocations-user_data)
-    - [Query Commission Rates (USER_DATA)](#query-commission-rates-user_data)
-    - [Query Order Amendments (USER_DATA)](#query-order-amendments-user_data)
+    - [Account information (USER\_DATA)](#account-information-user_data)
+    - [Query order (USER\_DATA)](#query-order-user_data)
+    - [Current open orders (USER\_DATA)](#current-open-orders-user_data)
+    - [All orders (USER\_DATA)](#all-orders-user_data)
+    - [Query Order list (USER\_DATA)](#query-order-list-user_data)
+    - [Query all Order lists (USER\_DATA)](#query-all-order-lists-user_data)
+    - [Query Open Order lists (USER\_DATA)](#query-open-order-lists-user_data)
+    - [Account trade list (USER\_DATA)](#account-trade-list-user_data)
+    - [Query Unfilled Order Count (USER\_DATA)](#query-unfilled-order-count-user_data)
+    - [Query Prevented Matches (USER\_DATA)](#query-prevented-matches-user_data)
+    - [Query Allocations (USER\_DATA)](#query-allocations-user_data)
+    - [Query Commission Rates (USER\_DATA)](#query-commission-rates-user_data)
+    - [Query Order Amendments (USER\_DATA)](#query-order-amendments-user_data)
   - [User data stream endpoints (Deprecated)](#user-data-stream-endpoints-deprecated)
-    - [Start user data stream (USER_STREAM) (Deprecated)](#start-user-data-stream-user_stream-deprecated)
-    - [Keepalive user data stream (USER_STREAM) (Deprecated)](#keepalive-user-data-stream-user_stream-deprecated)
-    - [Close user data stream (USER_STREAM) (Deprecated)](#close-user-data-stream-user_stream-deprecated)
+    - [Start user data stream (USER\_STREAM) (Deprecated)](#start-user-data-stream-user_stream-deprecated)
+    - [Keepalive user data stream (USER\_STREAM) (Deprecated)](#keepalive-user-data-stream-user_stream-deprecated)
+    - [Close user data stream (USER\_STREAM) (Deprecated)](#close-user-data-stream-user_stream-deprecated)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -582,7 +583,7 @@ Memory
       "quoteOrderQtyMarketAllowed": true,
       "allowTrailingStop": false,
       "cancelReplaceAllowed":false,
-      "allowAmend":false,
+      "amendAllowed":false,
       "isSpotTradingAllowed": true,
       "isMarginTradingAllowed": true,
       "filters": [
