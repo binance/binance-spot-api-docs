@@ -505,7 +505,7 @@ symbolStatus|ENUM|No|用于过滤具有此 `tradingStatus` 的交易对。有效
       "quoteOrderQtyMarketAllowed": true,
       "allowTrailingStop": false,
       "cancelReplaceAllowed": false,
-      "allowAmend":false,
+      "amendAllowed":false,
       "isSpotTradingAllowed": true,
       "isMarginTradingAllowed": true,
       "filters": [
