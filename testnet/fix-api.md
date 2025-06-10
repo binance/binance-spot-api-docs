@@ -1,3 +1,64 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+- [FIX API](#fix-api)
+  - [General API Information](#general-api-information)
+    - [FIX API Order Entry sessions](#fix-api-order-entry-sessions)
+    - [FIX API Drop Copy sessions](#fix-api-drop-copy-sessions)
+    - [FIX Market Data sessions](#fix-market-data-sessions)
+    - [FIX Connection Lifecycle](#fix-connection-lifecycle)
+    - [API Key Permissions](#api-key-permissions)
+    - [On message processing order](#on-message-processing-order)
+    - [Response Mode](#response-mode)
+    - [Timing Security](#timing-security)
+    - [How to sign Logon `<A>` request](#how-to-sign-logon-a-request)
+  - [Limits](#limits)
+    - [Message Limits](#message-limits)
+    - [Connection Limits](#connection-limits)
+    - [Unfilled Order Count](#unfilled-order-count)
+  - [Error Handling](#error-handling)
+  - [Types](#types)
+  - [Message Components](#message-components)
+    - [Header](#header)
+    - [Trailer](#trailer)
+  - [Administrative Messages](#administrative-messages)
+    - [Heartbeat `<0>`](#heartbeat-0)
+    - [TestRequest `<1>`](#testrequest-1)
+    - [Reject `<3>`](#reject-3)
+    - [Logon `<A>`](#logon-a)
+      - [Logon Request](#logon-request)
+      - [Logon Response](#logon-response)
+    - [Logout `<5>`](#logout-5)
+    - [News `<B>`](#news-b)
+    - [Resend Request `<2>`](#resend-request-2)
+  - [Application Messages](#application-messages)
+    - [Order Entry Messages](#order-entry-messages)
+      - [NewOrderSingle `<D>`](#newordersingle-d)
+        - [Supported Order Types](#supported-order-types)
+      - [ExecutionReport `<8>`](#executionreport-8)
+      - [OrderCancelRequest `<F>`](#ordercancelrequest-f)
+      - [OrderCancelReject `<9>`](#ordercancelreject-9)
+      - [OrderCancelRequestAndNewOrderSingle `<XCN>`](#ordercancelrequestandnewordersingle-xcn)
+      - [OrderMassCancelRequest `<q>`](#ordermasscancelrequest-q)
+      - [OrderMassCancelReport `<r>`](#ordermasscancelreport-r)
+      - [NewOrderList `<E>`](#neworderlist-e)
+      - [Supported Order List Types](#supported-order-list-types)
+      - [ListStatus `<N>`](#liststatus-n)
+      - [OrderAmendKeepPriorityRequest `<XAK>`](#orderamendkeeppriorityrequest-xak)
+    - [OrderAmendReject `<XAR>`](#orderamendreject-xar)
+    - [Limit Messages](#limit-messages)
+      - [LimitQuery `<XLQ>`](#limitquery-xlq)
+      - [LimitResponse `<XLR>`](#limitresponse-xlr)
+    - [Market Data Messages](#market-data-messages)
+      - [InstrumentListRequest `<x>`](#instrumentlistrequest-x)
+      - [InstrumentList `<y>`](#instrumentlist-y)
+      - [MarketDataRequest `<V>`](#marketdatarequest-v)
+    - [MarketDataRequestReject `<Y>`](#marketdatarequestreject-y)
+    - [MarketDataSnapshot `<W>`](#marketdatasnapshot-w)
+    - [MarketDataIncrementalRefresh `<X>`](#marketdataincrementalrefresh-x)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # FIX API
 
 > [!NOTE]
@@ -113,7 +174,7 @@ if (SendingTime < (serverTime + 1 second) && (serverTime - SendingTime) <= RecvW
 
 <a id="signaturecomputation"></a>
 
-### How to sign Logon<code>&lt;A&gt;</code> request
+### How to sign Logon `<A>` request
 
 The [Logon`<A>`](#logon-main) message authenticates your connection to the FIX API.
 This must be the first message sent by the client.
@@ -328,7 +389,7 @@ Appears at the end of every message.
 
 <a id="heartbeat"></a>
 
-### Heartbeat<code>&lt;0&gt;</code>
+### Heartbeat `<0>`
 
 Sent by the server if there is no outgoing traffic during the heartbeat interval (`HeartBtInt (108)` in [Logon`<A>`](#logon-main)).
 
@@ -342,7 +403,7 @@ Sent by the client or the server in response to a [TestRequest`<1>`](#testreques
 
 <a id="testrequest"></a>
 
-### TestRequest<code>&lt;1&gt;</code>
+### TestRequest `<1>`
 
 Sent by the server if there is no incoming traffic during the heartbeat interval (`HeartBtInt (108)` in [Logon`<A>`](#logon-main)).
 
@@ -357,7 +418,7 @@ Sent by the client to request a [Heartbeat`<0>`](#heartbeat) response.
 
 <a id="reject"></a>
 
-### Reject<code>&lt;3&gt;</code>
+### Reject `<3>`
 
 Sent by the server in response to an invalid message that cannot be processed.
 
@@ -377,7 +438,7 @@ Please refer to the `Text (58)` and `ErrorCode (25016)` fields for the reject re
 
 <a id="logon-main"></a>
 
-### Logon<code>&lt;A&gt;</code>
+### Logon `<A>`
 
 Sent by the client to authenticate the connection.
 Logon`<A>` must be the first message sent by the client.
@@ -427,7 +488,7 @@ Sent by the server in response to a successful logon.
 
 <a id="logout"></a>
 
-### Logout<code>&lt;5&gt;</code>
+### Logout `<5>`
 
 Sent to initiate the process of closing the connection, and also when responding to Logout.
 
@@ -451,7 +512,7 @@ Logout Response
 
 <a id="news"></a>
 
-### News <code>&lt;B&gt;</code>
+### News `<B>`
 
 When the server enters maintenance, a `News` message will be sent to clients **every 10 seconds for 10 minutes**.
 After this period, clients will be logged out and their sessions will be closed.
@@ -480,7 +541,7 @@ If the client does not close the old session within 10 seconds of receiving the 
 8=FIX.4.4|9=0000113|35=B|49=SPOT|56=OE|34=4|52=20240924-21:07:35.773537|148=Your connection is about to be closed. Please reconnect.|10=165|
 ```
 
-### Resend Request <code>&lt;2&gt;</code>
+### Resend Request `<2>`
 
 Resend requests are currently not supported.
 
@@ -493,7 +554,7 @@ Resend requests are currently not supported.
 
 <a id="newordersingle"></a>
 
-#### NewOrderSingle<code>&lt;D&gt;</code>
+#### NewOrderSingle `<D>`
 
 Sent by the client to submit a new order for execution.
 
@@ -588,7 +649,7 @@ Required fields based on Binance OrderType:
 
 <a id="executionreport"></a>
 
-#### ExecutionReport<code>&lt;8&gt;</code>
+#### ExecutionReport `<8>`
 
 Sent by the server whenever an order state changes.
 
@@ -662,7 +723,7 @@ Sent by the server whenever an order state changes.
 
 <a id="ordercancelrequest"></a>
 
-#### OrderCancelRequest<code>&lt;F&gt;</code>
+#### OrderCancelRequest `<F>`
 
 Sent by the client to cancel an order or an order list.
 
@@ -702,7 +763,7 @@ If the canceled order is part of an order list, the entire list will be canceled
 
 <a id="ordercancelreject"></a>
 
-#### OrderCancelReject<code>&lt;9&gt;</code>
+#### OrderCancelReject `<9>`
 
 Sent by the server when [OrderCancelRequest`<F>`](#ordercancelrequest) has failed.
 
@@ -727,7 +788,7 @@ Sent by the server when [OrderCancelRequest`<F>`](#ordercancelrequest) has faile
 
 <a id="ordercancelrequestandnewordersingle"></a>
 
-#### OrderCancelRequestAndNewOrderSingle<code>&lt;XCN&gt;</code>
+#### OrderCancelRequestAndNewOrderSingle `<XCN>`
 
 Sent by the client to cancel an order and submit a new one for execution.
 * To cancel an order either `OrderID (11)` or `OrigClOrdId (41)` are required.
@@ -788,7 +849,7 @@ Please refer to [Supported Order Types](#ordertype) for supported field combinat
 
 <a id="ordermasscancelrequest"></a>
 
-#### OrderMassCancelRequest<code>&lt;q&gt;</code>
+#### OrderMassCancelRequest `<q>`
 
 Sent by the client to cancel all open orders on a symbol.
 
@@ -815,7 +876,7 @@ Sent by the client to cancel all open orders on a symbol.
 
 <a id="ordermasscancelreport"></a>
 
-#### OrderMassCancelReport<code>&lt;r&gt;</code>
+#### OrderMassCancelReport `<r>`
 
 Sent by the server in response to [OrderMassCancelRequest`<q>`](#ordermasscancelrequest).
 
@@ -838,7 +899,7 @@ Sent by the server in response to [OrderMassCancelRequest`<q>`](#ordermasscancel
 
 <a id="neworderlist"></a>
 
-#### NewOrderList<code>&lt;E&gt;</code>
+#### NewOrderList `<E>`
 
 Sent by the client to submit a list of orders for execution.
 
@@ -910,7 +971,7 @@ Please refer to [Supported Order List Types](#order-list-types) for supported or
 
 <a id="liststatus"></a>
 
-#### ListStatus<code>&lt;N&gt;</code>
+#### ListStatus `<N>`
 
 Sent by the server whenever an order list state changes.
 
@@ -949,7 +1010,7 @@ Sent by the server whenever an order list state changes.
 
 <a id="orderamendkeeppriorityrequest"></a>
 
-#### OrderAmendKeepPriorityRequest<code>&lt;XAK&gt;</code>
+#### OrderAmendKeepPriorityRequest `<XAK>`
 
 Sent by the client to reduce the original quantity of their order.
 
@@ -987,7 +1048,7 @@ Read [Order Amend Keep Priority FAQ](faqs/order_amend_keep_priority.md) to learn
 
 <a id="orderamendreject"></a>
 
-#### OrderAmendReject<code>&lt;XAR&gt;</code>
+### OrderAmendReject `<XAR>`
 
 Sent by the server when the OrderAmendKeepPriorityRequest `<XAK>` has failed.
 
@@ -1011,7 +1072,7 @@ Sent by the server when the OrderAmendKeepPriorityRequest `<XAK>` has failed.
 
 <a id="limitquery"></a>
 
-#### LimitQuery<code>&lt;XLQ&gt;</code>
+#### LimitQuery `<XLQ>`
 
 Sent by the client to query current limits.
 
@@ -1027,7 +1088,7 @@ Sent by the client to query current limits.
 
 <a id="limitresponse"></a>
 
-#### LimitResponse<code>&lt;XLR&gt;</code>
+#### LimitResponse `<XLR>`
 
 Sent by the server in response to [LimitQuery`<XLQ>`](#limitquery).
 
@@ -1054,7 +1115,7 @@ Sent by the server in response to [LimitQuery`<XLQ>`](#limitquery).
 
 <a id="instrumentlistrequest"></a>
 
-#### InstrumentListRequest<code>&lt;x&gt;</code>
+#### InstrumentListRequest `<x>`
 
 Sent by the client to query information about active instruments (i.e., those that have the TRADING status). If used for an inactive instrument, it will be responded to with a [Reject`<3>`](#reject).
 
@@ -1072,7 +1133,7 @@ Sent by the client to query information about active instruments (i.e., those th
 
 <a id="instrumentlist"></a>
 
-#### InstrumentList<code>&lt;y&gt;</code>
+#### InstrumentList `<y>`
 
 Sent by the server in a response to the [InstrumentListRequest`<x>`](#instrumentlistrequest).
 
@@ -1102,7 +1163,7 @@ Sent by the server in a response to the [InstrumentListRequest`<x>`](#instrument
 
 <a id="marketdatarequest"></a>
 
-#### MarketDataRequest<code>&lt;V&gt;</code>
+#### MarketDataRequest `<V>`
 
 Sent by the client to subscribe to or unsubscribe from market data stream.
 
@@ -1188,7 +1249,7 @@ Order book price and quantity depth updates used to locally manage an order book
 
 <a id="marketdatarequestreject"></a>
 
-### MarketDataRequestReject<code>&lt;Y&gt;</code>
+### MarketDataRequestReject `<Y>`
 
 Sent by the server in a response to an invalid MarketDataRequest `<V>`.
 
@@ -1207,7 +1268,7 @@ Sent by the server in a response to an invalid MarketDataRequest `<V>`.
 
 <a id="marketdatasnapshot"></a>
 
-### MarketDataSnapshot<code>&lt;W&gt;</code>
+### MarketDataSnapshot `<W>`
 
 Sent by the server in response to a [MarketDataRequest`<V>`](#marketdatarequest), activating [Individual Symbol Book Ticker Stream](#symbolbooktickerstream) or [Diff. Depth Stream](#diffdepthstream) subscriptions.
 
@@ -1229,7 +1290,7 @@ Sent by the server in response to a [MarketDataRequest`<V>`](#marketdatarequest)
 
 <a id="marketdataincrementalrefresh"></a>
 
-### MarketDataIncrementalRefresh<code>&lt;X&gt;</code>
+### MarketDataIncrementalRefresh `<X>`
 
 Sent by the server when there is a change in a subscribed stream.
 
