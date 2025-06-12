@@ -1,6 +1,6 @@
 # 错误代码汇总
 
-**最近更新： 2025-04-08**
+**最近更新： 2025-06-11**
 
 币安Rest接口(包括wapi)返回的错误包含两部分，错误码与错误信息. 错误码是大类，一个错误码可能对应多个不同的错误信息。
 以下是一个完整错误码实例
@@ -315,6 +315,12 @@
 
 ### -2026 交易被归档
   * Order was canceled or expired with no executed qty over 90 days ago and has been archived.
+
+### -2035 有效的订阅
+  * User Data Stream subscription already active.
+
+### -2036 非有效的订阅
+  * User Data Stream subscription not active.
 
 ### -2039 ClientOrderId 无效
   * Client order ID is not correct for this order ID.

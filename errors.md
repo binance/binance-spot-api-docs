@@ -1,6 +1,6 @@
 # Error codes for Binance
 
-**Last Updated: 2025-04-08**
+**Last Updated: 2025-06-11**
 
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
@@ -315,6 +315,12 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 ### -2026 ORDER_ARCHIVED
   * Order was canceled or expired with no executed qty over 90 days ago and has been archived.
+
+### -2035 SUBSCRIPTION_ACTIVE
+  * User Data Stream subscription already active.
+
+### -2036 SUBSCRIPTION_INACTIVE
+  * User Data Stream subscription not active.
 
 ### -2039 CLIENT_ORDER_ID_INVALID
   * Client order ID is not correct for this order ID.
