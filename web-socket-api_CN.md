@@ -1106,7 +1106,7 @@ NONE
         "quoteOrderQtyMarketAllowed": true,
         "allowTrailingStop": true,
         "cancelReplaceAllowed": true,
-        "allowAmend":false,
+        "amendAllowed":false,
         "isSpotTradingAllowed": true,
         "isMarginTradingAllowed": true,
         // 交易对过滤器在"过滤器"页面上进行了说明：
