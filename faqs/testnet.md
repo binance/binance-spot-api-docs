@@ -289,7 +289,8 @@
         The public key should look something like this:
 </p>
 
-<pre>-----BEGIN PUBLIC KEY-----
+```
+-----BEGIN PUBLIC KEY-----
 bL4DUXwR3ijFSXzcecQtVFU1zVWcSQd0Meztl3DLX42l/8EALJx3LSz9YKS0PMQW
 MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAv9ij99RAJM4JLl8Rg47b
 dJXMrv84WL1OK/gid4hCnxo083LYLXUpIqMmL+O6fmXAvsvkyMyT520Cw0ZNCrUk
@@ -302,7 +303,8 @@ Xm+1zXliaA1fvVYRqon2MdHcedFeAjzVtX38+Xweytowydcq2V/9pUUNZIzUqX7t
 Zr3F+Ao3QOb/CuWbUBpUcbXfGv7AI1ozP8LRByyu6O8Z1dZNdkdjWVt83maUrIJH
 jjc7jlZY9JbH6EyYV5TenjJaupvdlx72vA7Fcgevx87seog2JALAJqZQNT+t9/tm
 rTUSEp3t4aINKUC1QC0CYKECAwEAAQ==
------END PUBLIC KEY-----</pre>
+-----END PUBLIC KEY-----
+```
 
 <p>
         Step 3:
@@ -430,9 +432,11 @@ curl -H "X-MBX-APIKEY: $API_KEY" -X "$API_METHOD" \
         The public key should look something like this:
 </p>
 
-<pre>-----BEGIN PUBLIC KEY-----
+```
+-----BEGIN PUBLIC KEY-----
 MCowBQYDK2VwAyEACeCSz7VJkh3Bb+NF794hLMU8fLB9Zr+/tGMdVKCC2eo=
------END PUBLIC KEY-----</pre>
+-----END PUBLIC KEY-----
+```
 
 <p>
         Step 3:
