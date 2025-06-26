@@ -2386,6 +2386,7 @@ Matching Engine
       "orderId": 3,
       "orderListId": -1,
       "clientOrderId": "G1kLo6aDv2KGNTFcjfTSFq",
+      "transactTime": 1684804350068,
       "price": "0.006123",
       "origQty": "10000.000000",
       "executedQty": "0.000000",
