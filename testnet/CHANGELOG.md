@@ -1,15 +1,23 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-06-04**
+**Last Updated: 2025-07-02**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-07-02
+
+**Data reset**
+
+All data on the Spot Test Network will be deleted today according to the periodic reset procedure. (see [F.A.Q.](../faqs/testnet.md#faq-periodic-reset) for more details)
+
+---
 
 ### 2025-06-04
 
 **Data reset**
 
-All data on the Spot Test Network will be deleted today according to the periodic reset procedure. (see [F.A.Q.](https://testnet.binance.vision/) for more details)
+All data on the Spot Test Network will be deleted today according to the periodic reset procedure. (see [F.A.Q.](../faqs/testnet.md) for more details)
 
 ---
 
