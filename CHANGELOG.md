@@ -1,6 +1,14 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-06-04**
+**Last Updated: 2025-07-03**
+
+### 2025-07-03
+
+* Beginning at **2025-07-08 07:00 UTC**, [WebSocket Streams](web-socket-streams.md) will be upgraded.
+* During the upgrade, **existing and new connections may be disconnected in less than 24 hours**.
+* The upgrade may take up to 2 hours. We apologize for the inconvenience.
+
+---
 
 ### 2025-06-04
 
