@@ -634,12 +634,15 @@ limit | INT | NO | 默认值： 500； 最大值： 1000。
     "id": 28457,
     "price": "4.00000100",
     "qty": "12.00000000",
+    "quoteQty": "48.000012",
     "time": 1499865549590,
     "isBuyerMaker": true,
     "isBestMatch": true
   }
 ]
 ```
+
+<a id="historicalTrades"></a>
 
 ### 查询历史成交
 ```
@@ -670,6 +673,7 @@ fromId | LONG | NO | 从哪一条成交id开始返回，缺省返回最近的成
     "id": 28457,
     "price": "4.00000100",
     "qty": "12.00000000",
+    "quoteQty": "48.000012",
     "time": 1499865549590,
     "isBuyerMaker": true,
     "isBestMatch": true
@@ -2361,6 +2365,7 @@ timestamp | LONG | YES |
       "orderId": 3,
       "orderListId": -1,
       "clientOrderId": "G1kLo6aDv2KGNTFcjfTSFq",
+      "transactTime": 1684804350068,
       "price": "0.006123",
       "origQty": "10000.000000",
       "executedQty": "0.000000",
