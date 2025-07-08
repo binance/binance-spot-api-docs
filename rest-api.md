@@ -88,6 +88,7 @@
 * Responses are in JSON by default. To receive responses in SBE, refer to the [SBE FAQ](./faqs/sbe_faq.md) page.
 * Data is returned in **ascending** order. Oldest first, newest last.
 * All time and timestamp related fields in the JSON responses are in **milliseconds by default.** To receive the information in microseconds, please add the header `X-MBX-TIME-UNIT:MICROSECOND` or `X-MBX-TIME-UNIT:microsecond`.
+* We support HMAC, RSA, and Ed25519 keys. For more information, please see [API Key types](faqs/api_key_types.md).
 * Timestamp parameters (e.g. `startTime`, `endTime`, `timestamp`) can be passed in milliseconds or microseconds.
 * For APIs that only send public market data, please use the base endpoint **https://data-api.binance.vision**. Please refer to [Market Data Only](./faqs/market_data_only.md) page.
 * If there are enums or terms you want clarification on, please see the [SPOT Glossary](faqs/spot_glossary.md) for more information.
@@ -174,7 +175,7 @@ This means that the endpoint will check the first Data Source, and if it cannot 
 * Each endpoint has a security type that determines how you will
   interact with it. This is stated next to the NAME of the endpoint.
 * If no security type is stated, assume the security type is NONE.
-* API-keys are passed into the Rest API via the `X-MBX-APIKEY` header.
+* API-keys are passed into the REST API via the `X-MBX-APIKEY` header.
 * API-keys and secret-keys **are case sensitive**.
 * API-keys can be configured to only access certain types of secure endpoints.<br> For example, one API-key could be used for TRADE only, <br> while another API-key can access everything except for TRADE routes.
 * By default, API-keys can access all secure routes.

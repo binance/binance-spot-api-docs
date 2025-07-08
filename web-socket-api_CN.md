@@ -9,6 +9,7 @@
   * 如果使用标准443端口时遇到问题，可以使用替代端口9443。
   * [现货测试网](https://testnet.binance.vision)的 base URL 是 `wss://ws-api.testnet.binance.vision/ws-api/v3`。
 * 每个到 base URL 的链接有效期不超过24小时，请妥善处理断线重连。
+* 我们支持 HMAC，RSA 以及 Ed25519 Key 类型。 如需进一步了解，请参考 [API Key 类型](faqs/api_key_types_CN.md)。
 * 响应默认为 JSON 格式。如果您想接收 SBE 格式的响应，请参考 [简单二进制编码 （SBE） 常见问题](./faqs/sbe_faq_CN.md)。
 * WebSocket 服务器**每20秒**发送 PING 消息。
   * 如果websocket 服务器没有在一分钟之内收到PONG 消息应答，连接会被断开。
