@@ -3,9 +3,13 @@
 > [!NOTE]
 > 此 API 只能用于现货 （`SPOT`） 交易所。
 
-## 基本信息
+<a id="general-api-information"></a>
+## 一般 API 信息
 
-FIX 连接需要 TLS 加密。请使用本地 TCP+TLS 连接或设置本地代理如 [stunnel](https://www.stunnel.org/) 来处理 TLS 加密。
+* FIX 连接需要 TLS 加密。请使用本地 TCP+TLS 连接或设置本地代理如 [stunnel](https://www.stunnel.org/) 来处理 TLS 加密。
+* API 处理请求的超时时间为 10 秒。如果撮合引擎的响应时间超过此时间，API 将返回 “Timeout waiting for response from backend server. Send status unknown; execution status unknown.”。[(-1007 超时)](errors_CN.md#-1007-timeout)
+  * 这并不总是意味着该请求在撮合引擎中失败。
+  * 如果请求状态未显示在 [WebSocket 账户接口](user-data-stream_CN.md) 中，请执行 API 查询以获取其状态。
 
 **FIX 会话仅支持 Ed25519 密钥。**
 
@@ -17,27 +21,40 @@ FIX 连接需要 TLS 加密。请使用本地 TCP+TLS 连接或设置本地代�
 - 支持下单，取消订单和查询当前限制使用情况。
 - 支持接收账户的所有 [ExecutionReport`<8>`](#executionreport) 和 [List Status`<N>`](#liststatus)。
 - 仅允许带有 `FIX_API` 的 API Key 连接。
-- 关于 QuickFix 模式文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
+- 关于 QuickFIX 模式文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
 
 ### FIX API Drop Copy 会话
 
 - 端点为：`tcp+tls://fix-dc.binance.com:9000`
 - 支持接收账户的所有 [ExecutionReport`<8>`](#executionreport) 和 [List Status`<N>`](#liststatus)。
 - 仅允许连接带有 `FIX_API` 或 `FIX_API_READ_ONLY` 的 API Key。
-- 关于 QuickFix 模式文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
+- 关于 QuickFIX 模式文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
 
 ### FIX API Market Data 会话
 
 * 端点为：`tcp+tls：//fix-md.binance.com：9000`
-* 支持市场数据流和活动工具查询。 
-* 不支持下订单或取消订单。  
+* 支持市场数据流和活动工具查询。
+* 不支持下订单或取消订单。
 * 仅允许连接带有“FIX_API”或“FIX_API_READ_ONLY”的 API 密钥。
 
-关于 QuickFix 模式 (Schema) 文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
+关于 QuickFIX 模式 (Schema) 文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
 
 FIX 连接需要 TLS 加密。请使用本地 TCP+TLS 连接或设置本地代理如 [stunnel](https://www.stunnel.org/) 来处理 TLS 加密。
 
-FIX Market Data 的 QuickFix Schema 可以在 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml)
+FIX Market Data 的 QuickFIX Schema 可以在 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml)
+
+
+### FIX 连接生命周期
+
+* 所有 FIX API 会话将尽最大努力，尽可能长时间地保持开放状态。
+* 没有最短连接时间保证，服务器可能随时进入维护状态。
+  * 当服务器进入维护状态时，系统将会向客户端**每隔 10 秒发送一条** [News `<B>`](#news) 消息，并**持续 10 分钟**，以提示客户端重新连接。收到此消息后，客户端应建立新会话并关闭旧会话。如果客户端未在规定的时间范围内关闭旧连接，那么服务器会将其注销并关闭会话。
+* 连接后，客户端必须发送 Logon `<A>` 请求。有关详情，请参阅 [如何签署登录请求](#signaturecomputation)。
+* 客户端应在断开连接之前发送 Logout `<5>` 消息来关闭会话。未能发送注销消息将导致在 2x `HeartInt (108)` 定义的时间间隔内无法将会话的 `SenderCompID (49)` 用于新会话的建立。
+* 系统允许在登录过程中协商 `HeartInt (108)` 值。可接受值的范围为 5 到 60 秒。
+  * 如果服务器在 `HeartInt (108)` 间隔内没有发送任何消息，将发送 [HeartBeat `<0>`](#heartbeat)。
+  * 如果服务器在 `HeartInt (108)` 间隔内没有收到任何消息，将发送 [TestRequest `<1>`](#testrequest)。如果服务器在 `HeartInt (108)` 秒内没有收到来自客户端的包含预期 `TestReqID (112)` 的 HeartBeat `<0>` 消息，服务器将发送 Logout `<5>` 消息并关闭连接。
+  * 如果客户端在 `HeartInt (108)` 间隔内未收到任何消息，那么客户端应负责发送 TestRequest `<1>` 消息以确保连接正常。收到这样的 TestRequest `<1>` 后，服务器会发送包含预期 `TestReqID (112)` 的 HeartBeat `<0>` 消息来进行响应。如果客户端在 `HeartInt (108)` 间隔内没有收到服务器的响应，那么客户端应关闭现有的会话和连接，并且建立新的会话和连接。
 
 ### API Key 权限
 
@@ -73,6 +90,32 @@ FIX Market Data 的 QuickFix Schema 可以在 [这里](https://github.com/binanc
 
 - `EVERYTHING(1)`： 默认模式。
 - `ONLY_ACKS(2)`： 无论操作成功还是失败，都只接收 ACK 消息。禁用 `ExecutionReport` 推送。
+
+<a id="timingsecurity"></a>
+
+### 时间同步安全
+
+* 所有请求都需要一个 `SendingTime(52)` 字段，该字段应为当前时间戳。
+* 另有一个可选字段 `RecvWindow(25000)` ，用以指定请求的有效期（以毫秒为单位）。
+* 如果未指定 `RecvWindow(25000)`，则仅对 Logon`<A>` 请求默认为 5000 毫秒。对于其他请求，如果未设置，则不会执行 RecvWindow 检查。
+  * `RecvWindow(25000)` 的最大有效时间为 60000 毫秒。
+* 请求处理逻辑如下：
+
+```javascript
+serverTime = getCurrentTime()
+if (SendingTime < (serverTime + 1 second) && (serverTime - SendingTime) <= RecvWindow) {
+  // 开始处理请求
+  serverTime = getCurrentTime()
+  if (serverTime - SendingTime) <= RecvWindow {
+    // 将请求转发到撮合引擎
+  } else {
+    // 拒绝请求
+  }
+  // 结束处理请求
+} else {
+  // 拒绝请求
+}
+```
 
 <a id="signaturecomputation"></a>
 
@@ -173,9 +216,9 @@ MC4CAQAwBQYDK2VwBCIEIIJEYWtGBrhACmb9Dvy+qa8WEf0lQOl1s4CLIAB9m89u
 * 违反消息限制会立即导致 [Logout `<5>`](#logout) 并断开连接。
 * 要了解当前的限制和使用情况，请发送 [LimitQuery`<XLQ>`](#limitquery) 消息。
   接口将发送 [LimitResponse`<XLR>`](#limitresponse) 消息作为响应，其中包含了有关订单速率限制和消息限制的信息。
-* FIX 订单输入会话限制为每 10 秒 10,000 条消息。 
-* FIX 市场数据会话限制为每 60 秒 10,000 条消息
-
+* FIX API 订单输入会话的限制为每 10 秒 10,000 条消息。
+* FIX Drop Copy 会话的限制为每 60 秒 60 条消息。
+* FIX Market Data 会话的限制为每 60 秒 2000 条消息。
 
 <a id="unfilled-order-count"></a>
 
@@ -195,9 +238,15 @@ MC4CAQAwBQYDK2VwBCIEIIJEYWtGBrhACmb9Dvy+qa8WEf0lQOl1s4CLIAB9m89u
 * 当 TCP 连接关闭时，限制值会减少。如果限制值没有立即减少，请等待最长不超过2倍于在 `HeartBtInt (108)` 内所定义的时间。
   比如说，如果 `HeartBtInt` 的值为5， 那么请等待10秒钟。
 * 违反限制时， [Reject `<3>`](#reject) 消息会被发送给用户。该消息包含了有关违反连接限制和当前限制的信息。
-* 对于订单接入会话，其限制为每个账户 5 个并发 TCP 连接。
-* 对于 Drop Copy 会话，其限制为每个账户 10 个并发 TCP 连接。
-* 对于市场数据会话，每个账户的并发 TCP 连接数限制为 5 个。
+* FIX 订单接入会话限制：
+  * 在 30 秒内 15 次连接尝试的限制
+  * 每个账户 最多 10 个并发 TCP 连接的限制
+* FIX Drop Copy 会话限制：
+  * 在 30 秒内 15 次连接尝试的限制
+  * 每个账户 10 个并发 TCP 连接的限制
+* FIX Market Data 会话限制:
+  * 在 300 秒内 300 次连接尝试的限制
+  * 每个账户 100 个并发 TCP 连接的限制
 
 
 ## 错误处理
@@ -224,7 +273,7 @@ MC4CAQAwBQYDK2VwBCIEIIJEYWtGBrhACmb9Dvy+qa8WEf0lQOl1s4CLIAB9m89u
 | `NUMINGROUP`   | 无符号的 64 位整数。                                        |
 | `PRICE`        | 定点数。精度取决于 symbol 定义。 |
 | `QTY`          | 定点数。精度取决于 symbol 定义。 |
-| `SEQNUM`       | 无符号的 64 位整数。                                        |
+| `SEQNUM`       | 无符号的 32 位整数。达到最大值 4,294,967,295 后会归 0，然后重新开始计数。|
 | `STRING`       | 可打印的 ASCII 字符串。                         |
 | `UTCTIMESTAMP` | 表示 UTC 日期时间的字符串。                            |
 
@@ -257,11 +306,11 @@ MC4CAQAwBQYDK2VwBCIEIIJEYWtGBrhACmb9Dvy+qa8WEf0lQOl1s4CLIAB9m89u
 
 出现在每条消息的开头。
 
-| Tag   | 名称         | 类型         | 是否必须 | 描述 
+| Tag   | 名称         | 类型         | 是否必须 | 描述
 |-------|--------------|--------------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 8     | BeginString  | STRING       | Y        | 始终为 `FIX.4.4`。 <br></br> 必须是消息的第一个字段。|
 | 9     | BodyLength   | LENGTH       | Y        | 消息长度（以字节为单位）。 <br></br> 必须是消息的第二个字段。|
-| 35    | MsgType      | STRING       | Y        | 必须是消息的第三个字段。 <br></br> 可能的值： <br></br>`0` - [HEARTBEAT](#heartbeat) <br></br>`1` - [TEST_REQUEST](#testrequest) <br></br>`3` - [REJECT](#reject) <br></br>`5` - [LOGOUT](#logout) <br></br>`8` - [EXECUTION_REPORT](#executionreport) <br></br> `9` - [ORDER_CANCEL_REJECT](#ordercancelreject) <br></br> `A` - [LOGON](#logon-main) <br></br> `D` - [NEW_ORDER_SINGLE](#newordersingle) <br></br> `E` - [NEW_ORDER_LIST](#neworderlist) <br></br> `F` - [ORDER_CANCEL_REQUEST](#ordercancelrequest) <br></br> `N` - [LIST_STATUS](#liststatus) <br></br> `q` - [ORDER_MASS_CANCEL_REQUEST](#ordermasscancelrequest) <br></br> `r` - [ORDER_MASS_CANCEL_REPORT](#ordermasscancelreport) <br></br> `XCN` - [ORDER_CANCEL_REQUEST_AND_NEW_ORDER_SINGLE](#ordercancelrequestandnewordersingle) <br></br> `XLQ` - [LIMIT_QUERY](#limitquery) <br></br> `XLR` - [LIMIT_RESPONSE](#limitresponse) <br></br> `B` - [NEWS](#news) <br></br> y` - [INSTRUMENT_LIST](#instrumentlist) <br></br>`V` - [MARKET_DATA_REQUEST](#marketdatarequest) <br></br> `Y` - [MARKET_DATA_REQUEST_REJECT](#marketdatarequestreject) <br></br>`W` - [MARKET_DATA_SNAPSHOT](#marketdatasnapshot) <br></br>`X` - [MARKET_DATA_INCREMENTAL_REFRESH](#marketdataincrementalrefresh)|
+| 35    | MsgType      | STRING       | Y        | 必须是消息的第三个字段。 <br></br> 可能的值： <br></br>`0` - [HEARTBEAT](#heartbeat) <br></br>`1` - [TEST_REQUEST](#testrequest) <br></br>`3` - [REJECT](#reject) <br></br>`5` - [LOGOUT](#logout) <br></br>`8` - [EXECUTION_REPORT](#executionreport) <br></br> `9` - [ORDER_CANCEL_REJECT](#ordercancelreject) <br></br> `A` - [LOGON](#logon-main) <br></br> `D` - [NEW_ORDER_SINGLE](#newordersingle) <br></br> `E` - [NEW_ORDER_LIST](#neworderlist) <br></br> `F` - [ORDER_CANCEL_REQUEST](#ordercancelrequest) <br></br> `N` - [LIST_STATUS](#liststatus) <br></br> `q` - [ORDER_MASS_CANCEL_REQUEST](#ordermasscancelrequest) <br></br> `r` - [ORDER_MASS_CANCEL_REPORT](#ordermasscancelreport) <br></br> `XCN` - [ORDER_CANCEL_REQUEST_AND_NEW_ORDER_SINGLE](#ordercancelrequestandnewordersingle) <br></br> `XLQ` - [LIMIT_QUERY](#limitquery) <br></br> `XLR` - [LIMIT_RESPONSE](#limitresponse) <br></br> `B` - [NEWS](#news) <br></br> `x`- [INSTRUMENT_LIST_REQUEST](#instrumentlistrequest) <br></br> `y` - [INSTRUMENT_LIST](#instrumentlist) <br></br>`V` - [MARKET_DATA_REQUEST](#marketdatarequest) <br></br> `Y` - [MARKET_DATA_REQUEST_REJECT](#marketdatarequestreject) <br></br>`W` - [MARKET_DATA_SNAPSHOT](#marketdatasnapshot) <br></br>`X` - [MARKET_DATA_INCREMENTAL_REFRESH](#marketdataincrementalrefresh) <br></br> `XAK` - [ORDER_AMEND_KEEP_PRIORITY_REQUEST](#orderamendkeeppriorityrequest) <br></br> `XAR` - [ORDER_AMEND_REJECT](#orderamendreject) |
 | 49    | SenderCompID | STRING       | Y        | 在账户的活动会话中必须是独特的。<br></br> 必须使用正则表达式：`^[a-zA-Z0-9-_]{1,8}$` |
 | 56    | TargetCompID | STRING       | Y        | 在客户端的消息中必须设置为`SPOT`。|
 | 34    | MsgSeqNum    | SEQNUM       | Y        | 整数消息序列号。 <br></br> 会导致间隙的值将被拒绝。|
@@ -354,7 +403,7 @@ Logon`<A>` 必须是客户端发送的第一条消息。
 | 141   | ResetSeqNumFlag | BOOLEAN | Y        | 必须为 `Y`。                                                                                                                                |
 | 553   | Username        | STRING  | Y        | API key。**仅支持 Ed25519 API keys。**                                                                                                  |
 | 25035 | MessageHandling | INT     | Y        | 可能的值: <br></br> `1` - UNORDERED <br></br> `2` - SEQUENTIAL <br></br> 请参阅 [关于消息处理顺序](#orderedmode) 了解更多信息。 |
-| 25036 | ResponseMode    | INT     | N        | 请参阅 [响应模式](#responsemode)。      
+| 25036 | ResponseMode    | INT     | N        | 请参阅 [响应模式](#responsemode)。
 | 9406  | DropCopyFlag    |BOOLEAN   | N       |登录到 Drop Copy 会话时，必须设置为"Y"。|                                                                                              |
 
 **示例消息:**
@@ -408,7 +457,22 @@ Logout 响应
 
 ### News <code>&lt;B&gt;</code>
 
-当连接即将关闭时，由服务器发送。
+当服务器进入维护状态时，系统将会向客户端**每隔 10 秒发送一条** `News` 消息，并**持续 10 分钟**。
+
+如果客户端未在规定的时间范围内关闭旧连接，那么服务器会将其注销并关闭会话。
+
+收到此消息后，客户端应建立新会话并关闭旧会话。
+
+发送的倒计时消息将是：
+
+```
+You'll be disconnected in %d seconds. Please reconnect.
+```
+剩余 10 秒时，系统将发送以下消息：
+```
+Your connection is about to be closed. Please reconnect.
+```
+如果客户端在收到上述消息后的 10 秒内没有关闭旧会话，那么服务器会将其注销并关闭会话。
 
 |Tag | 名称     | 类型   | 是否必须 | 描述  |
 |-----|------|--------|----------|-------------|
@@ -420,9 +484,13 @@ Logout 响应
 8=FIX.4.4|9=0000113|35=B|49=SPOT|56=OE|34=4|52=20240924-21:07:35.773537|148=Your connection is about to be closed. Please reconnect.|10=165|
 ```
 
+### Resend Request <code>&lt;2&gt;</code>
+
+目前不支持重新发送请求。
+
 ## Application Messages
 
-### 下单消息 
+### 下单消息
 
 > [!NOTE]
 > 以下消息只能用于 FIX 订单接入会话和 FIX Drop Copy 会话
@@ -432,6 +500,10 @@ Logout 响应
 #### NewOrderSingle<code>&lt;D&gt;</code>
 
 由客户端发送，用以提交新订单并进行执行。
+
+这个请求会把1个订单添加到 `EXCHANGE_MAX_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
+
+**未成交的订单计数:** 1
 
 请参阅 [支持的订单类型](#ordertype) 了解支持的字段组合。
 
@@ -453,7 +525,7 @@ Logout 响应
 | 152   | CashOrderQty             | QTY     | N        | 以报价资产单位指定的订单数量，用于反向市场订单。                                                                                                                                                                                                                                         |
 | 847   | TargetStrategy           | INT     | N        | 该值不能小于 `1000000`。                                                                                                                                                                                                                                                                                                                             |
 | 7940  | StrategyID               | INT     | N        |                                                                                                                                                                                                                                                                                      |
-| 25001 | SelfTradePreventionMode  | CHAR    | N        | 可能的值: <br></br> `1` - NONE <br></br> `2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br> `4` - EXPIRE_BOTH                                                                                                                                                                                                                      |
+| 25001 | SelfTradePreventionMode  | CHAR    | N        | 可能的值: <br></br> `1` - NONE <br></br> `2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br> `4` - EXPIRE_BOTH <br></br> `5` - DECREMENT                                                                                                                                                                                                                     |
 | 1100  | TriggerType              | CHAR    | N        | 可能的值: `4` - PRICE_MOVEMENT                                                                                                                                                                                                                                                                                        |
 | 1101  | TriggerAction            | CHAR    | N        | 可能的值: <br></br> `1` - ACTIVATE                                                                                                                                                                                                                                                                                         |
 | 1102  | TriggerPrice             | PRICE   | N        | 止盈止损订单的激活价格。请参阅 [表格](#ordertype)                                                                                                                                                                                                                                                              |
@@ -509,7 +581,7 @@ Logout 响应
 
 基于 Binance OrderType 的必填字段:
 
-| Binance OrderType   | 额外的必填字段                    | 额外的信息      
+| Binance OrderType   | 额外的必填字段                    | 额外的信息
 |---------------------|---------------------------------|---------------|
 | `LIMIT`             | 38, 44, 59                      |               |
 | `MARKET`            | 38 或 152                       | `MARKET` 订单使用 `OrderQty (38)` 字段来指定用户希望以市场价格买入或卖出的 `base asset` 数量。<br></br>  例如，用户可以使用交易对为 `BTCUSDT` 的 `MARKET` 订单来指定买入或卖出多少 BTC。<br></br><br></br> 用户使用 `MARKET` 订单中的 `quoteOrderQty` 字段来指定花费（买入时）或接收（卖出时）`quote` 资产。正确的 `quantity` 将由市场流动性和 `quoteOrderQty` 来决定。 <br></br> 用交易对 BTCUSDT来举例：<br></br> `BUY` 方订单将使用由 `quoteOrderQty` 定义的 USDT 数额来购买尽可能多的 BTC。<br></br> `SELL` 方订单将出售 BTC 来换取尽可能多的由 `CashOrderQty（152)` 定义的 USDT 数额。 |
@@ -549,7 +621,7 @@ Logout 响应
 | 152   | CashOrderQty             | QTY          | N        | 以 quote asset 单位指定的订单数量。                                                                                                                                                                                                                                                                                 |
 | 847   | TargetStrategy           | INT          | N        | 订单提交请求中的 `TargetStrategy (847)`。                                                                                                                                                                                                                                                                     |
 | 7940  | StrategyID               | INT          | N        | 订单提交请求中的 `StrategyID (7940)`。                                                                                                                                                                                                                                                                        |
-| 25001 | SelfTradePreventionMode  | CHAR         | N        | 可能的值: <br></br> `1` - NONE <br></br> `2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br>`4` - EXPIRE_BOTH                                                                                                                                                                                                                       |
+| 25001 | SelfTradePreventionMode  | CHAR         | N        | 可能的值: <br></br> `1` - NONE <br></br> `2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br>`4` - EXPIRE_BOTH <br></br> `5` - DECREMENT                                                                                                                                                                                                                       |
 | 150   | ExecType                 | CHAR         | Y        | **注意:** 如果订单因 `SelfTradePreventionMode(25013)` 过期，字段 `PreventedMatchID(25024)` 会被显示。 <br></br> 可能的值: <br></br> `0` - NEW <br></br> `4` - CANCELED <br></br> `5` - REPLACED <br></br> `8` - REJECTED <br></br> `F` - TRADE <br></br>`C` - EXPIRED                                                                   |
 | 14    | CumQty                   | QTY          | Y        | 在此订单上交易的 base asset 总数。                                                                                                                                                                                                                                                                            |
 | 151   | LeavesQty                | QTY          | N        | 剩余的可执行数量。                                                                                                                                                                                                                                                                                    |
@@ -599,9 +671,15 @@ Logout 响应
 
 由客户发送的，用以取消订单或订单列表。
 * 要取消订单，需要 `OrderID (11)` 或 `OrigClOrdID (41)`。
+  * 当同时提供 `OrderID (37)` 和 `OrigClOrdID (41)` 两个参数时，系统首先将会使用 `OrderID` 来搜索订单。然后， 查找结果中的 `OrigClOrdID` 的值将会被用来验证订单。如果两个条件都不满足，则请求将被拒绝。
 * 要取消订单列表，需要 `ListID (66)` 或 `OrigClListID (25015)`。
-  
+  * 当同时提供 `ListID (66)` 和 `OrigClListID (25015)` 两个参数时，系统首先将会使用 `ListID` 来搜索订单列表。然后， 查找结果中的 `OrigClListID` 将会被用来验证订单列表。如果两个条件都不满足，请求将被拒绝。
+
 如果已取消的订单是订单列表的一部分，则整个订单列表将被取消。
+
+**注意：**
+
+* 当仅发送 `orderId` 时，取消订单的执行(单个 Cancel 或作为 Cancel-Replace 的一部分)总是更快。发送 `origClientOrderId` 或同时发送 `orderId` + `origClientOrderId` 会稍慢。
 
 | Tag | 名称     | 类型   | 是否必须 | 描述|
 |---   | ---| ---| ---| --- |
@@ -654,6 +732,16 @@ Logout 响应
 #### OrderCancelRequestAndNewOrderSingle<code>&lt;XCN&gt;</code>
 
 由客户发送，用以取消订单并提交新订单以供执行。
+
+* 要取消订单，需要 `OrderID (11)` 或 `OrigClOrdId (41)`。
+* 当同时提供 `OrderID (37)` 和 `OrigClOrdID (41)` 两个参数时，系统首先将会使用 `OrderID` 来搜索订单。然后， 查找结果中的 `OrigClOrdID` 的值将会被用来验证订单。如果两个条件都不满足，则请求将被拒绝。
+
+在撤消订单和下单前会判断: 1) 过滤器参数, 以及 2) 目前下单数量。
+
+即使请求中没有尝试发送新订单，比如(`newOrderResult: NOT_ATTEMPTED`)，未成交订单的数量仍然会加1。
+
+**未成交的订单计数:** 1
+
 在描述新订单时，请参阅 [支持的订单类型](#ordertype) 了解支持的字段组合。
 
 > [!NOTE]
@@ -667,7 +755,7 @@ Logout 响应
 | 25034 | CancelClOrdID                           | STRING | N        | 待取消的 `ClOrdID`。                             |
 | 41    | OrigClOrdID                             | STRING | N        | 来自待取消订单的 `ClOrdID`。                      |
 | 11    | ClOrdID                                 | STRING | Y        | 用于分配给新订单的 `ClOrdID`。                    |
-| 25002 | CancelRestrictions                      | INT    | N        | 取消的限制。可能值 ：<br></br> `1` - ONLY_NEW <br></br> `2` - ONLY_PARTIALLY_FILLED|  
+| 25002 | CancelRestrictions                      | INT    | N        | 取消的限制。可能值 ：<br></br> `1` - ONLY_NEW <br></br> `2` - ONLY_PARTIALLY_FILLED|
 | 38    | OrderQty                                | QTY    | N        | 新订单的数量                                                      |
 | 40    | OrdType                                 | CHAR   | Y        | 请参阅 [表格]（#ordertype）以了解支持的订单类型以及相关的必填字段 。 <br></br> 可能的值 ：<br></br> `1` - MARKET <br></br> `2` - LIMIT <br></br> `3` - STOP <br></br> `4` - STOP_LIMIT         |
 | 18    | ExecInst                                | CHAR   | N        | 可能的值： <br></br> `6` - PARTICIPATE_DONT_INITIATE  |
@@ -679,7 +767,7 @@ Logout 响应
 | 152   | CashOrderQty                            | QTY    | N        | 用于反向市价单，用于定义 quote asset 单位中的订单数量。        |
 | 847   | TargetStrategy                          | INT    | N        | 该值不能小于 `1000000`。                                                |
 | 7940  | StrategyID                              | INT    | N        |  |
-| 25001 | SelfTradePreventionMode                 | CHAR   | N        | 可能的值: <br></br> `1` - NONE <br></br> `2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br> `4` - EXPIRE_BOTH       |
+| 25001 | SelfTradePreventionMode                 | CHAR   | N        | 可能的值: <br></br> `1` - NONE <br></br> `2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br> `4` - EXPIRE_BOTH <br></br> `5` - DECREMENT        |
 | 1100  | TriggerType                             | CHAR   | N        | 可能的值: `4` - PRICE_MOVEMENT            |
 | 1101  | TriggerAction                           | CHAR   | N        | 可能的值: <br></br> `1` - ACTIVATE              |
 | 1102  | TriggerPrice                            | PRICE  | N        | 止盈止损订单的激活价格。参见 [表格](#ordertype)       |
@@ -719,7 +807,7 @@ Logout 响应
 **示例消息：**
 
 ```
-8=FIX.4.4|9=94|35=q|34=2|49=dpYPesqv|52=20240613-01:24:36.948|56=SPOT|11=1718241876901971671|55=ABCDEF|530=1|10=110|
+8=FIX.4.4|9=95|35=q|34=2|49=dpYPesqv|52=20240613-01:24:36.948|56=SPOT|11=1718241876901971671|55=BTCUSDT|530=1|10=243|
 ```
 
 **响应：**
@@ -754,6 +842,14 @@ Logout 响应
 #### NewOrderList<code>&lt;E&gt;</code>
 
 由客户发送，用以提交需要执行的订单列表。
+* `OTO` 或 `OTO` 订单将**2 个订单**添加到 `EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
+* `OTOCO` 在 `EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器的基础上添加**3个订单**。
+
+**未成交的订单计数:**
+* OCO: 2
+* OTO: 2
+* OTOCO: 3
+
 订单列表中的订单是相互依赖的。
 欲了解支持的订单类型和触发说明，请参考[支持的订单列表类型](#order-list-types)。
 
@@ -774,7 +870,7 @@ Logout 响应
 | =>152    | CashOrderQty                 | QTY        | N        | 对于反向市场订单，在报价资产单位中指定的订单数量。|
 | =>847    | TargetStrategy               | INT        | N        | 该值不能小于 `1000000`。    |
 | =>7940   | StrategyID                   | INT        | N        | |
-| =>25001  | SelfTradePreventionMode      | CHAR       | N        | 可能的值：<br></br> `1` - NONE <br></br>`2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br> `4` - EXPIRE_BOTH                                                                                                                                                                                                                       |
+| =>25001  | SelfTradePreventionMode      | CHAR       | N        | 可能的值：<br></br> `1` - NONE <br></br>`2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br> `4` - EXPIRE_BOTH <br></br> `5` - DECREMENT                                                                                                                                                                                                                       |
 | =>1100   | TriggerType                  | CHAR       | N        | 可能的值: <br></br> `4` - PRICE_MOVEMENT                                                                                                                                                                                                                                                                                   |
 | =>1101   | TriggerAction                | CHAR       | N        | 可能的值: <br></br> `1` - ACTIVATE                                                                                                                                                                                                                                                                                         |
 | =>1102   | TriggerPrice                 | PRICE      | N        | 止盈止损订单的激活价格。参见 [表格](#ordertype)                                                                                                                                                                                                                                                              |
@@ -828,12 +924,12 @@ Logout 响应
 | 25014    | ClListID                     | STRING       | N        | 分配给请求的订单列表 `ClListID` 。 |
 | 25015    | OrigClListID                 | STRING       | N        | |
 | 1385     | ContingencyType              | INT          | N        | 可能的值: <br></br> `1` - ONE_CANCELS_THE_OTHER <br></br> `2` - ONE_TRIGGERS_THE_OTHER    |
-| 429      | ListStatusType               | INT          | Y        | 可能的值: <br></br> `2` - RESPONSE <br></br>`4` - EXEC_STARTED <br></br> `5` - ALL_DONE                                                                         |
+| 429      | ListStatusType               | INT          | Y        | 可能的值: <br></br> `2` - RESPONSE <br></br>`4` - EXEC_STARTED <br></br> `5` - ALL_DONE <br></br> `100` - UPDATED                                                                         |
 | 431      | ListOrderStatus              | INT          | Y        | 可能的值: <br></br> `3` - EXECUTING <br></br> `6` - ALL_DONE  <br></br> `7` - REJECT                                                                            |
 | 1386     | ListRejectReason             | INT          | N        | 可能的值: <br></br> `99` - OTHER                                                                                                                      |
 | 103      | OrdRejReason                 | INT          | N        | 可能的值: <br></br> `99` - OTHER                                                                                                                      |
 | 60       | TransactTime                 | UTCTIMESTAMP | N        | 发生此事件时的时间戳。              |
-| 25016    | ErrorCode                    | INT          | N        | API 错误代码 (参考 [错误代码](errors_CN.md) ). |
+| 25016    | ErrorCode                    | INT          | N        | API 错误代码 (参考 [错误代码](errors_CN.md) )。 |
 | 58       | Text                         | STRING       | N        | 可读的错误消息。   |
 | 73       | NoOrders                     | NUMINGROUP   | N        | `Orders` 数组中的元素个数。     |
 | =>55     | Symbol                       | STRING       | Y        | 订单的交易对。   |
@@ -848,7 +944,69 @@ Logout 响应
 **示例消息：**
 
 ```
-8=FIX.4.4|9=290|35=N|34=2|49=SPOT|52=20240607-02:19:07.837191|56=Eg13pOvN|55=ABCDEF|60=20240607-02:19:07.836000|66=25|73=2|55=LTCBNB|37=52|11=w1717726747805308656|55=ABCDEF|37=53|11=p1717726747805308656|25010=1|25011=3|25012=0|25013=1|429=4|431=3|1385=2|25014=1717726747805308656|25015=1717726747805308656|10=019|
+8=FIX.4.4|9=293|35=N|34=2|49=SPOT|52=20240607-02:19:07.837191|56=Eg13pOvN|55=BTCUSDT|60=20240607-02:19:07.836000|66=25|73=2|55=BTCUSDT|37=52|11=w1717726747805308656|55=BTCUSDT|37=53|11=p1717726747805308656|25010=1|25011=3|25012=0|25013=1|429=4|431=3|1385=2|25014=1717726747805308656|25015=1717726747805308656|10=162|
+```
+
+<a id="orderamendkeeppriorityrequest"></a>
+
+#### OrderAmendKeepPriorityRequest<code>&lt;XAK&gt;</code>
+
+由客户发送以减少其订单的原始数量。
+
+这个请求将添加0个订单到 `EXCHANGE_MAX_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
+
+**未成交的订单计数:** 0
+
+**注意：**
+
+* `ClOrdID(11)` 不需要与原订单的 `ClOrdID` 不同。当请求的 `ClOrdID` 与待修改订单的 `ClOrdID` 相同时，`ClOrdID` 将保持不变。
+* 当同时提供 `OrderID (37)` 和 `OrigClOrdID (41)` 两个参数时，系统首先将会使用 `OrderID` 来搜索订单。然后， 查找结果中的 `OrigClOrdID (41)` 的值将会被用来验证订单。如果两个条件都不满足，则请求将被拒绝。
+
+
+
+| Tag | 名称     | 类型   | 是否必须 | 描述|
+| :---- | :---- | :---- | :---- | ----- |
+| 11 | ClOrdID | STRING | Y | 分配给请求的订单 `ClOrdID`。  |
+| 41 | OrigClOrdID | STRING | N | 待修改订单的 `ClOrdID (11)`。 需提供 `OrigClOrdID (41)` 或 `OrderId (37)`。 |
+| 37 | OrderID | INT | N | 待修改订单的 `OrderID (37)`。 需提供 `OrigClOrdID (41)` 或 `OrderId (37)`。 |
+| 55 | Symbol  | STRING | Y | 待修改订单的交易对。|
+| 38 | OrderQty | QTY | N | 交易的新数量。 必须比订单的原始 OrderQty 小。 |
+
+
+**示例消息：**
+
+```
+8=FIX.4.4|9=103|35=XAK|34=2|49=EXAMPLE|52=20250319-12:35:21.087|56=SPOT|11=O2EIAS01742387721086|37=0|38=0.9|55=BTCUSDT|10=254|
+```
+
+**响应：**
+
+* [Reject `<3>`](#reject) 请求会由于缺少必填字段，无效字段，引用无效的符号，或超过消息限制而成为无效请求。
+* [OrderAmendReject `<XAR>`](#orderamendreject) 如果请求失败，则由于订单速率限制不足，指向不存在的订单，数量无效等。
+* [ExecutionReport `<8>`](#executionReport) 请求成功修改了单个订单。
+* [ExecutionReport `<8>`](#executionReport) \+ [ListStatus `<N>`](#liststatus) 请求成功修改了隶属于订单列表中的单个订单。
+
+<a id="orderamendreject"></a>
+
+### OrderAmendReject<code>&lt;XAR&gt;</code>
+
+当 OrderAmendKeepPriorityRequest `<XAK>` 请求失败时，由服务器发送。
+
+| Tag | 名称     | 类型   | 是否必须 | 描述|
+| :---- | :---- | :---- | :---- | :---- |
+| 11 | ClOrdID | STRING | Y | 待修改订单的 `ClOrdId`。|
+| 41 | OrigClOrdID | STRING | N | 待修改订单的 `OrigClOrdId (41)`。|
+| 37 | OrderID | INT | N | 待修改订单的 `OrderId (37)`。 |
+| 55 | Symbol | STRING | Y | 待修改订单的 `Symbol (55)`。 |
+| 38 | OrderQty | QTY | Y |  |
+| 25016 | ErrorCode | INT | Y | API 错误代码 (参考 [错误代码](errors_CN.md) )。 |
+| 58 | Text | STRING | Y | 人类可读的错误消息。 |
+
+
+**示例消息：**
+
+```
+8=FIX.4.4|9=0000176|35=XAR|49=SPOT|56=OE|34=2|52=20250319-14:27:32.751074|11=1WRGW5J1742394452749|37=0|55=BTCUSDT|38=1.000000|25016=-2038|58=The requested action would change no state; rejecting.|10=235|
 ```
 
 ### Limit Messages
@@ -861,7 +1019,7 @@ Logout 响应
 
 | Tag | 名称     | 类型   | 是否必须 | 描述        |
 |------|-------|--------|----------|--------------------|
-| 6136 | ReqID | STRING | Y        | 此请求的 ID | 
+| 6136 | ReqID | STRING | Y        | 此请求的 ID |
 
 **示例消息：**
 
@@ -877,7 +1035,7 @@ Logout 响应
 
 | Tag | 名称     | 类型   | 是否必须 | 描述|
 |------|-------|--------|----------|--------------------|
-| 6136    | ReqID                        | STRING     | Y        | `ReqID`。        | 
+| 6136    | ReqID                        | STRING     | Y        | `ReqID`。        |
 | 25003   | NoLimitIndicators            | NUMINGROUP | Y        | `LimitIndicator` 数组中的元素个数。  |
 | =>25004 | LimitType                    | CHAR       | Y        | 可能的值 <br></br> `1` - ORDER_LIMIT <br></br> `2` - MESSAGE_LIMIT   |
 | =>25005 | LimitCount                   | INT        | Y        | 此限制的当前使用情况。 |
@@ -911,7 +1069,7 @@ Logout 响应
 **示例消息:**
 
 ```
-8=FIX.4.4|35=x|49=BTCUSDT|56=SPOT|34=10|52=20240917-02:42:43.624784|320=BTCUSDT_INFO|559=0|55=1726540962645|
+8=FIX.4.4|9=92|35=x|49=BMDWATCH|56=SPOT|34=2|52=20250114-08:46:56.096691|320=BTCUSDT_INFO|559=0|55=BTCUSDT|10=164|
 ```
 
 <a id="instrumentlist"></a>
@@ -943,7 +1101,7 @@ Logout 响应
 **示例消息:**
 
 ```
-8=FIX.4.4|9=0000205|35=y|49=SPOT|56=TRANCE01|34=10|52=20240917-02:42:43.625203|320=BTCUSDT_INFO|146=1|55=1726540962645|15=1726540962422|562=0.01000|1140=10.00000|25039=0.00001|25040=0.01000|25041=0.01000|25042=0.00001|969=0.001|10=033|
+8=FIX.4.4|9=218|35=y|49=SPOT|56=BMDWATCH|34=2|52=20250114-08:46:56.100147|320=BTCUSDT_INFO|146=1|55=BTCUSDT|15=USDT|562=0.00001000|1140=9000.00000000|25039=0.00001000|25040=0.00000001|25041=76.79001236|25042=0.00000001|969=0.01000000|10=093||
 ```
 
 <a id="marketdatarequest"></a>
@@ -961,7 +1119,7 @@ Logout 响应
 **订阅所需的字段：**
 
 - `SubscriptionRequestType` 的值为 `SUBSCRIBE(1)`
-- `MDEntryType` 的值为 `TRADE(2)` 
+- `MDEntryType` 的值为 `TRADE(2)`
 
 **更新速度：** 实时
 
@@ -974,9 +1132,9 @@ Logout 响应
 **订阅所需的字段**
 
 - `SubscriptionRequestType` 值为 `SUBSCRIBE(1)`
-- `MDEntryType` 值为 `BID (0)` 
-- `MDEntryType` 值为 `OFFER(1)`  
-- `MarketDepth` 值为 `1` 
+- `MDEntryType` 值为 `BID (0)`
+- `MDEntryType` 值为 `OFFER(1)`
+- `MarketDepth` 值为 `1`
 \
 **Individual Symbol Book Ticker Stream**
 
@@ -1002,8 +1160,8 @@ Logout 响应
 
 **订阅所需的字段**
 
-- `SubscriptionRequestType` 值为 `SUBSCRIBE(1)`  
-- `MDEntryType` 值为 `BID (0)` 
+- `SubscriptionRequestType` 值为 `SUBSCRIBE(1)`
+- `MDEntryType` 值为 `BID (0)`
 - `MDEntryType` 值为 `OFFER (1)`
 - `MarketDepth` 值介于 `2` 和 `5000` 之间，用于控制初始快照的大小，对后续的 [MarketDataIncrementalRefresh `<X>` ](#marketdataincrementalrefresh) 消息没有影响
 
@@ -1088,7 +1246,7 @@ Logout 响应
 | Tag     | Name              | Type         | Required | Description                                                                                                                                      |
 |---------|-------------------|--------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------|
 | 262     | MDReqID           | STRING       | Y        | 激活此订阅的 [MarketDataRequest `<V>`](#marketdatarequest) 的 ID                                                          |
-| 893     | LastFragment      | BOOLEAN      | N        | 如果存在，则表示消息已分段。它只会出现在[交易数据流](#tradestream) 和 [增量深度数据流](#diffdepthstream)中。                 |
+| 893     | LastFragment      | BOOLEAN      | N        | 如果存在，则表示消息已分片。当单个 [MarketDataIncrementalRefresh `<X>`](#marketdataincrementalrefresh) 中的 `NoMDEntry` 超过 10000 时，会发生分片以便将其限制在10000。数据流中分片消息保证是连续的。分片消息只会出现在 [Trade Stream](#tradestream) 和 [Diff. Depth Stream](#diffdepthstream) 中。                 |
 | 268     | NoMDEntries       | NUMINGROUP   | Y        | 条目数                                                                                                                               |
 | =>279   | MDUpdateAction    | CHAR         | Y        | 可能的值： <br></br> `0` - NEW <br></br> `1` - CHANGE <br></br> `2` - DELETE                                                           |
 | =>270   | MDEntryPx         | PRICE        | Y        | 价格                                                                                                                                           |
@@ -1097,6 +1255,7 @@ Logout 响应
 | =>55    | Symbol            | STRING       | N        | 如果未指定`交易对`，则默认使用同一市场数据流消息中前一个消息的交易对 |
 | =>60    | TransactTime      | UTCTIMESTAMP | N        |                                                                                                                                                  |
 | =>1003  | TradeID           | INT          | N        |                                                                                                                                                  |
+| =>2446  | AggressorSide     | CHAR         | N        | 可能的值： <br></br> `1` - BUY <br></br> `2` - SELL |
 | =>25043 | FirstBookUpdateID | INT          | N        |   只会在 [增量深度数据流](#diffdepthstream) 中出现. <br></br> 如果 `LastBookUpdateID` 没有指定，市场数据消息的 `FirstBookUpdateID` 将会默认设置为与之前消息一样的 `FirstBookUpdateID`  |
 | =>25044 | LastBookUpdateID  | INT          | N        |   只会在 [增量深度数据流](#diffdepthstream) 和 [单个交易对订单簿数据流](#symbolbooktickerstream) 中出现. <br></br> 如果 `LastBookUpdateID` 没有指定，市场数据消息的 `LastBookUpdateID` 将会默认设置为与之前消息一样的 `LastBookUpdateID`  |
 
@@ -1105,4 +1264,22 @@ Logout 响应
 
 ```
 8=FIX.4.4|9=0000313|35=X|49=SPOT|56=EXAMPLE|34=16|52=20241019-05:40:11.466313|262=TRADE_3|893=N|268=3|279=0|269=2|270=10.00000|271=0.01000|55=BNBBUSD|1003=0|60=20241019-05:40:11.464000|279=0|269=2|270=10.00000|271=0.01000|1003=1|60=20241019-05:40:11.464000|279=0|269=2|270=10.00000|271=0.01000|1003=2|60=20241019-05:40:11.464000|10=125|
+```
+
+**示例分片消息:**
+
+> [!NOTE]
+> 以下是示例消息，其中 `NoMDEntry` 限制为 *2*，在实际流中，`NoMDEntry` 限制为 *10000*。
+
+[Trade Stream](#tradestream)
+```
+8=FIX.4.4|9=237|35=X|34=114|49=SPOT|52=20250116-19:36:44.544549|56=EXAMPLE|262=id|268=2|279=0|270=240.00|271=3.00000000|269=2|55=BNBBUSD|60=20250116-19:36:44.196569|1003=67|279=0|270=238.00|271=2.00000000|269=2|60=20250116-19:36:44.196569|1003=68|893=N|10=180|
+8=FIX.4.4|9=163|35=X|34=115|49=SPOT|52=20250116-19:36:44.544659|56=EXAMPLE|262=id|268=1|279=0|270=233.00|271=1.00000000|269=2|55=BNBBUSD|60=20250116-19:36:44.196569|1003=69|893=Y|10=243|
+```
+
+[Diff. Depth Stream](#diffdepthstream)
+```
+8=FIX.4.4|9=156|35=X|34=12|49=SPOT|52=20250116-19:45:31.774162|56=EXAMPLE|262=id|268=2|279=2|270=362.00|269=0|55=BNBBUSD|25043=1143|25044=1145|279=2|270=313.00|269=0|893=N|10=047|
+8=FIX.4.4|9=171|35=X|34=13|49=SPOT|52=20250116-19:45:31.774263|56=EXAMPLE|262=id|268=2|279=2|270=284.00|269=0|55=BNBBUSD|25043=1143|25044=1145|279=1|270=264.00|271=3.00000000|269=0|893=N|10=239|
+8=FIX.4.4|9=149|35=X|34=14|49=SPOT|52=20250116-19:45:31.774281|56=EXAMPLE|262=id|268=1|279=1|270=395.00|271=19.00000000|269=1|55=BNBBUSD|25043=1143|25044=1145|893=Y|10=024|
 ```

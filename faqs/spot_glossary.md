@@ -17,7 +17,7 @@ allocation
 * Unique identifier of an allocation on a symbol.
 
 `allocationType`
-* See [AllocationType](../enums.md#allocationtype) 
+* See [AllocationType](../enums.md#allocationtype)
 
 `askPrice`
 * In ticker responses: the lowest price on the `SELL` side.
@@ -39,10 +39,10 @@ allocation
 * The first asset in the symbol (e.g. `BTC` is the `base asset` of symbol `BTCUSDT`), which represents the asset being bought and sold (the `quantity`).
 
 `baseAssetPrecision`
-* A field found in `GET /api/v3/exchangeInfo` that shows the number of decimals allowed on the `baseAsset`.
+* A field found in Exchange Information that shows the number of decimals allowed on the `baseAsset`.
 
 `baseCommissionPrecision`
-* A field found in `GET /api/v3/exchangeInfo` that represents the number of decimals base asset commission will be calculated to.
+* A field found in Exchange Information that represents the number of decimals base asset commission will be calculated to.
 
 `bidPrice`
 * In ticker responses: the highest price on the `BUY` side.
@@ -66,8 +66,11 @@ allocation
 `CANCELED`
 * Order `status` indicating the order has been canceled by the user.
 
+`cancelReplaceMode`
+* Parameter used in Cancel Replace orders that define whether the New Order Placement should proceed if the Cancel Request fails.
+
 `clientOrderId`
-* A field, which can be set by the user, in the JSON response for `POST /api/v3/order` to identify the newly placed order.
+* A field, which can be set by the user, in the JSON response for order placement requests to identify the newly placed order.
 
 `commission`
 * The fee that was paid on a trade.
@@ -75,8 +78,11 @@ allocation
 `commissionAsset`
 * The asset the commission fees were deducted from.
 
-`cancelReplaceMode`
-* Parameter used in Cancel Replace orders (i.e. `POST /api/v3/order/cancelReplace`) that define whether the New Order Placement should proceed if the Cancel Request fails.
+Counter Order Id
+* A field in User Data Stream execution reports that indicates the counterparty order in a prevented match.
+
+Counter Symbol
+* A field in User Data Stream execution reports that indicates the symbol of the counterparty order in a prevented match.
 
 `cummulativeQuoteQty`
 * The accumulation of the `price` * `qty` for each fill of an order.
@@ -168,7 +174,7 @@ Last Prevented Quantity
 * Price of the latest trade.
 
 `lastQty`
-* Quantity filled by the last trade.
+* Total quantity traded at the `lastPrice`.
 
 `LIMIT`
 * a `type` of order where the execution price will be no worse than the order's set price. The execution price is limited to be the set price or better.
@@ -177,10 +183,10 @@ Last Prevented Quantity
 * A `type` of order where the order can only be a maker order (i.e. The order cannot immediately match and take).
 
 `limitClientOrderId`
-* A parameter used in placing OCO orders (i.e. `POST /api/v3/order/oco`) that identifies the `LIMIT_MAKER` pair of the OCO Order.
+* A parameter used in placing OCO orders that identifies the `LIMIT_MAKER` pair of the OCO Order.
 
 `listClientOrderId`
-* A parameter used in placing OCO Orders (e.g. `POST /api/v3/order/oco`) that identifies the pair of orders.
+* A parameter used in placing OCO Orders that identifies the pair of orders.
 
 `listenKey`
 * Individual key used on User Data Stream to get live updates on the associated account.
@@ -198,6 +204,9 @@ Last Prevented Quantity
 Matching Engine
 * This can either refer to a Data Source in the documentation which means the response is coming from the engine.
 * Or this is referred to as the system that handles all the requests and matches orders.
+
+Match Type
+* Field in the order response or execution report indicating if the order was filled by the [SOR](./sor_faq.md)
 
 Memory
 * Data Source where the response is coming from the API's internal memory or cache.
@@ -258,9 +267,17 @@ Pending order
 * A single order list can contain either a single pending order, or 2 pending orders forming an OCO.
 * In the single order case, almost any order type is supported, with the exception of `MARKET` orders using `quoteOrderQty`.
 
-
 `PENDING_NEW`
 * Order `status` indicating that the pending orders of an order list have been accepted by the engine, but are not yet placed on the order book.
+
+Prevented execution price
+* A field in User Data Stream execution reports showing the price of a prevented self-trade. See [STP](stp_faq.md).
+
+Prevented execution quantity
+* A field in the User Data Stream showing the quantity of a prevented self-trade. See [STP](stp_faq.md).
+
+Prevented execution quote quantity
+* A field in the User data Stream showing the quote quantity of the prevented self-trade. See [STP](stp_faq.md).
 
 `preventedQuantity`
 * Order quantity expired due to STP events.
@@ -282,10 +299,10 @@ Prevented Match
 * The second asset in the symbol (e.g. `USDT` is the `quote asset` of symbol `BTCUSDT`) which represents the asset being used to quote prices (the `price`).
 
 `quoteAssetPrecision`
-* A field found in `GET /api/v3/exchangeInfo` that shows the number of decimals allowed on the `quoteAsset`.
+* A field found in Exchange Information that shows the number of decimals allowed on the `quoteAsset`.
 
 `quoteCommissionPrecision`
-* A field found in `GET /api/v3/exchangeInfo` that represents the number of decimals quote asset commission will be calculated to.
+* A field found in Exchange Information that represents the number of decimals quote asset commission will be calculated to.
 
 `quoteOrderQty`
 * `MARKET` order parameter that specifies the amount of the quote asset one wants to spend/receive in a "Reverse MARKET order".
@@ -311,7 +328,7 @@ Reverse `MARKET` order
 ### S
 
 Self Trade Prevention (STP)
-* Self Trade Prevention is a feature that prevents orders of users, or the user's `tradeGroupId` from matching against their own.
+* Self Trade Prevention is a feature that prevents orders of users, or the user's `tradeGroupId` from matching against their own. Read [STP FAQ](./stp_faq.md) to learn more.
 
 `selfTradePreventionMode`
 * A parameter used to specify what the system will do if an order could cause a self-trade.
@@ -320,13 +337,13 @@ Self Trade Prevention (STP)
 * An enum in the `side` used when a user wants to sell an asset (e.g. BTC).
 
 Smart Order Routing (SOR)
-* Smart Order Routing uses interchangeable quote assets to improve liquidity. [Read SOR FAQ](./sor_faq.md) to learn more.
+* Smart Order Routing uses interchangeable quote assets to improve liquidity. Read [SOR FAQ](./sor_faq.md) to learn more.
 
 `SPOT`
 * This is to distinguish a type of trading, where the purchase and delivery of a asset is made immediately.
 
 `stopClientOrderId`
-* A parameter used in placing OCO orders (i.e. `POST /api/v3/order/oco`) that identifies the `STOP_LOSS` or `STOP_LOSS_LIMIT` pair of the OCO Order.
+* A parameter used in placing OCO orders that identifies the `STOP_LOSS` or `STOP_LOSS_LIMIT` pair of the OCO Order.
 
 `stopPrice`
 * The price used in algorithmic orders (e.g. `STOP_LOSS`, `TAKE_PROFIT`) that determines when an order will be triggered to be placed on the order book.
@@ -394,7 +411,10 @@ Smart Order Routing (SOR)
 * Last update to the order. This field (as well as all timestamp related fields) will be in milliseconds by default in JSON responses.
 
 User Data Stream
-* Websocket stream used to get real-time information of a user's account. (e.g. Changes to Balances, Order Updates, etc.)
+* WebSocket stream used to get real-time information of a user's account. (e.g. Changes to Balances, Order Updates, etc.) Read [User Data Streams](../user-data-stream.md) to learn more.
+
+`usedSor`
+* Indicates if the order was placed through [SOR](sor_faq.md).
 
 ---
 
@@ -422,4 +442,3 @@ Working order
 
 `X-MBX-USED-WEIGHT-XX`
 * Response header that is emitted when a user sends any request to the API, indicating the current used request weight for the XX interval by the user's IP.
-

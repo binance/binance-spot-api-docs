@@ -1,82 +1,20 @@
 # WebSocket 账户接口
 
-**最近更新： 2024-12-17**
+**最近更新： 2025-04-09**
 
 ## 基本信息
-* 本篇所列出API接口的base url : **https://api.binance.com**
-* 用于订阅账户数据的 `listenKey` 从创建时刻起有效期为60分钟
-* 可以通过 `PUT` 一个 `listenKey` 延长60分钟有效期
-* 可以通过`DELETE`一个 `listenKey` 立即关闭当前数据流，并使该`listenKey` 无效
-* 在具有有效`listenKey`的帐户上执行`POST`将返回当前有效的`listenKey`并将其有效期延长60分钟
-* websocket接口的baseurl: **wss://stream.binance.com:9443**
-* U订阅账户数据流的stream名称为 **/ws/\<listenKey\>** 或 **/stream?streams=\<listenKey\>**
-* 每个链接有效期不超过24小时，请妥善处理断线重连。
-* 账户数据流的消息不保证严格时间序; **请使用 E 字段进行排序**
-* JSON 响应中的所有时间和时间戳相关字段均以**毫秒为默认单位**。要以微秒为单位接收信息，请在 URL 中添加参数 `timeUnit=MICROSECOND` 或 `timeUnit=microsecond`。 
-  * 例如：`/ws/<listenKey>?timeUnit=MICROSECOND`
+* 目前有两种方法可以订阅 User Data Stream:
+  * **[首选]** 直接通过 [WebSocket API](web-socket-api_CN.md#user_data_stream_susbcribe) 使用 API 密钥.
+  * **[已弃用]** 通过使用 [REST API](rest-api_CN.md#user-data-stream-requests)或 [WebSocket API](web-socket-api_CN.md#user-data-stream-requests)生成一个 **listen key** 并使用它来监听 **stream.binance.com**。
+* 两个源都将**实时** 推送与您的帐户相关的所有事件.
+* 如何在 **stream.binance.com** 使用 `listen key`:
+  * 基本端点是**wss://stream.binance.com:9443** 或 **wss://stream.binance.com:443**。
+  * 连接到 **stream.binance.com** 的连接仅在 24 小时内有效;将会在到达 24 小时时断开连接。
+  * 用户数据流可通过 **/WS/\<listenKey\>** 或 **/stream？streams=\<listenKey\>** 访问。
+  * JSON payload 中所有与时间和时间戳相关的字段默认为 **毫秒**。以微秒为单位接收信息,请在连接 URL 中添加参数 `timeUnit=MICROSECOND` 或 `timeUnit=microsecond`。
+    * 例如 `/WS/<listenKey>？timeUnit=MICROSECOND`
 
-## 与Websocket账户接口相关的REST接口
-
-### 生成 Listen Key (USER_STREAM)
-```
-POST /api/v3/userDataStream
-```
-开始一个新的数据流。除非发送 keepalive，否则数据流于60分钟后关闭。如果该帐户具有有效的`listenKey`，则将返回该`listenKey`并将其有效期延长60分钟。
-
-**权重:**
-1
-
-**参数:**
-NONE
-
-**响应:**
-```javascript
-{
-  "listenKey": "pqia91ma19a5s61cv6a81va65sdf19v8a65a1a5s61cv6a81va65sdf19v8a65a1"
-}
-```
-
-### 延长 Listen Key 有效期 (USER_STREAM)
-```
-PUT /api/v3/userDataStream
-```
-有效期延长至本次调用后60分钟, 建议每30分钟发送一个 ping。
-
-**权重:**
-1
-
-**参数:**
-
-名称 | 类型 | 是否必须 | 描述
------------- | ------------ | ------------ | ------------
-listenKey | STRING | YES
-
-**响应:**
-```javascript
-{}
-```
-
-### 关闭 Listen Key (USER_STREAM)
-```
-DELETE /api/v3/userDataStream
-```
-关闭某账户数据流
-
-**权重:**
-1
-
-**参数:**
-
-名称 | 类型 | 是否必须 | 描述
------------- | ------------ | ------------ | ------------
-listenKey | STRING | YES
-
-**响应:**
-```javascript
-{}
-```
-
-## Websocket推送事件
+## 用户数据流事件
 
 ### 账户更新
 
@@ -126,6 +64,7 @@ listenKey | STRING | YES
 
 
 **Payload:**
+
 ```javascript
 {
   "e": "executionReport",        // 事件类型
@@ -140,10 +79,10 @@ listenKey | STRING | YES
   "P": "0.00000000",             // 止盈止损单触发价格
   "F": "0.00000000",             // 冰山订单数量
   "g": -1,                       // OCO订单 OrderListId
-  "C": "",                       // 原始订单自定义ID(原始订单，指撤单操作的对象。撤单本身被视为另一个订单)
+  "C": "",                       // 原始订单自定义ID（原始订单，指撤单操作的对象。撤单本身被视为另一个订单）
   "x": "NEW",                    // 本次事件的具体执行类型
   "X": "NEW",                    // 订单的当前状态
-  "r": "NONE",                   // 订单被拒绝的原因
+  "r": "NONE",                   // 订单被拒绝的原因；请参阅订单被拒绝的原因（下文）了解更多信息
   "i": 4293153,                  // orderId
   "l": "0.00000000",             // 订单末次成交量
   "z": "0.00000000",             // 订单累计已成交量
@@ -246,7 +185,7 @@ listenKey | STRING | YES
     <td><code>pY</code></td>
     <td>Prevented Execution Quote Qty</td>
     <td><code>"pY":"0.21234562"</code></td>
-  </tr>  
+  </tr>
   <tr>
     <td><code>W</code></td>
     <td>Working Time</td>
@@ -278,7 +217,19 @@ listenKey | STRING | YES
   </tr>
 </table>
 
-如果是一个订单组，则除了显示`executionReport`事件外，还将显示一个名为`ListStatus`的事件。
+#### 订单拒绝原因
+
+有关更多详细信息，请查阅 [错误代码汇总](errors_CN.md#other-errors) 文档中的错误消息。
+
+|拒绝原因 (`r`)| 错误信息|
+|---             | ---          |
+|`NONE`           | N/A (i.e. The order was not rejected.)|
+|`INSUFFICIENT_BALANCES`|"Account has insufficient balance for requested action."|
+|`STOP_PRICE_WOULD_TRIGGER_IMMEDIATELY`|"Order would trigger immediately."|
+|`WOULD_MATCH_IMMEDIATELY`|"Order would immediately match and take."|
+|`OCO_BAD_PRICES`|"The relationship of the prices for the orders is not correct."|
+
+如果是一个订单组，则除了显示 `executionReport` 事件外，还将显示一个名为 `ListStatus` 的事件。
 
 **Payload**
 
@@ -313,8 +264,8 @@ listenKey | STRING | YES
 
 * `NEW` - 新订单已被引擎接受。
 * `CANCELED` - 订单被用户取消。
-* `REPLACED` - (保留字段，当前未使用)
-* `REJECTED` - 新订单被拒绝 （这信息只会在撤消挂单再下单中发生，下新订单被拒绝但撤消挂单请求成功）。
+* `REPLACED` - 订单已被修改。
+* `REJECTED` - 新订单被拒绝 （e.g. 在撤消挂单再下单时，其中新订单被拒绝但撤消挂单请求成功）。
 * `TRADE` - 订单有新成交。
 * `EXPIRED` - 订单已根据 Time In Force 参数的规则取消（e.g. 没有成交的 LIMIT FOK 订单或部分成交的 LIMIT IOC 订单）或者被交易所取消（e.g. 强平或维护期间取消的订单）。
 * `TRADE_PREVENTION` - 订单因 STP 触发而过期。
@@ -333,16 +284,16 @@ listenKey | STRING | YES
 {
   "e": "listenKeyExpired",  // 事件类型
   "E": 1699596037418,      // 事件时间
-  "listenKey": "OfYGbUzi3PraNagEkdKuFwUHn48brFsItTdsuiIXrucEvD0rhRXZ7I6URWfE8YE8" 
+  "listenKey": "OfYGbUzi3PraNagEkdKuFwUHn48brFsItTdsuiIXrucEvD0rhRXZ7I6URWfE8YE8"
 }
 ```
 
 
 ## 事件流已终止
 
-此事件仅在使用 WebSocket API 时才会发生。
+此事件仅在订阅 WebSocket API 时显示。
 
-当账户数据流被终止时，`eventStreamTerminated` 会被发送。例如，在您发送 `userDataStream.stop` 请求或 `session.logout` 请求之后。
+当账户数据流被终止时，`eventStreamTerminated` 会被发送。例如，在您发送 `userDataStream.unsubscribe` 请求或 `session.logout` 请求之后。
 
 **Payload:**
 

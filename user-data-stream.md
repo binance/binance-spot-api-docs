@@ -2,99 +2,35 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [General WSS information](#general-wss-information)
-- [API Endpoints](#api-endpoints)
-  - [Create a listenKey (USER_STREAM)](#create-a-listenkey-user_stream)
-  - [Ping/Keep-alive a listenKey (USER_STREAM)](#pingkeep-alive-a-listenkey-user_stream)
-  - [Close a listenKey (USER_STREAM)](#close-a-listenkey-user_stream)
-- [Web Socket Payloads](#web-socket-payloads)
-  - [Account Update](#account-update)
-  - [Balance Update](#balance-update)
-  - [Order Update](#order-update)
-    - [Conditional Fields in Execution Report](#conditional-fields-in-execution-report)
-    - [Execution types](#execution-types)
-  - [Listen Key Expired](#listen-key-expired)
+  - [User Data Stream Events](#user-data-stream-events)
+    - [Account Update](#account-update)
+    - [Balance Update](#balance-update)
+    - [Order Update](#order-update)
+      - [Conditional Fields in Execution Report](#conditional-fields-in-execution-report)
+      - [Order Reject Reason](#order-reject-reason)
+    - [Listen Key Expired](#listen-key-expired)
   - [Event Stream Terminated](#event-stream-terminated)
   - [External Lock Update](#external-lock-update)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# User Data Streams for Binance 
+# User Data Streams for Binance
 
-**Last Updated: 2024-12-17**
+**Last Updated: 2025-04-08**
 
-* The base API endpoint is: **https://api.binance.com**
-* A User Data Stream `listenKey` is valid for 60 minutes after creation.
-* Doing a `PUT` on an active `listenKey` will extend its validity for 60 minutes.
-* Doing a `DELETE` on an active `listenKey` will close the stream and invalidate the `listenKey`.
-* Doing a `POST` on an account with an active `listenKey` will return the currently active `listenKey` and extend its validity for 60 minutes.
-* The base websocket endpoint is: **wss://stream.binance.com:9443**
-* User Data Streams are accessed at **/ws/\<listenKey\>** or **/stream?streams=\<listenKey\>**
-* A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark
-* All time and timestamp related fields in the JSON responses are **milliseconds by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND` or `timeUnit=microsecond` in the URL.  
-  * For example `/ws/<listenKey>?timeUnit=MICROSECOND`
-    
-## API Endpoints
-### Create a listenKey (USER_STREAM)
-```
-POST /api/v3/userDataStream
-```
-Start a new user data stream. The stream will close after 60 minutes unless a keepalive is sent. If the account has an active `listenKey`, that `listenKey` will be returned and its validity will be extended for 60 minutes.
+* There are currently two ways to subscribe to the User Data Stream:
+  * **[Preferred]** Subscribing directly through the [WebSocket API](web-socket-api.md#user_data_stream_subscribe) using an API Key.
+  * **[Deprecated]** Generating a **listen key** using [the REST API](rest-api.md#user-data-stream-requests) or [the WebSocket API](web-socket-api.md#user-data-stream-requests) and using it to listen on **stream.binance.com**
+* Both sources will push all events related to your account **in real-time**.
+* How to use a listen key on **stream.binance.com**:
+  * The base endpoint is: **wss://stream.binance.com:9443** or **wss://stream.binance.com:443**.
+  * A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark.
+  * User Data Streams are accessed at **/ws/\<listenKey\>** or **/stream?streams=\<listenKey\>**
+  * All time and timestamp related fields in the JSON payload are **milliseconds by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND` or `timeUnit=microsecond` in the connection URL.
+    * For example `/ws/<listenKey>?timeUnit=MICROSECOND`
 
-**Weight:**
-1
 
-**Parameters:**
-NONE
-
-**Response:**
-```javascript
-{
-  "listenKey": "pqia91ma19a5s61cv6a81va65sdf19v8a65a1a5s61cv6a81va65sdf19v8a65a1"
-}
-```
-
-### Ping/Keep-alive a listenKey (USER_STREAM)
-```
-PUT /api/v3/userDataStream
-```
-Keepalive a user data stream to prevent a time out. User data streams will close after 60 minutes. It's recommended to send a ping about every 30 minutes.
-
-**Weight:**
-1
-
-**Parameters:**
-
-Name | Type | Mandatory | Description
------------- | ------------ | ------------ | ------------
-listenKey | STRING | YES
-
-**Response:**
-```javascript
-{}
-```
-
-### Close a listenKey (USER_STREAM)
-```
-DELETE /api/v3/userDataStream
-```
-Close out a user data stream.
-
-**Weight:**
-1
-
-**Parameters:**
-
-Name | Type | Mandatory | Description
------------- | ------------ | ------------ | ------------
-listenKey | STRING | YES
-
-**Response:**
-```javascript
-{}
-```
-
-## Web Socket Payloads
+## User Data Stream Events
 ### Account Update
 
 `outboundAccountPosition` is sent any time an account balance has changed and contains the assets that were possibly changed by the event that generated the balance change.
@@ -121,6 +57,7 @@ Balance Update occurs during the following:
 * Transfer of funds between accounts (e.g. Spot to Margin)
 
 **Payload**
+
 ```javascript
 {
   "e": "balanceUpdate",         // Event Type
@@ -137,6 +74,7 @@ Orders are updated with the `executionReport` event.
 We recommend using the [FIX API](fix-api.md) for better performance compared to using the User Data Streams.
 
 **Payload:**
+
 ```javascript
 {
   "e": "executionReport",        // Event type
@@ -154,7 +92,7 @@ We recommend using the [FIX API](fix-api.md) for better performance compared to 
   "C": "",                       // Original client order ID; This is the ID of the order being canceled
   "x": "NEW",                    // Current execution type
   "X": "NEW",                    // Current order status
-  "r": "NONE",                   // Order reject reason; will be an error code.
+  "r": "NONE",                   // Order reject reason; Please see Order Reject Reason (below) for more information.
   "i": 4293153,                  // Order ID
   "l": "0.00000000",             // Last executed quantity
   "z": "0.00000000",             // Cumulative filled quantity
@@ -260,7 +198,7 @@ For additional information on these parameters, please refer to the [Spot Glossa
     <td><code>pY</code></td>
     <td>Prevented Execution Quote Qty</td>
     <td><code>"pY":"0.21234562"</code></td>
-  </tr>  
+  </tr>
   <tr>
     <td><code>W</code></td>
     <td>Working Time</td>
@@ -292,9 +230,22 @@ For additional information on these parameters, please refer to the [Spot Glossa
   </tr>
 </table>
 
+#### Order Reject Reason
+
+For additional details, look up the Error Message in the [Errors](errors.md#other-errors) documentation.
+
+|Rejection Reason (`r`)| Error Message|
+|---             | ---          |
+|`NONE`           | N/A (i.e. The order was not rejected.)|
+|`INSUFFICIENT_BALANCES`|"Account has insufficient balance for requested action."|
+|`STOP_PRICE_WOULD_TRIGGER_IMMEDIATELY`|"Order would trigger immediately."|
+|`WOULD_MATCH_IMMEDIATELY`|"Order would immediately match and take."|
+|`OCO_BAD_PRICES`|"The relationship of the prices for the orders is not correct."|
+
 If the order is an order list, an event named `ListStatus` will be sent in addition to the `executionReport` event.
 
 **Payload**
+
 ```javascript
 {
   "e": "listStatus",                // Event Type
@@ -326,15 +277,15 @@ If the order is an order list, an event named `ListStatus` will be sent in addit
 
 * `NEW` - The order has been accepted into the engine.
 * `CANCELED` - The order has been canceled by the user.
-* `REPLACED` (currently unused)
-* `REJECTED` - The order has been rejected and was not processed (This message appears only with Cancel Replace Orders wherein the new order placement is rejected but the request to cancel request succeeds.)
+* `REPLACED` - The order has been amended.
+* `REJECTED` - The order has been rejected and was not processed (e.g. Cancel Replace Orders wherein the new order placement is rejected but the request to cancel request succeeds.)
 * `TRADE` - Part of the order or all of the order's quantity has filled.
 * `EXPIRED` - The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance).
 * `TRADE_PREVENTION` - The order has expired due to STP.
 
 Check the [Enums page](./enums.md) for more relevant enum definitions.
 
-### Listen Key Expired 
+### Listen Key Expired
 
 This event is sent when the listen key expires.
 
@@ -348,15 +299,15 @@ This event will not be pushed when the stream is closed normally.
 {
   "e": "listenKeyExpired",  // Event type
   "E": 1699596037418,      // Event time
-  "listenKey": "OfYGbUzi3PraNagEkdKuFwUHn48brFsItTdsuiIXrucEvD0rhRXZ7I6URWfE8YE8" 
+  "listenKey": "OfYGbUzi3PraNagEkdKuFwUHn48brFsItTdsuiIXrucEvD0rhRXZ7I6URWfE8YE8"
 }
 ```
 
 ## Event Stream Terminated
 
-This event appears only for WebSocket API. 
+This event appears only when subscribed on the WebSocket API.
 
-`eventStreamTerminated` is sent when the User Data Stream is stopped. For example, after you send a `userDataStream.stop` request, or a `session.logout` request.
+`eventStreamTerminated` is sent when the User Data Stream is stopped. For example, after you send a `userDataStream.unsubscribe` request, or a `session.logout` request.
 
 **Payload:**
 
@@ -384,5 +335,3 @@ This event appears only for WebSocket API.
   "T": 1581557507268          // Transaction Time
 }
 ```
-
-

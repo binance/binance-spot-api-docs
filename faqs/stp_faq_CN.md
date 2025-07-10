@@ -1,19 +1,23 @@
 # 自我交易预防 (Self Trade Prevention - STP) 常见问题
 
-## 什么是 Self Trade Prevention - STP?
+**免责声明:**
+
+* 此处使用的佣金和价格是虚构的，并不反映实际交易所的设置。
+
+### 什么是 Self Trade Prevention - STP?
 
 自我交易预防是指阻止订单与来自同一账户或者同一 `tradeGroupId` 账户的订单交易。
 
-## 什么是自我交易（self-trade）?
+### 什么是自我交易（self-trade）?
 
 在以下任一情况下都可能发生自我交易：
 
 * 属于同一账户的订单之间交易。
 * 属于相同 `tradeGroupId` 的账户的订单之间交易。
 
-## STP 触发时会发生什么？
+### STP 触发时会发生什么？
 
-如果订单会触发自我交易，系统将执行四种可能的模式：
+如果订单会触发自我交易，系统将执行五种可能的模式：
 
 `NONE` - 此模式使订单免于自我交易预防。
 
@@ -23,23 +27,27 @@
 
 `EXPIRE_BOTH` - 此模式通过立即同时使吃单和挂单者的剩余数量过期来预防交易。
 
+`DECREMENT`  - 此模式通过阻止匹配的数量来增加*两种*订单的 `prevented quantity`。这将使可用数量较少的订单过期， 如果两个订单的可用数量相等，那么两个订单都将过期。
+
 STP 的发生取决于 **Taker 订单** 的 STP 模式。 <br> 因此，订单薄上的订单的 STP 模式不再有效果，并且将在所有未来的订单处理中被忽略。
 
-## 什么是交易组 Id（Trade Group Id）?
+### 什么是交易组 Id（Trade Group Id）?
 
 属于同一 `tradeGroupId` 的账户被视为同一交易组。相同交易组成员提交的订单有 STP 资格。
 
-每个账户可以从 `GET /api/v3/account`（REST API）或 `account.status`（Websocket API）确认账户是否属于同一个 `tradeGroupId`。
+每个账户可以从 `GET /api/v3/account`（REST API）或 `account.status`（WebSocket API）确认账户是否属于同一个 `tradeGroupId`。
 
-`tradeGroupId` 也存在 `GET /api/v3/preventedMatches`（Rest API）或 `myPreventedMatches`（Websocket API）的响应中。
+`tradeGroupId` 也存在 `GET /api/v3/preventedMatches`（REST API）或 `myPreventedMatches`（WebSocket API）的响应中。
 
 如果该值为 `-1`，这表示账户未设置 `tradeGroupId`，因此 STP 只能发生在同一账户的订单之间。
 
-## 什么是 Prevented Match?
+### 什么是 Prevented Match?
 
 当一个或多个订单因 STP 而过期时，这会创建一个被阻止的撮合交易事务。
 
-通过 Rest API 的 `GET /api/v3/preventedMatches` 或 Websocket API 的 `myPreventedMatches` 可以查询到有哪些被阻止的撮合交易。
+当一个自我交易被阻止时，将会创建一个被阻止的撮合交易事务。隶属于被阻止的撮合交易中的订单会增加其 `prevented quantity` 然后导致一个或多个订单过期。
+
+通过 REST API 的 `GET /api/v3/preventedMatches` 或 WebSocket API 的 `myPreventedMatches` 可以查询到有哪些被阻止的撮合交易。
 
 请求的响应示例：
 
@@ -53,19 +61,19 @@ STP 的发生取决于 **Taker 订单** 的 STP 模式。 <br> 因此，订单�
     "tradeGroupId": 1,                          //交易组的Id。（如果账户不属于交易组，则为 -1）
     "selfTradePreventionMode": "EXPIRE_BOTH",   //订单过期的 STP 模式。
     "price": "50.00000000",                     //撮合交易的价格。
-    "takerPreventedQuantity": "1.00000000",     //吃单者的剩余数量。 仅在 STP 模式为 EXPIRE_TAKER 或 EXPIRE_BOTH 时出现。
-    "makerPreventedQuantity": "10.00000000",    //挂单者的剩余数量。 仅在 STP 模式为 EXPIRE_MAKER 或 EXPIRE_BOTH 时出现。
+    "takerPreventedQuantity": "1.00000000",     //在STP 前， 吃单者的剩余数量。 仅在 STP 模式为 EXPIRE_TAKER 或 EXPIRE_BOTH 或 DECREMENT 时出现。
+    "makerPreventedQuantity": "10.00000000",    //在STP 前， 挂单者的剩余数量。 仅在 STP 模式为 EXPIRE_MAKER 或 EXPIRE_BOTH 或 DECREMENT 时出现。
     "transactTime": 1663190634060               //订单因 STP 而过期的时间。
   }
 ]
 ```
 
-## 什么是 "prevented quantity"?
+### 什么是 "prevented quantity"?
 
-STP事件会导致挂单的数量失效; STP的模式 `EXPIRE_TAKER`, `EXPIRE_MAKER` 以及 `EXPIRE_BOTH` 会使挂单中剩余的数量全部失效，从而使整个订单失效。
+STP事件会导致挂单的数量失效； STP的模式 `EXPIRE_TAKER`， `EXPIRE_MAKER` 以及 `EXPIRE_BOTH` 会使挂单中剩余的数量全部失效，从而使整个订单失效。
 
 
-`Prevented quantity` 表示订单中因为STP事件失效的数量. 用户WebSocket数据流中可能有如下两个字段:
+`Prevented quantity` 表示订单中因为STP事件失效的数量， 用户WebSocket数据流中可能有如下两个字段：
 
 ```javascript
 {
@@ -74,28 +82,22 @@ STP事件会导致挂单的数量失效; STP的模式 `EXPIRE_TAKER`, `EXPIRE_MA
 }
 ```
 
-`B` 代表着 `TRADE_PREVENTION` 交易类型, 其值表示本次STP事件导致失效的订单数量.
+`B` 代表着 `TRADE_PREVENTION` 交易类型， 其值表示本次STP事件导致失效的订单数量。
 
-`A` 代表着某订单因为STP事件导致的累计失效订单数量. 对于 `EXPIRE_TAKER`, `EXPIRE_MAKER` 以及 `EXPIRE_BOTH` 模式, 其值总是和 `B` 一样.
+`A` 代表着某订单因为STP事件导致的累计失效订单数量。 对于 `EXPIRE_TAKER`， `EXPIRE_MAKER` 以及 `EXPIRE_BOTH` 模式, 其值总是和 `B` 一样。
 
 由于 STP 而过期的订单的 API 响应也将有一个 `preventedQuantity` 字段，指示在订单由于 STP 而过期的累计数量。
 
 如果订单是处于挂单状态, 如下的公式成立:
 
 ```
-executed quantity + prevented quantity < original order quantity
-执行的订单数量 + 被过期的数量 < 订单的原始数量
+original order quantity - executed quantity - prevented quantity = quantity available for further execution
+原始的订单数量 - 执行的订单数量 - 被过期的数量 = 可用于未来执行的数量
 ```
 
-如果订单状态是 `EXPIRED_IN_MATCH` 或者 `FILLED`, 如下的等式成立:
+当一个订单的可用数量归 0 时，该订单会被从订单簿中移除。 这个状态会是 `EXPIRED_IN_MATCH`， `FILLED`， 或 `EXPIRED` 模式中的一个。
 
-```
-executed quantity + prevented quantity = original order quantity
-执行的订单数量 + 被过期的数量 = 订单的原始数量
-```
-
-
-## 如何知道有那些交易对支持 STP?
+### 如何知道有那些交易对支持 STP?
 
 交易对可以配置为允许不同的 STP 模式集并采用不同的默认 STP 模式。
 
@@ -116,7 +118,7 @@ executed quantity + prevented quantity = original order quantity
 
 这表示如果用户在没有提供 `selfTradePreventionMode` 的情况下发送订单，发送的订单有 `NONE` 的值。
 
-如果用户想明确提及模式，可以传 `NONE`，`EXPIRE_TAKER`，或 `EXPIRE_BOTH`。
+如果用户想明确指定模式，可以传 `NONE`，`EXPIRE_TAKER`，或 `EXPIRE_BOTH`。
 
 如果用户尝试为此交易对的订单指定 `EXPIRE_MAKER`，将会收到错误消息：
 
@@ -127,11 +129,11 @@ executed quantity + prevented quantity = original order quantity
 }
 ```
 
-## 如何知道订单因为 STP 而过期？
+### 如何知道订单因为 STP 而过期？
 
 订单的状态会是 `EXPIRED_IN_MATCH`.
 
-## STP 的一些示例:
+### STP 的一些示例
 
 假设以下示例的所有订单都是在同一个账户下发送。
 
@@ -476,7 +478,7 @@ Maker 订单
 
 ```json
 {
-  "symbol": "ABCDEF",
+  "symbol": "BTCUSDT",
   "orderId": 2,
   "orderListId": -1,
   "clientOrderId": "2JPC8xjpLq6Q0665uYWAcs",
@@ -505,7 +507,7 @@ Taker 订单
 
 ```json
 {
-  "symbol": "ABCDEF",
+  "symbol": "BTCUSDT",
   "orderId": 5,
   "orderListId": -1,
   "clientOrderId": "qMaz8yrOXk2iUIz74cFkiZ",
@@ -548,7 +550,7 @@ Taker 订单: symbol=BTCUSDT side=SELL type=LIMIT quantity=1 price=1 selfTradePr
 Maker 订单
 ```json
 {
-    "symbol": "ABCDEF",
+    "symbol": "BTCUSDT",
     "orderId": 0,
     "orderListId": -1,
     "clientOrderId": "jFUap8iFwwgqIpOfAL60GS",
@@ -574,7 +576,7 @@ Maker 订单
 Taker 订单
 ```json
 {
-    "symbol": "ABCDEF",
+    "symbol": "BTCUSDT",
     "orderId": 1,
     "orderListId": -1,
     "clientOrderId": "zxrvnNNm1RXC3rkPLUPrc1",
@@ -607,8 +609,8 @@ Taker 订单
 
 
 ```
-Maker 订单: symbol=ABCDEF side=BUY type=LIMIT quantity=1 price=1  selfTradePreventionMode=NONE
-Taker 订单: symbol=ABCDEF side=SELL type=MARKET quantity=1 selfTradePreventionMode=EXPIRE_MAKER
+Maker 订单: symbol=BTCUSDT side=BUY type=LIMIT quantity=1 price=1  selfTradePreventionMode=NONE
+Taker 订单: symbol=BTCUSDT side=SELL type=MARKET quantity=1 selfTradePreventionMode=EXPIRE_MAKER
 ```
 
 **结果:** 由于 STP，订单薄上的订单会过期，状态为 `EXPIRED_IN_MATCH`。
@@ -618,7 +620,7 @@ Maker 订单
 
 ```json
 {
-  "symbol": "ABCDEF",
+  "symbol": "BTCUSDT",
   "orderId": 2,
   "orderListId": -1,
   "clientOrderId": "7sgrQQInL69XDMQpiqMaG2",
@@ -644,9 +646,10 @@ Maker 订单
 ```
 
 Taker 订单
+
 ```json
 {
-  "symbol": "ABCDEF",
+  "symbol": "BTCUSDT",
   "orderId": 3,
   "orderListId": -1,
   "clientOrderId": "zqhsgGDEcdhxy2oza2Ljxd",
@@ -670,5 +673,72 @@ Taker 订单
     }
   ],
   "selfTradePreventionMode": "EXPIRE_MAKER"
+}
+```
+
+**情况 G - 用户发送带有 `DECREMENT` 的限价订单，该订单将与订单薄上已有的订单撮合。**
+
+```
+Maker 订单： symbol=BTCUSDT side=BUY  type=LIMIT quantity=6 price=2  selfTradePreventionMode=NONE
+Taker 订单： symbol=BTCUSDT side=SELL type=LIMIT quantity=2 price=2  selfTradePreventionMode=DECREMENT
+```
+
+**结果:** 两个订单的 preventedQuantity 均为 2。 由于这是 Taker 订单的所有可用数量，此订单会因为 STP 而过期。
+
+Maker 订单
+
+```json
+{
+  "symbol": "BTCUSDT",
+  "orderId": 23,
+  "orderListId": -1,
+  "clientOrderId": "Kxb4RpsBhfQrkK2r2YO2Z9",
+  "price": "2.00000000",
+  "origQty": "6.00000000",
+  "executedQty": "0.00000000",
+  "cummulativeQuoteQty": "0.00000000",
+  "status": "NEW",
+  "timeInForce": "GTC",
+  "type": "LIMIT",
+  "side": "BUY",
+  "stopPrice": "0.00000000",
+  "icebergQty": "0.00000000",
+  "time": 1741682807892,
+  "updateTime": 1741682816376,
+  "isWorking": true,
+  "workingTime": 1741682807892,
+  "origQuoteOrderQty": "0.00000000",
+  "selfTradePreventionMode": "DECREMENT",
+  "preventedMatchId": 4,
+  "preventedQuantity": "2.00000000"
+}
+```
+
+Taker 订单
+
+```json
+{
+  "symbol": "BTCUSDT",
+  "orderId": 24,
+  "orderListId": -1,
+  "clientOrderId": "dwf3qOzD7GM9ysDn9XG9AS",
+  "price": "2.00000000",
+  "origQty": "2.00000000",
+  "executedQty": "0.00000000",
+  "cummulativeQuoteQty": "0.00000000",
+  "status": "EXPIRED_IN_MATCH",
+  "timeInForce": "GTC",
+  "type": "LIMIT",
+  "side": "SELL",
+  "stopPrice": "0.00000000",
+  "icebergQty": "0.00000000",
+  "time": 1741682816376,
+  "updateTime": 1741682816376,
+  "isWorking": true,
+  "workingTime": 1741682816376,
+  "origQuoteOrderQty": "0.00000000",
+  "selfTradePreventionMode": "DECREMENT",
+  "preventedMatchId": 4,
+  "preventedQuantity": "2.00000000"
 }
 ```

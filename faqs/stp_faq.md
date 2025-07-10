@@ -1,19 +1,22 @@
 # Self Trade Prevention (STP) FAQ
 
-## What is Self Trade Prevention?
+**Disclaimer:**
+* The commissions and prices used here are fictional and do not imply anything about the actual setup on the live exchange.
+
+### What is Self Trade Prevention?
 
 Self Trade Prevention (or STP) prevents orders of users, or the user's `tradeGroupId` to match against their own.
 
-## What defines a self-trade?
+### What defines a self-trade?
 
 A self-trade can occur in either scenario:
 
 * The order traded against the same account.
 * The order traded against an account with the same `tradeGroupId`.
 
-## What happens when STP is triggered?
+### What happens when STP is triggered?
 
-There are four possible modes for what the system will do if an order could create a self-trade.
+There are five possible modes for what the system does when an order would create a self-trade.
 
 `NONE` - This mode exempts the order from self-trade prevention. Accounts or Trade group IDs will not be compared, no orders will be expired, and the trade will occur.
 
@@ -23,27 +26,29 @@ There are four possible modes for what the system will do if an order could crea
 
 `EXPIRE_BOTH` - This mode prevents a trade by immediately expiring both the taker and the potential maker orders' remaining quantities.
 
+`DECREMENT`  - This mode increases the `prevented quantity` of *both* orders by the amount of the prevented match. The smaller of the two orders will expire, or both if they have the same quantity.
+
 The STP event will occur depending on the STP mode of the **taker order**. <br> Thus, the STP mode of an order that goes on the book is no longer relevant and will be ignored for all future order processing.
 
-## What is a Trade Group Id?
+### What is a Trade Group Id?
 
 Different accounts with the same `tradeGroupId` are considered part of the same "trade group". Orders submitted by members of a trade group are eligible for STP according to the taker-order's STP mode.
 
-A user can confirm if their accounts are under the same `tradeGroupId` from the API either from `GET /api/v3/account` (REST API) or `account.status` (Websocket API) for each account.
+A user can confirm if their accounts are under the same `tradeGroupId` from the API either from `GET /api/v3/account` (REST API) or `account.status` (WebSocket API) for each account.
 
-The field is also present in the response for `GET /api/v3/preventedMatches` (Rest API) or `myPreventedMatches` (Websocket API).
+The field is also present in the response for `GET /api/v3/preventedMatches` (REST API) or `myPreventedMatches` (WebSocket API).
 
 If the value is `-1`, then the `tradeGroupId` has not been set for that account, so the STP may only take place between orders of the same account.
 
-## What is a Prevented Match?
+### What is a Prevented Match?
 
-When one or more orders are expired due to STP, this creates a prevented match.
+When a self-trade is prevented, a prevented match is created. The orders in the prevented match have their prevented quantities increased and one or more orders expire.
 
 This is not to be confused with a trade, as no orders will match.
 
 This is a record of what orders could have self-traded.
 
-This can be queried through the endpoint `GET /api/v3/preventedMatches` on the Rest API or `myPreventedMatches` on the Websocket API.
+This can be queried through the endpoint `GET /api/v3/preventedMatches` on the REST API or `myPreventedMatches` on the WebSocket API.
 
 This is a sample of the output request for reference:
 
@@ -57,14 +62,14 @@ This is a sample of the output request for reference:
     "tradeGroupId": 1,                          //Identifies the Trade Group Id. (If the account is not part of a trade group, this will be -1.)
     "selfTradePreventionMode": "EXPIRE_BOTH",   //STP mode that expired the order(s).
     "price": "50.00000000",                     //Price at which the match occurred.
-    "takerPreventedQuantity": "1.00000000",     //Taker's remaining quantity. Only appears if the STP mode is EXPIRE_TAKER or EXPIRE_BOTH.
-    "makerPreventedQuantity": "10.00000000",    //Maker's remaining quantity. Only appears if the STP mode is EXPIRE_MAKER or EXPIRE_BOTH.
+    "takerPreventedQuantity": "1.00000000",     //Taker's remaining quantity before the STP. Only appears if the STP mode is EXPIRE_TAKER, EXPIRE_BOTH or DECREMENT.
+    "makerPreventedQuantity": "10.00000000",    //Maker's remaining quantity before the STP. Only appears if the STP mode is EXPIRE_MAKER, EXPIRE_BOTH, or DECREMENT.
     "transactTime": 1663190634060               //Time the order(s) expired due to STP.
   }
 ]
 ```
 
-## What is "prevented quantity?"
+### What is "prevented quantity?"
 
 STP events expire quantity from open orders. The STP modes `EXPIRE_TAKER`, `EXPIRE_MAKER`, and `EXPIRE_BOTH` expire all remaining quantity on the affected orders, resulting in the entire open order being expired.
 
@@ -83,19 +88,15 @@ Prevented quantity is the amount of quantity that is expired due to STP events f
 
 API responses for orders which expired due to STP will also have a `preventedQuantity` field, indicating the cumulative quantity expired due to STP over the lifetime of the order.
 
-While an order is open, the following inequality holds true:
+While an order is open, the following equation holds true:
 
 ```
-executed quantity + prevented quantity < original order quantity
+original order quantity - executed quantity - prevented quantity = quantity available for further execution
 ```
 
-When an order has status `EXPIRED_IN_MATCH` or `FILLED`, the followiung equation will hold true:
+When an order's available quantity goes to zero, the order will be removed from the order book and the status will be one of `EXPIRED_IN_MATCH`, `FILLED`, or `EXPIRED`.
 
-```
-executed quantity + prevented quantity = original order quantity
-```
-
-## How do I know which symbol uses STP?
+### How do I know which symbol uses STP?
 
 Symbols may be configured to allow different sets of STP modes and take different default STP modes.
 
@@ -116,7 +117,7 @@ For example, if a symbol has the following configuration:
 
 Then that means if a user sends an order with no `selfTradePreventionMode` provided, then the order sent will have the value of `NONE`.
 
-If a user wants to explicitly mention the mode they can pass the enum `NONE`, `EXPIRE_TAKER`, or `EXPIRE_BOTH`.
+If a user wants to explicitly specify the mode they can pass the enum `NONE`, `EXPIRE_TAKER`, or `EXPIRE_BOTH`.
 
 If a user tries to specify `EXPIRE_MAKER` for orders on this symbol, they will receive an error:
 
@@ -127,11 +128,11 @@ If a user tries to specify `EXPIRE_MAKER` for orders on this symbol, they will r
 }
 ```
 
-## How do I know if an order expired due to STP?
+### How do I know if an order expired due to STP?
 
 The order will have the status `EXPIRED_IN_MATCH`.
 
-## STP Examples:
+### STP Examples
 
 For all these cases, assume that all orders for these examples are made on the same account.
 
@@ -475,7 +476,7 @@ Maker Order
 
 ```json
 {
-  "symbol": "ABCDEF",
+  "symbol": "BTCUSDT",
   "orderId": 2,
   "orderListId": -1,
   "clientOrderId": "2JPC8xjpLq6Q0665uYWAcs",
@@ -504,7 +505,7 @@ Taker Order
 
 ```json
 {
-  "symbol": "ABCDEF",
+  "symbol": "BTCUSDT",
   "orderId": 5,
   "orderListId": -1,
   "clientOrderId": "qMaz8yrOXk2iUIz74cFkiZ",
@@ -546,7 +547,7 @@ Taker Order: symbol=BTCUSDT side=SELL type=LIMIT quantity=1 price=1 selfTradePre
 Maker Order
 ```json
 {
-    "symbol": "ABCDEF",
+    "symbol": "BTCUSDT",
     "orderId": 0,
     "orderListId": -1,
     "clientOrderId": "jFUap8iFwwgqIpOfAL60GS",
@@ -572,7 +573,7 @@ Maker Order
 Taker Order
 ```json
 {
-    "symbol": "ABCDEF",
+    "symbol": "BTCUSDT",
     "orderId": 1,
     "orderListId": -1,
     "clientOrderId": "zxrvnNNm1RXC3rkPLUPrc1",
@@ -600,12 +601,11 @@ Taker Order
 }
 ```
 
-
 **Scenario F - A user sends a market order with `EXPIRE_MAKER` which would match with an existing order.**
 
 ```
-Maker Order: symbol=ABCDEF side=BUY  type=LIMIT  quantity=1 price=1  selfTradePreventionMode=NONE
-Taker Order: symbol=ABCDEF side=SELL type=MARKET quantity=1          selfTradePreventionMode=EXPIRE_MAKER
+Maker Order: symbol=BTCUSDT side=BUY  type=LIMIT  quantity=1 price=1  selfTradePreventionMode=NONE
+Taker Order: symbol=BTCUSDT side=SELL type=MARKET quantity=1          selfTradePreventionMode=EXPIRE_MAKER
 ```
 
 **Result**: The existing order expires with the status `EXPIRED_IN_MATCH`, due to STP.
@@ -615,7 +615,7 @@ Maker Order
 
 ```json
 {
-  "symbol": "ABCDEF",
+  "symbol": "BTCUSDT",
   "orderId": 2,
   "orderListId": -1,
   "clientOrderId": "7sgrQQInL69XDMQpiqMaG2",
@@ -643,7 +643,7 @@ Maker Order
 Taker Order
 ```json
 {
-  "symbol": "ABCDEF",
+  "symbol": "BTCUSDT",
   "orderId": 3,
   "orderListId": -1,
   "clientOrderId": "zqhsgGDEcdhxy2oza2Ljxd",
@@ -667,5 +667,72 @@ Taker Order
     }
   ],
   "selfTradePreventionMode": "EXPIRE_MAKER"
+}
+```
+
+**Scenario G- A user sends a limit order with `DECREMENT` which would match with an existing order.**
+
+```
+Maker Order: symbol=BTCUSDT side=BUY  type=LIMIT quantity=6 price=2  selfTradePreventionMode=NONE
+Taker Order: symbol=BTCUSDT side=SELL type=LIMIT quantity=2 price=2  selfTradePreventionMode=DECREMENT
+```
+
+**Result**: Both orders have a preventedQuantity of 2. Since this is the taker order’s full quantity, it expires due to STP.
+
+Maker Order
+
+```json
+{
+  "symbol": "BTCUSDT",
+  "orderId": 23,
+  "orderListId": -1,
+  "clientOrderId": "Kxb4RpsBhfQrkK2r2YO2Z9",
+  "price": "2.00000000",
+  "origQty": "6.00000000",
+  "executedQty": "0.00000000",
+  "cummulativeQuoteQty": "0.00000000",
+  "status": "NEW",
+  "timeInForce": "GTC",
+  "type": "LIMIT",
+  "side": "BUY",
+  "stopPrice": "0.00000000",
+  "icebergQty": "0.00000000",
+  "time": 1741682807892,
+  "updateTime": 1741682816376,
+  "isWorking": true,
+  "workingTime": 1741682807892,
+  "origQuoteOrderQty": "0.00000000",
+  "selfTradePreventionMode": "DECREMENT",
+  "preventedMatchId": 4,
+  "preventedQuantity": "2.00000000"
+}
+```
+
+Taker Order
+
+```json
+{
+  "symbol": "BTCUSDT",
+  "orderId": 24,
+  "orderListId": -1,
+  "clientOrderId": "dwf3qOzD7GM9ysDn9XG9AS",
+  "price": "2.00000000",
+  "origQty": "2.00000000",
+  "executedQty": "0.00000000",
+  "cummulativeQuoteQty": "0.00000000",
+  "status": "EXPIRED_IN_MATCH",
+  "timeInForce": "GTC",
+  "type": "LIMIT",
+  "side": "SELL",
+  "stopPrice": "0.00000000",
+  "icebergQty": "0.00000000",
+  "time": 1741682816376,
+  "updateTime": 1741682816376,
+  "isWorking": true,
+  "workingTime": 1741682816376,
+  "origQuoteOrderQty": "0.00000000",
+  "selfTradePreventionMode": "DECREMENT",
+  "preventedMatchId": 4,
+  "preventedQuantity": "2.00000000"
 }
 ```

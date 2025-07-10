@@ -2,21 +2,28 @@
   "environment": "TESTNET",
   "latestSchema":
   {
-    "id": 2,
-    "version": 1,
-    "releaseDate": "2024-11-28"
+    "id": 3,
+    "version": 0,
+    "releaseDate": "2025-04-02"
   },
   "deprecatedSchemas":
   [
     {
       "id": 2,
-      "version": 0,
-      "releaseDate": "2024-04-04",
-      "deprecatedDate": "2024-11-28"
+      "version": 1,
+      "releaseDate": "2024-11-28",
+      "deprecatedDate": "2025-04-02"
     }
   ],
   "retiredSchemas":
   [
+    {
+      "id": 2,
+      "version": 0,
+      "releaseDate": "2024-04-04",
+      "deprecatedDate": "2024-11-28",
+      "retiredDate": "2025-05-28"
+    },
     {
       "id": 1,
       "version": 0,

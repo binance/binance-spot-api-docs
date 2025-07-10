@@ -3,7 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
   - [General WSS information](#general-wss-information)
-  - [Websocket Limits](#websocket-limits)
+  - [WebSocket Limits](#websocket-limits)
   - [Live Subscribing/Unsubscribing to streams](#live-subscribingunsubscribing-to-streams)
     - [Subscribe to a stream](#subscribe-to-a-stream)
     - [Unsubscribe to a stream](#unsubscribe-to-a-stream)
@@ -30,25 +30,25 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Web Socket Streams for Binance (2024-12-17)
+# WebSocket Streams for Binance (2025-01-28)
 
 ## General WSS information
-* The base endpoint is: **wss://stream.binance.com:9443** or **wss://stream.binance.com:443**
+* The base endpoint is: **wss://stream.binance.com:9443** or **wss://stream.binance.com:443**.
 * Streams can be accessed either in a single raw stream or in a combined stream.
 * Raw streams are accessed at **/ws/\<streamName\>**
 * Combined streams are accessed at **/stream?streams=\<streamName1\>/\<streamName2\>/\<streamName3\>**
 * Combined stream events are wrapped as follows: **{"stream":"\<streamName\>","data":\<rawPayload\>}**
 * All symbols for streams are **lowercase**
 * A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark
-* Websocket server will send a `ping frame` every 3 minutes. 
-  * If the websocket server does not receive a `pong frame` back from the connection within a 10 minute period, the connection will be disconnected. 
+* The WebSocket server will send a `ping frame` every 20 seconds.
+  * If the WebSocket server does not receive a `pong frame` back from the connection within a minute the connection will be disconnected.
   * When you receive a ping, you must send a pong with a copy of ping's payload as soon as possible.
   * Unsolicited `pong frames` are allowed, but will not prevent disconnection. **It is recommended that the payload for these pong frames are empty.**
 * The base endpoint **wss://data-stream.binance.vision** can be subscribed to receive **only** market data messages. <br> User data stream is **NOT** available from this URL.
-* All time and timestamp related fields are **milliseconds by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND or timeUnit=microsecond` in the URL.  
+* All time and timestamp related fields are **milliseconds by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND or timeUnit=microsecond` in the URL.
   * For example: `/stream?streams=btcusdt@trade&timeUnit=MICROSECOND`
 
-## Websocket Limits
+## WebSocket Limits
 * WebSocket connections have a limit of 5 incoming messages per second. A message is considered:
     * A PING frame
     * A PONG frame
@@ -59,7 +59,7 @@
 
 ## Live Subscribing/Unsubscribing to streams
 
-* The following data can be sent through the websocket instance in order to subscribe/unsubscribe from streams. Examples can be seen below.
+* The following data can be sent through the WebSocket instance in order to subscribe/unsubscribe from streams. Examples can be seen below.
 * The `id` is used as an identifier to uniquely identify the messages going back and forth. The following formats are accepted:
   * 64-bit signed integer
   * alphanumeric strings; max length 36
@@ -258,7 +258,7 @@ s-> seconds; m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
 * 3d
 * 1w
 * 1M
-  
+
 
 **Stream Name:** \<symbol\>@kline_\<interval\>
 
@@ -480,7 +480,7 @@ Note that only tickers that have changed will be present in the array.
 ```javascript
 [
   {
-    // Same as <symbol>@ticker_<window-size> payload,
+    // Same as <symbol>@ticker_<window_size> payload,
     // one for each symbol updated within the interval.
   }
 ]
@@ -602,7 +602,6 @@ To apply an event to your local order book, follow this update procedure:
 1. Set the order book update ID to the last update ID (`u`) in the processed event.
 
 > [!NOTE]
-> Since depth snapshots retrieved from the API have a limit on the number of price levels (5000 on each side maximum), you won't learn the quantities for the levels outside of the initial snapshot unless they change. <br> 
+> Since depth snapshots retrieved from the API have a limit on the number of price levels (5000 on each side maximum), you won't learn the quantities for the levels outside of the initial snapshot unless they change. <br>
 > So be careful when using the information for those levels, since they might not reflect the full view of the order book. <br>
 > However, for most use cases, seeing 5000 levels on each side is enough to understand the market and trade effectively.
-
