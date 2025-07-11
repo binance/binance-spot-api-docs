@@ -60,8 +60,6 @@
 ### 订单更新
 订单通过`executionReport`事件进行更新。
 
-与使用用户数据流相比，我们建议使用 [FIX API](fix-api_CN.md) 以获得更好的性能。
-
 
 **Payload:**
 
