@@ -3365,7 +3365,7 @@ NONE
     </tr>
     <tr>
         <td><code>orderId</code></td>
-        <td>INT</td>
+        <td>LONG</td>
         <td rowspan="2">YES</td>
         <td>按 <code>orderId</code> 取消订单</td>
     </tr>
@@ -3626,7 +3626,7 @@ NONE
     </tr>
     <tr>
         <td><code>cancelOrderId</code></td>
-        <td>INT</td>
+        <td>LONG</td>
         <td rowspan="2">YES</td>
         <td>按 <code>orderId</code> 取消订单</td>
     </tr>
@@ -5929,7 +5929,7 @@ NONE
     </tr>
     <tr>
         <td><code>orderId</code></td>
-        <td>INT</td>
+        <td>LONG</td>
         <td rowspan="2">YES</td>
         <td>按 <code>orderId</code> 查找顺序</td>
     </tr>
@@ -6144,7 +6144,7 @@ NONE
 名称                | 类型    | 是否必需 | 描述
 ------------------- | ------- | --------- | ------------
 `symbol`            | STRING  | YES       |
-`orderId`           | INT     | NO        | 起始订单ID
+`orderId`           | LONG    | NO        | 起始订单ID
 `startTime`         | LONG    | NO        |
 `endTime`           | LONG    | NO        |
 `limit`             | INT     | NO        | 默认值： 500； 最大值： 1000
@@ -6541,7 +6541,7 @@ NONE
 名称                | 类型    | 是否必需 | 描述
 ------------------- | ------- | --------- | ------------
 `symbol`            | STRING  | YES       |
-`orderId`           | INT     | NO        |
+`orderId`           | LONG    | NO        |
 `startTime`         | LONG    | NO        |
 `endTime`           | LONG    | NO        |
 `fromId`            | INT     | NO        | 起始交易 ID

@@ -3489,7 +3489,7 @@ Cancel an active order.
     </tr>
     <tr>
         <td><code>orderId</code></td>
-        <td>INT</td>
+        <td>LONG</td>
         <td rowspan="2">YES</td>
         <td>Cancel order by <code>orderId</code></td>
     </tr>
@@ -3751,7 +3751,7 @@ A new order that was not attempted (i.e. when `newOrderResult: NOT_ATTEMPTED`), 
     </tr>
     <tr>
         <td><code>cancelOrderId</code></td>
-        <td>INT</td>
+        <td>LONG</td>
         <td rowspan="2">YES</td>
         <td>Cancel order by <code>orderId</code></td>
     </tr>
@@ -6064,7 +6064,7 @@ Check execution status of an order.
     </tr>
     <tr>
         <td><code>orderId</code></td>
-        <td>INT</td>
+        <td>LONG</td>
         <td rowspan="2">YES</td>
         <td>Lookup order by <code>orderId</code></td>
     </tr>
@@ -6280,7 +6280,7 @@ Query information about all your orders – active, canceled, filled – filtere
 Name                | Type    | Mandatory | Description
 ------------------- | ------- | --------- | ------------
 `symbol`            | STRING  | YES       |
-`orderId`           | INT     | NO        | Order ID to begin at
+`orderId`           | LONG    | NO        | Order ID to begin at
 `startTime`         | LONG    | NO        |
 `endTime`           | LONG    | NO        |
 `limit`             | INT     | NO        | Default: 500; Maximum: 1000
@@ -6677,7 +6677,7 @@ Condition| Weight|
 Name                | Type    | Mandatory | Description
 ------------------- | ------- | --------- | ------------
 `symbol`            | STRING  | YES       |
-`orderId`           | INT     | NO        |
+`orderId`           | LONG    | NO        |
 `startTime`         | LONG    | NO        |
 `endTime`           | LONG    | NO        |
 `fromId`            | INT     | NO        | First trade ID to query
