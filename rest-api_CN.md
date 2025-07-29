@@ -510,24 +510,8 @@ symbolStatus|ENUM|No|用于过滤具有此 `tradingStatus` 的交易对。有效
       "isSpotTradingAllowed": true,
       "isMarginTradingAllowed": true,
       "filters": [
-        {
-          "filterType": "PRICE_FILTER",
-          "minPrice": "0.00000100",
-          "maxPrice": "100000.00000000",
-          "tickSize": "0.00000100"
-        },
-        {
-          "filterType": "LOT_SIZE",
-          "minQty": "0.00100000",
-          "maxQty": "100000.00000000",
-          "stepSize": "0.00100000"
-        },
-        {
-          "filterType": "MIN_NOTIONAL",
-          "minNotional": "0.00100000",
-          "applyToMarket": true,
-          "avgPriceMins": 5
-        }
+          // 这些在“过滤器”部分定义。
+          // 所有过滤器均为可选
       ],
       "permissions": [],
       "permissionSets": [
