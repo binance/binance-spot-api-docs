@@ -1,9 +1,131 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-07-02**
+**Last Updated: 2025-08-05**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-08-05
+
+**Notice: The following changes will be deployed on 2025-08-06, starting 7:00 UTC and may take several hours to complete.** <br>
+Please consult the Spot Test Network's [homepage](https://testnet.binance.vision/) to be informed of the release completion.
+
+#### General Changes
+
+* The [pegged order](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/pegged_orders.md) functionality is now available.
+  * Exchange Information requests emit the field `pegInstructionsAllowed`.
+  * The following conditional fields `pegPriceType`, `pegOffSetType`, `pegOffsetValues`, and `peggedPrice` appear in responses of the following requests if the order was a pegged order:
+    * REST API
+      * `GET /api/v3/order`
+      * `GET /api/v3/orderList`
+      * `GET /api/v3/openOrderList`
+      * `GET /api/v3/allOrders`
+      * `DELETE /api/v3/order`
+      * `DELETE /api/v3/orderList`
+      * `DELETE /api/v3/openOrders`
+      * `PUT /api/v3/order/amend/keepPriority`
+    * WebSocket API
+      * `order.status`
+      * `orderList.status`
+      * `allOrders`
+      * `order.cancel`
+      * `orderList.cancel`
+      * `openOrders.cancelAll`
+      * `order.amend.keepPriority`
+  * FIX API
+    * `OrdType(4)` supports new value `P(PEGGED)`
+    * Tags `PegOffsetValue(211)`, `PegPriceType(1094)`, `PegMoveType(835)`, and `PegOffsetType(836)` have been added to the following messages:
+      * NewOrderSingle `<D>`
+      * NewOrderList `<E>`
+      * OrderCancelRequestAndNewOrderSingle `<XCN>`
+    * When placing an order, the message ExecutionReport `<8>` will echo back PegInstructions, with an extra optional field `PeggedPrice (839)`
+  * New error messages for pegged orders are added. Please see the [Errors](errors.md) document for more information.
+* Changes with `recvWindow`:
+  * A third check is made after your message leaves the message broker just before it is sent to the Matching Engine.
+    * This does not cover potential delays inside the Matching Engine itself.
+  * `recvWindow` supports microseconds.
+    * The value is still specified in milliseconds, but can now take a decimal component to specify it with higher precision.
+    * This means that the parameter supports a **maximum precision of 3 decimal places**. (e.g. 6000.346)
+    * APIs affected:
+        * FIX API
+        * REST API
+        * WebSocket API
+* The following requests have a new structure called `specialCommission`. See [Commission Rates](../faqs/commission_faq.md).
+  * REST API
+    * `GET /api/v3/account/commission`
+    * `POST /api/v3/order/test` with `computeCommissionRates=true`
+    * `POST /api/v3/sor/order/test` with `computeCommissionRates=true`
+  * WebSocket API
+    * `account.commission`
+    * `order.test` with `computeCommissionRates=true`
+    * `sor.order.test` with `computeCommissionRates=true`
+* The new [`MAX_NUM_ORDER_AMENDS`](https://github.com/binance/binance-spot-api-docs/blob/master/testnet/filters.md#max_num_order_amends) filter is enabled with a limit of 10 amendments per order.
+* New error codes `-1120` and `1211`. See [Errors](errors.md) for more information.
+* **SBE: A new schema 3:1 ([spot_3_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml)) is available.**
+  * The current schema 3:0 ([spot_3_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_0.xml)) is deprecated and will be retired in 6 months as per our schema deprecation policy.
+  * Changes in schema 3:1:
+    * `ExchangeInfoResponse`: new field `pegInstructionsAllowed`
+    * `ExecutionReportEvent`: new fields `pricePeg`, `pricePegOffsetLevel`, `peggedPrice`
+    * `UserDataStreamSubscribeResponse`: new field `subscriptionId`
+    * New field `subscriptionId` for all user data stream events.
+    * Field `apiKey` renamed to `loggedOnApiKey` for `WebSocketSessionLogonResponse`, `WebSocketSessionStatusResponse` and WebSocketSessionLogoutResponse
+    * `OrderTestWithCommissionsResponse`: 2 new fields `specialCommissionForOrderMaker` and `specialCommissionForOrderTaker`
+    * `AccountCommissionResponse`: 4 new fields `specialCommissionMaker`, `specialCommissionTaker`, `specialCommissionBuyer` and `specialCommissionSeller`
+    * Support for `EXCHANGE_MAX_NUM_ORDER_LISTS`, `MAX_NUM_ORDER_LISTS`, and `MAX_NUM_ORDER_AMENDS` filters.
+    * `ExecutionReportEvent`: fields `rejectReason` and `origClientOrderId` now show their default values in SBE format to match the JSON format.
+    * `NonRepresentableMessage`: New message added to represent a message that cannot be represented in this schema ID and version. Receipt of this message indicates that something should be available, but it is not representable using the SBE schema currently in use.
+* Query order lists requests will first query the data in the cache, and if it cannot be found will query the database.
+  * REST API: `GET /api/v3/openOrderLists`
+  * WebSocket API: `openOrderLists.status`
+* Orders with cumulative quantity of 0 in the final state `EXPIRED_IN_MATCH` (i.e. the order expired due to STP) will be archived after 90 days.
+* Bug fixed where the Matching Engine was accepting order lists that were above the order count filter limits. Affected filters are:
+  * `MAX_NUM_ORDERS`
+  * `MAX_ALGO_ORDERS`
+  * `MAX_ICEBERG_ORDERS`
+  * `EXCHANGE_MAX_NUM_ORDERS`
+  * `EXCHANGE_MAX_ALGO_ORDERS`
+  * `EXCHANGE_MAX_ICEBERG_ORDERS`
+
+#### WebSocket API
+
+* A single WebSocket connection can subscribe to multiple User Data Streams at once.
+  * You can only have one subscription open for any given account on a single connection.
+* Method `userDataStream.subscribe.signature` has been added that allows you to subscribe to the User Data Stream without needing to login first.
+  * This also doesn’t require an Ed25519 API Key, and can work with any [API Key type](../faqs/api_key_types.md).
+  * For [SBE support](../faqs/sbe_faq.md) you need to use schema 3:1 at least.
+* Method `session.subscriptions` has been added that lists all the subscriptions active for the current session.
+* The meaning of the field `userDataStream` in the session requests has changed slightly.
+  * Previously, this returned `true` if you were subscribed to the user data stream of your logged-on account.
+  * Now it returns `true` if you have at least one active user data stream subscription
+    * `true` - If there is at least one subscription active
+    * `false` - If there are no active subscriptions
+* `userDataStream.unsubscribe` supports closing multiple subscriptions.
+  * When called with no parameter, this will close all subscriptions.
+  * When called with `subscriptionId`, this will attempt to close the subscription matching that Id, if it exists.
+  * The authorization for this request has been changed to `NONE`.
+
+#### User Data Stream
+
+* Field `subscriptionId` has been added to the User Data Stream events payload when listening through the [WebSocket API](web-socket-api.md#user_data_stream_subscribe). This will identify which subscription the event is coming from.
+
+#### FIX API
+
+* When a client sends a reject message, the FIX API will no longer send the client back a Reject `<3>` message.
+Error messages are clearer when a tag is invalid, missing a value, or when the field value is empty or malformed
+  * If the tag number was invalid, you will receive the error:
+    ```json
+    {"code": -1169, "msg": "Invalid tag number."}
+    ```
+  * If a valid tag was specified without a value, you will receive the error:
+    ```json
+    {"code": -1177, "msg": "Tag specified without a value."}
+    ```
+  * If the field value was empty or malformed, you will still receive the error:
+    ```json
+    {"code": -1102, "msg": "Field value was empty or malformed."}
+    ```
+
+---
 
 ### 2025-07-02
 
@@ -18,6 +140,7 @@ All data on the Spot Test Network will be deleted today according to the periodi
 **Data reset**
 
 All data on the Spot Test Network will be deleted today according to the periodic reset procedure. (see [F.A.Q.](../faqs/testnet.md) for more details)
+
 
 ---
 

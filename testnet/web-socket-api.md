@@ -1,6 +1,5 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
   - [General API Information](#general-api-information)
   - [Request format](#request-format)
@@ -78,7 +77,9 @@
   - [User Data Stream requests](#user-data-stream-requests)
     - [User Data Stream subscription](#user-data-stream-subscription)
       - [Subscribe to User Data Stream (USER_STREAM)](#subscribe-to-user-data-stream-user_stream)
-      - [Unsubscribe from User Data Stream (USER_STREAM)](#unsubscribe-from-user-data-stream-user_stream)
+      - [Unsubscribe from User Data Stream](#unsubscribe-from-user-data-stream)
+      - [Listing all subscriptions](#listing-all-subscriptions)
+      - [Subscribe to User Data Stream through signature subscription (USER\_STREAM)](#subscribe-to-user-data-stream-through-signature-subscription-user%5C_stream)
     - [Listen Key Management (Deprecated)](#listen-key-management-deprecated)
       - [Start user data stream (USER_STREAM) (Deprecated)](#start-user-data-stream-user_stream-deprecated)
       - [Ping user data stream (USER_STREAM) (Deprecated)](#ping-user-data-stream-user_stream-deprecated)
@@ -88,7 +89,7 @@
 
 # Public WebSocket API for Binance SPOT Testnet
 
-**Last Updated: 2025-05-28**
+**Last Updated: 2025-08-05**
 
 ## General API Information
 
@@ -1218,6 +1219,7 @@ Memory
         "allowTrailingStop": true,
         "cancelReplaceAllowed": true,
         "amendAllowed":false,
+        "pegInstructionsAllowed": true,
         "isSpotTradingAllowed": true,
         "isMarginTradingAllowed": true,
         // Symbol filters are explained on the "Filters" page:
@@ -2942,6 +2944,9 @@ Name                | Type    | Mandatory | Description
 `strategyId`        | LONG    | NO        | Arbitrary numeric value identifying the order within an order strategy.
 `strategyType`      | INT     | NO        | <p>Arbitrary numeric value identifying the order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
 `selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. Supported values: [STP Modes](enums.md#stpmodes)
+`pegPriceType`      | ENUM    | NO        | `PRIMARY_PEG` or `MARKET_PEG` <br> See [Pegged Orders](#pegged-orders) | |
+`pegOffsetValue`    | INT     | NO        | Price level to peg the price to (max: 100) <br> See [Pegged Orders](#pegged-orders) |
+`pegOffsetType`     | ENUM    | NO        | Only `PRICE_LEVEL` is supported <br> See [Pegged Orders](#pegged-orders)|   |
 `apiKey`            | STRING  | YES       |
 `recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
 `signature`         | STRING  | YES       |
@@ -3129,6 +3134,15 @@ Supported order types:
     </tr>
 </tbody>
 </table>
+
+<a id="pegged-orders-info"></a>
+Notes on using parameters for Pegged Orders:
+
+* These parameters are allowed for `LIMIT`, `LIMIT_MAKER`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT_LIMIT` orders.
+* If `pegPriceType` is specified, `price` becomes optional. Otherwise, it is still mandatory.
+* `pegPriceType=PRIMARY_PEG` means the primary peg, that is the best price on the same side of the order book as your order.
+* `pegPriceType=MARKET_PEG` means the market peg, that is the best price on the opposite side of the order book from your order.
+* Use `pegOffsetType` and `pegOffsetValue` to request a price level other than the best one. These parameters must be specified together.
 
 <a id="timeInForce"></a>
 
@@ -3347,6 +3361,10 @@ Field          |Description                                                     
 `trailingTime` | Time when the trailing order is now active and tracking price changes| Appears only for Trailing Stop Orders.| `"trailingTime": -1`
 `usedSor`      | Field that determines whether order used SOR | Appears when placing orders using SOR|`"usedSor": true`
 `workingFloor` | Field that determines whether the order is being filled by the SOR or by the order book the order was submitted to.|Appears when placing orders using SOR|`"workingFloor": "SOR"`
+`pegPriceType` |  Price peg type  |      Only for pegged orders  | `"pegPriceType": "PRIMARY_PEG"` |
+`pegOffsetType` | Price peg offset type | Only for pegged orders, if requested  | `"pegOffsetType": "PRICE_LEVEL"` |
+`pegOffsetValue` | Price peg offset value  | Only for pegged orders, if requested  | `"pegOffsetValue": 5` |
+`peggedPrice` | Current price order is pegged at | Only for pegged orders, once determined | `"peggedPrice": "87523.83710000"` |
 
 ### Test new order (TRADE)
 
@@ -3423,6 +3441,10 @@ With `computeCommissionRates`:
     "standardCommissionForOrder": {           //Standard commission rates on trades from the order.
       "maker": "0.00000112",
       "taker": "0.00000114"
+    },
+    "specialCommissionForOrder": {    //Special commission rates on trades from the order.
+       "maker": "0.05000000",
+      "taker": "0.06000000"
     },
     "taxCommissionForOrder": {                //Tax commission rates for trades from the order
       "maker": "0.00000112",
@@ -3878,6 +3900,24 @@ A new order that was not attempted (i.e. when `newOrderResult: NOT_ATTEMPTED`), 
         <td>ENUM</td>
         <td>NO</td>
         <td>Supported values: <br> <code>DO_NOTHING</code> (default)- will only attempt to cancel the order if account has not exceeded the unfilled order rate limit<br> <code>CANCEL_ONLY</code> - will always cancel the order.</td>
+    </tr>
+    <tr>
+        <td><code>pegPriceType</code></td>
+        <td>ENUM</td>
+        <td>NO</td>
+        <td><code>PRIMARY_PEG</code> or <code>MARKET_PEG</code>. <br>See <a href="#pegged-orders-info">Pegged Orders</a>"</td>
+    </tr>
+    <tr>
+        <td><code>pegOffsetValue</code></td>
+        <td>INT</td>
+        <td>NO</td>
+        <td>Price level to peg the price to (max: 100) <br> See <a href="#pegged-orders-info">Pegged Orders</a></td>
+    </tr>
+    <tr>
+        <td><code>pegOffsetType</code></td>
+        <td>ENUM</td>
+        <td>NO</td>
+        <td>Only <code>PRICE_LEVEL</code> is supported<br>See <a href="#pegged-orders-info">Pegged Orders</a></td>
     </tr>
     <tr>
         <td><code>recvWindow</code></td>
@@ -4861,6 +4901,9 @@ Name                     |Type    | Mandatory | Description
 `aboveTimeInForce`       |DECIMAL |NO         |Required if `aboveType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`.
 `aboveStrategyId`        |LONG    |NO         |Arbitrary numeric value identifying the above order within an order strategy.
 `aboveStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the above order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
+`abovePegPriceType`      |ENUM    |NO         |See [Pegged Orders](#pegged-orders-info) |
+`abovePegOffsetType`     |ENUM    |NO         |  |
+`abovePegOffsetValue`    |INT     |NO         |  |
 `belowType`              |ENUM    |YES        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 `belowClientOrderId`     |STRING  |NO         |
 `belowIcebergQty`        |LONG    |NO         |Note that this can only be used if `belowTimeInForce` is `GTC`.
@@ -4870,6 +4913,9 @@ Name                     |Type    | Mandatory | Description
 `belowTimeInForce`       |ENUM    |NO         |Required if `belowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`
 `belowStrategyId`        |LONG    |NO         |Arbitrary numeric value identifying the below order within an order strategy.
 `belowStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the below order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
+`belowPegPriceType`      |ENUM    |NO         |See [Pegged Orders](#pegged-orders-info) |
+`belowPegOffsetType`     |ENUM    |NO         |  |
+`belowPegOffsetValue`    |INT     |NO         |  |
 `newOrderRespType`       |ENUM    |NO         |Select response format: `ACK`, `RESULT`, `FULL`
 `selfTradePreventionMode`|ENUM    |NO         |The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](./enums.md#stpmodes).
 `apiKey`                 |STRING  |YES        |
@@ -5035,6 +5081,9 @@ Name                   |Type   |Mandatory | Description
 `workingTimeInForce`     |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
 `workingStrategyId`      |LONG   |NO        |Arbitrary numeric value identifying the working order within an order strategy.
 `workingStrategyType`    |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
+`workingPegPriceType`    |ENUM   |NO        |See [Pegged Orders](#pegged-orders-info) |
+`workingPegOffsetType`   |ENUM | NO |  |
+`workingPegOffsetValue`  |INT | NO |  |
 `pendingType`            |ENUM   |YES       |Supported values: [Order types](#order-type). <br> Note that `MARKET` orders using `quoteOrderQty` are not supported.
 `pendingSide`            |ENUM   |YES       |Supported values: [Order side](./enums.md#side)
 `pendingClientOrderId`   |STRING |NO        |Arbitrary unique ID among open orders for the pending order.<br> Automatically generated if not sent.
@@ -5046,6 +5095,9 @@ Name                   |Type   |Mandatory | Description
 `pendingTimeInForce`     |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
 `pendingStrategyId`      |LONG   |NO        |Arbitrary numeric value identifying the pending order within an order strategy.
 `pendingStrategyType`    |INT    |NO        |Arbitrary numeric value identifying the pending order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
+`pendingPegOffsetType`   |ENUM   |NO        |See [Pegged Orders](#pegged-orders-info) |
+`pendingPegPriceType`    |ENUM | NO |  |
+`pendingPegOffsetValue`  |INT    |NO        |  |
 `recvWindow`             |LONG   |NO        |The value cannot be greater than `60000`.
 `timestamp`              |LONG   |YES       |
 `signature`              |STRING |YES       |
@@ -5211,6 +5263,9 @@ Name                     |Type   |Mandatory | Description
 `workingTimeInForce`       |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
 `workingStrategyId`        |LONG    |NO        |Arbitrary numeric value identifying the working order within an order strategy.
 `workingStrategyType`      |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
+`workingPegPriceType`      |ENUM   |NO        |See [Pegged Orders](#pegged-orders-info) |
+`workingPegOffsetType`     |ENUM   |NO |  |
+`workingPegOffsetValue`    |INT    |NO |  |
 `pendingSide`              |ENUM   |YES       |Supported values: [Order Side](./enums.md#side)
 `pendingQuantity`          |DECIMAL|YES       |
 `pendingAboveType`         |ENUM   |YES       |Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
@@ -5222,6 +5277,9 @@ Name                     |Type   |Mandatory | Description
 `pendingAboveTimeInForce`  |ENUM   |NO        |
 `pendingAboveStrategyId`   |LONG    |NO        |Arbitrary numeric value identifying the pending above order within an order strategy.
 `pendingAboveStrategyType` |INT    |NO        |Arbitrary numeric value identifying the pending above order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
+`pendingAbovePegPriceType` |ENUM   |NO       |See [Pegged Orders](#pegged-orders-info) |
+`pendingAbovePegOffsetType` | ENUM |NO |  |
+`pendingAbovePegOffsetValue` | INT |NO |  |
 `pendingBelowType`         |ENUM   |NO        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 `pendingBelowClientOrderId`|STRING |NO        |Arbitrary unique ID among open orders for the pending below order.<br> Automatically generated if not sent.
 `pendingBelowPrice`        |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT` to specify the limit price.
@@ -5229,8 +5287,11 @@ Name                     |Type   |Mandatory | Description
 `pendingBelowTrailingDelta`|DECIMAL|NO        |
 `pendingBelowIcebergQty`   |DECIMAL|NO        |This can only be used if `pendingBelowTimeInForce` is `GTC`, or if `pendingBelowType` is `LIMIT_MAKER`.
 `pendingBelowTimeInForce`  |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
-`pendingBelowStrategyId`   |LONG    |NO        |Arbitrary numeric value identifying the pending below order within an order strategy.
+`pendingBelowStrategyId`   |LONG   |NO        |Arbitrary numeric value identifying the pending below order within an order strategy.
 `pendingBelowStrategyType` |INT    |NO        |Arbitrary numeric value identifying the pending below order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
+`pendingBelowPegPriceType` | ENUM  |NO        |See [Pegged Orders](#pegged-orders-info) |
+`pendingBelowPegOffsetType` |ENUM | NO |  |
+`pendingBelowPegOffsetValue` |INT | NO |  |
 `recvWindow`               |LONG   |NO        |The value cannot be greater than `60000`.
 `timestamp`                |LONG   |YES       |
 `signature`                |STRING|YES|
@@ -6845,6 +6906,12 @@ Database
       "buyer": "0.00000030",
       "seller": "0.00000040"
     },
+    "specialCommission": {      // Special commission rates from the order.
+      "maker": "0.01000000",
+      "taker": "0.02000000",
+      "buyer": "0.03000000",
+      "seller": "0.04000000"
+    },
     "taxCommission": {          //Tax commission rates on trades from the order.
       "maker": "0.00000112",
       "taker": "0.00000114",
@@ -6943,6 +7010,27 @@ Database
 
 ### User Data Stream subscription
 
+<a id=general_info_user_data_stream_subscriptions></a>
+**General information:**
+
+* User Data Stream subscriptions allow you to receive all the events related to a given account on a WebSocket connection.
+* There are 2 ways to start a subscription:
+  * If you have an authenticated session, then you can subscribe to events for that authenticated account using [`userDataStream.subscribe`](#user-data-stream-subscribe).
+  * You can additionally open extra subscriptions for any account for which you have an API Key, using [`userdataStream.subscribe.signature`](#user-data-signature).
+  * You can have only one active subscription for a given account on a given connection.
+* Subscriptions are identified by a `subscriptionId` which is returned when starting the subscription. That `subscriptionId` allows you to map the events you receive to a given subscription.
+  * All active subscriptions for a session can be found using [`session.subscriptions`](#session-subscription).
+* Limits
+  * A single session supports **up to 1,000 active subscriptions** simultaneously.
+    * Attempting to start a new subscription beyond this limit will result in an error.
+    * If your accounts are very active, we suggest not opening too many subscriptions at once, in order to not overload your connection.
+  * A single session can handle a maximum of **65,535 total subscriptions** over its lifetime.
+    * If this limit is reached, you will receive an error and must re-establish a new connection to be able to start new subscriptions.
+* To verify the status of User Data Stream subscriptions, check the `userDataStream` field in [`session.status`](#session-status):
+  * `null` - User Data Stream subscriptions are **not available** on this WebSocket API.
+  * `true` - There is at **least one subscription active** in this session.
+  * `false` - There are **no active subscriptions** in this session.
+
 <a id="user-data-stream-subscribe"></a>
 
 #### Subscribe to User Data Stream (USER_STREAM)
@@ -6980,7 +7068,7 @@ NONE
 }
 ```
 
-#### Unsubscribe from User Data Stream (USER_STREAM)
+#### Unsubscribe from User Data Stream
 
 ```javascript
 {
@@ -6991,12 +7079,16 @@ NONE
 
 Stop listening to the User Data Stream in the current WebSocket connection.
 
+Note that `session.logout` will only close the subscription created with `userdataStream.subscribe` but not subscriptions opened with `userDataStream.subscribe.signature`.
+
 **Weight**:
 2
 
 **Parameters**:
 
-NONE
+| Name | Type | Mandatory | Description |
+| --- | --- | --- | --- |
+| `subscriptionId` | INT | No | When called with no parameter, this will close all subscriptions. <br>When called with the `subscriptionId` parameter, this will attempt to close the subscription with that subscription id, if it exists. |
 
 **Response**:
 
@@ -7008,12 +7100,90 @@ NONE
 }
 ```
 
+<a id="session-subscription"></a>
+
+#### Listing all subscriptions
+
+```javascript
+{
+  "id": "d3df5a22-88ea-4fe0-9f4e-0fcea5d418b7",
+  "method": "session.subscriptions",
+  "params": {}
+}
+```
+
+**Note:**
+
+* Users are expected to track on their side which subscription corresponds to which account.
+
+**Weight**: 2
+
+**Data Source**: Memory
+
+**Response**:
+
+```javascript
+{
+  "id": "d3df5a22-88ea-4fe0-9f4e-0fcea5d418b7",
+  "status": 200,
+  "result": [
+    {
+      "subscriptionId": 0
+    },
+    {
+      "subscriptionId": 1
+    }
+  ]
+}
+```
+
+<a id="user-data-signature"></a>
+
+#### Subscribe to User Data Stream through signature subscription (USER\_STREAM)
+
+```javascript
+{
+  "id": "d3df8a22-98ea-4fe0-9f4e-0fcea5d418b7",
+  "method": "userDataStream.subscribe.signature",
+  "params": {
+    "apiKey": "mjcKCrJzTU6TChLsnPmgnQJJMR616J4yWvdZWDUeXkk6vL6dLyS7rcVOQlADlVjA",
+    "timestamp": 1747385641636,
+    "signature": "yN1vWpXb+qoZ3/dGiFs9vmpNdV7e3FxkA+BstzbezDKwObcijvk/CVkWxIwMCtCJbP270R0OempYwEpS6rDZCQ=="
+  }
+}
+```
+
+**Weight:**
+2
+
+**Parameters**:
+
+| Name | Type | Mandatory | Description |
+| --- | --- | --- | --- |
+| `apiKey` | STRING | Yes |  |
+| `timestamp` | LONG | Yes |  |
+| `signature` | STRING | Yes |  |
+
+**Data Source:** Memory
+
+**Response:**
+
+```javascript
+{
+  "id": "d3df8a22-98ea-4fe0-9f4e-0fcea5d418b7",
+  "status": 200,
+  "result": {
+    "subscriptionId": 0
+  }
+}
+```
+
 <a id="user-data-stream-requests"></a>
 ### Listen Key Management (Deprecated)
 
 > [!IMPORTANT]
 > These requests have been deprecated, which means we will remove them in the future.
-> Please subscribe to the User Data Stream through the [WebSocket API](#user_data_stream_subscribe) instead.
+> Please subscribe to the User Data Stream through the [WebSocket API](#general_info_user_data_stream_subscriptions) instead.
 
 The following requests manage [User Data Stream](user-data-stream.md) subscriptions.
 

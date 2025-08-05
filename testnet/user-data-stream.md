@@ -18,7 +18,7 @@
 
 # User Data Streams for Binance Spot TESTNET
 
-**Last Updated: 2025-04-08**
+**Last Updated: 2025-08-05**
 
 # General WSS information
 
@@ -227,6 +227,27 @@ For additional information on these parameters, please refer to the [Spot Glossa
     <td>Appears for orders that used SOR</td>
     <td><code>"uS":true</code></td>
   </tr>
+   <tr>
+      <td><code>gP</code></td>
+      <td>Pegged Price Type</td>
+      <td rowspan="4">Appears only for Pegged Orders</td>
+      <td><code>"gP": "PRIMARY_PEG"</code></td>
+   </tr>
+   <tr>
+      <td><code>gOT</code></td>
+      <td>Pegged offset Type</td>
+      <td><code>"gOT": "PRICE_LEVEL"</code></td>
+   </tr>
+   <tr>
+      <td><code>gOV</code></td>
+      <td>Pegged Offset Value</td>
+      <td><code>"gOV": 5</code></td>
+   </tr>
+   <tr>
+      <td><code>gp</code></td>
+      <td>Pegged Price</td>
+      <td><code>"gp": "1.00000000"</code></td>
+   </tr>
 </table>
 
 #### Order Reject Reason
