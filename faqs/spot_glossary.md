@@ -339,8 +339,14 @@ Self Trade Prevention (STP)
 Smart Order Routing (SOR)
 * Smart Order Routing uses interchangeable quote assets to improve liquidity. Read [SOR FAQ](./sor_faq.md) to learn more.
 
+`specialCommissionForOrder`/`specialCommission`
+* See [Commission FAQ](commission_faq.md)
+
 `SPOT`
 * This is to distinguish a type of trading, where the purchase and delivery of a asset is made immediately.
+
+`standardCommissionForOrder`/`standardCommission`
+* See [Commission FAQ](commission_faq.md)
 
 `stopClientOrderId`
 * A parameter used in placing OCO orders that identifies the `STOP_LOSS` or `STOP_LOSS_LIMIT` pair of the OCO Order.
@@ -373,6 +379,9 @@ Smart Order Routing (SOR)
 
 `TAKE_PROFIT_LIMIT`
 * A `type` of algorithmic order where once the market price hits the `stopPrice`, a `LIMIT` order is placed on the order book.
+
+`taxCommissionForOrder`/`taxCommission`
+* See [Commission FAQ](commission_faq.md)
 
 `ticker`
 * Reports the price change, and other maker data, of a symbol within a certain rolling interval.
