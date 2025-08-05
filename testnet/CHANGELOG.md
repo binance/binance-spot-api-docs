@@ -1,4 +1,4 @@
-# CHANGELOG for Binance SPOT Testnet
+# CHANGELOG for Binance SPOT Testnet  
 
 **Last Updated: 2025-08-05**
 
