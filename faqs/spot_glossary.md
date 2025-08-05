@@ -231,6 +231,9 @@ Notional value
 `OCO`
 * One-Cancels-the-Other type of order that is composed by a pair of orders (e.g. `STOP_LOSS` or `STOP_LOSS_LIMIT` paired with a `LIMIT_MAKER` order) with the condition that if one of the orders execute, the other is automatically expired.
 
+Order Amend Keep Priority
+* See [Order Amend Keep Priority](order_amend_keep_priority.md)
+
 Order Book
 * List of the open bids and asks for a symbol.
 
