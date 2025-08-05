@@ -28,6 +28,7 @@ WebSocket API: `account.commission`
 
 You can also find out the commission rates to a trade from an order using the test order requests with `computeCommissionRates`.
 
+<a id="test-order-diferences"></a>
 ### What is the difference between the response sending a test order with `computeCommissionRates` vs the response from querying commission rates?
 
 A test order with `computeCommissionRates` returns detailed commission rates for that specific order:

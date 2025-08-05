@@ -3260,7 +3260,7 @@ NONE
 
 参数名                   |类型          | 是否必需    | 描述
 ------------           | ------------ | ------------ | ------------
-`computeCommissionRates` | BOOLEAN      | NO         | 默认值： `false`
+`computeCommissionRates` | BOOLEAN      | NO         | 默认值： `false` <br> 请参阅[佣金常见问题解答](faqs/commission_faq_CN.md#test-order-diferences) 了解更多信息。
 
 
 **数据源:**

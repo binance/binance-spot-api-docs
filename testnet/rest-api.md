@@ -1861,7 +1861,7 @@ the following optional parameters are also accepted:
 
 Name                   |Type          | Mandatory    | Description
 ------------           | ------------ | ------------ | ------------
-computeCommissionRates | BOOLEAN      | NO           | Default: `false`
+computeCommissionRates | BOOLEAN      | NO           | Default: `false` <br> See [Commissions FAQ](../faqs/commission_faq.md#test-order-diferences) to learn more.
 
 **Data Source:**
 Memory

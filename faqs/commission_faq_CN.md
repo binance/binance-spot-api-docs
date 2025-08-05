@@ -5,11 +5,11 @@
 * 本文所用的佣金和价格都是虚构的，并不代表现实交易中的设置。
 * 本内容只适用于现货交易所。
 
-## 什么是佣金率？
+### 什么是佣金率？
 
 这些比率是用来决定当您的任何金额订单成交后，您所需要支付的佣金金额数目。
 
-## 佣金率有哪些不同的类型？
+### 佣金率有哪些不同的类型？
 
 有以下3种类型：
 
@@ -17,7 +17,7 @@
 * 税务佣金（`taxCommission`） - 来自订单的税费佣金率。
 * 折扣（`discount`） - 如果使用`BNB`支付佣金，在标准佣金基础上可以得到的折扣率。
 
-## 我怎么才能知道佣金率是多少？
+### 我怎么才能知道佣金率是多少？
 
 您可以通过以下请求找到它们：
 
@@ -27,7 +27,8 @@ WebSocket API: `account.commission`
 
 您也可以通过在测试订单请求中使用 `computeCommissionRates` 来找出订单交易的佣金比率。
 
-## 在发送测试订单中使用`computeCommissionRates`得到的响应与查询佣金率的响应之间有什么不同？
+<a id="test-order-diferences"></a>
+### 在发送测试订单中使用`computeCommissionRates`得到的响应与查询佣金率的响应之间有什么不同？
 
 以下是有关前者的一个例子：
 
@@ -56,7 +57,7 @@ WebSocket API: `account.commission`
 而查询佣金率的响应则提供了针对于您的帐户中该交易对的当前佣金率。
 
 
-## 佣金是怎么计算的？
+### 佣金是怎么计算的？
 
 以下面的这个佣金配置为例：
 
@@ -67,19 +68,19 @@ WebSocket API: `account.commission`
     "maker": "0.00000010",
     "taker": "0.00000020",
     "buyer": "0.00000030",
-    "seller": "0.00000040" 
+    "seller": "0.00000040"
   },
   "taxCommission": {
     "maker": "0.00000112",
     "taker": "0.00000114",
     "buyer": "0.00000118",
-    "seller": "0.00000116" 
+    "seller": "0.00000116"
   },
   "discount": {
     "enabledForAccount": true,
     "enabledForSymbol": true,
     "discountAsset": "BNB",
-    "discount": "0.25000000" 
+    "discount": "0.25000000"
   }
 }
 ```
@@ -147,7 +148,3 @@ WebSocket API: `account.commission`
 ```
 
 如果您的`BNB`余额不足以支付折扣后的佣金，那么全部佣金将从您所接收的`USDT`金额中扣除。
-
-
-
-
