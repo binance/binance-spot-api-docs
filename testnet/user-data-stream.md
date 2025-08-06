@@ -352,4 +352,5 @@ This event appears only for WebSocket API.
   "a": "NEO",                 // Asset
   "d": "10.00000000",         // Delta
   "T": 1581557507268          // Transaction Time
-}```
+}
+```
