@@ -1,6 +1,6 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-08-07**
+**Last Updated: 2025-08-08**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
@@ -10,6 +10,10 @@ This is not always synced with the live exchange.
 * Updated FIX API documentation
   * [FIX Market Data limits](fix-api.md#connection-limits): The subscription limit has always been present but was undocumented.
   * [On message processing order](fix-api.md#on-message-processing-order): Reworded and reformatted.
+
+**Notice: The following will be enabled on 2025-08-08, 07:00 UTC**
+
+* Filter [`MAX_NUM_ORDER_LISTS`](filters.md#max-num-order-lists), is enabled with the limit of 20 per symbol.
 
 ---
 

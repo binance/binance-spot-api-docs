@@ -1,6 +1,6 @@
 # Error codes for Binance SPOT Testnet
 
-**Last Updated: 2025-08-05**
+**Last Updated: 2025-08-07**
 
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
@@ -407,8 +407,10 @@ Error message | Description
 "Filter failure: MAX_NUM_ORDERS" | Account has too many open orders on the symbol.
 "Filter failure: MAX_NUM_ALGO_ORDERS" | Account has too many open stop loss and/or take profit orders on the symbol.
 "Filter failure: MAX_NUM_ICEBERG_ORDERS" | Account has too many open iceberg orders on the symbol.
+"Filter failure: MAX_NUM_ORDER_AMENDS" | Account has made too many amendments to a single order on the symbol.
+"Filter failure: MAX_NUM_ORDER_LISTS" | Account has too many open order lists on the symbol. |
 "Filter failure: TRAILING_DELTA" | `trailingDelta` is not within the defined range of the filter for that order type.
 "Filter failure: EXCHANGE_MAX_NUM_ORDERS" | Account has too many open orders on the exchange.
 "Filter failure: EXCHANGE_MAX_NUM_ALGO_ORDERS" | Account has too many open stop loss and/or take profit orders on the exchange.
 "Filter failure: EXCHANGE_MAX_NUM_ICEBERG_ORDERS" | Account has too many open iceberg orders on the exchange.
-"Filter failure: MAX_NUM_ORDER_AMENDS" | Account has made too many amendments to a single order on the symbol. 
+"Filter failure: EXCHANGE_MAX_NUM_ORDER_LISTS" | Account has too many open order lists on the exchange.
