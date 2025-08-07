@@ -128,11 +128,14 @@ on how to set up an Ed25519 key pair.
 
 ### On message processing order
 
-The `MessageHandling (25035)` field required in the initial [Logon`<A>`](#logon-request) message controls whether the
-messages may get reordered before they are processed by the engine.
+The `MessageHandling (25035)` field required in the initial [Logon`<A>`](#logon-request) message controls whether messages from the client may be reordered before they are processed by the Matching Engine.
 
-- `UNORDERED(1)` messages from client are allowed to be sent to the engine out of order.
-- `SEQUENTIAL(2)` messages from client are always sent to the engine in the `MsgSeqNum (34)` order.
+| Mode            | Description                                                                                |
+|-----------------|--------------------------------------------------------------------------------------------|
+| `UNORDERED(1)`  | Messages from the client are allowed to be sent to the matching engine in any order.       |
+| `SEQUENTIAL(2)` | Messages from the client are always sent to the matching engine in `MsgSeqNum (34)` order. |
+
+In all modes, the client's `MsgSeqNum (34)` must increase monotonically, with each subsequent message having a sequence number that is exactly 1 greater than the previous message.
 
 > [!TIP]
 > `UNORDERED(1)` should offer better performance when there are multiple messages in flight from the client to the server.
@@ -302,6 +305,7 @@ Resulting Logon `<A>` message:
 * FIX Market Data limits
   * 300 connection attempts within 300 seconds
   * Maximum of 100 concurrent TCP connections per account
+  * A single connection can listen to a maximum of 1000 streams.
 
 ### Unfilled Order Count
 

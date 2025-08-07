@@ -1,6 +1,14 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-07-03**
+**Last Updated: 2025-08-07**
+
+### 2025-08-07
+
+* Updated FIX API documentation
+  * [FIX Market Data limits](fix-api.md#connection-limits): The subscription limit has always been present but was undocumented.
+  * [On message processing order](fix-api.md#on-message-processing-order): Reworded and reformatted.
+
+---
 
 ### 2025-07-03
 

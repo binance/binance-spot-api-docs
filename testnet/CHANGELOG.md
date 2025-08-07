@@ -1,9 +1,17 @@
-# CHANGELOG for Binance SPOT Testnet  
+# CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-08-05**
+**Last Updated: 2025-08-07**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-08-07
+
+* Updated FIX API documentation
+  * [FIX Market Data limits](fix-api.md#connection-limits): The subscription limit has always been present but was undocumented.
+  * [On message processing order](fix-api.md#on-message-processing-order): Reworded and reformatted.
+
+---
 
 ### 2025-08-05
 
@@ -123,7 +131,6 @@ Error messages are clearer when a tag is invalid, missing a value, or when the f
   * If the field value was empty or malformed, you will still receive the error:
     ```json
     {"code": -1102, "msg": "Field value was empty or malformed."}
-    ```
 
 ---
 
@@ -139,7 +146,7 @@ All data on the Spot Test Network will be deleted today according to the periodi
 
 **Data reset**
 
-All data on the Spot Test Network will be deleted today according to the periodic reset procedure. (see [F.A.Q.](../faqs/testnet.md) for more details)
+All data on the Spot Test Network will be deleted today according to the periodic reset procedure. (see [F.A.Q.](../faqs/testnet.md#faq-periodic-reset) for more details)
 
 
 ---

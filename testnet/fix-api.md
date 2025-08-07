@@ -123,11 +123,14 @@ To access the FIX Market Data sessions, your API key must be configured with eit
 
 ### On message processing order
 
-The `MessageHandling (25035)` field required in the initial [Logon`<A>`](#logon-request) message controls whether the
-messages may get reordered before they are processed by the engine.
+The `MessageHandling (25035)` field required in the initial [Logon`<A>`](#logon-request) message controls whether messages from the client may be reordered before they are processed by the Matching Engine.
 
-- `UNORDERED(1)` messages from client are allowed to be sent to the engine out of order.
-- `SEQUENTIAL(2)` messages from client are always sent to the engine in the `MsgSeqNum (34)` order.
+| Mode            | Description                                                                                |
+|-----------------|--------------------------------------------------------------------------------------------|
+| `UNORDERED(1)`  | Messages from the client are allowed to be sent to the matching engine in any order.       |
+| `SEQUENTIAL(2)` | Messages from the client are always sent to the matching engine in `MsgSeqNum (34)` order. |
+
+In all modes, the client's `MsgSeqNum (34)` must increase monotonically, with each subsequent message having a sequence number that is exactly 1 greater than the previous message.
 
 > [!TIP]
 > `UNORDERED(1)` should offer better performance when there are multiple messages in flight from the client to the server.
@@ -297,6 +300,7 @@ Resulting Logon `<A>` message:
 * FIX Market Data limits
   * 300 connection attempts within 300 seconds
   * Maximum of 100 concurrent TCP connections per account
+  * A single connection can listen to a maximum of 1000 streams.
 
 ### Unfilled Order Count
 
@@ -371,9 +375,9 @@ Appears at the start of every message.
 | 35    | MsgType      | STRING       | Y        | Must be the third field in the message. <br></br> Possible values: <br></br>`0` - [HEARTBEAT](#heartbeat) <br></br>`1` - [TEST_REQUEST](#testrequest) <br></br>`3` - [REJECT](#reject) <br></br>`5` - [LOGOUT](#logout) <br></br>`8` - [EXECUTION_REPORT](#executionreport) <br></br> `9` - [ORDER_CANCEL_REJECT](#ordercancelreject) <br></br> `A` - [LOGON](#logon-main) <br></br> `D` - [NEW_ORDER_SINGLE](#newordersingle) <br></br> `E` - [NEW_ORDER_LIST](#neworderlist) <br></br> `F` - [ORDER_CANCEL_REQUEST](#ordercancelrequest) <br></br> `N` - [LIST_STATUS](#liststatus) <br></br> `q` - [ORDER_MASS_CANCEL_REQUEST](#ordermasscancelrequest) <br></br> `r` - [ORDER_MASS_CANCEL_REPORT](#ordermasscancelreport) <br></br> `XCN` - [ORDER_CANCEL_REQUEST_AND_NEW_ORDER_SINGLE](#ordercancelrequestandnewordersingle) <br></br> `XLQ` - [LIMIT_QUERY](#limitquery) <br></br> `XLR` - [LIMIT_RESPONSE](#limitresponse) <br></br> `B` - [NEWS](#news) <br></br> `x`- [INSTRUMENT_LIST_REQUEST](#instrumentlistrequest) <br></br> `y` - [INSTRUMENT_LIST](#instrumentlist)  <br></br>`V` - [MARKET_DATA_REQUEST](#marketdatarequest) <br></br> `Y` - [MARKET_DATA_REQUEST_REJECT](#marketdatarequestreject) <br></br>`W` - [MARKET_DATA_SNAPSHOT](#marketdatasnapshot) <br></br>`X` - [MARKET_DATA_INCREMENTAL_REFRESH](#marketdataincrementalrefresh) <br></br> `XAK` - [ORDER_AMEND_KEEP_PRIORITY_REQUEST](#orderamendkeeppriorityrequest) <br></br> `XAR` - [ORDER_AMEND_REJECT](#orderamendreject) |
 | 49    | SenderCompID | STRING       | Y        | Must be unique across an account's active sessions.  <br></br> Must obey regex: `^[a-zA-Z0-9-_]{1,8}$`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | 56    | TargetCompID | STRING       | Y        | A string identifying this TCP connection.<br></br>On messages from client required to be set to `SPOT`. <br></br>Must be unique across TCP connections. <br></br> Must conform to the regex: `^[a-zA-Z0-9-_]{1,8}$`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |                                                                                                                                      |
-| 34    | MsgSeqNum    | SEQNUM       | Y        | Integer message sequence number. <br></br> Values that will cause a gap will be rejected.|
-| 52    | SendingTime  | UTCTIMESTAMP | Y        | Time of message transmission (always expressed in UTC).|
-| 25000 | RecvWindow   | INT          | N        | Number of milliseconds after `SendingTime (52)` the request is valid for. <br></br> Defaults to `5000` milliseconds in [Logon`<A>`](#logon-request) and has a max value of `60000` milliseconds.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| 34    | MsgSeqNum    | SEQNUM       | Y        | Integer message sequence number. <br></br> Values that will cause a gap will be rejected.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| 52    | SendingTime  | UTCTIMESTAMP | Y        | Time of message transmission (always expressed in UTC). |
+| 25000 | RecvWindow   | INT          | N        | Number of milliseconds after `SendingTime (52)` the request is valid for. <br></br> Defaults to `5000` milliseconds in [Logon`<A>`](#logon-request) and has a max value of `60000` milliseconds. |
 
 <a id="trailer"></a>
 
