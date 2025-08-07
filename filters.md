@@ -206,7 +206,7 @@ An `ICEBERG` order is any order where the `icebergQty` is > 0.
 }
 ```
 
-### MAX_POSITION 
+### MAX_POSITION
 
 The `MAX_POSITION` filter defines the allowed maximum position an account can have on the base asset of a symbol. An account's position defined as the sum of the account's:
 1. free balance of the base asset
@@ -227,14 +227,14 @@ If an order's `quantity` can cause the position to overflow, this will also fail
 
 ### TRAILING_DELTA
 
-The `TRAILING_DELTA` filter defines the minimum and maximum value for the parameter `trailingDelta`.
+The `TRAILING_DELTA` filter defines the minimum and maximum value for the parameter [`trailingDelta`](faqs/trailing-stop-faq.md).
 
 In order for a trailing stop order to pass this filter, the following must be true:
 
-For `STOP_LOSS BUY`, `STOP_LOSS_LIMIT_BUY`,`TAKE_PROFIT SELL` and `TAKE_PROFIT_LIMIT SELL` orders: 
+For `STOP_LOSS BUY`, `STOP_LOSS_LIMIT_BUY`,`TAKE_PROFIT SELL` and `TAKE_PROFIT_LIMIT SELL` orders:
 
 * `trailingDelta` >= `minTrailingAboveDelta`
-* `trailingDelta` <= `maxTrailingAboveDelta` 
+* `trailingDelta` <= `maxTrailingAboveDelta`
 
 For `STOP_LOSS SELL`, `STOP_LOSS_LIMIT SELL`, `TAKE_PROFIT BUY`, and `TAKE_PROFIT_LIMIT BUY` orders:
 

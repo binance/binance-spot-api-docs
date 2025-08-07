@@ -227,7 +227,7 @@ If an order's `quantity` can cause the position to overflow, this will also fail
 
 ### TRAILING_DELTA
 
-The `TRAILING_DELTA` filter defines the minimum and maximum value for the parameter `trailingDelta`.
+The `TRAILING_DELTA` filter defines the minimum and maximum value for the parameter [`trailingDelta`](../faqs/trailing-stop-faq.md).
 
 In order for a trailing stop order to pass this filter, the following must be true:
 
@@ -256,7 +256,7 @@ For `STOP_LOSS SELL`, `STOP_LOSS_LIMIT SELL`, `TAKE_PROFIT BUY`, and `TAKE_PROFI
 
 ### MAX_NUM_ORDER_AMENDS
 
-The `MAX_NUM_ORDER_AMENDS` filter defines the maximum number of times an order can be amended on the given symbol.
+The `MAX_NUM_ORDER_AMENDS` filter defines the maximum number of times an order can be [amended](../faqs/order_amend_keep_priority.md) on the given symbol.
 
 If there are too many order amendments made on a single order, you will receive the `-2038` error code.
 

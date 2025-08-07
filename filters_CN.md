@@ -100,9 +100,9 @@ MIN_NOTIONAL过滤器定义了交易对订单所允许的最小名义价值(成�
 订单的名义价值是`价格`*`数量`。
 如果是高级订单(比如止盈止损订单`STOP_LOSS_LIMIT`)，名义价值会按照`stopPrice` * `quantity`来计算。
 如果是冰山订单，名义价值会按照`price` * `icebergQty`来计算。
-`applyToMarket`确定 `MIN_NOTIONAL`过滤器是否也将应用于`MARKET`订单。   
-由于`MARKET`订单没有价格，因此会在最后`avgPriceMins`分钟内使用平均价格。   
-`avgPriceMins`是计算平均价格的分钟数。 0表示使用最后的价格。 
+`applyToMarket`确定 `MIN_NOTIONAL`过滤器是否也将应用于`MARKET`订单。
+由于`MARKET`订单没有价格，因此会在最后`avgPriceMins`分钟内使用平均价格。
+`avgPriceMins`是计算平均价格的分钟数。 0表示使用最后的价格。
 
 
 **/exchangeInfo 响应中的格式:**
@@ -190,7 +190,7 @@ MIN_NOTIONAL过滤器定义了交易对订单所允许的最小名义价值(成�
 ```
 
 ### MAX_NUM_ALGO_ORDERS 最多条件单数
-`MAX_NUM_ALGO_ORDERS`过滤器定义允许账户在交易对上开设的"algo"订单的最大数量。    
+`MAX_NUM_ALGO_ORDERS`过滤器定义允许账户在交易对上开设的"algo"订单的最大数量。
 "Algo"订单是`STOP_LOSS`，`STOP_LOSS_LIMIT`，`TAKE_PROFIT`和`TAKE_PROFIT_LIMIT`止盈止损单。
 
 **/exchangeInfo 响应中的格式:**
@@ -202,7 +202,7 @@ MIN_NOTIONAL过滤器定义了交易对订单所允许的最小名义价值(成�
 ```
 
 ### MAX_NUM_ICEBERG_ORDERS 最多冰山单数
-`MAX_NUM_ICEBERG_ORDERS`过滤器定义了允许在交易对上开设账户的`ICEBERG`订单的最大数量。     
+`MAX_NUM_ICEBERG_ORDERS`过滤器定义了允许在交易对上开设账户的`ICEBERG`订单的最大数量。
 `ICEBERG`订单是icebergQty大于0的任何订单。
 
 **/exchangeInfo 响应中的格式:**
@@ -235,7 +235,7 @@ MIN_NOTIONAL过滤器定义了交易对订单所允许的最小名义价值(成�
 ### TRAILING_DELTA 过滤器
 
 
-此过滤器定义了参数`trailingDelta`的最大和最小值.
+此过滤器定义了参数[`trailingDelta`](faqs/trailing-stop-faq_CN.md)的最大和最小值.
 
 下追踪止损订单, 需要满足条件:
 
@@ -262,7 +262,7 @@ MIN_NOTIONAL过滤器定义了交易对订单所允许的最小名义价值(成�
 
 ## 交易所级别过滤器
 ### EXCHANGE_MAX_NUM_ORDERS 最多订单数
-`EXCHANGE_MAX_NUM_ORDERS`过滤器定义了允许在交易对上开设账户的最大订单数。    
+`EXCHANGE_MAX_NUM_ORDERS`过滤器定义了允许在交易对上开设账户的最大订单数。
 请注意，此过滤器同时计算"algo"订单和常规订单。
 
 **/exchangeInfo 响应中的格式:**
@@ -274,7 +274,7 @@ MIN_NOTIONAL过滤器定义了交易对订单所允许的最小名义价值(成�
 ```
 
 ### EXCHANGE_MAX_NUM_ALGO_ORDERS 最多条件单数
-`EXCHANGE_MAX_ALGO_ORDERS`过滤器定义了允许在交易上开设账户的"algo"订单的最大数量。    
+`EXCHANGE_MAX_ALGO_ORDERS`过滤器定义了允许在交易上开设账户的"algo"订单的最大数量。
 "Algo"订单是`STOP_LOSS`，`STOP_LOSS_LIMIT`，`TAKE_PROFIT`和`TAKE_PROFIT_LIMIT`订单。
 
 **/exchangeInfo 响应中的格式:**
