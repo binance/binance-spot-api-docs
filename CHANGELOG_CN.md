@@ -5,8 +5,8 @@
 ### 2025-08-07
 
 * 更新了 FIX API 文档
-  * [FIX 市场数据限制](#fix-api_CN.md#connection-limits)：订阅限制一直存在，但之前未有文档说明。
-  * [消息处理顺序](#fix-api_CN.md#orderedmode)：重新措辞并调整了格式。
+  * [FIX 市场数据限制](fix-api_CN.md#connection-limits)：订阅限制一直存在，但之前未有文档说明。
+  * [消息处理顺序](fix-api_CN.md#orderedmode)：重新措辞并调整了格式。
 
 ---
 
