@@ -154,11 +154,11 @@ OTO order lists may use peg instructions as well.
 
 OTOCO order lists may contain pegged orders as well, similar to OTO and OCO.
 
-## **Which symbols allow pegged orders?**
+## Which symbols allow pegged orders?
 
 Please refer to Exchange Information requests and look for the field `pegInstructionsAllowed`. If set to true, pegged orders can be used with the symbol.
 
-## **Which Filters are applicable to pegged orders?**
+## Which Filters are applicable to pegged orders?
 
 Pegged orders are required to pass all applicable filters with the selected price:
 

@@ -80,7 +80,7 @@ The following changes will be available on **2025-08-27 starting at 07:00 UTC**:
   * `EXCHANGE_MAX_ICEBERG_ORDERS`
 
 The following changes will be available on **2025-08-28 starting at 07:00 UTC**:
-* The [pegged orders](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/pegged_orders.md) functionality will be available.
+* The [pegged orders](faqs/pegged_orders.md) functionality will be available.
   * `pegInstructionsAllowed` will be set to `true` for all symbols, enabling the use of pegged orders for all APIs.
   * The following conditional fields `pegPriceType`, `pegOffSetType`, `pegOffsetValues`, and `peggedPrice` will appear in responses of the following requests if the order is a pegged order:
     * REST API
