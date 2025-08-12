@@ -51,7 +51,7 @@
   * 调用时不带参数，将关闭所有订阅。
   * 调用时传入 `subscriptionId`，如果该 ID 存在的话，将尝试关闭与该 ID 匹配的订阅。
   * 此请求的授权已更改为 `NONE`。
-* 通过 [WebSocket API](web-socket-api_CN.md#user_data_stream_subscribe) 进行监听时，用户数据流事件负载中新增了字段 `subscriptionId`。这个字段会标识事件来自哪个订阅。
+* 通过 [WebSocket API](web-socket-api_CN.md#user-data-stream-subscribe) 进行监听时，用户数据流事件负载中新增了字段 `subscriptionId`。这个字段会标识事件来自哪个订阅。
 
 #### FIX API
 
