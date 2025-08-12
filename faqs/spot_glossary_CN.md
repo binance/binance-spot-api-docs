@@ -339,8 +339,14 @@ Self Trade Prevention (STP)
 Smart Order Routing (SOR)
 * 智能订单路由；使用可互换的定价资产（`quote asset`）来提高流动性。请阅读 [SOR 常见问题](./sor_faq_CN.md) 来了解更多详情。
 
+`specialCommissionForOrder`/`specialCommission`
+* 参考 [佣金率](commission_faq_CN.md)
+
 `SPOT`
 * 现货交易； 此种交易时候，买卖相应的资产会立刻到账。
+
+`standardCommissionForOrder`/`standardCommission`
+* 参考 [佣金率](commission_faq_CN.md)
 
 `stopClientOrderId`
 * 用于下OCO订单的接口；此ID可以用来标识OCO中 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 的订单。
@@ -373,6 +379,9 @@ Smart Order Routing (SOR)
 
 `TAKE_PROFIT_LIMIT`
 * 限价止盈订单；当市场价格触及 `stopPrice` 价，此订单会以限价单（`LIMIT`）被执行。
+
+`taxCommissionForOrder`/`taxCommission`
+* 参考 [佣金率](commission_faq_CN.md)
 
 `ticker`
 * 用以汇报过去一段时间内的价格变动等市场信息。

@@ -1,6 +1,6 @@
 # 错误代码汇总
 
-**最近更新： 2025-06-11**
+**最近更新： 2025-08-12**
 
 币安Rest接口(包括wapi)返回的错误包含两部分，错误码与错误信息. 错误码是大类，一个错误码可能对应多个不同的错误信息。
 以下是一个完整错误码实例
@@ -235,6 +235,7 @@
  * `MsgType (35)` is not the third tag in a message.
  * `BodyLength (9)` does not contain the correct byte count.
  * Only printable ASCII characters and SOH (Start of Header) are allowed.
+ * Tag specified without a value.
 
 ### -1178 Compid错误
  * `SenderCompId(49)` contains an incorrect value. The SenderCompID value should not change throughout the lifetime of a session.
@@ -295,6 +296,12 @@
 ### -1199 卖方 `OCO` 单的止盈单必须是上方（`above`） 订单
 * A take profit order in a sell OCO must be above.
 
+### -1210 错误的挂钩订单价格类型
+* Invalid pegPriceType.
+
+### -1211 错误的挂钩订单偏移类型
+* Invalid pegOffsetType.
+
 ### -2010 新订单被拒绝
  * NEW_ORDER_REJECTED
 
@@ -324,6 +331,9 @@
 
 ### -2039 ClientOrderId 无效
   * Client order ID is not correct for this order ID.
+
+### -2042 最大订阅 ID
+* Maximum subscription ID reached for this connection.
 
 <a id="other-errors"></a>
 
@@ -367,6 +377,10 @@
 "Order book liquidity is less than symbol minimum quantity." |当订单簿里没有订单时，无法提交包含 `quoteOrderQty` 的市价单。
 "Order amend (quantity increase) is not supported." | `newQty` 必须小于原来订单的数量 (`quantity`)。
 "The requested action would change no state; rejecting". | 发送的请求将不会改变现状；拒绝。<br></br>(比如， `newQty` 不能和原来订单的数量 (`quantity`)是一样的。)
+"Pegged orders are not supported for this symbol." | `pegInstructionsAllowed` 还没有启用。|
+"This order type may not use pegged price." | 在不被支持的订单类型上使用 `pegPriceType` 参数 (例如， `MARKET`)。 |
+"This price peg cannot be used with this order type." | 在 `LIMIT_MAKER` 订单上使用 `pegPriceType`=`MARKET_PEG`。|
+"Order book liquidity is too low for this pegged order." | 订单簿中没有最佳价格水平可用以固定价格。 |
 
 ## 有关使用 cancelReplace 下订单的错误
 
@@ -392,7 +406,10 @@
 "Filter failure: MAX_NUM_ORDERS" | 账户在该交易对下最多挂单数。
 "Filter failure: MAX_NUM_ALGO_ORDERS" | 账户在该交易对下最多的止盈/止损挂单数。
 "Filter failure: MAX_NUM_ICEBERG_ORDERS" | 账户在该交易对下最多的冰山订单数。
+"Filter failure: MAX_NUM_ORDER_AMENDS" | 账户在该交易对下针对单一订单的最多修改次数。
+"Filter failure: MAX_NUM_ORDER_LISTS" | 账户在该交易对下最多的订单列表数。
 "Filter failure: TRAILING_DELTA" | `trailingDelta` 不在该订单类型的筛选器的定义范围内。
 "Filter failure: EXCHANGE_MAX_NUM_ORDERS" | 账户在交易所有太多未结订单。
 "Filter failure: EXCHANGE_MAX_NUM_ALGO_ORDERS" | 账户在交易所有太多的未平仓止损和/或止盈订单。
 "Filter failure: EXCHANGE_MAX_NUM_ICEBERG_ORDERS" | 账户在交易所有太多未平仓的冰山订单。
+"Filter failure: EXCHANGE_MAX_NUM_ORDER_LISTS" | 账户在交易所有太多未平仓的订单列表。

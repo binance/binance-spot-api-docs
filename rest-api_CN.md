@@ -1,6 +1,6 @@
 # REST行情与交易接口
 
-**最近更新： 2025-05-28**
+**最近更新： 2025-08-12**
 
 <a id="general-api-information"></a>
 ## API 基本信息
@@ -507,6 +507,7 @@ symbolStatus|ENUM|No|用于过滤具有此 `tradingStatus` 的交易对。有效
       "allowTrailingStop": false,
       "cancelReplaceAllowed": false,
       "amendAllowed":false,
+      "pegInstructionsAllowed": true,
       "isSpotTradingAllowed": true,
       "isMarginTradingAllowed": true,
       "filters": [
@@ -1653,6 +1654,9 @@ trailingDelta|LONG|NO| 参见 [追踪止盈止损(Trailing Stop)订单常见问�
 icebergQty | DECIMAL | NO | 仅有限价单(包括条件限价单与限价做事单)可以使用该参数，含义为创建冰山订单并指定冰山订单的数量。
 newOrderRespType | ENUM | NO | 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`, 其他默认为`ACK`。
 selfTradePreventionMode |ENUM| NO | 允许的 ENUM 取决于交易对的配置。支持的值有：[STP 模式](enums_CN.md#stpmodes)。
+pegPriceType | ENUM | NO | `PRIMARY_PEG` 或 `MARKET_PEG`。 <br> 参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)|
+pegOffsetValue | INT | NO | 用于挂钩的价格水平（最大值：100）。 <br> 参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)  |
+pegOffsetType | ENUM | NO | 仅支持 `PRICE_LEVEL`。 <br> 参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info) |
 recvWindow | LONG | NO |
 timestamp | LONG | YES |
 
@@ -1667,6 +1671,15 @@ Type | 强制要求的参数 | 其他信息
 `TAKE_PROFIT` | `quantity`, `stopPrice`, `trailingDelta` | 条件满足后会下`MARKET`单子. (例如：达到`stopPrice`或`trailingDelta`被启动)
 `TAKE_PROFIT_LIMIT` | `timeInForce`, `quantity`, `price`, `stopPrice`, `trailingDelta`
 `LIMIT_MAKER` | `quantity`, `price` | 订单大部分情况下与普通的限价单没有区别，但是如果在当前价格会立即吃对手单并成交则下单会被拒绝。因此使用这个订单类型可以保证订单一定是挂单方，不会成为吃单方。
+
+
+<a id="pegged-orders-info">关于挂钩订单参数的注意事项：</a>
+
+* 这些参数仅适用于 `LIMIT`， `LIMIT_MAKER`， `STOP_LOSS_LIMIT` 和 `TAKE_PROFIT_LIMIT` 订单。
+* 如果使用了 `pegPriceType`， 那么 `price` 字段将是可选的。 否则，`price` 字段依旧是必须的。
+* `pegPriceType=PRIMARY_PEG` 就是主要挂钩（`primary`），这是订单簿上与您的订单同一方向的最佳价格。
+* `pegPriceType=MARKET_PEG` 就是市场挂钩（`market`），这是订单簿上与您的订单相反方向的最佳价格。
+* 可以通过使用 `pegOffsetType` 和 `pegOffsetValue` 来获取最佳价格以外的价格水平。 这两个参数必须一起使用。
 
 其他:
 
@@ -1799,6 +1812,10 @@ Type | 强制要求的参数 | 其他信息
 `trailingTime` | 追踪单被激活和跟踪价格变化的时间。                                  | 出现在追踪止损订单中。                               | `"trailingTime": -1`|
 `usedSor` | 用于确定订单是否使用SOR的字段 | 在使用SOR下单时出现 |`"usedSor": true` ｜
 `workingFloor` | 用以定义订单是通过 SOR 还是由订单提交到的订单薄（order book）成交的。   |出现在使用了 SOR 的订单中。                             |`"workingFloor": "SOR"`|
+`pegPriceType` |  挂钩价格类型                                                  | 仅用于挂钩订单                                       |`"pegPriceType": "PRIMARY_PEG"` |
+`pegOffsetType`  | 挂钩价格偏移类型                                              | 如若需要，仅用于挂钩订单                               |`"pegOffsetType": "PRICE_LEVEL"` |
+`pegOffsetValue` | 挂钩价格偏移值                                                | 如若需要，仅用于挂钩订单                               |`"pegOffsetValue": 5` |
+`peggedPrice`    | 订单对应的当前挂钩价格                                         | 一旦确定，仅用于挂钩订单                               |`"peggedPrice": "87523.83710000"` |
 
 ### 测试下单接口 (TRADE)
 
@@ -1842,6 +1859,10 @@ computeCommissionRates | BOOLEAN      | NO           | 默认值: `false` <br> �
   "standardCommissionForOrder": {   // 订单交易的标准佣金率
     "maker": "0.00000112",
     "taker": "0.00000114",
+  },
+  "specialCommissionForOrder": {    // 订单交易的特殊佣金率
+    "maker": "0.05000000",
+    "taker": "0.06000000"
   },
   "taxCommissionForOrder": {        // 订单交易的税率
     "maker": "0.00000112",
@@ -2096,6 +2117,9 @@ newOrderRespType|ENUM|NO|指定响应类型: <br/> 指定响应类型 `ACK`, `RE
 selfTradePreventionMode|ENUM|NO|允许的 ENUM 取决于交易对的配置。支持的值有：[STP 模式](./enums_CN.md#stpmodes)。
 cancelRestrictions| ENUM | NO | 支持的值: <br>`ONLY_NEW` - 如果订单状态为 `NEW`，撤销将成功。<br> `ONLY_PARTIALLY_FILLED` - 如果订单状态为 `PARTIALLY_FILLED`，撤销将成功。
 orderRateLimitExceededMode| ENUM | NO |支持的值： <br></br> `DO_NOTHING`（默认值）- 仅在账户未超过未成交订单频率限制时，会尝试取消订单。<br></br> `CANCEL_ONLY` - 将始终取消订单。|
+pegPriceType | ENUM | NO | `PRIMARY_PEG` 或 `MARKET_PEG`。 <br> 参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)|
+pegOffsetValue | INT | NO | 用于挂钩的价格水平（最大值：100）。 <br> 参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)  |
+pegOffsetType | ENUM | NO | 仅支持 `PRICE_LEVEL`。 <br> 参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info) |
 recvWindow | LONG | NO | 不能大于 `60000`
 timestamp | LONG | YES |
 
@@ -2737,6 +2761,9 @@ aboveTrailingDelta     |LONG    |No         |请看 [追踪止盈止损(Trailing
 aboveTimeInForce       |DECIMAL |No         |如果 `aboveType` 是 `STOP_LOSS_LIMIT` 或 `TAKE_PROFIT_LIMIT`，则为必填项。
 aboveStrategyId        |LONG     |No         |订单策略中上方订单的 ID。
 aboveStrategyType      |INT     |No         |上方订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
+abovePegPriceType      |ENUM    |NO         |参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)
+abovePegOffsetType     |ENUM    |NO         |
+abovePegOffsetValue    |INT     |NO         |
 belowType              |ENUM    |Yes        |支持值：`STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`。
 belowClientOrderId     |STRING  |No         |
 belowIcebergQty        |LONG    |No         |请注意，只有当 `belowTimeInForce` 为 `GTC` 时才能使用。
@@ -2746,6 +2773,9 @@ belowTrailingDelta     |LONG    |No         |请看 [追踪止盈止损(Trailing
 belowTimeInForce       |ENUM    |No         |如果`belowType` 是 `STOP_LOSS_LIMIT` 或 `TAKE_PROFIT_LIMIT`，则为必须配合提交的值。
 belowStrategyId        |LONG    |No          |订单策略中下方订单的 ID。
 belowStrategyType      |INT     |No         |下方订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
+belowPegPriceType      |ENUM    |NO         |参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)
+belowPegOffsetType     |ENUM    |NO         |
+belowPegOffsetValue    |INT      NO         |
 newOrderRespType       |ENUM    |No         |响应格式可选值: `ACK`, `RESULT`, `FULL`。
 selfTradePreventionMode|ENUM    |No         |允许的 ENUM 取决于交易对上的配置。 支持值：[STP 模式](./enums_CN.md#stpmodes)。
 recvWindow             |LONG   |No          |不能大于 `60000`。
@@ -2863,6 +2893,9 @@ workingTimeInForce     |ENUM   |NO        |支持的数值： [生效时间](./e
 workingStrategyId      |LONG    |NO        |订单策略中用于标识生效订单的 ID。
 workingStrategyType    |INT    |NO        |用于标识生效订单策略的任意数值。<br> 小于 `1000000` 的值被保留，无法使用。
 pendingType            |ENUM   |YES       |支持的数值： <a href="#order-type">订单类型</a><br> 请注意，系统不支持使用 `quoteOrderQty` 的 `MARKET` 订单。
+workingPegPriceType    |ENUM   |NO        |参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)
+workingPegOffsetType   |ENUM   |NO        |
+workingPegOffsetValue  |INT    |NO        |
 pendingSide            |ENUM   |YES       |支持的数值： [订单方向](./enums_CN.md#side)
 pendingClientOrderId   |STRING |NO        |用于标识待处理订单的唯一ID。 <br> 如果未发送则自动生成。
 pendingPrice           |DECIMAL|NO        |
@@ -2873,6 +2906,9 @@ pendingIcebergQty      |DECIMAL|NO        |只有当 `pendingTimeInForce` 为 `G
 pendingTimeInForce     |ENUM   |NO        |支持的数值： [生效时间](./enums_CN.md#timeinforce)
 pendingStrategyId      |LONG    |NO        |订单策略中用于标识待处理订单的 ID。
 pendingStrategyType    |INT    |NO        |用于标识待处理订单策略的任意数值。 <br> 小于 `1000000` 的值被保留，无法使用。
+pendingPegPriceType    |ENUM   |NO        |参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)
+pendingPegOffsetType   |ENUM   |NO        |
+pendingPegOffsetValue  |INT    |NO        |
 recvWindow             |LONG   |NO        |不能大于 `60000`。
 timestamp              |LONG   |YES       |
 
@@ -2999,6 +3035,9 @@ workingIcebergQty        |DECIMAL|NO        |只有当 `workingTimeInForce` 为 
 workingTimeInForce       |ENUM   |NO        |支持的数值： [生效时间](./enums_CN.md#timeinforce)
 workingStrategyId        |LONG    |NO        |订单策略中用于标识生效订单的 ID。
 workingStrategyType      |INT    |NO        |用于标识生效订单策略的任意数值。<br> 小于 `1000000` 的值被保留，无法使用。
+workingPegPriceType      |ENUM   |NO       |参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)
+workingPegOffsetType     |ENUM   |NO       |
+workingPegOffsetValue    |INT    |NO       |
 pendingSide              |ENUM   |YES       |支持的数值： [订单方向](./enums_CN.md#side)
 pendingQuantity          |DECIMAL|YES       |
 pendingAboveType         |ENUM   |YES       |支持的数值： `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
@@ -3010,6 +3049,9 @@ pendingAboveIcebergQty   |DECIMAL|NO        |只有当 `pendingAboveTimeInForce`
 pendingAboveTimeInForce  |ENUM   |NO        |
 pendingAboveStrategyId   |LONG    |NO        |订单策略中用于标识待处理上方订单的 ID。
 pendingAboveStrategyType |INT    |NO        |用于标识待处理上方订单策略的任意数值。 <br> 小于 `1000000` 的值被保留，无法使用。
+pendingAbovePegPriceType |ENUM   |NO        |参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)
+pendingAbovePegOffsetType |ENUM  |NO        |
+pendingAbovePegOffsetValue|INT   |NO        |
 pendingBelowType         |ENUM   |NO        |支持的数值： `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
 pendingBelowClientOrderId|STRING |NO        |用于标识待处理下方订单的唯一ID。 <br> 如果未发送则自动生成。
 pendingBelowPrice        |DECIMAL|NO        |当 `pendingBelowType` 是 `STOP_LOSS_LIMIT` 或 `TAKE_PROFIT_LIMIT` 时，可用以指定限价。
@@ -3019,6 +3061,9 @@ pendingBelowIcebergQty   |DECIMAL|NO        |只有当 `pendingBelowTimeInForce`
 pendingBelowTimeInForce  |ENUM   |NO        |
 pendingBelowStrategyId   |LONG    |NO        |订单策略中用于标识待处理下方订单的 ID。
 pendingBelowStrategyType |INT    |NO        |用于标识待处理下方订单策略的任意数值。 <br> 小于 `1000000` 的值被保留，无法使用。
+pendingBelowPegPriceType |ENUM  |NO         |参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)
+pendingBelowPegOffsetType |ENUM |NO         |
+pendingBelowPegOffsetValue |INT |NO         |
 recvWindow               |LONG   |NO        |不能大于 `60000`。
 timestamp                |LONG   |YES       |
 
@@ -4025,6 +4070,12 @@ symbol        | STRING | YES          |
     "taker": "0.00000020",
     "buyer": "0.00000030",
     "seller": "0.00000040"
+  },
+  "specialCommission": {         // 订单交易的特殊佣金率。
+    "maker": "0.01000000",
+    "taker": "0.02000000",
+    "buyer": "0.03000000",
+    "seller": "0.04000000"
   },
   "taxCommission": {              // 订单交易的税率。
     "maker": "0.00000112",

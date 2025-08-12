@@ -1,6 +1,6 @@
 # Binance 的公共 WebSocket API
 
-**最近更新： 2025-05-28**
+**最近更新： 2025-08-12**
 
 <a id="general-api-information"></a>
 ## API 基本信息
@@ -1108,6 +1108,7 @@ NONE
         "allowTrailingStop": true,
         "cancelReplaceAllowed": true,
         "amendAllowed":false,
+        "pegInstructionsAllowed": true,
         "isSpotTradingAllowed": true,
         "isMarginTradingAllowed": true,
         // 交易对过滤器在"过滤器"页面上进行了说明：
@@ -2828,6 +2829,9 @@ NONE
 `strategyId`        | LONG    | NO        | 标识订单策略中订单的任意ID。
 `strategyType`      | INT     | NO        | <p>标识订单策略的任意数值。</p><p>小于`1000000`的值是保留的，不能使用。</p>
 `selfTradePreventionMode` |ENUM| NO | 允许的 ENUM 取决于交易对的配置。支持值：[STP 模式](enums_CN.md#stpmodes)
+`pegPriceType`      | ENUM    | NO        | `PRIMARY_PEG` 或 `MARKET_PEG` <br> 参阅 [挂钩订单](#pegged-orders-info)
+`pegOffsetValue`    | INT     | NO        | 用于挂钩的价格水平（最大值：100） <br> 参阅 [挂钩订单](#pegged-orders-info)
+`pegOffsetType`     | ENUM    | NO        | 仅支持 `PRICE_LEVEL` <br> 参阅 [挂钩订单](#pegged-orders-info)
 `apiKey`            | STRING  | YES       |
 `recvWindow`        | LONG    | NO        | 值不能大于 `60000`
 `signature`         | STRING  | YES       |
@@ -3009,6 +3013,15 @@ NONE
     </tr>
 </tbody>
 </table>
+
+<a id="pegged-orders-info"></a>
+关于挂钩订单参数的注意事项：
+
+* 这些参数仅适用于 `LIMIT`， `LIMIT_MAKER`， `STOP_LOSS_LIMIT` 和 `TAKE_PROFIT_LIMIT` 订单。
+* 如果使用了 `pegPriceType`， 那么 `price` 字段将是可选的。 否则，`price` 字段依旧是必须的。
+* `pegPriceType=PRIMARY_PEG` 就是主要挂钩（`primary`），这是订单簿上与您的订单同一方向的最佳价格。
+* `pegPriceType=MARKET_PEG` 就是市场挂钩（`market`），这是订单簿上与您的订单相反方向的最佳价格。
+* 可以通过使用 `pegOffsetType` 和 `pegOffsetValue` 来获取最佳价格以外的价格水平。 这两个参数必须一起使用。
 
 <a id="timeInForce"></a>
 
@@ -3220,7 +3233,10 @@ NONE
 `trailingTime` | 追踪单被激活和跟踪价格变化的时间。                                  | 出现在追踪止损订单中。                                 | `"trailingTime": -1`|
 `usedSor` | 用于确定订单是否使用`SOR`的字段 | 在使用`SOR`下单时出现 |`"usedSor": true`
 `workingFloor` | 用以定义订单是通过 SOR 还是由订单提交到的订单薄（order book）成交的。   |出现在使用了 SOR 的订单中。                             |`"workingFloor": "SOR"`|
-
+`pegPriceType` |  挂钩价格类型  | 仅用于挂钩订单 | `"pegPriceType": "PRIMARY_PEG"`
+`pegOffsetType`| 挂钩价格偏移类型 | 如若需要，仅用于挂钩订单   | `"pegOffsetType": "PRICE_LEVEL"`
+`pegOffsetValue` | 挂钩价格偏移值  | 如若需要，仅用于挂钩订单   | `"pegOffsetValue": 5`
+`peggedPrice`   | 订单对应的当前挂钩价格 | 一旦确定，仅用于挂钩订单 | `"peggedPrice": "87523.83710000"`
 
 ### 测试下单 (TRADE)
 
@@ -3298,6 +3314,10 @@ NONE
     "standardCommissionForOrder": {           // 根据订单的角色（例如，Maker或Taker）确定的佣金费率。
       "maker": "0.00000112",
       "taker": "0.00000114"
+    },
+    "specialCommissionForOrder": {            // 根据订单的角色（例如，Maker或Taker）确定的特殊佣金率。
+      "maker": "0.05000000",
+      "taker": "0.06000000"
     },
     "taxCommissionForOrder": {                 // 根据订单的角色（例如，Maker或Taker）确定的税收扣除率。
       "maker": "0.00000112",
@@ -3754,6 +3774,24 @@ NONE
         <td>ENUM</td>
         <td>NO</td>
         <td>支持的值： <br> <code>DO_NOTHING</code> （默认值） - 仅在账户未超过未成交订单频率限制时，会尝试取消订单。<br> <code>CANCEL_ONLY</code> - 将始终取消订单。</td>
+    </tr>
+    <tr>
+        <td><code>pegPriceType</code></td>
+        <td>ENUM</td>
+        <td>NO</td>
+        <td><code>PRIMARY_PEG</code> 或 <code>MARKET_PEG</code>。 <br> 参阅 <a href="#pegged-orders-info">挂钩订单</a>"</td>
+    </tr>
+    <tr>
+        <td><code>pegOffsetValue</code></td>
+        <td>INT</td>
+        <td>NO</td>
+        <td>用于价格挂钩的价格水平（最大值：100） <br> 参阅 <a href="#pegged-orders-info">挂钩订单</a></td>
+    </tr>
+    <tr>
+        <td><code>pegOffsetType</code></td>
+        <td>ENUM</td>
+        <td>NO</td>
+        <td>仅支持 <code>PRICE_LEVEL</code> <br> 参阅 <a href="#pegged-orders-info">挂钩订单</a></td>
     </tr>
     <tr>
         <td><code>recvWindow</code></td>
@@ -4914,6 +4952,10 @@ NONE
 `aboveTimeInForce`       |DECIMAL |NO         |如果 `aboveType` 是 `STOP_LOSS_LIMIT` 或 `TAKE_PROFIT_LIMIT`，则为必填项。
 `aboveStrategyId`        |LONG    |NO         |订单策略中上方订单的 ID。
 `aboveStrategyType`      |INT     |NO         |上方订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
+`abovePegPriceType`      |ENUM    |NO         |参阅 [挂钩订单](#pegged-orders-info)
+`abovePegOffsetType`     |ENUM    |NO         |
+`abovePegOffsetValue`    |INT     |NO         |
+`belowType`              |ENUM    |YES        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 `belowType`              |ENUM    |YES        |支持值：`STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`。
 `belowClientOrderId`     |STRING  |NO         |
 `belowIcebergQty`        |LONG    |NO         |请注意，只有当 `belowTimeInForce` 为 `GTC` 时才能使用。
@@ -4923,6 +4965,9 @@ NONE
 `belowTimeInForce`       |ENUM    |NO         |如果`belowType` 是 `STOP_LOSS_LIMIT` 或 `TAKE_PROFIT_LIMIT`，则为必须配合提交的值。
 `belowStrategyId`        |LONG     |NO          |订单策略中下方订单的 ID。
 `belowStrategyType`      |INT     |NO         |下方订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
+`belowPegPriceType`      |ENUM    |NO         |参阅 [挂钩订单](#pegged-orders-info)
+`belowPegOffsetType`     |ENUM    |NO         |
+`belowPegOffsetValue`    |INT     |NO         |
 `newOrderRespType`       |ENUM    |NO         |响应格式可选值: `ACK`, `RESULT`, `FULL`。
 `selfTradePreventionMode`|ENUM    |NO         |允许的 ENUM 取决于交易对上的配置。 可能支持的值为：[STP 模式](./enums_CN.md#stpmodes)
 `apiKey`                 |STRING  |YES        |
@@ -5088,6 +5133,9 @@ NONE
 `workingTimeInForce`     |ENUM   |NO        |支持的数值： [生效时间](./enums_CN.md#timeinforce)
 `workingStrategyId`      |LONG   |NO        |订单策略中用于标识生效订单的 ID。
 `workingStrategyType`    |INT    |NO        |用于标识生效订单策略的任意数值。<br> 小于 `1000000` 的值被保留，无法使用。
+`workingPegPriceType`    |ENUM   |NO        |参阅 [挂钩订单](#pegged-orders-info)
+`workingPegOffsetType`   |ENUM   |NO        |
+`workingPegOffsetValue`  |INT    |NO        |
 `pendingType`            |ENUM   |YES       |支持的数值： [订单类型](#order-type)<br> 请注意，系统不支持使用 `quoteOrderQty` 的 `MARKET` 订单。
 `pendingSide`            |ENUM   |YES       |支持的数值： [订单方向](./enums_CN.md#side)
 `pendingClientOrderId`   |STRING |NO        |用于标识待处理订单的唯一ID。 <br> 如果未发送则自动生成。
@@ -5099,6 +5147,9 @@ NONE
 `pendingTimeInForce`     |ENUM   |NO        |支持的数值： [生效时间](./enums_CN.md#timeinforce)
 `pendingStrategyId`      |LONG   |NO        |订单策略中用于标识待处理订单的 ID。
 `pendingStrategyType`    |INT    |NO        |用于标识待处理订单策略的任意数值。 <br> 小于 `1000000` 的值被保留，无法使用。
+`pendingPegOffsetType`   |ENUM   |NO        |参阅 [挂钩订单](#pegged-orders-info)
+`pendingPegPriceType`    |ENUM   |NO        |
+`pendingPegOffsetValue`  |INT    |NO        |
 `recvWindow`             |LONG   |NO        |不能大于 `60000`。
 `timestamp`              |LONG   |YES       |
 `signature`              |STRING |YES       |
@@ -5264,6 +5315,9 @@ NONE
 `workingTimeInForce`       |ENUM   |NO        |支持的数值： [生效时间](./enums_CN.md#timeinforce)
 `workingStrategyId`        |LONG    |NO        |订单策略中用于标识生效订单的 ID。
 `workingStrategyType`      |INT    |NO        |用于标识生效订单策略的任意数值。<br> 小于 `1000000` 的值被保留，无法使用。
+`workingPegPriceType`      |ENUM   |NO        |参阅 [挂钩订单](#pegged-orders-info)
+`workingPegOffsetType`     |ENUM   |NO        |
+`workingPegOffsetValue`    |INT    |NO        |
 `pendingSide`              |ENUM   |YES       |支持的数值： [订单方向](./enums_CN.md#side)
 `pendingQuantity`          |DECIMAL|YES       |
 `pendingAboveType`         |ENUM   |YES       |支持的数值： `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
@@ -5275,6 +5329,9 @@ NONE
 `pendingAboveTimeInForce`  |ENUM   |NO        |
 `pendingAboveStrategyId`   |LONG    |NO        |订单策略中用于标识待处理上方订单的 ID。
 `pendingAboveStrategyType` |INT    |NO        |用于标识待处理上方订单策略的任意数值。 <br> 小于 `1000000` 的值被保留，无法使用。
+`pendingAbovePegPriceType` |ENUM   |NO        |参阅 [挂钩订单](#pegged-orders-info)
+`pendingAbovePegOffsetType`|ENUM   |NO        |
+`pendingAbovePegOffsetValue` |INT  |NO        |
 `pendingBelowType`         |ENUM   |NO        |支持的数值： `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
 `pendingBelowClientOrderId`|STRING |NO        |用于标识待处理下方订单的唯一ID。 <br> 如果未发送则自动生成。
 `pendingBelowPrice`        |DECIMAL|NO        |当 `pendingBelowType` 是 `STOP_LOSS_LIMIT` 或 `TAKE_PROFIT_LIMIT` 时，可用以指定限价。
@@ -5284,6 +5341,9 @@ NONE
 `pendingBelowTimeInForce`  |ENUM   |NO        |支持的数值： [生效时间](./enums_CN.md#timeinforce)
 `pendingBelowStrategyId`   |LONG    |NO        |订单策略中用于标识待处理下方订单的 ID。
 `pendingBelowStrategyType` |INT    |NO        |用于标识待处理下方订单策略的任意数值。 <br> 小于 `1000000` 的值被保留，无法使用。
+`pendingBelowPegPriceType` |ENUM   |NO        |参阅 [挂钩订单](#pegged-orders-info)
+`pendingBelowPegOffsetType`|ENUM   |NO        |
+`pendingBelowPegOffsetValue` |INT  |NO        |
 `recvWindow`               |LONG  |NO        |不能大于 `60000`。
 `timestamp`                |LONG   |YES       |
 `signature`                |STRING|YES|
@@ -6902,6 +6962,13 @@ timestamp           | LONG   | YES          |
         "buyer": "0.00000030",
         "seller": "0.00000040"
       },
+      "specialCommission":
+      {                                  // 订单交易的特殊佣金率。
+        "maker": "0.01000000",
+        "taker": "0.02000000",
+        "buyer": "0.03000000",
+        "seller": "0.04000000"
+      },
       "taxCommission":                   // 订单交易的税率。
       {
         "maker": "0.00000112",
@@ -7002,6 +7069,31 @@ timestamp           | LONG   | YES          |
 
 ## 用户数据流请求
 
+### 用户数据流订阅
+
+<a id=general_info_user_data_stream_subscriptions></a>
+**常规信息：**
+
+* 用户数据流订阅允许您通过 WebSocket 连接接收与指定帐户相关的所有事件。
+* 有两种方式可以启用订阅：
+  * 如果您拥有已通过验证的会话，则可以使用 [`userDataStream.subscribe`](#user-data-stream-subscribe) 来订阅该已通过验证帐户的相关事件。
+  * 您还可以使用 [`userdataStream.subscribe.signature`](#user-data-signature) 为拥有 API 密钥的任何帐户额外开设订阅。
+  * 一个帐户在指定连接上只能有一个有效订阅。
+* 订阅由用订阅时返回的 `subscriptionId` 标识。该 `subscriptionId` 允许您将收到的事件映射到给定的订阅。
+* 可以使用 [`session.subscriptions`](#session-subscription) 查找会话的所有有效订阅。
+* 限制
+  * 单个会话最多可同时支持**1,000 个有效订阅**。
+    * 尝试启用超出此限制的新订阅将导致错误。
+    * 如果您的帐户非常活跃，我们建议您不要一次启用过多的订阅，以免连接过载。
+  * 单个会话在其生命周期内最多可处理**65,535 个订阅**。
+    * 如果达到此限制，您将收到错误，并且必须重新建立连接才能启用新的订阅。
+* 要验证用户数据流订阅的状态，请检查 [`session.status`](#query-session-status) 中的 `userDataStream` 字段：
+  * `null` - 此 WebSocket API 上**不提供**用户数据流订阅。
+  * `true` - 此会话中**至少有一个有效订阅**。
+  * `false` - 此会话中**没有有效订阅**。
+
+<a id="user-data-stream-subscribe"></a>
+
 #### 订阅用户数据流 (USER_STREAM)
 
 ```javascript
@@ -7037,7 +7129,7 @@ timestamp           | LONG   | YES          |
 }
 ```
 
-#### 取消订阅用户数据流 (USER_STREAM)
+#### 取消订阅用户数据流
 
 ```javascript
 {
@@ -7048,11 +7140,16 @@ timestamp           | LONG   | YES          |
 
 取消订阅当前 WebSocket 连接中的用户数据流。
 
+请注意 `session.logout` 只会关闭由 `userdataStream.subscribe` 创建的订阅，并不会关闭通过 `userDataStream.subscribe.signature` 创建的订阅。
+
 **权重:**
 2
 
 **参数:**
-无
+
+名称               | 类型    | 是否必需 | 描述
+----------------  | ------ |-------- | ---------
+| `subscriptionId`| INT    | No      | 如果在进行调用时不用该参数，将会关闭所有订阅。 <br>如果在进行调用时使用 `subscriptionId` 参数，如果该 ID 存在的话，将尝试关闭与该 ID 匹配的订阅。 |
 
 **响应:**
 
@@ -7064,6 +7161,86 @@ timestamp           | LONG   | YES          |
 }
 ```
 
+<a id="session-subscription"></a>
+
+#### 显示所有订阅
+
+```javascript
+{
+  "id": "d3df5a22-88ea-4fe0-9f4e-0fcea5d418b7",
+  "method": "session.subscriptions",
+  "params": {}
+}
+```
+
+**注意：**
+
+* 用户按需要跟踪相关帐户的对应订阅情况。
+
+**权重:**
+2
+
+**数据源:**
+缓存
+
+**响应:**
+
+```javascript
+{
+  "id": "d3df5a22-88ea-4fe0-9f4e-0fcea5d418b7",
+  "status": 200,
+  "result": [
+    {
+      "subscriptionId": 0
+    },
+    {
+      "subscriptionId": 1
+    }
+  ]
+}
+```
+
+<a id="user-data-signature"></a>
+
+#### 通过签名订阅的方式订阅用户数据流 (USER\_STREAM)
+
+```javascript
+{
+  "id": "d3df8a22-98ea-4fe0-9f4e-0fcea5d418b7",
+  "method": "userDataStream.subscribe.signature",
+  "params": {
+    "apiKey": "mjcKCrJzTU6TChLsnPmgnQJJMR616J4yWvdZWDUeXkk6vL6dLyS7rcVOQlADlVjA",
+    "timestamp": 1747385641636,
+    "signature": "yN1vWpXb+qoZ3/dGiFs9vmpNdV7e3FxkA+BstzbezDKwObcijvk/CVkWxIwMCtCJbP270R0OempYwEpS6rDZCQ=="
+  }
+}
+```
+
+**权重:**
+2
+
+**参数:**
+
+名称               | 类型    | 是否必需 | 描述
+----------------  | ------ |-------- | ---------
+| `apiKey`        | STRING  | Yes    |
+| `timestamp`     | LONG    | Yes    |
+| `signature`     | STRING  | Yes    |
+
+**数据源:**
+缓存
+
+**响应:**
+
+```javascript
+{
+  "id": "d3df8a22-98ea-4fe0-9f4e-0fcea5d418b7",
+  "status": 200,
+  "result": {
+    "subscriptionId": 0
+  }
+}
+```
 
 ### Listen Key 管理 (已弃用)
 

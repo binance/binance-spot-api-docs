@@ -1,6 +1,127 @@
 # 更新日志
 
-**最近更新： 2025-08-07**
+**最近更新： 2025-08-12**
+
+### 2025-08-12
+
+**通知:** 本节中的更改将逐步推出,需要大约两周时间才能完成部署。
+
+#### 常规更改
+
+* 新的错误代码 `-1120` 和 `1211`。有关详情，请参阅 [错误代码汇总](errors_CN.md)。
+* 以下请求包含一个名为 `specialCommission` 的新结构。请参阅 [佣金率](faqs/commission_faq_CN.md)。
+  * REST API
+    * `GET /api/v3/account/commission`
+    * `POST /api/v3/order/test` 并设置 `computeCommissionRates=true`
+    * `POST /api/v3/sor/order/test` 并设置 `computeCommissionRates=true`
+  * WebSocket API
+    * `account.commission`
+    * `order.test` 并设置 `computeCommissionRates=true`
+    * `sor.order.test` 并设置 `computeCommissionRates=true`
+* **SBE: 新模式 3:1 ([spot_3_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml)) 将可以使用。**
+  * 现行模式 3:0 ([spot_3_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_0.xml)) 将会被废止并根据我们的废止政策，在6个月内停止使用。
+  * 模式 3:1 中的更改：
+    * `ExchangeInfoResponse`：增加新字段 `pegInstructionsAllowed`
+    * `ExecutionReportEvent`：增加新字段 `pricePeg`，`pricePegOffsetLevel` 和 `peggedPrice`
+    * `UserDataStreamSubscribeResponse`：新字段 `subscriptionId`
+    * 所有的用户数据流事件都增加了新字段 `subscriptionId`。
+    * 对于 `WebSocketSessionLogonResponse`，`WebSocketSessionStatusResponse` 和 `WebSocketSessionLogoutResponse`，字段 `apiKey` 被改名为 `loggedOnApiKey`
+    * `OrderTestWithCommissionsResponse`：增加2个新字段 `specialCommissionForOrderMaker` 和 `specialCommissionForOrderTaker`
+    * `AccountCommissionResponse`：增加4个新字段 `specialCommissionMaker`，`specialCommissionTaker`，`specialCommissionBuyer` 和 `specialCommissionSeller`
+    * 支持 `EXCHANGE_MAX_NUM_ORDER_LISTS`，`MAX_NUM_ORDER_LISTS` 和 `MAX_NUM_ORDER_AMENDS` 过滤器。
+    * `ExecutionReportEvent`：字段 `rejectReason` 和 `origClientOrderId` 在 SBE 格式也会显示它们的默认值，以和 JSON 格式保持一致，
+    * `NonRepresentableMessage`：添加了一条新消息，用于表示无法使用现有 `schema ID` 和 `version` 来显示的信息。收到此消息则表示应该有可用内容，但不适用于当前使用的 SBE 模式。
+* 最终状态为 `EXPIRED_IN_MATCH`（即因 STP 而过期的订单）且累计数量为 0 的订单将在 90 天后做归档处理。
+* 查询订单列表请求将首先查询缓存中的数据，如果找不到，再去查询数据库。
+  * REST API：`GET /api/v3/openOrderLists`
+  * WebSocket API：`openOrderLists.status`
+
+#### WebSocket API
+
+* 单个 WebSocket 连接可以同时订阅多个用户数据流。
+  * 单个连接上，每个帐户只能有一个订阅。
+* 新增了 `userDataStream.subscribe.signature` 方法，允许您无需事先登录即可订阅用户数据流。
+  * 此方法也不需要 Ed25519 API 密钥，并且可以与任何 [API Key 类型](faqs/api_key_types_CN.md) 配合使用。
+  * 为了获得 [SBE 支持](faqs/sbe_faq_CN.md)，您至少需要使用架构 3:1。
+* 新增了 `session.subscriptions` 方法，用于列出当前会话中所有有效的订阅。
+* 会话请求中字段 `userDataStream` 的含义略有变化。
+  * 之前，如果您订阅了已登录帐户的用户数据流，则此方法返回 `true`。
+  * 现在，如果您至少有一个有效的用户数据流订阅，它将返回 `true`，否则为 `false`。
+* `userDataStream.unsubscribe` 支持关闭多个订阅。
+  * 调用时不带参数，将关闭所有订阅。
+  * 调用时传入 `subscriptionId`，如果该 ID 存在的话，将尝试关闭与该 ID 匹配的订阅。
+  * 此请求的授权已更改为 `NONE`。
+* 通过 [WebSocket API](web-socket-api_CN.md#user_data_stream_subscribe) 进行监听时，用户数据流事件负载中新增了字段 `subscriptionId`。这个字段会标识事件来自哪个订阅。
+
+#### FIX API
+
+* 当客户端发送拒绝消息时，FIX API 将不再向客户端返回 `<3>` 拒绝消息。
+* 现在，当标签无效、缺少值、字段值为空或格式错误时，错误消息将更加清晰明了。
+  * ```json
+    {"code": -1169, "msg": "Invalid tag number."}
+    ```
+  * ```json
+    {"code": -1177, "msg": "Tag specified without a value."}
+    ```
+  * ```json
+    {"code": -1102, "msg": "Field value was empty or malformed."}
+    ```
+
+#### 将会发生的更改
+
+以下变更将于**2025-08-27 07:00 UTC 开始发生**：
+* 交易所信息请求将发送字段 `pegInstructionsAllowed`。
+* 已修复的问题：撮合引擎不会再接受数量超出订单数量过滤器上限的订单列表。受到影响的过滤器包括：
+  * `MAX_NUM_ORDERS`
+  * `MAX_ALGO_ORDERS`
+  * `MAX_ICEBERG_ORDERS`
+  * `EXCHANGE_MAX_NUM_ORDERS`
+  * `EXCHANGE_MAX_ALGO_ORDERS`
+  * `EXCHANGE_MAX_ICEBERG_ORDERS`
+
+以下变更将于**2025-08-28 07:00 UTC 开始发生**：
+* [挂钩订单](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/pegged_orders_CN.md) 功能将可以使用。
+  * pegInstructionsAllowed` 将在所有的交易对上被设为 `true`, 在所有的 API 上正式启用挂钩订单相关功能。
+  * 如果订单是挂钩订单，那么以下条件字段 `pegPriceType`， `pegOffSetType`， `pegOffsetValues` 和 `peggedPrice` 将出现在以下请求的响应中：
+    * REST API
+      * `GET /api/v3/order`
+      * `GET /api/v3/orderList`
+      * `GET /api/v3/openOrderList`
+      * `GET /api/v3/allOrders`
+      * `DELETE /api/v3/order`
+      * `DELETE /api/v3/orderList`
+      * `DELETE /api/v3/openOrders`
+      * `PUT /api/v3/order/amend/keepPriority`
+    * WebSocket API
+      * `order.status`
+      * `orderList.status`
+      * `allOrders`
+      * `order.cancel`
+      * `orderList.cancel`
+      * `openOrders.cancelAll`
+      * `order.amend.keepPriority`
+  * FIX API
+    * `OrdType(40)` 支持新的数值 `P(PEGGED)`
+    * 字段 `PegOffsetValue(211)`，`PegPriceType(1094)`，`PegMoveType(835)` 和 `PegOffsetType(836)` 被添加到以下消息中：
+      * NewOrderSingle `<D>`
+      * NewOrderList `<E>`
+      * OrderCancelRequestAndNewOrderSingle `<XCN>`
+    * 下单时，`ExecutionReport` `<8>` 消息将回显 PegInstructions，并带有一个额外的可选字段 `PeggedPrice (839)`
+  * 添加了新的挂钩订单错误消息。欲知详情，请参阅 [错误代码汇总](errors_CN.md) 文档。
+* `recvWindow` 上的变更将被启用。
+  * 当您的消息离开我方的消息代理后，在即将发送到撮合引擎之前，将进行第三次检查。
+    * 这不包括撮合引擎本身内部的潜在延迟。
+  * `recvWindow` 支持微秒级。
+    * 该值仍然以毫秒为单位指定，但现在可以采用小数部分来指定更高的精度。
+    * 这意味着该参数现在支持**最大精度为 3 位小数**。（例如， 6000.346）
+    * 受影响的 API：
+      * FIX API
+      * REST API
+      * WebSocket API
+* 新的 [`MAX_NUM_ORDER_LISTS`](filters.md#max-num-order-lists) 过滤器将被启用：会允许每个交易对上最多有 20 个订单列表挂单。
+* 新的 [`MAX_NUM_ORDER_AMENDS`](filters_CN.md#max_num_order_amends) 过滤器将被启用：会以 10 次为上限来限制订单修改次数。
+
+---
 
 ### 2025-08-07
 

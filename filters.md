@@ -254,6 +254,34 @@ For `STOP_LOSS SELL`, `STOP_LOSS_LIMIT SELL`, `TAKE_PROFIT BUY`, and `TAKE_PROFI
    }
 ```
 
+### MAX_NUM_ORDER_AMENDS
+
+The `MAX_NUM_ORDER_AMENDS` filter defines the maximum number of times an order can be amended on the given symbol.
+
+If there are too many order amendments made on a single order, you will receive the `-2038` error code.
+
+**/exchangeInfo format:**
+
+```javascript
+        {
+          "filterType": "MAX_NUM_ORDER_AMENDS",
+          "maxNumOrderAmends": 10
+        }
+```
+
+### MAX_NUM_ORDER_LISTS
+
+The `MAX_NUM_ORDER_LISTS` filter defines the maximum number of open order lists an account can have on a symbol. Note that OTOCOs count as one order list.
+
+**/exchangeInfo format:**
+
+```javascript
+        {
+          "filterType": "MAX_NUM_ORDER_LISTS",
+          "maxNumOrderLists": 20
+        }
+```
+
 
 ## Exchange Filters
 ### EXCHANGE_MAX_NUM_ORDERS
@@ -290,3 +318,15 @@ The `EXCHANGE_MAX_NUM_ICEBERG_ORDERS` filter defines the maximum number of icebe
   "maxNumIcebergOrders": 10000
 }
 ```
+
+### EXCHANGE_MAX_NUM_ORDER_LISTS
+
+The `EXCHANGE_MAX_NUM_ORDERS` filter defines the maximum number of order lists an account is allowed to have open on the exchange. Note that OTOCOs count as one order list.
+
+**/exchangeInfo format:**
+
+```javascript
+   {
+      "filterType": "EXCHANGE_MAX_NUM_ORDER_LISTS",
+      "maxNumOrderLists": 20
+    }```

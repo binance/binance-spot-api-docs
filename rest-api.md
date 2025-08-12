@@ -74,7 +74,7 @@
 
 # Public Rest API for Binance
 
-**Last Updated: 2025-05-28**
+**Last Updated: 2025-08-12**
 
 ## General API Information
 * The following base endpoints are available. Please use whichever works best for your setup:
@@ -584,6 +584,7 @@ Memory
       "allowTrailingStop": false,
       "cancelReplaceAllowed":false,
       "amendAllowed":false,
+      "pegInstructionsAllowed": true,
       "isSpotTradingAllowed": true,
       "isMarginTradingAllowed": true,
       "filters": [
@@ -1692,6 +1693,9 @@ trailingDelta|LONG|NO| See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md).
 icebergQty | DECIMAL | NO | Used with `LIMIT`, `STOP_LOSS_LIMIT`, and `TAKE_PROFIT_LIMIT` to create an iceberg order.
 newOrderRespType | ENUM | NO | Set the response JSON. `ACK`, `RESULT`, or `FULL`; `MARKET` and `LIMIT` order types default to `FULL`, all other orders default to `ACK`.
 selfTradePreventionMode |ENUM| NO | The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](enums.md#stpmodes).
+pegPriceType | ENUM | NO | `PRIMARY_PEG` or `MARKET_PEG`. <br> See [Pegged Orders Info](#pegged-orders-info)|
+pegOffsetValue | INT | NO | Price level to peg the price to (max: 100). <br>See [Pegged Orders Info](#pegged-orders-info)  |
+pegOffsetType | ENUM | NO | Only `PRICE_LEVEL` is supported. <br> See [Pegged Orders Info](#pegged-orders-info) |
 recvWindow | LONG | NO |The value cannot be greater than `60000`
 timestamp | LONG | YES |
 
@@ -1707,6 +1711,15 @@ Type | Additional mandatory parameters | Additional Information
 `TAKE_PROFIT` | `quantity`, `stopPrice` or `trailingDelta` | This will execute a `MARKET` order when the conditions are met. (e.g. `stopPrice` is met or `trailingDelta` is activated)
 `TAKE_PROFIT_LIMIT` | `timeInForce`, `quantity`, `price`, `stopPrice` or `trailingDelta` |
 `LIMIT_MAKER` | `quantity`, `price`| This is a `LIMIT` order that will be rejected if the order immediately matches and trades as a taker. <br/> This is also known as a POST-ONLY order.
+
+
+<a id="pegged-orders-info">Notes on using parameters for Pegged Orders:</a>
+
+* These parameters are allowed for `LIMIT`, `LIMIT_MAKER`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT_LIMIT` orders.
+* If `pegPriceType` is specified, `price` becomes optional. Otherwise, it is still mandatory.
+* `pegPriceType=PRIMARY_PEG` means the primary peg, that is the best price on the same side of the order book as your order.
+* `pegPriceType=MARKET_PEG` means the market peg, that is the best price on the opposite side of the order book from your order.
+* Use `pegOffsetType` and `pegOffsetValue` to request a price level other than the best one. These parameters must be specified together.
 
 Other info:
 
@@ -1834,6 +1847,10 @@ Field          |Description                                                     
 `trailingTime` | Time when the trailing order is now active and tracking price changes| Appears only for Trailing Stop Orders.| `"trailingTime": -1`
 `usedSor`      | Field that determines whether order used SOR | Appears when placing orders using SOR|`"usedSor": true`
 `workingFloor` | Field that determines whether the order is being filled by the SOR or by the order book the order was submitted to.|Appears when placing orders using SOR|`"workingFloor": "SOR"`|
+`pegPriceType` | Price peg type  | Only for pegged orders  |`"pegPriceType": "PRIMARY_PEG"` |
+`pegOffsetType` | Price peg offset type | Only for pegged orders, if requested  |`"pegOffsetType": "PRICE_LEVEL"` |
+`pegOffsetValue` | Price peg offset value  | Only for pegged orders, if requested  |`"pegOffsetValue": 5` |
+`peggedPrice` | Current price order is pegged at | Only for pegged orders, once determined |`"peggedPrice": "87523.83710000"` |
 
 ### Test new order (TRADE)
 ```
@@ -1876,6 +1893,10 @@ With `computeCommissionRates`
   "standardCommissionForOrder": {  //Standard commission rates on trades from the order.
     "maker": "0.00000112",
     "taker": "0.00000114"
+  },
+  "specialCommissionForOrder": {    //Special commission rates on trades from the order.
+    "maker": "0.05000000",
+    "taker": "0.06000000"
   },
   "taxCommissionForOrder": {       //Tax commission rates for trades from the order.
     "maker": "0.00000112",
@@ -2130,6 +2151,9 @@ newOrderRespType|ENUM|NO|Allowed values: <br/> `ACK`, `RESULT`, `FULL` <br/> `MA
 selfTradePreventionMode |ENUM| NO |The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](./enums.md#stpmodes).
 cancelRestrictions| ENUM   | NO           | Supported values: <br>`ONLY_NEW` - Cancel will succeed if the order status is `NEW`.<br> `ONLY_PARTIALLY_FILLED ` - Cancel will succeed if order status is `PARTIALLY_FILLED`. For more information please refer to [Regarding `cancelRestrictions`](#regarding-cancelrestrictions)
 orderRateLimitExceededMode|ENUM|No| Supported values: <br> `DO_NOTHING` (default)- will only attempt to cancel the order if account has not exceeded the unfilled order rate limit<br> `CANCEL_ONLY` - will always cancel the order|
+pegPriceType |ENUM |NO |`PRIMARY_PEG` or `MARKET_PEG` <br> See [Pegged Orders](#pegged-orders-info) |
+pegOffsetValue |INT |NO |Price level to peg the price to (max: 100) <br> See [Pegged Orders](#pegged-orders-info)  |
+pegOffsetType |ENUM |NO |Only `PRICE_LEVEL` is supported  <br> See [Pegged Orders](#pegged-orders-info)|
 recvWindow | LONG | NO | The value cannot be greater than `60000`
 timestamp | LONG | YES |
 
@@ -2776,6 +2800,9 @@ aboveTrailingDelta     |LONG    |No         |See [Trailing Stop order FAQ](faqs/
 aboveTimeInForce       |DECIMAL |No         |Required if `aboveType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`
 aboveStrategyId        |LONG     |No         |Arbitrary numeric value identifying the above order within an order strategy.
 aboveStrategyType      |INT     |No         |Arbitrary numeric value identifying the above order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
+abovePegPriceType      |ENUM    |NO         |See [Pegged Orders](#pegged-orders-info)
+abovePegOffsetType     |ENUM    |NO         |
+abovePegOffsetValue    |INT     |NO         |
 belowType              |ENUM    |Yes        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 belowClientOrderId     |STRING  |No         |Arbitrary unique ID among open orders for the below order. Automatically generated if not sent
 belowIcebergQty        |LONG    |No         |Note that this can only be used if `belowTimeInForce` is `GTC`.
@@ -2785,6 +2812,9 @@ belowTrailingDelta     |LONG    |No         |See [Trailing Stop order FAQ](faqs/
 belowTimeInForce       |ENUM    |No         |Required if `belowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`.
 belowStrategyId        |LONG    |No          |Arbitrary numeric value identifying the below order within an order strategy.
 belowStrategyType      |INT     |No         |Arbitrary numeric value identifying the below order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
+belowPegPriceType      |ENUM    |NO         |See [Pegged Orders](#pegged-orders-info)
+belowPegOffsetType     |ENUM    |NO         |
+belowPegOffsetValue    |INT     |NO         |
 newOrderRespType       |ENUM    |No         |Select response format: `ACK`, `RESULT`, `FULL`
 selfTradePreventionMode|ENUM    |No         |The allowed enums is dependent on what is configured on the symbol. Supported values: [STP Modes](./enums.md#stpmodes)
 recvWindow             |LONG   |No          |The value cannot be greater than `60000`.
@@ -2898,6 +2928,9 @@ workingIcebergQty      |DECIMAL|NO       |This can only be used if `workingTimeI
 workingTimeInForce     |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
 workingStrategyId      |LONG    |NO        |Arbitrary numeric value identifying the working order within an order strategy.
 workingStrategyType    |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
+workingPegPriceType    |ENUM   |NO        |See [Pegged Orders](#pegged-orders-info)
+workingPegOffsetType   |ENUM   |NO        |
+workingPegOffsetValue  |INT    |NO        |
 pendingType            |ENUM   |YES       |Supported values: [Order Types](#order-type)<br> Note that `MARKET` orders using `quoteOrderQty` are not supported.
 pendingSide            |ENUM   |YES       |Supported values: [Order Side](./enums.md#side)
 pendingClientOrderId   |STRING |NO        |Arbitrary unique ID among open orders for the pending order.<br> Automatically generated if not sent.
@@ -2909,6 +2942,9 @@ pendingIcebergQty      |DECIMAL|NO        |This can only be used if `pendingTime
 pendingTimeInForce     |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
 pendingStrategyId      |LONG    |NO        |Arbitrary numeric value identifying the pending order within an order strategy.
 pendingStrategyType    |INT    |NO        |Arbitrary numeric value identifying the pending order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
+pendingPegPriceType    |ENUM   |NO        |See [Pegged Orders](#pegged-orders-info)
+pendingPegOffsetType   |ENUM   |NO       |
+pendingPegOffsetValue  |INT    |NO       |
 recvWindow             |LONG   |NO        |The value cannot be greater than `60000`.
 timestamp              |LONG   |YES       |
 
@@ -3032,6 +3068,9 @@ workingIcebergQty        |DECIMAL|NO        |This can only be used if `workingTi
 workingTimeInForce       |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
 workingStrategyId        |LONG    |NO        |Arbitrary numeric value identifying the working order within an order strategy.
 workingStrategyType      |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
+workingPegPriceType      |ENUM   |NO        |See [Pegged Orders](#pegged-orders-info)
+workingPegOffsetType     |ENUM   |NO        |
+workingPegOffsetValue    |INT    |NO        |
 pendingSide              |ENUM   |YES       |Supported values: [Order side](./enums.md#side)
 pendingQuantity          |DECIMAL|YES       |
 pendingAboveType         |ENUM   |YES       |Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
@@ -3041,8 +3080,11 @@ pendingAboveStopPrice    |DECIMAL|NO        |Can be used if `pendingAboveType` i
 pendingAboveTrailingDelta|DECIMAL|NO        |See [Trailing Stop FAQ](faqs/trailing-stop-faq.md)
 pendingAboveIcebergQty   |DECIMAL|NO        |This can only be used if `pendingAboveTimeInForce` is `GTC` or if `pendingAboveType` is `LIMIT_MAKER`.
 pendingAboveTimeInForce  |ENUM   |NO        |
-pendingAboveStrategyId   |LONG    |NO        |Arbitrary numeric value identifying the pending above order within an order strategy.
+pendingAboveStrategyId   |LONG   |NO        |Arbitrary numeric value identifying the pending above order within an order strategy.
 pendingAboveStrategyType |INT    |NO        |Arbitrary numeric value identifying the pending above order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
+pendingAbovePegPriceType |ENUM  |NO         |See [Pegged Orders](#pegged-orders-info)
+pendingAbovePegOffsetType  |ENUM |NO        |
+pendingAbovePegOffsetValue |INT |NO         |
 pendingBelowType         |ENUM   |NO        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 pendingBelowClientOrderId|STRING |NO        |Arbitrary unique ID among open orders for the pending below order.<br> Automatically generated if not sent.
 pendingBelowPrice        |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT` to specify limit price
@@ -3052,6 +3094,9 @@ pendingBelowIcebergQty   |DECIMAL|NO        |This can only be used if `pendingBe
 pendingBelowTimeInForce  |ENUM   |NO        |Supported values: [Time In Force](enums.md#timeinforce)
 pendingBelowStrategyId   |LONG    |NO        |Arbitrary numeric value identifying the pending below order within an order strategy.
 pendingBelowStrategyType |INT    |NO        |Arbitrary numeric value identifying the pending below order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
+pendingBelowPegPriceType |ENUM  |NO         |See [Pegged Orders](#pegged-orders-info)
+pendingBelowPegOffsetType |ENUM |NO         |
+pendingBelowPegOffsetValue |INT |NO         |
 recvWindow               |LONG   |NO        |The value cannot be greater than `60000`.
 timestamp                |LONG   |YES       |
 
@@ -4055,6 +4100,12 @@ Database
     "taker": "0.00000020",
     "buyer": "0.00000030",
     "seller": "0.00000040"
+  },
+  "specialCommission": {         // Special commission rates from the order.
+    "maker": "0.01000000",
+    "taker": "0.02000000",
+    "buyer": "0.03000000",
+    "seller": "0.04000000"
   },
   "taxCommission": {              //Tax commission rates for trades from the order.
     "maker": "0.00000112",

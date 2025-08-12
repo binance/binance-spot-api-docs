@@ -12,10 +12,11 @@
 ### 佣金率有哪些不同的类型？
 
 有以下3种类型：
-
 * 标准佣金（`standardCommission`） - 来自订单的标准交易佣金率。
 * 税务佣金（`taxCommission`） - 来自订单的税费佣金率。
-* 折扣（`discount`） - 如果使用`BNB`支付佣金，在标准佣金基础上可以得到的折扣率。
+* 特殊佣金（`specialCommission`） - 在特定情况下，将会被收取的额外佣金。
+
+标准佣金率可能会被降低，具体情况取决于特定交易对的促销活动、可适用的折扣等。
 
 ### 我怎么才能知道佣金率是多少？
 
@@ -30,7 +31,7 @@ WebSocket API: `account.commission`
 <a id="test-order-diferences"></a>
 ### 在发送测试订单中使用`computeCommissionRates`得到的响应与查询佣金率的响应之间有什么不同？
 
-以下是有关前者的一个例子：
+使用 `computeCommissionRates` 的测试订单会返回该特定订单的详细佣金率：
 
 
 ```json
@@ -38,6 +39,10 @@ WebSocket API: `account.commission`
   "standardCommissionForOrder": {
     "maker": "0.00000050",
     "taker": "0.00000060"
+  },
+  "specialCommissionForOrder": {
+    "maker": "0.05000000",
+    "taker": "0.06000000"
   },
   "taxCommissionForOrder": {
     "maker": "0.00000228",
@@ -51,10 +56,39 @@ WebSocket API: `account.commission`
   }
 }
 ```
+注意：因为买方/卖方佣金已根据订单方向计算在内，所以买方/卖方佣金不会被单独显示出来。
 
-当使用带有`computeCommissionRates`的订单测试请求时，`standardCommissionForOrder` 和 `taxCommissionForOrder` 显示了该订单交易的实际佣金率。无论订单参数如何设置，响应均会返回`maker`和`taker`的费率。
+相反，查询佣金率的响应则提供了针对于您的帐户中该交易对的当前佣金率。
 
-而查询佣金率的响应则提供了针对于您的帐户中该交易对的当前佣金率。
+```json
+{
+  "symbol": "BTCUSDT",
+  "standardCommission": {
+    "maker": "0.00000040",
+    "taker": "0.00000050",
+    "buyer": "0.00000010",
+    "seller": "0.00000010"
+  },
+  "specialCommission": {
+    "maker": "0.04000000",
+    "taker": "0.05000000",
+    "buyer": "0.01000000",
+    "seller": "0.01000000"
+  },
+  "taxCommission": {
+    "maker": "0.00000128",
+    "taker": "0.00000130",
+    "buyer": "0.00000100",
+    "seller": "0.00000100"
+  },
+  "discount": {
+    "enabledForAccount": true,
+    "enabledForSymbol": true,
+    "discountAsset": "BNB",
+    "discount": "0.25000000"
+  }
+}
+```
 
 
 ### 佣金是怎么计算的？
@@ -69,6 +103,12 @@ WebSocket API: `account.commission`
     "taker": "0.00000020",
     "buyer": "0.00000030",
     "seller": "0.00000040"
+  },
+  "specialCommission": {
+    "maker": "0.01000000",
+    "taker": "0.02000000",
+    "buyer": "0.03000000",
+    "seller": "0.04000000"
   },
   "taxCommission": {
     "maker": "0.00000112",
@@ -118,6 +158,15 @@ WebSocket API: `account.commission`
                = 0.04022988 USDT
 ```
 
+如果适用，特殊佣金（`special commission`）的计算方式如下：
+
+```
+特殊佣金 = 名义价值 * (taker + seller)
+               = (35000 * 0.49975) * (0.02000000 + 0.04000000)
+               = 17491.25000000 * 0.06000030
+               = 1049.47500000 USDT
+```
+
 如果您不使用`BNB`支付佣金，佣金总数会被加起来并从您所接收的`USDT`金额中扣除。
 
 由于`discount`下的`enabledforAccount`和`enabledForSymbol`被设置为`true`，这意味着如果您所持有的余额足够，那么佣金将用`BNB`支付。
@@ -133,18 +182,23 @@ WebSocket API: `account.commission`
                                             = 0.000010091
 ```
 
-请注意，折扣（`discount`）**不适用于税务佣金（`税务佣金`）**。
+请注意，折扣（`discount`）**不适用于税务佣金（`taxCommission`）或特殊佣金（`special commission`）**。
 
 ```
 税务佣金 (以BNB支付) = 税务佣金 * BNB 汇率
                         = 0.04022988 * (1/260)
                         = 0.00015473
+
+特殊佣金 (以BNB支付) = 特殊佣金 * BNB 汇率
+                        = 1049.47500000 * (1/260)
+                        = 4.036442308
+
 ```
 
 ```
-佣金总数 (以BNB支付) = 标准佣金(打折后) + 税务佣金 (以BNB支付)
-                          = 0.000010091 + 0.00015473
-                          = 0.00016482
+佣金总数 (以BNB支付) = 标准佣金(打折后) + 税务佣金 (以BNB支付) + 特殊佣金 (以BNB支付)
+                        = 0.000010091 + 0.00015473 + 4.036442308
+                        = 4.036607129
 ```
 
 如果您的`BNB`余额不足以支付折扣后的佣金，那么全部佣金将从您所接收的`USDT`金额中扣除。
