@@ -260,6 +260,35 @@ MIN_NOTIONAL过滤器定义了交易对订单所允许的最小名义价值(成�
    }
 ```
 
+### MAX_NUM_ORDER_AMENDS 过滤器
+
+此过滤器定义了指定交易对的订单修改次数上限。
+
+如果单笔订单的修改次数过多，您将会收到 `-2038` 错误代码。
+
+**/exchangeInfo format:**
+
+```javascript
+        {
+          "filterType": "MAX_NUM_ORDER_AMENDS",
+          "maxNumOrderAmends": 10
+        }
+```
+
+### MAX_NUM_ORDER_LISTS
+
+此过滤器定义了账户在交易对上可持有的最大未平仓订单列表数量。请注意，OTOCO 交易计为一个订单列表。
+
+**/exchangeInfo format:**
+
+```javascript
+{
+          "filterType": "MAX_NUM_ORDER_LISTS",
+          "maxNumOrderLists": 20
+}
+```
+
+
 ## 交易所级别过滤器
 ### EXCHANGE_MAX_NUM_ORDERS 最多订单数
 `EXCHANGE_MAX_NUM_ORDERS`过滤器定义了允许在交易对上开设账户的最大订单数。
@@ -296,5 +325,18 @@ MIN_NOTIONAL过滤器定义了交易对订单所允许的最小名义价值(成�
 {
   "filterType": "EXCHANGE_MAX_NUM_ICEBERG_ORDERS",
   "maxNumIcebergOrders": 10000
+}
+```
+
+### EXCHANGE_MAX_NUM_ORDER_LISTS
+
+此过滤器定义了允许账号持有的最大未平仓订单列表数量。请注意，OTOCO 交易计为一个订单列表。
+
+**/exchangeInfo format:**
+
+```javascript
+{
+      "filterType": "EXCHANGE_MAX_NUM_ORDER_LISTS",
+      "maxNumOrderLists": 20
 }
 ```

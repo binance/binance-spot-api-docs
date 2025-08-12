@@ -1,6 +1,128 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-08-07**
+**Last Updated: 2025-08-12**
+
+### 2025-08-12
+
+**Notice:** The changes in this section will be gradually rolled out, and will take approximately up to two weeks to complete.
+
+#### General Changes
+
+* New error codes `-1120` and `1211`. See [Errors](errors.md) for more information.
+* The following requests have a new structure called `specialCommission`. See [Commission Rates](faqs/commission_faq.md).
+  * REST API
+    * `GET /api/v3/account/commission`
+    * `POST /api/v3/order/test` with `computeCommissionRates=true`
+    * `POST /api/v3/sor/order/test` with `computeCommissionRates=true`
+  * WebSocket API
+    * `account.commission`
+    * `order.test` with `computeCommissionRates=true`
+    * `sor.order.test` with `computeCommissionRates=true`
+* **SBE: A new schema 3:1 ([spot_3_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml)) is available.**
+  * The current schema 3:0 ([spot_3_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_0.xml)) is deprecated and will retire in 6 months as per our schema deprecation policy.
+  * Changes in schema 3:1:
+    * `ExchangeInfoResponse`: new field `pegInstructionsAllowed`
+    * `ExecutionReportEvent`: new fields `pricePeg`, `pricePegOffsetLevel`, `peggedPrice`
+    * `UserDataStreamSubscribeResponse`: new field `subscriptionId`
+    * New field `subscriptionId` for all user data stream events.
+    * Field `apiKey` renamed to `loggedOnApiKey` for `WebSocketSessionLogonResponse`, `WebSocketSessionStatusResponse` and `WebSocketSessionLogoutResponse`
+    * `OrderTestWithCommissionsResponse`: 2 new fields `specialCommissionForOrderMaker` and `specialCommissionForOrderTaker`
+    * `AccountCommissionResponse`: 4 new fields `specialCommissionMaker`, `specialCommissionTaker`, `specialCommissionBuyer` and `specialCommissionSeller`
+    * Support for `EXCHANGE_MAX_NUM_ORDER_LISTS`, `MAX_NUM_ORDER_LISTS`, and `MAX_NUM_ORDER_AMENDS` filters.
+    * `ExecutionReportEvent`: fields `rejectReason` and `origClientOrderId` now show their default values in SBE format to match the JSON format.
+    * `NonRepresentableMessage`: New message added to represent a message that cannot be represented in this schema ID and version. Receipt of this message indicates that something should be available, but it is not representable using the SBE schema currently in use.
+* Orders with cumulative quantity of 0 in the final state `EXPIRED_IN_MATCH` (i.e., the order expired due to STP) will be archived after 90 days.
+* Query order lists requests will first query the data in the cache, and if it cannot be found, will query the database.
+  * REST API: `GET /api/v3/openOrderLists`
+  * WebSocket API: `openOrderLists.status`
+
+#### WebSocket API
+
+* A single WebSocket connection can subscribe to multiple User Data Streams at once.
+  * Only one subscription per account is allowed on a single connection.
+* Method `userDataStream.subscribe.signature` has been added that allows you to subscribe to the User Data Stream without needing to login first.
+  * This also doesn’t require an Ed25519 API Key, and can work with any [API Key type](faqs/api_key_types.md).
+  * For [SBE support](faqs/sbe_faq.md), you need to use at least schema 3:1.
+* Method `session.subscriptions` has been added to list all active subscriptions for the current session.
+* The meaning of the field `userDataStream` in the session requests has changed slightly.
+  * Previously, this returned `true` if you were subscribed to the user data stream of your logged-on account.
+  * Now returns `true` if you have at least one active user data stream subscription, otherwise `false`.
+* `userDataStream.unsubscribe` supports closing multiple subscriptions.
+  * When called with no parameter, this will close all subscriptions.
+  * When called with `subscriptionId`, this will attempt to close the subscription matching that Id, if it exists.
+  * The authorization for this request has been changed to `NONE`.
+* Field `subscriptionId` has been added to the User Data Stream events payload when listening through the [WebSocket API](web-socket-api.md#user_data_stream_subscribe). This will identify which subscription the event is coming from.
+
+#### FIX API
+
+* When a client sends a reject message, the FIX API will no longer send the client back a Reject `<3>` message.
+* Error messages are now clearer when a tag is invalid, missing a value, or when the field value is empty or malformed.
+  * ```json
+    {"code": -1169, "msg": "Invalid tag number."}
+    ```
+  * ```json
+    {"code": -1177, "msg": "Tag specified without a value."}
+    ```
+  * ```json
+    {"code": -1102, "msg": "Field value was empty or malformed."}
+    ```
+
+#### Future Changes
+
+The following changes will be available on **2025-08-27 starting at 07:00 UTC**:
+* Exchange Information requests will emit a new field, `pegInstructionsAllowed`.
+* Bug fix: The Matching Engine will no longer accept order lists that exceed the order count filter limits. Affected filters:
+  * `MAX_NUM_ORDERS`
+  * `MAX_ALGO_ORDERS`
+  * `MAX_ICEBERG_ORDERS`
+  * `EXCHANGE_MAX_NUM_ORDERS`
+  * `EXCHANGE_MAX_ALGO_ORDERS`
+  * `EXCHANGE_MAX_ICEBERG_ORDERS`
+
+The following changes will be available on **2025-08-28 starting at 07:00 UTC**:
+* The [pegged orders](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/pegged_orders.md) functionality will be available.
+  * `pegInstructionsAllowed` will be set to `true` for all symbols, enabling the use of pegged orders for all APIs.
+  * The following conditional fields `pegPriceType`, `pegOffSetType`, `pegOffsetValues`, and `peggedPrice` will appear in responses of the following requests if the order is a pegged order:
+    * REST API
+      * `GET /api/v3/order`
+      * `GET /api/v3/orderList`
+      * `GET /api/v3/openOrderList`
+      * `GET /api/v3/allOrders`
+      * `DELETE /api/v3/order`
+      * `DELETE /api/v3/orderList`
+      * `DELETE /api/v3/openOrders`
+      * `PUT /api/v3/order/amend/keepPriority`
+    * WebSocket API
+      * `order.status`
+      * `orderList.status`
+      * `allOrders`
+      * `order.cancel`
+      * `orderList.cancel`
+      * `openOrders.cancelAll`
+      * `order.amend.keepPriority`
+  * FIX API
+    * `OrdType(40)` supports new value `P(PEGGED)`
+    * Tags `PegOffsetValue(211)`, `PegPriceType(1094)`, `PegMoveType(835)`, and `PegOffsetType(836)` have been added to the following messages:
+      * NewOrderSingle `<D>`
+      * NewOrderList `<E>`
+      * OrderCancelRequestAndNewOrderSingle `<XCN>`
+    * When placing an order, the `ExecutionReport` `<8>` message will echo back `PegInstructions`, with an extra optional field `PeggedPrice (839)`.
+  * New error messages for pegged orders are added. Please see the [Errors](errors.md) document for more information.
+* Changes with `recvWindow` will be enabled.
+  * A third check is performed after your message leaves our message broker, just before it is sent to the Matching Engine.
+    * This does not cover potential delays inside the Matching Engine itself.
+  * `recvWindow` supports microseconds.
+    * The value is still specified in milliseconds, but it can now include a decimal component for higher precision.
+    * This means the parameter can now support up to **three decimal places** (e.g., 6000.346).
+    * APIs affected:
+      * FIX API
+      * REST API
+      * WebSocket API
+* New [`MAX_NUM_ORDER_LISTS`](filters.md#max-num-order-lists) filter will be enabled, limiting the number of order lists to 20 per symbol.
+* New [`MAX_NUM_ORDER_AMENDS`](filters.md#max_num_order_amends) filter will be enabled, limiting each order to a maximum of 10 amendments.
+
+
+---
 
 ### 2025-08-07
 

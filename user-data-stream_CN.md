@@ -1,6 +1,6 @@
 # WebSocket 账户接口
 
-**最近更新： 2025-04-09**
+**最近更新： 2025-08-12**
 
 ## 基本信息
 * 目前有两种方法可以订阅 User Data Stream:
@@ -213,6 +213,27 @@
     <td>只有在订单使用 SOR 时可见</td>
     <td><code>"uS":true</code></td>
   </tr>
+   <tr>
+      <td><code>gP</code></td>
+      <td>Pegged Price Type</td>
+      <td rowspan="4">仅出现在挂钩订单中</td>
+      <td><code>"gP": "PRIMARY_PEG"</code></td>
+   </tr>
+   <tr>
+      <td><code>gOT</code></td>
+      <td>Pegged offset Type</td>
+      <td><code>"gOT": "PRICE_LEVEL"</code></td>
+   </tr>
+   <tr>
+      <td><code>gOV</code></td>
+      <td>Pegged Offset Value</td>
+      <td><code>"gOV": 5</code></td>
+   </tr>
+   <tr>
+      <td><code>gp</code></td>
+      <td>Pegged Price</td>
+      <td><code>"gp": "1.00000000"</code></td>
+   </tr>
 </table>
 
 #### 订单拒绝原因

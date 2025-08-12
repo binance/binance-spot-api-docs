@@ -1,6 +1,6 @@
 # Error codes for Binance
 
-**Last Updated: 2025-06-11**
+**Last Updated: 2025-08-12**
 
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
@@ -235,6 +235,7 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * `MsgType (35)` is not the third tag in a message.
  * `BodyLength (9)` does not contain the correct byte count.
  * Only printable ASCII characters and SOH (Start of Header) are allowed.
+ * Tag specified without a value.
 
 ### -1178 BAD_SENDER_COMPID
  * `SenderCompId(49)` contains an incorrect value. The SenderCompID value should not change throughout the lifetime of a session.
@@ -295,6 +296,12 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 ### -1199 SELL_OCO_TAKE_PROFIT_MUST_BE_ABOVE
 * A take profit order in a sell OCO must be above.
 
+### -1210 INVALID_PEG_PRICE_TYPE
+* Invalid pegPriceType.
+
+### -1211 INVALID_PEG_OFFSET_TYPE
+* Invalid pegOffsetType.
+
 ### -2010 NEW_ORDER_REJECTED
  * NEW_ORDER_REJECTED
 
@@ -324,6 +331,9 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 ### -2039 CLIENT_ORDER_ID_INVALID
   * Client order ID is not correct for this order ID.
+
+### -2042 MAXIMUM_SUBSCRIPTION_IDS
+* Maximum subscription ID reached for this connection.
 
 <a id="other-errors"></a>
 
@@ -368,6 +378,10 @@ Error message                                                   | Description
 "Order book liquidity is less than symbol minimum quantity." | Quote quantity market orders cannot be placed when there are no orders on the book.
 "Order amend (quantity increase) is not supported." | `newQty` must be less than the order quantity.
 "The requested action would change no state; rejecting". | The request sent would not have changed the status quo.<br></br>(e.g. `newQty` cannot equal the order quantity.)
+"Pegged orders are not supported for this symbol." | `pegInstructionsAllowed` has not been enabled. |
+"This order type may not use pegged price." | You are using parameter `pegPriceType` with an unsupported order type. (e.g. `MARKET`) |
+"This price peg cannot be used with this order type." | You are using `pegPriceType`=`MARKET_PEG` for a `LIMIT_MAKER` order.|
+"Order book liquidity is too low for this pegged order." | The order book doesn’t have the best price level to peg the price to. |
 
 ## Errors regarding placing orders via cancelReplace
 
@@ -393,7 +407,10 @@ Error message | Description
 "Filter failure: MAX_NUM_ORDERS" | Account has too many open orders on the symbol.
 "Filter failure: MAX_NUM_ALGO_ORDERS" | Account has too many open stop loss and/or take profit orders on the symbol.
 "Filter failure: MAX_NUM_ICEBERG_ORDERS" | Account has too many open iceberg orders on the symbol.
+"Filter failure: MAX_NUM_ORDER_AMENDS" | Account has made too many amendments to a single order on the symbol.
+"Filter failure: MAX_NUM_ORDER_LISTS" | Account has too many open order lists on the symbol. |
 "Filter failure: TRAILING_DELTA" | `trailingDelta` is not within the defined range of the filter for that order type.
 "Filter failure: EXCHANGE_MAX_NUM_ORDERS" | Account has too many open orders on the exchange.
 "Filter failure: EXCHANGE_MAX_NUM_ALGO_ORDERS" | Account has too many open stop loss and/or take profit orders on the exchange.
 "Filter failure: EXCHANGE_MAX_NUM_ICEBERG_ORDERS" | Account has too many open iceberg orders on the exchange.
+"Filter failure: EXCHANGE_MAX_NUM_ORDER_LISTS" | Account has too many open order lists on the exchange.
