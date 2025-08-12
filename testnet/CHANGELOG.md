@@ -24,7 +24,7 @@ Please consult the Spot Test Network's [homepage](https://testnet.binance.vision
 
 #### General Changes
 
-* The [pegged order](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/pegged_orders.md) functionality is now available.
+* The [pegged order](../faqs/pegged_orders.md) functionality is now available.
   * Exchange Information requests emit the field `pegInstructionsAllowed`.
   * The following conditional fields `pegPriceType`, `pegOffSetType`, `pegOffsetValues`, and `peggedPrice` appear in responses of the following requests if the order was a pegged order:
     * REST API
@@ -71,7 +71,7 @@ Please consult the Spot Test Network's [homepage](https://testnet.binance.vision
     * `account.commission`
     * `order.test` with `computeCommissionRates=true`
     * `sor.order.test` with `computeCommissionRates=true`
-* The new [`MAX_NUM_ORDER_AMENDS`](https://github.com/binance/binance-spot-api-docs/blob/master/testnet/filters.md#max_num_order_amends) filter is enabled with a limit of 10 amendments per order.
+* The new [`MAX_NUM_ORDER_AMENDS`](filters.md#max_num_order_amends) filter is enabled with a limit of 10 amendments per order.
 * New error codes `-1120` and `1211`. See [Errors](errors.md) for more information.
 * **SBE: A new schema 3:1 ([spot_3_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml)) is available.**
   * The current schema 3:0 ([spot_3_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_0.xml)) is deprecated and will be retired in 6 months as per our schema deprecation policy.

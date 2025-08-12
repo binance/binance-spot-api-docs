@@ -80,7 +80,7 @@
   * `EXCHANGE_MAX_ICEBERG_ORDERS`
 
 以下变更将于**2025-08-28 07:00 UTC 开始发生**：
-* [挂钩订单](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/pegged_orders_CN.md) 功能将可以使用。
+* [挂钩订单](faqs/pegged_orders_CN.md) 功能将可以使用。
   * pegInstructionsAllowed` 将在所有的交易对上被设为 `true`, 在所有的 API 上正式启用挂钩订单相关功能。
   * 如果订单是挂钩订单，那么以下条件字段 `pegPriceType`， `pegOffSetType`， `pegOffsetValues` 和 `peggedPrice` 将出现在以下请求的响应中：
     * REST API
