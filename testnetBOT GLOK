@@ -1,0 +1,155 @@
+import urllib.request
+import urllib.parse
+import hmac
+import hashlib
+import time
+import json
+import pandas as pd
+import numpy as np
+import logging
+from datetime import datetime
+import csv
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from xgboost import XGBClassifier
+import sqlite3  # Para database de trades
+
+# Configurações (otimizadas de todas fontes)
+API_KEY = 'SUA_API_KEY_AQUI'
+API_SECRET = 'SEU_API_SECRET_AQUI'
+BASE_URL = 'https://api.binance.com'
+SYMBOL = 'BTCUSDT'
+INTERVAL = '5m'  # +1h para multi-timeframe
+LIMIT = 1000
+ML_TRAIN_INTERVAL = 3600
+SHORT_MA, MED_MA, LONG_MA = 4, 9, 18
+RSI_PERIOD = 14
+MACD_FAST, MACD_SLOW, MACD_SIGNAL = 12, 26, 9
+BB_PERIOD, BB_STD = 20, 2
+STOCH_K, STOCH_D, STOCH_SMOOTH = 14, 3, 3
+ADX_PERIOD = 14
+SUPERTREND_PERIOD, SUPERTREND_MULT = 10, 3
+VOLUME_MA = 20
+BUY_AMOUNT_USDT = 10.0  # 1% risco dinâmico
+TP_LEVELS = [0.05, 0.10, 0.15]
+SL_PCT = 0.03
+TRAILING_PCT_BASE = 0.02
+PRED_THRESHOLD = 0.6
+RECV_WINDOW = 5000
+SLEEP_TIME = 300
+RISK_PER_TRADE = 0.01  # 1%
+MAX_DRAWDOWN = 0.20  # Halt se >20%
+STRATEGIES = ['crossover', 'dca', 'grid', 'arbitrage', 'mean_reversion']  # Adicionadas
+
+# Estado
+in_position = False
+entry_price = 0.0
+position_qty = 0.0
+trailing_stop_price = 0.0
+trades = []  # (entry, exit, profit)
+last_train_time = 0
+ml_model_lstm = None
+ml_model_xgb = None
+scaler = MinMaxScaler()
+current_strategy = 'crossover'  # Dinâmica
+db_conn = sqlite3.connect('trades.db')
+db_cursor = db_conn.cursor()
+db_cursor.execute('CREATE TABLE IF NOT EXISTS trades (id INTEGER PRIMARY KEY, entry REAL, exit REAL, profit REAL, strategy TEXT)')
+
+# Logging e CSV
+logging.basicConfig(filename='bot_final.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+logging.getLogger('').addHandler(console)
+trade_csv = 'trades_final.csv'
+with open(trade_csv, 'w', newline='') as f:
+    writer = csv.writer(f)
+    writer.writerow(['Entry Time', 'Entry Price', 'Exit Time', 'Exit Price', 'Profit', 'Strategy'])
+
+# Funções API (com segurança aprimorada)
+# ... (copie api_request, get_server_time, get_price, get_klines, get_balance, place_order, place_oco_sell do anterior)
+
+# Indicadores (todos + sentiment mock; use transformers se disponível)
+def calculate_indicators(df):
+    # ... (copie cálculos anteriores)
+    # Sentimento mock (NLP simples; extend com transformers)
+    df['sentiment'] = np.random.uniform(-1, 1, len(df))  # Placeholder; real: use FinBERT on news
+    return df
+
+# ML Model (híbrido + features novas: sentiment, multi-timeframe)
+class LSTMModel(nn.Module):
+    # ... (copie do anterior, input_size=6 agora com sentiment)
+
+def train_ml_models(df):
+    # ... (copie, adicione 'sentiment' a features)
+    # Hyperparam tuning simples (Optuna-like manual)
+    for lr in [0.001, 0.0005]:
+        # Treine e selecione melhor
+
+def predict_ml(df):
+    # ... (copie, ensemble)
+
+# Backtesting Integrado
+def backtest_strategy(df, strategy='crossover'):
+    # Simule trades no df histórico
+    signals = []  # Gere buy/sell
+    # Calcule win_rate, sharpe, dd, etc.
+    return {'win_rate': 0.65, 'sharpe': 1.5, 'dd': 0.15}  # Exemplo; implemente full
+
+# Estratégias Adicionais
+def dca_strategy(df):
+    # Buy em dips fixos
+    return buy_signal if df['close'].iloc[-1] < df['ema_long'].iloc[-1] * 0.95 else False
+
+def grid_strategy(df):
+    # Ordens em grid ao redor de preço
+    # Implemente via multi-ordens
+
+# Seleção Dinâmica de Estratégia
+def select_strategy(df):
+    if df['adx'].iloc[-1] > 25:
+        return 'crossover'  # Trend
+    else:
+        return 'mean_reversion'  # Sideways
+
+# Lógica Trading (todas melhorias)
+def trading_logic():
+    # ... (copie base)
+    # Multi-timeframe: Fetch 1h klines, cheque EMA
+    df_1h = get_klines(interval='1h')
+    if df_1h['ema_long'].iloc[-1] < df_1h['close'].iloc[-1]:  # Uptrend confirm
+        # Proceed
+    # Backtest antes de live
+    perf = backtest_strategy(df)
+    if perf['dd'] > MAX_DRAWDOWN:
+        logging.warning("Halt: Max DD exceeded")
+        return
+    # Estratégia dinâmica
+    current_strategy = select_strategy(df)
+    # Risco dinâmico
+    atr_pct = df['atr'].iloc[-1] / current_price
+    risk_amount = get_balance('USDT') * RISK_PER_TRADE
+    # Buy/Sell com novas estratégias
+    if current_strategy == 'dca':
+        buy_signal = dca_strategy(df)
+    # Journaling
+    if order:  # Após trade
+        db_cursor.execute('INSERT INTO trades (entry, exit, profit, strategy) VALUES (?, ?, ?, ?)', (entry_price, exit_price, profit, current_strategy))
+        db_conn.commit()
+
+# Loop (com monitoramento)
+logging.info("Iniciando Bot Final...")
+while True:
+    try:
+        trading_logic()
+        # Monitor: Cheque drawdown total de trades
+        perf = calculate_performance()
+        if perf['drawdown'] > MAX_DRAWDOWN:
+            break  # Kill-switch
+    except Exception as e:
+        logging.error(f"Erro: {str(e)}")
+    time.sleep(SLEEP_TIME)
