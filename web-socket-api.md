@@ -5096,7 +5096,6 @@ Name                     |Type    | Mandatory | Description
 `abovePegOffsetType`     |ENUM    |NO         |
 `abovePegOffsetValue`    |INT     |NO         |
 `belowType`              |ENUM    |YES        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
-`belowType`              |ENUM    |YES        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 `belowClientOrderId`     |STRING  |NO         |
 `belowIcebergQty`        |LONG    |NO         |Note that this can only be used if `belowTimeInForce` is `GTC`.
 `belowPrice`             |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.

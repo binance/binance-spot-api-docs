@@ -4955,7 +4955,6 @@ NONE
 `abovePegPriceType`      |ENUM    |NO         |参阅 [挂钩订单](#pegged-orders-info)
 `abovePegOffsetType`     |ENUM    |NO         |
 `abovePegOffsetValue`    |INT     |NO         |
-`belowType`              |ENUM    |YES        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
 `belowType`              |ENUM    |YES        |支持值：`STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`。
 `belowClientOrderId`     |STRING  |NO         |
 `belowIcebergQty`        |LONG    |NO         |请注意，只有当 `belowTimeInForce` 为 `GTC` 时才能使用。
