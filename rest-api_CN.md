@@ -13,7 +13,11 @@
   * **https://api4.binance.com**
 * 上述列表的最后4个接口 (`api1`-`api4`) 会提供更好的性能，但其稳定性略为逊色。因此，请务必使用最适合的URL。
 * 响应默认为 JSON 格式。如果您想接收 SBE 格式的响应，请参考 [简单二进制编码 （SBE） 常见问题](./faqs/sbe_faq_CN.md)。
-* 响应中如有数组，数组元素以时间**升序**排列，越早的数据越提前。
+* 除非另有说明，否则数据将按**时间顺序**返回。
+  * 如果未指定 `startTime` 或 `endTime`，则返回最近的条目，直至达到限制值。
+  * 如果指定 `startTime`，则返回从 `startTime` 到限制值为止最老的条目。
+  * 如果指定 `endTime`，则返回截至 `endTime` 和限制值为止最近的条目。
+  * 如果同时指定 `startTime` 和 `endTime`，则行为类似于 `startTime`，但不超过 `endTime`。
 * JSON 响应中的所有时间和时间戳相关字段均以**毫秒为默认单位**。要以微秒为单位接收信息，请添加报文头 `X-MBX-TIME-UNIT：MICROSECOND` 或 `X-MBX-TIME-UNIT：microsecond`。
 * 我们支持 HMAC，RSA 以及 Ed25519 Key 类型。 如需进一步了解，请参考 [API Key 类型](faqs/api_key_types_CN.md)。
 * 时间戳参数（例如 `startTime`、`endTime`、`timestamp`）可以以毫秒或微秒为单位传递。

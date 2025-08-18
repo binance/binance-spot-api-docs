@@ -15,7 +15,11 @@
   * 如果websocket 服务器没有在一分钟之内收到PONG 消息应答，连接会被断开。
   * 当客户收到PING消息，必须尽快回复PONG消息，同时payload需要和PING消息一致。
   * 服务器允许未经请求的PONG消息，但这不会保证连接不断开。**对于这些PONG 消息，建议payload为空。**
-* 响应中如有数组，数组元素以时间**时间顺序**排列，越早的数据越提前。
+* 除非另有说明，否则数据将按**时间顺序**返回。
+  * 如果未指定 `startTime` 或 `endTime`，则返回最近的条目，直至达到限制值。
+  * 如果指定 `startTime`，则返回从 `startTime` 到限制值为止最老的条目。
+  * 如果指定 `endTime`，则返回截至 `endTime` 和限制值为止最近的条目。
+  * 如果同时指定 `startTime` 和 `endTime`，则行为类似于 `startTime`，但不超过 `endTime`。
 * JSON 响应中的所有时间和时间戳相关字段均以**UTC 毫秒为默认单位**。要以微秒为单位接收信息，请在 URL 中添加参数 `timeUnit=MICROSECOND` 或 `timeUnit=microsecond`。
 * 时间戳参数（例如 `startTime`、`endTime`、`timestamp`）可以以毫秒或微秒为单位传递。
 * 除非另有说明，所有字段名称和值都**大小写敏感**。
