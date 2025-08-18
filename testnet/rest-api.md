@@ -78,8 +78,12 @@
 ## General API Information
 * The base endpoint is **https://testnet.binance.vision/api**
 * Responses are in JSON by default. To receive responses in SBE, refer to the [SBE FAQ](../faqs/sbe_faq.md) page.
-* Data is returned in **ascending** order. Oldest first, newest last.
-* All time and timestamp related fields in the JSON responses are in **milliseconds by default.** To receive the information in microseconds, please add the header `X-MBX-TIME-UNIT:MICROSECOND` or `X-MBX-TIME-UNIT:microsecond`.
+* Data is returned in **chronological order**, unless noted otherwise.
+  * Without `startTime` or `endTime`, returns the most recent items up to the limit.
+  * With `startTime`, returns oldest items from `startTime` up to the limit.
+  * With `endTime`, returns most recent items up to `endTime` and the limit.
+  * With both, behaves like `startTime` but does not exceed `endTime`.
+* All time and timestamp related fields in the JSON responses are in **milliseconds by defa ult.** To receive the information in microseconds, please add the header `X-MBX-TIME-UNIT:MICROSECOND` or `X-MBX-TIME-UNIT:microsecond`.
 * We support HMAC, RSA, and Ed25519 keys. For more information, please see [API Key types](../faqs/api_key_types.md).
 * Timestamp parameters (e.g. `startTime`, `endTime`, `timestamp`) can be passed in milliseconds or microseconds.
 * If there are enums or terms you want clarification on, please see the [SPOT Glossary](../faqs/spot_glossary.md) for more information.

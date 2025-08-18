@@ -104,7 +104,11 @@
   * If the WebSocket server does not receive a `pong frame` back from the connection within a minute the connection will be disconnected.
   * When you receive a ping, you must send a pong with a copy of ping's payload as soon as possible.
   * Unsolicited `pong frames` are allowed, but will not prevent disconnection. **It is recommended that the payload for these pong frames are empty.**
-* Lists are returned in **chronological order**, unless noted otherwise.
+* Data is returned in **chronological order**, unless noted otherwise.
+  * Without `startTime` or `endTime`, returns the most recent items up to the limit.
+  * With `startTime`, returns oldest items from `startTime` up to the limit.
+  * With `endTime`, returns most recent items up to `endTime` and the limit.
+  * With both, behaves like `startTime` but does not exceed `endTime`.
 * All timestamps in the JSON responses are in **milliseconds in UTC by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND` or `timeUnit=microsecond` in the URL.
 * Timestamp parameters (e.g. `startTime`, `endTime`, `timestamp`) can be passed in milliseconds or microseconds.
 * All field names and values are **case-sensitive**, unless noted otherwise.
