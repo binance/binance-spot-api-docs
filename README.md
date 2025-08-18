@@ -47,6 +47,7 @@ Name | Description
 
 Name | Description
 ------------ | ------------
+[api_key_types](./faqs/api_key_types.md) | API Key Types
 [spot_glossary](./faqs/spot_glossary.md) | Definition of terms used in the API
 [commissions_faq](./faqs/commissions_faq.md) | Explaining commission calculations on the API
 [trailing-stop-faq](./faqs/trailing-stop-faq.md)   | Detailed Information on the behavior of Trailing Stops on the API
@@ -56,7 +57,9 @@ Name | Description
 [sor_faq](./faqs/sor_faq.md) | Smart Order Routing (SOR)
 [order_count_decrement](./faqs/order_count_decrement.md) | Updates to the Spot Order Count Limit Rules.
 [order_amend_keep_priority](./faqs/order_amend_keep_priority.md) | Detailed Information on the behavior of Order Amend Keep Priority
+[pegged_orders](./faqs/pegged_orders.md) | Detailed Information on Pegged Orders
 [sbe_faq](./faqs/sbe_faq.md) | Information on the implementation of Simple Binary Encoding (SBE) on the API
+[testnet](./faqs/testnet.md) | Information on SPOT Testnet
 
 ### Change log
 

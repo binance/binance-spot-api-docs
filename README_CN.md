@@ -49,6 +49,7 @@
 
 名称 | 描述
 ------------ | ------------
+[api_key_types](./faqs/api_key_types_CN.md) | API 密钥类型
 [spot_glossary_CN](./faqs/spot_glossary_CN.md) | 现货交易 API 术语表
 [commission_faq_CN](./faqs/commission_faq_CN.md) | 解释 API 上所使用的佣金计算方式
 [trailing_stop_faq_CN](./faqs/trailing-stop-faq_CN.md)   | 追踪止盈止损订单(Trailing Stop)详细信息和常见问题
@@ -57,6 +58,7 @@
 [market_data_only_CN](./faqs/market_data_only_CN.md) | 仅提供市场数据的 API 和 WebSocket Streams
 [sor_faq_CN](./faqs/sor_faq_CN.md) | 智能指令路由 (SOR)
 [order_amend_keep_priority_CN](./faqs/order_amend_keep_priority_CN.md)| 关于修改订单并保留其优先级的详细信息
+[pegged_orders](./faqs/pegged_orders_CN.md) |  关于挂钩订单的详细信息
 [order_count_decrement_CN](./faqs/order_count_decrement_CN.md) | 现货下单频率限制的更新
 [sbe_faq_CN](./faqs/sbe_faq_CN.md) | 关于在 API 上实施简单二进制编码 (SBE) 的信息
 
