@@ -5,6 +5,12 @@
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
 
+### 2025-08-19
+
+* `userDataStream.subscribe` returns `subscriptionId` in the responses. <br> This was missed in a [previous](#2025-08-05) changelog entry.
+
+---
+
 ### 2025-08-07
 
 * Updated FIX API documentation
@@ -50,7 +56,7 @@ Please consult the Spot Test Network's [homepage](https://testnet.binance.vision
       * NewOrderSingle `<D>`
       * NewOrderList `<E>`
       * OrderCancelRequestAndNewOrderSingle `<XCN>`
-    * When placing an order, the message ExecutionReport `<8>` will echo back PegInstructions, with an extra optional field `PeggedPrice (839)`
+      * When placing an order, the `ExecutionReport` `<8>` message will echo back `PegInstructions`, with an extra optional field `PeggedPrice (839)`.
   * New error messages for pegged orders are added. Please see the [Errors](errors.md) document for more information.
 * Changes with `recvWindow`:
   * A third check is made after your message leaves the message broker just before it is sent to the Matching Engine.
@@ -71,7 +77,7 @@ Please consult the Spot Test Network's [homepage](https://testnet.binance.vision
     * `account.commission`
     * `order.test` with `computeCommissionRates=true`
     * `sor.order.test` with `computeCommissionRates=true`
-* The new [`MAX_NUM_ORDER_AMENDS`](filters.md#max_num_order_amends) filter is enabled with a limit of 10 amendments per order.
+* The new [`MAX_NUM_ORDER_AMENDS`](https://github.com/binance/binance-spot-api-docs/blob/master/testnet/filters.md#max_num_order_amends) filter is enabled with a limit of 10 amendments per order.
 * New error codes `-1120` and `1211`. See [Errors](errors.md) for more information.
 * **SBE: A new schema 3:1 ([spot_3_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml)) is available.**
   * The current schema 3:0 ([spot_3_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_0.xml)) is deprecated and will be retired in 6 months as per our schema deprecation policy.
@@ -90,7 +96,7 @@ Please consult the Spot Test Network's [homepage](https://testnet.binance.vision
   * REST API: `GET /api/v3/openOrderLists`
   * WebSocket API: `openOrderLists.status`
 * Orders with cumulative quantity of 0 in the final state `EXPIRED_IN_MATCH` (i.e. the order expired due to STP) will be archived after 90 days.
-* Bug fixed where the Matching Engine was accepting order lists that were above the order count filter limits. Affected filters are:
+* Bug fix: The Matching Engine no longer accepts order lists that exceed the order count filter limits. Affected filters:
   * `MAX_NUM_ORDERS`
   * `MAX_ALGO_ORDERS`
   * `MAX_ICEBERG_ORDERS`
@@ -101,7 +107,7 @@ Please consult the Spot Test Network's [homepage](https://testnet.binance.vision
 #### WebSocket API
 
 * A single WebSocket connection can subscribe to multiple User Data Streams at once.
-  * You can only have one subscription open for any given account on a single connection.
+  * Only one subscription per account is allowed on a single connection.
 * Method `userDataStream.subscribe.signature` has been added that allows you to subscribe to the User Data Stream without needing to login first.
   * This also doesn’t require an Ed25519 API Key, and can work with any [API Key type](../faqs/api_key_types.md).
   * For [SBE support](../faqs/sbe_faq.md) you need to use schema 3:1 at least.

@@ -1,6 +1,12 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-08-12**
+**Last Updated: 2025-08-19**
+
+### 2025-08-19
+
+* `userDataStream.subscribe` returns `subscriptionId` in the responses. <br> This was missed in the [previous](#2025-08-12) changelog entry.
+
+---
 
 ### 2025-08-12
 
