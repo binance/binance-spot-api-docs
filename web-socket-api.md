@@ -7336,7 +7336,7 @@ Memory
 
 <a id="user-data-signature"></a>
 
-#### Subscribe to User Data Stream through signature subscription (USER\_STREAM)
+#### Subscribe to User Data Stream through signature subscription (USER_DATA)
 
 ```javascript
 {

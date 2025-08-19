@@ -7143,7 +7143,7 @@ Note that `session.logout` will only close the subscription created with `userda
 
 <a id="user-data-signature"></a>
 
-#### Subscribe to User Data Stream through signature subscription (USER\_STREAM)
+#### Subscribe to User Data Stream through signature subscription (USER_DATA)
 
 ```javascript
 {

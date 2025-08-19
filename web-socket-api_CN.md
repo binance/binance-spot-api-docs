@@ -7205,7 +7205,7 @@ timestamp           | LONG   | YES          |
 
 <a id="user-data-signature"></a>
 
-#### 通过签名订阅的方式订阅用户数据流 (USER\_STREAM)
+#### 通过签名订阅的方式订阅用户数据流 (USER_DATA)
 
 ```javascript
 {
