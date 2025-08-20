@@ -7259,7 +7259,9 @@ NONE
 {
   "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
   "status": 200,
-  "result": {}
+  "result": {
+    "subscriptionId": 0
+  }
 }
 ```
 
@@ -7291,9 +7293,7 @@ Note that `session.logout` will only close the subscription created with `userda
 {
   "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
   "status": 200,
-  "result": {
-    "subscriptionId": 0
-  }
+  "result": {}
 }
 ```
 
