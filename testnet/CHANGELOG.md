@@ -1,9 +1,20 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-08-08**
+**Last Updated: 2025-08-25**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-08-25
+
+* **SBE: schema 3:1 ([spot_3_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml))** will be updated on **2025-08-25 at 05:00 UTC**
+  * The following fields have been renamed because the [SbeTool](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/sbe_faq.md#generate-sbe-decoders) code generator has been found to generate Java code that does not compile.
+    * Although only users impacted by this issue need to update the schema, we advise all users to upgrade to the latest version to maintain consistency.
+    * Message `MaxAssetFilter`
+      * field `limitExponent` renamed to `qtyExponent`
+      * field `limit` renamed to `maxQty`
+
+---
 
 ### 2025-08-19
 
