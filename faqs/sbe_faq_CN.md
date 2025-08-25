@@ -137,6 +137,7 @@ response=$(echo $request | websocat -n1 'wss://ws-api.binance.com:443/ws-api/v3?
 }
 ```
 
+<a id="generate-sbe-decoders"></a>
 ### 生成解码器：
 
 1. 下载模式：

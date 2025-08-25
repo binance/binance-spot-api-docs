@@ -471,8 +471,8 @@
     <!-- Not in use yet -->
     <sbe:message name="MaxAssetFilter" id="21">
         <field id="1" name="filterType" type="filterType" presence="constant" valueRef="filterType.MaxAsset"/>
-        <field id="2" name="limitExponent" type="exponent8"/>
-        <field id="3" name="limit" type="mantissa64" mbx:exponent="limitExponent"/>
+        <field id="2" name="qtyExponent" type="exponent8"/>
+        <field id="3" name="maxQty" type="mantissa64" mbx:exponent="qtyExponent" mbx:jsonPath="limit"/>
         <data id="200" name="asset" type="varString8"/>
     </sbe:message>
 
@@ -1894,7 +1894,7 @@
     </sbe:message>
 
     <!-- User data stream events -->
- 
+
     <!-- "balanceUpdate" -->
     <sbe:message name="BalanceUpdateEvent" id="601">
         <field id="1" name="eventTime" type="utcTimestampUs" mbx:jsonPath="E"/>

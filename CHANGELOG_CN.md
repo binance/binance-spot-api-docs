@@ -1,6 +1,17 @@
 # 更新日志
 
-**最近更新： 2025-08-12**
+**最近更新： 2025-08-25**
+
+### 2025-08-25
+
+* **SBE: 模式 3:1 ([spot_3_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml))**将于**2025-08-25 05:00 UTC** 进行更新。
+  * 以下字段已被重命名，用于解决通过 [SbeTool](faqs/sbe_faq_CN.md#generate-sbe-decoders) 代码生成器所生成的 Java 代码被发现无法进行编译的问题。
+    * 虽然只有受此问题影响的用户才需要更新模式文档，但我们建议所有用户都升级到最新版本以保持一致性。
+    * 消息 `MaxAssetFilter`
+      * 字段 `limitExponent` 重命名为 `qtyExponent`
+      * 字段 `limit` 重命名为 `maxQty`
+
+---
 
 ### 2025-08-19
 
