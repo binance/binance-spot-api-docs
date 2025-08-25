@@ -1894,7 +1894,6 @@
     </sbe:message>
 
     <!-- User data stream events -->
-
     <!-- "balanceUpdate" -->
     <sbe:message name="BalanceUpdateEvent" id="601">
         <field id="1" name="eventTime" type="utcTimestampUs" mbx:jsonPath="E"/>
