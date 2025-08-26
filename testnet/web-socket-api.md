@@ -1,6 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+- [Public WebSocket API for Binance SPOT Testnet](#public-websocket-api-for-binance-spot-testnet)
   - [General API Information](#general-api-information)
   - [Request format](#request-format)
   - [Response format](#response-format)
@@ -14,7 +15,7 @@
     - [IP limits](#ip-limits)
     - [Unfilled Order Count](#unfilled-order-count)
   - [Request security](#request-security)
-    - [SIGNED (TRADE and USER_DATA) request security](#signed-trade-and-user_data-request-security)
+    - [SIGNED request security](#signed-request-security)
     - [Timing security](#timing-security)
     - [SIGNED request example (HMAC)](#signed-request-example-hmac)
     - [SIGNED request example (RSA)](#signed-request-example-rsa)
@@ -79,7 +80,7 @@
       - [Subscribe to User Data Stream (USER_STREAM)](#subscribe-to-user-data-stream-user_stream)
       - [Unsubscribe from User Data Stream](#unsubscribe-from-user-data-stream)
       - [Listing all subscriptions](#listing-all-subscriptions)
-      - [Subscribe to User Data Stream through signature subscription (USER\_STREAM)](#subscribe-to-user-data-stream-through-signature-subscription-user%5C_stream)
+      - [Subscribe to User Data Stream through signature subscription (USER_DATA)](#subscribe-to-user-data-stream-through-signature-subscription-user_data)
     - [Listen Key Management (Deprecated)](#listen-key-management-deprecated)
       - [Start user data stream (USER_STREAM) (Deprecated)](#start-user-data-stream-user_stream-deprecated)
       - [Ping user data stream (USER_STREAM) (Deprecated)](#ping-user-data-stream-user_stream-deprecated)
@@ -89,7 +90,7 @@
 
 # Public WebSocket API for Binance SPOT Testnet
 
-**Last Updated: 2025-08-05**
+**Last Updated: 2025-08-26**
 
 ## General API Information
 
@@ -587,29 +588,26 @@ Successful response indicating that you have placed 12 orders in 10 seconds, and
 
 ## Request security
 
-* Every method has a security type which determines how to call it.
-  * Security type is stated next to the method name.
-    For example, [Place new order (TRADE)](#place-new-order-trade).
-  * If no security type is stated, the security type is NONE.
-
-Security type | API key  | Signature | Description
-------------- | -------- | --------- | ------------
-`NONE`        |          |           | Public market data
-`TRADE`       | required | required  | Trading on the exchange, placing and canceling orders
-`USER_DATA`   | required | required  | Private account information, such as order status and your trading history
-`USER_STREAM` | required |           | Managing User Data Stream subscriptions
-
+* Each method has a security type indicating required API key permissions, shown next to the method name (e.g., [Place new order (TRADE)](#place-new-order-trade)).
+* If unspecified, the security type is `NONE`.
+* Except for `NONE`, all methods with a security type are considered `SIGNED` requests (i.e. including a `signature`), except for [listenKey management](#user-data-stream-requests).
 * Secure methods require a valid API key to be specified and authenticated.
-  * API keys can be created on the [API Management](https://www.binance.com/en/support/faq/360002502072) page of your Binance account.
+  * API keys can be created on the [SPOT Test Network](https://testnet.binance.vision) upon logging in with your Github account.
   * **Both API key and secret key are sensitive.** Never share them with anyone.
     If you notice unusual activity in your account, immediately revoke all the keys and contact Binance support.
 * API keys can be configured to allow access only to certain types of secure methods.
   * For example, you can have an API key with `TRADE` permission for trading,
     while using a separate API key with `USER_DATA` permission to monitor your order status.
   * By default, an API key cannot `TRADE`. You need to enable trading in API Management first.
-* `TRADE` and `USER_DATA` requests are also known as `SIGNED` requests.
 
-### SIGNED (TRADE and USER_DATA) request security
+Security type |  Description
+------------- | ------------
+`NONE`        | Public market data
+`TRADE`       | Trading on the exchange, placing and canceling orders
+`USER_DATA`   | Private account information, such as order status and your trading history
+`USER_STREAM` | Managing User Data Stream subscriptions
+
+### SIGNED request security
 
 * `SIGNED` requests require an additional parameter: `signature`, authorizing the request.
 * Please consult [SIGNED request example (HMAC)](#signed-request-example-hmac), [SIGNED request example (RSA)](#signed-request-example-rsa), and [SIGNED request example (Ed25519)](#signed-request-example-ed25519) on how to compute signature, depending on which API key type you are using.
@@ -7207,8 +7205,8 @@ The following requests manage [User Data Stream](user-data-stream.md) subscripti
 
 Start a new user data stream.
 
-**Note:** the stream will close in 60 minutes
-unless [`userDataStream.ping`](#ping-user-data-stream-user_stream) requests are sent regularly.
+The stream will close in 60 minutes unless [`userDataStream.ping`](#ping-user-data-stream-user_stream) requests are sent regularly.
+This request does not require `signature`.
 
 **Weight:**
 2
@@ -7226,7 +7224,6 @@ Memory
 **Response:**
 
 Subscribe to the received listen key on WebSocket Stream afterwards.
-
 
 ```javascript
 {
@@ -7267,6 +7264,8 @@ even if you're listening to them on WebSocket Streams.
 In order to keep the stream open, you have to regularly send pings using the `userDataStream.ping` request.
 
 It is recommended to send a ping once every 30 minutes.
+
+This request does not require `signature`.
 
 **Weight:**
 2
@@ -7314,6 +7313,8 @@ Memory
 ```
 
 Explicitly stop and close the user data stream.
+
+This request does not require `signature`.
 
 **Weight:**
 2

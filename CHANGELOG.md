@@ -1,6 +1,12 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-08-25**
+**Last Updated: 2025-08-26**
+
+### 2025-08-26
+
+* Updated "Request Security" documentation for [REST API](rest-api.md#request-security) and [WebSocket API](web-socket-api.md#request-security) with no functional changes.
+
+---
 
 ### 2025-08-25
 

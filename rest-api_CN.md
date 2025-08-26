@@ -1,6 +1,6 @@
 # REST行情与交易接口
 
-**最近更新： 2025-08-12**
+**最近更新： 2025-08-26**
 
 <a id="general-api-information"></a>
 ## API 基本信息
@@ -95,29 +95,32 @@
 
 有些接口有不止一个数据源, 比如 `缓存 => 数据库`, 这表示接口会先从第一个数据源检查，如果没有数据，则检查下一个数据源。
 
-## 接口鉴权类型
-* 每个接口都有自己的鉴权类型，鉴权类型决定了访问时应当进行何种鉴权。
-* 鉴权类型会在本文档中各个接口名称旁声明，如果没有特殊声明即默认为 `NONE`。
-* 如果需要 API-keys，应当在HTTP头中通过 `X-MBX-APIKEY` 字段来传递给 REST 接口。
-* API-keys 与 secret-keys **是大小写敏感的**。
-* API-keys可以被配置为只拥有访问一些接口的权限。
- <br>例如, 一个 API-key 仅可用于发送交易指令, 而另一个 API-key 则可访问除交易指令外的所有路径。
-* 默认 API-keys 可访问所有鉴权路径.
+<a id="request-security"></a>
 
-鉴权类型 | 描述
------------- | ------------
-NONE | 不需要鉴权的接口
-TRADE | 需要有效的API-KEY和签名
-USER_DATA | 需要有效的API-KEY和签名
-USER_STREAM | 需要有效的API-KEY
-MARKET_DATA | 需要有效的API-KEY
+## 请求鉴权类型
 
-* `TRADE` 和 `USER_DATA` 接口是 签名(SIGNED)接口.
+* 每个方法都有一个鉴权类型，指示所需的 API 密钥权限，显示在方法名称旁边（例如，[下新订单 (TRADE)](#place-new-order-trade)）。
+* 如果未指定，则鉴权类型为 `NONE`。
+* 除了为 `NONE` 外，所有具有鉴权类型的方法均视为 `SIGNED` 请求（即包含 `signature`），[listenKey 管理](#user-data-stream-requests) 除外。
+* 具有鉴权类型的方法需要提供有效的 API 密钥并验证通过。
+  * API 密钥可在您的 Binance 账户的 [API 管理](https://www.binance.com/en/support/faq/360002502072) 页面创建。
+  * **API 密钥和密钥对均为敏感信息，切勿与他人分享。** 如果发现账户有异常活动，请立即撤销所有密钥并联系 Binance 支持。
+* API 密钥可配置为仅允许访问某些鉴权类型。
+  * 例如，您可以拥有具有 `TRADE` 权限的 API 密钥用于交易，
+    同时使用具有 `USER_DATA` 权限的另一个 API 密钥来监控订单状态。
+  * 默认情况下，API 密钥无法进行 `TRADE`，您需要先在 API 管理中启用交易权限。
 
-### 需要签名的接口 (TRADE 与 USER_DATA)
+鉴权类型        |  描述
+------------- |  ------------
+`NONE`        |  公开市场数据
+`TRADE`       |  在交易所交易，下单和取消订单
+`USER_DATA`   |  私人账户信息，例如订单状态和交易历史
+`USER_STREAM` |  管理用户数据流订阅
+
+### 需要签名的接口
 * 调用`SIGNED` 接口时，除了接口本身所需的参数外，还需要在`query string` 或 `request body`中传递 `signature`, 即签名参数。
 * `签名` **大小写不敏感**.
-* 请参考下面 [签名示例](#post-apiv3order-%E7%9A%84%E7%A4%BA%E4%BE%8B) 以了解具体如何做计算签名。
+* 根据不同的API密钥类型，请参考下面 [签名示例](#post-apiv3order-%E7%9A%84%E7%A4%BA%E4%BE%8B) 以了解具体如何做计算签名。
 
 <a id="timingsecurity"></a>
 ### 时间同步安全
@@ -1625,6 +1628,7 @@ GET /api/v3/ticker
 ]
 ```
 
+<a id="place-new-order-trade"></a>
 ## 交易接口
 ### 下单 (TRADE)
 ```
@@ -4163,6 +4167,7 @@ timestamp | LONG | YES |
 POST /api/v3/userDataStream
 ```
 从创建起60分钟有效
+此请求不需要 `signature`。
 
 **权重:**
 2
@@ -4187,6 +4192,7 @@ NONE
 PUT /api/v3/userDataStream
 ```
 延长用户数据流有效期到60分钟之后。 建议每30分钟调用一次
+此请求不需要 `signature`。
 
 **权重:**
 2
@@ -4211,6 +4217,8 @@ listenKey | STRING | YES
 DELETE /api/v3/userDataStream
 ```
 关闭用户数据流。
+此请求不需要 `signature`。
+
 
 **权重:**
 2

@@ -1,6 +1,6 @@
 # Binance 的公共 WebSocket API
 
-**最近更新： 2025-08-12**
+**最近更新： 2025-08-26**
 
 <a id="general-api-information"></a>
 ## API 基本信息
@@ -494,31 +494,28 @@ API 有多种频率限制间隔。
 }
 ```
 
+<a id="request-security"></a>
 ## 请求鉴权类型
 
-* 每个函数都有自己的鉴权类型，鉴权类型决定了访问时应当进行何种鉴权。
-  * 鉴权类型会在本文档中各个函数名称旁声明。比如 [下新的订单 (TRADE)](#order-place)。
-  * 如果没有特殊声明即默认为 NONE
+* 每个方法都有一个鉴权类型，指示所需的 API 密钥权限，显示在方法名称旁边（例如，[下新订单 (TRADE)](#order-place)）。
+* 如果未指定，则鉴权类型为 `NONE`。
+* 除了为 `NONE` 外，所有具有鉴权类型的方法均视为 `SIGNED` 请求（即包含 `signature`），[listenKey 管理](#user-data-stream-requests) 除外。
+* 具有鉴权类型的方法需要提供有效的 API 密钥并验证通过。
+  * API 密钥可在您的 Binance 账户的 [API 管理](https://www.binance.com/en/support/faq/360002502072) 页面创建。
+  * **API 密钥和密钥对均为敏感信息，切勿与他人分享。** 如果发现账户有异常活动，请立即撤销所有密钥并联系 Binance 支持。
+* API 密钥可配置为仅允许访问某些鉴权类型。
+  * 例如，您可以拥有具有 `TRADE` 权限的 API 密钥用于交易，
+    同时使用具有 `USER_DATA` 权限的另一个 API 密钥来监控订单状态。
+  * 默认情况下，API 密钥无法进行 `TRADE`，您需要先在 API 管理中启用交易权限。
 
-鉴权类型 | API key | 签名 | 描述
-------------- | -------- | --------- | ------------
-`NONE`        |          |           | 公开市场数据
-`TRADE`       | required | required  | 在交易所交易，下单和取消订单
-`USER_DATA`   | required | required  | 私人账户信息，例如订单状态和交易历史
-`USER_STREAM` | required |           | 管理用户数据流订阅
-`MARKET_DATA` | required |           | 历史市场数据访问
+鉴权类型        |  描述
+------------- |  ------------
+`NONE`        |  公开市场数据
+`TRADE`       |  在交易所交易，下单和取消订单
+`USER_DATA`   |  私人账户信息，例如订单状态和交易历史
+`USER_STREAM` |  管理用户数据流订阅
 
-* 函数鉴权需要指定和验证有效的 API key。
-  * API key 可以在币安账户的 [API 管理](https://www.binance.com/zh-CN/support/faq/%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BAapi-360002502072) 页面创建。
-  * **API key和密钥都是大小写敏感的。** 切勿与任何人共享它们。
-    如果您发现您的账户有异常活动，请立即撤销所有keys并联系币安客服。
-* API key 可以配置为仅允许访问某些类型的函数鉴权。
-  * 例如，可以拥有一个 API key 有 `TRADE` 的权限进行交易，同时使用另一个 API key 有 `USER_DATA` 的权限来监控您的订单状态。
-  * 默认情况下，API key 不能 `交易`。您需要先在 API 管理中开通交易权限。
-* `TRADE` 和 `USER_DATA` 请求也称为 `SIGNED` 请求。
-
-### SIGNED (TRADE 和 USER_DATA) 请求鉴权
-
+### 需要签名的请求
 * 为了授权请求，`SIGNED` 请求必须带 `signature` 参数。
 * 请参考 [签名请求示例（HMAC）](#hmac), [签名请求示例（RSA）](#rsa) 和 [SIGNED 请求示例 (Ed25519)](#ed25519) 理解如何计算签名。
 
@@ -7271,6 +7268,7 @@ timestamp           | LONG   | YES          |
 
 **注意：**
 数据流将在 60 分钟后关闭，除非定期发送 [`userDataStream.ping`](#user_data_stream_ping) 请求。
+此请求不需要 `signature` 。
 
 **权重:**
 2
@@ -7326,6 +7324,7 @@ timestamp           | LONG   | YES          |
 
 即使在监听, 用户数据流也会在60分钟后会自动关闭。
 若要保持用户数据流的活动状态，必须使用 `userDataStream.ping` 请求定期发送 ping，建议的是在每30分钟发送一次 ping。
+此请求不需要 `signature` 。
 
 **权重:**
 2
@@ -7372,7 +7371,8 @@ timestamp           | LONG   | YES          |
 }
 ```
 
-强制停止和关闭用户数据流
+强制停止和关闭用户数据流。
+此请求不需要 `signature` 。
 
 **权重:**
 2

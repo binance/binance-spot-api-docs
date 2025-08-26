@@ -1,6 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+- [Public Rest API for Binance](#public-rest-api-for-binance)
   - [General API Information](#general-api-information)
   - [HTTP Return Codes](#http-return-codes)
   - [Error Codes](#error-codes)
@@ -10,8 +11,8 @@
     - [IP Limits](#ip-limits)
     - [Unfilled Order Count](#unfilled-order-count)
   - [Data Sources](#data-sources)
-  - [Endpoint security type](#endpoint-security-type)
-    - [SIGNED (TRADE and USER_DATA) Endpoint security](#signed-trade-and-user_data-endpoint-security)
+  - [Request Security](#request-security)
+    - [SIGNED Endpoint security](#signed-endpoint-security)
     - [Timing security](#timing-security)
     - [SIGNED Endpoint Examples for POST /api/v3/order](#signed-endpoint-examples-for-post-apiv3order)
       - [HMAC Keys](#hmac-keys)
@@ -74,7 +75,7 @@
 
 # Public Rest API for Binance
 
-**Last Updated: 2025-08-12**
+**Last Updated: 2025-08-26**
 
 ## General API Information
 * The following base endpoints are available. Please use whichever works best for your setup:
@@ -175,30 +176,31 @@ These are the three sources, ordered by least to most potential for delays in da
 Some endpoints can have more than 1 data source. (e.g. Memory => Database)
 This means that the endpoint will check the first Data Source, and if it cannot find the value it's looking for it will check the next one.
 
-## Endpoint security type
-* Each endpoint has a security type that determines how you will
-  interact with it. This is stated next to the NAME of the endpoint.
-* If no security type is stated, assume the security type is NONE.
-* API-keys are passed into the REST API via the `X-MBX-APIKEY` header.
-* API-keys and secret-keys **are case sensitive**.
-* API-keys can be configured to only access certain types of secure endpoints.<br> For example, one API-key could be used for TRADE only, <br> while another API-key can access everything except for TRADE routes.
-* By default, API-keys can access all secure routes.
+## Request Security
 
-Security Type | Description
------------- | ------------
-NONE | Endpoint can be accessed freely.
-TRADE | Endpoint requires sending a valid API-Key and signature.
-USER_DATA | Endpoint requires sending a valid API-Key and signature.
-USER_STREAM | Endpoint requires sending a valid API-Key.
+* Each method has a security type indicating required API key permissions, shown next to the method name (e.g., [New order (TRADE)](#new-order-trade)).
+* If unspecified, the security type is `NONE`.
+* Methods with a security type other than `NONE` are considered `SIGNED` requests (i.e. requires parameter `signature`). A few legacy [listenKey management](#user-data-stream-requests) endpoints are an exception to this rule.
+* Secure methods require a valid API key to be specified and authenticated.
+  * API keys can be created on the [API Management](https://www.binance.com/en/support/faq/360002502072) page of your Binance account.
+  * **Both API key and secret key are sensitive.** Never share them with anyone.
+    If you notice unusual activity in your account, immediately revoke all the keys and contact Binance support.
+* API keys can be configured to allow access only to certain types of secure methods.
+  * For example, you can have an API key with `TRADE` permission for trading,
+    while using a separate API key with `USER_DATA` permission to monitor your order status.
+  * By default, an API key cannot `TRADE`. You need to enable trading in API Management first.
 
+Security type | Description
+------------- | ------------
+`NONE`        | Public market data
+`TRADE`       | Trading on the exchange, placing and canceling orders
+`USER_DATA`   | Private account information, such as order status and your trading history
+`USER_STREAM` | Managing User Data Stream subscriptions
 
-* `TRADE` and `USER_DATA` endpoints are `SIGNED` endpoints.
-
-### SIGNED (TRADE and USER_DATA) Endpoint security
+### SIGNED Endpoint security
 * `SIGNED` endpoints require an additional parameter, `signature`, to be sent in the  `query string` or `request body`.
 * The `signature` is **not case sensitive**.
 * Please consult the [examples](#signed-endpoint-examples-for-post-apiv3order) below on how to compute signature, depending on which API key type you are using.
-
 
 ### Timing security
 * `SIGNED` requests also require a `timestamp` parameter which should be the current timestamp either in milliseconds or microseconds. (See [General API Information](#general-api-information))
@@ -4194,6 +4196,7 @@ The following requests manage [User Data Stream](user-data-stream.md) subscripti
 POST /api/v3/userDataStream
 ```
 Start a new user data stream. The stream will close after 60 minutes unless a keepalive is sent.
+This request does not require `signature`.
 
 **Weight:**
 2
@@ -4216,6 +4219,8 @@ Memory
 PUT /api/v3/userDataStream
 ```
 Keepalive a user data stream to prevent a time out. User data streams will close after 60 minutes. It's recommended to send a ping about every 30 minutes.
+
+This request does not require `signature`.
 
 **Weight:**
 2

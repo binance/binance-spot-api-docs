@@ -1,6 +1,12 @@
 # 更新日志
 
-**最近更新： 2025-08-25**
+**最近更新： 2025-08-26**
+
+### 2025-08-26
+
+* 更新了 [REST API](rest-api_CN.md#request-security) 和 [WebSocket API](web-socket-api_CN.md#request-security) 文档的 “请求鉴权类型” 部分，不过相关的功能没有改动。
+
+---
 
 ### 2025-08-25
 
