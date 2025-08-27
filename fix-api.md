@@ -91,7 +91,7 @@ on how to set up an Ed25519 key pair.
 - Only API keys with `FIX_API` or `FIX_API_READ_ONLY` are allowed to connect.
 - QuickFIX Schema can be found [here](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml).
 
-### FIX Market Data sessions
+### FIX API Market Data sessions
 
 * Endpoint is: `tcp+tls://fix-md.binance.com:9000`
 * Supports market data streams and active instruments queries.
