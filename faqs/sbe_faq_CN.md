@@ -79,7 +79,9 @@ response=$(echo $request | websocat -n1 'wss://ws-api.binance.com:443/ws-api/v3?
 * 将被使用的模式 (schema) 会被保存在此仓库 (repository) 中，[请看这里](https://github.com/binance/binance-spot-api-docs/tree/master/sbe/schemas)。
 * 对于模式的任何更新将会被记录在[更改日志](../CHANGELOG_CN.md)中。
 
-**关于对旧版本的支持：**
+<a id="regarding-legacy-support"></a>
+
+#### 关于对旧版本的支持：
 
 * SBE 模式通过两个 XML 属性进行版本控制，`id` 和 `version`。
 	* 当引入破坏性更改时，`id` 会增加。当这种情况发生时，`version` 会被重置为0。
@@ -97,9 +99,17 @@ response=$(echo $request | websocat -n1 'wss://ws-api.binance.com:443/ws-api/v3?
 	* 3025年2月：发布模式id 2 版本 1。这个模式引入了一个非破坏性的变化。
 		* 模式 id 1 version 1 已被停用。
 		* 模式 id 2 version 0 此时已被废止，但还可以再被使用至少另外6个月。
-* HTTP将在针对 `X-MBX-SBE header` 中已被废止的 `SBE` 模式版本请求的响应中包含一个 `X-MBX-SBE-DEPRECATED` 报文头 。
-* 对于WebSocket响应，如果在其连接URL中指定了已弃用的`sbeSchemaId`和`sbeSchemaVersion`，`sbeSchemaIdVersionDeprecated`字段将被设置为`true`。
-* 指定已废止的`<ID>:<VERSION>`（REST API）或`sbeSchemaId`和`sbeSchemaVersion` （WebSocket API）的请求将会返回HTTP 400错误。
+* 当 REST API 请求中在 `X-MBX-SBE` 头部里指定了已废止的 `<ID>:<VERSION>` 时：
+    * HTTP 响应将包含 `X-MBX-SBE-DEPRECATED` 头部
+    * SBE 响应将使用可兼容的最高版本模式进行编码
+        * 例如，从2025-08-27 开始，针对 `X-MBX-SBE: 3:0` 的请求将收到以模式 `3:1` 进行编码的响应。根据 [FIX SBE 规范](https://www.fixtrading.org/standards/sbe-online/#schema-extension-mechanism)，模式 `3:0` 的 SBE 解码器应该能够顺利地对模式 `3:1` 进行解码。
+* 当 WebSocket API 连接 URL 中指定了已废止的 `sbeSchemaId` 和 `sbeSchemaVersion` 时：
+    * 所有 `WebSocketResponse` SBE 消息中的字段 `sbeSchemaIdVersionDeprecated` 将被设置为 `true`
+    * 所有 SBE 响应将使用可兼容的最高版本模式进行编码
+        * 例如，从2025-08-27 开始，针对 `sbeSchemaId=3&sbeSchemaVersion=0` 的请求将收到以模式 `3:1` 进行编码的响应。根据 [FIX SBE 规范](https://www.fixtrading.org/standards/sbe-online/#schema-extension-mechanism)，模式 `3:0` 的 SBE 解码器应该能够顺利地对模式 `3:1` 进行解码。
+* 指定已被停用的 `<ID>:<VERSION>`（REST API）或 `sbeSchemaId` 和 `sbeSchemaVersion`（WebSocket API）的请求将返回 HTTP 400 错误。
+* 在 SBE 模式 [3:0](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_0.xml) 中，为每个 `enum` 添加了名为 `NonRepresentable` 的 `validValue`。接收到该值表示使用最新模式时有额外数据可用。
+* 在 SBE 模式 [3:1](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml) 中，添加了名为 `NonRepresentableMessage` 的消息。接收到该消息表示使用最新模式时有额外数据可用。该消息可能作为顶层消息接收，或当 `data` 字段的 `type` 为 `messageData`、`messageData8`、`messageData16`、`optionalMessageData` 或 `optionalMessageData16` 时嵌入在 `data` 字段中。
 * 关于模式生命周期的 `JSON` 文件将被保存在此仓库中，[请看这里](https://github.com/binance/binance-spot-api-docs/tree/master/sbe/schemas)。这个文件包含了关于实时交易所和现货测试网的最新、被废止和被停用模式的具体发生日期。<br> 以下是一个基于上述假设时间线的 `JSON` 示例：
 
 ```json

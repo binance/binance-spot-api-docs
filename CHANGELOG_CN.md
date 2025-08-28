@@ -1,6 +1,12 @@
 # 更新日志
 
-**最近更新： 2025-08-26**
+**最近更新： 2025-08-28**
+
+### 2025-08-28
+
+* 更新了 “简单二进制编码（SBE）常见问题” 文档中 [关于对旧版本的支持](faqs/sbe_faq_CN.md#regarding-legacy-support) 部分，增加了关于模式兼容性的更多细节，并解释了 `NonRepresentable` 和 `NonRepresentableMessage` 的用法。
+
+---
 
 ### 2025-08-26
 

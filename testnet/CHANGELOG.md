@@ -1,9 +1,15 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-08-26**
+**Last Updated: 2025-08-28**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-08-28
+
+* Updated SBE FAQ section [regarding legacy support](../faqs/sbe_faq.md#regarding-legacy-support) to include more details on schema compatibility and explain `NonRepresentable` and `NonRepresentableMessage`.
+
+---
 
 ### 2025-08-26
 
