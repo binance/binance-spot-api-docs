@@ -1,11 +1,19 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-08-28**
+**Last Updated: 2025-09-05**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
 
-### 2025-08-28 
+### 2025-09-05
+
+**Data reset**
+
+All data on the Spot Test Network will be deleted today according to the periodic reset procedure. See [F.A.Q.](../faqs/testnet.md#faq-periodic-reset) for more details.
+
+---
+
+### 2025-08-28
 
 * Updated SBE FAQ section [regarding legacy support](../faqs/sbe_faq.md#regarding-legacy-support) to include more details on schema compatibility and explain `NonRepresentable` and `NonRepresentableMessage`.
 
@@ -164,7 +172,7 @@ Error messages are clearer when a tag is invalid, missing a value, or when the f
   * If the field value was empty or malformed, you will still receive the error:
     ```json
     {"code": -1102, "msg": "Field value was empty or malformed."}
-
+    ```
 ---
 
 ### 2025-07-02
@@ -180,7 +188,6 @@ All data on the Spot Test Network will be deleted today according to the periodi
 **Data reset**
 
 All data on the Spot Test Network will be deleted today according to the periodic reset procedure. (see [F.A.Q.](../faqs/testnet.md#faq-periodic-reset) for more details)
-
 
 ---
 
