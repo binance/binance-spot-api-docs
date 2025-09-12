@@ -101,7 +101,8 @@ FIX Market Data 的 QuickFIX Schema 可以在 [这里](https://github.com/binanc
 
 * 所有请求都需要一个 `SendingTime(52)` 字段，该字段应为当前时间戳。
 * 另有一个可选字段 `RecvWindow(25000)` ，用以指定请求的有效期（以毫秒为单位）。
-* 如果未指定 `RecvWindow(25000)`，则仅对 Logon`<A>` 请求默认为 5000 毫秒。对于其他请求，如果未设置，则不会执行 RecvWindow 检查。
+  * `RecvWindow(25000)` 扩展为三位小数（例如 6000.346），以便可以指定微秒。
+  * 如果未指定 `RecvWindow(25000)`，则仅对 Logon`<A>` 请求默认为 5000 毫秒。对于其他请求，如果未设置，则不会执行 RecvWindow 检查。
   * `RecvWindow(25000)` 的最大有效时间为 60000 毫秒。
 * 请求处理逻辑如下：
 
@@ -319,7 +320,7 @@ MC4CAQAwBQYDK2VwBCIEIIJEYWtGBrhACmb9Dvy+qa8WEf0lQOl1s4CLIAB9m89u
 | 56    | TargetCompID | STRING       | Y        | 在客户端的消息中必须设置为`SPOT`。|
 | 34    | MsgSeqNum    | SEQNUM       | Y        | 整数消息序列号。 <br></br> 会导致间隙的值将被拒绝。|
 | 52    | SendingTime  | UTCTIMESTAMP | Y        | 消息传输时间（始终以 UTC 表示）。|
-| 25000 | RecvWindow   | INT          | N        | 在`SendingTime (52)` 后，用于标识请求有效时间的毫秒数。 <br></br> 在 [Logon`<A>`](#logon-request) 中默认为 `5000` 毫秒，最大值为 `60000` 毫秒。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| 25000 | RecvWindow   | FLOAT          | N        | 在`SendingTime (52)` 后，用于标识请求有效时间的毫秒数。 <br></br> 在 [Logon`<A>`](#logon-request) 中默认为 `5000` 毫秒，最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 
 <a id="trailer"></a>
 

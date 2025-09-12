@@ -1,6 +1,15 @@
 # 更新日志
 
-**最近更新： 2025-08-28**
+**最近更新： 2025-09-12**
+
+### 2025-09-12
+
+* 更新了 FIX 订单接入 API 的 [QuickFix 模式](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)，用以支持挂钩订单。
+* 在 FIX API 文档中， 对以下部分的 `RecvWindow` 进行了更新：
+  * [消息组件](fix-api_CN.md#header)
+  * [时间同步安全](fix-api_CN.md#timingsecurity)
+
+---
 
 ### 2025-08-28
 
@@ -110,7 +119,7 @@
 
 以下变更将于**2025-08-28 07:00 UTC 开始发生**：
 * [挂钩订单](faqs/pegged_orders_CN.md) 功能将可以使用。
-  * pegInstructionsAllowed` 将在所有的交易对上被设为 `true`, 在所有的 API 上正式启用挂钩订单相关功能。
+  * `pegInstructionsAllowed` 将在所有的交易对上被设为 `true`, 在所有的 API 上正式启用挂钩订单相关功能。
   * 如果订单是挂钩订单，那么以下条件字段 `pegPriceType`， `pegOffSetType`， `pegOffsetValues` 和 `peggedPrice` 将出现在以下请求的响应中：
     * REST API
       * `GET /api/v3/order`

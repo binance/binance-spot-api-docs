@@ -39,6 +39,8 @@
    <field name='ExecInst' required='N'/>
    <field name='Price' required='N'/>
    <component name='TriggeringInstruction' required='N'/>
+   <component name='PegInstructions' required='N'/>
+   <field name='PeggedPrice' required='N'/>
    <field name='TimeInForce' required='N'/>
    <field name='TransactTime' required='N'/>
    <field name='OrderCreationTime' required='N'/>
@@ -207,6 +209,12 @@
   <field name='CheckSum' required='Y'/>
  </trailer>
  <components>
+  <component name='PegInstructions'>
+   <field name='PegOffsetValue' required='N'/>
+   <field name='PegPriceType' required='N'/>
+   <field name='PegMoveType' required='N'/>
+   <field name='PegOffsetType' required='N'/>
+  </component>
   <component name='TriggeringInstruction'>
    <field name='TriggerType' required='N'/>
    <field name='TriggerAction' required='N'/>
@@ -229,6 +237,7 @@
    <field name='ExecInst' required='N'/>
    <field name='Price' required='N'/>
    <component name='TriggeringInstruction' required='N'/>
+   <component name='PegInstructions' required='N'/>
    <field name='Side' required='Y'/>
    <field name='Symbol' required='Y'/>
    <field name='TimeInForce' required='N'/>
@@ -292,6 +301,7 @@
    <value enum='2' description='LIMIT'/>
    <value enum='3' description='STOP'/>
    <value enum='4' description='STOP_LIMIT'/>
+   <value enum='P' description='PEGGED'/>
   </field>
   <field number='41' name='OrigClOrdID' type='STRING'/>
   <field number='44' name='Price' type='PRICE'/>
@@ -346,6 +356,7 @@
   </field>
   <field number='151' name='LeavesQty' type='QTY'/>
   <field number='152' name='CashOrderQty' type='QTY'/>
+  <field number='211' name='PegOffsetValue' type='FLOAT'/>
   <field number='371' name='RefTagID' type='INT'/>
   <field number='372' name='RefMsgType' type='STRING'/>
   <field number='373' name='SessionRejectReason' type='INT'>
@@ -395,11 +406,22 @@
   </field>
   <field number='636' name='WorkingIndicator' type='BOOLEAN'/>
   <field number='811' name='PriceDelta' type='INT'/>
+  <field number='835' name='PegMoveType' type='INT'>
+   <value enum='1' description='FIXED'/>
+  </field>
+  <field number='836' name='PegOffsetType' type='CHAR'>
+   <value enum='3' description='PRICE_TIER'/>
+  </field>
+  <field number='839' name='PeggedPrice' type='PRICE'/>
   <field number='847' name='TargetStrategy' type='INT'/>
   <field number='1003' name='TradeID' type='INT'/>
   <field number='1057' name='AggressorIndicator' type='BOOLEAN'>
    <value enum='Y' description='ORDER_INITIATOR_IS_AGGRESSOR'/>
    <value enum='N' description='ORDER_INITIATOR_IS_PASSIVE'/>
+  </field>
+  <field number='1094' name='PegPriceType' type='CHAR'>
+   <value enum='4' description='MARKET_PEG'/>
+   <value enum='5' description='PRIMARY_PEG'/>
   </field>
   <field number='1100' name='TriggerType' type='CHAR'>
    <value enum='4' description='PRICE_MOVEMENT'/>
@@ -427,7 +449,7 @@
   <field number='6136' name='ReqID' type='STRING'/>
   <field number='7940' name='StrategyID' type='INT'/>
   <field number='9406' name='DropCopyFlag' type='BOOLEAN'/>
-  <field number='25000' name='RecvWindow' type='INT'/>
+  <field number='25000' name='RecvWindow' type='FLOAT'/>
   <field number='25001' name='SelfTradePreventionMode' type='CHAR'>
    <value enum='1' description='NONE'/>
    <value enum='2' description='EXPIRE_TAKER'/>

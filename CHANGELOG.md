@@ -1,8 +1,17 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-08-28**
+**Last Updated: 2025-09-12**
 
-### 2025-08-28 
+### 2025-09-12
+
+* The [QuickFix schema for FIX Order Entry](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml) has been updated to support Pegged Orders.
+* Updated FIX API Documentation for `RecvWindow` in
+  * [Message Components](fix-api.md#header)
+  * [Timing Security](fix-api.md#timing-security)
+
+---
+
+### 2025-08-28
 
 * Updated SBE FAQ section [regarding legacy support](faqs/sbe_faq.md#regarding-legacy-support) to include more details on schema compatibility and explain `NonRepresentable` and `NonRepresentableMessage`.
 

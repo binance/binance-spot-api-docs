@@ -1,9 +1,18 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-09-05**
+**Last Updated: 2025-09-12**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-09-12
+
+* The [QuickFix schema for FIX Order Entry](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml) has been updated to support Pegged Orders.
+* Updated FIX API Documentation for `RecvWindow` in
+  * [Message Components](fix-api.md#header)
+  * [Timing Security](fix-api.md#timing-security)
+
+---
 
 ### 2025-09-05
 
