@@ -614,10 +614,13 @@ Security type |  Description
 * `SIGNED` requests require an additional parameter: `signature`, authorizing the request.
 * Please consult [SIGNED request example (HMAC)](#signed-request-example-hmac), [SIGNED request example (RSA)](#signed-request-example-rsa), and [SIGNED request example (Ed25519)](#signed-request-example-ed25519) on how to compute signature, depending on which API key type you are using.
 
+<a id="timingsecurity"></a>
+
 ### Timing security
 
 * `SIGNED` requests also require a `timestamp` parameter which should be the current timestamp either in milliseconds or microseconds. (See [General API Information](#general-api-information))
 * An additional optional parameter, `recvWindow`, specifies for how long the request stays valid and may only be specified in milliseconds.
+  * `recvWindow` supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
   * If `recvWindow` is not sent, **it defaults to 5000 milliseconds**.
   * Maximum `recvWindow` is 60000 milliseconds.
 * Request processing logic is as follows:
@@ -2790,7 +2793,7 @@ Calling `session.logon` multiple times changes the current authenticated API key
 Name          | Type    | Mandatory | Description
 ------------- | ------- | --------- | ------------
 `apiKey`      | STRING  | YES       |
-`recvWindow`  | LONG    | NO        | The value cannot be greater than `60000`
+`recvWindow`  | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `signature`   | STRING  | YES       |
 `timestamp`   | LONG    | YES       |
 
@@ -2952,7 +2955,7 @@ Name                | Type    | Mandatory | Description
 `pegOffsetValue`    | INT     | NO        | Price level to peg the price to (max: 100) <br> See [Pegged Orders](#pegged-orders-info)
 `pegOffsetType`     | ENUM    | NO        | Only `PRICE_LEVEL` is supported <br> See [Pegged Orders](#pegged-orders-info)
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
+`recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
@@ -3544,9 +3547,9 @@ Cancel an active order.
     </tr>
     <tr>
         <td><code>recvWindow</code></td>
-        <td>LONG</td>
+        <td>DECIMAL</td>
         <td>NO</td>
-        <td>The value cannot be greater than <tt>60000</tt></td>
+        <td>The value cannot be greater than <tt>60000</tt>.<br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.</td>
     </tr>
     <tr>
         <td><code>signature</code></td>
@@ -3926,9 +3929,9 @@ A new order that was not attempted (i.e. when `newOrderResult: NOT_ATTEMPTED`), 
     </tr>
     <tr>
         <td><code>recvWindow</code></td>
-        <td>LONG</td>
+        <td>DECIMAL</td>
         <td>NO</td>
-        <td>The value cannot be greater than <tt>60000</tt></td>
+        <td>The value cannot be greater than <tt>60000</tt>.<br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.</td>
     </tr>
     <tr>
         <td><code>signature</code></td>
@@ -4584,7 +4587,7 @@ orderId | LONG | NO\* | `orderId` or `origClientOrderId` must be sent  |
 origClientOrderId | STRING | NO\* | `orderId` or `origClientOrderId` must be sent  |
 newClientOrderId | STRING | NO\* | The new client order ID for the order after being amended. <br> If not sent, one will be randomly generated. <br> It is possible to reuse the current clientOrderId by sending it as the `newClientOrderId`. |
 newQty | DECIMAL | YES | `newQty` must be greater than 0 and less than the order's quantity. |
-recvWindow | LONG | NO | The value cannot be greater than `60000`.
+recvWindow | DECIMAL | NO | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 timestamp | LONG | YES |
 
 **Data Source**: Matching Engine
@@ -4729,7 +4732,7 @@ Name                | Type    | Mandatory | Description
 ------------------- | ------- | --------- | ------------
 `symbol`            | STRING  | YES       |
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
+`recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
@@ -4904,7 +4907,7 @@ Name                | Type    | Mandatory | Description
 `newOrderRespType`  | ENUM    | NO        | Select response format: `ACK`, `RESULT`, `FULL` (default)
 `selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](./enums.md#stpmodes)
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
+`recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
@@ -5112,7 +5115,7 @@ Name                     |Type    | Mandatory | Description
 `newOrderRespType`       |ENUM    |NO         |Select response format: `ACK`, `RESULT`, `FULL`
 `selfTradePreventionMode`|ENUM    |NO         |The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](./enums.md#stpmodes).
 `apiKey`                 |STRING  |YES        |
-`recvWindow`             |LONG    |NO         |The value cannot be greater than `60000`.
+`recvWindow`             |DECIMAL |NO         |The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `timestamp`              |LONG    |YES        |
 `signature`              |STRING  |YES        |
 
@@ -5291,7 +5294,7 @@ Name                   |Type   |Mandatory | Description
 `pendingPegOffsetType`   |ENUM   |NO        |See [Pegged Orders](#pegged-orders-info)
 `pendingPegPriceType`    |ENUM   |NO        |
 `pendingPegOffsetValue`  |INT    |NO        |
-`recvWindow`             |LONG   |NO        |The value cannot be greater than `60000`.
+`recvWindow`             |DECIMAL|NO        |The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `timestamp`              |LONG   |YES       |
 `signature`              |STRING |YES       |
 
@@ -5485,7 +5488,7 @@ Name                     |Type   |Mandatory | Description
 `pendingBelowPegPriceType` |ENUM   |NO        |See [Pegged Orders](#pegged-orders-info)
 `pendingBelowPegOffsetType`|ENUM   |NO        |
 `pendingBelowPegOffsetValue` |INT  |NO        |
-`recvWindow`               |LONG   |NO        |The value cannot be greater than `60000`.
+`recvWindow`               |DECIMAL|NO        |The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `timestamp`                |LONG   |YES       |
 `signature`                |STRING|YES|
 
@@ -5681,9 +5684,9 @@ Cancel an active order list.
     </tr>
     <tr>
         <td><code>recvWindow</code></td>
-        <td>LONG</td>
+        <td>DECIMAL</td>
         <td>NO</td>
-        <td>The value cannot be greater than <tt>60000</tt></td>
+        <td>The value cannot be greater than <tt>60000</tt>.<br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.</td>
     </tr>
     <tr>
         <td><code>signature</code></td>
@@ -5838,7 +5841,7 @@ Name                | Type    | Mandatory | Description
 `selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](./enums.md#stpmodes).
 `apiKey`            | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
-`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
+`recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `signature`         | STRING  | YES       |
 
 **Note:** `sor.order.place` only supports `LIMIT` and `MARKET` orders. `quoteOrderQty` is not supported.
@@ -6022,7 +6025,7 @@ Name                | Type    | Mandatory | Description
 ------------------- | ------- | --------- | ------------
 `apiKey`            | STRING  | YES       |
 `omitZeroBalances`  | BOOLEAN | NO        | When set to `true`, emits only the non-zero balances of an account. <br>Default value: false
-`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
+`recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
@@ -6146,9 +6149,9 @@ Check execution status of an order.
     </tr>
     <tr>
         <td><code>recvWindow</code></td>
-        <td>LONG</td>
+        <td>DECIMAL</td>
         <td>NO</td>
-        <td>The value cannot be greater than <tt>60000</tt></td>
+        <td>The value cannot be greater than <tt>60000</tt>.<br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.</td>
     </tr>
     <tr>
         <td><code>signature</code></td>
@@ -6258,7 +6261,7 @@ Name                | Type    | Mandatory | Description
 ------------------- | ------- | --------- | ------------
 `symbol`            | STRING  | NO        | If omitted, open orders for all symbols are returned
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
+`recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
@@ -6350,7 +6353,7 @@ Name                | Type    | Mandatory | Description
 `endTime`           | LONG    | NO        |
 `limit`             | INT     | NO        | Default: 500; Maximum: 1000
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
+`recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
@@ -6473,9 +6476,9 @@ For execution status of individual orders, use [`order.status`](#query-order-use
     </tr>
     <tr>
         <td><code>recvWindow</code></td>
-        <td>LONG</td>
+        <td>DECIMAL</td>
         <td>NO</td>
-        <td>The value cannot be greater than <tt>60000</tt></td>
+        <td>The value cannot be greater than <tt>60000</tt>.<br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.</td>
     </tr>
     <tr>
         <td><code>signature</code></td>
@@ -6570,7 +6573,7 @@ If you need to continuously monitor order status updates, please consider using 
 Name                | Type    | Mandatory | Description
 ------------------- | ------- | --------- | ------------
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
+`recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
@@ -6649,7 +6652,7 @@ Name                | Type    | Mandatory | Description
 `endTime`           | LONG    | NO        |
 `limit`             | INT     | NO        | Default: 500; Maximum: 1000
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
+`recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
@@ -6748,7 +6751,7 @@ Name                | Type    | Mandatory | Description
 `fromId`            | INT     | NO        | First trade ID to query
 `limit`             | INT     | NO        | Default: 500; Maximum: 1000
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
+`recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
@@ -6847,7 +6850,7 @@ Query your current unfilled order count for all intervals.
 Name                | Type    | Mandatory | Description
 ------------------- | ------- | --------- | ------------
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | The value cannot be greater than `60000`
+`recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
@@ -6922,7 +6925,7 @@ preventedMatchId    | LONG   | NO           |
 orderId             | LONG   | NO           |
 fromPreventedMatchId| LONG   | NO           |
 limit               | INT    | NO           | Default: `500`; Maximum: `1000`
-recvWindow          | LONG   | NO           | The value cannot be greater than `60000`
+recvWindow          | DECIMAL| NO           | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 timestamp           | LONG   | YES          |
 
 **Weight**
@@ -7000,7 +7003,7 @@ Name                       | Type  |Mandatory | Description
 `fromAllocationId`         |INT    |No        |
 `limit`                    |INT    |No        |Default: 500; Maximum: 1000
 `orderId`                  |LONG   |No        |
-`recvWindow`               |LONG   |No        |The value cannot be greater than `60000`
+`recvWindow`               |DECIMAL|No        |The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `timestamp`                |LONG   |No        |
 
 Supported parameter combinations:
@@ -7160,7 +7163,7 @@ symbol | STRING | YES |  |
 orderId | LONG | YES |  |
 fromExecutionId | LONG | NO |  |
 limit | INT | NO | Default:500; Maximum: 1000 |
-recvWindow | LONG | NO | The value cannot be greater than `60000`.
+recvWindow | DECIMAL | NO | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 timestamp | LONG | YES |
 
 **Data Source:**

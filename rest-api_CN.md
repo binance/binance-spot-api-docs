@@ -123,9 +123,11 @@
 * 根据不同的API密钥类型，请参考下面 [签名示例](#post-apiv3order-%E7%9A%84%E7%A4%BA%E4%BE%8B) 以了解具体如何做计算签名。
 
 <a id="timingsecurity"></a>
+
 ### 时间同步安全
 * `SIGNED` 请求还需要一个 `timestamp` 参数，该参数应为当前时间戳，单位为毫秒或微秒。（参见 [通用 API 信息](#general-api-information)）
 * 另一个可选参数 `recvWindow`，用以指定请求的有效期，只能以毫秒为单位。
+  * `recvWindow` 扩展为三位小数（例如 6000.346），以便可以指定微秒。
   * 如果未发送 `recvWindow`，则 **默认值为 5000 毫秒**。
   * `recvWindow` 的最大值为 60000 毫秒。
 * 请求处理逻辑如下：
@@ -1665,7 +1667,7 @@ selfTradePreventionMode |ENUM| NO | 允许的 ENUM 取决于交易对的配置�
 pegPriceType | ENUM | NO | `PRIMARY_PEG` 或 `MARKET_PEG`。 <br> 参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)|
 pegOffsetValue | INT | NO | 用于挂钩的价格水平（最大值：100）。 <br> 参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)  |
 pegOffsetType | ENUM | NO | 仅支持 `PRICE_LEVEL`。 <br> 参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info) |
-recvWindow | LONG | NO |
+recvWindow | DECIMAL | NO | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。 |
 timestamp | LONG | YES |
 
 根据 order `type`的不同，<a id="order-type">某些参数</a> 有强制要求，具体如下:
@@ -1902,7 +1904,7 @@ orderId | LONG | NO |
 origClientOrderId | STRING | NO |
 newClientOrderId | STRING | NO |  用户自定义的本次撤销操作的ID(注意不是被撤销的订单的自定义ID)。如无指定会自动赋值。
 cancelRestrictions| ENUM | NO | 支持的值: <br>`ONLY_NEW` - 如果订单状态为 `NEW`，撤销将成功。<br> `ONLY_PARTIALLY_FILLED` - 如果订单状态为 `PARTIALLY_FILLED`，撤销将成功。
-recvWindow | LONG | NO |
+recvWindow | DECIMAL | NO | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp | LONG | YES |
 
 **注意:**
@@ -1972,7 +1974,7 @@ DELETE /api/v3/openOrders
 名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-recvWindow | LONG | NO | 不能大于 `60000`
+recvWindow | DECIMAL | NO | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp | LONG | YES |
 
 **数据源:**
@@ -2128,7 +2130,7 @@ orderRateLimitExceededMode| ENUM | NO |支持的值： <br></br> `DO_NOTHING`（
 pegPriceType | ENUM | NO | `PRIMARY_PEG` 或 `MARKET_PEG`。 <br> 参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)|
 pegOffsetValue | INT | NO | 用于挂钩的价格水平（最大值：100）。 <br> 参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)  |
 pegOffsetType | ENUM | NO | 仅支持 `PRICE_LEVEL`。 <br> 参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info) |
-recvWindow | LONG | NO | 不能大于 `60000`
+recvWindow | DECIMAL| NO | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp | LONG | YES |
 
 
@@ -2519,7 +2521,7 @@ PUT /api/v3/order/amend/keepPriority
  origClientOrderId | STRING | NO\* | 需提供 `orderId` 或 `origClientOrderId`。
  newClientOrderId | STRING | NO\* | 订单在被修改后被赋予的新 client order ID。  <br> 如果未发送则自动生成。 <br> 可以将当前 clientOrderId 作为 `newClientOrderId` 发送来重用当前 clientOrderId 的值。
  newQty | DECIMAL | YES | 交易的新数量。 `newQty` 必须大于0, 但是必须比订单的原始数量小。
-recvWindow | LONG | NO |
+recvWindow | DECIMAL | NO | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp | LONG | YES |
 
 
@@ -2654,7 +2656,7 @@ stopIcebergQty|DECIMAL|NO|
 stopLimitTimeInForce|ENUM|NO| 有效值 `GTC`/`FOK`/`IOC`
 newOrderRespType|ENUM|NO| 详见枚举定义：[订单返回类型](./enums_CN.md#orderresponsetype)
 selfTradePreventionMode |ENUM| NO | 允许的 ENUM 取决于交易对的配置。支持的值有：[STP 模式](./enums_CN.md#stpmodes)。
-recvWindow|LONG|NO| 不能大于 `60000`
+recvWindow|DECIMAL|NO| 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp|LONG|YES|
 
 
@@ -2783,10 +2785,10 @@ belowStrategyId        |LONG    |No          |订单策略中下方订单的 ID�
 belowStrategyType      |INT     |No         |下方订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
 belowPegPriceType      |ENUM    |NO         |参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)
 belowPegOffsetType     |ENUM    |NO         |
-belowPegOffsetValue    |INT      NO         |
+belowPegOffsetValue    |INT     |NO         |
 newOrderRespType       |ENUM    |No         |响应格式可选值: `ACK`, `RESULT`, `FULL`。
 selfTradePreventionMode|ENUM    |No         |允许的 ENUM 取决于交易对上的配置。 支持值：[STP 模式](./enums_CN.md#stpmodes)。
-recvWindow             |LONG   |No          |不能大于 `60000`。
+recvWindow             |DECIMAL |NO         |最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp              |LONG   |Yes         |
 
 **数据源:**
@@ -2917,7 +2919,7 @@ pendingStrategyType    |INT    |NO        |用于标识待处理订单策略的�
 pendingPegPriceType    |ENUM   |NO        |参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)
 pendingPegOffsetType   |ENUM   |NO        |
 pendingPegOffsetValue  |INT    |NO        |
-recvWindow             |LONG   |NO        |不能大于 `60000`。
+recvWindow             |DECIMAL|NO        |最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp              |LONG   |YES       |
 
 <a id="mandatory-parameters-based-on-pendingtype-or-workingtype"></a>
@@ -3072,7 +3074,7 @@ pendingBelowStrategyType |INT    |NO        |用于标识待处理下方订单�
 pendingBelowPegPriceType |ENUM  |NO         |参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)
 pendingBelowPegOffsetType |ENUM |NO         |
 pendingBelowPegOffsetValue |INT |NO         |
-recvWindow               |LONG   |NO        |不能大于 `60000`。
+recvWindow               |DECIMAL|NO        |最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp                |LONG   |YES       |
 
 <a id="mandatory-parameters-based-on-pendingabovetype-pendingbelowtype-or-workingtype"></a>
@@ -3204,7 +3206,7 @@ symbol| STRING| YES|
 orderListId|LONG|NO| `orderListId` 或 `listClientOrderId` 必须被提供
 listClientOrderId|STRING|NO| `orderListId` 或 `listClientOrderId` 必须被提供
 newClientOrderId|STRING|NO| 用户自定义的本次撤销操作的ID(注意不是被撤销的订单的自定义ID)。如无指定会自动赋值。
-recvWindow|LONG|NO|不能大于 `60000`
+recvWindow|DECIMAL|NO| 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp|LONG|YES|
 
 其他注意点:
@@ -3317,7 +3319,7 @@ icebergQty              | DECIMAL| NO | 仅有限价单可以使用该参数，�
 newOrderRespType        | ENUM   | NO | 指定响应类型:
 指定响应类型 `ACK`, `RESULT` 或 `FULL`; 默认为 `FULL`。
 selfTradePreventionMode |ENUM    | NO | 允许的 ENUM 取决于交易对的配置。支持的值有：[STP 模式](enums_CN.md#stpmodes)。
-recvWindow              | LONG   | NO | 赋值不能大于 `60000`
+recvWindow              | DECIMAL| NO | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp               | LONG | YES |
 
 **请注意:** `POST /api/v3/sor/order` 只支持 `限价` 和 `市场` 单， 并不支持 `quoteOrderQty`。
@@ -3435,7 +3437,7 @@ GET /api/v3/account
 名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
 omitZeroBalances |BOOLEAN| NO | 如果`true`，将隐藏所有零余额。 <br>默认值：`false`
-recvWindow | LONG | NO |
+recvWindow |DECIMAL| NO | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp | LONG | YES |
 
 **数据源:**
@@ -3497,7 +3499,7 @@ GET /api/v3/order
 symbol | STRING | YES |
 orderId | LONG | NO |
 origClientOrderId | STRING | NO |
-recvWindow | LONG | NO |
+recvWindow | DECIMAL | NO | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp | LONG | YES |
 
 **注意:**
@@ -3553,7 +3555,7 @@ GET /api/v3/openOrders
 名称 | 类型 | 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | NO |
-recvWindow | LONG | NO |
+recvWindow | DECIMAL | NO |最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp | LONG | YES |
 
 * 不带symbol参数，会返回所有交易对的挂单
@@ -3609,7 +3611,7 @@ orderId | LONG | NO | 只返回此orderID之后的订单，缺省返回最近的
 startTime | LONG | NO |
 endTime | LONG | NO |
 limit | INT | NO | 默认值： 500； 最大值： 1000
-recvWindow | LONG | NO |
+recvWindow | DECIMAL | NO |最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp | LONG | YES |
 
 **注意:**
@@ -3668,7 +3670,7 @@ GET /api/v3/orderList
 ----|-----|----|----------
 orderListId|LONG|NO*|  通过 `orderListId` 获取订单列表。 <br>必须提供 `orderListId` 或 `origClientOrderId`。
 origClientOrderId|STRING|NO*| 通过 `listClientOrderId` 获取订单列表。<br>必须提供 `orderListId` 或 `origClientOrderId`。
-recvWindow|LONG|NO| 赋值不得大于 `60000`
+recvWindow|DECIMAL|NO|最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp|LONG|YES|
 
 **数据源:**
@@ -3720,7 +3722,7 @@ fromId|LONG|NO| 提供该项后, `startTime` 和 `endTime` 都不可提供
 startTime|LONG|NO|
 endTime|LONG|NO|
 limit|INT|NO| 默认值： 500； 最大值： 1000
-recvWindow|LONG|NO| 赋值不能超过 `60000`
+recvWindow|DECIMAL|NO|最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp|LONG|YES|
 
 **数据源:**
@@ -3787,7 +3789,7 @@ GET /api/v3/openOrderList
 
 名称| 类型|是否必需| 描述
 ----|-----|---|------------------
-recvWindow|LONG|NO| 赋值不能大于 `60000`
+recvWindow|DECIMAL|NO|最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp|LONG|YES|
 
 
@@ -3845,7 +3847,7 @@ startTime | LONG | NO |
 endTime | LONG | NO |
 fromId | LONG | NO |返回该fromId之后的成交，缺省返回最近的成交
 limit | INT | NO | 默认值： 500； 最大值： 1000
-recvWindow | LONG | NO |
+recvWindow |DECIMAL | NO | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp | LONG | YES |
 
 
@@ -3897,7 +3899,7 @@ GET /api/v3/rateLimit/order
 **参数:**
 名称 | 类型| 是否必需 | 描述
 ------------ | ------------ | ------------ | ------------
-recvWindow | LONG | NO | 赋值不得大于 `60000`
+recvWindow | DECIMAL | NO |最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp | LONG | YES |
 
 **数据源:**
@@ -3948,7 +3950,7 @@ preventedMatchId    |LONG    | NO           |
 orderId             |LONG    | NO           |
 fromPreventedMatchId|LONG    | NO           |
 limit               |INT     | NO           | 默认值： 500； 最大值： 1000。
-recvWindow          | LONG   | NO           | 赋值不得大于 `60000`
+recvWindow          |DECIMAL | NO           |最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp           | LONG   | YES          |
 
 **权重:**
@@ -4003,7 +4005,7 @@ endTime                  |LONG   |No        |
 fromAllocationId         |INT    |No        |
 limit                    |INT    |No        |默认值： 500； 最大值： 1000
 orderId                  |LONG   |No        |
-recvWindow               |LONG   |No        |不能大于 `60000`
+recvWindow               |DECIMAL|NO        |最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp                |LONG   |No        |
 
 支持的参数组合:
@@ -4119,7 +4121,7 @@ GET /api/v3/order/amendments
  orderId | LONG | YES |
  fromExecutionId | LONG | NO |
  limit | LONG | NO | 默认值： 500； 最大值： 1000
- recvWindow | LONG | NO | 不能大于 `60000`
+ recvWindow | DECIMAL | NO |最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp | LONG | YES |
 
 **数据源:**
