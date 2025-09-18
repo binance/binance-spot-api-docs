@@ -1,6 +1,14 @@
 # 更新日志
 
-**最近更新： 2025-09-12**
+**最近更新： 2025-09-18**
+
+### 2025-09-18
+
+* 更新了文档中有关 `recvWindow` 的部分， 用以体现在 [2025-08-12](#2025-08-12) 发表的微秒级支持。
+  * REST API: [时间同步安全](rest-api_CN.md#timingsecurity)
+  * WebSocket API: [时间同步安全](web-socket-api_CN.md#timingsecurity)
+
+---
 
 ### 2025-09-12
 

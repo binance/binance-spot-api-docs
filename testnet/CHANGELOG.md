@@ -1,9 +1,15 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-09-12**
+**Last Updated: 2025-09-18**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-09-18
+
+* Updated documentation for `recvWindow` to reflect microsecond support announced on [2025-08-05](#2025-08-05).
+  * REST API: [Timing Security](rest-api.md#timingsecurity)
+  * WebSocket API: [Timing Security](web-socket-api.md#timingsecurity)
 
 ### 2025-09-12
 

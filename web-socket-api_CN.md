@@ -520,10 +520,12 @@ API 有多种频率限制间隔。
 * 请参考 [签名请求示例（HMAC）](#hmac), [签名请求示例（RSA）](#rsa) 和 [SIGNED 请求示例 (Ed25519)](#ed25519) 理解如何计算签名。
 
 <a id="timingsecurity"></a>
+
 ### 时间同步安全
 
 * `SIGNED` 请求还需要一个 `timestamp` 参数，该参数应为当前时间戳，单位为毫秒或微秒。（参见 [通用 API 信息](#general-api-information)）
 * 另一个可选参数 `recvWindow`，用以指定请求的有效期，只能以毫秒为单位。
+  * `recvWindow` 扩展为三位小数（例如 6000.346），以便可以指定微秒。
   * 如果未发送 `recvWindow`，则 **默认为 5000 毫秒**。
   * `recvWindow` 的最大值为 60000 毫秒。
 * 请求处理逻辑如下：
@@ -2670,7 +2672,7 @@ days    | `1d`, `2d` ... `7d`
 参数名          | 类型    | 是否必需 | 描述
 ------------- | ------- | --------- | ------------
 `apiKey`      | STRING  | YES       |
-`recvWindow`  | LONG    | NO        | The value cannot be greater than `60000`
+`recvWindow`  | DECIMAL | NO        | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 `signature`   | STRING  | YES       |
 `timestamp`   | LONG    | YES       |
 
@@ -2834,7 +2836,7 @@ NONE
 `pegOffsetValue`    | INT     | NO        | 用于挂钩的价格水平（最大值：100） <br> 参阅 [挂钩订单](#pegged-orders-info)
 `pegOffsetType`     | ENUM    | NO        | 仅支持 `PRICE_LEVEL` <br> 参阅 [挂钩订单](#pegged-orders-info)
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | 值不能大于 `60000`
+`recvWindow`        | DECIMAL | NO        | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
@@ -3415,9 +3417,9 @@ NONE
     </tr>
     <tr>
         <td><code>recvWindow</code></td>
-        <td>LONG</td>
+        <td>DECIMAL</td>
         <td>NO</td>
-        <td>值不能大于 <tt>60000</tt></td>
+        <td>值不能大于 <tt>60000</tt>。<br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。</td>
     </tr>
     <tr>
         <td><code>signature</code></td>
@@ -3796,9 +3798,9 @@ NONE
     </tr>
     <tr>
         <td><code>recvWindow</code></td>
-        <td>LONG</td>
+        <td>DECIMAL</td>
         <td>NO</td>
-        <td>值不能大于 <tt>60000</tt></td>
+        <td>值不能大于 <tt>60000</tt>。<br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。</td>
     </tr>
     <tr>
         <td><code>signature</code></td>
@@ -4449,8 +4451,8 @@ NONE
  `origClientOrderId` | STRING | NO\* | 需提供 `orderId` 或 `origClientOrderId`。
  `newClientOrderId` | STRING | NO\* | 订单在被修改后被赋予的新 client order ID。 <br> 如果未发送则自动生成。 <br> 可以将当前 clientOrderId 作为 `newClientOrderId` 发送来重用当前 clientOrderId 的值。
  `newQty` | DECIMAL | YES | 交易的新数量。 `newQty` 必须大于0, 但是必须比订单的原始数量小。
-`recvWindow` |LONG   |NO        |不能大于 `60000`
-`timestamp` |LONG   |NO        |
+ `recvWindow` | DECIMAL | NO | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
+ `timestamp` |LONG   |NO        |
 
 
 **数据源:**
@@ -4595,7 +4597,7 @@ NONE
 ------------------- | ------- | --------- | ------------
 `symbol`            | STRING  | YES       |
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | 值不能大于 `60000`
+`recvWindow`        | DECIMAL | NO        | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
@@ -4767,7 +4769,7 @@ NONE
 `newOrderRespType`  | ENUM    | NO        | 可选的响应格式: `ACK`，`RESULT`，`FULL` (默认)
 `selfTradePreventionMode` |ENUM| NO | 允许的 ENUM 取决于交易对的配置。支持的值有：[STP 模式](./enums_CN.md#stpmodes)
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | 值不能大于 `60000`
+`recvWindow`        | DECIMAL | NO        | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
@@ -4971,7 +4973,7 @@ NONE
 `newOrderRespType`       |ENUM    |NO         |响应格式可选值: `ACK`, `RESULT`, `FULL`。
 `selfTradePreventionMode`|ENUM    |NO         |允许的 ENUM 取决于交易对上的配置。 可能支持的值为：[STP 模式](./enums_CN.md#stpmodes)
 `apiKey`                 |STRING  |YES        |
-`recvWindow`             |LONG    |NO         |不能大于 `60000`。
+`recvWindow`             |DECIMAL |NO         |最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 `signature`              |STRING  |YES        |
 `timestamp`              |LONG    |YES        |
 
@@ -5150,7 +5152,7 @@ NONE
 `pendingPegOffsetType`   |ENUM   |NO        |参阅 [挂钩订单](#pegged-orders-info)
 `pendingPegPriceType`    |ENUM   |NO        |
 `pendingPegOffsetValue`  |INT    |NO        |
-`recvWindow`             |LONG   |NO        |不能大于 `60000`。
+`recvWindow`             |DECIMAL|NO        |最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 `timestamp`              |LONG   |YES       |
 `signature`              |STRING |YES       |
 
@@ -5344,7 +5346,7 @@ NONE
 `pendingBelowPegPriceType` |ENUM   |NO        |参阅 [挂钩订单](#pegged-orders-info)
 `pendingBelowPegOffsetType`|ENUM   |NO        |
 `pendingBelowPegOffsetValue` |INT  |NO        |
-`recvWindow`               |LONG  |NO        |不能大于 `60000`。
+`recvWindow`               |DECIMAL|NO        |最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 `timestamp`                |LONG   |YES       |
 `signature`                |STRING|YES|
 
@@ -5541,9 +5543,9 @@ NONE
     </tr>
     <tr>
         <td><code>recvWindow</code></td>
-        <td>LONG</td>
+        <td>DECIMAL</td>
         <td>NO</td>
-        <td>值不能大于 <tt>60000</tt></td>
+        <td>值不能大于 <tt>60000</tt>。<br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。</td>
     </tr>
     <tr>
         <td><code>signature</code></td>
@@ -5698,7 +5700,7 @@ NONE
 `selfTradePreventionMode` |ENUM | NO      | 允许的 ENUM 取决于交易对的配置。支持的值有：[STP 模式](./enums_CN.md#stpmodes)
 `apiKey`            | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
-`recvWindow`        | LONG    | NO        | 赋值不能大于 `60000`
+`recvWindow`        | DECIMAL | NO        | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 `signature`         | STRING  | YES       |
 
 **注意:** `sor.order.place` 只支持 `限价` 和 `市场` 单， 并不支持 `quoteOrderQty`。
@@ -5881,7 +5883,7 @@ NONE
 ------------------- | ------- | --------- | ------------
 `apiKey`            | STRING  | YES       |
 `omitZeroBalances`  | BOOLEAN | NO        | 如果`true`，将隐藏所有零余额。<br>默认值：`false`。
-`recvWindow`        | LONG    | NO        | 值不能大于 `60000`
+`recvWindow`        | DECIMAL | NO        | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
@@ -6006,9 +6008,9 @@ NONE
     </tr>
     <tr>
         <td><code>recvWindow</code></td>
-        <td>LONG</td>
+        <td>DECIMAL</td>
         <td>NO</td>
-        <td>值不能大于 <tt>60000</tt></td>
+        <td>值不能大于 <tt>60000</tt>。<br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。</td>
     </tr>
     <tr>
         <td><code>signature</code></td>
@@ -6117,7 +6119,7 @@ NONE
 ------------------- | ------- | --------- | ------------
 `symbol`            | STRING  | NO        | 如果省略，则返回所有交易对的挂单
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | 值不能大于 `60000`
+`recvWindow`        | DECIMAL | NO        | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
@@ -6209,7 +6211,7 @@ NONE
 `endTime`           | LONG    | NO        |
 `limit`             | INT     | NO        | 默认值： 500； 最大值： 1000
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | 值不能大于 `60000`
+`recvWindow`        | DECIMAL | NO        | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
@@ -6332,9 +6334,9 @@ NONE
     </tr>
     <tr>
         <td><code>recvWindow</code></td>
-        <td>LONG</td>
+        <td>DECIMAL</td>
         <td>NO</td>
-        <td>值不能大于 <tt>60000</tt></td>
+        <td>值不能大于 <tt>60000</tt>。<br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。</td>
     </tr>
     <tr>
         <td><code>signature</code></td>
@@ -6428,7 +6430,7 @@ NONE
 名称                | 类型    | 是否必需 | 描述
 ------------------- | ------- | --------- | ------------
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | 值不能大于 `60000`
+`recvWindow`        | DECIMAL | NO        | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
@@ -6507,7 +6509,7 @@ NONE
 `endTime`           | LONG    | NO        |
 `limit`             | INT     | NO        | 默认值： 500； 最大值： 1000
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | 值不能大于 `60000`
+`recvWindow`        | DECIMAL | NO        | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
@@ -6607,7 +6609,7 @@ NONE
 `fromId`            | INT     | NO        | 起始交易 ID
 `limit`             | INT     | NO        | 默认值： 500； 最大值： 1000
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | 值不能大于 `60000`
+`recvWindow`        | DECIMAL | NO        | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
@@ -6706,7 +6708,7 @@ NONE
 名称                | 类型    | 是否必需 | 描述
 ------------------- | ------- | --------- | ------------
 `apiKey`            | STRING  | YES       |
-`recvWindow`        | LONG    | NO        | 值不能大于 `60000`
+`recvWindow`        | DECIMAL | NO        | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 `signature`         | STRING  | YES       |
 `timestamp`         | LONG    | YES       |
 
@@ -6781,7 +6783,7 @@ preventedMatchId    | LONG   | NO           |
 orderId             | LONG   | NO           |
 fromPreventedMatchId| LONG   | NO           |
 limit               | INT    | NO           | 默认值：`500`； 最大值：`1000`
-recvWindow          | LONG   | NO           | 赋值不得大于 `60000`
+recvWindow          | DECIMAL| NO           | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp           | LONG   | YES          |
 
 **权重:**
@@ -6859,7 +6861,7 @@ timestamp           | LONG   | YES          |
 `fromAllocationId`         |INT    |NO        |
 `limit`                    |INT    |NO        |默认值： 500； 最大值： 1000
 `orderId`                  |LONG   |NO        |
-`recvWindow`               |LONG  |NO        |不能大于 `60000`
+`recvWindow`               |DECIMAL| NO       |最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 `timestamp`                |LONG   |NO        |
 
 支持的参数组合:
@@ -7027,7 +7029,7 @@ timestamp           | LONG   | YES          |
 `orderId`         | LONG   | YES     |
 `fromExecutionId` | LONG   | NO      |
 `limit`           | LONG   | NO      | 默认值： 500； 最大值： 1000
-`recvWindow`      | LONG   | NO      | 不能大于 `60000`
+`recvWindow`      | DECIMAL| NO        | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 `timestamp`       | LONG   | NO      |
 
 **数据源:**

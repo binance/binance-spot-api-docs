@@ -1,6 +1,14 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-09-12**
+**Last Updated: 2025-09-18**
+
+### 2025-09-18
+
+* Updated documentation for `recvWindow` to reflect microsecond support announced on [2025-08-12](#2025-08-12).
+  * REST API: [Timing Security](rest-api.md#timingsecurity)
+  * WebSocket API: [Timing Security](web-socket-api.md#timingsecurity)
+
+---
 
 ### 2025-09-12
 
