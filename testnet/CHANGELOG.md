@@ -11,6 +11,8 @@ This is not always synced with the live exchange.
   * REST API: [Timing Security](rest-api.md#timingsecurity)
   * WebSocket API: [Timing Security](web-socket-api.md#timingsecurity)
 
+---
+
 ### 2025-09-12
 
 * The [QuickFix schema for FIX Order Entry](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml) has been updated to support Pegged Orders.
