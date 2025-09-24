@@ -1,9 +1,22 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-09-18**
+**Last Updated: 2025-09-24**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-09-24
+
+**Notice: The following changes will be deployed on 2025-09-24, starting at 7:00 UTC and may take several hours to complete.**
+
+* Added an endpoint to retrieve the list of filters relevant to an account on a given symbol. This is the only endpoint that shows if an account has `MAX_ASSET` filters applied to it.
+  * REST API: [`GET /api/v3/myFilters`](rest-api.md#myFilters)
+  * WebSocket API: [`myFilters`](web-socket-api.md#myFilters)
+* Comments in **SBE: schema 3:1 ([spot_3_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml))** have been added, modified, and removed. Although there is no need for users of `3:1` to update to this version of the file, we advise updating to maintain consistency.
+* Added documentation for filter [`MAX_ASSET`](filters.md#max_asset).
+  * In `Testnet` only: all accounts have a `MAX_ASSET` filter for asset `JPY` with value set to `1000000`.
+
+---
 
 ### 2025-09-18
 
