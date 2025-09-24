@@ -65,6 +65,7 @@
     - [Query Allocations (USER_DATA)](#query-allocations-user_data)
     - [Query Commission Rates (USER_DATA)](#query-commission-rates-user_data)
     - [Query Order Amendments (USER_DATA)](#query-order-amendments-user_data)
+    - [Query Relevant Filters (USER_DATA)](#query-relevant-filters-user_data)
   - [User data stream endpoints (Deprecated)](#user-data-stream-endpoints-deprecated)
     - [Start user data stream (USER_STREAM) (Deprecated)](#start-user-data-stream-user_stream-deprecated)
     - [Keepalive user data stream (USER_STREAM) (Deprecated)](#keepalive-user-data-stream-user_stream-deprecated)
@@ -74,7 +75,7 @@
 
 # Public Rest API for Binance SPOT Testnet
 
-**Last Updated: 2025-08-26**
+**Last Updated: 2025-09-24**
 
 ## General API Information
 * The base endpoint is **https://testnet.binance.vision/api**
@@ -614,6 +615,7 @@ Memory
   ]
 }
 ```
+
 
 ## Market Data endpoints
 ### Order book
@@ -2730,7 +2732,7 @@ aboveIcebergQty        |LONG    |No         |Note that this can only be used if 
 abovePrice             |DECIMAL |No         |Can be used if `aboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
 aboveStopPrice         |DECIMAL |No         |Can be used if `aboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`. <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
 aboveTrailingDelta     |LONG    |No         |See [Trailing Stop order FAQ](../faqs/trailing-stop-faq.md).
-aboveTimeInForce       |DECIMAL |No         |Required if `aboveType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`.
+aboveTimeInForce       |ENUM    |No         |Required if `aboveType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`.
 aboveStrategyId        |LONG     |No         |Arbitrary numeric value identifying the above order within an order strategy.
 aboveStrategyType      |INT     |No         |Arbitrary numeric value identifying the above order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
 abovePegPriceType      |ENUM | NO | See [Pegged Orders](#pegged-orders-info) |
@@ -4055,6 +4057,55 @@ Database
       "time": 1741672924895
   }
 ]
+```
+
+<a id="myFilters"></a>
+### Query relevant filters (USER_DATA)
+
+```
+GET /api/v3/myFilters
+```
+
+Retrieves the list of [filters](filters.md) relevant to an account on a given symbol. This is the only endpoint that shows if an account has [`MAX_ASSET`](filters.md#max_asset) filters applied to it.
+
+**Weight:**
+40
+
+**Parameters:**
+
+Name       | Type         | Mandatory    | Description
+---------- | ------------ | ------------ | ------------
+symbol     | STRING       | YES          |
+recvWindow | DECIMAL      | NO           | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
+timestamp  | LONG         | YES          |
+
+**Data Source:**
+Memory
+
+**Response:**
+
+```javascript
+{
+  "exchangeFilters": [
+    {
+      "filterType": "EXCHANGE_MAX_NUM_ORDERS",
+      "maxNumOrders": 1000
+    }
+  ],
+  "symbolFilters": [
+    {
+      "filterType": "MAX_NUM_ORDER_LISTS",
+      "maxNumOrderLists": 20
+    }
+  ],
+  "assetFilters": [
+    {
+      "filterType": "MAX_ASSET",
+      "asset": "JPY",
+      "limit": "1000000.00000000"
+    }
+  ]
+}
 ```
 
 <a id="user-data-stream-requests"></a>

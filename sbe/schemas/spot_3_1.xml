@@ -219,7 +219,7 @@
             <validValue name="MaxNumOrderLists" mbx:jsonValue="MAX_NUM_ORDER_LISTS">17</validValue>
             <validValue name="ExchangeMaxNumOrderLists" mbx:jsonValue="EXCHANGE_MAX_NUM_ORDER_LISTS">18</validValue>
             <validValue name="MaxNumOrderAmends" mbx:jsonValue="MAX_NUM_ORDER_AMENDS">19</validValue>
-            <validValue name="MaxAsset" mbx:jsonValue="MAX_ASSET">20</validValue><!-- Not in use yet -->
+            <validValue name="MaxAsset" mbx:jsonValue="MAX_ASSET">20</validValue>
             <validValue name="NonRepresentable" mbx:jsonValue="NON_REPRESENTABLE">254</validValue>
         </enum>
 
@@ -468,7 +468,6 @@
         <field id="2" name="maxNumOrderLists" type="int64"/>
     </sbe:message>
 
-    <!-- Not in use yet -->
     <sbe:message name="MaxAssetFilter" id="21">
         <field id="1" name="filterType" type="filterType" presence="constant" valueRef="filterType.MaxAsset"/>
         <field id="2" name="qtyExponent" type="exponent8"/>
@@ -620,8 +619,8 @@
                     - "MaxPositionFilter"
                     - "TrailingDeltaFilter"
                     - "TPlusSellFilter"
-                    - "MaxNumOrderLists"
-                    - "MaxNumOrderAmends"
+                    - "MaxNumOrderListsFilter"
+                    - "MaxNumOrderAmendsFilter"
                     Use the "templateId" field from the "messageHeader" to
                     differentiate them. -->
                 <data id="200" name="filter" type="messageData8" mbx:jsonPath=".."/>
@@ -646,7 +645,9 @@
         </group>
     </sbe:message>
 
-    <!-- Not in use yet -->
+    <!-- Response for
+        - REST GET /api/v3/myFilters
+        - WebSocket "method":"myFilters" -->
     <sbe:message name="MyFiltersResponse" id="105">
         <group id="100" name="exchangeFilters">
             <!-- Contains one of
@@ -674,8 +675,8 @@
                 - "MaxPositionFilter"
                 - "TrailingDeltaFilter"
                 - "TPlusSellFilter"
-                - "MaxNumOrderLists"
-                - "MaxNumOrderAmends"
+                - "MaxNumOrderListsFilter"
+                - "MaxNumOrderAmendsFilter"
                 Use the "templateId" field from the "messageHeader" to
                 differentiate them. -->
             <data id="200" name="filter" type="messageData8" mbx:jsonPath=".."/>
