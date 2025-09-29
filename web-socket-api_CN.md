@@ -1,6 +1,6 @@
 # Binance 的公共 WebSocket API
 
-**最近更新： 2025-08-26**
+**最近更新： 2025-09-29**
 
 <a id="general-api-information"></a>
 ## API 基本信息
@@ -4952,7 +4952,7 @@ NONE
 `abovePrice`             |DECIMAL |NO         |当 `aboveType` 是 `STOP_LOSS_LIMIT`, `LIMIT_MAKER` 或 `TAKE_PROFIT_LIMIT` 时，可用以指定限价。
 `aboveStopPrice`         |DECIMAL |NO         |如果 `aboveType` 是 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT` 或 `TAKE_PROFIT_LIMIT` 才能使用。<br> 必须指定 `aboveStopPrice` 或 `aboveTrailingDelta` 或两者。
 `aboveTrailingDelta`     |LONG    |NO         |请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md).
-`aboveTimeInForce`       |DECIMAL |NO         |如果 `aboveType` 是 `STOP_LOSS_LIMIT` 或 `TAKE_PROFIT_LIMIT`，则为必填项。
+`aboveTimeInForce`       |ENUM    |NO         |如果 `aboveType` 是 `STOP_LOSS_LIMIT` 或 `TAKE_PROFIT_LIMIT`，则为必填项。
 `aboveStrategyId`        |LONG    |NO         |订单策略中上方订单的 ID。
 `aboveStrategyType`      |INT     |NO         |上方订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
 `abovePegPriceType`      |ENUM    |NO         |参阅 [挂钩订单](#pegged-orders-info)
@@ -7064,6 +7064,69 @@ timestamp           | LONG   | YES          |
       "count": 4
     }
   ]
+}
+```
+
+<a id="myFilters"></a>
+### 查询相关过滤器 (USER_DATA)
+
+```javascript
+{
+  "id": "74R4febb-d142-46a2-977d-90533eb4d97g",
+  "method": "myFilters",
+  "params": {
+    "recvWindow": 5000,
+    "symbol": "BTCUSDT",
+    "timestamp": 1758008841149,
+    "apiKey": "nQ6kG5gDExDd5MZSO0MfOOWEVZmdkRllpNMfm1FjMjkMnmw1NUd3zPDfvcnDJlil",
+    "signature": "7edc54dd0493dd5bc47adbab9b17bfc9b378d55c20511ae5a168456d3d37aa3a"
+  }
+}
+```
+
+用于检索一个账户上指定交易对的 [filters](filters_CN.md) 列表。这是唯一一个目前会显示账户是否应用了 [`MAX_ASSET`](filters_CN.md#max_asset) 过滤器的端点。
+
+**权重:**
+40
+
+**参数:**
+
+名称       | 类型     | 是否必需 | 描述
+---------  | ------ |-------- | ---------
+symbol     | STRING | YES     |
+recvWindow | DECIMAL| NO      |  最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
+timestamp  | LONG   | YES     |
+
+**数据源:**
+缓存
+
+**响应:**
+
+```javascript
+{
+  "id": "1758009606869",
+  "status": 200,
+  "result": {
+    "exchangeFilters": [
+      {
+        "filterType": "EXCHANGE_MAX_NUM_ORDERS",
+        "maxNumOrders": 1000
+      }
+    ],
+    "symbolFilters": [
+      {
+        "filterType": "MAX_NUM_ORDER_LISTS",
+        "maxNumOrderLists": 20
+      }
+    ],
+    "assetFilters": [
+      {
+        "filterType": "MAX_ASSET",
+        "asset": "JPY",
+        "limit": "1000000.00000000"
+      }
+    ]
+  }
 }
 ```
 

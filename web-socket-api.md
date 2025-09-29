@@ -76,6 +76,7 @@
     - [Account allocations (USER_DATA)](#account-allocations-user_data)
     - [Account Commission Rates (USER_DATA)](#account-commission-rates-user_data)
     - [Query Order Amendments (USER_DATA)](#query-order-amendments-user_data)
+    - [Query Relevant Filters (USER_DATA)](#query-relevant-filters-user_data)
   - [User Data Stream requests](#user-data-stream-requests)
     - [User Data Stream subscription](#user-data-stream-subscription)
       - [Subscribe to User Data Stream (USER_STREAM)](#subscribe-to-user-data-stream-user_stream)
@@ -91,7 +92,7 @@
 
 # Public WebSocket API for Binance
 
-**Last Updated: 2025-08-12**
+**Last Updated: 2025-09-29**
 
 ## General API Information
 
@@ -5094,7 +5095,7 @@ Name                     |Type    | Mandatory | Description
 `abovePrice`             |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
 `aboveStopPrice`         |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`. <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
 `aboveTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](faqs/trailing-stop-faq.md).
-`aboveTimeInForce`       |DECIMAL |NO         |Required if `aboveType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`.
+`aboveTimeInForce`       |ENUM    |NO         |Required if `aboveType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`.
 `aboveStrategyId`        |LONG    |NO         |Arbitrary numeric value identifying the above order within an order strategy.
 `aboveStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the above order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
 `abovePegPriceType`      |ENUM    |NO         |See [Pegged Orders](#pegged-orders-info)
@@ -7198,6 +7199,70 @@ Database
       "count": 4
     }
   ]
+}
+```
+
+
+<a id="myFilters"></a>
+### Query Relevant Filters (USER_DATA)
+
+```javascript
+{
+  "id": "74R4febb-d142-46a2-977d-90533eb4d97g",
+  "method": "myFilters",
+  "params": {
+    "recvWindow": 5000,
+    "symbol": "BTCUSDT",
+    "timestamp": 1758008841149,
+    "apiKey": "nQ6kG5gDExDd5MZSO0MfOOWEVZmdkRllpNMfm1FjMjkMnmw1NUd3zPDfvcnDJlil",
+    "signature": "7edc54dd0493dd5bc47adbab9b17bfc9b378d55c20511ae5a168456d3d37aa3a"
+  }
+}
+```
+
+Retrieves the list of [filters](filters.md) relevant to an account on a given symbol. This is the only endpoint that shows if an account has [`MAX_ASSET`](filters.md#max_asset) filters applied to it.
+
+**Weight:**
+40
+
+**Parameters:**
+
+Name       | Type         | Mandatory    | Description
+---------- | ------------ | ------------ | ------------
+symbol     | STRING       | YES          |
+recvWindow | DECIMAL      | NO           | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
+timestamp  | LONG         | YES          |
+
+**Data Source:**
+Memory
+
+**Response:**
+
+```javascript
+{
+  "id": "1758009606869",
+  "status": 200,
+  "result": {
+    "exchangeFilters": [
+      {
+        "filterType": "EXCHANGE_MAX_NUM_ORDERS",
+        "maxNumOrders": 1000
+      }
+    ],
+    "symbolFilters": [
+      {
+        "filterType": "MAX_NUM_ORDER_LISTS",
+        "maxNumOrderLists": 20
+      }
+    ],
+    "assetFilters": [
+      {
+        "filterType": "MAX_ASSET",
+        "asset": "JPY",
+        "limit": "1000000.00000000"
+      }
+    ]
+  }
 }
 ```
 

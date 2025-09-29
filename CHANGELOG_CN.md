@@ -1,6 +1,18 @@
 # 更新日志
 
-**最近更新： 2025-09-18**
+**最近更新： 2025-09-29**
+
+### 2025-09-29
+
+**注意：以下变更将于 2025 年 9 月 29 日 7:00 (UTC) 推出，可能需要几个小时才能完成部署。**
+
+* 新增一个端点，用于检索与指定交易品种的账户相关的过滤器列表。这是唯一一个目前会显示账户是否应用了 `MAX_ASSET` 过滤器的端点。
+  * REST API： [`GET /api/v3/myFilters`](rest-api_CN.md#myFilters)
+  * WebSocket API： [`myFilters`](web-socket-api_CN.md#myFilters)
+* 对 **SBE: schema 3:1 ([spot_3_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml))** 中的部分注释进行了添加、修改和删除。虽然 `3:1` 用户无需更新到此版本的模式，但我们建议您进行更新以保持一致性。
+* 新增了有关过滤器 [`MAX_ASSET`](filters_CN.md#max_asset) 的文档。
+
+---
 
 ### 2025-09-18
 

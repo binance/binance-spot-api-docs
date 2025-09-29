@@ -1,6 +1,6 @@
 # 过滤器
 过滤器，即Filter，定义了一系列交易规则。
-共有两类，分别是针对交易对的过滤器`symbol filters`，和针对整个交易所的过滤器`exchange filters`
+共有两类，分别是针对交易对的过滤器 `symbol filters`，针对整个交易所的过滤器 `exchange filters` 和针对资产的过滤器 `asset filters`。
 
 ## 交易对过滤器
 ### PRICE_FILTER 价格过滤器
@@ -339,4 +339,26 @@ MIN_NOTIONAL过滤器定义了交易对订单所允许的最小名义价值(成�
       "filterType": "EXCHANGE_MAX_NUM_ORDER_LISTS",
       "maxNumOrderLists": 20
 }
+```
+
+
+## 资产过滤器
+### MAX_ASSET
+
+`MAX_ASSET` 过滤器定义了一个账户在单笔订单中可交易的资产最大数量。
+
+* 当资产是交易对的基础资产时，该限制适用于订单的数量。
+* 当资产是交易对的报价资产时，该限制适用于订单的名义价值。
+* 例如，针对 USDC 的 MAX_ASSET 过滤器适用于所有以 USDC 作为基础资产或报价资产的交易对，例如：
+  * USDCBNB
+  * BNBUSDC
+
+**/myFilters format:**
+
+```javascript
+   {
+      "filterType": "MAX_ASSET",
+      "asset": "USDC",
+      "limit": "42.00000000"
+    }
 ```
