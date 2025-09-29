@@ -14,8 +14,6 @@
 
 ---
 
-**Last Updated: 2025-09-18**
-
 ### 2025-09-18
 
 * Updated documentation for `recvWindow` to reflect microsecond support announced on [2025-08-12](#2025-08-12).
