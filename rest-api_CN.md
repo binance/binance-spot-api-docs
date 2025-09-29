@@ -1,6 +1,6 @@
 # REST行情与交易接口
 
-**最近更新： 2025-08-26**
+**最近更新： 2025-09-29**
 
 <a id="general-api-information"></a>
 ## API 基本信息
@@ -2768,7 +2768,7 @@ aboveIcebergQty        |LONG    |No         |请注意，只有当 `aboveTimeInF
 abovePrice             |DECIMAL |No         |当 `aboveType` 是 `STOP_LOSS_LIMIT`, `LIMIT_MAKER` 或 `TAKE_PROFIT_LIMIT` 时，可用以指定限价。
 aboveStopPrice         |DECIMAL |No         |如果 `aboveType` 是 `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT` 或 `TAKE_PROFIT_LIMIT` 才能使用。<br> 必须指定 `aboveStopPrice` 或 `aboveTrailingDelta` 或两者。
 aboveTrailingDelta     |LONG    |No         |请看 [追踪止盈止损(Trailing Stop)订单常见问题](faqs/trailing-stop-faq_CN.md)。
-aboveTimeInForce       |DECIMAL |No         |如果 `aboveType` 是 `STOP_LOSS_LIMIT` 或 `TAKE_PROFIT_LIMIT`，则为必填项。
+aboveTimeInForce       |ENUM    |No         |如果 `aboveType` 是 `STOP_LOSS_LIMIT` 或 `TAKE_PROFIT_LIMIT`，则为必填项。
 aboveStrategyId        |LONG     |No         |订单策略中上方订单的 ID。
 aboveStrategyType      |INT     |No         |上方订单策略的任意数值。<br>小于 `1000000` 的值被保留，无法使用。
 abovePegPriceType      |ENUM    |NO         |参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)
@@ -4153,6 +4153,56 @@ timestamp | LONG | YES |
   }
 ]
 ```
+
+<a id="myFilters"></a>
+### 查询相关过滤器 (USER_DATA)
+
+```
+GET /api/v3/myFilters
+```
+
+用于检索一个账户上指定交易对的 [filters](filters_CN.md) 列表。这是唯一一个目前会显示账户是否应用了 [`MAX_ASSET`](filters_CN.md#max_asset) 过滤器的端点。
+
+**权重:**
+40
+
+**参数:**
+
+名称       | 类型     | 是否必需 | 描述
+---------  | ------ |-------- | ---------
+symbol     | STRING | YES     |
+recvWindow | DECIMAL| NO      |  最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
+timestamp  | LONG   | YES     |
+
+**数据源:**
+缓存
+
+**响应:**
+
+```javascript
+{
+  "exchangeFilters": [
+    {
+      "filterType": "EXCHANGE_MAX_NUM_ORDERS",
+      "maxNumOrders": 1000
+    }
+  ],
+  "symbolFilters": [
+    {
+      "filterType": "MAX_NUM_ORDER_LISTS",
+      "maxNumOrderLists": 20
+    }
+  ],
+  "assetFilters": [
+    {
+      "filterType": "MAX_ASSET",
+      "asset": "JPY",
+      "limit": "1000000.00000000"
+    }
+  ]
+}
+```
+
 
 <a id="user-data-stream-requests"></a>
 
