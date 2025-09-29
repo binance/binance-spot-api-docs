@@ -4,7 +4,7 @@
 
 ### 2025-09-29
 
-**Notice: The following changes will be deployed on 2025-09-29, starting at 7:00 UTC and may take several hours to complete.**
+**Notice: The following changes will be deployed on 2025-09-29, starting at 10:00 UTC and may take several hours to complete.**
 
 * Added an endpoint to retrieve the list of filters relevant to an account on a given symbol. This is the only endpoint that shows if an account has `MAX_ASSET` filters applied to it.
   * REST API: [`GET /api/v3/myFilters`](rest-api.md#myFilters)
