@@ -1,6 +1,6 @@
 # Filters
 Filters define trading rules on a symbol or an exchange.
-Filters come in two forms: `symbol filters`, `exchange filters` and `asset filters`.
+Filters come in three forms: `symbol filters`, `exchange filters` and `asset filters`.
 
 ## Symbol filters
 ### PRICE_FILTER

@@ -36,13 +36,13 @@ allocation
 ### B
 
 `baseAsset`
-* 基准资产；指代交易对中的第一个资产（比如 `BTCUSDT` 中的 `BTC`），表示被出售或者买进的资产。
+* 基础资产；指代交易对中的第一个资产（比如 `BTCUSDT` 中的 `BTC`），表示被出售或者买进的资产。
 
 `baseAssetPrecision`
-* 基准资产精度；Exchange Information 响应中的一个字段，代表了基准资产（`baseAsset`）可以允许的最多小数位数。
+* 基础资产精度；Exchange Information 响应中的一个字段，代表了基础资产（`baseAsset`）可以允许的最多小数位数。
 
 `baseCommissionPrecision`
-* Exchange Information 响应中用来表示基准资产手续费可以允许的最多小数位数。
+* Exchange Information 响应中用来表示基础资产手续费可以允许的最多小数位数。
 
 `bidPrice`
 * `ticker` 请求返回的来自“买"方的最高价格。
@@ -293,10 +293,10 @@ Prevented execution quote quantity
 ### Q
 
 `quantity`
-* 订单量；买卖订单时候基本资产（`base asset`）的数量。
+* 订单量；买卖订单时候基础资产（`base asset`）的数量。
 
 `quoteAsset`
-* 定价资产；在交易对中的第二个资产，比如交易对 `BTCUSDT` 中的 `USDT`。
+* 报价资产；在交易对中的第二个资产，比如交易对 `BTCUSDT` 中的 `USDT`。
 
 `quoteAssetPrecision`
 * Exchange Information 响应中用来指明 `quoteAsset` 允许的最多小数位数。
@@ -337,7 +337,7 @@ Self Trade Prevention (STP)
 * 方向（`side`）的一个枚举值，用于用户希望卖出某一资产。
 
 Smart Order Routing (SOR)
-* 智能订单路由；使用可互换的定价资产（`quote asset`）来提高流动性。请阅读 [SOR 常见问题](./sor_faq_CN.md) 来了解更多详情。
+* 智能订单路由；使用可互换的报价资产（`quote asset`）来提高流动性。请阅读 [SOR 常见问题](./sor_faq_CN.md) 来了解更多详情。
 
 `specialCommissionForOrder`/`specialCommission`
 * 参考 [佣金率](commission_faq_CN.md)
@@ -368,7 +368,7 @@ Smart Order Routing (SOR)
 * 策略单类型；用以显示此订单对应的交易策略。
 
 `symbol`
-* 交易对；由交易对象（`base asset`）和定价资产（`quote asset`）组成。
+* 交易对；由基础资产（`base asset`）和报价资产（`quote asset`）组成。
 
 ---
 

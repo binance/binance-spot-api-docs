@@ -1108,7 +1108,7 @@ Your connection is about to be closed. Please reconnect.
 | 320     | InstrumentReqID       | STRING     | Y        | `InstrumentReqID` 从请求中得到               |
 | 146     | NoRelatedSym          | NUMINGROUP | Y        | 交易数量                                 |
 | =>55    | Symbol                | STRING     | Y        | 交易对                                        |
-| =>15    | Currency              | STRING     | Y        | 此交易品种的定价资产                |
+| =>15    | Currency              | STRING     | Y        | 此交易品种的报价资产                |
 | 146     | NoRelatedSym          | NUMINGROUP | Y        | 交易品种数量                                 |
 | =>55    | Symbol                | STRING     | Y        |                                            |
 | =>15    | Currency              | STRING     | Y        | 此交易品种的 Quote asset                |

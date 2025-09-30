@@ -1,6 +1,6 @@
 # 过滤器
 过滤器，即Filter，定义了一系列交易规则。
-共有两类，分别是针对交易对的过滤器 `symbol filters`，针对整个交易所的过滤器 `exchange filters` 和针对资产的过滤器 `asset filters`。
+共有三类，分别是针对交易对的过滤器 `symbol filters`，针对整个交易所的过滤器 `exchange filters` 和针对资产的过滤器 `asset filters`。
 
 ## 交易对过滤器
 ### PRICE_FILTER 价格过滤器
