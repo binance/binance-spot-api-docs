@@ -237,6 +237,7 @@ SBE 会话中的事件将作为 **二进制帧** 发送。
 
 ```javascript
 {
+  "subscriptionId": 0,
   "event": {
     "e": "outboundAccountPosition",
     "E": 1728972148778,
@@ -262,7 +263,7 @@ SBE 会话中的事件将作为 **二进制帧** 发送。
 | 名称             | 类型    | 是否必须    | 描述
 | --------------- | ------- | --------- | -----------
 | `event` | OBJECT    | YES       | 事件 payload。请看 [用户数据流](user-data-stream_CN.md)
-
+| `subscriptionId` | INT | NO | 用以标识事件来自于哪个订阅。详见 [用户数据流订阅](#general_info_user_data_stream_subscriptions) |
 
 <a id="ratelimits"></a>
 

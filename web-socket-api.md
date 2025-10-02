@@ -329,6 +329,7 @@ Example of an event:
 
 ```javascript
 {
+  "subscriptionId": 0,
   "event": {
     "e": "outboundAccountPosition",
     "E": 1728972148778,
@@ -354,6 +355,7 @@ Event fields:
 | Name | Type | Mandatory | Description |
 | :---- | :---- | :---- | :---- |
 | `event` | OBJECT | YES | Event payload. See [User Data Streams](user-data-stream.md) |
+| `subscriptionId`|INT| NO| Identifies which subscription the event is coming from. See [User Data Stream subscriptions](#general_info_user_data_stream_subscriptions) |
 
 ## Rate limits
 
