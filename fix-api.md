@@ -1167,20 +1167,21 @@ Sent by the server in a response to the [InstrumentListRequest`<x>`](#instrument
 > [!NOTE]
 > More detailed symbol information is available through the [exchangeInfo](https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#exchange-information) endpoint.
 
-
 | Tag     | Name                  | Type       | Required | Description                                |
 |---------|-----------------------|------------|----------|--------------------------------------------|
 | 320     | InstrumentReqID       | STRING     | Y        | `InstrumentReqID` from the request.        |
 | 146     | NoRelatedSym          | NUMINGROUP | Y        | Number of symbols                          |
 | =>55    | Symbol                | STRING     | Y        |                                            |
 | =>15    | Currency              | STRING     | Y        | Quote asset of this symbol                 |
-| =>562   | MinTradeVol           | QTY        | Y        | The minimum trading quantity               |
-| =>1140  | MaxTradeVol           | QTY        | Y        | The maximum trading quantity               |
-| =>25039 | MinQtyIncrement       | QTY        | Y        | The minimum quantity increase              |
-| =>25040 | MarketMinTradeVol     | QTY        | Y        | The minimum market order trading quantity  |
-| =>25041 | MarketMaxTradeVol     | QTY        | Y        | The maximum market order trading quantity  |
-| =>25042 | MarketMinQtyIncrement | QTY        | Y        | The minimum market order quantity increase |
-| =>969   | MinPriceIncrement     | PRICE      | Y        | The minimum price increase                 |
+| =>562   | MinTradeVol           | QTY        | N        | Corresponds to the [LOT_SIZE](filters.md#lot_size) filter|
+| =>1140  | MaxTradeVol           | QTY        | N        | Corresponds to the [LOT_SIZE](filters.md#lot_size) filter|
+| =>25039 | MinQtyIncrement       | QTY        | N        | Corresponds to the [LOT_SIZE](filters.md#lot_size) filter|
+| =>25040 | MarketMinTradeVol     | QTY        | N        | Corresponds to the [MARKET_LOT_SIZE](filters.md#market_lot_size) filter|
+| =>25041 | MarketMaxTradeVol     | QTY        | N        | Corresponds to the [MARKET_LOT_SIZE](filters.md#market_lot_size) filter|
+| =>25042 | MarketMinQtyIncrement | QTY        | N        | Corresponds to the [MARKET_LOT_SIZE](filters.md#market_lot_size) filter|
+| =>969   | MinPriceIncrement     | PRICE      | N        | Corresponds to the [PRICE](filters.md#price) filter|
+| =>2551  | StartPriceRange       | PRICE      | N        | Corresponds to the [PRICE](filters.md#price) filter|
+| =>2552  | EndPriceRange         | PRICE      | N        | Corresponds to the [PRICE](filters.md#price) filter|
 
 **Sample message:**
 

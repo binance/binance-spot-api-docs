@@ -1,9 +1,24 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-10-01**
+**Last Updated: 2025-10-08**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-10-08
+
+#### FIX API
+
+**Notice: The following changes will be enabled at 2025-10-08 07:00 UTC**
+
+* Updated [QuickFIX Schema](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml) for FIX Market Data:
+  * Updated RecvWindow (25000) to reflect microsecond support announced on [2025-08-05](#2025-08-05).
+  * Updated [InstrumentList `<y>`](fix-api.md#instrumentlist) message:
+    * Added fields: `StartPriceRange`, `EndPriceRange`.
+    * Made the following fields optional: `MinTradeVol`, `MaxTradeVol`, `MinQtyIncrement`, `MarketMinTradeVol`, `MarketMaxTradeVol`, `MarketMinQtyIncrement`, `MinPriceIncrement`.
+  * The changes to InstrumentList `<y>` are breaking changes. Please update to the new schema.
+
+---
 
 ### 2025-10-01
 

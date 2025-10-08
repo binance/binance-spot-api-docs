@@ -60,13 +60,15 @@
    <group name='NoRelatedSym' required='Y'>
     <field name='Symbol' required='Y'/>
     <field name='Currency' required='Y'/>
-    <field name='MinTradeVol' required='Y'/>
-    <field name='MaxTradeVol' required='Y'/>
-    <field name='MinQtyIncrement' required='Y'/>
-    <field name='MarketMinTradeVol' required='Y'/>
-    <field name='MarketMaxTradeVol' required='Y'/>
-    <field name='MarketMinQtyIncrement' required='Y'/>
-    <field name='MinPriceIncrement' required='Y'/>
+    <field name='MinTradeVol' required='N'/>
+    <field name='MaxTradeVol' required='N'/>
+    <field name='MinQtyIncrement' required='N'/>
+    <field name='MarketMinTradeVol' required='N'/>
+    <field name='MarketMaxTradeVol' required='N'/>
+    <field name='MarketMinQtyIncrement' required='N'/>
+    <field name='StartPriceRange' required='N'/>
+    <field name='EndPriceRange' required='N'/>
+    <field name='MinPriceIncrement' required='N'/>
    </group>
   </message>
   <message name='MarketDataRequest' msgcat='app' msgtype='V'>
@@ -228,8 +230,10 @@
    <value enum='1' description='BUY'/>
    <value enum='2' description='SELL'/>
   </field>
+  <field number='2551' name='StartPriceRange' type='PRICE'/>
+  <field number='2552' name='EndPriceRange' type='PRICE'/>
   <field number='6136' name='ReqID' type='STRING'/>
-  <field number='25000' name='RecvWindow' type='INT'/>
+  <field number='25000' name='RecvWindow' type='FLOAT'/>
   <field number='25003' name='NoLimitIndicators' type='NUMINGROUP'/>
   <field number='25004' name='LimitType' type='CHAR'>
    <value enum='2' description='MESSAGE_LIMIT'/>

@@ -1112,13 +1112,15 @@ Your connection is about to be closed. Please reconnect.
 | 146     | NoRelatedSym          | NUMINGROUP | Y        | 交易品种数量                                 |
 | =>55    | Symbol                | STRING     | Y        |                                            |
 | =>15    | Currency              | STRING     | Y        | 此交易品种的 Quote asset                |
-| =>562   | MinTradeVol           | QTY        | Y        | 最低交易数量               |
-| =>1140  | MaxTradeVol           | QTY        | Y        | 最大交易数量               |
-| =>25039 | MinQtyIncrement       | QTY        | Y        | 最小数量增加             |
-| =>25040 | MarketMinTradeVol     | QTY        | Y        | 最低市价单交易数量  |
-| =>25041 | MarketMaxTradeVol     | QTY        | Y        | 市价单最大交易数量  |
-| =>25042 | MarketMinQtyIncrement | QTY        | Y        | 最低市价订单数量增加 |
-| =>969   | MinPriceIncrement     | PRICE      | Y        | 最低价格上调幅度                |
+| =>562   | MinTradeVol           | QTY        | N        | 对应于 [LOT_SIZE](filters_CN.md#lot_size) 过滤器               |
+| =>1140  | MaxTradeVol           | QTY        | N        | 对应于 [LOT_SIZE](filters_CN.md#lot_size) 过滤器                  |
+| =>25039 | MinQtyIncrement       | QTY        | N        | 对应于 [LOT_SIZE](filters_CN.md#lot_size) 过滤器                |
+| =>25040 | MarketMinTradeVol     | QTY        | N       | 对应于 [MARKET_LOT_SIZE](filters_CN.md#market_lot_size) 过滤器 |
+| =>25041 | MarketMaxTradeVol     | QTY        | N        | 对应于 [MARKET_LOT_SIZE](filters_CN.md#market_lot_size) 过滤器  |
+| =>25042 | MarketMinQtyIncrement | QTY        | N        | 对应于 [MARKET_LOT_SIZE](filters_CN.md#market_lot_size) 过滤器 |
+| =>969   | MinPriceIncrement     | PRICE      | N        | 对应于 [PRICE](filters_CN.md#price) 过滤器|                |
+| =>2551  | StartPriceRange       | PRICE      | N        | 对应于 [PRICE](filters_CN.md#price) 过滤器|
+| =>2552  | EndPriceRange         | PRICE      | N        | 对应于 [PRICE](filters_CN.md#price) 过滤器|
 
 **示例消息:**
 
