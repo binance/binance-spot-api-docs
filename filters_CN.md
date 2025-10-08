@@ -3,6 +3,7 @@
 共有三类，分别是针对交易对的过滤器 `symbol filters`，针对整个交易所的过滤器 `exchange filters` 和针对资产的过滤器 `asset filters`。
 
 ## 交易对过滤器
+<a id="price"></a>
 ### PRICE_FILTER 价格过滤器
 价格过滤器用于检测order订单中price参数的合法性
 * `minPrice` 定义了 `price`/`stopPrice` 允许的最小值; `minPrice` == 0 的时候则失效。
@@ -71,7 +72,7 @@
     "avgPriceMins": 1
   }
 ```
-<a id="lotsize"></a>
+<a id="lot_size"></a>
 ### LOT_SIZE 订单尺寸
 "lots" 是拍卖术语，这个过滤器对订单中的 `quantity` 也就是数量参数进行合法性检查。包含三个部分：
 
@@ -154,6 +155,7 @@ MIN_NOTIONAL过滤器定义了交易对订单所允许的最小名义价值(成�
   }
 ```
 
+<a id="market_lot_size"></a>
 ### MARKET_LOT_SIZE 市价订单尺寸
 `MARKET_LOT_SIZE`过滤器为交易对上的`MARKET`订单定义了`数量`(即拍卖中的"手数")规则。 共有3部分：
 

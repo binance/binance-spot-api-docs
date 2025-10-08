@@ -3052,7 +3052,7 @@ NONE
   * `stopPrice` 必须高于市场价格：`STOP_LOSS BUY`，`TAKE_PROFIT SELL`
   * `stopPrice` 必须低于市场价格：`STOP_LOSS SELL`，`TAKE_PROFIT BUY`
 
-* 使用 `quoteOrderQty` 的 `MARKET` 订单遵循 [`LOT_SIZE`](filters_CN.md#lotsize) 过滤规则。
+* 使用 `quoteOrderQty` 的 `MARKET` 订单遵循 [`LOT_SIZE`](filters_CN.md#lot_size) 过滤规则。
 
   该订单将执行一个名义价值尽可能接近请求的 `quoteOrderQty` 的数量。
 
