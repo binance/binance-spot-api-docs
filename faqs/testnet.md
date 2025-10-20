@@ -8,7 +8,7 @@
 </h3>
 
 <p>
-        Step 1: Log in on this website, and generate an API Key.
+        Step 1: Log in on this <a href="https://testnet.binance.vision/">website</a>, and generate an API Key.
 </p>
 
 <p>
