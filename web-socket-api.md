@@ -323,7 +323,7 @@ User Data Stream events for non-SBE sessions are sent as JSON in **text frames**
 
 Events in SBE sessions will be sent as **binary frames**.
 
-Please refer to [`userDataStream.subscribe`](#user_data_stream_subscribe) for details on how to subscribe to User Data Stream in WebSocket API.
+Please refer to [`userDataStream.subscribe`](#user-data-stream-subscribe) for details on how to subscribe to User Data Stream in WebSocket API.
 
 Example of an event:
 
@@ -4593,7 +4593,8 @@ newQty | DECIMAL | YES | `newQty` must be greater than 0 and less than the order
 recvWindow | DECIMAL | NO | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 timestamp | LONG | YES |
 
-**Data Source**: Matching Engine
+**Data Source**:
+Matching Engine
 
 **Response:**
 
@@ -5315,7 +5316,6 @@ Depending on the `pendingType` or `workingType`, some optional parameters will b
 |`pendingType` =`STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`|`pendingPrice`, `pendingStopPrice` and/or `pendingTrailingDelta`, `pendingTimeInForce`|
 
 **Data Source:**
-
 Matching Engine
 
 **Response:**
@@ -5511,7 +5511,8 @@ Depending on the `pendingAboveType`/`pendingBelowType` or `workingType`, some op
 `pendingBelowType= STOP_LOSS/TAKE_PROFIT`         |`pendingBelowStopPrice` and/or `pendingBelowTrailingDelta`|
 |`pendingBelowType=STOP_LOSS_LIMIT/TAKE_PROFIT_LIMIT`|`pendingBelowPrice`, `pendingBelowStopPrice` and/or `pendingBelowTrailingDelta`, `pendingBelowTimeInForce`|
 
-**Data Source:** Matching Engine
+**Data Source:**
+Matching Engine
 
 **Response:**
 
@@ -6940,7 +6941,6 @@ Querying by `preventedMatchId`  | 2
 Querying by `orderId`           | 20
 
 **Data Source:**
-
 Database
 
 **Response:**
@@ -7278,8 +7278,8 @@ Memory
 
 * User Data Stream subscriptions allow you to receive all the events related to a given account on a WebSocket connection.
 * There are 2 ways to start a subscription:
-  * If you have an authenticated session, then you can subscribe to events for that authenticated account using [`userDataStream.subscribe`](#user_data_stream_subscribe).
-  * You can additionally open extra subscriptions for any account for which you have an API Key, using [`userdataStream.subscribe.signature`](#user-data-signature).
+  * If you have an authenticated session, then you can subscribe to events for that authenticated account using [`userDataStream.subscribe`](#user-data-stream-subscribe).
+  * In any session, authenticated or not, you can subscribe to events for one or more accounts for which you can provide an API Key signature, using [`userdataStream.subscribe.signature`](#user-data-signature).
   * You can have only one active subscription for a given account on a given connection.
 * Subscriptions are identified by a `subscriptionId` which is returned when starting the subscription. That `subscriptionId` allows you to map the events you receive to a given subscription.
   * All active subscriptions for a session can be found using [`session.subscriptions`](#session-subscription).
@@ -7294,7 +7294,7 @@ Memory
   * `true` - There is at **least one subscription active** in this session.
   * `false` - There are **no active subscriptions** in this session.
 
-<a id="user_data_stream_subscribe"></a>
+<a id="user-data-stream-subscribe"></a>
 
 #### Subscribe to User Data Stream (USER_STREAM)
 
@@ -7406,7 +7406,7 @@ Memory
 
 <a id="user-data-signature"></a>
 
-#### Subscribe to User Data Stream through signature subscription (USER_DATA)
+#### Subscribe to User Data Stream through signature subscription (USER_STREAM)
 
 ```javascript
 {
@@ -7451,7 +7451,7 @@ Memory
 
 > [!IMPORTANT]
 > These requests have been deprecated, which means we will remove them in the future.
-> Please subscribe to the User Data Stream through the [WebSocket API](#user_data_stream_subscribe) instead.
+> Please subscribe to the User Data Stream using [`userdataStream.subscribe`](#user-data-stream-subscribe) or [`userdataStream.subscribe.signature`](#user-data-signature) instead.
 
 The following requests manage [User Data Stream](user-data-stream.md) subscriptions.
 

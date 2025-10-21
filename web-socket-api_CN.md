@@ -6796,7 +6796,6 @@ timestamp           | LONG   | YES          |
 用 `orderId` 查询         | 20
 
 **数据源:**
-
 数据库
 
 **响应:**
@@ -7143,7 +7142,7 @@ timestamp  | LONG   | YES     |
 * 用户数据流订阅允许您通过 WebSocket 连接接收与指定帐户相关的所有事件。
 * 有两种方式可以启用订阅：
   * 如果您拥有已通过验证的会话，则可以使用 [`userDataStream.subscribe`](#user-data-stream-subscribe) 来订阅该已通过验证帐户的相关事件。
-  * 您还可以使用 [`userdataStream.subscribe.signature`](#user-data-signature) 为拥有 API 密钥的任何帐户额外开设订阅。
+  * 在任何会话中，无论是否通过验证，如果您能为相关账户提供 API Key， 那么您可以使用 [`userdataStream.subscribe.signature`](#user-data-signature) 来订阅一个或多个账户的相关事件。
   * 一个帐户在指定连接上只能有一个有效订阅。
 * 订阅由用订阅时返回的 `subscriptionId` 标识。该 `subscriptionId` 允许您将收到的事件映射到给定的订阅。
 * 可以使用 [`session.subscriptions`](#session-subscription) 查找会话的所有有效订阅。
@@ -7270,7 +7269,7 @@ timestamp  | LONG   | YES     |
 
 <a id="user-data-signature"></a>
 
-#### 通过签名订阅的方式订阅用户数据流 (USER_DATA)
+#### 通过签名订阅的方式订阅用户数据流 (USER_STREAM)
 
 ```javascript
 {
@@ -7314,7 +7313,7 @@ timestamp  | LONG   | YES     |
 
 > [!IMPORTANT]
 > 这些请求已被弃用，这意味着我们以后会删除这些请求。
-> 请通过订阅 [WebSocket API](#user_data_stream_susbcribe) 来获得用户账户更新。
+> 请改用 [`userdataStream.subscribe`](#user-data-stream-subscribe) 或 [`userdataStream.subscribe.signature`](#user-data-signature) 来获得用户账户更新。
 
 以下请求管理 [用户数据流](user-data-stream_CN.md) 订阅。
 

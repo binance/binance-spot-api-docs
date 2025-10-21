@@ -7119,7 +7119,7 @@ Memory
 * User Data Stream subscriptions allow you to receive all the events related to a given account on a WebSocket connection.
 * There are 2 ways to start a subscription:
   * If you have an authenticated session, then you can subscribe to events for that authenticated account using [`userDataStream.subscribe`](#user-data-stream-subscribe).
-  * You can additionally open extra subscriptions for any account for which you have an API Key, using [`userdataStream.subscribe.signature`](#user-data-signature).
+  * In any session, authenticated or not, you can subscribe to events for one or more accounts for which you can provide an API Key signature, using [`userdataStream.subscribe.signature`](#user-data-signature).
   * You can have only one active subscription for a given account on a given connection.
 * Subscriptions are identified by a `subscriptionId` which is returned when starting the subscription. That `subscriptionId` allows you to map the events you receive to a given subscription.
   * All active subscriptions for a session can be found using [`session.subscriptions`](#session-subscription).
@@ -7244,7 +7244,7 @@ Note that `session.logout` will only close the subscription created with `userda
 
 <a id="user-data-signature"></a>
 
-#### Subscribe to User Data Stream through signature subscription (USER_DATA)
+#### Subscribe to User Data Stream through signature subscription (USER_STREAM)
 
 ```javascript
 {
@@ -7288,7 +7288,7 @@ Note that `session.logout` will only close the subscription created with `userda
 
 > [!IMPORTANT]
 > These requests have been deprecated, which means we will remove them in the future.
-> Please subscribe to the User Data Stream through the [WebSocket API](#general_info_user_data_stream_subscriptions) instead.
+> Please subscribe to the User Data Stream using [`userdataStream.subscribe`](#user-data-stream-subscribe) or [`userdataStream.subscribe.signature`](#user-data-signature) instead.
 
 The following requests manage [User Data Stream](user-data-stream.md) subscriptions.
 
