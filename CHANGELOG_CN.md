@@ -18,7 +18,7 @@ REST 和 WebSocket API：
   * 更新了 [`InstrumentList`](fix-api_CN.md#instrumentlist) 消息：
     * 新增字段：`StartPriceRange`、`EndPriceRange`。
     * 以下字段改为可选：`MinTradeVol`、`MaxTradeVol`、`MinQtyIncrement`、`MarketMinTradeVol`、`MarketMaxTradeVol`、`MarketMinQtyIncrement`、`MinPriceIncrement`。
-  * **关于 InstrumentList `<y>` 的更改属于重大变更。因此，请务必更新至最新版本的模式。列出的以上 7个字段将于 2025 年 10 月 23 日 07:00 (UTC) 变为可选字段。**
+  * **InstrumentList `<y>` 的变更属于破坏性变更，预计将于 2025-10-23 07:00 UTC 左右发布。请在此之前更新到新的模式。**
   * 在[SPOT 测试网](https://testnet.binance.vision/) 上已经启用了这个重大更改。
 
 ---

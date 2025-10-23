@@ -20,7 +20,7 @@ REST and WebSocket API:
   * Updated [InstrumentList `<y>`](fix-api.md#instrumentlist) message:
     * Added fields: `StartPriceRange`, `EndPriceRange`.
     * Made the following fields optional: `MinTradeVol(562)`, `MaxTradeVol(1140)`, `MinQtyIncrement(25039)`, `MarketMinTradeVol(25040)`, `MarketMaxTradeVol(25041)`, `MarketMinQtyIncrement(25042)`, `MinPriceIncrement(969)`.
-  * **The changes to InstrumentList `<y>` are breaking changes. Please update to the new schema. The 7 fields listed above will become optional at 2025-10-23 07:00 UTC.**
+  * **The changes to InstrumentList <y> are breaking changes, and will roll out at around 2025-10-23 07:00 UTC. Please update to the new schema before then.**
   * [SPOT Testnet](https://testnet.binance.vision/) has the breaking changes already enabled.
 
 ---
