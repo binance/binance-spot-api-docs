@@ -1,9 +1,36 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-10-17**
+**Last Updated: 2025-10-24**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-10-24
+
+#### SBE
+
+* SBE: schema 3:1 ([spot_3_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml)) has been updated to support [listenToken Subscription Methods](https://developers.binance.com/docs/margin_trading/trade-data-stream/Listen-Token-Websocket-API) for Margin Trading.
+
+#### REST and WebSocket API
+
+Following the announcement from [2025-04-01](#2025-04-01), all documentation related with `listenKey` for use on `wss://stream.binance.com` has been removed.
+
+Please refer to the list of requests and methods below for more information.
+
+The features will remain available until a future retirement announcement is made.
+
+REST API
+* `POST /api/v3/userDataStream`
+* `PUT /api/v3/userDataStream`
+* `DELETE /api/v3/userDataStream`
+
+WebSocket API
+
+* `userDataStream.start`
+* `userDataStream.ping`
+* `userDataStream.stop`
+
+---
 
 ### 2025-10-17
 

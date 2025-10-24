@@ -1,8 +1,8 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [General WSS information](#general-wss-information)
+- [User Data Streams for Binance Spot TESTNET](#user-data-streams-for-binance-spot-testnet)
+  - [General information](#general-information)
   - [User Data Stream Events](#user-data-stream-events)
     - [Account Update](#account-update)
     - [Balance Update](#balance-update)
@@ -10,7 +10,6 @@
       - [Conditional Fields in Execution Report](#conditional-fields-in-execution-report)
       - [Order Reject Reason](#order-reject-reason)
       - [Execution types](#execution-types)
-    - [Listen Key Expired](#listen-key-expired)
     - [Event Stream Terminated](#event-stream-terminated)
     - [External Lock Update](#external-lock-update)
 
@@ -18,20 +17,14 @@
 
 # User Data Streams for Binance Spot TESTNET
 
-**Last Updated: 2025-08-05**
+**Last Updated: 2025-10-24**
 
-# General WSS information
+## General information
 
-* There are currently two ways to subscribe to the User Data Stream:
-  * **[Preferred]** Subscribing directly through the [WebSocket API](web-socket-api.md#user-data-stream-subscribe) using an API Key.
-  * **[Deprecated]** Generating a **listen key** using [the REST API](rest-api.md#user-data-stream-requests) or [the WebSocket API](web-socket-api.md#user-data-stream-requests) and using it to listen on **stream.binance.com**
-* Both sources will push all events related to your account **in real-time**.
-* How to use a listen key on **stream.testnet.binance.vision**:
-  * The base endpoint is: **wss://stream.testnet.binance.vision:9443** or **wss://stream.testnet.binance.vision:443**.
-  * A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark.
-  * User Data Streams are accessed at **/ws/\<listenKey\>** or **/stream?streams=\<listenKey\>**
-  * All time and timestamp related fields in the JSON payload are **milliseconds by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND` or `timeUnit=microsecond` in the connection URL.
-    * For example `/ws/<listenKey>?timeUnit=MICROSECOND`
+* Subscribe via the [WebSocket API](web-socket-api.md#user-data-stream-subscribe) using an API Key.
+* Both [SBE](../faqs/sbe_faq.md) and JSON output are supported.
+* Account events are pushed in **real-time**.
+* All timestamps in JSON payloads are in **milliseconds by default**.
 
 ## User Data Stream Events
 ### Account Update
@@ -40,16 +33,20 @@
 
 ```javascript
 {
-  "e": "outboundAccountPosition", // Event type
-  "E": 1564034571105,             // Event Time
-  "u": 1564034571073,             // Time of last account update
-  "B": [                          // Balances Array
-    {
-      "a": "ETH",                 // Asset
-      "f": "10000.000000",        // Free
-      "l": "0.000000"             // Locked
-    }
-  ]
+  "subscriptionId": 0,
+  "event": {
+    "e": "outboundAccountPosition", // Event type
+    "E": 1564034571105,             // Event Time
+    "u": 1564034571073,             // Time of last account update
+    "B":                            // Balances Array
+    [
+      {
+        "a": "ETH",                 // Asset
+        "f": "10000.000000",        // Free
+        "l": "0.000000"             // Locked
+      }
+    ]
+  }
 }
 ```
 
@@ -62,11 +59,14 @@ Balance Update occurs during the following:
 **Payload**
 ```javascript
 {
-  "e": "balanceUpdate",         // Event Type
-  "E": 1573200697110,           // Event Time
-  "a": "BTC",                   // Asset
-  "d": "100.00000000",          // Balance Delta
-  "T": 1573200697068            // Clear Time
+  "subscriptionId": 0,
+  "event": {
+    "e": "balanceUpdate",         // Event Type
+    "E": 1573200697110,           // Event Time
+    "a": "BTC",                   // Asset
+    "d": "100.00000000",          // Balance Delta
+    "T": 1573200697068            // Clear Time
+  }
 }
 ```
 
@@ -76,41 +76,44 @@ Orders are updated with the `executionReport` event.
 **Payload:**
 ```javascript
 {
-  "e": "executionReport",        // Event type
-  "E": 1499405658658,            // Event time
-  "s": "ETHBTC",                 // Symbol
-  "c": "mUvoqJxFIILMdfAW5iGSOW", // Client order ID
-  "S": "BUY",                    // Side
-  "o": "LIMIT",                  // Order type
-  "f": "GTC",                    // Time in force
-  "q": "1.00000000",             // Order quantity
-  "p": "0.10264410",             // Order price
-  "P": "0.00000000",             // Stop price
-  "F": "0.00000000",             // Iceberg quantity
-  "g": -1,                       // OrderListId
-  "C": "",                       // Original client order ID; This is the ID of the order being canceled
-  "x": "NEW",                    // Current execution type
-  "X": "NEW",                    // Current order status
-  "r": "NONE",                   // Order reject reason; Please see Order Reject Reason (below) for more information.
-  "i": 4293153,                  // Order ID
-  "l": "0.00000000",             // Last executed quantity
-  "z": "0.00000000",             // Cumulative filled quantity
-  "L": "0.00000000",             // Last executed price
-  "n": "0",                      // Commission amount
-  "N": null,                     // Commission asset
-  "T": 1499405658657,            // Transaction time
-  "t": -1,                       // Trade ID
-  "v": 3,                        // Prevented Match Id; This is only visible if the order expired due to STP
-  "I": 8641984,                  // Execution Id
-  "w": true,                     // Is the order on the book?
-  "m": false,                    // Is this trade the maker side?
-  "M": false,                    // Ignore
-  "O": 1499405658657,            // Order creation time
-  "Z": "0.00000000",             // Cumulative quote asset transacted quantity
-  "Y": "0.00000000",             // Last quote asset transacted quantity (i.e. lastPrice * lastQty)
-  "Q": "0.00000000",             // Quote Order Quantity
-  "W": 1499405658657,            // Working Time; This is only visible if the order has been placed on the book.
-  "V": "NONE"                    // SelfTradePreventionMode
+  "subscriptionId": 0,
+  "event": {
+    "e": "executionReport",         // Event type
+    "E": 1499405658658,             // Event time
+    "s": "ETHBTC",                  // Symbol
+    "c": "mUvoqJxFIILMdfAW5iGSOW",  // Client order ID
+    "S": "BUY",                     // Side
+    "o": "LIMIT",                   // Order type
+    "f": "GTC",                     // Time in force
+    "q": "1.00000000",              // Order quantity
+    "p": "0.10264410",              // Order price
+    "P": "0.00000000",              // Stop price
+    "F": "0.00000000",              // Iceberg quantity
+    "g": -1,                        // OrderListId
+    "C": "",                        // Original client order ID; This is the ID of the order being canceled
+    "x": "NEW",                     // Current execution type
+    "X": "NEW",                     // Current order status
+    "r": "NONE",                    // Order reject reason; Please see Order Reject Reason (below) for more information.
+    "i": 4293153,                   // Order ID
+    "l": "0.00000000",              // Last executed quantity
+    "z": "0.00000000",              // Cumulative filled quantity
+    "L": "0.00000000",              // Last executed price
+    "n": "0",                       // Commission amount
+    "N": null,                      // Commission asset
+    "T": 1499405658657,             // Transaction time
+    "t": -1,                        // Trade ID
+    "v": 3,                         // Prevented Match Id; This is only visible if the order expired due to STP
+    "I": 8641984,                   // Execution Id
+    "w": true,                      // Is the order on the book?
+    "m": false,                     // Is this trade the maker side?
+    "M": false,                     // Ignore
+    "O": 1499405658657,             // Order creation time
+    "Z": "0.00000000",              // Cumulative quote asset transacted quantity
+    "Y": "0.00000000",              // Last quote asset transacted quantity (i.e. lastPrice * lastQty)
+    "Q": "0.00000000",              // Quote Order Quantity
+    "W": 1499405658657,             // Working Time; This is only visible if the order has been placed on the book.
+    "V": "NONE"                     // SelfTradePreventionMode
+  }
 }
 ```
 
@@ -120,7 +123,7 @@ Orders are updated with the `executionReport` event.
 
 These are fields that appear in the payload only if certain conditions are met.
 
-For additional information on these parameters, please refer to the [Spot Glossary](./faqs/spot_glossary.md).
+For additional information on these parameters, please refer to the [Spot Glossary](../faqs/spot_glossary.md).
 
 <table>
   <tr>
@@ -267,28 +270,32 @@ If the order is an order list, an event named `ListStatus` will be sent in addit
 **Payload**
 ```javascript
 {
-  "e": "listStatus",                // Event Type
-  "E": 1564035303637,               // Event Time
-  "s": "ETHBTC",                    // Symbol
-  "g": 2,                           // OrderListId
-  "c": "OCO",                       // Contingency Type
-  "l": "EXEC_STARTED",              // List Status Type
-  "L": "EXECUTING",                 // List Order Status
-  "r": "NONE",                      // List Reject Reason
-  "C": "F4QN4G8DlFATFlIUQ0cjdD",    // List Client Order ID
-  "T": 1564035303625,               // Transaction Time
-  "O": [                            // An array of objects
-    {
-      "s": "ETHBTC",                // Symbol
-      "i": 17,                      // OrderId
-      "c": "AJYsMjErWJesZvqlJCTUgL" // ClientOrderId
-    },
-    {
-      "s": "ETHBTC",
-      "i": 18,
-      "c": "bfYPSQdLoqAJeNrOr9adzq"
-    }
-  ]
+  "subscriptionId": 0,
+  "event": {
+    "e": "listStatus",                 // Event Type
+    "E": 1564035303637,                // Event Time
+    "s": "ETHBTC",                     // Symbol
+    "g": 2,                            // OrderListId
+    "c": "OCO",                        // Contingency Type
+    "l": "EXEC_STARTED",               // List Status Type
+    "L": "EXECUTING",                  // List Order Status
+    "r": "NONE",                       // List Reject Reason
+    "C": "F4QN4G8DlFATFlIUQ0cjdD",     // List Client Order ID
+    "T": 1564035303625,                // Transaction Time
+    "O":                               // An array of objects
+    [
+      {
+        "s": "ETHBTC",                 // Symbol
+        "i": 17,                       // OrderId
+        "c": "AJYsMjErWJesZvqlJCTUgL"  // ClientOrderId
+      },
+      {
+        "s": "ETHBTC",
+        "i": 18,
+        "c": "bfYPSQdLoqAJeNrOr9adzq"
+      }
+    ]
+  }
 }
 ```
 
@@ -304,27 +311,7 @@ If the order is an order list, an event named `ListStatus` will be sent in addit
 
 Check the [Enums Documentation](enums.md) for more relevant enum definitions.
 
-### Listen Key Expired
-
-This event is sent when the listen key expires.
-
-No more events will be sent after this until a new `listenKey` is created.
-
-This event will not be pushed when the stream is closed normally.
-
-**Payload:**
-
-```javascript
-{
-  "e": "listenKeyExpired",  // Event type
-  "E": "1699596037418",     // Event time
-  "listenKey": "OfYGbUzi3PraNagEkdKuFwUHn48brFsItTdsuiIXrucEvD0rhRXZ7I6URWfE8YE8"
-}
-```
-
 ### Event Stream Terminated
-
-This event appears only for WebSocket API.
 
 `eventStreamTerminated` is sent when the User Data Stream is stopped. For example, after you send a `userDataStream.unsubscribe` request, or a `session.logout` request.
 
@@ -332,6 +319,7 @@ This event appears only for WebSocket API.
 
 ```javascript
 {
+  "subscriptionId": 0,
   "event": {
     "e": "eventStreamTerminated", // Event Type
     "E": 1728973001334            // Event Time
@@ -347,10 +335,13 @@ This event appears only for WebSocket API.
 
 ```javascript
 {
-  "e": "externalLockUpdate",  // Event Type
-  "E": 1581557507324,         // Event Time
-  "a": "NEO",                 // Asset
-  "d": "10.00000000",         // Delta
-  "T": 1581557507268          // Transaction Time
+  "subscriptionId": 0,
+  "event": {
+    "e": "externalLockUpdate",   // Event Type
+    "E": 1581557507324,          // Event Time
+    "a": "NEO",                  // Asset
+    "d": "10.00000000",          // Delta
+    "T": 1581557507268           // Transaction Time
+  }
 }
 ```

@@ -188,9 +188,6 @@ Last Prevented Quantity
 `listClientOrderId`
 * OCO 订单下单接口的一个参数，方便用户自定义ID来标记 OCO 订单。
 
-`listenKey`
-* 系统提供的一个 Key，以方便用户来获取 WebSocket 中的用户相关信息。
-
 `locked`
 * 表示用户的某个资产余额中当前锁定在挂单或者被其他系统占用的数量。
 

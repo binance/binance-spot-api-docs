@@ -81,17 +81,13 @@
       - [Subscribe to User Data Stream (USER_STREAM)](#subscribe-to-user-data-stream-user_stream)
       - [Unsubscribe from User Data Stream](#unsubscribe-from-user-data-stream)
       - [Listing all subscriptions](#listing-all-subscriptions)
-      - [Subscribe to User Data Stream through signature subscription (USER_DATA)](#subscribe-to-user-data-stream-through-signature-subscription-user_data)
-    - [Listen Key Management (Deprecated)](#listen-key-management-deprecated)
-      - [Start user data stream (USER_STREAM) (Deprecated)](#start-user-data-stream-user_stream-deprecated)
-      - [Ping user data stream (USER_STREAM) (Deprecated)](#ping-user-data-stream-user_stream-deprecated)
-      - [Stop user data stream (USER_STREAM) (Deprecated)](#stop-user-data-stream-user_stream-deprecated)
+      - [Subscribe to User Data Stream through signature subscription (USER_STREAM)](#subscribe-to-user-data-stream-through-signature-subscription-user_stream)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # Public WebSocket API for Binance SPOT Testnet
 
-**Last Updated: 2025-10-17**
+**Last Updated: 2025-10-24**
 
 ## General API Information
 
@@ -317,9 +313,9 @@ See [Error codes for Binance](errors.md) for a list of error codes and messages.
 
 ## Event format
 
-User Data Stream events for non-SBE sessions are sent as JSON in **text frames**, one event per frame.
+[User Data Stream](user-data-stream.md) events for non-SBE sessions are sent as JSON in **text frames**, one event per frame.
 
-Events in SBE sessions will be sent as **binary frames**.
+Events in [SBE sessions](../faqs/sbe_faq.md) will be sent as **binary frames**.
 
 Please refer to [`userDataStream.subscribe`](#user-data-stream-subscribe) for details on how to subscribe to User Data Stream in WebSocket API.
 
@@ -334,12 +330,12 @@ Example of an event:
     "u": 1728972148778,
     "B": [
       {
-        "a": "ABC",
+        "a": "BTC",
         "f": "11818.00000000",
         "l": "182.00000000"
       },
       {
-        "a": "DEF",
+        "a": "USDT",
         "f": "10580.00000000",
         "l": "70.00000000"
       }
@@ -7108,7 +7104,6 @@ Memory
 }
 ```
 
-
 ## User Data Stream requests
 
 ### User Data Stream subscription
@@ -7280,170 +7275,5 @@ Note that `session.logout` will only close the subscription created with `userda
   "result": {
     "subscriptionId": 0
   }
-}
-```
-
-<a id="user-data-stream-requests"></a>
-### Listen Key Management (Deprecated)
-
-> [!IMPORTANT]
-> These requests have been deprecated, which means we will remove them in the future.
-> Please subscribe to the User Data Stream using [`userdataStream.subscribe`](#user-data-stream-subscribe) or [`userdataStream.subscribe.signature`](#user-data-signature) instead.
-
-The following requests manage [User Data Stream](user-data-stream.md) subscriptions.
-
-#### Start user data stream (USER_STREAM) (Deprecated)
-
-```javascript
-{
-  "id": "d3df8a61-98ea-4fe0-8f4e-0fcea5d418b0",
-  "method": "userDataStream.start",
-  "params": {
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A"
-  }
-}
-```
-
-Start a new user data stream.
-
-The stream will close in 60 minutes unless [`userDataStream.ping`](#ping-user-data-stream-user_stream) requests are sent regularly.
-This request does not require `signature`.
-
-**Weight:**
-2
-
-**Parameters:**
-
-Name                | Type    | Mandatory | Description
-------------------- | ------- | --------- | ------------
-`apiKey`            | STRING  | YES       |
-
-
-**Data Source:**
-Memory
-
-**Response:**
-
-Subscribe to the received listen key on WebSocket Stream afterwards.
-
-```javascript
-{
-  "id": "d3df8a61-98ea-4fe0-8f4e-0fcea5d418b0",
-  "status": 200,
-  "result": {
-    "listenKey": "xs0mRXdAKlIPDRFrlPcw0qI41Eh3ixNntmymGyhrhgqo7L6FuLaWArTD7RLP"
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 2
-    }
-  ]
-}
-```
-
-#### Ping user data stream (USER_STREAM) (Deprecated)
-
-```javascript
-{
-  "id": "815d5fce-0880-4287-a567-80badf004c74",
-  "method": "userDataStream.ping",
-  "params": {
-    "listenKey": "xs0mRXdAKlIPDRFrlPcw0qI41Eh3ixNntmymGyhrhgqo7L6FuLaWArTD7RLP",
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A"
-  }
-}
-```
-
-Ping a user data stream to keep it alive.
-
-User data streams close automatically after 60 minutes,
-even if you're listening to them on WebSocket Streams.
-In order to keep the stream open, you have to regularly send pings using the `userDataStream.ping` request.
-
-It is recommended to send a ping once every 30 minutes.
-
-This request does not require `signature`.
-
-**Weight:**
-2
-
-**Parameters:**
-
-Name                | Type    | Mandatory | Description
-------------------- | ------- | --------- | ------------
-`listenKey`         | STRING  | YES       |
-`apiKey`            | STRING  | YES       |
-
-**Data Source:**
-Memory
-
-**Response:**
-
-```javascript
-{
-  "id": "815d5fce-0880-4287-a567-80badf004c74",
-  "status": 200,
-  "response": {},
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 2
-    }
-  ]
-}
-```
-
-#### Stop user data stream (USER_STREAM) (Deprecated)
-
-```javascript
-{
-  "id": "819e1b1b-8c06-485b-a13e-131326c69599",
-  "method": "userDataStream.stop",
-  "params": {
-    "listenKey": "xs0mRXdAKlIPDRFrlPcw0qI41Eh3ixNntmymGyhrhgqo7L6FuLaWArTD7RLP",
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A"
-  }
-}
-```
-
-Explicitly stop and close the user data stream.
-
-This request does not require `signature`.
-
-**Weight:**
-2
-
-**Parameters:**
-
-Name                | Type    | Mandatory | Description
-------------------- | ------- | --------- | ------------
-`listenKey`         | STRING  | YES       |
-`apiKey`            | STRING  | YES       |
-
-**Data Source:**
-Memory
-
-**Response:**
-```javascript
-{
-  "id": "819e1b1b-8c06-485b-a13e-131326c69599",
-  "status": 200,
-  "response": {},
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 2
-    }
-  ]
 }
 ```
