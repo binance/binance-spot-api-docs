@@ -1,6 +1,38 @@
 # 更新日志
 
-**最近更新： 2025-10-08**
+**最近更新： 2025-10-24**
+
+### 2024-10-24
+
+#### SBE
+
+* SBE：schema 3:1（[spot_3_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml)）已更新，支持保证金交易的[listenToken 订阅方法](https://developers.binance.com/docs/zh-CN/margin_trading/trade-data-stream/Listen-Token-Websocket-API)。
+
+#### REST 和 WebSocket API
+
+根据 [2025-04-07](#2025-04-07) 的公告，所有关于在 `wss://stream.binance.com` 上使用 `listenKey` 的文档已被移除。请参阅以下请求和方法列表以获取详细信息。
+该功能将在未来发布停用公告之前继续可用。
+
+* REST API
+  * `POST /api/v3/userDataStream`
+  * `PUT /api/v3/userDataStream`
+  * `DELETE /api/v3/userDataStream`
+
+* WebSocket API
+  * `userDataStream.start`
+  * `userDataStream.ping`
+  * `userDataStream.stop`
+
+---
+
+### 2025-10-21
+
+REST 和 WebSocket API：
+
+* 注意：根据我们的 SBE 政策，[在被废止 6 个月后](faqs/sbe_faq_CN.md#sbe-schema)， SBE 2:1 模式将于 2025 年 10 月 24 日被禁用。
+* [面向生产的 SBE 生命周期](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) 已基于本次更改进行了更新。
+
+---
 
 ### 2025-10-08
 
@@ -9,7 +41,7 @@
   * 更新了 [`InstrumentList`](fix-api_CN.md#instrumentlist) 消息：
     * 新增字段：`StartPriceRange`、`EndPriceRange`。
     * 以下字段改为可选：`MinTradeVol`、`MaxTradeVol`、`MinQtyIncrement`、`MarketMinTradeVol`、`MarketMaxTradeVol`、`MarketMinQtyIncrement`、`MinPriceIncrement`。
-  * **关于 InstrumentList `<y>` 的更改属于重大变更。因此，请务必更新至最新版本的模式。列出的以上 7个字段将于 2025 年 10 月 23 日 07:00 (UTC) 变为可选字段。**
+  * **InstrumentList `<y>` 的变更属于破坏性变更，预计将于 2025-10-23 07:00 UTC 左右发布。请在此之前更新到新的模式。**
   * 在[SPOT 测试网](https://testnet.binance.vision/) 上已经启用了这个重大更改。
 
 ---

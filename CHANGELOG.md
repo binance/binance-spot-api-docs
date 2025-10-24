@@ -1,6 +1,41 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-10-08**
+**Last Updated: 2025-10-24**
+
+### 2025-10-24
+
+#### SBE
+
+* SBE: schema 3:1 ([spot_3_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml)) has been updated to support [listenToken Subscription Methods](https://developers.binance.com/docs/margin_trading/trade-data-stream/Listen-Token-Websocket-API) for Margin Trading.
+
+#### REST and WebSocket API
+
+Following the announcement from [2025-04-07](#2025-04-07), all documentation related with `listenKey` for use on `wss://stream.binance.com` has been removed.
+
+Please refer to the list of requests and methods below for more information.
+
+The features will remain available until a future retirement announcement is made.
+
+* REST API
+  * `POST /api/v3/userDataStream`
+  * `PUT /api/v3/userDataStream`
+  * `DELETE /api/v3/userDataStream`
+
+* WebSocket API
+  * `userDataStream.start`
+  * `userDataStream.ping`
+  * `userDataStream.stop`
+
+---
+
+### 2025-10-21
+
+REST and WebSocket API:
+
+* Reminder that SBE 2:1 schema will be retired on 2025-10-24, [6 months after being deprecated](faqs/sbe_faq.md#sbe-schema).
+* The [SBE lifecycle for Production](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) has been updated to reflect this change.
+
+---
 
 ### 2025-10-08
 
@@ -11,7 +46,7 @@
   * Updated [InstrumentList `<y>`](fix-api.md#instrumentlist) message:
     * Added fields: `StartPriceRange`, `EndPriceRange`.
     * Made the following fields optional: `MinTradeVol(562)`, `MaxTradeVol(1140)`, `MinQtyIncrement(25039)`, `MarketMinTradeVol(25040)`, `MarketMaxTradeVol(25041)`, `MarketMinQtyIncrement(25042)`, `MinPriceIncrement(969)`.
-  * **The changes to InstrumentList `<y>` are breaking changes. Please update to the new schema. The 7 fields listed above will become optional at 2025-10-23 07:00 UTC.**
+  * **The changes to InstrumentList <y> are breaking changes, and will roll out at around 2025-10-23 07:00 UTC. Please update to the new schema before then.**
   * [SPOT Testnet](https://testnet.binance.vision/) has the breaking changes already enabled.
 
 ---

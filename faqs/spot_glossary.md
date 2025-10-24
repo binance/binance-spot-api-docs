@@ -188,9 +188,6 @@ Last Prevented Quantity
 `listClientOrderId`
 * A parameter used in placing OCO Orders that identifies the pair of orders.
 
-`listenKey`
-* Individual key used on User Data Stream to get live updates on the associated account.
-
 `locked`
 * The amount of an asset in a user's balances that are currently locked in open orders and other services by the platform.
 

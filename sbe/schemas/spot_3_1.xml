@@ -1894,6 +1894,12 @@
     <sbe:message name="UserDataStreamUnsubscribeResponse" id="504">
     </sbe:message>
 
+    <!-- Refer to https://developers.binance.com/docs/margin_trading/trade-data-stream/Listen-Token-Websocket-API -->
+    <sbe:message name="UserDataStreamSubscribeListenTokenResponse" id="505" sinceVersion="1">
+        <field id="1" name="subscriptionId" type="subscriptionId"/>
+        <field id="2" name="expirationTime" type="utcTimestampUs"/>
+    </sbe:message>
+
     <!-- User data stream events -->
 
     <!-- "balanceUpdate" -->
