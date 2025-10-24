@@ -1,6 +1,32 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-10-21**
+**Last Updated: 2025-10-24**
+
+### 2025-10-24
+
+#### SBE
+
+* SBE: schema 3:1 ([spot_3_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml)) has been updated to support [listenToken Subscription Methods](https://developers.binance.com/docs/margin_trading/trade-data-stream/Listen-Token-Websocket-API) for Margin Trading.
+
+#### REST and WebSocket API
+
+Following the announcement from [2025-04-07](#2025-04-07), all documentation related with `listenKey` for use on `wss://stream.binance.com` has been removed.
+
+Please refer to the list of requests and methods below for more information.
+
+The features will remain available until a future retirement announcement is made.
+
+* REST API
+  * `POST /api/v3/userDataStream`
+  * `PUT /api/v3/userDataStream`
+  * `DELETE /api/v3/userDataStream`
+
+* WebSocket API
+  * `userDataStream.start`
+  * `userDataStream.ping`
+  * `userDataStream.stop`
+
+---
 
 ### 2025-10-21
 

@@ -1,6 +1,6 @@
 # REST行情与交易接口
 
-**最近更新： 2025-09-29**
+**最近更新： 2025-10-24**
 
 <a id="general-api-information"></a>
 ## API 基本信息
@@ -4201,91 +4201,4 @@ timestamp  | LONG   | YES     |
     }
   ]
 }
-```
-
-
-<a id="user-data-stream-requests"></a>
-
-## 用户数据流订阅接口
-
-> [!IMPORTANT]
-> 这些请求已被弃用，这意味着我们以后会删除这些请求。
-> 请通过订阅 [WebSocket API](web-socket-api_CN.md) 来获得用户账户更新。
-
-以下请求管理 [WebSocket 帐户信息](user-data-stream_CN.md) 订阅。
-
-### 新建用户数据流 (USER_STREAM) (已弃用)
-```
-POST /api/v3/userDataStream
-```
-从创建起60分钟有效
-此请求不需要 `signature`。
-
-**权重:**
-2
-
-**参数:**
-NONE
-
-**数据源:**
-缓存
-
-
-**响应:**
-
-```javascript
-{
-  "listenKey": "pqia91ma19a5s61cv6a81va65sdf19v8a65a1a5s61cv6a81va65sdf19v8a65a1" // 用于订阅的数据流名
-}
-```
-
-### Keepalive (USER_STREAM) (已弃用)
-```
-PUT /api/v3/userDataStream
-```
-延长用户数据流有效期到60分钟之后。 建议每30分钟调用一次
-此请求不需要 `signature`。
-
-**权重:**
-2
-
-**参数:**
-
-名称 | 类型 | 是否必需 | 描述
------------- | ------------ | ------------ | ------------
-listenKey | STRING | YES
-
-**数据源:**
-缓存
-
-**响应:**
-
-```javascript
-{}
-```
-
-### 关闭用户数据流 (USER_STREAM) (已弃用)
-```
-DELETE /api/v3/userDataStream
-```
-关闭用户数据流。
-此请求不需要 `signature`。
-
-
-**权重:**
-2
-
-**参数:**
-
-名称 | 类型 | 是否必需 | 描述
------------- | ------------ | ------------ | ------------
-listenKey | STRING | YES
-
-**数据源:**
-缓存
-
-**响应:**
-
-```javascript
-{}
 ```

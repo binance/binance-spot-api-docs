@@ -1,6 +1,6 @@
 # Binance 的公共 WebSocket API
 
-**最近更新： 2025-09-29**
+**最近更新： 2025-10-24**
 
 <a id="general-api-information"></a>
 ## API 基本信息
@@ -227,9 +227,9 @@
 
 ## 事件格式
 
-非 SBE 会话的用户数据流事件以 JSON 格式在 **text 帧** 中发送，每帧一个事件。
+[用户数据流](user-data-stream_CN.md)中的非 SBE 会话事件以 JSON 格式在 **text 帧** 中发送，每帧一个事件。
 
-SBE 会话中的事件将作为 **二进制帧** 发送。
+[SBE 会话](faqs/sbe_faq_CN.md)中的事件将作为 **二进制帧** 发送。
 
 有关如何在 WebSocket API 中订阅用户数据流的详细信息，请参阅 [`订阅用户数据流`](#user_data_stream_susbcribe)。
 
@@ -244,12 +244,12 @@ SBE 会话中的事件将作为 **二进制帧** 发送。
     "u": 1728972148778,
     "B": [
       {
-        "a": "ABC",
+        "a": "BTC",
         "f": "11818.00000000",
         "l": "182.00000000"
       },
       {
-        "a": "DEF",
+        "a": "USDT",
         "f": "10580.00000000",
         "l": "70.00000000"
       }
@@ -7306,167 +7306,5 @@ timestamp  | LONG   | YES     |
   "result": {
     "subscriptionId": 0
   }
-}
-```
-
-### Listen Key 管理 (已弃用)
-
-> [!IMPORTANT]
-> 这些请求已被弃用，这意味着我们以后会删除这些请求。
-> 请改用 [`userdataStream.subscribe`](#user-data-stream-subscribe) 或 [`userdataStream.subscribe.signature`](#user-data-signature) 来获得用户账户更新。
-
-以下请求管理 [用户数据流](user-data-stream_CN.md) 订阅。
-
-#### 开始用户数据流 (USER_STREAM) （已弃用）
-
-```javascript
-{
-  "id": "d3df8a61-98ea-4fe0-8f4e-0fcea5d418b0",
-  "method": "userDataStream.start",
-  "params": {
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A"
-  }
-}
-```
-
-开始新的用户数据流
-
-**注意：**
-数据流将在 60 分钟后关闭，除非定期发送 [`userDataStream.ping`](#user_data_stream_ping) 请求。
-此请求不需要 `signature` 。
-
-**权重:**
-2
-
-**参数:**
-
-名称                | 类型    | 是否必需 | 描述
-------------------- | ------- | --------- | ------------
-`apiKey`            | STRING  | YES       |
-
-
-**数据源:**
-缓存
-
-**响应:**
-
-之后在 WebSocket Stream 上订阅收到的 listen key。
-
-
-```javascript
-{
-  "id": "d3df8a61-98ea-4fe0-8f4e-0fcea5d418b0",
-  "status": 200,
-  "result": {
-    "listenKey": "xs0mRXdAKlIPDRFrlPcw0qI41Eh3ixNntmymGyhrhgqo7L6FuLaWArTD7RLP"
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 2
-    }
-  ]
-}
-```
-
-<a id="user_data_stream_ping"></a>
-
-#### Ping 用户数据流 (USER_STREAM) （已弃用）
-
-```javascript
-{
-  "id": "815d5fce-0880-4287-a567-80badf004c74",
-  "method": "userDataStream.ping",
-  "params": {
-    "listenKey": "xs0mRXdAKlIPDRFrlPcw0qI41Eh3ixNntmymGyhrhgqo7L6FuLaWArTD7RLP",
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A"
-  }
-}
-```
-
-即使在监听, 用户数据流也会在60分钟后会自动关闭。
-若要保持用户数据流的活动状态，必须使用 `userDataStream.ping` 请求定期发送 ping，建议的是在每30分钟发送一次 ping。
-此请求不需要 `signature` 。
-
-**权重:**
-2
-
-**参数:**
-
-名称                | 类型    | 是否必需 | 描述
-------------------- | ------- | --------- | ------------
-`listenKey`         | STRING  | YES       |
-`apiKey`            | STRING  | YES       |
-
-**数据源:**
-缓存
-
-**响应:**
-
-```javascript
-{
-  "id": "815d5fce-0880-4287-a567-80badf004c74",
-  "status": 200,
-  "response": {},
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 2
-    }
-  ]
-}
-```
-
-#### 关闭用户数据流 (USER_STREAM) （已弃用）
-
-```javascript
-{
-  "id": "819e1b1b-8c06-485b-a13e-131326c69599",
-  "method": "userDataStream.stop",
-  "params": {
-    "listenKey": "xs0mRXdAKlIPDRFrlPcw0qI41Eh3ixNntmymGyhrhgqo7L6FuLaWArTD7RLP",
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A"
-  }
-}
-```
-
-强制停止和关闭用户数据流。
-此请求不需要 `signature` 。
-
-**权重:**
-2
-
-**参数:**
-
-名称                | 类型    | 是否必需 | 描述
-------------------- | ------- | --------- | ------------
-`listenKey`         | STRING  | YES       |
-`apiKey`            | STRING  | YES       |
-
-**数据源:**
-缓存
-
-**响应:**
-
-```javascript
-{
-  "id": "819e1b1b-8c06-485b-a13e-131326c69599",
-  "status": 200,
-  "response": {},
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 2
-    }
-  ]
 }
 ```
