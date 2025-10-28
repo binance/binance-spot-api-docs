@@ -1,6 +1,7 @@
 # Binance 的公共 WebSocket API
 
-**最近更新： 2025-10-24**
+**最近更新： 2025-10-28**
+
 
 <a id="general-api-information"></a>
 ## API 基本信息
@@ -1212,6 +1213,8 @@ NONE
 --------- | ------- | --------- | -----------
 `symbol`  | STRING  | YES       |
 `limit`   | INT     | NO        | 默认值： 100； 最大值： 5000
+`symbolStatus`|ENUM | NO        | 过滤具有此 `tradingStatus` 的交易对。<br/>如果状态不匹配，将返回错误 [`-1220`](./errors_CN.md#-1220-symbol_does_not_match_status)。<br/>有效值： `TRADING`, `HALT`, `BREAK`
+
 
 **数据源:**
 缓存
@@ -1770,6 +1773,12 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
         <td align=center>NO</td>
         <td>Ticker 类型: <code>FULL</code> (默认) 或者 <code>MINI</code></td>
     </tr>
+    <tr>
+        <td>symbolStatus</td>
+        <td>ENUM</td>
+        <td rowspan="2" align="center">NO</td>
+        <td>过滤具有此 <code>tradingStatus</code> 的交易对。<br>对于单个交易对，如果状态不匹配，将返回错误 <a href="./errors_CN.md#-1220-symbol_does_not_match_status" class="after:absolute after:inset-0"><code>-1220</code></a>。<br>对于多个或者全部交易对， 响应中不会包括状态不匹配的交易对。<br>有效值： <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code> </td>
+    </tr>
 </tbody>
 </table>
 
@@ -1978,6 +1987,12 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
       <td>ENUM</td>
       <td>NO</td>
       <td>可接受值: <tt>FULL</tt> or <tt>MINI</tt>. <br/>默认值: <tt>FULL</tt></td>
+  </tr>
+  <tr>
+      <td>symbolStatus</td>
+      <td>ENUM</td>
+      <td>NO</td>
+      <td>过滤具有此 <code>tradingStatus</code> 的交易对。<br>对于单个交易对，如果状态不匹配，将返回错误 <a href="./errors_CN.md#-1220-symbol_does_not_match_status" class="after:absolute after:inset-0"><code>-1220</code></a>。<br>对于多个交易对， 响应中不会包括状态不匹配的交易对。<br>有效值： <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code> </td>
   </tr>
 </table>
 
@@ -2251,6 +2266,12 @@ With `symbols`:
         <td align=center>NO</td>
         <td>默认 <code>1d</code></td>
     </tr>
+    <tr>
+        <td>symbolStatus</td>
+        <td>ENUM</td>
+        <td rowspan="2" align="center">NO</td>
+        <td>过滤具有此 <code>tradingStatus</code> 的交易对。<br>对于单个交易对，如果状态不匹配，将返回错误 <a href="./errors_CN.md#-1220-symbol_does_not_match_status" class="after:absolute after:inset-0"><code>-1220</code></a>。<br>对于多个交易对， 响应中不会包括状态不匹配的交易对。<br>有效值： <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code> </td>
+    </tr>
 </tbody>
 </table>
 
@@ -2448,6 +2469,12 @@ days    | `1d`, `2d` ... `7d`
         <td>ARRAY of STRING</td>
         <td>获取多个交易对的 price </td>
     </tr>
+    <tr>
+        <td>symbolStatus</td>
+        <td>ENUM</td>
+        <td rowspan="2" align="center">NO</td>
+        <td>过滤具有此 <code>tradingStatus</code> 的交易对。<br>对于单个交易对，如果状态不匹配，将返回错误 <a href="./errors_CN.md#-1220-symbol_does_not_match_status" class="after:absolute after:inset-0"><code>-1220</code></a>。<br>对于多个或者全部交易对， 响应中不会包括状态不匹配的交易对。<br>有效值： <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code> </td>
+    </tr>
 </tbody>
 </table>
 
@@ -2566,6 +2593,12 @@ days    | `1d`, `2d` ... `7d`
         <td><code>symbols</code></td>
         <td>ARRAY of STRING</td>
         <td>获取多个交易对的 ticker</td>
+    </tr>
+    <tr>
+        <td>symbolStatus</td>
+        <td>ENUM</td>
+        <td rowspan="2" align="center">NO</td>
+        <td>过滤具有此 <code>tradingStatus</code> 的交易对。<br>对于单个交易对，如果状态不匹配，将返回错误 <a href="./errors_CN.md#-1220-symbol_does_not_match_status" class="after:absolute after:inset-0"><code>-1220</code></a>。<br>对于多个或者全部交易对， 响应中不会包括状态不匹配的交易对。<br>有效值： <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code> </td>
     </tr>
 </tbody>
 </table>

@@ -1,6 +1,32 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-10-24**
+**Last Updated: 2025-10-28**
+
+### 2025-10-28
+
+**Notice: The following changes will be deployed on 2025-10-28, starting at 04:00 UTC and may take several hours to complete:**
+
+* An optional parameter, `symbolStatus`, has been added to the following endpoints:
+    * **REST API**
+      * `GET /api/v3/depth`
+      * `GET /api/v3/ticker/price`
+      * `GET /api/v3/ticker/bookTicker`
+      * `GET /api/v3/ticker/24hr`
+      * `GET /api/v3/ticker/tradingDay`
+      * `GET /api/v3/ticker`
+    * **WebSocket API**
+      * `depth`
+      * `ticker.price`
+      * `ticker.book`
+      * `ticker.24hr`
+      * `ticker.tradingDay`
+      * `ticker`
+* When the parameter `symbolStatus=<STATUS>` is provided, only symbols whose trading status matches the specified `STATUS` will be included in the response:_
+    * If a single symbol is specified using the `symbol=<SYMBOL>` parameter and its trading status does not match the given `STATUS`, the endpoint will return error code [`-1220 SYMBOL_DOES_NOT_MATCH_STATUS`](./errors.md#-1220-symbol_does_not_match_status).
+    * If multiple symbols are specified using the `symbols=[...]` parameter, the response will be an array that excludes any symbols whose trading status does not match `STATUS`. If no symbols from the symbols parameter have a trading status that matches `STATUS`, the response is an empty array.
+    * For endpoints where the `symbol` and `symbols` parameters are optional, omitting these parameters is treated as if all symbols had been specified in the `symbols=[...]` parameter. See the previous line for the behavior of `symbolStatus=<STATUS>`.
+
+---
 
 ### 2025-10-24
 

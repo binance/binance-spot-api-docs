@@ -1,6 +1,6 @@
 # 错误代码汇总
 
-**最近更新： 2025-08-12**
+**最近更新： 2025-10-28**
 
 币安Rest接口(包括wapi)返回的错误包含两部分，错误码与错误信息. 错误码是大类，一个错误码可能对应多个不同的错误信息。
 以下是一个完整错误码实例
@@ -301,6 +301,10 @@
 
 ### -1211 错误的挂钩订单偏移类型
 * Invalid pegOffsetType.
+
+<a id="-1220-symbol_does_not_match_status"></a>
+### -1220 交易对与状态不匹配
+* The symbol's status does not match the requested symbolStatus.
 
 ### -2010 新订单被拒绝
  * NEW_ORDER_REJECTED

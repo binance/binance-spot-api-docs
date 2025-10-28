@@ -88,7 +88,7 @@
 
 # Public WebSocket API for Binance
 
-**Last Updated: 2025-10-24**
+**Last Updated: 2025-10-28**
 
 ## General API Information
 
@@ -1133,7 +1133,7 @@ Query current exchange trading rules, rate limits, and symbol information.
     <tr>
         <td><code>symbolStatus</code></td>
         <td>ENUM</td>
-        <td>Filters symbols that have this <code>tradingStatus</code>.<br></br> Valid values: <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code> <br> Cannot be used in combination with <code>symbol</code> or <code>symbols</code></td>
+        <td>Filters for symbols that have this <code>tradingStatus</code>.<br></br> Valid values: <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code> <br> Cannot be used in combination with <code>symbol</code> or <code>symbols</code></td>
     </tr>
 </tbody>
 </table>
@@ -1325,6 +1325,7 @@ Name      | Type    | Mandatory | Description
 --------- | ------- | --------- | -----------
 `symbol`  | STRING  | YES       |
 `limit`   | INT     | NO        | Default: 100; Maximum: 5000
+`symbolStatus`|ENUM | NO        | Filters for symbols that have this `tradingStatus`.<br/>A status mismatch returns error [`-1220`](./errors.md#-1220-symbol_does_not_match_status)<br/>Valid values: `TRADING`, `HALT`, `BREAK`
 
 **Data Source:**
 Memory
@@ -1890,6 +1891,12 @@ Adjusted based on the number of requested symbols:
         <td align="center">NO</td>
         <td>Ticker type: <code>FULL</code> (default) or <code>MINI</code></td>
     </tr>
+    <tr>
+        <td>symbolStatus</td>
+        <td>ENUM</td>
+        <td rowspan="2" align="center">NO</td>
+        <td>Filters for symbols that have this <code>tradingStatus</code>.<br>For a single symbol, a status mismatch returns error <a href="./errors.md#-1220-symbol_does_not_match_status" class="after:absolute after:inset-0"><code>-1220</code></a>.<br>For multiple or all symbols, non-matching ones are simply excluded from the response.<br>Valid values: <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code> </td>
+    </tr>
 </tbody>
 </table>
 
@@ -2096,6 +2103,12 @@ Price change statistics for a trading day.
       <td>ENUM</td>
       <td>NO</td>
       <td>Supported values: <tt>FULL</tt> or <tt>MINI</tt>. <br/>If none provided, the default is <tt>FULL</tt> </td>
+  </tr>
+  <tr>
+      <td>symbolStatus</td>
+      <td>ENUM</td>
+      <td>NO</td>
+      <td>Filters for symbols that have this <code>tradingStatus</code>.<br>For a single symbol, a status mismatch returns error <a href="./errors.md#-1220-symbol_does_not_match_status" class="after:absolute after:inset-0"><code>-1220</code></a>. <br>For multiple symbols, non-matching ones are simply excluded from the response.<br> Valid values: <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code> </td>
   </tr>
 </table>
 
@@ -2370,6 +2383,12 @@ Adjusted based on the number of requested symbols:
         <td align="center">NO</td>
         <td>Default <code>1d</code></td>
     </tr>
+    <tr>
+        <td>symbolStatus</td>
+        <td>ENUM</td>
+        <td align="center">NO</td>
+        <td>Filters for symbols that have this <code>tradingStatus</code>.<br>For a single symbol, a status mismatch returns error <a href="./errors.md#-1220-symbol_does_not_match_status" class="after:absolute after:inset-0"><code>-1220</code></a>. <br>For multiple symbols, non-matching ones are simply excluded from the response.<br>Valid values: <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code> </td>
+    </tr>
 </tbody>
 </table>
 
@@ -2567,6 +2586,12 @@ Adjusted based on the number of requested symbols:
         <td>ARRAY of STRING</td>
         <td>Query price for multiple symbols</td>
     </tr>
+    <tr>
+        <td>symbolStatus</td>
+        <td>ENUM</td>
+        <td align="center">NO</td>
+        <td>Filters for symbols that have this <code>tradingStatus</code>.<br>For a single symbol, a status mismatch returns error <a href="./errors.md#-1220-symbol_does_not_match_status" class="after:absolute after:inset-0"><code>-1220</code></a>.<br>For multiple or all symbols, non-matching ones are simply excluded from the response.<br>Valid values: <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code> </td>
+    </tr>
 </tbody>
 </table>
 
@@ -2685,6 +2710,12 @@ Adjusted based on the number of requested symbols:
         <td><code>symbols</code></td>
         <td>ARRAY of STRING</td>
         <td>Query ticker for multiple symbols</td>
+    </tr>
+    <tr>
+        <td>symbolStatus</td>
+        <td>ENUM</td>
+        <td align="center">NO</td>
+        <td>Filters for symbols that have this <code>tradingStatus</code>.<br>For a single symbol, a status mismatch returns error <a href="./errors.md#-1220-symbol_does_not_match_status" class="after:absolute after:inset-0"><code>-1220</code></a>. <br>For multiple or all symbols, non-matching ones are simply excluded from the response.<br>Valid values: <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code> </td>
     </tr>
 </tbody>
 </table>
