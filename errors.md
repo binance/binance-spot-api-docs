@@ -1,6 +1,6 @@
 # Error codes for Binance
 
-**Last Updated: 2025-08-12**
+**Last Updated: 2025-10-28**
 
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
@@ -301,6 +301,9 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 ### -1211 INVALID_PEG_OFFSET_TYPE
 * Invalid pegOffsetType.
+
+### -1220 SYMBOL_DOES_NOT_MATCH_STATUS
+* The symbol's status does not match the requested symbolStatus.
 
 ### -2010 NEW_ORDER_REJECTED
  * NEW_ORDER_REJECTED

@@ -573,7 +573,8 @@ GET /api/v3/depth
 名称 | 类型 | 是否必须 | 描述
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-limit | INT | NO | 默认： 100; 最大： 5000。 <br/> 如果 limit > 5000, 最多返回5000条数据.
+limit | INT | NO | 默认： 100; 最大： 5000。 <br/> 如果 limit > 5000, 最多返回5000条数据。
+`symbolStatus`|ENUM | NO | 过滤具有此 `tradingStatus` 的交易对。<br/>如果状态不匹配，将返回错误 [`-1220`](./errors_CN.md#-1220-symbol_does_not_match_status)<br/>有效值： `TRADING`, `HALT`, `BREAK`
 
 **数据源:**
 缓存
@@ -958,6 +959,12 @@ GET /api/v3/ticker/24hr
         <td>NO</td>
         <td>可接受的参数: <tt>FULL</tt> or <tt>MINI</tt>. <br/>如果不提供, 默认值为 <tt>FULL</tt> </td>
     </tr>
+    <tr>
+        <td>symbolStatus</td>
+        <td>ENUM</td>
+        <td>NO</td>
+        <td>过滤具有此 <code>tradingStatus</code> 的交易对。<br>对于单个交易对，如果状态不匹配，将返回错误 <a href="./errors_CN.md#-1220-symbol_does_not_match_status" class="after:absolute after:inset-0"><code>-1220</code></a>。<br>对于多个或者全部交易对， 响应中不会包括状态不匹配的交易对。<br>有效值： <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code> </td>
+    </tr>
 </tbody>
 </table>
 
@@ -1117,6 +1124,12 @@ GET /api/v3/ticker/tradingDay
       <td>ENUM</td>
       <td>NO</td>
       <td>可接受值: <tt>FULL</tt> or <tt>MINI</tt>. <br/>默认值: <tt>FULL</tt> </td>
+  </tr>
+  <tr>
+      <td>symbolStatus</td>
+      <td>ENUM</td>
+      <td>NO</td>
+      <td>过滤具有此 <code>tradingStatus</code> 的交易对。<br>对于单个交易对，如果状态不匹配，将返回错误 <a href="./errors_CN.md#-1220-symbol_does_not_match_status" class="after:absolute after:inset-0"><code>-1220</code></a>。<br>对于多个交易对， 响应中不会包括状态不匹配的交易对。<br>有效值： <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code> </td>
   </tr>
 </table>
 
@@ -1317,6 +1330,12 @@ GET /api/v3/ticker/price
         <td>STRING</td>
         <td>NO</td>
     </tr>
+    <tr>
+        <td>symbolStatus</td>
+        <td>ENUM</td>
+        <td>NO</td>
+        <td>过滤具有此 <code>tradingStatus</code> 的交易对。<br>对于单个交易对，如果状态不匹配，将返回错误 <a href="./errors_CN.md#-1220-symbol_does_not_match_status" class="after:absolute after:inset-0"><code>-1220</code></a>。<br>对于多个或者全部交易对， 响应中不会包括状态不匹配的交易对。<br>有效值： <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code> </td>
+    </tr>
 </tbody>
 </table>
 
@@ -1415,6 +1434,12 @@ GET /api/v3/ticker/bookTicker
         <td>STRING</td>
         <td>NO</td>
     </tr>
+    <tr>
+        <td>symbolStatus</td>
+        <td>ENUM</td>
+        <td>NO</td>
+        <td>过滤具有此 <code>tradingStatus</code> 的交易对。<br>对于单个交易对，如果状态不匹配，将返回错误 <a href="./errors_CN.md#-1220-symbol_does_not_match_status" class="after:absolute after:inset-0"><code>-1220</code></a>。<br>对于多个或者全部交易对， 响应中不会包括状态不匹配的交易对。<br>有效值： <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code> </td>
+    </tr>
 </tbody>
 </table>
 
@@ -1500,8 +1525,14 @@ GET /api/v3/ticker
   <tr>
      <td>type</td>
      <td>ENUM</td>
-      <td>NO</td>
+     <td>NO</td>
       <td>可接受的参数: <tt>FULL</tt> or <tt>MINI</tt>. <br/>如果不提供, 默认值为 <tt>FULL</tt> </td>
+  </tr>
+  <tr>
+      <td>symbolStatus</td>
+      <td>ENUM</td>
+      <td>NO</td>
+      <td>过滤具有此 <code>tradingStatus</code> 的交易对。<br>对于单个交易对，如果状态不匹配，将返回错误 <a href="./errors_CN.md#-1220-symbol_does_not_match_status" class="after:absolute after:inset-0"><code>-1220</code></a>。<br>对于多个交易对， 响应中不会包括状态不匹配的交易对。<br>有效值： <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code> </td>
   </tr>
 </table>
 

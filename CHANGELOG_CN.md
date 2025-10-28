@@ -1,6 +1,32 @@
 # 更新日志
 
-**最近更新： 2025-10-24**
+**最近更新： 2025-10-28**
+
+### 2025-10-28
+
+**注意：以下变更将于 2025 年 10 月 28 日 04:00 (UTC) 推出，可能需要几个小时才能完成部署。**
+
+* 可选参数 `symbolStatus` 已添加到以下端点：
+    * **REST API**
+      * `GET /api/v3/depth`
+      * `GET /api/v3/ticker/price`
+      * `GET /api/v3/ticker/bookTicker`
+      * `GET /api/v3/ticker/24hr`
+      * `GET /api/v3/ticker/tradingDay`
+      * `GET /api/v3/ticker`
+    * **WebSocket API**
+      * `depth`
+      * `ticker.price`
+      * `ticker.book`
+      * `ticker.24hr`
+      * `ticker.tradingDay`
+      * `ticker`
+* 当提供参数 `symbolStatus=<STATUS>` 时，只有交易状态与指定的 `STATUS` 相匹配的交易对才会包含在响应中：
+    * 如果使用 `symbol=<SYMBOL>` 参数指定单个交易对，但是这个交易对的状态与指定的 `STATUS` 不匹配时，端点将返回错误代码 [`-1220 SYMBOL_DOES_NOT_MATCH_STATUS`](./errors_CN.md#-1220-symbol_does_not_match_status)。
+    * 如果使用 `symbols=[...]` 参数指定了多个交易对，那么响应将是一个数组。该数组中将不会包括交易状态与 `STATUS` 不匹配的交易对。当 symbols 参数中所指定的交易对中没有任何一个交易对的状态与 `STATUS` 相匹配时，响应将为一个空数组。
+    * 对于 `symbol` 和 `symbols` 参数为可选参数的端点，省略这些参数将被视为在 `symbols=[...]` 参数中指定了所有交易对。有关 `symbolStatus=<STATUS>` 的行为，请参阅上一行。
+
+---
 
 ### 2024-10-24
 
