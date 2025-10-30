@@ -39,6 +39,12 @@
 根据 [2025-04-07](#2025-04-07) 的公告，所有关于在 `wss://stream.binance.com` 上使用 `listenKey` 的文档已被移除。请参阅以下请求和方法列表以获取详细信息。
 该功能将在未来发布停用公告之前继续可用。
 
+**特此提醒您： 您应该通过订阅 [在 WebSocket API 内的账户信息流](https://developers.binance.com/docs/zh-CN/binance-spot-api-docs/websocket-api/user-data-stream-requests) 来获得用户账户更新。这样可以提供更好的性能（更低的延迟）。**
+
+请参阅下方请求和方法列表来了解更多详情。
+
+这些功能将持续可用，直至另行发布停用公告。
+
 * REST API
   * `POST /api/v3/userDataStream`
   * `PUT /api/v3/userDataStream`
@@ -389,7 +395,7 @@ REST 和 WebSocket API：
 
 * **我们将弃用此功能： 通过使用 `listenKey` 来访问 wss://stream.binance.com:9443 以监听账户信息的。**
     * 以后但不是当前，此功将被能从我们的系统中删除。
-* **您应该通过订阅 [在 WebSocket API 内的账户信息流](web-socket-api_CN.md) 来获得用户账户更新。**
+* **您应该通过订阅 [在 WebSocket API 内的账户信息流](https://developers.binance.com/docs/zh-CN/binance-spot-api-docs/websocket-api/user-data-stream-requests) 来获得用户账户更新。**
   * 这个方式会提供稍好的性能 **（较低的延迟）**。
   * 必须使用 Ed25519 API 密钥
 * 在未来的更新中，将删除有关账户数据流的 WebSocket 基本访问地址的信息。

@@ -38,6 +38,8 @@
 
 Following the announcement from [2025-04-07](#2025-04-07), all documentation related with `listenKey` for use on `wss://stream.binance.com` has been removed.
 
+**We remind you that you should instead get user data updates by subscribing to the [User Data Stream on the WebSocket API](https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/user-data-stream-requests). This will offer better performance (lower latency).**
+
 Please refer to the list of requests and methods below for more information.
 
 The features will remain available until a future retirement announcement is made.
@@ -395,7 +397,7 @@ REST and WebSocket API:
 
 * **Receiving user data streams on wss://stream.binance.com:9443 using a `listenKey` is now deprecated.**
     * This feature will be removed from our systems at a later date.
-* **Instead, you should get user data updates by subscribing to the [User Data Stream on the WebSocket API](web-socket-api.md)**.
+* **Instead, you should get user data updates by subscribing to the [User Data Stream on the WebSocket API](https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/user-data-stream-requests)**.
     * This should offer slightly better performance **(lower latency)**.
     * This requires the use of an Ed25519 API Key.
 * In a future update, information about the base WebSocket endpoint for the User Data Streams will be removed.
