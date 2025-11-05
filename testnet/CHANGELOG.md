@@ -1,9 +1,17 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-10-24**
+**Last Updated: 2025-11-05**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-11-05
+
+**Data reset**
+
+All data on the Spot Test Network will be deleted today according to the periodic reset procedure. See [F.A.Q.](../faqs/testnet.md#faq-periodic-reset) for more details.
+
+---
 
 ### 2025-10-24
 
@@ -453,7 +461,7 @@ Please consult the Spot Test Network's [homepage](https://testnet.binance.vision
 
 * **Receiving user data streams on stream.testnet.binance.vision using a `listenKey` is now deprecated.**
     * This feature will be removed from our systems at a later date.
-* **Instead, you should get user data updates by subscribing to the [User Data Stream on the WebSocket API](web-socket-api.md).**
+* **Instead, you should get user data updates by subscribing to the [User Data Stream on the WebSocket API](https://developers.binance.com/docs/binance-spot-api-docs/testnet/websocket-api/user-data-stream-requests).**
     * This should offer slightly better performance (lower latency).
     * This requires the use of an Ed25519 API Key.
 * In a future update, information about the base WebSocket endpoint for the User Data Streams will be removed.
