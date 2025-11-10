@@ -1,7 +1,5 @@
 # Error codes for Binance
 
-**Last Updated: 2025-10-28**
-
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
 ```javascript

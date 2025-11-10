@@ -1,8 +1,5 @@
 # Binance 的公共 WebSocket API
 
-**最近更新： 2025-10-28**
-
-
 <a id="general-api-information"></a>
 ## API 基本信息
 

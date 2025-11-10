@@ -32,8 +32,6 @@
 
 # WebSocket Streams for Binance SPOT Testnet
 
-**Last Updated: 2025-04-01**
-
 ## General WSS information
 * The base endpoint is: **wss://stream.testnet.binance.vision/ws**.
 * Streams can be accessed either in a single raw stream or in a combined stream

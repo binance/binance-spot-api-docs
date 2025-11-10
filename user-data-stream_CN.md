@@ -1,7 +1,5 @@
 # WebSocket 账户接口
 
-**最近更新： 2025-10-24**
-
 ## 一般信息
 
 * 通过使用 API Key 订阅 [WebSocket API](web-socket-api_CN.md#user-data-stream-subscribe)。

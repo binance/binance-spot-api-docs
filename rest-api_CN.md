@@ -1,7 +1,5 @@
 # REST行情与交易接口
 
-**最近更新： 2025-10-24**
-
 <a id="general-api-information"></a>
 ## API 基本信息
 * 本篇列出接口的 base URL 有:

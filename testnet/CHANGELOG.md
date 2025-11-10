@@ -1,9 +1,16 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-11-05**
+**Last Updated: 2025-11-10**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-11-10
+
+* "Last Updated" dates will be removed from all documents except for CHANGELOG. 
+* Moving forward, CHANGELOG will be the source of reference for when changes were made to any document.
+
+---
 
 ### 2025-11-05
 

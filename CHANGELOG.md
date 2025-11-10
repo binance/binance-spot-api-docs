@@ -1,6 +1,13 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-10-28**
+**Last Updated: 2025-11-10**
+
+### 2025-11-10
+
+* "Last Updated" dates will be removed from all documents except for CHANGELOG. 
+* Moving forward, CHANGELOG will be the source of reference for when changes were made to any document.
+
+---
 
 ### 2025-10-28
 

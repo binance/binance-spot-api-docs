@@ -71,8 +71,6 @@
 
 # Public Rest API for Binance SPOT Testnet
 
-**Last Updated: 2025-10-17**
-
 ## General API Information
 * The base endpoint is **https://testnet.binance.vision/api**
 * Responses are in JSON by default. To receive responses in SBE, refer to the [SBE FAQ](../faqs/sbe_faq.md) page.

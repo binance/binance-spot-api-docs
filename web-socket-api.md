@@ -88,8 +88,6 @@
 
 # Public WebSocket API for Binance
 
-**Last Updated: 2025-10-28**
-
 ## General API Information
 
 * The base endpoint is: **`wss://ws-api.binance.com:443/ws-api/v3`**.

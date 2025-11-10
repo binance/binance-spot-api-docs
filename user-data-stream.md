@@ -17,8 +17,6 @@
 
 # User Data Streams for Binance
 
-**Last Updated: 2025-10-24**
-
 ## General information
 
 * Subscribe via the [WebSocket API](web-socket-api.md#user-data-stream-subscribe) using an API Key.

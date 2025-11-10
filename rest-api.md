@@ -72,9 +72,6 @@
 
 # Public Rest API for Binance
 
-**Last Updated: 2025-10-28**
-
-
 ## General API Information
 * The following base endpoints are available. Please use whichever works best for your setup:
   * **https://api.binance.com**

@@ -87,8 +87,6 @@
 
 # Public WebSocket API for Binance SPOT Testnet
 
-**Last Updated: 2025-10-24**
-
 ## General API Information
 
 * The base endpoint is: **`wss://ws-api.testnet.binance.vision/ws-api/v3`**

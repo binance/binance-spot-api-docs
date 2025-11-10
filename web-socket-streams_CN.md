@@ -1,8 +1,6 @@
 
 # WebSocket 行情接口
 
-**最近更新： 2025-01-28**
-
 ## 基本信息
 * 本篇所列出的所有wss接口的baseurl为: **wss://stream.binance.com:9443** 或者 **wss://stream.binance.com:443**
 * 所有stream均可以直接访问，或者作为组合streams的一部分。
