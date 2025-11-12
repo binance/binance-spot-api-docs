@@ -1,6 +1,12 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-11-11**
+**Last Updated: 2025-11-12**
+
+### 2025-11-12
+
+* The steps on [how to manage a local order book correctly](https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams#how-to-manage-a-local-order-book-correctly) has been corrected.
+
+---
 
 ### 2025-11-11
 

@@ -5,6 +5,12 @@
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
 
+### 2025-11-12
+
+* The steps on [how to manage a local order book correctly](https://developers.binance.com/docs/binance-spot-api-docs/testnet/web-socket-streams#how-to-manage-a-local-order-book-correctly) has been corrected.
+
+---
+
 ### 2025-11-11
 
 #### SBE Market Data

@@ -1,6 +1,12 @@
 # 更新日志
 
-**最近更新： 2025-11-11**
+**最近更新： 2025-11-12**
+
+### 2025-11-12
+
+* 关于[如何正确管理本地订单簿](https://developers.binance.com/docs/zh-CN/binance-spot-api-docs/web-socket-streams#how-to-maintain-orderbook)的步骤已被修正。
+
+---
 
 ### 2025-11-11
 

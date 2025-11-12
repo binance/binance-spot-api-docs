@@ -595,13 +595,15 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 6. 将本地order book设置为快照。它的更新ID 为 `lastUpdateId`。
 7. 更新所有缓存的event，以及后续的所有event。
 
-要将event应用于您的本地order book，请遵循以下更新过程：
-1. 如果event `u` (最后一次更新 ID) < 您本地order book的更新 ID，请忽略该事件。
-2. 如果event `U` (第一次更新 ID) > 您本地order book的更新 ID，则说明出现问题。请丢弃您的本地order book并从头开始开始重建。
-3. 对于买价 (`b`) 和卖价 (`a`) 中的每个价位，在order book中设置新的数量：
-    * 如果order book中不存在价位，则插入新的数量。
+要将一个event应用于您的本地order book，请遵循以下更新过程：
+1. 判断是否需要处理event：
+    * 如果event的最后一次更新ID（`u`）小于本地order book的更新ID，忽略该event。
+    * 如果event的首次更新ID（`U`）大于本地order book的更新ID加1，说明你错过了一些events。<br>请丢弃您的本地order book并从头开始重新同步。
+    * 通常，下一event的`U`等于上一event的`u + 1`。
+1. 对买价（`b`）和卖价（`a`）中的每个价位，设置order book中的新数量：
+    * 如果该价位在order book中不存在，则插入该价位及其数量。
     * 如果数量为零，则从order book中删除此价位。
-4. 将order book更新 ID 设置为处理过event中的最后一次更新 ID (`u`)。
+1. 将order book的更新ID设置为已处理event的最后一次更新ID（`u`）。
 
 > [!NOTE]
 > 由于从 API 检索的深度快照对价位的数量有限制（每侧最多 5000 个），因此除非它们发生变化，否则您将无法了解初始快照之外的价位数量。<br>
