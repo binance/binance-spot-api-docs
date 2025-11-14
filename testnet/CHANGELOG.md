@@ -1,9 +1,16 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-11-11**
+**Last Updated: 2025-11-14**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-11-14
+
+* All Market Tickers Stream (`!ticker@arr`) has been deprecated; This means this will be removed both from the documentation and from our systems at a later date. More details to follow.
+* Please use [`<symbol>@ticker`](https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams#individual-symbol-ticker-streams) or [`!miniTicker@arr`](https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams#all-market-mini-tickers-stream) instead.
+
+---
 
 ### 2025-11-12
 

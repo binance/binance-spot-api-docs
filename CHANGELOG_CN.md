@@ -1,6 +1,13 @@
 # 更新日志
 
-**最近更新： 2025-11-12**
+**最近更新： 2025-11-14**
+
+### 2025-11-14
+
+* 全市场所有交易对的完整Ticker（`!ticker@arr`）已被弃用；这意味着该接口将在后续从文档和系统中移除，具体时间另行通知。
+* 请改用 [`<symbol>@ticker`](https://developers.binance.com/docs/zh-CN/binance-spot-api-docs/web-socket-streams#twentyfourhourticker) 或 [`!miniTicker@arr`](https://developers.binance.com/docs/zh-CN/binance-spot-api-docs/web-socket-streams#all-markets-mini-ticker)。
+
+---
 
 ### 2025-11-12
 

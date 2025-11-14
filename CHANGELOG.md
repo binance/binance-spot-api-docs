@@ -1,6 +1,13 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-11-12**
+**Last Updated: 2025-11-14**
+
+### 2025-11-14
+
+* All Market Tickers Stream (`!ticker@arr`) has been deprecated; This means this will be removed both from the documentation and from our systems at a later date. More details to follow.
+* Please use [`<symbol>@ticker`](https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams#individual-symbol-ticker-streams) or [`!miniTicker@arr`](https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams#all-market-mini-tickers-stream) instead.
+
+---
 
 ### 2025-11-12
 

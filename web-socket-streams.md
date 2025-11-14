@@ -1,7 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [WebSocket Streams for Binance](#websocket-streams-for-binance)
   - [General WSS information](#general-wss-information)
   - [WebSocket Limits](#websocket-limits)
   - [Live Subscribing/Unsubscribing to streams](#live-subscribingunsubscribing-to-streams)
@@ -19,7 +19,7 @@
   - [Individual Symbol Mini Ticker Stream](#individual-symbol-mini-ticker-stream)
   - [All Market Mini Tickers Stream](#all-market-mini-tickers-stream)
   - [Individual Symbol Ticker Streams](#individual-symbol-ticker-streams)
-  - [All Market Tickers Stream](#all-market-tickers-stream)
+  - [All Market Tickers Stream (DEPRECATED)](#all-market-tickers-stream-deprecated)
   - [Individual Symbol Rolling Window Statistics Streams](#individual-symbol-rolling-window-statistics-streams)
   - [All Market Rolling Window Statistics Streams](#all-market-rolling-window-statistics-streams)
   - [Individual Symbol Book Ticker Streams](#individual-symbol-book-ticker-streams)
@@ -410,7 +410,7 @@ Supported intervals: See [`Kline/Candlestick chart intervals`](#kline-intervals)
 }
 ```
 
-## All Market Tickers Stream
+## All Market Tickers Stream (DEPRECATED)
 24hr rolling window ticker statistics for all symbols that changed in an array. These are NOT the statistics of the UTC day, but a 24hr rolling window for the previous 24hrs. Note that only tickers that have changed will be present in the array.
 
 **Stream Name:** !ticker@arr
