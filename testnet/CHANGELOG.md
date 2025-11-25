@@ -1,9 +1,15 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-11-14**
+**Last Updated: 2025-11-25**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-11-25
+
+* [`ICEBERG_PARTS`](https://developers.binance.com/docs/binance-spot-api-docs/testnet/filters#iceberg_parts) will be increased to 25 for all symbols.
+
+---
 
 ### 2025-11-14
 
@@ -32,7 +38,7 @@ This is not always synced with the live exchange.
 
 ### 2025-11-10
 
-* "Last Updated" dates will be removed from all documents except for CHANGELOG. 
+* "Last Updated" dates will be removed from all documents except for CHANGELOG.
 * Moving forward, CHANGELOG will be the source of reference for when changes were made to any document.
 
 ---
