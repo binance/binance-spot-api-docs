@@ -28,7 +28,18 @@ There are five possible modes for what the system does when an order would creat
 
 `DECREMENT`  - This mode increases the `prevented quantity` of *both* orders by the amount of the prevented match. The smaller of the two orders will expire, or both if they have the same quantity.
 
-The STP event will occur depending on the STP mode of the **taker order**. <br> Thus, the STP mode of an order that goes on the book is no longer relevant and will be ignored for all future order processing.
+`TRANSFER` - If orders are from the same account, then the behavior is the same as `DECREMENT`.
+If orders are from different accounts with the same `tradeGroupId`, then in addition to the behavior of `DECREMENT`, the `last prevented quantity` and its notional are transferred between the two accounts.
+
+STP behavior is typically determined by the STP mode of the **taker order** only. The exception is that for STP `TRANSFER` to occur, both the maker and taker orders must specify STP mode `TRANSFER`. If the taker order specifies STP mode `TRANSFER`, but the maker order specifies a different STP mode, then the STP behavior is `DECREMENT`.
+
+In summary:
+
+| Taker Order STP Mode | Maker Order STP Mode | Effective STP Mode |
+| :---- | :---- | :---- |
+| `TRANSFER` | `TRANSFER` | `TRANSFER` |
+| `TRANSFER` | `EXPIRE_MAKER`, `EXPIRE_TAKER`, `EXPIRE_BOTH`, `NONE`, `DECREMENT` | `DECREMENT` |
+| `EXPIRE_MAKER`, `EXPIRE_TAKER`, `EXPIRE_BOTH`, `NONE`, `DECREMENT`  | ANY STP MODE | STP mode of the Taker Order |
 
 ### What is a Trade Group Id?
 
@@ -734,5 +745,159 @@ Taker Order
   "selfTradePreventionMode": "DECREMENT",
   "preventedMatchId": 4,
   "preventedQuantity": "2.00000000"
+}
+```
+
+**Scenario H- A user sends a limit order with `TRANSFER` which would match with an existing order under the same tradeGroupId.**
+
+Balances before order placement
+
+Maker's Balances
+
+```json
+{
+  "balances": [
+    {
+      "asset": "BTC",
+      "free": "20000.00000000",
+      "locked": "0.00000000"
+    },
+    {
+      "asset": "USDT",
+      "free": "20000.00000000",
+      "locked": "0.00000000"
+    }
+  ]
+}
+```
+
+Taker's Balances
+
+```json
+{
+  "balances": [
+    {
+      "asset": "BTC",
+      "free": "20000.00000000",
+      "locked": "0.00000000"
+    },
+    {
+      "asset": "USDT",
+      "free": "20000.00000000",
+      "locked": "0.00000000"
+    }
+  ]
+}
+```
+
+```
+Maker Order: symbol=BTCUSDT side=BUY  type=LIMIT quantity=0.6 price=0.2  selfTradePreventionMode=TRANSFER tradeGroupId=1
+Taker Order: symbol=BTCUSDT side=SELL type=LIMIT quantity=0.2 price=0.2  selfTradePreventionMode=TRANSFER tradeGroupId=1
+```
+
+**Result:** Both orders have a preventedQuantity of 0.2. Since this is the taker’s full quantity, it expires due to STP.
+
+Maker Order
+
+```json
+{
+    "symbol": "BTCUSDT",
+    "orderId": 12,
+    "orderListId": -1,
+    "clientOrderId": "zEyu9HGqiT5YUaXXhKr1MR",
+    "price": "0.20000000",
+    "origQty": "0.60000000",
+    "executedQty": "0.00000000",
+    "cummulativeQuoteQty": "0.00000000",
+    "status": "NEW",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "stopPrice": "0.00000000",
+    "icebergQty": "0.00000000",
+    "time": 1762852466582,
+    "updateTime": 1762852522145,
+    "isWorking": true,
+    "workingTime": 1762852466582,
+    "origQuoteOrderQty": "0.00000000",
+    "selfTradePreventionMode": "TRANSFER",
+    "preventedMatchId": 3,
+    "preventedQuantity": "0.20000000"
+}
+```
+
+Taker Order
+
+```json
+{
+    "symbol": "BTCUSDT",
+    "orderId": 13,
+    "orderListId": -1,
+    "clientOrderId": "6T06cph3Et2yFNnGpHdejh",
+    "transactTime": 1762852522145,
+    "price": "0.20000000",
+    "origQty": "0.20000000",
+    "executedQty": "0.00000000",
+    "origQuoteOrderQty": "0.00000000",
+    "cummulativeQuoteQty": "0.00000000",
+    "status": "EXPIRED_IN_MATCH",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "SELL",
+    "workingTime": 1762852522145,
+    "fills": [],
+    "preventedMatches": [
+        {
+            "preventedMatchId": 3,
+            "makerSymbol": "BTCUSDT",
+            "makerOrderId": 12,
+            "price": "0.20000000",
+            "takerPreventedQuantity": "0.20000000",
+            "makerPreventedQuantity": "0.20000000"
+        }
+    ],
+    "selfTradePreventionMode": "TRANSFER",
+    "tradeGroupId": 1,
+    "preventedQuantity": "0.20000000"
+}
+```
+
+Balances after self-trade prevention:
+
+Maker Balances
+
+```json
+{
+  "balances": [
+    {
+      "asset": "BTC",
+      "free": "20000.20000000",
+      "locked": "0.00000000"
+    },
+    {
+      "asset": "USDT",
+      "free": "19999.88000000",
+      "locked": "0.08000000"
+    }
+  ]
+}
+```
+
+Taker's Balances
+
+```json
+{
+  "balances": [
+    {
+      "asset": "BTC",
+      "free": "19999.80000000",
+      "locked": "0.00000000"
+    },
+    {
+      "asset": "USDT",
+      "free": "20000.04000000",
+      "locked": "0.00000000"
+    }
+  ]
 }
 ```

@@ -1,13 +1,17 @@
 {
   "environment": "TESTNET",
-  "latestSchema":
-  {
+  "latestSchema": {
     "id": 3,
-    "version": 1,
-    "releaseDate": "2025-08-06"
+    "version": 2,
+    "releaseDate": "2025-12-02"
   },
-  "deprecatedSchemas":
-  [
+  "deprecatedSchemas": [
+    {
+      "id": 3,
+      "version": 1,
+      "releaseDate": "2025-08-06",
+      "deprecatedDate": "2025-12-02"
+    },
     {
       "id": 3,
       "version": 0,
@@ -15,8 +19,7 @@
       "deprecatedDate": "2025-08-06"
     }
   ],
-  "retiredSchemas":
-  [
+  "retiredSchemas": [
     {
       "id": 2,
       "version": 1,

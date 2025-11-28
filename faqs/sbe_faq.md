@@ -66,9 +66,13 @@ response=$(echo $request | websocat -n1 'wss://ws-api.binance.com:443/ws-api/v3?
     * This means that if SBE is disabled while your WebSocket connection is active, you will receive an SBE-encoded "SBE is not enabled" error in response to any subsequent request.
 * As of writing, we do not recommend using `websocat` to send any request as we have observed issues in how it decodes binary frames. The sample above is only used for reference to show the URL to get an SBE response.
 
+#### FIX API
+
+See FIX API's [SBE section](../testnet/fix-api.md#fix-sbe) for detailed information.
+
 ### Supported APIs
 
-REST API and WebSocket API for SPOT support SBE.
+REST API, WebSocket API and FIX API for SPOT support SBE.
 
 ### SBE Schema
 
@@ -101,7 +105,10 @@ REST API and WebSocket API for SPOT support SBE.
     * the field `sbeSchemaIdVersionDeprecated` will be set to `true` in all `WebSocketResponse` SBE messages
     * all SBE responses will be encoded in the highest compatible schema
         * For example, as of 2025-08-27, requests for `sbeSchemaId=3&sbeSchemaVersion=0` will receive responses encoded in schema `3:1`. An SBE decoder for schema `3:0` is expected to decode schema `3:1` gracefully as detailed in the [FIX SBE Specification](https://www.fixtrading.org/standards/sbe-online/#schema-extension-mechanism).
-* Requests specifying a retired `<ID>:<VERSION>` (REST API) or `sbeSchemaId` and `sbeSchemaVersion`  (WebSocket API) will fail with HTTP 400.
+* For FIX API, when an SBE request message header specifies a deprecated `schemaId` and `version`:
+    * the field `sbeSchemaIdVersionDeprecated` will be set to `true` in the `LogonAck` message
+    * all SBE response messages will be encoded using the highest schema version for the provided `schemaId`
+* Requests specifying a retired schemaId/version will fail with HTTP 400 (REST & WebSocket) or reject message (FIX API) .
 * In SBE Schema [3:0](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_0.xml), a `validValue` named `NonRepresentable` was added to each `enum`. Receipt of this value indicates that additional data is available when using the latest schema.
 * In SBE Schema [3:1](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml), a message named `NonRepresentableMessage` was added. Receipt of this message indicates that additional data is available when using the latest schema. This message may be received as a top-level message or embedded in a `data` field when the `data` field's `type` is `messageData`, `messageData8`, `messageData16`, `optionalMessageData`, or `optionalMessageData16`.
 * JSON file regarding the schema life-cycle with the dates of the latest, deprecated, and retired schemas for both the live exchange and SPOT Testnet will be saved in this repository [here](https://github.com/binance/binance-spot-api-docs/tree/master/sbe/schemas). <br> Below is an example JSON based on the hypothetical timeline above:
@@ -144,8 +151,12 @@ REST API and WebSocket API for SPOT support SBE.
 ### Generate SBE decoders:
 
 1. Download the schema:
-    * [`spot_prod_latest.xml`](../sbe/schemas/spot_prod_latest.xml) for the live exchange.
-    * [`spot_testnet_latest.xml`](../sbe/schemas/spot_testnet_latest.xml) for [SPOT Testnet](https://testnet.binance.vision).
+    * REST/WebSocket API:
+        * [`spot_prod_latest.xml`](../sbe/schemas/spot_prod_latest.xml) for the live exchange.
+        * [`spot_testnet_latest.xml`](../sbe/schemas/spot_testnet_latest.xml) for [SPOT Testnet](https://testnet.binance.vision).
+    * FIX API:
+        * [`spot_fix_prod_latest.xml`](../sbe/schemas/spot_fix_prod_latest.xml) for the live exchange.
+        * [`spot_fix_testnet_latest.xml`](../sbe/schemas/spot_fix_testnet_latest.xml) for [SPOT Testnet](https://testnet.binance.vision).
 2. Clone and build [`simple-binary-encoding`](https://github.com/real-logic/simple-binary-encoding):
 ```shell
  $ git clone https://github.com/real-logic/simple-binary-encoding.git

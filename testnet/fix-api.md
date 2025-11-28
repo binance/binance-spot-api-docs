@@ -5,7 +5,7 @@
   - [General API Information](#general-api-information)
     - [FIX API Order Entry sessions](#fix-api-order-entry-sessions)
     - [FIX API Drop Copy sessions](#fix-api-drop-copy-sessions)
-    - [FIX Market Data sessions](#fix-market-data-sessions)
+    - [FIX API Market Data sessions](#fix-api-market-data-sessions)
     - [FIX Connection Lifecycle](#fix-connection-lifecycle)
     - [API Key Permissions](#api-key-permissions)
     - [On message processing order](#on-message-processing-order)
@@ -56,6 +56,16 @@
     - [MarketDataRequestReject `<Y>`](#marketdatarequestreject-y)
     - [MarketDataSnapshot `<W>`](#marketdatasnapshot-w)
     - [MarketDataIncrementalRefresh `<X>`](#marketdataincrementalrefresh-x)
+  - [FIX SBE](#fix-sbe)
+    - [Endpoints](#endpoints)
+      - [Order Entry](#order-entry)
+      - [Drop Copy](#drop-copy)
+      - [Market data](#market-data)
+    - [FIX SBE encoding layout](#fix-sbe-encoding-layout)
+    - [Logon](#logon)
+    - [FIX vs. FIX SBE schema](#fix-vs-fix-sbe-schema)
+    - [Errors](#errors)
+    - [FAQ](#faq)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -587,7 +597,7 @@ Please refer to [Supported Order Types](#ordertype) for supported field combinat
 | 152   | CashOrderQty             | QTY     | N        | Quantity of the order specified in the quote asset units, for reverse market orders.                                                                                                                                                                                                                                         |
 | 847   | TargetStrategy           | INT     | N        | The value cannot be less than `1000000`.                                                                                                                                                                                                                                                                                                                             |
 | 7940  | StrategyID               | INT     | N        |                                                                                                                                                                                                                                                                                      |
-| 25001 | SelfTradePreventionMode  | CHAR    | N        | Possible values: <br></br> `1` - NONE <br></br> `2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br> `4` - EXPIRE_BOTH <br></br> `5` - DECREMENT                                                                                                                                                                                                                      |
+| 25001 | SelfTradePreventionMode  | CHAR    | N        | Possible values: <br></br> `1` - NONE <br></br> `2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br> `4` - EXPIRE_BOTH <br></br> `5` - DECREMENT  <br> `6` - TRANSFER                                                                                                                                                                                                                    |
 |211 | PegOffsetValue | FLOAT | N | Amount added to the peg in the context of the PegOffsetType |
 |1094 | PegPriceType | CHAR | N | Defines the type of peg <br> Possible values: <br> `4` - MARKET_PEG <br> `5` - PRIMARY_PEG|
 |835 | PegMoveType | CHAR | N | Describes whether peg is fixed or floats. Required for Pegged Orders and must be set to `1` (FIXED) |
@@ -686,7 +696,7 @@ Sent by the server whenever an order state changes.
 | 152   | CashOrderQty             | QTY          | N        | OrderQty specified in the quote asset units.                                                                                                                                                                                                                                                                                 |
 | 847   | TargetStrategy           | INT          | N        | `TargetStrategy (847)` from the order placement request.                                                                                                                                                                                                                                                                     |
 | 7940  | StrategyID               | INT          | N        | `StrategyID (7940)` from the order placement request.                                                                                                                                                                                                                                                                        |
-| 25001 | SelfTradePreventionMode  | CHAR         | N        | Possible values: <br></br> `1` - NONE <br></br> `2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br>`4` - EXPIRE_BOTH  <br></br> `5` - DECREMENT                                                                                                                                                                                                                      |
+| 25001 | SelfTradePreventionMode  | CHAR         | N        | Possible values: <br></br> `1` - NONE <br></br> `2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br>`4` - EXPIRE_BOTH  <br></br> `5` - DECREMENT  <br> `6` - TRANSFER                                                                                                                                                                                                                    |
 | 150   | ExecType                 | CHAR         | Y        | **Note:** Field `PreventedMatchID(25024)` will be present if order has expired due to `SelfTradePreventionMode(25013)` <br></br> Possible values: <br></br> `0` - NEW <br></br> `4` - CANCELED <br></br> `5` - REPLACED <br></br> `8` - REJECTED <br></br> `F` - TRADE <br></br>`C` - EXPIRED                                                                   |
 | 14    | CumQty                   | QTY          | Y        | Total number of base asset traded on this order.                                                                                                                                                                                                                                                                            |
 | 151   | LeavesQty                | QTY          | N        | Quantity remaining for further execution.                                                                                                                                                                                                                                                                                    |
@@ -839,7 +849,7 @@ Please refer to [Supported Order Types](#ordertype) for supported field combinat
 | 152   | CashOrderQty                            | QTY    | N        | Quantity of the order specified in the quote asset units, for reverse market orders.                                                                                                                                                                                                                                         |
 | 847   | TargetStrategy                          | INT    | N        | The value cannot be less than `1000000`.                                                                                                                                                                                                                                                                                                                             |
 | 7940  | StrategyID                              | INT    | N        |                                                                                                                                                                                                                                                                                      |
-| 25001 | SelfTradePreventionMode                 | CHAR   | N        | Possible values: <br></br> `1` - NONE <br></br> `2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br> `4` - EXPIRE_BOTH <br></br> `5` - DECREMENT                                                                                                                                                                                                                     |
+| 25001 | SelfTradePreventionMode                 | CHAR   | N        | Possible values: <br></br> `1` - NONE <br></br> `2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br> `4` - EXPIRE_BOTH <br></br> `5` - DECREMENT  <br> `6` - TRANSFER                                                                                                                                                                                                                   |
 |211 | PegOffsetValue | FLOAT | N | Amount added to the peg in the context of the PegOffsetType |
 |1094 | PegPriceType | CHAR | N | Defines the type of peg <br> Possible values: <br> `4` - MARKET_PEG <br> `5` - PRIMARY_PEG|
 |835 | PegMoveType | CHAR | N | Describes whether peg is fixed or floats. Required for Pegged Orders and must be set to `1` (FIXED) |
@@ -936,7 +946,8 @@ Please refer to [Supported Order List Types](#order-list-types) for supported or
 | Tag      | Name                         | Type       | Required | Description                                                                                                                                                                                                                                                                                                                  |
 |----------|------------------------------|------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 25014    | ClListID                     | STRING     | Y        | `ClListID` to be assigned to the order list.                                                                                                                                                                                                                                                                                 |
-| 1385     | ContingencyType              | INT        | N        | Possible values: <br></br> `1` - ONE_CANCELS_THE_OTHER <br></br> `2` - ONE_TRIGGERS_THE_OTHER                                                                                                                                                                                                                                          |
+| 1385     | ContingencyType              | INT        | N        | Possible values: <br></br> `1` - ONE_CANCELS_THE_OTHER <br></br> `2` - ONE_TRIGGERS_THE_OTHER   |
+| 25046    | OPO                          | BOOLEAN    | N        | Sets this order list as an [OPO](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/opo.md) when set to `true`. |
 | 73       | NoOrders                     | NUMINGROUP | N        | The length of the array for Orders. Only 2 or 3 are allowed.             |
 | =>11     | ClOrdID                      | STRING     | Y        | `ClOrdID` to be assigned to the order                                                                                                                                                                                                                                                                                        |
 | =>38     | OrderQty                     | QTY        | N        | Quantity of the order                                                                                                                                                                                                                                                                                                        |
@@ -950,7 +961,7 @@ Please refer to [Supported Order List Types](#order-list-types) for supported or
 | =>152    | CashOrderQty                 | QTY        | N        | Quantity of the order specified in the quote asset units, for reverse market orders.                                                                                                                                                                                                                                         |
 | =>847    | TargetStrategy               | INT        | N        | The value cannot be less than `1000000`.                                                                                                                                                                                                                                                                                                                             |
 | =>7940   | StrategyID                   | INT        | N        |                                                                                                                                                                                                                                                                                      |
-| =>25001  | SelfTradePreventionMode      | CHAR       | N        | Possible values: <br></br> `1` - NONE <br></br>`2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br> `4` - EXPIRE_BOTH <br></br> `5` - DECREMENT                                                                                                                                                                                                                  |
+| =>25001  | SelfTradePreventionMode      | CHAR       | N        | Possible values: <br></br> `1` - NONE <br></br>`2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br> `4` - EXPIRE_BOTH <br></br> `5` - DECREMENT  <br> `6` - TRANSFER                                                                                                                                                                                                                |
 |=> 211 | PegOffsetValue | FLOAT | N | Amount added to the peg in the context of the PegOffsetType |
 |=>1094 | PegPriceType | CHAR | N | Defines the type of peg <br> Possible values: <br> `4` - MARKET_PEG <br> `5` - PRIMARY_PEG|
 |=>835 | PegMoveType | CHAR | N | Describes whether peg is fixed or floats. Required for Pegged Orders and must be set to `1` (FIXED) |
@@ -990,7 +1001,9 @@ Please refer to [Supported Order List Types](#order-list-types) for supported or
 | OTOCO           | `2`                     | 1. working order<br></br><br></br> 2. pending below order<br></br><br></br> 3. pending above order | 1. working order=`SELL` or `BUY`<br></br><br></br> 2. pending below order=`BUY`<br></br><br></br>  3. pending above order=`BUY`  | 1. working order=`LIMIT` or `LIMIT_MAKER`      <br></br><br></br> 2. pending below order=`LIMIT_MAKER`                   <br></br><br></br> 3. pending above order=`STOP_LOSS` or `STOP_LOSS_LIMIT` | 1. working order:<br></br>NONE<br></br><br></br>                                                             2. pending below order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=2&#124;25013=2&#124;</code><br></br><br></br>3. pending above order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=2&#124;25012=1&#124;25013=2&#124;</code> |
 | OTOCO           | `2`                     | 1. working order<br></br><br></br> 2. pending below order<br></br><br></br> 3. pending above order | 1. working order=`SELL` or `BUY`<br></br><br></br> 2. pending below order=`SELL`<br></br><br></br> 3. pending above order=`SELL` | 1. working order=`LIMIT` or `LIMIT_MAKER`      <br></br><br></br> 2. pending below order=`STOP_LOSS` or `STOP_LOSS_LIMIT`<br></br><br></br> 3. pending above order=`TAKE_PROFIT`                    | 1. working order:<br></br>NONE<br></br><br></br>                                                             2. pending below order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=2&#124;25013=2&#124;</code><br></br><br></br>3. pending above order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=1&#124;25013=2&#124;</code> |
 | OTOCO           | `2`                     | 1. working order<br></br><br></br> 2. pending below order<br></br><br></br> 3. pending above order | 1. working order=`SELL` or `BUY`<br></br><br></br> 2. pending below order=`BUY`<br></br><br></br>  3. pending above order=`BUY`  | 1. working order=`LIMIT` or `LIMIT_MAKER`      <br></br><br></br> 2. pending below order=`TAKE_PROFIT`                   <br></br><br></br> 3. pending above order=`STOP_LOSS` or `STOP_LOSS_LIMIT` | 1. working order:<br></br>NONE<br></br><br></br>                                                             2. pending below order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=2&#124;25013=2&#124;</code><br></br><br></br>3. pending above order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=1&#124;25013=2&#124;</code> |
-
+| OPO             | `2`                     | 1. working order<br></br><br></br> 2. pending order                                                | 1. working order=`BUY`<br></br><br></br> 2. pending order=`SELL`                                            | 1. working order=`LIMIT` or `LIMIT_MAKER`      <br></br><br></br> 2. pending order=ANY                                                                                                              | 1. working order:<br></br>NONE<br></br><br></br>                                                             2. pending order:      <br></br><code>25010=1&#124;25011=3&#124;25012=0&#124;25013=1&#124;</code>
+| OPOCO           | `2`                     | 1. working order<br></br><br></br> 2. pending below order<br></br><br></br> 3. pending above order | 1. working order=`BUY`<br></br><br></br> 2. pending below order=`SELL`<br></br><br></br> 3. pending above order=`SELL` | 1. working order=`LIMIT` or `LIMIT_MAKER`      <br></br><br></br> 2. pending below order=`STOP_LOSS` or `STOP_LOSS_LIMIT`<br></br><br></br> 3. pending above order=`LIMIT_MAKER`                    | 1. working order:<br></br>NONE<br></br><br></br>                                                             2. pending below order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=2&#124;25012=2&#124;25013=2&#124;</code><br></br><br></br>3. pending above order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=1&#124;25013=2&#124;</code> |
+| OPOCO           | `2`                     | 1. working order<br></br><br></br> 2. pending below order<br></br><br></br> 3. pending above order | 1. working order=`BUY`<br><br> 2. pending below order=`SELL`<br></br><br></br> 3. pending above order=`SELL` | 1. working order=`LIMIT` or `LIMIT_MAKER`      <br></br><br></br> 2. pending below order=`STOP_LOSS` or `STOP_LOSS_LIMIT`<br></br><br></br> 3. pending above order=`TAKE_PROFIT` or `TAKE_PROFIT_LIMIT`  | 1. working order:<br></br>NONE<br></br><br></br>                                                             2. pending below order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=2&#124;25013=2&#124;</code><br></br><br></br>3. pending above order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=1&#124;25013=2&#124;</code> |
 
 <a id="liststatus"></a>
 
@@ -1004,7 +1017,7 @@ Sent by the server whenever an order list state changes.
 
 | Tag      | Name                         | Type         | Required | Description                                                                                                                                             |
 |----------|------------------------------|--------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 55       | Symbol                       | STRING       | Y        | Symbol of the order list.                                                                                                                               |
+| 55       | Symbol                       | STRING       | N        | Symbol of the order list.                                                                                                                               |
 | 66       | ListID                       | STRING       | N        | `ListID` of the list as assigned by the exchange.                                                                                                       |
 | 25014    | ClListID                     | STRING       | N        | `ClListID` of the list as assigned on the request.                                                                                                      |
 | 25015    | OrigClListID                 | STRING       | N        |                                                                                                                                                         |
@@ -1322,7 +1335,7 @@ Sent by the server when there is a change in a subscribed stream.
 | Tag     | Name              | Type         | Required | Description                                                                                                                                                                                                                                                                                                                                                                                                                  |
 |---------|-------------------|--------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 262     | MDReqID           | STRING       | Y        | ID of the [MarketDataRequest`<V>`](#marketdatarequest) that activated this subscription                                                                                                                                                                                                                                                                                                                                      |
-| 893     | LastFragment      | BOOLEAN      | N        | When present, this indicates that the message was fragmented. Fragmentation occurs when `NoMDEntry` would exceed 10000 in a single [MarketDataIncrementalRefresh`<X>`](#marketdataincrementalrefresh), in order to limit it to 10000. The fragments of a fragmented message are guaranteed to be consecutive in the stream. It can only appear in the [Trade Stream](#tradestream) and [Diff. Depth Stream](#diffdepthstream). |
+| 893     | LastFragment      | BOOLEAN      | N        | When present, this indicates that the message was fragmented. Fragmentation may occur when `NoMDEntry` would exceed 10000 in a single [MarketDataIncrementalRefresh`<X>`](#marketdataincrementalrefresh), in order to limit it to 10000. The fragments of a fragmented message are guaranteed to be consecutive in the stream. It can only appear in the [Trade Stream](#tradestream) and [Diff. Depth Stream](#diffdepthstream). |
 | 268     | NoMDEntries       | NUMINGROUP   | Y        | Number of entries                                                                                                                                                                                                                                                                                                                                                                                                            |
 | =>279   | MDUpdateAction    | CHAR         | Y        | Possible values: <br></br> `0` - NEW <br></br> `1` - CHANGE <br></br> `2` - DELETE                                                                                                                                                                                                                                                                                                                                           |
 | =>270   | MDEntryPx         | PRICE        | Y        | Price                                                                                                                                                                                                                                                                                                                                                                                                                        |
@@ -1358,3 +1371,84 @@ Sent by the server when there is a change in a subscribed stream.
 8=FIX.4.4|9=171|35=X|34=13|49=SPOT|52=20250116-19:45:31.774263|56=EXAMPLE|262=id|268=2|279=2|270=284.00|269=0|55=BNBBUSD|25043=1143|25044=1145|279=1|270=264.00|271=3.00000000|269=0|893=N|10=239|
 8=FIX.4.4|9=149|35=X|34=14|49=SPOT|52=20250116-19:45:31.774281|56=EXAMPLE|262=id|268=1|279=1|270=395.00|271=19.00000000|269=1|55=BNBBUSD|25043=1143|25044=1145|893=Y|10=024|
 ```
+
+## FIX SBE
+
+FIX SBE (Simple Binary Encoding) can be used instead of FIX with the [spot-fixsbe-1\_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fixsbe-1_0.xml) schema file.
+
+### Endpoints
+
+In addition to FIX encoding available on port 9000, two request/response encoding schemes are supported on additional TCP ports. See below endpoints for each API.
+
+#### Order Entry
+
+* `tcp+tls://fix-oe.testnet.binance.vision:9001`: Send FIX requests; receive FIX SBE responses
+    * FIX `SbeSchemaId` tag (=25050) must be set to the FIX SBE schema ID (=1)
+    * The FIX `SbeSchemaVersion` tag (=25051) must be set to the FIX SBE schema version (=0)
+* `tcp+tls://fix-oe.testnet.binance.vision:9002`: Send FIX SBE requests; receive FIX SBE responses
+
+#### Drop Copy
+
+* `tcp+tls://fix-dc.testnet.binance.vision:9001`: Send FIX requests; receive FIX SBE responses
+    * FIX `SbeSchemaId` tag (=25050) must be set to the FIX SBE schema ID (=1)
+    * The FIX `SbeSchemaVersion` tag (=25051) must be set to the FIX SBE schema version (=0)
+* `tcp+tls://fix-dc.testnet.binance.vision:9002`: Send FIX SBE requests; receive FIX SBE responses
+
+#### Market data
+
+* `tcp+tls://fix-md.testnet.binance.vision:9001`: Send FIX requests; receive FIX SBE responses
+    * FIX `SbeSchemaId` tag (=25050) must be set to the FIX SBE schema ID (=1)
+    * The FIX `SbeSchemaVersion` tag (=25051) must be set to the FIX SBE schema version (=0)
+* `tcp+tls://fix-md.testnet.binance.vision:9002`: Send FIX SBE requests; receive FIX SBE responses
+
+### FIX SBE encoding layout
+
+FIX SBE request/response messages always come with a SOFH (Simple Open Framing Header) and message header. A given FIX SBE message of N bytes has the following wire format:
+
+`<SOFH (6 bytes)> <message header (20 bytes)> <message (N bytes)>`
+
+SOFH: This corresponds to the "sofh" composite type in the schema file. This acts as a framing header so that the FIX SBE servers/clients can know the length of SBE messages and ensure messages have been fully received prior to deserializing them
+
+Notes:
+- The two fields within the SOFH MUST be encoded in little-endian
+- The FIX servers only support `0xEB50` for the encodingType field, i.e. only little-endian is supported for all fields
+
+Message header: This corresponds to the "messageHeader" composite type in the schema file.
+
+### Logon
+
+The logon signature (RawData) is computed as documented in the [signature computation](#signaturecomputation) section.
+
+### FIX vs. FIX SBE schema
+
+General:
+* FIX SBE has no `Checksum` field
+
+**Logon** message:
+* The `SenderCompID`, `TargetCompID` and `RecvWindow` fields are provided in the `Logon` FIX SBE message instead of the message header
+* When the `ResponseMode` field is set to `OnlyAcks`, the `ExecutionReportType` field can be set to `Mini` to receive `ExecutionReportAck` messages instead of `ExecutionReport`
+
+**MarketDataIncrementRefresh** message:
+* This single message in the FIX schema is split into the following FIX SBE messages: `MarketDataIncrementalTrade`, `MarketDataIncrementalBookTicker` and `MarketDataIncrementalDepth`
+* The `MDReqID` field is omitted from the market data snapshot and refresh messages as these messages can be tied to the subscription request using the `Symbol` field and the message's template ID
+    * `MDReqID` is required in the `MarketDataRequest` message so that it may appear in `MarketDataRequestReject`
+    * The value of `MDReqID` must be unique across subscriptions
+
+**MarketDataIncrementalBookTicker** message:
+* FIX SBE book ticker subscriptions use **auto-culling**: when the system is under high load, it may drop outdated events instead of queuing all events and delivering them with a delay.
+* For example, if a best bid/ask event is generated at time T2 when there is still an undelivered event queued at time T1 (where T1 < T2), the event for T1 is dropped, and the system will deliver only the event for T2. This is done on a per-symbol basis.
+
+### Errors
+
+The following FIX SBE-specific errors may be returned:
+
+| Code    | Message                                         |  Description                                                       |
+|---------|-------------------------------------------------|--------------------------------------------------------------------|
+| -1152   | Invalid SBE message header.                     | Error when decoding `messageHeader` in FIX SBE request             |
+| -1153   | Invalid SBE schema ID or version specified.     | Error when parsing/decoding FIX SBE schema ID/version              |
+| -1177   | Invalid encodingType.                           | Error when decoding `encodingType` field in sofh composite type    |
+| -1221   | Invalid/missing field(s) in SBE message.        | Invalid/missing field when decoding FIX SBE request                |
+
+### FAQ
+
+See the [SBE FAQ](../faqs/sbe_faq.md) for more information on generating SBE decoders and handling schema updates.

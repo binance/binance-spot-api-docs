@@ -48,6 +48,8 @@
       - [New Order list - OCO (TRADE)](#new-order-list---oco-trade)
       - [New Order list - OTO (TRADE)](#new-order-list---oto-trade)
       - [New Order list - OTOCO (TRADE)](#new-order-list---otoco-trade)
+      - [New Order List - OPO (TRADE)](#new-order-list---opo-trade)
+      - [New Order List - OPOCO (TRADE)](#new-order-list---opoco-trade)
       - [Cancel Order list (TRADE)](#cancel-order-list-trade)
     - [SOR](#sor)
       - [New order using SOR (TRADE)](#new-order-using-sor-trade)
@@ -65,7 +67,7 @@
     - [Query Allocations (USER_DATA)](#query-allocations-user_data)
     - [Query Commission Rates (USER_DATA)](#query-commission-rates-user_data)
     - [Query Order Amendments (USER_DATA)](#query-order-amendments-user_data)
-    - [Query Relevant Filters (USER_DATA)](#query-relevant-filters-user_data)
+    - [Query relevant filters (USER_DATA)](#query-relevant-filters-user_data)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -572,6 +574,7 @@ Memory
       "icebergAllowed": true,
       "ocoAllowed": true,
       "otoAllowed": true,
+      "opoAllowed": true,
       "quoteOrderQtyMarketAllowed": true,
       "allowTrailingStop": false,
       "cancelReplaceAllowed":false,
@@ -3024,7 +3027,7 @@ workingSide              |ENUM   |YES       |Supported values: [Order side](./en
 workingClientOrderId     |STRING |NO        |Arbitrary unique ID among open orders for the working order.<br> Automatically generated if not sent.
 workingPrice             |DECIMAL|YES       |
 workingQuantity          |DECIMAL|YES        |
-workingIcebergQty        |DECIMAL|NO        |This can only be used if `workingTimeInForce` is `GTC`.
+workingIcebergQty        |DECIMAL|NO        |This can only be used if `workingTimeInForce` is `GTC` or if `workingType` is `LIMIT_MAKER`.|
 workingTimeInForce       |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
 workingStrategyId        |LONG    |NO        |Arbitrary numeric value identifying the working order within an order strategy.
 workingStrategyType      |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
@@ -3161,6 +3164,271 @@ Matching Engine
             "timeInForce": "GTC",
             "type": "LIMIT_MAKER",
             "side": "BUY",
+            "workingTime": -1,
+            "selfTradePreventionMode": "NONE"
+        }
+    ]
+}
+```
+
+**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+
+#### New Order List - OPO (TRADE)
+
+```
+POST /api/v3/orderList/opo
+```
+
+Place an [OPO](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/opo.md).
+
+* OPOs add 2 orders to the EXCHANGE_MAX_NUM_ORDERS filter and MAX_NUM_ORDERS filter.
+
+**Weight:** 1
+
+**Unfilled Order Count:** 2
+
+**Parameters:**
+
+| Name | Type | Mandatory | Description |
+| ----- | ----- | ----- | ----- |
+| symbol | STRING | YES |  |
+| listClientOrderId | STRING | NO | Arbitrary unique ID among open order lists. Automatically generated if not sent. A new order list with the same listClientOrderId is accepted only when the previous one is filled or completely expired. `listClientOrderId` is distinct from the `workingClientOrderId` and the `pendingClientOrderId`. |
+| newOrderRespType | ENUM | NO | Format of the JSON response. Supported values: [Order Response Type](./enums.md#orderresponsetype) |
+| selfTradePreventionMode | ENUM | NO | The allowed values are dependent on what is configured on the symbol. Supported values: [STP Modes](./enums.md#stpmodes) |
+| workingType | ENUM | YES | Supported values: `LIMIT`,`LIMIT_MAKER` |
+| workingSide | ENUM | YES | Supported values: [Order Side](./enums.md#side) |
+| workingClientOrderId | STRING | NO | Arbitrary unique ID among open orders for the working order. Automatically generated if not sent. |
+| workingPrice | DECIMAL | YES |  |
+| workingQuantity | DECIMAL | YES | Sets the quantity for the working order. |
+| workingIcebergQty | DECIMAL | NO | This can only be used if `workingTimeInForce` is `GTC`, or if `workingType` is `LIMIT_MAKER`. |
+| workingTimeInForce | ENUM | NO | Supported values: [Time In Force](./enums.md#timeinforce) |
+| workingStrategyId | LONG | NO | Arbitrary numeric value identifying the working order within an order strategy. |
+| workingStrategyType | INT | NO | Arbitrary numeric value identifying the working order strategy. Values smaller than 1000000 are reserved and cannot be used. |
+| workingPegPriceType | ENUM | NO | See [Pegged Orders](#pegged-orders-info) |
+| workingPegOffsetType | ENUM | NO |  |
+| workingPegOffsetValue | INT | NO |  |
+| pendingType | ENUM | YES | Supported values: [Order Types](#order-type) Note that `MARKET` orders using `quoteOrderQty` are not supported. |
+| pendingSide | ENUM | YES | Supported values: [Order Side](./enums.md#side) |
+| pendingClientOrderId | STRING | NO | Arbitrary unique ID among open orders for the pending order. Automatically generated if not sent. |
+| pendingPrice | DECIMAL | NO |  |
+| pendingStopPrice | DECIMAL | NO |  |
+| pendingTrailingDelta | DECIMAL | NO |  |
+| pendingIcebergQty | DECIMAL | NO | This can only be used if `pendingTimeInForce` is `GTC` or if `pendingType` is `LIMIT_MAKER`. |
+| pendingTimeInForce | ENUM | NO | Supported values: [Time In Force](./enums.md#timeinforce) |
+| pendingStrategyId | LONG | NO | Arbitrary numeric value identifying the pending order within an order strategy. |
+| pendingStrategyType | INT | NO | Arbitrary numeric value identifying the pending order strategy. Values smaller than 1000000 are reserved and cannot be used. |
+| pendingPegPriceType | ENUM | NO | See [Pegged Orders](#pegged-orders-info) |
+| pendingPegOffsetType | ENUM | NO |  |
+| pendingPegOffsetValue | INT | NO |  |
+| recvWindow | DECIMAL | NO | The value cannot be greater than `60000`. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified. |
+| timestamp | LONG | YES |  |
+
+**Data Source**: Matching Engine
+
+**Response:**
+
+```javascript
+{
+    "orderListId": 0,
+    "contingencyType": "OTO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "H94qCqO27P74OEiO4X8HOG",
+    "transactionTime": 1762998011671,
+    "symbol": "BTCUSDT",
+    "orders": [
+        {
+            "symbol": "BTCUSDT",
+            "orderId": 2,
+            "clientOrderId": "JX6xfdjo0wysiGumfHNmPu"
+        },
+        {
+            "symbol": "BTCUSDT",
+            "orderId": 3,
+            "clientOrderId": "2ZJCY0IjOhuYIMLGN8kU8S"
+        }
+    ],
+    "orderReports": [
+        {
+            "symbol": "BTCUSDT",
+            "orderId": 2,
+            "orderListId": 0,
+            "clientOrderId": "JX6xfdjo0wysiGumfHNmPu",
+            "transactTime": 1762998011671,
+            "price": "102264.00000000",
+            "origQty": "0.00060000",
+            "executedQty": "0.00000000",
+            "origQuoteOrderQty": "0.00000000",
+            "cummulativeQuoteQty": "0.00000000",
+            "status": "NEW",
+            "timeInForce": "GTC",
+            "type": "LIMIT",
+            "side": "BUY",
+            "workingTime": 1762998011671,
+            "selfTradePreventionMode": "NONE"
+        },
+        {
+            "symbol": "BTCUSDT",
+            "orderId": 3,
+            "orderListId": 0,
+            "clientOrderId": "2ZJCY0IjOhuYIMLGN8kU8S",
+            "transactTime": 1762998011671,
+            "price": "0.00000000",
+            "executedQty": "0.00000000",
+            "origQuoteOrderQty": "0.00000000",
+            "cummulativeQuoteQty": "0.00000000",
+            "status": "PENDING_NEW",
+            "timeInForce": "GTC",
+            "type": "MARKET",
+            "side": "SELL",
+            "workingTime": -1,
+            "selfTradePreventionMode": "NONE"
+        }
+    ]
+}
+```
+
+**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+
+#### New Order List - OPOCO (TRADE)
+
+```
+POST /api/v3/orderList/opoco
+```
+
+Place an [OPOCO](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/opo.md).
+
+**Weight**: 1
+
+**Unfilled Order Count:** 3
+
+**Parameters:**
+
+| Name | Type | Mandatory | Description |
+| ----- | ----- | ----- | ----- |
+| symbol | STRING | YES |  |
+| listClientOrderId | STRING | NO | Arbitrary unique ID among open order lists. Automatically generated if not sent. A new order list with the same listClientOrderId is accepted only when the previous one is filled or completely expired. `listClientOrderId` is distinct from the `workingClientOrderId`, `pendingAboveClientOrderId`, and the `pendingBelowClientOrderId`. |
+| newOrderRespType | ENUM | NO | Format of the JSON response. Supported values: [Order Response Type](./enums.md#orderresponsetype) |
+| selfTradePreventionMode | ENUM | NO | The allowed values are dependent on what is configured on the symbol. Supported values: [STP Modes](./enums.md#stpmodes) |
+| workingType | ENUM | YES | Supported values: `LIMIT`, `LIMIT_MAKER` |
+| workingSide | ENUM | YES | Supported values: [Order side](./enums.md#side) |
+| workingClientOrderId | STRING | NO | Arbitrary unique ID among open orders for the working order. Automatically generated if not sent. |
+| workingPrice | DECIMAL | YES |  |
+| workingQuantity | DECIMAL | YES |  |
+| workingIcebergQty | DECIMAL | NO | This can only be used if `workingTimeInForce` is `GTC` or if `workingType` is `LIMIT_MAKER`. |
+| workingTimeInForce | ENUM | NO | Supported values: [Time In Force](./enums.md#timeinforce) |
+| workingStrategyId | LONG | NO | Arbitrary numeric value identifying the working order within an order strategy. |
+| workingStrategyType | INT | NO | Arbitrary numeric value identifying the working order strategy. Values smaller than 1000000 are reserved and cannot be used. |
+| workingPegPriceType | ENUM | NO | See [Pegged Orders](#pegged-orders-info) |
+| workingPegOffsetType | ENUM | NO |  |
+| workingPegOffsetValue | INT | NO |  |
+| pendingSide | ENUM | YES | Supported values: [Order side](./enums.md#side) |
+| pendingAboveType | ENUM | YES | Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` |
+| pendingAboveClientOrderId | STRING | NO | Arbitrary unique ID among open orders for the pending above order. Automatically generated if not sent. |
+| pendingAbovePrice | DECIMAL | NO | Can be used if `pendingAboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price. |
+| pendingAboveStopPrice | DECIMAL | NO | Can be used if `pendingAboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` |
+| pendingAboveTrailingDelta | DECIMAL | NO | See [Trailing Stop FAQ](../faqs/trailing-stop-faq.md) |
+| pendingAboveIcebergQty | DECIMAL | NO | This can only be used if `pendingAboveTimeInForce` is `GTC` or if `pendingAboveType` is `LIMIT_MAKER`. |
+| pendingAboveTimeInForce | ENUM | NO |  |
+| pendingAboveStrategyId | LONG | NO | Arbitrary numeric value identifying the pending above order within an order strategy. |
+| pendingAboveStrategyType | INT | NO | Arbitrary numeric value identifying the pending above order strategy. Values smaller than 1000000 are reserved and cannot be used. |
+| pendingAbovePegPriceType | ENUM | NO | See [Pegged Orders](#pegged-orders-info) |
+| pendingAbovePegOffsetType | ENUM | NO |  |
+| pendingAbovePegOffsetValue | INT | NO |  |
+| pendingBelowType | ENUM | NO | Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT` |
+| pendingBelowClientOrderId | STRING | NO | Arbitrary unique ID among open orders for the pending below order. Automatically generated if not sent. |
+| pendingBelowPrice | DECIMAL | NO | Can be used if `pendingBelowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT` to specify limit price |
+| pendingBelowStopPrice | DECIMAL | NO | Can be used if `pendingBelowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`. Either `pendingBelowStopPrice` or `pendingBelowTrailingDelta` or both, must be specified. |
+| pendingBelowTrailingDelta | DECIMAL | NO |  |
+| pendingBelowIcebergQty | DECIMAL | NO | This can only be used if `pendingBelowTimeInForce` is `GTC`, or if `pendingBelowType` is `LIMIT_MAKER`. |
+| pendingBelowTimeInForce | ENUM | NO | Supported values: [Time In Force](./enums.md#timeinforce) |
+| pendingBelowStrategyId | LONG | NO | Arbitrary numeric value identifying the pending below order within an order strategy. |
+| pendingBelowStrategyType | INT | NO | Arbitrary numeric value identifying the pending below order strategy. Values smaller than 1000000 are reserved and cannot be used. |
+| pendingBelowPegPriceType | ENUM | NO | See [Pegged Orders](#pegged-orders-info) |
+| pendingBelowPegOffsetType | ENUM | NO |  |
+| pendingBelowPegOffsetValue | INT | NO |  |
+| recvWindow | DECIMAL | NO | The value cannot be greater than `60000`. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified. |
+| timestamp | LONG | YES |  |
+
+**Response**
+
+```javascript
+{
+    "orderListId": 2,
+    "contingencyType": "OTO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "bcedxMpQG6nFrZUPQyshoL",
+    "transactionTime": 1763000506354,
+    "symbol": "BTCUSDT",
+    "orders": [
+        {
+            "symbol": "BTCUSDT",
+            "orderId": 9,
+            "clientOrderId": "OLSBhMWaIlLSzZ9Zm7fnKB"
+        },
+        {
+            "symbol": "BTCUSDT",
+            "orderId": 10,
+            "clientOrderId": "mfif39yPTHsB3C0FIXznR2"
+        },
+        {
+            "symbol": "BTCUSDT",
+            "orderId": 11,
+            "clientOrderId": "yINkaXSJeoi3bU5vWMY8Z8"
+        }
+    ],
+    "orderReports": [
+        {
+            "symbol": "BTCUSDT",
+            "orderId": 9,
+            "orderListId": 2,
+            "clientOrderId": "OLSBhMWaIlLSzZ9Zm7fnKB",
+            "transactTime": 1763000506354,
+            "price": "102496.00000000",
+            "origQty": "0.00170000",
+            "executedQty": "0.00000000",
+            "origQuoteOrderQty": "0.00000000",
+            "cummulativeQuoteQty": "0.00000000",
+            "status": "NEW",
+            "timeInForce": "GTC",
+            "type": "LIMIT",
+            "side": "BUY",
+            "workingTime": 1763000506354,
+            "selfTradePreventionMode": "NONE"
+        },
+        {
+            "symbol": "BTCUSDT",
+            "orderId": 10,
+            "orderListId": 2,
+            "clientOrderId": "mfif39yPTHsB3C0FIXznR2",
+            "transactTime": 1763000506354,
+            "price": "101613.00000000",
+            "executedQty": "0.00000000",
+            "origQuoteOrderQty": "0.00000000",
+            "cummulativeQuoteQty": "0.00000000",
+            "status": "PENDING_NEW",
+            "timeInForce": "GTC",
+            "type": "STOP_LOSS_LIMIT",
+            "side": "SELL",
+            "stopPrice": "10100.00000000",
+            "workingTime": -1,
+            "selfTradePreventionMode": "NONE"
+        },
+        {
+            "symbol": "BTCUSDT",
+            "orderId": 11,
+            "orderListId": 2,
+            "clientOrderId": "yINkaXSJeoi3bU5vWMY8Z8",
+            "transactTime": 1763000506354,
+            "price": "104261.00000000",
+            "executedQty": "0.00000000",
+            "origQuoteOrderQty": "0.00000000",
+            "cummulativeQuoteQty": "0.00000000",
+            "status": "PENDING_NEW",
+            "timeInForce": "GTC",
+            "type": "LIMIT_MAKER",
+            "side": "SELL",
             "workingTime": -1,
             "selfTradePreventionMode": "NONE"
         }

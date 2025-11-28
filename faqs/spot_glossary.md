@@ -228,6 +228,14 @@ Notional value
 `OCO`
 * One-Cancels-the-Other type of order that is composed by a pair of orders (e.g. `STOP_LOSS` or `STOP_LOSS_LIMIT` paired with a `LIMIT_MAKER` order) with the condition that if one of the orders execute, the other is automatically expired.
 
+`OPO`
+* [One-Pays-The-Other](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/opo.md), a special subset of OTO.
+* When the working order fully fills, the accumulated received quantity is used for the quantity of the pending order.
+
+`OPOCO`
+* [One-Pays-The-Other](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/opo.md), a special subset of OTOCO.
+* When the working order fully fills, the accumulated received quantity is used for the quantity of the pending OCO pair.
+
 Order Amend Keep Priority
 * See [Order Amend Keep Priority](order_amend_keep_priority.md)
 
@@ -253,7 +261,6 @@ Order List
 `OTOCO`
 * One-Triggers-a-One-Cancels-the-Other order has a working order, and an OCO pair for the pending orders.
 * When the working order fully fills, the pending OCO pair is automatically placed.
-
 
 ---
 
