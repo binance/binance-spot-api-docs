@@ -115,6 +115,8 @@
    <field name='ResponseMode' required='N'/>
    <field name='DropCopyFlag' required='N'/>
    <field name='UUID' required='N'/>
+   <field name='SBESchemaID' required='N'/>
+   <field name='SBESchemaVersion' required='N'/>
   </message>
   <message name='NewOrderSingle' msgcat='app' msgtype='D'>
    <component name='NewOrder' required='Y'/>
@@ -123,6 +125,7 @@
   <message name='NewOrderList' msgcat='app' msgtype='E'>
    <field name='ClListID' required='Y'/>
    <field name='ContingencyType' required='Y'/>
+   <field name='OPO' required='N'/>
    <group name='NoOrders' required='N'>
     <component name='NewOrder' required='Y'/>
     <component name='ListTriggeringInstruction' required='N'/>
@@ -138,7 +141,7 @@
    <field name='CancelRestrictions' required='N'/>
   </message>
   <message name='ListStatus' msgcat='app' msgtype='N'>
-   <field name='Symbol' required='Y'/>
+   <field name='Symbol' required='N'/>
    <field name='ListID' required='N'/>
    <field name='ClListID' required='N'/>
    <field name='OrigClListID' required='N'/>
@@ -456,6 +459,7 @@
    <value enum='3' description='EXPIRE_MAKER'/>
    <value enum='4' description='EXPIRE_BOTH'/>
    <value enum='5' description='DECREMENT'/>
+   <value enum='6' description='TRANSFER'/>
   </field>
   <field number='25002' name='CancelRestrictions' type='INT'>
    <value enum='1' description='ONLY_NEW'/>
@@ -526,5 +530,8 @@
    <value enum='1' description='DO_NOTHING'/>
    <value enum='2' description='CANCEL_ONLY'/>
   </field>
+  <field number='25046' name='OPO' type='BOOLEAN'/>
+  <field number='25050' name='SBESchemaID' type='INT'/>
+  <field number='25051' name='SBESchemaVersion' type='INT'/>
  </fields>
 </fix>

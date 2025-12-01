@@ -36,6 +36,8 @@
    <field name='Username' required='N'/>
    <field name='MessageHandling' required='N'/>
    <field name='UUID' required='N'/>
+   <field name='SBESchemaID' required='N'/>
+   <field name='SBESchemaVersion' required='N'/>
   </message>
   <message name='LimitQuery' msgcat='app' msgtype='XLQ'>
    <field name='ReqID' required='Y'/>
@@ -169,9 +171,9 @@
   <field number='146' name='NoRelatedSym' type='NUMINGROUP'/>
   <field number='148' name='Headline' type='STRING'/>
   <field number='262' name='MDReqID' type='STRING'/>
-  <field number='263' name='SubscriptionRequestType' type='char'>
-   <value enum='1' description='Subscribe'/>
-   <value enum='2' description='Unsubscribe'/>
+  <field number='263' name='SubscriptionRequestType' type='CHAR'>
+   <value enum='1' description='SUBSCRIBE'/>
+   <value enum='2' description='UNSUBSCRIBE'/>
   </field>
   <field number='264' name='MarketDepth' type='INT'/>
   <field number='266' name='AggregatedBook' type='BOOLEAN'>
@@ -260,5 +262,7 @@
   <field number='25042' name='MarketMinQtyIncrement' type='QTY'/>
   <field number='25043' name='FirstBookUpdateID' type='INT'/>
   <field number='25044' name='LastBookUpdateID' type='INT'/>
+  <field number='25050' name='SBESchemaID' type='INT'/>
+  <field number='25051' name='SBESchemaVersion' type='INT'/>
  </fields>
 </fix>
