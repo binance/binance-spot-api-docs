@@ -1449,6 +1449,8 @@ The following FIX SBE-specific errors may be returned:
 | -1177   | Invalid encodingType.                           | Error when decoding `encodingType` field in sofh composite type    |
 | -1221   | Invalid/missing field(s) in SBE message.        | Invalid/missing field when decoding FIX SBE request                |
 
+Note: Error codes returned for semantically equivalent FIX and FIX SBE requests may not be identical.
+
 ### FAQ
 
 See the [SBE FAQ](../faqs/sbe_faq.md) for more information on generating SBE decoders and handling schema updates.
