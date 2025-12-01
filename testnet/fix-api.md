@@ -1374,7 +1374,7 @@ Sent by the server when there is a change in a subscribed stream.
 
 ## FIX SBE
 
-FIX SBE (Simple Binary Encoding) can be used instead of FIX with the [spot-fixsbe-1\_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fixsbe-1_0.xml) schema file.
+FIX SBE (Simple Binary Encoding) can be used instead of FIX with the [spot-fixsbe-1\_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot-fixsbe-1_0.xml) schema file.
 
 ### Endpoints
 
