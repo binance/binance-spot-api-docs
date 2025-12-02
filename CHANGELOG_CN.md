@@ -1,6 +1,67 @@
 # 更新日志
 
-**最近更新： 2025-11-14**
+**最近更新： 2025-12-02**
+
+### 2025-12-02
+
+**注意： 本节中的变更将逐步推出，预计大约需要两周时间完成。**
+
+#### 常规更改
+
+* 参数 `symbol` 和 `symbols` 现在支持以 UTF-8 编码的 Unicode 值。
+* 根据 [2025-11-14](#2025-11-14) 的公告，所有与 `!ticker@arr` 相关的内容已经在文档被移除。
+  * 该功能将在未来弃用公告发布前继续可用。
+  * 请改用 `<symbol>@ticker` 或 `!miniTicker@arr`。
+
+#### FIX API
+
+* 现在 FIX 消息中可以接受以 UTF-8 编码的 Unicode 值。仅允许以下标签使用：
+  * `Currency (15)`
+  * `MiscFeeCurr (138)`
+  * `Symbol (55)`
+  * `SecondarySymbol (25019)`
+  * `CounterSymbol (25028)`
+  * `SecurityDesc (107)`
+* 当 Unicode 出现在非上述标签的值中时，FIX API 会在拒绝消息 `<3>` 中返回 `RefTagID (371)` 标签，指明具体哪个标签不允许包含 Unicode。
+* NewOrderList `<E>` 可以接受没有 `TriggerPrice (1102)` 的 `TriggerPriceDirection (1109)`。
+
+#### WebSocket 数据流
+
+* WebSocket 市场数据流支持 URL 编码的 URL。
+<br>
+<br>
+
+**注意：以下变更预计于 2025-12-18 07:00 UTC 左右生效**：
+* [ICEBERG_PARTS](https://developers.binance.com/docs/zh-CN/binance-spot-api-docs/filters#iceberg_parts) 将对所有交易对提升至 25。
+* [FIX SBE 支持](fix-api_CN.md) 将上线。
+* [一个订单支付另一个订单（OPO）](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/opo_CN.md) 将在所有交易对上线。
+  * `opoAllowed` 将开始出现在 `Exchange Information` 请求中，指示每个交易对是否支持一个订单支付另一个订单（OPO）。
+    * REST API: `GET /api/v3/exchangeInfo`
+    * WebSocket API: `exchangeInfo`
+  * OPO 新请求：
+    * REST API：
+      * `POST /api/v3/orderList/opo`
+      * `POST /api/v3/orderList/opoco`
+    * WebSocket API：
+      * `orderList.place.opo`
+      * `orderList.place.opoco`
+    * FIX API：
+      * NewOrderList `<E>` 新增字段 `OPO (25046)`。请更新至最新 QuickFIX 模式以支持 OPO。
+* 新增 STP 模式 [`TRANSFER`](./faqs/stp_faq_CN.md)。STP `TRANSFER` 启用的具体日期尚未确定。
+* **SBE：新增 schema 3:2 版本 ([spot_3_2.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_2.xml))。**
+  * 当前 schema 3:1 ([spot_3_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml)) 已被弃用，将根据我们的 schema 弃用政策在 6 个月后停用。
+  * 3:2 版本变更：
+    * 为 `selfTradePreventionMode` 和 `allowedSelfTradePreventionModes` 新增枚举值 `TRANSFER`。
+    * 所有低于 3:1 的 schema 无法返回包含 STP 模式 `TRANSFER` 的响应（例如 Exchange Information、下单、撤单或订单状态查询）。<br>当响应无法用请求的 schema 表示时，将返回错误。
+* FIX API 变更：
+    * `LastFragment (893)` 被弃用。
+      * 这意味着 MarketIncrementalRefresh `<X>` 消息将不再分片，可能包含超过 10,000 条目。
+      * 文档已更新以反映此变更。
+    * ListStatus `<N>` 将不再发送可选的 `symbol` 字段。
+      * 适用于 FIX 订单接入和 FIX Drop Copy。
+      * 文档已更新以反映此变更。
+
+---
 
 ### 2025-11-14
 

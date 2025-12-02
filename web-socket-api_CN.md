@@ -1106,6 +1106,7 @@ NONE
         "icebergAllowed": true,
         "ocoAllowed": true,
         "otoAllowed": true,
+        "opoAllowed": true,
         "quoteOrderQtyMarketAllowed": true,
         "allowTrailingStop": true,
         "cancelReplaceAllowed": true,
@@ -1726,7 +1727,7 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
 24 小时滚动窗口价格变动数据。
 如果您需要持续监控交易统计，请考虑使用 WebSocket Streams:
 
-* [`<symbol>@ticker`](web-socket-streams_CN.md#twentyfourhourticker) 或者 [`!ticker@arr`](web-socket-streams_CN.md#all-markets-ticker)
+* [`<symbol>@ticker`](web-socket-streams_CN.md#twentyfourhourticker)
 * [`<symbol>@miniTicker`](web-socket-streams_CN.md#twentyfourhourminiticker) 或者 [`!miniTicker@arr`](web-socket-streams_CN.md#all-markets-mini-ticker)
 
 如果你想用不同的窗口数量，可以用 [`ticker`](#ticker) 请求。
@@ -5162,7 +5163,7 @@ NONE
 `workingClientOrderId`   |STRING |NO        |用于标识生效订单的唯一ID。 <br> 如果未发送则自动生成。
 `workingPrice`           |DECIMAL|YES       |
 `workingQuantity`        |DECIMAL|YES       |用于设置生效订单的数量。
-`workingIcebergQty`      |DECIMAL|NO       |只有当 `workingTimeInForce` 为 `GTC` 时才能使用。
+`workingIcebergQty`      |DECIMAL|NO       |仅当 `workingTimeInForce` 为 `GTC` 或 `workingType` 为 `LIMIT_MAKER` 时，才能使用此功能。
 `workingTimeInForce`     |ENUM   |NO        |支持的数值： [生效时间](./enums_CN.md#timeinforce)
 `workingStrategyId`      |LONG   |NO        |订单策略中用于标识生效订单的 ID。
 `workingStrategyType`    |INT    |NO        |用于标识生效订单策略的任意数值。<br> 小于 `1000000` 的值被保留，无法使用。
@@ -5344,7 +5345,7 @@ NONE
 `workingClientOrderId`     |STRING |NO        |用于标识生效订单的唯一ID。 <br> 如果未发送则自动生成。
 `workingPrice`             |DECIMAL|YES       |
 `workingQuantity`          |DECIMAL|YES       |
-`workingIcebergQty`        |DECIMAL|NO        |只有当 `workingTimeInForce` 为 `GTC` 时才能使用。
+`workingIcebergQty`        |DECIMAL|NO        |仅当 `workingTimeInForce` 为 `GTC` 或 `workingType` 为 `LIMIT_MAKER` 时，才能使用此功能。
 `workingTimeInForce`       |ENUM   |NO        |支持的数值： [生效时间](./enums_CN.md#timeinforce)
 `workingStrategyId`        |LONG    |NO        |订单策略中用于标识生效订单的 ID。
 `workingStrategyType`      |INT    |NO        |用于标识生效订单策略的任意数值。<br> 小于 `1000000` 的值被保留，无法使用。
@@ -5505,6 +5506,321 @@ NONE
       "count": 65
     }
   ]
+}
+```
+
+**注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 [订单响应中的特定条件时才会出现的字段](#conditional-fields-in-order-responses) 部分。
+
+#### 新订单列表 - OPO（TRADE）
+
+```json
+{
+  "id": "1762941318128",
+  "method": "orderList.place.opo",
+  "params": {
+    "workingPrice": "101496",
+    "workingQuantity": "0.0007",
+    "workingType": "LIMIT",
+    "workingTimeInForce": "GTC",
+    "pendingType": "MARKET",
+    "pendingSide": "SELL",
+    "recvWindow": 5000,
+    "workingSide": "BUY",
+    "symbol": "BTCUSDT",
+    "timestamp": 1762941318129,
+    "apiKey": "aHb4Ur1cK1biW3sgibqUFs39SE58f9d5Xwf4uEW0tFh7ibun5g035QKSktxoOBfE",
+    "signature": "b50ce8977333a78a3bbad21df178d7e104a8c985d19007b55df688cdf868639a"
+  }
+}
+
+```
+
+发送一个 [OPO](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/opo_CN.md) 订单。
+
+* OPO 会向 `EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中添加 2 个订单。
+
+**权重:** 1
+
+**未成交订单数量:** 2
+
+**参数:**
+
+| 名称 | 类型 | 必填 | 描述 |
+| ----- | ----- | ----- | ----- |
+| `symbol` | STRING | YES | 交易对符号 |
+| `listClientOrderId` | STRING | NO | 订单列表中的任意唯一 ID。如果未发送，则自动生成。只有当之前的同一 `listClientOrderId` 的订单列表已成交或完全过期时，才接受新的同一 `listClientOrderId` 的订单列表。`listClientOrderId` 与 `workingClientOrderId` 和 `pendingClientOrderId` 不同。 |
+| `newOrderRespType` | ENUM | NO | JSON 响应格式。支持的数值：[订单返回类型](./enums_CN.md#orderresponsetype) |
+| `selfTradePreventionMode` | ENUM | NO | 允许的值取决于交易对的配置。支持的值见：[STP模式](./enums_CN.md#stpmodes) |
+| `workingType` | ENUM | YES | 支持的数值：`LIMIT`，`LIMIT_MAKER` |
+| `workingSide` | ENUM | YES | 支持的数值：[订单方向](./enums_CN.md#side) |
+| `workingClientOrderId` | STRING | NO | 生效订单中挂单的任意唯一 ID。如果未发送，则自动生成。 |
+| `workingPrice` | DECIMAL | YES | 生效订单价格 |
+| `workingQuantity` | DECIMAL | YES | 设置生效订单的数量 |
+| `workingIcebergQty` | DECIMAL | NO | 仅当 `workingTimeInForce` 为 `GTC` 或 `workingType` 为 `LIMIT_MAKER` 时可用 |
+| `workingTimeInForce` | ENUM | NO | 支持的数值：[生效时间](./enums_CN.md#timeinforce) |
+| `workingStrategyId` | LONG | NO | 用于标识订单策略中生效订单的任意数字值 |
+| `workingStrategyType` | INT | NO | 用于标识生效订单策略的任意数字值。小于 1000000 为保留值，不能使用。 |
+| `workingPegPriceType` | ENUM | NO | 详见 [挂钩订单](#pegged-orders-info) |
+| `workingPegOffsetType` | ENUM | NO |  |
+| `workingPegOffsetValue` | INT | NO |  |
+| `pendingType` | ENUM | YES | 支持的数值：[订单类型](#order-type)。注意，不支持使用 `quoteOrderQty` 的 `MARKET` 订单。 |
+| `pendingSide` | ENUM | YES | 支持的数值：[订单方向](./enums_CN.md#side) |
+| `pendingClientOrderId` | STRING | NO | 待执行订单中挂单的任意唯一 ID。如果未发送，则自动生成。 |
+| `pendingPrice` | DECIMAL | NO | 待执行订单价格 |
+| `pendingStopPrice` | DECIMAL | NO | 待执行订单止损价格 |
+| `pendingTrailingDelta` | DECIMAL | NO | 待执行订单跟踪止损差值 |
+| `pendingIcebergQty` | DECIMAL | NO | 仅当 `pendingTimeInForce` 为 `GTC` 或 `pendingType` 为 `LIMIT_MAKER` 时可用 |
+| `pendingTimeInForce` | ENUM | NO | 支持的数值：[生效时间](./enums_CN.md#timeinforce) |
+| `pendingStrategyId` | LONG | NO | 用于标识订单策略中待执行订单的任意数字值 |
+| `pendingStrategyType` | INT | NO | 用于标识待执行订单策略的任意数字值。小于 1000000 为保留值，不能使用。 |
+| `pendingPegPriceType` | ENUM | NO | 详见 [挂钩订单](#pegged-orders-info) |
+| `pendingPegOffsetType` | ENUM | NO |  |
+| `pendingPegOffsetValue` | INT | NO |  |
+| `recvWindow` | DECIMAL | NO | 该值不能大于 `60000`。支持最多三位小数精度（例如 6000.346），以便指定微秒。 |
+| `timestamp` | LONG | YES | 时间戳 |
+
+**数据来源**：撮合引擎
+
+**响应示例:**
+
+```json
+{
+  "id": "1762941318128",
+  "status": 200,
+  "result": {
+    "orderListId": 2,
+    "contingencyType": "OTO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "OiOgqvRagBefpzdM5gjYX3",
+    "transactionTime": 1762941318142,
+    "symbol": "BTCUSDT",
+    "orders": [
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 2,
+        "clientOrderId": "pUzhKBbc0ZVdMScIRAqitH"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 3,
+        "clientOrderId": "x7ISSjywZxFXOdzwsThNnd"
+      }
+    ],
+    "orderReports": [
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 2,
+        "orderListId": 2,
+        "clientOrderId": "pUzhKBbc0ZVdMScIRAqitH",
+        "transactTime": 1762941318142,
+        "price": "101496.00000000",
+        "origQty": "0.00070000",
+        "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.00000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "BUY",
+        "workingTime": 1762941318142,
+        "selfTradePreventionMode": "NONE"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 3,
+        "orderListId": 2,
+        "clientOrderId": "x7ISSjywZxFXOdzwsThNnd",
+        "transactTime": 1762941318142,
+        "price": "0.00000000",
+        "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.00000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "PENDING_NEW",
+        "timeInForce": "GTC",
+        "type": "MARKET",
+        "side": "SELL",
+        "workingTime": -1,
+        "selfTradePreventionMode": "NONE"
+      }
+    ]
+  }
+}
+```
+
+**注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 [订单响应中的特定条件时才会出现的字段](#conditional-fields-in-order-responses) 部分。
+
+#### 新订单列表 - OPOCO（TRADE）
+
+```json
+{
+  "id": "1763000139090",
+  "method": "orderList.place.opoco",
+  "params": {
+    "workingPrice": "102496",
+    "workingQuantity": "0.0017",
+    "workingType": "LIMIT",
+    "workingTimeInForce": "GTC",
+    "pendingAboveType": "LIMIT_MAKER",
+    "pendingAbovePrice": "104261",
+    "pendingBelowStopPrice": "10100",
+    "pendingBelowPrice": "101613",
+    "pendingBelowType": "STOP_LOSS_LIMIT",
+    "pendingBelowTimeInForce": "IOC",
+    "pendingSide": "SELL",
+    "recvWindow": 5000,
+    "workingSide": "BUY",
+    "symbol": "BTCUSDT",
+    "timestamp": 1763000139091,
+    "apiKey": "2wiKgTLyllTCu0QWXaEtKWX9tUQ5iQMiDQqTQPdUe2bZ1IVT9aXoS6o19wkYIKl2",
+    "signature": "adfa185c50f793392a54ad5a6e2c39fd34ef6d35944adf2ddd6f30e1866e58d3"
+  }
+}
+```
+
+发送一个 [OPOCO](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/opo_CN.md) 订单。
+
+**权重**: 1
+
+**未成交订单数量:** 3
+
+**参数:**
+
+| 名称 | 类型 | 必填 | 描述 |
+| ----- | ----- | ----- | ----- |
+| `symbol` | STRING | YES | 交易对符号 |
+| `listClientOrderId` | STRING | NO | 订单列表中的任意唯一 ID。如果未发送，则自动生成。只有当之前的同一 `listClientOrderId` 的订单列表已成交或完全过期时，才接受新的同一 `listClientOrderId` 的订单列表。`listClientOrderId` 与 `workingClientOrderId`、`pendingAboveClientOrderId` 和 `pendingBelowClientOrderId` 不同。 |
+| `newOrderRespType` | ENUM | NO | JSON 响应格式。支持的数值：[订单返回类型](./enums_CN.md#orderresponsetype) |
+| `selfTradePreventionMode` | ENUM | NO | 允许的值取决于交易对的配置。支持的数值：[STP模式](./enums_CN.md#stpmodes) |
+| `workingType` | ENUM | YES | 支持的值：`LIMIT`，`LIMIT_MAKER` |
+| `workingSide` | ENUM | YES | 支持的值见：[订单方向](./enums_CN.md#side) |
+| `workingClientOrderId` | STRING | NO | 生效订单中挂单的任意唯一 ID。如果未发送，则自动生成。 |
+| `workingPrice` | DECIMAL | YES | 生效订单价格 |
+| `workingQuantity` | DECIMAL | YES | 生效订单数量 |
+| `workingIcebergQty` | DECIMAL | NO | 仅当 `workingTimeInForce` 为 `GTC` 或 `workingType` 为 `LIMIT_MAKER` 时可用 |
+| `workingTimeInForce` | ENUM | NO | 支持的数值：[生效时间](./enums_CN.md#timeinforce) |
+| `workingStrategyId` | LONG | NO | 用于标识订单策略中生效订单的任意数字值 |
+| `workingStrategyType` | INT | NO | 用于标识生效订单策略的任意数字值。小于 1000000 为保留值，不能使用。 |
+| `workingPegPriceType` | ENUM | NO | 详见 [挂钩订单](#pegged-orders-info) |
+| `workingPegOffsetType` | ENUM | NO |  |
+| `workingPegOffsetValue` | INT | NO |  |
+| `pendingSide` | ENUM | YES | 支持的值见：[订单方向](./enums_CN.md#side) |
+| `pendingAboveType` | ENUM | YES | 支持的值：`STOP_LOSS_LIMIT`，`STOP_LOSS`，`LIMIT_MAKER`，`TAKE_PROFIT`，`TAKE_PROFIT_LIMIT` |
+| `pendingAboveClientOrderId` | STRING | NO | 待执行上方订单中开放订单的任意唯一 ID。如果未发送，则自动生成。 |
+| `pendingAbovePrice` | DECIMAL | NO | 当 `pendingAboveType` 为 `STOP_LOSS_LIMIT`、`LIMIT_MAKER` 或 `TAKE_PROFIT_LIMIT` 时，可用于指定限价。 |
+| `pendingAboveStopPrice` | DECIMAL | NO | 当 `pendingAboveType` 为 `STOP_LOSS`、`STOP_LOSS_LIMIT`、`TAKE_PROFIT`、`TAKE_PROFIT_LIMIT` 时可用。 |
+| `pendingAboveTrailingDelta` | DECIMAL | NO | 详见 [追踪止盈止损订单常见问题](../faqs/trailing-stop-faq_CN.md) |
+| `pendingAboveIcebergQty` | DECIMAL | NO | 仅当 `pendingAboveTimeInForce` 为 `GTC` 或 `pendingAboveType` 为 `LIMIT_MAKER` 时可用。 |
+| `pendingAboveTimeInForce` | ENUM | NO |  |
+| `pendingAboveStrategyId` | LONG | NO | 用于标识订单策略中待执行上方订单的任意数值。 |
+| `pendingAboveStrategyType` | INT | NO | 用于标识待执行上方订单策略的任意数字值。小于 1000000 的值为保留，不能使用。 |
+| `pendingAbovePegPriceType` | ENUM | NO | 详见 [挂钩订单](#pegged-orders-info) |
+| `pendingAbovePegOffsetType` | ENUM | NO |  |
+| `pendingAbovePegOffsetValue` | INT | NO |  |
+| `pendingBelowType` | ENUM | NO | 支持的值：`STOP_LOSS`，`STOP_LOSS_LIMIT`，`TAKE_PROFIT`，`TAKE_PROFIT_LIMIT` |
+| `pendingBelowClientOrderId` | STRING | NO | 待执行下方订单中开放订单的任意唯一 ID。如果未发送，则自动生成。 |
+| `pendingBelowPrice` | DECIMAL | NO | 当 `pendingBelowType` 为 `STOP_LOSS_LIMIT` 或 `TAKE_PROFIT_LIMIT` 时，可用于指定限价。 |
+| `pendingBelowStopPrice` | DECIMAL | NO | 当 `pendingBelowType` 为 `STOP_LOSS`、`STOP_LOSS_LIMIT`、`TAKE_PROFIT` 或 `TAKE_PROFIT_LIMIT` 时可用。`pendingBelowStopPrice`、`pendingBelowTrailingDelta` 或两者之一必须被指定。 |
+| `pendingBelowTrailingDelta` | DECIMAL | NO |  |
+| `pendingBelowIcebergQty` | DECIMAL | NO | 仅当 `pendingBelowTimeInForce` 为 `GTC` 或 `pendingBelowType` 为 `LIMIT_MAKER` 时可用。 |
+| `pendingBelowTimeInForce` | ENUM | NO | 支持的值见：[生效时间](./enums_CN.md#timeinforce) |
+| `pendingBelowStrategyId` | LONG | NO | 用于标识订单策略中待执行下方订单的任意数值。 |
+| `pendingBelowStrategyType` | INT | NO | 用于标识待执行下方订单策略的任意数值。小于 1000000 为保留值，不能使用。 |
+| `pendingBelowPegPriceType` | ENUM | NO | 详见 [挂钩订单](#pegged-orders-info) |
+| `pendingBelowPegOffsetType` | ENUM | NO |  |
+| `pendingBelowPegOffsetValue` | INT | NO |  |
+| `recvWindow` | DECIMAL | NO | 该值不能大于 `60000`。支持最多三位小数精度（例如 6000.346），以便指定微秒。 |
+| `timestamp` | LONG | YES | 时间戳 |
+
+**数据来源**：撮合引擎
+
+**响应示例:**
+
+```json
+{
+  "id": "1763000139090",
+  "status": 200,
+  "result": {
+    "orderListId": 1,
+    "contingencyType": "OTO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "TVbG6ymkYMXTj7tczbOsBf",
+    "transactionTime": 1763000139104,
+    "symbol": "BTCUSDT",
+    "orders": [
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 6,
+        "clientOrderId": "3czuJSeyjPwV9Xo28j1Dv3"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 7,
+        "clientOrderId": "kyIKnMLKQclE5FmyYgaMSo"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 8,
+        "clientOrderId": "i76cGJWN9J1FpADS56TtQZ"
+      }
+    ],
+    "orderReports": [
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 6,
+        "orderListId": 1,
+        "clientOrderId": "3czuJSeyjPwV9Xo28j1Dv3",
+        "transactTime": 1763000139104,
+        "price": "102496.00000000",
+        "origQty": "0.00170000",
+        "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.00000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "BUY",
+        "workingTime": 1763000139104,
+        "selfTradePreventionMode": "NONE"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 7,
+        "orderListId": 1,
+        "clientOrderId": "kyIKnMLKQclE5FmyYgaMSo",
+        "transactTime": 1763000139104,
+        "price": "101613.00000000",
+        "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.00000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "PENDING_NEW",
+        "timeInForce": "IOC",
+        "type": "STOP_LOSS_LIMIT",
+        "side": "SELL",
+        "stopPrice": "10100.00000000",
+        "workingTime": -1,
+        "selfTradePreventionMode": "NONE"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 8,
+        "orderListId": 1,
+        "clientOrderId": "i76cGJWN9J1FpADS56TtQZ",
+        "transactTime": 1763000139104,
+        "price": "104261.00000000",
+        "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.00000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "PENDING_NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT_MAKER",
+        "side": "SELL",
+        "workingTime": -1,
+        "selfTradePreventionMode": "NONE"
+      }
+    ]
+  }
 }
 ```
 

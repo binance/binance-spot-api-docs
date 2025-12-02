@@ -400,22 +400,6 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 }
 ```
 
-<a id="all-markets-ticker"></a>
-## 全市场所有交易对的完整Ticker (已弃用)
-同上，只是推送所有交易对
-
-**Stream 名称:** !ticker@arr
-
-**更新速度:** 1000ms
-
-**Payload:**
-```javascript
-[
-  {
-    // 对应每一个交易对的 <symbol>@ticker 内容
-  }
-]
-```
 <a id="bookticker"></a>
 ## 按Symbol的最优挂单信息
 

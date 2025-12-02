@@ -1,6 +1,66 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-11-14**
+**Last Updated: 2025-12-02**
+
+### 2025-12-02
+
+**Notice:** The changes in this section will be gradually rolled out, and will take approximately up to two weeks to complete.
+
+#### General Changes
+
+* Parameter `symbol` and `symbols` can now support Unicode values encoded in UTF-8.
+* Following the announcement from [2025-11-14](#2025-11-14), all documentation related to `!ticker@arr` has been removed.
+  * The feature will remain available until a future retirement announcement is made.
+  * Please use `<symbol>@ticker` or `!miniTicker@arr` instead.
+
+#### FIX API
+
+* Unicode values encoded in UTF-8 can now be accepted in FIX messages. This is allowed for the following tags only:
+  * `Currency (15)`
+  * `MiscFeeCurr (138)`
+  * `Symbol (55)`
+  * `SecondarySymbol (25019)`
+  * `CounterSymbol (25028)`
+  * `SecurityDesc (107)`
+* When Unicode is put in a tag value that is not one of the tags above, FIX API will now send back a `RefTagID (371)` tag in the Reject `<3>`, pointing to exactly which tag is not allowed to contain Unicode.
+* NewOrderList `<E>` accepts `TriggerPriceDirection (1109)` without `TriggerPrice (1102)`.
+
+#### WebSocket Streams
+
+* WebSocket Market Streams supports URL-encoded urls.
+<br>
+<br>
+
+**Notice: The following changes will occur at approximately 2025-12-18 7:00 UTC**:
+* [ICEBERG_PARTS](https://developers.binance.com/docs/binance-spot-api-docs/filters#iceberg_parts) will be increased to 25 for all symbols.
+* [FIX SBE support](fix-api.md) becomes available.
+* [One Pays the Other (OPO)](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/opo.md) becomes available on all symbols.
+  * `opoAllowed` begins to appear in Exchange Information requests, indicating if One-Pays-the-Other (OPO) orders are supported on each symbol.
+    * REST API: `GET /api/v3/exchangeInfo`
+    * WebSocket API: `exchangeInfo`
+  * New requests for OPO:
+    * REST API:
+      * `POST /api/v3/orderList/opo`
+      * `POST /api/v3/orderList/opoco`
+    * WebSocket API
+      * `orderList.place.opo`
+      * `orderList.place.opoco`
+    * FIX API
+      * NewOrderList `<E>` has field `OPO (25046)`. Please update to the latest QuickFIX Schema for OPO support.
+* STP mode [`TRANSFER`](./faqs/stp_faq.md) has been added. The exact date that STP `TRANSFER` will be enabled has not yet been determined.
+* **SBE: A new schema 3:2 ([spot_3_2.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_2.xml)) is available.**
+  * The current schema 3:1 ([spot_3_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml)) is deprecated and will be retired in 6 months as per our schema deprecation policy.
+  * Changes in 3:2:
+    * New enum variant `TRANSFER` for `selfTradePreventionMode` and `allowedSelfTradePreventionModes`.
+    * All schemas below 3:1 are unable to represent any response that could contain the STP mode `TRANSFER` (e.g. Exchange Information, order placement, order cancellation, or querying the status of an order). <br> When a response cannot be represented in the requested schema, an error is returned.
+* FIX API changes:
+    * `LastFragment (893)` becomes deprecated.
+      * This means that the MarketIncrementalRefresh `<X>` messages will no longer be fragmented and may contain more than 10,000 entries.
+      * The documentation has been updated to reflect this change.
+    * ListStatus `<N>` will no longer emit the optional `symbol` field.
+      * This applies to FIX Order Entry and FIX Drop Copy.
+      * The documentation has been updated to reflect this change.
+---
 
 ### 2025-11-14
 
@@ -29,7 +89,7 @@
 
 ### 2025-11-10
 
-* "Last Updated" dates will be removed from all documents except for CHANGELOG. 
+* "Last Updated" dates will be removed from all documents except for CHANGELOG.
 * Moving forward, CHANGELOG will be the source of reference for when changes were made to any document.
 
 ---

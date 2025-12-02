@@ -151,6 +151,7 @@
  * Combination of optional fields invalid. Recommendation: '%s' and '%s' must both be sent.
  * Fields [%s] must be sent together or omitted entirely.
  * Invalid 'MDEntryType (269)' combination. BID and OFFER must be requested together.
+ * Conflicting fields: ['%s'...]
 
 ### -1130 无效参数(值)
  * Invalid data sent for a parameter.
@@ -175,9 +176,11 @@
 
  ### -1152 无效的SBE报文头部
 * Invalid `X-MBX-SBE` header; expected `<SCHEMA_ID>:<VERSION>`.
+* Invalid SBE message header.
 
 ### -1153 不支持的SCHEMA_ID
 * Unsupported SBE schema ID or version specified in the `X-MBX-SBE` header.
+* Invalid SBE schema ID or version specified.
 
 ### -1155 SBE 没有开启
 * SBE is not enabled.
@@ -234,6 +237,7 @@
  * `BodyLength (9)` does not contain the correct byte count.
  * Only printable ASCII characters and SOH (Start of Header) are allowed.
  * Tag specified without a value.
+ * Invalid encodingType.
 
 ### -1178 Compid错误
  * `SenderCompId(49)` contains an incorrect value. The SenderCompID value should not change throughout the lifetime of a session.
@@ -303,6 +307,21 @@
 <a id="-1220-symbol_does_not_match_status"></a>
 ### -1220 交易对与状态不匹配
 * The symbol's status does not match the requested symbolStatus.
+
+### -1221 SBE 消息中包含错误的字段
+* Invalid/missing field(s) in SBE message.
+
+### -1222 OPO 的生效订单必须是买单
+* Working order in an OPO list must be a bid.
+
+### -1223 OPO 的待执行订单必须是卖单
+* Pending orders in an OPO list must be asks.
+
+### -1224 生效订单缺少必须的 Tag
+* Working order must include the '{param}' tag.
+
+### -1225 待执行订单包含不需要的 Tag
+* Pending orders should not include the '%s' tag.
 
 ### -2010 新订单被拒绝
  * NEW_ORDER_REJECTED
@@ -383,6 +402,8 @@
 "This order type may not use pegged price." | 在不被支持的订单类型上使用 `pegPriceType` 参数 (例如， `MARKET`)。 |
 "This price peg cannot be used with this order type." | 在 `LIMIT_MAKER` 订单上使用 `pegPriceType`=`MARKET_PEG`。|
 "Order book liquidity is too low for this pegged order." | 订单簿中没有最佳价格水平可用以固定价格。 |
+| OPO orders are not supported for this symbol. |  该交易对不支持 OPO 订单|
+| Order amend (pending OPO order) is not supported. | OPO 订单中的待执行订单无法修改数量 |
 
 ## 有关使用 cancelReplace 下订单的错误
 

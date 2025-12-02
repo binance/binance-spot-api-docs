@@ -19,7 +19,6 @@
   - [Individual Symbol Mini Ticker Stream](#individual-symbol-mini-ticker-stream)
   - [All Market Mini Tickers Stream](#all-market-mini-tickers-stream)
   - [Individual Symbol Ticker Streams](#individual-symbol-ticker-streams)
-  - [All Market Tickers Stream (DEPRECATED)](#all-market-tickers-stream-deprecated)
   - [Individual Symbol Rolling Window Statistics Streams](#individual-symbol-rolling-window-statistics-streams)
   - [All Market Rolling Window Statistics Streams](#all-market-rolling-window-statistics-streams)
   - [Individual Symbol Book Ticker Streams](#individual-symbol-book-ticker-streams)
@@ -408,22 +407,6 @@ Supported intervals: See [`Kline/Candlestick chart intervals`](#kline-intervals)
   "L": 18150,         // Last trade Id
   "n": 18151          // Total number of trades
 }
-```
-
-## All Market Tickers Stream (DEPRECATED)
-24hr rolling window ticker statistics for all symbols that changed in an array. These are NOT the statistics of the UTC day, but a 24hr rolling window for the previous 24hrs. Note that only tickers that have changed will be present in the array.
-
-**Stream Name:** !ticker@arr
-
-**Update Speed:** 1000ms
-
-**Payload:**
-```javascript
-[
-  {
-    // Same as <symbol>@ticker payload
-  }
-]
 ```
 
 ## Individual Symbol Rolling Window Statistics Streams
