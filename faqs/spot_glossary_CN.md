@@ -229,6 +229,14 @@ Notional value
 
 * 二选一订单（`One-Cancels-the-Other`）；订单支持用户同时提交一系列订单，比如现价单（`LIMIT_MAKER`）和止盈止损订单（`STOP_LOSS` or `STOP_LOSS_LIMIT`）。 当执行其中一个订单时，另一个订单将自动取消。
 
+`OPO`
+* [一个订单支付另一个订单（One-Pays-The-Other）](opo_CN.md)，OTO 的一个特殊子集。
+* 当生效订单完全成交时，累计接收的数量将作为待执行订单的数量。
+
+`OPOCO`
+* [一个订单支付另一个订单（One-Pays-The-Other）](opo_CN.md)，OTOCO 的一个特殊子集。
+* 当生效订单完全成交时，累计接收的数量将作为待执行 OCO 组合订单的数量。
+
 Order Amend Keep Priority
 * 参考 [保留优先级的修改订单请求 (Order Amend Keep Priority)](order_amend_keep_priority_CN.md)
 

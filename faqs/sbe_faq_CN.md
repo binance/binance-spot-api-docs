@@ -68,10 +68,14 @@ response=$(echo $request | websocat -n1 'wss://ws-api.binance.com:443/ws-api/v3?
     * 这意味着，如果在您的WebSocket连接处于活动状态时禁用了SBE，那么在对您的后续请求做出响应时，您将会收到一个被SBE编码了的“SBE未启用”错误。
 * 就目前而言，我们不建议使用`websocat`发送任何请求，因为我们观察到了它解码二进制帧的问题。上面的样本仅用作参考，显示获取SBE响应的URL。
 
+#### FIX API
+
+详情请参见 FIX API 的 [SBE 部分](../fix-api_CN.md#fix-sbe)
+
 
 ### 支持的 APIs
 
-目前现货交易的 REST API 和 WebSocket API 支持 `SBE`。
+REST API、WebSocket API 和 FIX API 对现货（SPOT）支持 `SBE`。
 
 <a id="sbe-schema"></a>
 ### SBE 模式
@@ -107,7 +111,10 @@ response=$(echo $request | websocat -n1 'wss://ws-api.binance.com:443/ws-api/v3?
     * 所有 `WebSocketResponse` SBE 消息中的字段 `sbeSchemaIdVersionDeprecated` 将被设置为 `true`
     * 所有 SBE 响应将使用可兼容的最高版本模式进行编码
         * 例如，从2025-08-27 开始，针对 `sbeSchemaId=3&sbeSchemaVersion=0` 的请求将收到以模式 `3:1` 进行编码的响应。根据 [FIX SBE 规范](https://www.fixtrading.org/standards/sbe-online/#schema-extension-mechanism)，模式 `3:0` 的 SBE 解码器应该能够顺利地对模式 `3:1` 进行解码。
-* 指定已被停用的 `<ID>:<VERSION>`（REST API）或 `sbeSchemaId` 和 `sbeSchemaVersion`（WebSocket API）的请求将返回 HTTP 400 错误。
+* 对于 FIX API，当 SBE 请求消息头指定了已弃用的 `schemaId` 和 `version` 时：
+    * 在 `LogonAck` 消息中，字段 `sbeSchemaIdVersionDeprecated` 将被设置为 `true`
+    * 所有 SBE 响应消息将使用所提供 `schemaId` 的最高模式版本进行编码
+* 指定已废弃的 schemaId/version 的请求将失败，返回 HTTP 400（REST 和 WebSocket）或拒绝消息（FIX API）。
 * 在 SBE 模式 [3:0](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_0.xml) 中，为每个 `enum` 添加了名为 `NonRepresentable` 的 `validValue`。接收到该值表示使用最新模式时有额外数据可用。
 * 在 SBE 模式 [3:1](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml) 中，添加了名为 `NonRepresentableMessage` 的消息。接收到该消息表示使用最新模式时有额外数据可用。该消息可能作为顶层消息接收，或当 `data` 字段的 `type` 为 `messageData`、`messageData8`、`messageData16`、`optionalMessageData` 或 `optionalMessageData16` 时嵌入在 `data` 字段中。
 * 关于模式生命周期的 `JSON` 文件将被保存在此仓库中，[请看这里](https://github.com/binance/binance-spot-api-docs/tree/master/sbe/schemas)。这个文件包含了关于实时交易所和现货测试网的最新、被废止和被停用模式的具体发生日期。<br> 以下是一个基于上述假设时间线的 `JSON` 示例：
@@ -151,8 +158,12 @@ response=$(echo $request | websocat -n1 'wss://ws-api.binance.com:443/ws-api/v3?
 ### 生成解码器：
 
 1. 下载模式：
-    * [`spot_prod_latest.xml`](../sbe/schemas/spot_prod_latest.xml) 适用于实时交易所。
-    * [`spot_testnet_latest.xml`](../sbe/schemas/spot_testnet_latest.xml) 适用于 [现货测试网](https://testnet.binance.vision)。
+* REST/WebSocket API：
+    * [`spot_prod_latest.xml`](../sbe/schemas/spot_prod_latest.xml) 用于实时交易所。
+    * [`spot_testnet_latest.xml`](../sbe/schemas/spot_testnet_latest.xml) 用于[现货测试网](https://testnet.binance.vision)。
+* FIX API：
+    * [`spot_fix_prod_latest.xml`](../sbe/schemas/spot_fix_prod_latest.xml) 用于实时交易所。
+    * [`spot_fix_testnet_latest.xml`](../sbe/schemas/spot_fix_testnet_latest.xml) 用于[现货测试网](https://testnet.binance.vision)。
 2. 克隆并构建 [`simple-binary-encoding`](https://github.com/real-logic/simple-binary-encoding)：
 ```shell
  $ git clone https://github.com/real-logic/simple-binary-encoding.git
