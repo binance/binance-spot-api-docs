@@ -1,13 +1,17 @@
 {
   "environment": "PROD",
-  "latestSchema":
-  {
+  "latestSchema": {
     "id": 3,
-    "version": 1,
-    "releaseDate": "2025-08-19"
+    "version": 2,
+    "releaseDate": "2025-12-18"
   },
-  "deprecatedSchemas":
-  [
+  "deprecatedSchemas": [
+    {
+      "id": 3,
+      "version": 1,
+      "releaseDate": "2025-08-19",
+      "deprecatedDate": "2025-12-18"
+    },
     {
       "id": 3,
       "version": 0,
@@ -15,8 +19,7 @@
       "deprecatedDate": "2025-08-19"
     }
   ],
-  "retiredSchemas":
-  [
+  "retiredSchemas": [
     {
       "id": 2,
       "version": 1,
