@@ -530,7 +530,7 @@ Your connection is about to be closed. Please reconnect.
 | 152   | CashOrderQty             | QTY     | N        | 以报价资产单位指定的订单数量，用于反向市场订单。                                                                                                                                                                                                                                         |
 | 847   | TargetStrategy           | INT     | N        | 该值不能小于 `1000000`。                                                                                                                                                                                                                                                                                                                             |
 | 7940  | StrategyID               | INT     | N        |                                                                                                                                                                                                                                                                                      |
-| 25001 | SelfTradePreventionMode  | CHAR    | N        | 可能的值: <br></br> `1` - NONE <br></br> `2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br> `4` - EXPIRE_BOTH <br></br> `5` - DECREMENT                                                                                                                                                                                                                     |
+| 25001 | SelfTradePreventionMode  | CHAR    | N        | 可能的值: <br></br> `1` - NONE <br></br> `2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br> `4` - EXPIRE_BOTH <br></br> `5` - DECREMENT  <br> `6` - TRANSFER                                                                                                                                                                                                                      |
 | 211   | PegOffsetValue           | FLOAT   | N        | 使用了 `PegOffsetType` 后，添加到挂钩的偏移值 |
 | 1094  | PegPriceType             | CHAR    | N        | 定义了挂钩价格的类型 <br> 可能的值: <br> `4` - MARKET_PEG <br> `5` - PRIMARY_PEG|
 | 835   | PegMoveType              | CHAR    | N        | 描述挂钩是固定的还是浮动的。挂钩订单必用且必须为 `1` (FIXED) |
@@ -630,7 +630,7 @@ Your connection is about to be closed. Please reconnect.
 | 152   | CashOrderQty             | QTY          | N        | 以 quote asset 单位指定的订单数量。                                                                                                                                                                                                                                                                                 |
 | 847   | TargetStrategy           | INT          | N        | 订单提交请求中的 `TargetStrategy (847)`。                                                                                                                                                                                                                                                                     |
 | 7940  | StrategyID               | INT          | N        | 订单提交请求中的 `StrategyID (7940)`。                                                                                                                                                                                                                                                                        |
-| 25001 | SelfTradePreventionMode  | CHAR         | N        | 可能的值: <br></br> `1` - NONE <br></br> `2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br>`4` - EXPIRE_BOTH <br></br> `5` - DECREMENT                                                                                                                                                                                                                       |
+| 25001 | SelfTradePreventionMode  | CHAR         | N        | 可能的值: <br></br> `1` - NONE <br></br> `2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br>`4` - EXPIRE_BOTH <br></br> `5` - DECREMENT  <br> `6` - TRANSFER                                                                                                                                                                                                                        |
 | 150   | ExecType                 | CHAR         | Y        | **注意:** 如果订单因 `SelfTradePreventionMode(25013)` 过期，字段 `PreventedMatchID(25024)` 会被显示。 <br></br> 可能的值: <br></br> `0` - NEW <br></br> `4` - CANCELED <br></br> `5` - REPLACED <br></br> `8` - REJECTED <br></br> `F` - TRADE <br></br>`C` - EXPIRED                                                                   |
 | 14    | CumQty                   | QTY          | Y        | 在此订单上交易的 base asset 总数。                                                                                                                                                                                                                                                                            |
 | 151   | LeavesQty                | QTY          | N        | 剩余的可执行数量。                                                                                                                                                                                                                                                                                    |
@@ -781,7 +781,7 @@ Your connection is about to be closed. Please reconnect.
 | 152   | CashOrderQty                            | QTY    | N        | 用于反向市价单，用于定义 quote asset 单位中的订单数量。        |
 | 847   | TargetStrategy                          | INT    | N        | 该值不能小于 `1000000`。                                                |
 | 7940  | StrategyID                              | INT    | N        |  |
-| 25001 | SelfTradePreventionMode                 | CHAR   | N        | 可能的值: <br></br> `1` - NONE <br></br> `2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br> `4` - EXPIRE_BOTH <br></br> `5` - DECREMENT        |
+| 25001 | SelfTradePreventionMode                 | CHAR   | N        | 可能的值: <br></br> `1` - NONE <br></br> `2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br> `4` - EXPIRE_BOTH <br></br> `5` - DECREMENT   <br> `6` - TRANSFER        |
 | 211   | PegOffsetValue                          | FLOAT   | N       | 使用了 `PegOffsetType` 后，添加到挂钩的偏移值 |
 | 1094  | PegPriceType                            | CHAR    | N       | 定义了挂钩价格的类型 <br> 可能的值: <br> `4` - MARKET_PEG <br> `5` - PRIMARY_PEG|
 | 835   | PegMoveType                             | CHAR    | N       | 描述挂钩是固定的还是浮动的。挂钩订单必用且必须为 `1` (FIXED) |
@@ -875,6 +875,7 @@ Your connection is about to be closed. Please reconnect.
 | --- |--- | ---| --- |---|
 | 25014    | ClListID                     | STRING     | Y        | `ClListID`，用于分配给订单列表。              |
 | 1385     | ContingencyType              | INT        | N        | 可能的值 ： <br></br> `1` -ONE_CANCELS_THE_OTHER <br></br> `2` - ONE_TRIGGERS_THE_OTHER |
+| 25046    | OPO                          | BOOLEAN    | N        | 设置为 `true` 时，将此订单列表设为 [OPO](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/opo_CN.md)。|
 | 73       | NoOrders                     | NUMINGROUP | N        | `Orders` 数组中的元素个数。只允许输入2或者3。 |
 | =>11     | ClOrdID                      | STRING     | Y        | 用于分配给订单的`ClOrdID`     |
 | =>38     | OrderQty                     | QTY        | N        | 订单数量                                                          |
@@ -888,7 +889,7 @@ Your connection is about to be closed. Please reconnect.
 | =>152    | CashOrderQty                 | QTY        | N        | 对于反向市场订单，在报价资产单位中指定的订单数量。|
 | =>847    | TargetStrategy               | INT        | N        | 该值不能小于 `1000000`。    |
 | =>7940   | StrategyID                   | INT        | N        | |
-| =>25001  | SelfTradePreventionMode      | CHAR       | N        | 可能的值：<br></br> `1` - NONE <br></br>`2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br> `4` - EXPIRE_BOTH <br></br> `5` - DECREMENT                                                                                                                                                                                                                       |
+| =>25001  | SelfTradePreventionMode      | CHAR       | N        | 可能的值：<br></br> `1` - NONE <br></br>`2` - EXPIRE_TAKER <br></br> `3` - EXPIRE_MAKER <br></br> `4` - EXPIRE_BOTH <br></br> `5` - DECREMENT   <br> `6` - TRANSFER                                                                                                                                                                                                                       |
 | =>211    | PegOffsetValue               | FLOAT      | N        | 使用了 `PegOffsetType` 后，添加到挂钩的偏移值 |
 | =>1094   | PegPriceType                 | CHAR       | N        | 定义了挂钩价格的类型 <br> 可能的值: <br> `4` - MARKET_PEG <br> `5` - PRIMARY_PEG|
 | =>835    | PegMoveType                  | CHAR       | N        | 描述挂钩是固定的还是浮动的。挂钩订单必用且必须为 `1` (FIXED) |
@@ -928,6 +929,9 @@ Your connection is about to be closed. Please reconnect.
 | OTOCO           | `2`                     | 1. working order<br></br><br></br> 2. pending below order<br></br><br></br> 3. pending above order | 1. working order=`SELL` 或 `BUY`<br></br><br></br> 2. pending below order=`BUY`<br></br><br></br>  3. pending above order=`BUY`  | 1. working order=`LIMIT` 或 `LIMIT_MAKER`      <br></br><br></br> 2. pending below order=`LIMIT_MAKER`                   <br></br><br></br> 3. pending above order=`STOP_LOSS` 或 `STOP_LOSS_LIMIT` | 1. working order:<br></br>NONE<br></br><br></br>                                                             2. pending below order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=2&#124;25013=2&#124;</code><br></br><br></br>3. pending above order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=2&#124;25012=1&#124;25013=2&#124;</code> |
 | OTOCO           | `2`                     | 1. working order<br></br><br></br> 2. pending below order<br></br><br></br> 3. pending above order | 1. working order=`SELL` 或 `BUY`<br></br><br></br> 2. pending below order=`SELL`<br></br><br></br> 3. pending above order=`SELL` | 1. working order=`LIMIT` 或 `LIMIT_MAKER`      <br></br><br></br> 2. pending below order=`STOP_LOSS` 或 `STOP_LOSS_LIMIT`<br></br><br></br> 3. pending above order=`TAKE_PROFIT`                    | 1. working order:<br></br>NONE<br></br><br></br>                                                             2. pending below order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=2&#124;25013=2&#124;</code><br></br><br></br>3. pending above order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=1&#124;25013=2&#124;</code> |
 | OTOCO           | `2`                     | 1. working order<br></br><br></br> 2. pending below order<br></br><br></br> 3. pending above order | 1. working order=`SELL` 或 `BUY`<br></br><br></br> 2. pending below order=`BUY`<br></br><br></br>  3. pending above order=`BUY`  | 1. working order=`LIMIT` 或 `LIMIT_MAKER`      <br></br><br></br> 2. pending below order=`TAKE_PROFIT`                   <br></br><br></br> 3. pending above order=`STOP_LOSS` 或 `STOP_LOSS_LIMIT` | 1. working order:<br></br>NONE<br></br><br></br>                                                             2. pending below order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=2&#124;25013=2&#124;</code><br></br><br></br>3. pending above order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=1&#124;25013=2&#124;</code> |
+| OPO             | `2`                     | 1. working order<br></br><br></br> 2. pending order                                                | 1. working order=`BUY`<br></br><br></br> 2. pending order=`SELL`                                            | 1. working order=`LIMIT` or `LIMIT_MAKER`      <br></br><br></br> 2. pending order=ANY                                                                                                              | 1. working order:<br></br>NONE<br></br><br></br>                                                             2. pending order:      <br></br><code>25010=1&#124;25011=3&#124;25012=0&#124;25013=1&#124;</code>
+| OPOCO           | `2`                     | 1. working order<br></br><br></br> 2. pending below order<br></br><br></br> 3. pending above order | 1. working order=`BUY`<br></br><br></br> 2. pending below order=`SELL`<br></br><br></br> 3. pending above order=`SELL` | 1. working order=`LIMIT` or `LIMIT_MAKER`      <br></br><br></br> 2. pending below order=`STOP_LOSS` or `STOP_LOSS_LIMIT`<br></br><br></br> 3. pending above order=`LIMIT_MAKER`                    | 1. working order:<br></br>NONE<br></br><br></br>                                                             2. pending below order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=2&#124;25012=2&#124;25013=2&#124;</code><br></br><br></br>3. pending above order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=1&#124;25013=2&#124;</code> |
+| OPOCO           | `2`                     | 1. working order<br></br><br></br> 2. pending below order<br></br><br></br> 3. pending above order | 1. working order=`BUY`<br><br> 2. pending below order=`SELL`<br></br><br></br> 3. pending above order=`SELL` | 1. working order=`LIMIT` or `LIMIT_MAKER`      <br></br><br></br> 2. pending below order=`STOP_LOSS` or `STOP_LOSS_LIMIT`<br></br><br></br> 3. pending above order=`TAKE_PROFIT` or `TAKE_PROFIT_LIMIT`  | 1. working order:<br></br>NONE<br></br><br></br>                                                             2. pending below order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=2&#124;25013=2&#124;</code><br></br><br></br>3. pending above order:<br></br><code>25010=2&#124;25011=3&#124;25012=0&#124;25013=2&#124;25011=1&#124;25012=1&#124;25013=2&#124;</code> |
 
 <a id="liststatus"></a>
 
@@ -941,7 +945,7 @@ Your connection is about to be closed. Please reconnect.
 
 | Tag | 名称     | 类型   | 是否必须 | 描述|
 | --- |--- | --- | --- | ---|
-| 55       | Symbol                       | STRING       | Y        | 订单列表的交易对。  |
+| 55       | Symbol                       | STRING       | N        | 订单列表的交易对。  |
 | 66       | ListID                       | STRING       | N        | 由交易所分配的订单列表 `ListID`。  |
 | 25014    | ClListID                     | STRING       | N        | 分配给请求的订单列表 `ClListID` 。 |
 | 25015    | OrigClListID                 | STRING       | N        | |
@@ -1270,7 +1274,7 @@ Your connection is about to be closed. Please reconnect.
 | Tag     | Name              | Type         | Required | Description                                                                                                                                      |
 |---------|-------------------|--------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------|
 | 262     | MDReqID           | STRING       | Y        | 激活此订阅的 [MarketDataRequest `<V>`](#marketdatarequest) 的 ID                                                          |
-| 893     | LastFragment      | BOOLEAN      | N        | 如果存在，则表示消息已分片。当单个 [MarketDataIncrementalRefresh `<X>`](#marketdataincrementalrefresh) 中的 `NoMDEntry` 超过 10000 时，会发生分片以便将其限制在10000。数据流中分片消息保证是连续的。分片消息只会出现在 [Trade Stream](#tradestream) 和 [Diff. Depth Stream](#diffdepthstream) 中。                 |
+| 893     | LastFragment      | BOOLEAN      | N        | 当该字段出现时，表示消息被分片。分片将会发生在单个 [MarketDataIncrementalRefresh`<X>`](#marketdataincrementalrefresh) 中 `NoMDEntry` 超过 10000 时，为了将其限制在 10000 以内。分片消息的各个片段在数据流中保证是连续的。该字段仅出现在 [交易数据流](#tradestream) 和 [增量深度数据流](#diffdepthstream) 中。   |
 | 268     | NoMDEntries       | NUMINGROUP   | Y        | 条目数                                                                                                                               |
 | =>279   | MDUpdateAction    | CHAR         | Y        | 可能的值： <br></br> `0` - NEW <br></br> `1` - CHANGE <br></br> `2` - DELETE                                                           |
 | =>270   | MDEntryPx         | PRICE        | Y        | 价格                                                                                                                                           |
@@ -1307,3 +1311,86 @@ Your connection is about to be closed. Please reconnect.
 8=FIX.4.4|9=171|35=X|34=13|49=SPOT|52=20250116-19:45:31.774263|56=EXAMPLE|262=id|268=2|279=2|270=284.00|269=0|55=BNBBUSD|25043=1143|25044=1145|279=1|270=264.00|271=3.00000000|269=0|893=N|10=239|
 8=FIX.4.4|9=149|35=X|34=14|49=SPOT|52=20250116-19:45:31.774281|56=EXAMPLE|262=id|268=1|279=1|270=395.00|271=19.00000000|269=1|55=BNBBUSD|25043=1143|25044=1145|893=Y|10=024|
 ```
+
+## FIX SBE
+
+FIX SBE（简单二进制编码）可以替代 FIX，使用 [spot-fixsbe-1_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot-fixsbe-1_0.xml) 模式文件。
+
+### 端点
+
+除了在 9000 端口支持的 FIX 编码外，还支持两种请求/响应编码方案，分别在额外的 TCP 端口上。以下是各个 API 的端点说明。
+
+#### 订单录入
+
+* `tcp+tls://fix-oe.testnet.binance.vision:9001`：发送 FIX 请求；接收 FIX SBE 响应
+    * FIX `SbeSchemaId` 标签（=25050）必须设置为 FIX SBE 模式 ID（=1）
+    * FIX `SbeSchemaVersion` 标签（=25051）必须设置为 FIX SBE 模式版本（=0）
+* `tcp+tls://fix-oe.testnet.binance.vision:9002`：发送 FIX SBE 请求；接收 FIX SBE 响应
+
+#### Drop Copy（订单副本）
+
+* `tcp+tls://fix-dc.testnet.binance.vision:9001`：发送 FIX 请求；接收 FIX SBE 响应
+    * FIX `SbeSchemaId` 标签（=25050）必须设置为 FIX SBE 模式 ID（=1）
+    * FIX `SbeSchemaVersion` 标签（=25051）必须设置为 FIX SBE 模式版本（=0）
+* `tcp+tls://fix-dc.testnet.binance.vision:9002`：发送 FIX SBE 请求；接收 FIX SBE 响应
+
+#### 市场数据
+
+* `tcp+tls://fix-md.testnet.binance.vision:9001`：发送 FIX 请求；接收 FIX SBE 响应
+    * FIX `SbeSchemaId` 标签（=25050）必须设置为 FIX SBE 模式 ID（=1）
+    * FIX `SbeSchemaVersion` 标签（=25051）必须设置为 FIX SBE 模式版本（=0）
+* `tcp+tls://fix-md.testnet.binance.vision:9002`：发送 FIX SBE 请求；接收 FIX SBE 响应
+
+### FIX SBE 编码设计
+
+FIX SBE 请求/响应 消息总会包含一个 SOFH (Simple Open Framing Header) 和消息头. 一个 N 字节的FIX SBE 消息包含下面的格式:
+
+`<SOFH (6 字节> <消息头 (20 字节)> <消息 (N 字节)>`
+
+SOFH：有关模式文件中的组合类型 "sofh"。这个字段作为一个帧头用来让FIX SBE 服务器端/客户端 来确定 SBE 消息的长度和保证在反序列化之前已经接收到完整的消息。
+
+注意：
+- SOFH 中的两个字段必须是小端序编码（little-endian）
+- FIX 服务器仅支持编码类型字段 `0xEB50` , 例如只有小端序（little-endian） 在所有字段被支持
+
+消息头： 这对应于模式文件中的组合类型 "messageHeader".
+
+### Logon
+
+登录签名（RawData）的计算方法如[签名计算](#signaturecomputation)部分所述。
+
+### FIX 与 FIX SBE 模式对比
+
+通用说明：
+* FIX SBE 没有 `Checksum` 字段
+
+**Logon（登录）消息：**
+* `SenderCompID`、`TargetCompID` 和 `RecvWindow` 字段包含在 `Logon` FIX SBE 消息中，而不是消息头
+* 当 `ResponseMode` 字段设置为 `OnlyAcks` 时，`ExecutionReportType` 字段可以设置为 `Mini`，以接收 `ExecutionReportAck` 消息，而非 `ExecutionReport`
+
+**MarketDataIncrementRefresh（市场数据增量刷新）消息：**
+* FIX 模式中的单条消息被拆分为以下 FIX SBE 消息：`MarketDataIncrementalTrade`、`MarketDataIncrementalBookTicker` 和 `MarketDataIncrementalDepth`
+* 市场数据快照和刷新消息中省略了 `MDReqID` 字段，因为这些消息可以通过 `Symbol` 字段和消息的模板 ID 与订阅请求关联起来。
+    * `MDReqID` 在 `MarketDataRequest` 消息中是必需的，以便它可以在 `MarketDataRequestReject` 中使用。
+    * `MDReqID` 的值在所有订阅中必须是唯一的。
+
+**MarketDataIncrementalBookTicker** 消息：
+* FIX SBE 最优挂单信息订阅使用 **自动剔除（auto-culling）**：当系统负载较高时，可能会丢弃过时的事件，而不是将所有事件排队并延迟发送。
+* 例如，如果在时间 T2 生成了一个最优买/卖单报价事件，而此时仍有一个未发送的事件排队在时间 T1（且 T1 < T2），则会丢弃时间 T1 的事件，系统只会发送时间 T2 的事件。此操作是基于每个交易对分别进行的。
+
+### 错误代码
+
+可能返回以下 FIX SBE 特定错误代码：
+
+| 代码    | 消息                                         | 描述                                                             |
+|---------|----------------------------------------------|------------------------------------------------------------------|
+| -1152   | 无效的 SBE 消息头。                          | 解码 FIX SBE 请求中的 `messageHeader` 时出错                     |
+| -1153   | 指定的 SBE 模式 ID 或版本无效。              | 解析/解码 FIX SBE 模式 ID/版本时出错                             |
+| -1177   | 无效的编码类型。                         | 解码 sofh 复合类型中的 `encodingType` 字段时出错                 |
+| -1221   | SBE 消息中字段无效或缺失。                   | 解码 FIX SBE 请求时字段无效或缺失                                |
+
+注意：对于语义等效的 FIX 和 FIX SBE 请求，返回的错误代码可能不完全相同。
+
+### 常见问题
+
+有关生成 SBE 解码器和处理模式更新的更多信息，请参见 [SBE FAQ](./faqs/sbe_faq_CN.md)。
