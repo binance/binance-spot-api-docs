@@ -875,7 +875,7 @@ Your connection is about to be closed. Please reconnect.
 | --- |--- | ---| --- |---|
 | 25014    | ClListID                     | STRING     | Y        | `ClListID`，用于分配给订单列表。              |
 | 1385     | ContingencyType              | INT        | N        | 可能的值 ： <br></br> `1` -ONE_CANCELS_THE_OTHER <br></br> `2` - ONE_TRIGGERS_THE_OTHER |
-| 25046    | OPO                          | BOOLEAN    | N        | 设置为 `true` 时，将此订单列表设为 [OPO](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/opo_CN.md)。|
+| 25046    | OPO                          | BOOLEAN    | N        | 设置为 `true` 时，将此订单列表设为 [OPO](./faqs/opo_CN.md)。|
 | 73       | NoOrders                     | NUMINGROUP | N        | `Orders` 数组中的元素个数。只允许输入2或者3。 |
 | =>11     | ClOrdID                      | STRING     | Y        | 用于分配给订单的`ClOrdID`     |
 | =>38     | OrderQty                     | QTY        | N        | 订单数量                                                          |

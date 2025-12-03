@@ -5535,7 +5535,7 @@ NONE
 
 ```
 
-发送一个 [OPO](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/opo_CN.md) 订单。
+发送一个 [OPO](./faqs/opo_CN.md) 订单。
 
 * OPO 会向 `EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中添加 2 个订单。
 
@@ -5678,7 +5678,7 @@ NONE
 }
 ```
 
-发送一个 [OPOCO](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/opo_CN.md) 订单。
+发送一个 [OPOCO](./faqs/opo_CN.md) 订单。
 
 **权重**: 1
 

@@ -5485,7 +5485,7 @@ Depending on the `pendingAboveType`/`pendingBelowType` or `workingType`, some op
 
 ```
 
-Place an [OPO](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/opo.md).
+Place an [OPO](../faqs/opo.md).
 
 * OPOs add 2 orders to the EXCHANGE_MAX_NUM_ORDERS filter and MAX_NUM_ORDERS filter.
 
@@ -5628,7 +5628,7 @@ Place an [OPO](https://github.com/binance/binance-spot-api-docs/blob/master/faqs
 }
 ```
 
-Place an [OPOCO](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/opo.md).
+Place an [OPOCO](../faqs/opo.md).
 
 **Weight**: 1
 

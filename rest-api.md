@@ -3254,7 +3254,7 @@ Matching Engine
 POST /api/v3/orderList/opo
 ```
 
-Place an [OPO](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/opo.md).
+Place an [OPO](./faqs/opo.md).
 
 * OPOs add 2 orders to the EXCHANGE_MAX_NUM_ORDERS filter and MAX_NUM_ORDERS filter.
 
@@ -3371,7 +3371,7 @@ Place an [OPO](https://github.com/binance/binance-spot-api-docs/blob/master/faqs
 POST /api/v3/orderList/opoco
 ```
 
-Place an [OPOCO](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/opo.md).
+Place an [OPOCO](./faqs/opo.md).
 
 **Weight**: 1
 
