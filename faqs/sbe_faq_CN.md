@@ -159,11 +159,11 @@ REST API、WebSocket API 和 FIX API 对现货（SPOT）支持 `SBE`。
 
 1. 下载模式：
 * REST/WebSocket API：
-    * [`spot_prod_latest.xml`](../sbe/schemas/spot_prod_latest.xml) 用于实时交易所。
-    * [`spot_testnet_latest.xml`](../sbe/schemas/spot_testnet_latest.xml) 用于[现货测试网](https://testnet.binance.vision)。
+    * [`spot_prod_latest.xml`](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_prod_latest.xml) 用于实时交易所。
+    * [`spot_testnet_latest.xml`](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_testnet_latest.xml) 用于[现货测试网](https://testnet.binance.vision)。
 * FIX API：
-    * [`spot_fix_prod_latest.xml`](../sbe/schemas/spot_fix_prod_latest.xml) 用于实时交易所。
-    * [`spot_fix_testnet_latest.xml`](../sbe/schemas/spot_fix_testnet_latest.xml) 用于[现货测试网](https://testnet.binance.vision)。
+    * [`spot_fix_prod_latest.xml`](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_fix_prod_latest.xml) 用于实时交易所。
+    * [`spot_fix_testnet_latest.xml`](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_fix_testnet_latest.xml) 用于[现货测试网](https://testnet.binance.vision)。
 2. 克隆并构建 [`simple-binary-encoding`](https://github.com/real-logic/simple-binary-encoding)：
 ```shell
  $ git clone https://github.com/real-logic/simple-binary-encoding.git

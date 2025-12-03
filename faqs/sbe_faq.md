@@ -152,11 +152,11 @@ REST API, WebSocket API and FIX API for SPOT support SBE.
 
 1. Download the schema:
     * REST/WebSocket API:
-        * [`spot_prod_latest.xml`](../sbe/schemas/spot_prod_latest.xml) for the live exchange.
-        * [`spot_testnet_latest.xml`](../sbe/schemas/spot_testnet_latest.xml) for [SPOT Testnet](https://testnet.binance.vision).
+        * [`spot_prod_latest.xml`](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_prod_latest.xml) for the live exchange.
+        * [`spot_testnet_latest.xml`](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_testnet_latest.xml) for [SPOT Testnet](https://testnet.binance.vision).
     * FIX API:
-        * [`spot_fix_prod_latest.xml`](../sbe/schemas/spot_fix_prod_latest.xml) for the live exchange.
-        * [`spot_fix_testnet_latest.xml`](../sbe/schemas/spot_fix_testnet_latest.xml) for [SPOT Testnet](https://testnet.binance.vision).
+        * [`spot_fix_prod_latest.xml`](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_fix_prod_latest.xml) for the live exchange.
+        * [`spot_fix_testnet_latest.xml`](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_fix_testnet_latest.xml) for [SPOT Testnet](https://testnet.binance.vision).
 2. Clone and build [`simple-binary-encoding`](https://github.com/real-logic/simple-binary-encoding):
 ```shell
  $ git clone https://github.com/real-logic/simple-binary-encoding.git
