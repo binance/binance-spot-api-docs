@@ -2,7 +2,7 @@
 
 These URLs do not require any authentication (i.e. The API key is not necessary) and serve only public market data.
 
-## RESTful API
+### RESTful API
 
 On the RESTful API, these are the endpoints you can request on `data-api.binance.vision`: 
 
@@ -26,7 +26,7 @@ Sample request:
 curl -sX GET "https://data-api.binance.vision/api/v3/exchangeInfo?symbol=BTCUSDT" 
 ```
 
-## Websocket Streams
+### Websocket Streams
 
 Public market data can also be retrieved through the websocket market data using the URL `data-stream.binance.vision`.
 The streams available through this domain are the same that can be found in the [Websocket Market Streams](../web-socket-streams.md) documentation.

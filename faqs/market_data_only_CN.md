@@ -2,7 +2,7 @@
 
 这些 URL 不需要任何身份验证（即不需要 API Key）并且仅提供公开市场数据。
 
-## RESTful API
+### RESTful API
 
 在 RESTful API 上，您可以在 `data-api.binance.vision` 上访问以下接口：
 
@@ -26,7 +26,7 @@
 curl -sX GET "https://data-api.binance.vision/api/v3/exchangeInfo?symbol=BTCUSDT" 
 ```
 
-## Websocket Streams
+### Websocket Streams
 
 也可以通过 Websocket 市场数据的 URL `data-stream.binance.vision` 提取公共市场数据。
 此域名所提供的 stream 与 [Websocket Market Streams_CN](../web-socket-streams_CN.md) 文档中的相同。
