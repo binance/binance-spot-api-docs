@@ -264,5 +264,6 @@
   <field number='25044' name='LastBookUpdateID' type='INT'/>
   <field number='25050' name='SBESchemaID' type='INT'/>
   <field number='25051' name='SBESchemaVersion' type='INT'/>
+  <field number='25052' name='SBESchemaVersionDeprecated' type='INT'/>
  </fields>
 </fix>
