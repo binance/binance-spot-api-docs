@@ -1,6 +1,6 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-12-04**
+**Last Updated: 2025-12-04 **
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
