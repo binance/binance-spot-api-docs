@@ -1359,6 +1359,7 @@ SOFH：有关模式文件中的组合类型 "sofh"。这个字段作为一个帧
 
 登录签名（RawData）的计算方法如[签名计算](#signaturecomputation)部分所述。
 
+<a id="fix-vs-fix-sbe-schema"></a>
 ### FIX 与 FIX SBE 模式对比
 
 通用说明：
@@ -1368,15 +1369,30 @@ SOFH：有关模式文件中的组合类型 "sofh"。这个字段作为一个帧
 * `SenderCompID`、`TargetCompID` 和 `RecvWindow` 字段包含在 `Logon` FIX SBE 消息中，而不是消息头
 * 当 `ResponseMode` 字段设置为 `OnlyAcks` 时，`ExecutionReportType` 字段可以设置为 `Mini`，以接收 `ExecutionReportAck` 消息，而非 `ExecutionReport`
 
-**MarketDataIncrementRefresh（市场数据增量刷新）消息：**
+**MarketDataIncrementalRefresh（市场数据增量刷新）** 消息：
 * FIX 模式中的单条消息被拆分为以下 FIX SBE 消息：`MarketDataIncrementalTrade`、`MarketDataIncrementalBookTicker` 和 `MarketDataIncrementalDepth`
 * 市场数据快照和刷新消息中省略了 `MDReqID` 字段，因为这些消息可以通过 `Symbol` 字段和消息的模板 ID 与订阅请求关联起来。
     * `MDReqID` 在 `MarketDataRequest` 消息中是必需的，以便它可以在 `MarketDataRequestReject` 中使用。
     * `MDReqID` 的值在所有订阅中必须是唯一的。
 
-**MarketDataIncrementalBookTicker** 消息：
+**MarketDataIncrementalTrade（市场数据增量交易）** 消息：
+* FIX 模式中可用的 `MDUpdateAction` 字段在 FIX SBE 中被省略，因为其值始终为 `NEW`。
+
+**MarketDataIncrementalBookTicker（市场数据增量订单簿数据流）** 消息：
 * FIX SBE 最优挂单信息订阅使用 **自动剔除（auto-culling）**：当系统负载较高时，可能会丢弃过时的事件，而不是将所有事件排队并延迟发送。
-* 例如，如果在时间 T2 生成了一个最优买/卖单报价事件，而此时仍有一个未发送的事件排队在时间 T1（且 T1 < T2），则会丢弃时间 T1 的事件，系统只会发送时间 T2 的事件。此操作是基于每个交易对分别进行的。
+    * 例如，如果在时间 T2 生成了一个最优买/卖单报价事件，而此时仍有一个未发送的事件排队在时间 T1（且 T1 < T2），则会丢弃时间 T1 的事件，系统只会发送时间 T2 的事件。此操作是基于每个交易对分别进行的。
+* FIX 模式中可用的 `MDUpdateAction` 字段在 FIX SBE 中被省略，因为其值可能源自 `MDEntrySize`。
+    * 当 `MDEntrySize` 未设置（`NullVal`）时，`MDUpdateAction` 为 `DELETE`。
+    * 当 `MDEntrySize` 已设置时：
+        * 如果价格水平已存在于本地订单簿中，则 `MDUpdateAction` 为 `CHANGE`
+        * 否则，`MDUpdateAction` 为 `NEW`。
+
+**MarketDataIncrementalDepth（市场数据增量深度）** 消息：
+* FIX 模式中可用的 `MDUpdateAction` 字段在 FIX SBE 中被省略，因为其值可能源自 `MDEntrySize`。
+    * 当 `MDEntrySize` 未设置（`NullVal`）时，`MDUpdateAction` 为 `DELETE`。
+    * 当 `MDEntrySize` 已设置时：
+        * 如果价格水平已存在于本地订单簿中，则 `MDUpdateAction` 为 `CHANGE`
+        * 否则，`MDUpdateAction` 为 `NEW`。
 
 ### 错误代码
 

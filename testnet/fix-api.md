@@ -1427,16 +1427,32 @@ General:
 **Logon** message:
 * The `SenderCompID`, `TargetCompID` and `RecvWindow` fields are provided in the `Logon` FIX SBE message instead of the message header
 * When the `ResponseMode` field is set to `OnlyAcks`, the `ExecutionReportType` field can be set to `Mini` to receive `ExecutionReportAck` messages instead of `ExecutionReport`
+    * Note: The `ExecutionReportType` field is only supported on port 9001 and port 9002 for the Order Entry and Drop Copy endpoints
 
-**MarketDataIncrementRefresh** message:
+**MarketDataIncrementalRefresh** message:
 * This single message in the FIX schema is split into the following FIX SBE messages: `MarketDataIncrementalTrade`, `MarketDataIncrementalBookTicker` and `MarketDataIncrementalDepth`
 * The `MDReqID` field is omitted from the market data snapshot and refresh messages as these messages can be tied to the subscription request using the `Symbol` field and the message's template ID
     * `MDReqID` is required in the `MarketDataRequest` message so that it may appear in `MarketDataRequestReject`
     * The value of `MDReqID` must be unique across subscriptions
 
+**MarketDataIncrementalTrade** message:
+* The MDUpdateAction field available in the FIX schema is omitted in FIX SBE since the value is always `NEW`.
+
 **MarketDataIncrementalBookTicker** message:
 * FIX SBE book ticker subscriptions use **auto-culling**: when the system is under high load, it may drop outdated events instead of queuing all events and delivering them with a delay.
-* For example, if a best bid/ask event is generated at time T2 when there is still an undelivered event queued at time T1 (where T1 < T2), the event for T1 is dropped, and the system will deliver only the event for T2. This is done on a per-symbol basis.
+    * For example, if a best bid/ask event is generated at time T2 when there is still an undelivered event queued at time T1 (where T1 < T2), the event for T1 is dropped, and the system will deliver only the event for T2. This is done on a per-symbol basis.
+* The `MDUpdateAction` field available in the FIX schema is omitted in FIX SBE as its value may be derived from `MDEntrySize`.
+    * When `MDEntrySize` is unset (`NullVal`), `MDUpdateAction` is `DELETE`.
+    * When `MDEntrySize` is set,
+        * if the price level exists in your local order book, `MDUpdateAction` is `CHANGE`
+        * else `MDUpdateAction` is `NEW`.
+
+**MarketDataIncrementalDepth** message:
+* The `MDUpdateAction` field available in the FIX schema is omitted in FIX SBE as its value may be derived from `MDEntrySize`.
+    * When `MDEntrySize` is unset (`NullVal`), `MDUpdateAction` is `DELETE`.
+    * When `MDEntrySize` is set,
+        * if the price level exists in your local order book, `MDUpdateAction` is `CHANGE`
+        * else `MDUpdateAction` is `NEW`.
 
 ### Errors
 

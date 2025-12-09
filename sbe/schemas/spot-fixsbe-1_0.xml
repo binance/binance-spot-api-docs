@@ -754,11 +754,11 @@
         <field id="25044" name="LastBookUpdateID" type="int64" presence="optional"/>
         <field id="25054" name="PriceExponent" type="exponent8"/>
         <field id="25055" name="QtyExponent" type="exponent8"/>
-        <group id="25047" name="MDEntriesBids" dimensionType="smallGroupSize8Encoding">
+        <group id="25047" name="MDEntriesBids" dimensionType="smallGroupSize16Encoding">
             <field id="270" name="MDEntryPx" type="mantissa64" mbx:exponent="PriceExponent"/>
             <field id="271" name="MDEntrySize" type="mantissa64" mbx:exponent="QtyExponent"/>
         </group>
-        <group id="25048" name="MDEntriesAsks" dimensionType="smallGroupSize8Encoding">
+        <group id="25048" name="MDEntriesAsks" dimensionType="smallGroupSize16Encoding">
             <field id="270" name="MDEntryPx" type="mantissa64" mbx:exponent="PriceExponent"/>
             <field id="271" name="MDEntrySize" type="mantissa64" mbx:exponent="QtyExponent"/>
         </group>
@@ -784,11 +784,11 @@
         <field id="25055" name="QtyExponent" type="exponent8"/>
         <group id="25047" name="MDEntriesBids" dimensionType="smallGroupSize8Encoding">
             <field id="270" name="MDEntryPx" type="mantissa64" mbx:exponent="PriceExponent"/>
-            <field id="271" name="MDEntrySize" type="mantissa64" mbx:exponent="QtyExponent"/>
+            <field id="271" name="MDEntrySize" type="mantissa64" presence="optional" mbx:exponent="QtyExponent"/>
         </group>
         <group id="25048" name="MDEntriesAsks" dimensionType="smallGroupSize8Encoding">
             <field id="270" name="MDEntryPx" type="mantissa64" mbx:exponent="PriceExponent"/>
-            <field id="271" name="MDEntrySize" type="mantissa64" mbx:exponent="QtyExponent"/>
+            <field id="271" name="MDEntrySize" type="mantissa64" presence="optional" mbx:exponent="QtyExponent"/>
         </group>
         <data id="55" name="Symbol" type="varString8"/>
     </sbe:message>
@@ -800,11 +800,11 @@
         <field id="25055" name="QtyExponent" type="exponent8"/>
         <group id="25047" name="MDEntriesBids" dimensionType="smallGroupSize16Encoding">
             <field id="270" name="MDEntryPx" type="mantissa64" mbx:exponent="PriceExponent"/>
-            <field id="271" name="MDEntrySize" type="mantissa64" mbx:exponent="QtyExponent"/>
+            <field id="271" name="MDEntrySize" type="mantissa64" presence="optional" mbx:exponent="QtyExponent"/>
         </group>
         <group id="25048" name="MDEntriesAsks" dimensionType="smallGroupSize16Encoding">
             <field id="270" name="MDEntryPx" type="mantissa64" mbx:exponent="PriceExponent"/>
-            <field id="271" name="MDEntrySize" type="mantissa64" mbx:exponent="QtyExponent"/>
+            <field id="271" name="MDEntrySize" type="mantissa64" presence="optional" mbx:exponent="QtyExponent"/>
         </group>
         <data id="55" name="Symbol" type="varString8"/>
     </sbe:message>

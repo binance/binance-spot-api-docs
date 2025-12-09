@@ -4,6 +4,8 @@
 
 ### 2025-12-09
 
+* [FIX SBE Schema](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot-fixsbe-1_0.xml) 已更新，会在 `MarketDataSnapshot` 中使用 `smallGroupSize16Encoding`。并在增量单个交易对订单簿数据流/深度数据流的 `MDEntrySize` 的字段中使用 `presence="optional"`。
+* 更新了关于 [FIX 与 FIX SBE](fix-api.md#fix-vs-fix-sbe-schema) 的文档说明
 * 在 REST 和 WebSocket API 文档中新增说明：**请避免在请求中使用 SQL 关键字**，因为这可能会触发 Web 应用防火墙（WAF）规则导致安全拦截。详情请参见 https://www.binance.com/zh-CN/support/faq/detail/360004492232 。
 
 ---

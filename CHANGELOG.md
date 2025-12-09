@@ -4,7 +4,10 @@
 
 ### 2025-12-09
 
-* Added documentation in REST, and WebSocket APIs stating: **Please avoid SQL keywords in requests** as they may trigger a security block by a WAF (Web Application Firewall) rule. See https://www.binance.com/en/support/faq/detail/360004492232 for more details.
+* [Schema for FIX SBE](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot-fixsbe-1_0.xml) has been updated to use `smallGroupSize16Encoding` in `MarketDataSnapshot` and use `presence="optional"` for incremental book ticker/depth `MDEntrySize` fields.
+* Updated documentation re: [FIX vs FIX SBE](fix-api.md#fix-vs-fix-sbe-schema)
+* Added documentation in REST, and WebSocket APIs stating: <br>**Please avoid SQL keywords in requests** as they may trigger a security block by a WAF (Web Application Firewall) rule. <br> See https://www.binance.com/en/support/faq/detail/360004492232 for more details.
+
 
 ---
 
