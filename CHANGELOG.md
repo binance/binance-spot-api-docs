@@ -1,6 +1,12 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-12-02**
+**Last Updated: 2025-12-09**
+
+### 2025-12-09
+
+* Added documentation in REST, and WebSocket APIs stating: **Please avoid SQL keywords in requests** as they may trigger a security block by a WAF (Web Application Firewall) rule. See https://www.binance.com/en/support/faq/detail/360004492232 for more details.
+
+---
 
 ### 2025-12-02
 

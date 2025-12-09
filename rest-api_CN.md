@@ -24,11 +24,12 @@
 * API 处理请求的超时时间为 10 秒。如果撮合引擎的响应时间超过此时间，API 将返回 “Timeout waiting for response from backend server. Send status unknown; execution status unknown.”。[(-1007 超时)](errors_CN.md#-1007-timeout)
   * 这并不总是意味着该请求在撮合引擎中失败。
   * 如果请求状态未显示在 [WebSocket 账户接口](user-data-stream_CN.md) 中，请执行 API 查询以获取其状态。
+* **请避免在请求中使用 SQL 关键字**，因为这可能会触发 Web 应用防火墙（WAF）规则导致安全拦截。详情请参见 https://www.binance.com/zh-CN/support/faq/detail/360004492232
 
 ## HTTP 返回代码
 
 * HTTP `4XX` 错误码用于指示错误的请求内容、行为、格式。问题在于请求者。
-* HTTP `403` 错误码表示违反WAF限制(Web应用程序防火墙)。
+* HTTP `403` 错误码表示违反WAF限制(Web应用程序防火墙)。详情请参见 https://www.binance.com/zh-CN/support/faq/detail/360004492232 。
 * HTTP `409` 错误码表示重新下单(cancelReplace)的请求部分成功。(比如取消订单失败，但是下单成功了)
 * HTTP `429` 错误码表示警告访问频次超限，即将被封IP。
 * HTTP `418` 表示收到429后继续访问，于是被封了。

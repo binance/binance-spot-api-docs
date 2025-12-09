@@ -97,11 +97,12 @@
 * APIs have a timeout of 10 seconds when processing a request. If a response from the Matching Engine takes longer than this, the API responds with "Timeout waiting for response from backend server. Send status unknown; execution status unknown." [(-1007 TIMEOUT)](errors.md#-1007-timeout)
   * This does not always mean that the request failed in the Matching Engine.
   * If the status of the request has not appeared in [User Data Stream](user-data-stream.md), please perform an API query for its status.
+* **Please avoid SQL keywords in requests** as they may trigger a security block by a WAF (Web Application Firewall) rule. See https://www.binance.com/en/support/faq/detail/360004492232 for more details.
 
 ## HTTP Return Codes
 
 * HTTP `4XX` return codes are used for malformed requests; the issue is on the sender's side.
-* HTTP `403` return code is used when the WAF Limit (Web Application Firewall) has been violated.
+* HTTP `403` return code is used when a WAF (Web Application Firewall) rule has been violated. This can indicate a rate limit violation or a security block. See https://www.binance.com/en/support/faq/detail/360004492232 for more details.
 * HTTP `409` return code is used when a cancelReplace order partially succeeds. (i.e. if the cancellation of the order fails but the new order placement succeeds.)
 * HTTP `429` return code is used when breaking a request rate limit.
 * HTTP `418` return code is used when an IP has been auto-banned for continuing to send requests after receiving `429` codes.
@@ -233,7 +234,6 @@ server.
 
 
 **It is recommended to use a small recvWindow of 5000 or less! The max cannot go beyond 60,000!**
-
 
 ### SIGNED Endpoint Examples for POST /api/v3/order
 
