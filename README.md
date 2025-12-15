@@ -32,7 +32,7 @@ Name | Description
 [Mining](https://developers.binance.com/docs/mining) |Details on Mining
 [Algo Trading](https://developers.binance.com/docs/algo) |Details on Algo Trading
 [Copy Trading](https://developers.binance.com/docs/copy_trading) |Details on Copy Trading
-[Porfolio Margin Pro](https://developers.binance.com/docs/derivatives/portfolio-margin-pro/general-info) |Details on Portfolio Margin Pro
+[Portfolio Margin Pro](https://developers.binance.com/docs/derivatives/portfolio-margin-pro/general-info) |Details on Portfolio Margin Pro
 [Fiat](https://developers.binance.com/docs/fiat) |Details on Fiat|
 [C2C](https://developers.binance.com/docs/c2c) |Details on C2C|
 [VIP Loan](https://developers.binance.com/docs/vip_loan) |Details on VIP Loan
@@ -49,7 +49,7 @@ Name | Description
 ------------ | ------------
 [api_key_types](./faqs/api_key_types.md) | API Key Types
 [spot_glossary](./faqs/spot_glossary.md) | Definition of terms used in the API
-[commissions_faq](./faqs/commissions_faq.md) | Explaining commission calculations on the API
+[commission_faq](./faqs/commission_faq.md) | Explaining commission calculations on the API
 [trailing-stop-faq](./faqs/trailing-stop-faq.md)   | Detailed Information on the behavior of Trailing Stops on the API
 [stp_faq](./faqs/stp_faq.md) | Detailed Information on the behavior of Self Trade Prevention (aka STP) on the API
 [market_orders_faq](./faqs/market_orders_faq.md)| Detailed information on the behavior of Market Orders
@@ -92,9 +92,9 @@ Please refer to [CHANGELOG](./CHANGELOG.md) for latest changes on our APIs and S
 ### Contact Us
 
 * [Binance API Telegram Group](https://t.me/binance_api_english)
-    * For any questions regarding sudden drop in performance with the API and/or Websockets.
+    * For any questions regarding sudden drop in performance with the API and/or WebSockets.
     * For any general questions about the API not covered in the documentation.
 * [Binance Developers](https://dev.binance.vision/)
-    * For any questions/help regarding code implementation with API and/or Websockets.
+    * For any questions/help regarding code implementation with API and/or WebSockets.
 * [Binance Customer Support](https://www.binance.com/en/support-center)
     * For cases such as missing funds, help with 2FA, etc.
