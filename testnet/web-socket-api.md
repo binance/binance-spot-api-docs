@@ -96,6 +96,8 @@
 * A single connection to the API is only valid for 24 hours; expect to be disconnected after the 24-hour mark.
 * We support HMAC, RSA, and Ed25519 keys. For more information, please see [API Key types](../faqs/api_key_types.md).
 * Responses are in JSON by default. To receive responses in SBE, refer to the [SBE FAQ](../faqs/sbe_faq.md) page.
+* If your request contains a symbol name containing non-ASCII characters, then the response may contain non-ASCII characters encoded in UTF-8.
+* Some methods may return asset and/or symbol names containing non-ASCII characters encoded in UTF-8 even if the request did not contain non-ASCII characters.
 * The WebSocket server will send a `ping frame` every 20 seconds.
   * If the WebSocket server does not receive a `pong frame` back from the connection within a minute the connection will be disconnected.
   * When you receive a ping, you must send a pong with a copy of ping's payload as soon as possible.
@@ -7375,7 +7377,7 @@ Database
 }
 ```
 
-Retrieves the list of [filters](filters.md) relevant to an account on a given symbol. This is the only endpoint that shows if an account has [`MAX_ASSET`](filters.md#max_asset) filters applied to it.
+Retrieves the list of [filters](filters.md) relevant to an account on a given symbol. This is the only method that shows if an account has [`MAX_ASSET`](filters.md#max_asset) filters applied to it.
 
 **Weight:**
 40

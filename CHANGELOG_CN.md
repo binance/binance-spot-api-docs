@@ -1,6 +1,20 @@
 # 更新日志
 
-**最近更新： 2025-12-09**
+**最近更新： 2025-12-15**
+
+### 2025-12-15
+
+**关于 UTF-8 编码的说明：**
+
+* 在 [FIX API](fix-api_CN.md)、[REST API](rest-api_CN.md) 和 [WebSocket API](web-socket-api_CN.md) 中，如果您的请求包含非 ASCII 字符的交易对名称，那么响应中可能包含以 UTF-8 编码的非 ASCII 字符。
+* 在 REST 和 WebSocket API 中，即使请求本身不包含非 ASCII 字符，某些端点/方法也可能返回包含以 UTF-8 编码的非 ASCII 字符的资产和/或交易对名称。
+* 在 [WebSocket 数据流](web-socket-streams_CN.md) 中，如果您的请求包含非 ASCII 字符的交易对名称，那么数据流事件中可能包含以 UTF-8 编码的非 ASCII 字符。
+* 在 WebSocket 数据流中，[全市场所有 Symbol 的精简 Ticker](web-socket-streams_CN.md#all-markets-mini-ticker) 和 [全市场滚动窗口统计](web-socket-streams_CN.md#all-market-rolling-window-ticker) 事件可能包含以 UTF-8 编码的非 ASCII 字符。
+* 在 [SBE 市场数据流](sbe-market-data-streams_CN.md) 中，如果您的请求包含包含非 ASCII 字符的交易对名称，那么数据流事件中可能包含以 UTF-8 编码的非 ASCII 字符。
+* 如果您持有或交易任何名称包含非 ASCII 字符的资产或交易对，那么 [WebSocket 账户接口](user-data-stream_CN.md) 中可能包含以 UTF-8 编码的非 ASCII 字符。
+* 为了与币安 API 完全兼容，请务必确保您的代码能够处理 UTF-8 编码的字符串。
+
+---
 
 ### 2025-12-09
 

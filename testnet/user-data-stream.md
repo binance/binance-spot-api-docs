@@ -23,6 +23,7 @@
 * Both [SBE](../faqs/sbe_faq.md) and JSON output are supported.
 * Account events are pushed in **real-time**.
 * All timestamps in JSON payloads are in **milliseconds by default**.
+* Events may contain non-ASCII characters encoded in UTF-8 if you own or trade any assets or symbols whose names contain non-ASCII characters.
 
 ## User Data Stream Events
 ### Account Update

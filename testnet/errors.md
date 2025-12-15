@@ -1,7 +1,5 @@
 # Error codes for Binance SPOT Testnet
 
-**Last Updated: 2025-08-07**
-
 Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
 ```javascript
@@ -153,6 +151,7 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * Combination of optional fields invalid. Recommendation: '%s' and '%s' must both be sent.
  * Fields [%s] must be sent together or omitted entirely.
  * Invalid `MDEntryType (269)` combination. BID and OFFER must be requested together.
+ * Conflicting fields: ['%s'...]
 
 ### -1130 INVALID_PARAMETER
  * Invalid data sent for a parameter.
@@ -177,9 +176,11 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 ### -1152 INVALID_SBE_HEADER
  * Invalid `X-MBX-SBE` header; expected `<SCHEMA_ID>:<VERSION>`.
+ * Invalid SBE message header.
 
 ### -1153 UNSUPPORTED_SCHEMA_ID
  * Unsupported SBE schema ID or version specified in the `X-MBX-SBE` header.
+ * Invalid SBE schema ID or version specified.
 
 ### -1155 SBE_DISABLED
  * SBE is not enabled.
@@ -236,6 +237,7 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  * `BodyLength (9)` does not contain the correct byte count.
  * Only printable ASCII characters and SOH (Start of Header) are allowed.
  * Tag specified without a value.
+ * Invalid encodingType.
 
 ### -1178 BAD_SENDER_COMPID
  * `SenderCompId(49)` contains an incorrect value. The SenderCompID value should not change throughout the lifetime of a session.
@@ -304,6 +306,25 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 ### -1220 SYMBOL_DOES_NOT_MATCH_STATUS
 * The symbol's status does not match the requested symbolStatus.
+
+### -1221 INVALID_SBE_MESSAGE_FIELD
+* Invalid/missing field(s) in SBE message.
+
+### -1222 OPO_WORKING_MUST_BE_BUY
+
+* Working order in an OPO list must be a bid.
+
+### -1223 OPO_PENDING_MUST_BE_SELL
+
+* Pending orders in an OPO list must be asks.
+
+### -1224 WORKING_PARAM_REQUIRED
+
+* Working order must include the '{param}' tag.
+
+### -1225 PENDING_PARAM_NOT_REQUIRED
+
+* Pending orders should not include the '%s' tag.
 
 ### -2010 NEW_ORDER_REJECTED
  * NEW_ORDER_REJECTED
@@ -385,6 +406,8 @@ Error message                                                   | Description
 "This order type may not use pegged price." | You are using parameter `pegPriceType` with an unsupported order type. (e.g. `MARKET`) |
 "This price peg cannot be used with this order type." | You are using `pegPriceType`=`MARKET_PEG` for a `LIMIT_MAKER` order.|
 "Order book liquidity is too low for this pegged order." | The order book doesn’t have the best price level to peg the price to. |
+| OPO orders are not supported for this symbol. |  |
+| Order amend (pending OPO order) is not supported. | You cannot amend the pending quantity of an OPO order |
 
 ## Errors regarding placing orders via cancelReplace
 

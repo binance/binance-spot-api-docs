@@ -81,7 +81,7 @@
   * With `startTime`, returns oldest items from `startTime` up to the limit.
   * With `endTime`, returns most recent items up to `endTime` and the limit.
   * With both, behaves like `startTime` but does not exceed `endTime`.
-* All time and timestamp related fields in the JSON responses are in **milliseconds by defa ult.** To receive the information in microseconds, please add the header `X-MBX-TIME-UNIT:MICROSECOND` or `X-MBX-TIME-UNIT:microsecond`.
+* All time and timestamp related fields in the JSON responses are in **milliseconds by default.** To receive the information in microseconds, please add the header `X-MBX-TIME-UNIT:MICROSECOND` or `X-MBX-TIME-UNIT:microsecond`.
 * We support HMAC, RSA, and Ed25519 keys. For more information, please see [API Key types](../faqs/api_key_types.md).
 * Timestamp parameters (e.g. `startTime`, `endTime`, `timestamp`) can be passed in milliseconds or microseconds.
 * If there are enums or terms you want clarification on, please see the [SPOT Glossary](../faqs/spot_glossary.md) for more information.
@@ -89,6 +89,8 @@
   * This does not always mean that the request failed in the Matching Engine.
   * If the status of the request has not appeared in [User Data Stream](user-data-stream.md), please perform an API query for its status.
 * **Please avoid SQL keywords in requests** as they may trigger a security block by a WAF (Web Application Firewall) rule. See https://www.binance.com/en/support/faq/detail/360004492232 for more details.
+* If your request contains a symbol name containing non-ASCII characters, then the response may contain non-ASCII characters encoded in UTF-8.
+* Some endpoints may return asset and/or symbol names containing non-ASCII characters encoded in UTF-8 even if the request did not contain non-ASCII characters.
 
 ## HTTP Return Codes
 

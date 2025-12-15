@@ -61,9 +61,9 @@ The best bid and ask price and quantity, pushed in real-time when the order book
 **Update Speed**: Real time
 
 <a id="auto-culling"></a>
-SBE best bid/ask streams use **auto-culling**: when our system is under high load, we may drop outdated events instead of queuing all events and delivering them with a delay.
+SBE best bid/ask streams use **auto-culling**: when the system is under high load, it may drop outdated events instead of queuing all events and delivering them with a delay.
 
-For example, if a best bid/ask event is generated at time T2 when we still have an undelivered event queued at time T1 (where T1 < T2), the event for T1 is dropped, and we will deliver only the event for T2. This is done on a per-symbol basis.
+For example, if a best bid/ask event is generated at time T2 when there is still an undelivered event queued at time T1 (where T1 < T2), the event for T1 is dropped, and the system will deliver only the event for T2. This is done on a per-symbol basis.
 
 ### Diff. Depth Streams
 

@@ -1,9 +1,23 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-12-09**
+**Last Updated: 2025-12-15**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-12-15
+
+**Clarification Regarding UTF-8 Encoding:**
+
+* In [FIX](fix-api.md), [REST](rest-api.md), and [WebSocket APIs](web-socket-api.md), if your request contains a symbol name containing non-ASCII characters, then the response may contain non-ASCII characters encoded in UTF-8.
+* In REST and WebSocket APIs, some endpoints/methods may return asset and/or symbol names containing non-ASCII characters encoded in UTF-8 even if the request did not contain non-ASCII characters.
+* In [WebSocket Streams](web-socket-streams.md), if your request contains a symbol name containing non-ASCII characters, then the stream events may contain non-ASCII characters encoded in UTF-8.
+* In WebSocket Streams, [All Market Mini Tickers Stream](web-socket-streams.md#all-market-mini-tickers-stream and [All Market Rolling Window Statistics Streams](web-socket-streams.md#all-market-rolling-window-statistics-streams) events may contain non-ASCII characters encoded in UTF-8.
+* In [SBE Market Data Streams](sbe-market-data-streams.md), if your request contains a symbol name containing non-ASCII characters, then the stream events may contain non-ASCII characters encoded in UTF-8.
+* [UserDataStream events](user-data-stream.md) may contain non-ASCII characters encoded in UTF-8 if you own or trade any assets or symbols whose names contain non-ASCII characters.
+* For full compatibility with Binance APIs, please ensure your code is designed to handle UTF-8-encoded strings.
+
+---
 
 ### 2025-12-09
 

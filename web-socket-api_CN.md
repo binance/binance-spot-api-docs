@@ -9,6 +9,8 @@
 * 每个到 base URL 的链接有效期不超过24小时，请妥善处理断线重连。
 * 我们支持 HMAC，RSA 以及 Ed25519 Key 类型。 如需进一步了解，请参考 [API Key 类型](faqs/api_key_types_CN.md)。
 * 响应默认为 JSON 格式。如果您想接收 SBE 格式的响应，请参考 [简单二进制编码 （SBE） 常见问题](./faqs/sbe_faq_CN.md)。
+* 如果您的请求包含非 ASCII 字符的交易对名称，那么响应中可能包含以 UTF-8 编码的非 ASCII 字符。
+* 即使请求本身不包含非 ASCII 字符，某些方法也可能会返回包含以 UTF-8 编码的非 ASCII 字符的资产和/或交易对名称。
 * WebSocket 服务器**每20秒**发送 PING 消息。
   * 如果websocket 服务器没有在一分钟之内收到PONG 消息应答，连接会被断开。
   * 当客户收到PING消息，必须尽快回复PONG消息，同时payload需要和PING消息一致。
@@ -7431,7 +7433,7 @@ timestamp           | LONG   | YES          |
 }
 ```
 
-用于检索一个账户上指定交易对的 [filters](filters_CN.md) 列表。这是唯一一个目前会显示账户是否应用了 [`MAX_ASSET`](filters_CN.md#max_asset) 过滤器的端点。
+用于检索一个账户上指定交易对的 [filters](filters_CN.md) 列表。这是唯一一个目前会显示账户是否应用了 [`MAX_ASSET`](filters_CN.md#max_asset) 过滤器的方法。
 
 **权重:**
 40

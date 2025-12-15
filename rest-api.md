@@ -84,6 +84,8 @@
   * **https://api4.binance.com**
 * The last 4 endpoints in the point above (`api1`-`api4`) should give better performance but have less stability.
 * Responses are in JSON by default. To receive responses in SBE, refer to the [SBE FAQ](./faqs/sbe_faq.md) page.
+* If your request contains a symbol name containing non-ASCII characters, then the response may contain non-ASCII characters encoded in UTF-8.
+* Some endpoints may return asset and/or symbol names containing non-ASCII characters encoded in UTF-8 even if the request did not contain non-ASCII characters.
 * Data is returned in **chronological order**, unless noted otherwise.
   * Without `startTime` or `endTime`, returns the most recent items up to the limit.
   * With `startTime`, returns oldest items from `startTime` up to the limit.

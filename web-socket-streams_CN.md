@@ -16,6 +16,8 @@
 * **wss://data-stream.binance.vision** 可以用来订阅仅有市场信息的数据流。账户信息**无法**从此URL获得。
 * 所有时间和时间戳相关字段均以**毫秒为默认单位**。 要以微秒为单位接收信息，请在 URL 中添加参数 `timeUnit=MICROSECOND` 或 `timeUnit=microsecond`。
   * 例如： `/stream?streams=btcusdt@trade&timeUnit=MICROSECOND`
+* 如果您的请求包含非 ASCII 字符的交易对名称，那么数据流事件中可能包含以 UTF-8 编码的非 ASCII 字符。
+* [全市场所有 Symbol 的精简 Ticker](web-socket-streams_CN.md#all-markets-mini-ticker) 和 [全市场滚动窗口统计](web-socket-streams_CN.md#all-market-rolling-window-ticker) 事件可能包含以 UTF-8 编码的非 ASCII 字符。
 
 ## WebSocket 连接限制
 

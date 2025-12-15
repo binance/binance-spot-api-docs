@@ -153,3 +153,4 @@ Read [Self Trade Prevention (STP) FAQ](../faqs/stp_faq.md) to learn more.
 * `EXPIRE_TAKER`
 * `EXPIRE_BOTH`
 * `DECREMENT`
+* `TRANSFER`
