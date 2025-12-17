@@ -6,7 +6,7 @@
 
 #### Time-sensitive Notice
 
-* **The following change to REST API will occur at approximately 2026-01-15 07:00 UTC:** <br>When calling endpoints that require signatures, percent-encode payloads before computing signatures. Requests that do not follow this order will be rejected with [`-1022 INVALID_SIGNATURE`](errors.md#-1022-invalid_signature). Please review and update your signing logic accordingly.
+* **The following change to REST API will occur at approximately 2026-01-15 07:00 UTC:** <br>When calling endpoints that require signatures, percent-encode payloads before computing signatures. Requests that do not follow this order will be rejected with [`-1022 INVALID_SIGNATURE`](errors.md#-1022-invalid_signature). Please review and update your signing logic accordingly. This has now been enabled on [SPOT Testnet](http://testnet.binance.vision)
 
 #### REST API
 
