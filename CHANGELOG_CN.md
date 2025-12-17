@@ -6,7 +6,7 @@
 
 #### 时效性通知
 
-* **以下有关于REST API变更将在 2026-01-15 07:OO UTC 发生:** <br> 调用需要签名的接口时，请在计算签名之前对 payload 进行百分比编码（percent-encode）。不符合此顺序的请求将被拒绝，并返回错误代码 [`-1022 签名不正确`](errors_CN.md#-1022-invalid_signature)。请检查并相应地更新您代码中的签名逻辑部分。
+* **以下有关于REST API变更将在 2026-01-15 07:OO UTC 发生:** <br> 调用需要签名的接口时，请在计算签名之前对 payload 进行百分比编码（percent-encode）。不符合此顺序的请求将被拒绝，并返回错误代码 [`-1022 签名不正确`](errors_CN.md#-1022-invalid_signature)。请检查并相应地更新您代码中的签名逻辑部分。这项功能现已在 [SPOT Testnet](http://testnet.binance.vision) 上启用。
 
 #### REST API
 
