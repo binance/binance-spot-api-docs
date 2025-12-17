@@ -1,15 +1,28 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-12-15**
+**Last Updated: 2025-12-17**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-12-17
+
+#### REST API
+
+* When calling endpoints that require signatures, percent-encode payloads before computing signatures. Requests that do not follow this order will be rejected with [`-1022 INVALID_SIGNATURE`](errors.md#-1022-invalid_signature). Please review and update your signing logic accordingly.
+* Updated documentation for REST API regarding [Signed Endpoints examples for placing an order](https://developers.binance.com/docs/binance-spot-api-docs/testnet/rest-api/request-security#signed-endpoint-examples-for-post-apiv3order)
+
+#### WebSocket API
+
+* Updated documentation for WebSocket API regarding [SIGNED request security](https://developers.binance.com/docs/binance-spot-api-docs/testnet/websocket-api/request-security#signed-request-security)
+
+---
 
 ### 2025-12-15
 
 **Clarification Regarding UTF-8 Encoding:**
 
-* In [FIX](fix-api.md), [REST](rest-api.md), and [WebSocket APIs](web-socket-api.md), if your request contains a symbol name containing non-ASCII characters, then the response may contain non-ASCII characters encoded in UTF-8.
+* In [FIX](fix-api.md), [REST](https://developers.binance.com/docs/binance-spot-api-docs/testnet/rest-api/general-api-information), and [WebSocket APIs](https://developers.binance.com/docs/binance-spot-api-docs/testnet/websocket-api/general-api-information), if your request contains a symbol name containing non-ASCII characters, then the response may contain non-ASCII characters encoded in UTF-8.
 * In REST and WebSocket APIs, some endpoints/methods may return asset and/or symbol names containing non-ASCII characters encoded in UTF-8 even if the request did not contain non-ASCII characters.
 * In [WebSocket Streams](web-socket-streams.md), if your request contains a symbol name containing non-ASCII characters, then the stream events may contain non-ASCII characters encoded in UTF-8.
 * In WebSocket Streams, [All Market Mini Tickers Stream](web-socket-streams.md#all-market-mini-tickers-stream) and [All Market Rolling Window Statistics Streams](web-socket-streams.md#all-market-rolling-window-statistics-streams) events may contain non-ASCII characters encoded in UTF-8.

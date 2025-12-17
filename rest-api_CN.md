@@ -27,6 +27,8 @@
   * 这并不总是意味着该请求在撮合引擎中失败。
   * 如果请求状态未显示在 [WebSocket 账户接口](user-data-stream_CN.md) 中，请执行 API 查询以获取其状态。
 * **请避免在请求中使用 SQL 关键字**，因为这可能会触发 Web 应用防火墙（WAF）规则导致安全拦截。详情请参见 https://www.binance.com/zh-CN/support/faq/detail/360004492232
+* 如果您的请求包含非 ASCII 字符的交易对名称，那么响应中可能会包含以 UTF-8 编码的非 ASCII 字符。
+* 即使请求中不包含非 ASCII 字符，某些接口也可能返回包含以 UTF-8 编码的非 ASCII 字符的资产和/或交易对名称。
 
 ## HTTP 返回代码
 
@@ -100,13 +102,13 @@
 
 ## 请求鉴权类型
 
-* 每个方法都有一个鉴权类型，指示所需的 API 密钥权限，显示在方法名称旁边（例如，[下新订单 (TRADE)](#place-new-order-trade)）。
+* 每个接口都有一个鉴权类型，指示所需的 API 密钥权限，显示在接口名称旁边（例如，[下新订单 (TRADE)](#place-new-order-trade)）。
 * 如果未指定，则鉴权类型为 `NONE`。
-* 除了为 `NONE` 外，所有具有鉴权类型的方法均视为 `SIGNED` 请求（即包含 `signature`），[listenKey 管理](#user-data-stream-requests) 除外。
-* 具有鉴权类型的方法需要提供有效的 API 密钥并验证通过。
+* 除了为 `NONE` 外，所有具有鉴权类型的接口均视为 `SIGNED` 请求（即包含 `signature`），[listenKey 管理](#user-data-stream-requests) 除外。
+* 具有鉴权类型的接口需要提供有效的 API 密钥并验证通过。
   * API 密钥可在您的 Binance 账户的 [API 管理](https://www.binance.com/en/support/faq/360002502072) 页面创建。
   * **API 密钥和密钥对均为敏感信息，切勿与他人分享。** 如果发现账户有异常活动，请立即撤销所有密钥并联系 Binance 支持。
-* API 密钥可配置为仅允许访问某些鉴权类型。
+* API 密钥可配置为仅允许访问某些鉴权接口。
   * 例如，您可以拥有具有 `TRADE` 权限的 API 密钥用于交易，
     同时使用具有 `USER_DATA` 权限的另一个 API 密钥来监控订单状态。
   * 默认情况下，API 密钥无法进行 `TRADE`，您需要先在 API 管理中启用交易权限。
@@ -119,9 +121,15 @@
 `USER_STREAM` |  管理用户数据流订阅
 
 ### 需要签名的接口
-* 调用`SIGNED` 接口时，除了接口本身所需的参数外，还需要在`query string` 或 `request body`中传递 `signature`, 即签名参数。
-* `签名` **大小写不敏感**.
-* 根据不同的API密钥类型，请参考下面 [签名示例](#post-apiv3order-%E7%9A%84%E7%A4%BA%E4%BE%8B) 以了解具体如何做计算签名。
+* 调用`SIGNED` 接口时，除了接口本身所需的参数外，还需要在 `query string` 或 `request body` 中传递 `signature`, 即签名参数。
+
+#### 签名是否是大小写敏感的
+
+* **HMAC：** 使用 HMAC 生成的签名**不区分大小写**。这意味着无论字母大小写如何，签名字符串都可以被验证。
+* **RSA：** 使用 RSA 生成的签名是**大小写敏感的**。
+* **Ed25519：** 使用 Ed25519 生成的签名也是**大小写敏感的**。
+
+请参阅[已签名请求示例 (HMAC)](#hmac-keys)、[已签名请求示例 (RSA)](#rsa-keys) 和[已签名请求示例 (Ed25519)](#ed25519-keys)，了解如何根据您使用的 API 密钥类型计算签名。
 
 <a id="timingsecurity"></a>
 
@@ -154,18 +162,28 @@ if (timestamp < (serverTime + 1 second) && (serverTime - timestamp) <= recvWindo
 这是我们设置`recvWindow`的目的所在，如果你从事高频交易，对交易时效性有较高的要求，可以灵活设置`recvWindow`以达到你的要求。
 **不推荐使用5秒以上的recvWindow。最大值不能超过60秒！**
 
+<a id="signed-endpoint-examples-for-post-apiv3order"></a>
 
-### POST /api/v3/order 的示例
+### POST /api/v3/order 的签名示例
 
 #### HMAC Keys
-以下是在linux bash环境下使用 `echo`,`openssl`和`curl`工具实现的一个调用接口下单的示例
-apikey、secret仅供示范
+
+不使用分隔符，把查询字符串与 `HTTP body` 连接在一起将生成请求的签名 payload。任何非 ASCII 字符在签名前都必须进行百分比编码（percent-encoded）。
+
+以下示例分步演示如何使用 `echo`、`openssl` 和 `curl` 从 Linux 命令行发送有效的签名 payload。其中一个例子中的交易对名称完全由 ASCII 字符组成，另一个例子中的交易对名称则包含非 ASCII 字符。
+
+API 密钥和密钥示例：
 
 Key | Value
 ------------ | ------------
 `apiKey` | vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A
 `secretKey` | NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j
 
+**警告：请勿与任何人分享您的 API 密钥和秘钥。**
+
+此处提供的示例密钥仅用于示范说明目的。
+
+交易对名称完全由 ASCII 字符组成的请求示例：
 
 参数 | 取值
 ------------ | ------------
@@ -178,75 +196,129 @@ Key | Value
 `recvWindow` | 5000
 `timestamp` | 1499827319559
 
+交易对名称包含非 ASCII 字符的请求示例：
 
-**示例 1: 所有参数通过 query string 发送**
-* **queryString:** symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559
-* **HMAC SHA256 签名:**
-
-    ```
-    [linux]$ echo -n "symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559" | openssl dgst -sha256 -hmac "NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j"
-    (stdin)= c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71
-    ```
-
-
-* **curl 调用:**
-
-    ```
-    (HMAC SHA256)
-    [linux]$ curl -H "X-MBX-APIKEY: vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A" -X POST 'https://api.binance.com/api/v3/order?symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71'
-    ```
-
-**示例 2: 所有参数通过 request body 发送**
-* **requestBody:** symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559
-* **HMAC SHA256 签名:**
-
-    ```
-    [linux]$ echo -n "symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559" | openssl dgst -sha256 -hmac "NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j"
-    (stdin)= c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71
-    ```
+参数 | 取值
+------------ | ------------
+`symbol` | １２３４５６
+`side` | BUY
+`type` | LIMIT
+`timeInForce` | GTC
+`quantity` | 1
+`price` | 0.1
+`recvWindow` | 5000
+`timestamp` | 1499827319559
 
 
-* **curl 调用:**
+**第一步: 构建签名 payload。**
 
-    ```
-    (HMAC SHA256)
-    [linux]$ curl -H "X-MBX-APIKEY: vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A" -X POST 'https://api.binance.com/api/v3/order' -d 'symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71'
-    ```
+1. 将参数格式化为 `参数=取值` 对并用 `&` 分隔每个参数对。
+2. 对字符串进行百分比编码（percent-encoded）。
 
-**示例 3: 混合使用 query string 与 request body**
-* **queryString:** symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC
-* **requestBody:** quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559
-* **HMAC SHA256 签名:**
+对于第一组示例参数（仅限 ASCII 字符）， `parameter=value` 字符串将如下所示：
 
-    ```
-    [linux]$ echo -n "symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTCquantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559" | openssl dgst -sha256 -hmac "NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j"
-    (stdin)= 0fd168b8ddb4876a0358a8d14d0c9f3da0e9b20c5d52b2a00fcf7d1c602f9a77
-    ```
+```console
+symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559
+```
 
+对字符串进行百分比编码（percent-encoded）后，签名 payload 如下所示：
 
-* **curl 调用:**
+```console
+symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559
+```
 
-    ```
-    (HMAC SHA256)
-    [linux]$ curl -H "X-MBX-APIKEY: vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A" -X POST 'https://api.binance.com/api/v3/order?symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC' -d 'quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=0fd168b8ddb4876a0358a8d14d0c9f3da0e9b20c5d52b2a00fcf7d1c602f9a77'
-    ```
+对于第二组示例参数（包含一些 Unicode 字符），`parameter=value` 字符串将如下所示：
 
-Note that the signature is different in example 3.
-There is no & between "GTC" and "quantity=1".
+```console
+symbol=１２３４５６&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559
+```
 
+对字符串进行百分比编码（percent-encoded）后，签名 payload 如下所示：
+
+```console
+symbol=%EF%BC%91%EF%BC%92%EF%BC%93%EF%BC%94%EF%BC%95%EF%BC%96&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559
+```
+
+**第二步: 计算签名。**
+
+1. 使用 API 密钥中的 `secretKey` 作为 HMAC-SHA-256 算法的签名密钥。
+2. 对步骤 1 中构建的签名 payload 进行签名。
+3. 将 HMAC-SHA-256 的输出编码为十六进制字符串。
+
+请注意，`secretKey` 和 payload 是**大小写敏感的**，而生成的签名值是不区分大小写的。
+
+**示例命令**
+
+对于第一组示例参数（仅限 ASCII 字符）：
+
+```console
+$ echo -n "symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559" | openssl dgst -sha256 -hmac "NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j"
+
+c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71
+```
+
+对于第二组示例参数（包含一些 Unicode 字符）：
+
+```console
+$ echo -n "symbol=%EF%BC%91%EF%BC%92%EF%BC%93%EF%BC%94%EF%BC%95%EF%BC%96&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559" | openssl dgst -sha256 -hmac "NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j"
+
+e1353ec6b14d888f1164ae9af8228a3dbd508bc82eb867db8ab6046442f33ef3
+```
+
+**第三步: 为请求添加签名**
+
+通过在查询字符串中添加 `signature` 参数来完成请求。
+
+对于第一组示例参数（仅限 ASCII 字符）：
+
+```console
+curl -s -v -H "X-MBX-APIKEY: $apiKey" -X POST "https://api.binance.com/api/v3/order?symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71"
+```
+
+对于第二组示例参数（包含一些 Unicode 字符）：
+
+```console
+curl -s -v -H "X-MBX-APIKEY: $apiKey" -X POST "https://api.binance.com/api/v3/order?symbol=%EF%BC%91%EF%BC%92%EF%BC%93%EF%BC%94%EF%BC%95%EF%BC%96&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=e1353ec6b14d888f1164ae9af8228a3dbd508bc82eb867db8ab6046442f33ef3"
+```
+
+以下是一个执行上述所有步骤的 Bash 脚本示例：
+
+```bash
+apiKey="vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A"
+secretKey="NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j"
+
+payload="symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559"
+
+# 对请求进行签名
+
+signature=$(echo -n "$payload" | openssl dgst -sha256 -hmac "$secretKey")
+signature=${signature#*= }    # Keep only the part after the "= "
+
+# 发送请求
+
+curl -H "X-MBX-APIKEY: $apiKey" -X POST "https://api.binance.com/api/v3/order?$payload&signature=$signature"
+
+```
 
 #### RSA Keys
 
-* 这将逐步介绍如何通过有效的签名发送 payload。
-* 我们接受`PKCS#8`格式的RSA密钥。
-* 要获取 API Key，您需要在您的账户上上传您的 RSA Public Key。
-* 对于这个例子，Private Key 将被引用为 `test-prv-key.pem`。
+不使用分隔符，把查询字符串与 `HTTP body` 连接在一起将生成请求的签名 payload。任何非 ASCII 字符在签名前都必须进行百分比编码（percent-encoded）。
+
+要获取 API 密钥，您需要将 RSA 公钥上传到您的帐户中，系统将为您提供相应的 API 密钥。
+
+仅支持 `PKCS#8` 密钥。
+
+在以下示例中，其中一个例子中的交易对名称完全由 ASCII 字符组成，另一个例子中的交易对名称则包含非 ASCII 字符。
+
+这些示例假设私钥存储在文件 `./test-prv-key.pem` 中。
 
 Key | Value
 ------------ | ------------
 `apiKey` | CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ
 
-参数 | 取值
+交易对名称完全由 ASCII 字符组成的请求示例：
+
+参数          | 取值
 ------------ | ------------
 `symbol` | BTCUSDT
 `side` | SELL
@@ -257,46 +329,121 @@ Key | Value
 `timestamp` | 1668481559918
 `recvWindow` | 5000
 
+交易对名称包含非 ASCII 字符的请求示例：
 
-**第一步: Payload**
+参数          | 取值
+------------ | ------------
+`symbol` | １２３４５６
+`side` | SELL
+`type` | LIMIT
+`timeInForce` | GTC
+`quantity` | 1
+`price` | 0.2
+`timestamp` | 1668481559918
+`recvWindow` | 5000
 
-将参数列表排列成一个 string。 用 `&` 分隔每个参数。对于上述参数，签名 payload 如下所示：
+
+**第一步: 构建签名 payload。**
+
+1. 将参数格式化为 `参数=取值` 对并用 `&` 分隔每个参数对。
+2. 对字符串进行百分比编码（percent-encoded）。
+
+对于第一组示例参数（仅限 ASCII 字符）， `parameter=value` 字符串将如下所示：
 
 ```console
 symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918&recvWindow=5000
 ```
 
-**第二步: 计算签名**
-
-1. 将签名有效负载编码为 ASCII 数据。
-2. 使用带有 SHA-256 hash 函数的 RSASSA-PKCS1-v1_5 算法对 payload 进行签名。
+对字符串进行百分比编码（percent-encoded）后，签名 payload 如下所示：
 
 ```console
-$ echo -n 'symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918&recvWindow=5000' | openssl dgst -sha256 -sign ./test-prv-key.pem
+symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918&recvWindow=5000
 ```
-3. 将输出编码为 base64 string。
+
+对于第二组示例参数（包含一些 Unicode 字符），`parameter=value` 字符串将如下所示：
 
 ```console
-$ echo -n 'symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918&recvWindow=5000' | openssl dgst -sha256 -sign ./test-prv-key.pem | openssl enc -base64 -A
+symbol=１２３４５６=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918&recvWindow=5000
+```
+
+对字符串进行百分比编码（percent-encoded）后，签名 payload 如下所示：
+
+```console
+symbol=%EF%BC%91%EF%BC%92%EF%BC%93%EF%BC%94%EF%BC%95%EF%BC%96&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918&recvWindow=5000
+```
+
+**第二步: 计算签名。**
+
+1. 使用 RSASSA-PKCS1-v1_5 算法和 SHA-256 哈希函数对步骤 1 中构建的签名 payload 进行签名。
+2. 将输出结果编码为 base64 格式。
+
+请注意，payload 和生成的`签名值`是**大小写敏感的**。
+
+对于第一组示例参数（仅限 ASCII 字符）：
+
+```console
+$  echo -n 'symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918&recvWindow=5000' | openssl dgst -sha256 -sign ./test-prv-key.pem | openssl enc -base64 -A | tr -d '\n'
 HZ8HOjiJ1s/igS9JA+n7+7Ti/ihtkRF5BIWcPIEluJP6tlbFM/Bf44LfZka/iemtahZAZzcO9TnI5uaXh3++lrqtNonCwp6/245UFWkiW1elpgtVAmJPbogcAv6rSlokztAfWk296ZJXzRDYAtzGH0gq7CgSJKfH+XxaCmR0WcvlKjNQnp12/eKXJYO4tDap8UCBLuyxDnR7oJKLHQHJLP0r0EAVOOSIbrFang/1WOq+Jaq4Efc4XpnTgnwlBbWTmhWDR1pvS9iVEzcSYLHT/fNnMRxFc7u+j3qI//5yuGuu14KR0MuQKKCSpViieD+fIti46sxPTsjSemoUKp0oXA==
 ```
 
-4. 由于签名可能包含 `/` 和 `=`，这可能会导致发送请求时出现问题。 所以签名必须是 URL 编码的。
+对于第二组示例参数（包含一些 Unicode 字符）：
+
+```console
+$  echo -n 'symbol=%EF%BC%91%EF%BC%92%EF%BC%93%EF%BC%94%EF%BC%95%EF%BC%96&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918&recvWindow=5000' | openssl dgst -sha256 -sign ./test-prv-key.pem | openssl enc -base64 -A | tr -d '\n'
+
+qJtv66wyp/1mZE+mIFAAMUoTe8xkmLN7/eAZjuC9x1ocxovItHLl/sNK7Wq8QjgiHqGn0bb8P7yVvGBEd1gFe71NQ8aM0M+JNIMz5UFxfeA53rXjFlvsyH1Sig+OuO9Nz5nhCaJ6bEfj2iuv7w27pB3L8MVqmoCi6D9C/QMiLxtPaR70CxtnvoOlIgPmpv2bQy029A31NEK19ieVLkoyp1EUkXRaX3v0mohx8yMnUG1dhX9nUg3Oy8TYZ03DQy7kHDGkMKisNX7rt/GuGx1HIgjFclDGLsbAFIodvSLjm9FbseasMELoxlAJDlwRnW8zo5sQmL0Fz7ao935QBynrng==
+```
+
+3. 对 base64 格式的字符串进行百分比编码（percent-encoded）。
+
+对于第一组示例参数（仅限 ASCII 字符）：
 
 ```console
 HZ8HOjiJ1s%2FigS9JA%2Bn7%2B7Ti%2FihtkRF5BIWcPIEluJP6tlbFM%2FBf44LfZka%2FiemtahZAZzcO9TnI5uaXh3%2B%2BlrqtNonCwp6%2F245UFWkiW1elpgtVAmJPbogcAv6rSlokztAfWk296ZJXzRDYAtzGH0gq7CgSJKfH%2BXxaCmR0WcvlKjNQnp12%2FeKXJYO4tDap8UCBLuyxDnR7oJKLHQHJLP0r0EAVOOSIbrFang%2F1WOq%2BJaq4Efc4XpnTgnwlBbWTmhWDR1pvS9iVEzcSYLHT%2FfNnMRxFc7u%2Bj3qI%2F%2F5yuGuu14KR0MuQKKCSpViieD%2BfIti46sxPTsjSemoUKp0oXA%3D%3D
 ```
 
-5. curl 命令:
+对于第二组示例参数（包含一些 Unicode 字符）：
+
+```console
+qJtv66wyp%2F1mZE%2BmIFAAMUoTe8xkmLN7%2FeAZjuC9x1ocxovItHLl%2FsNK7Wq8QjgiHqGn0bb8P7yVvGBEd1gFe71NQ8aM0M%2BJNIMz5UFxfeA53rXjFlvsyH1Sig%2BOuO9Nz5nhCaJ6bEfj2iuv7w27pB3L8MVqmoCi6D9C%2FQMiLxtPaR70CxtnvoOlIgPmpv2bQy029A31NEK19ieVLkoyp1EUkXRaX3v0mohx8yMnUG1dhX9nUg3Oy8TYZ03DQy7kHDGkMKisNX7rt%2FGuGx1HIgjFclDGLsbAFIodvSLjm9FbseasMELoxlAJDlwRnW8zo5sQmL0Fz7ao935QBynrng%3D%3D
+```
+
+**第三步: 为请求添加签名**
+
+通过在查询字符串中添加 `signature` 参数来完成请求。
+
+对于第一组示例参数（仅限 ASCII 字符）：
 
 ```console
 curl -H "X-MBX-APIKEY: CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ" -X POST 'https://api.binance.com/api/v3/order?symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918&recvWindow=5000&signature=HZ8HOjiJ1s%2FigS9JA%2Bn7%2B7Ti%2FihtkRF5BIWcPIEluJP6tlbFM%2FBf44LfZka%2FiemtahZAZzcO9TnI5uaXh3%2B%2BlrqtNonCwp6%2F245UFWkiW1elpgtVAmJPbogcAv6rSlokztAfWk296ZJXzRDYAtzGH0gq7CgSJKfH%2BXxaCmR0WcvlKjNQnp12%2FeKXJYO4tDap8UCBLuyxDnR7oJKLHQHJLP0r0EAVOOSIbrFang%2F1WOq%2BJaq4Efc4XpnTgnwlBbWTmhWDR1pvS9iVEzcSYLHT%2FfNnMRxFc7u%2Bj3qI%2F%2F5yuGuu14KR0MuQKKCSpViieD%2BfIti46sxPTsjSemoUKp0oXA%3D%3D'
 ```
 
-下面的示例 Bash 脚本执行上述类似的步骤：
+对于第二组示例参数（包含一些 Unicode 字符）：
+
+```console
+curl -H "X-MBX-APIKEY: CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ" -X POST 'https://api.binance.com/api/v3/order?symbol=%EF%BC%91%EF%BC%92%EF%BC%93%EF%BC%94%EF%BC%95%EF%BC%96&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918&recvWindow=5000&signature=qJtv66wyp%2F1mZE%2BmIFAAMUoTe8xkmLN7%2FeAZjuC9x1ocxovItHLl%2FsNK7Wq8QjgiHqGn0bb8P7yVvGBEd1gFe71NQ8aM0M%2BJNIMz5UFxfeA53rXjFlvsyH1Sig%2BOuO9Nz5nhCaJ6bEfj2iuv7w27pB3L8MVqmoCi6D9C%2FQMiLxtPaR70CxtnvoOlIgPmpv2bQy029A31NEK19ieVLkoyp1EUkXRaX3v0mohx8yMnUG1dhX9nUg3Oy8TYZ03DQy7kHDGkMKisNX7rt%2FGuGx1HIgjFclDGLsbAFIodvSLjm9FbseasMELoxlAJDlwRnW8zo5sQmL0Fz7ao935QBynrng%3D%3D'
+```
+
+以下是一个执行上述所有步骤的 Bash 脚本示例：
 
 ```bash
-#!/usr/bin/env bash
+function rawurlencode {
+  local string="${1}"
+  local strlen=${#string}
+  local encoded=""
+  local pos c o
+
+  for (( pos=0 ; pos<strlen ; pos++ )); do
+     c=${string:$pos:1}
+     case "$c" in
+        [-_.~a-zA-Z0-9] ) o="${c}" ;;
+        * )               printf -v o '%%%02x' "'$c"
+     esac
+     encoded+="${o}"
+  done
+  echo "${encoded}"
+}
+
 # 设置身份验证：
 API_KEY="替换成您的 API Key"
 PRIVATE_KEY_PATH="test-prv-key.pem"
@@ -307,9 +454,12 @@ API_PARAMS="symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price
 # 计算签名：
 timestamp=$(date +%s000)
 api_params_with_timestamp="$API_PARAMS&timestamp=$timestamp"
-signature=$(echo -n "$api_params_with_timestamp" \
-            | openssl dgst -sha256 -sign "$PRIVATE_KEY_PATH" \
-            | openssl enc -base64 -A)
+
+rawSignature=$(echo -n $api_params_with_timestamp | openssl dgst -keyform PEM -sha256 -sign $PRIVATE_KEY_PATH | openssl enc -base64 | tr -d '\n')
+
+# 对签名编码进行百分号编码（percent-encoding）
+signature=$(rawurlencode "$rawSignature")
+
 # 发送请求：
 curl -H "X-MBX-APIKEY: $API_KEY" -X "$API_METHOD" \
     "https://api.binance.com/$API_CALL?$api_params_with_timestamp" \
@@ -318,7 +468,19 @@ curl -H "X-MBX-APIKEY: $API_KEY" -X "$API_METHOD" \
 
 #### Ed25519 Keys
 
-**我们建议使用 Ed25519 API keys**，因为它在所有受支持的 API key 类型中提供最佳性能和安全性。
+**我们强烈建议使用 Ed25519 API keys**，因为它在所有受支持的 API key 类型中提供最佳性能和安全性。
+
+不使用分隔符，把查询字符串与 `HTTP body` 连接在一起将生成请求的签名 payload。任何非 ASCII 字符在签名前都必须进行百分比编码（percent-encoded）。
+
+在以下示例中，其中一个例子中的交易对名称完全由 ASCII 字符组成，另一个例子中的交易对名称则包含非 ASCII 字符。
+
+这些示例假设私钥存储在文件 `./test-prv-key.pem` 中。
+
+Key | Value
+------------ | ------------
+`apiKey` | 4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO
+
+交易对名称完全由 ASCII 字符组成的请求示例：
 
 参数           | 取值
 ------------  | ------------
@@ -329,23 +491,123 @@ curl -H "X-MBX-APIKEY: $API_KEY" -X "$API_METHOD" \
 `quantity`    | 1
 `price`       | 0.2
 `timestamp`   | 1668481559918
+`recvWindow`  | 5000
 
-下面的 Python 示例代码能说明如何使用 Ed25519 key 对 payload 进行签名。
+交易对名称包含非 ASCII 字符的请求示例：
+
+参数           | 取值
+------------  | ------------
+`symbol`      | １２３４５６
+`side`        | SELL
+`type`        | LIMIT
+`timeInForce` | GTC
+`quantity`    | 1
+`price`       | 0.2
+`timestamp`   | 1668481559918
+`recvWindow`  | 5000
+
+**第一步: 构建签名 payload。**
+
+1. 将参数格式化为 `参数=取值` 对并用 `&` 分隔每个参数对。
+2. 对字符串进行百分比编码（percent-encoded）。
+
+对于第一组示例参数（仅限 ASCII 字符）， `parameter=value` 字符串将如下所示：
+
+```console
+symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918&recvWindow=5000
+```
+
+对字符串进行百分比编码（percent-encoded）后，签名 payload 如下所示：
+
+```console
+symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918&recvWindow=5000
+```
+
+对于第二组示例参数（包含一些 Unicode 字符），`parameter=value` 字符串将如下所示：
+
+```console
+symbol=１２３４５６&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918&recvWindow=5000
+```
+
+对字符串进行百分比编码（percent-encoded）后，签名 payload 如下所示：
+
+```console
+symbol=%EF%BC%91%EF%BC%92%EF%BC%93%EF%BC%94%EF%BC%95%EF%BC%96&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918&recvWindow=5000
+```
+
+**第二步: 计算签名。**
+
+1. 对 payload 进行签名。
+2. 将输出结果编码为 base64 格式。
+
+请注意，payload 和生成的`签名值`是**大小写敏感的**。
+
+对于第一组示例参数（仅限 ASCII 字符）：
+
+```console
+echo -n "symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918&recvWindow=5000" | openssl dgst -keyform PEM -sha256 -sign ./test-prv-key.pem | openssl enc -base64 | tr -d '\n'
+
+HaZnek7KOGa/k5+f6Q1nw8lzMUpo36mRVvvLHCMUCXxlmdQQGZge1luAUKnleD/DYeD19YrqzeHbb6xU3MkSIXKhAO1MaYq48uGVYb3vJScEZVOutgMInrZzUcCWNulNkfcbmExSiymCZ5xQBw5QDuzpuDFqRZ1Xt+BZxEHBN9OYQKpoe0+ovjnXyVOaH8VUKhE/ghUWnThrXJr+hmSc5t7ggjiVPQc7pGn3qSNGCQwdpkQC9GHMr/r+8n6qeEKMYB5j/1wC4d8Jae8FQiU8xcXR0NlUgV2LAw61/ZJv5BTJpa+z5Lv1W9v6jHQWRX2O8uaG3KU/lR3spR7+oGlWOw=
+```
+
+对于第二组示例参数（包含一些 Unicode 字符）：
+
+```console
+echo -n "symbol=%EF%BC%91%EF%BC%92%EF%BC%93%EF%BC%94%EF%BC%95%EF%BC%96&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918&recvWindow=5000" | openssl dgst -keyform PEM -sha256 -sign ./test-prv-key.pem | openssl enc -base64 | tr -d '\n'
+
+qJtv66wyp/1mZE+mIFAAMUoTe8xkmLN7/eAZjuC9x1ocxovItHLl/sNK7Wq8QjgiHqGn0bb8P7yVvGBEd1gFe71NQ8aM0M+JNIMz5UFxfeA53rXjFlvsyH1Sig+OuO9Nz5nhCaJ6bEfj2iuv7w27pB3L8MVqmoCi6D9C/QMiLxtPaR70CxtnvoOlIgPmpv2bQy029A31NEK19ieVLkoyp1EUkXRaX3v0mohx8yMnUG1dhX9nUg3Oy8TYZ03DQy7kHDGkMKisNX7rt/GuGx1HIgjFclDGLsbAFIodvSLjm9FbseasMELoxlAJDlwRnW8zo5sQmL0Fz7ao935QBynrng==
+```
+
+3. 对 base64 格式的字符串进行百分比编码（percent-encoded）。
+
+对于第一组示例参数（仅限 ASCII 字符）：
+
+```console
+HaZnek7KOGa%2Fk5%2Bf6Q1nw8lzMUpo36mRVvvLHCMUCXxlmdQQGZge1luAUKnleD%2FDYeD19YrqzeHbb6xU3MkSIXKhAO1MaYq48uGVYb3vJScEZVOutgMInrZzUcCWNulNkfcbmExSiymCZ5xQBw5QDuzpuDFqRZ1Xt%2BBZxEHBN9OYQKpoe0%2BovjnXyVOaH8VUKhE%2FghUWnThrXJr%2BhmSc5t7ggjiVPQc7pGn3qSNGCQwdpkQC9GHMr%2Fr%2B8n6qeEKMYB5j%2F1wC4d8Jae8FQiU8xcXR0NlUgV2LAw61%2FZJv5BTJpa%2Bz5Lv1W9v6jHQWRX2O8uaG3KU%2FlR3spR7%2BoGlWOw%3D
+```
+
+对于第二组示例参数（包含一些 Unicode 字符）：
+
+```console
+qJtv66wyp%2F1mZE%2BmIFAAMUoTe8xkmLN7%2FeAZjuC9x1ocxovItHLl%2FsNK7Wq8QjgiHqGn0bb8P7yVvGBEd1gFe71NQ8aM0M%2BJNIMz5UFxfeA53rXjFlvsyH1Sig%2BOuO9Nz5nhCaJ6bEfj2iuv7w27pB3L8MVqmoCi6D9C%2FQMiLxtPaR70CxtnvoOlIgPmpv2bQy029A31NEK19ieVLkoyp1EUkXRaX3v0mohx8yMnUG1dhX9nUg3Oy8TYZ03DQy7kHDGkMKisNX7rt%2FGuGx1HIgjFclDGLsbAFIodvSLjm9FbseasMELoxlAJDlwRnW8zo5sQmL0Fz7ao935QBynrng%3D%3D
+```
+
+**第三步: 为请求添加签名**
+
+通过在查询字符串中添加 `signature` 参数来完成请求。
+
+对于第一组示例参数（仅限 ASCII 字符）：
+
+```console
+curl -H "X-MBX-APIKEY: 4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO" -X POST 'hhttps://api.binance.com/api/v3/order?symbol=BTCUSDT&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918&recvWindow=5000&signature=HaZnek7KOGa%2Fk5%2Bf6Q1nw8lzMUpo36mRVvvLHCMUCXxlmdQQGZge1luAUKnleD%2FDYeD19YrqzeHbb6xU3MkSIXKhAO1MaYq48uGVYb3vJScEZVOutgMInrZzUcCWNulNkfcbmExSiymCZ5xQBw5QDuzpuDFqRZ1Xt%2BBZxEHBN9OYQKpoe0%2BovjnXyVOaH8VUKhE%2FghUWnThrXJr%2BhmSc5t7ggjiVPQc7pGn3qSNGCQwdpkQC9GHMr%2Fr%2B8n6qeEKMYB5j%2F1wC4d8Jae8FQiU8xcXR0NlUgV2LAw61%2FZJv5BTJpa%2Bz5Lv1W9v6jHQWRX2O8uaG3KU%2FlR3spR7%2BoGlWOw%3D'
+```
+
+对于第二组示例参数（包含一些 Unicode 字符）：
+
+```console
+curl -H "X-MBX-APIKEY: 4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO" -X POST 'https://api.binance.com/api/v3/order?symbol=%EF%BC%91%EF%BC%92%EF%BC%93%EF%BC%94%EF%BC%95%EF%BC%96&&side=SELL&type=LIMIT&timeInForce=GTC&quantity=1&price=0.2&timestamp=1668481559918&recvWindow=5000&signature=qJtv66wyp%2F1mZE%2BmIFAAMUoTe8xkmLN7%2FeAZjuC9x1ocxovItHLl%2FsNK7Wq8QjgiHqGn0bb8P7yVvGBEd1gFe71NQ8aM0M%2BJNIMz5UFxfeA53rXjFlvsyH1Sig%2BOuO9Nz5nhCaJ6bEfj2iuv7w27pB3L8MVqmoCi6D9C%2FQMiLxtPaR70CxtnvoOlIgPmpv2bQy029A31NEK19ieVLkoyp1EUkXRaX3v0mohx8yMnUG1dhX9nUg3Oy8TYZ03DQy7kHDGkMKisNX7rt%2FGuGx1HIgjFclDGLsbAFIodvSLjm9FbseasMELoxlAJDlwRnW8zo5sQmL0Fz7ao935QBynrng%3D%3D'
+```
+
+以下是一个执行上述所有步骤的 Bash 脚本示例：
 
 ```python
 #!/usr/bin/env python3
+
 import base64
 import requests
 import time
+import urllib.parse
 from cryptography.hazmat.primitives.serialization import load_pem_private_key
 
 # 设置身份验证：
 API_KEY='替换成您的 API Key'
 PRIVATE_KEY_PATH='test-prv-key.pem'
+
 # 加载 private key。
 # 在这个例子中，private key 没有加密，但我们建议使用强密码以提高安全性。
 with open(PRIVATE_KEY_PATH, 'rb') as f:
     private_key = load_pem_private_key(data=f.read(), password=None)
+
 # 设置请求参数：
 params = {
     'symbol':       'BTCUSDT',
@@ -355,13 +617,16 @@ params = {
     'quantity':     '1.0000000',
     'price':        '0.20',
 }
+
 # 参数中加时间戳：
 timestamp = int(time.time() * 1000) # 以毫秒为单位的 UNIX 时间戳
 params['timestamp'] = timestamp
+
 # 参数中加签名：
-payload = '&'.join([f'{param}={value}' for param, value in params.items()])
+payload = urllib.parse.urlencode(params, encoding='UTF-8')
 signature = base64.b64encode(private_key.sign(payload.encode('ASCII')))
 params['signature'] = signature
+
 # 发送请求：
 headers = {
     'X-MBX-APIKEY': API_KEY,

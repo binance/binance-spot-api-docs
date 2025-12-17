@@ -16,6 +16,7 @@
     - [Unfilled Order Count](#unfilled-order-count)
   - [Request security](#request-security)
     - [SIGNED request security](#signed-request-security)
+      - [Signature Case Sensitivity](#signature-case-sensitivity)
     - [Timing security](#timing-security)
     - [SIGNED request example (HMAC)](#signed-request-example-hmac)
     - [SIGNED request example (RSA)](#signed-request-example-rsa)
@@ -302,7 +303,7 @@ Here are some common status codes that you might encounter:
 * `200` indicates a successful response.
 * `4XX` status codes indicate invalid requests; the issue is on your side.
   * `400` – your request failed, see `error` for the reason.
-  * `403` – you have been blocked by the Web Application Firewall.  This can indicate a rate limit violation or a security block. See https://www.binance.com/en/support/faq/detail/360004492232 for more details.
+  * `403` – you have been blocked by the Web Application Firewall. This can indicate a rate limit violation or a security block. See https://www.binance.com/en/support/faq/detail/360004492232 for more details.
   * `409` – your request partially failed but also partially succeeded, see `error` for details.
   * `418` – you have been auto-banned for repeated violation of rate limits.
   * `429` – you have exceeded API request rate limit, please slow down.
@@ -612,7 +613,14 @@ Security type |  Description
 ### SIGNED request security
 
 * `SIGNED` requests require an additional parameter: `signature`, authorizing the request.
-* Please consult [SIGNED request example (HMAC)](#signed-request-example-hmac), [SIGNED request example (RSA)](#signed-request-example-rsa), and [SIGNED request example (Ed25519)](#signed-request-example-ed25519) on how to compute signature, depending on which API key type you are using.
+
+#### Signature Case Sensitivity
+
+* **HMAC:** Signatures generated using HMAC are **not case-sensitive**. This means the signature string can be verified regardless of letter casing.
+* **RSA:** Signatures generated using RSA are **case-sensitive**.
+* **Ed25519:** Signatures generated using ED25519 are also **case-sensitive**
+
+Please consult [SIGNED request example (HMAC)](#signed-request-example-hmac), [SIGNED request example (RSA)](#signed-request-example-rsa), and [SIGNED request example (Ed25519)](#signed-request-example-ed25519) on how to compute signature, depending on which API key type you are using.
 
 <a id="timingsecurity"></a>
 
@@ -651,20 +659,20 @@ server.
 
 ### SIGNED request example (HMAC)
 
-Here is a step-by-step guide on how to sign requests using HMAC secret key.
+Here is a step-by-step guide on how to sign requests using an HMAC secret key.
 
 Example API key and secret key:
 
 Key          | Value
 ------------ | ------------
-apiKey       | `vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A`
-secretKey    | `NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j`
+`apiKey`       | `vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A`
+`secretKey`    | `NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j`
 
 **WARNING: DO NOT SHARE YOUR API KEY AND SECRET KEY WITH ANYONE.**
 
 The example keys are provided here only for illustrative purposes.
 
-Example of request:
+Example of request with a symbol name comprised entirely of ASCII characters:
 
 ```json
 {
@@ -677,8 +685,28 @@ Example of request:
     "timeInForce":      "GTC",
     "quantity":         "0.01000000",
     "price":            "52000.00",
-    "newOrderRespType": "ACK",
     "recvWindow":       100,
+    "timestamp":        1645423376532,
+    "apiKey":           "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature":        "------ FILL ME ------"
+  }
+}
+```
+
+Example of a request with a symbol name containing non-ASCII characters:
+
+```json
+{
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol":           "１２３４５６",
+    "side":             "BUY",
+    "type":             "LIMIT",
+    "timeInForce":      "GTC",
+    "quantity":         "0.01000000",
+    "price":            "0.10000000",
+    "recvWindow":       5000,
     "timestamp":        1645423376532,
     "apiKey":           "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
     "signature":        "------ FILL ME ------"
@@ -688,51 +716,85 @@ Example of request:
 
 As you can see, the `signature` parameter is currently missing.
 
-**Step 1. Construct the signature payload**
+**Step 1: Construct the signature payload**
 
-Take all request `params` except for the `signature`, sort them by name in alphabetical order:
+Take all request `params` except `signature` and **sort them in alphabetical order by parameter name**:
+
+For the first set of example parameters (ASCII only):
 
 Parameter        | Value
 ---------------- | ------------
-apiKey           | vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A
-newOrderRespType | ACK
-price            | 52000.00
-quantity         | 0.01000000
-recvWindow       | 100
-side             | SELL
-symbol           | BTCUSDT
-timeInForce      | GTC
-timestamp        | 1645423376532
-type             | LIMIT
+`apiKey`           | vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A
+`price`            | 52000.00
+`quantity`         | 0.01000000
+`recvWindow`       | 100
+`side`             | SELL
+`symbol`           | BTCUSDT
+`timeInForce`      | GTC
+`timestamp`        | 1645423376532
+`type`             | LIMIT
 
-Format parameters as `parameter=value` pairs separated by `&`.
+For the second set of example parameters (some non-ASCII characters):
 
-Resulting signature payload:
+Parameter | Value
+------------ | ------------
+`apiKey` | vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A
+`price` | 0.10000000
+`quantity` | 1.00000000
+`recvWindow` | 5000
+`side` | BUY
+`symbol` | １２３４５６
+`timeInForce` | GTC
+`timestamp` | 1645423376532
+`type` | LIMIT
 
+Format parameters as `parameter=value` pairs separated by `&`. Values need to be encoded in UTF-8.
+
+For the first set of example parameters (ASCII only), the signature payload should look like this:
+
+```console
+apiKey=vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
 ```
-apiKey=vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A&newOrderRespType=ACK&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
+
+For the second set of example parameters (some non-ASCII characters), the signature payload should look like this:
+
+```console
+apiKey=vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A&price=0.10000000&quantity=1.00000000&recvWindow=5000&side=BUY&symbol=１２３４５６&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
 ```
 
-**Step 2. Compute the signature**
+**Step 2: Compute the signature**
 
-1. Interpret `secretKey` as ASCII data, using it as a key for HMAC-SHA-256.
-2. Sign signature payload as ASCII data.
-3. Encode HMAC-SHA-256 output as a hex string.
+1. Use the `secretKey` of your API key as the signing key for the HMAC-SHA-256 algorithm.
+2. Sign the UTF-8 bytes of the signature payload constructed in Step 1.
+3. Encode the HMAC-SHA-256 output as a hex string.
 
-Note that `apiKey`, `secretKey`, and the payload are **case-sensitive**, while resulting signature value is case-insensitive.
+Note that `apiKey`, `secretKey`, and the payload are **case-sensitive**, while the resulting signature value is case-insensitive.
 
 You can cross-check your signature algorithm implementation with OpenSSL:
 
+For the first set of example parameters (ASCII only):
+
 ```console
-$ echo -n 'apiKey=vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A&newOrderRespType=ACK&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT' \
+$ echo -n 'apiKey=vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT' \
   | openssl dgst -hex -sha256 -hmac 'NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j'
 
-cc15477742bd704c29492d96c7ead9414dfd8e0ec4a00f947bb5bb454ddbd08a
+aa1b5712c094bc4e57c05a1a5c1fd8d88dcd628338ea863fec7b88e59fe2db24
 ```
 
-**Step 3. Add `signature` to request `params`**
+For the second set of example parameters (some non-ASCII characters):
 
-Finally, complete the request by adding the `signature` parameter with the signature string.
+```console
+$ echo -n 'apiKey=vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A&price=0.10000000&quantity=1.00000000&recvWindow=5000&side=BUY&symbol=１２３４５６&timeInForce=GTC&timestamp=1645423376532&type=LIMIT' \
+  | openssl dgst -hex -sha256 -hmac 'NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j'
+
+b33892ae8e687c939f4468c6268ddd4c40ac1af18ad19a064864c47bae0752cd
+```
+
+**Step 3: Add `signature` to request `params`**
+
+Complete the request by adding the `signature` parameter with the signature string.
+
+For the first set of example parameters (ASCII only):
 
 ```json
 {
@@ -745,30 +807,50 @@ Finally, complete the request by adding the `signature` parameter with the signa
     "timeInForce":      "GTC",
     "quantity":         "0.01000000",
     "price":            "52000.00",
-    "newOrderRespType": "ACK",
     "recvWindow":       100,
     "timestamp":        1645423376532,
     "apiKey":           "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature":        "cc15477742bd704c29492d96c7ead9414dfd8e0ec4a00f947bb5bb454ddbd08a"
+    "signature":        "aa1b5712c094bc4e57c05a1a5c1fd8d88dcd628338ea863fec7b88e59fe2db24"
+  }
+}
+```
+
+For the second set of example parameters (some non-ASCII characters):
+
+```json
+{
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol":           "１２３４５６",
+    "side":             "BUY",
+    "type":             "LIMIT",
+    "timeInForce":      "GTC",
+    "quantity":         "1.00000000",
+    "price":            "0.10000000",
+    "recvWindow":       5000,
+    "timestamp":        1645423376532,
+    "apiKey":           "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature":        "b33892ae8e687c939f4468c6268ddd4c40ac1af18ad19a064864c47bae0752cd"
   }
 }
 ```
 
 ### SIGNED request example (RSA)
 
-Here is a step-by-step guide on how to sign requests using your RSA private key.
+Here is a step-by-step guide on how to sign requests using an RSA private key.
 
 Key          | Value
 ------------ | ------------
-apiKey       | `CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ`
+`apiKey`       | `CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ`
 
-In this example, we assume the private key is stored in the `test-prv-key.pem` file.
+These examples assume the private key is stored in the file `test-rsa-prv.pem`.
 
 **WARNING: DO NOT SHARE YOUR API KEY AND PRIVATE KEY WITH ANYONE.**
 
 The example keys are provided here only for illustrative purposes.
 
-Example of request:
+Example of request with a symbol name comprised entirely of ASCII characters:
 
 ```json
 {
@@ -781,7 +863,6 @@ Example of request:
     "timeInForce":      "GTC",
     "quantity":         "0.01000000",
     "price":            "52000.00",
-    "newOrderRespType": "ACK",
     "recvWindow":       100,
     "timestamp":        1645423376532,
     "apiKey":           "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
@@ -790,52 +871,107 @@ Example of request:
 }
 ```
 
-**Step 1. Construct the signature payload**
+Example of a request with a symbol name containing non-ASCII characters:
 
-Take all request `params` except for the `signature`, sort them by name in alphabetical order:
+```json
+{
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol":           "１２３４５６",
+    "side":             "BUY",
+    "type":             "LIMIT",
+    "timeInForce":      "GTC",
+    "quantity":         "0.01000000",
+    "price":            "0.10000000",
+    "recvWindow":       5000,
+    "timestamp":        1645423376532,
+    "apiKey":           "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
+    "signature":        "------ FILL ME ------"
+  }
+}
+```
+
+**Step 1: Construct the signature payload**
+
+Take all request `params` except `signature` and **sort them in alphabetical order by parameter name**:
+
+For the first set of example parameters (ASCII only):
 
 Parameter        | Value
 ---------------- | ------------
-apiKey           | CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ
-newOrderRespType | ACK
-price            | 52000.00
-quantity         | 0.01000000
-recvWindow       | 100
-side             | SELL
-symbol           | BTCUSDT
-timeInForce      | GTC
-timestamp        | 1645423376532
-type             | LIMIT
+`apiKey`           | CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ
+`price`            | 52000.00
+`quantity`         | 0.01000000
+`recvWindow`       | 100
+`side`             | SELL
+`symbol`           | BTCUSDT
+`timeInForce`      | GTC
+`timestamp`        | 1645423376532
+`type`             | LIMIT
 
-Format parameters as `parameter=value` pairs separated by `&`.
+For the second set of example parameters (some non-ASCII characters):
 
-Resulting signature payload:
+Parameter | Value
+------------ | ------------
+`apiKey` | CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ
+`price` | 0.10000000
+`quantity` | 1.00000000
+`recvWindow` | 5000
+`side` | BUY
+`symbol` | １２３４５６
+`timeInForce` | GTC
+`timestamp` | 1645423376532
+`type` | LIMIT
 
+Format parameters as `parameter=value` pairs separated by `&`. Values need to be encoded in UTF-8.
+
+For the first set of example parameters (ASCII only), the signature payload should look like this:
+
+```console
+apiKey=CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
 ```
-apiKey=CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ&newOrderRespType=ACK&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
+
+For the second set of example parameters (some non-ASCII characters), the signature payload should look like this:
+
+```console
+apiKey=CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ&price=0.10000000&quantity=1.00000000&recvWindow=5000&side=BUY&symbol=１２３４５６&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
 ```
 
-**Step 2. Compute the signature**
+**Step 2: Compute the signature**
 
-1. Encode signature payload as ASCII data.
-2. Sign payload using RSASSA-PKCS1-v1_5 algorithm with SHA-256 hash function.
-3. Encode output as base64 string.
+1. Sign the UTF-8 bytes of the signature payload constructed in Step 1 using the RSASSA-PKCS1-v1_5 algorithm with SHA-256 hash function.
+2. Encode the output in base64.
 
 Note that `apiKey`, the payload, and the resulting `signature` are **case-sensitive**.
 
 You can cross-check your signature algorithm implementation with OpenSSL:
 
+For the first set of example parameters (ASCII only):
+
 ```console
-$ echo -n 'apiKey=CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ&newOrderRespType=ACK&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT' \
-  | openssl dgst -sha256 -sign test-prv-key.pem \
+$ echo -n 'apiKey=CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT' \
+  | openssl dgst -sha256 -sign test-rsa-prv.pem \
   | openssl enc -base64 -A
 
 OJJaf8C/3VGrU4ATTR4GiUDqL2FboSE1Qw7UnnoYNfXTXHubIl1iaePGuGyfct4NPu5oVEZCH4Q6ZStfB1w4ssgu0uiB/Bg+fBrRFfVgVaLKBdYHMvT+ljUJzqVaeoThG9oXlduiw8PbS9U8DYAbDvWN3jqZLo4Z2YJbyovyDAvDTr/oC0+vssLqP7NmlNb3fF3Bj7StmOwJvQJTbRAtzxK5PP7OQe+0mbW+D7RqVkUiSswR8qJFWTeSe4nXXNIdZdueYhF/Xf25L+KitJS5IHdIHcKfEw3MQzHFb2ZsGWkjDQwxkwr7Noi0Zaa+gFtxCuatGFm9dFIyx217pmSHtA==
 ```
 
-**Step 3. Add `signature` to request `params`**
+For the second set of example parameters (some non-ASCII characters):
 
-Finally, complete the request by adding the `signature` parameter with the signature string.
+```console
+$ echo -n 'apiKey=CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ&price=0.10000000&quantity=1.00000000&recvWindow=5000&side=BUY&symbol=１２３４５６&timeInForce=GTC&timestamp=1645423376532&type=LIMIT' \
+  | openssl dgst -sha256 -sign test-rsa-prv.pem \
+  | openssl enc -base64 -A
+
+F3o/79Ttvl2cVYGPfBOF3oEOcm5QcYmTYWpdVIrKve5u+8paMNDAdUE+teqMxFM9HcquetGcfuFpLYtsQames5bDx/tskGM76TWW8HaM+6tuSYBSFLrKqChfA9hQGLYGjAiflf1YBnDhY+7vNbJFusUborNOloOj+ufzP5q42PvI3H0uNy3W5V3pyfXpDGCBtfCYYr9NAqA4d+AQfyllL/zkO9h9JSdozN49t0/hWGoD2dWgSO0Je6MytKEvD4DQXGeqNlBTB6tUXcWnRW+FcaKZ4KYqnxCtb1u8rFXUYgFykr2CbcJLSmw6ydEJ3EZ/NaZopRr+cU0W2m0HZ3qucw==
+```
+
+**Step 3: Add `signature` to request `params`**
+
+Complete the request by adding the `signature` parameter with the signature string.
+
+For the first set of example parameters (ASCII only):
 
 ```json
 {
@@ -857,21 +993,206 @@ Finally, complete the request by adding the `signature` parameter with the signa
 }
 ```
 
+For the second set of example parameters (some non-ASCII characters):
+
+```json
+{
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol":           "１２３４５６",
+    "side":             "SELL",
+    "type":             "LIMIT",
+    "timeInForce":      "GTC",
+    "quantity":         "1.00000000",
+    "price":            "0.10000000",
+    "recvWindow":       5000,
+    "timestamp":        1645423376532,
+    "apiKey":           "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
+    "signature":        "F3o/79Ttvl2cVYGPfBOF3oEOcm5QcYmTYWpdVIrKve5u+8paMNDAdUE+teqMxFM9HcquetGcfuFpLYtsQames5bDx/tskGM76TWW8HaM+6tuSYBSFLrKqChfA9hQGLYGjAiflf1YBnDhY+7vNbJFusUborNOloOj+ufzP5q42PvI3H0uNy3W5V3pyfXpDGCBtfCYYr9NAqA4d+AQfyllL/zkO9h9JSdozN49t0/hWGoD2dWgSO0Je6MytKEvD4DQXGeqNlBTB6tUXcWnRW+FcaKZ4KYqnxCtb1u8rFXUYgFykr2CbcJLSmw6ydEJ3EZ/NaZopRr+cU0W2m0HZ3qucw=="
+  }
+}
+```
+
 ### SIGNED Request Example (Ed25519)
 
-**Note: It is highly recommended to use Ed25519 API keys as it should provide the best performance and security out of all supported key types.**
+**Note: It is highly recommended to use Ed25519 API keys as they will provide the best performance and security out of all supported key types.**
+
+Here is a step-by-step guide on how to sign requests using an Ed25519 private key.
+
+Key          | Value
+------------ | ------------
+`apiKey`       | `4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO`
+
+These examples assume the private key is stored in the file `test-ed25519-prv.pem`.
+
+**WARNING: DO NOT SHARE YOUR API KEY AND PRIVATE KEY WITH ANYONE.**
+
+The example keys are provided here only for illustrative purposes.
+
+Example of request with a symbol name comprised entirely of ASCII characters:
+
+```json
+{
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol":           "BTCUSDT",
+    "side":             "SELL",
+    "type":             "LIMIT",
+    "timeInForce":      "GTC",
+    "quantity":         "0.01000000",
+    "price":            "52000.00",
+    "recvWindow":       100,
+    "timestamp":        1645423376532,
+    "apiKey":           "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
+    "signature":        "------ FILL ME ------"
+  }
+}
+```
+
+Example of a request with a symbol name containing non-ASCII characters:
+
+```json
+{
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol":           "１２３４５６",
+    "side":             "BUY",
+    "type":             "LIMIT",
+    "timeInForce":      "GTC",
+    "quantity":         "0.01000000",
+    "price":            "0.10000000",
+    "recvWindow":       5000,
+    "timestamp":        1645423376532,
+    "apiKey":           "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
+    "signature":        "------ FILL ME ------"
+  }
+}
+```
+
+**Step 1: Construct the signature payload**
+
+Take all request `params` except `signature` and **sort them in alphabetical order by parameter name**:
+
+For the first set of example parameters (ASCII only):
+
+Parameter        | Value
+---------------- | ------------
+`apiKey`           | 4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO
+`price`            | 52000.00
+`quantity`         | 0.01000000
+`recvWindow`       | 100
+`side`             | SELL
+`symbol`           | BTCUSDT
+`timeInForce`      | GTC
+`timestamp`        | 1645423376532
+`type`             | LIMIT
+
+For the second set of example parameters (some non-ASCII characters):
 
 Parameter     | Value
 ------------  | ------------
-`symbol`      | BTCUSDT
+`apiKey`      | 4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO
+`price`       | 0.20000000
+`quantity`    | 1.00000000
+`recvWindow`  | 5000
 `side`        | SELL
-`type`        | LIMIT
+`symbol`      | １２３４５６
 `timeInForce` | GTC
-`quantity`    | 1
-`price`       | 0.2
 `timestamp`   | 1668481559918
+`type`        | LIMIT
 
-This is a sample code in Python to show how to sign the payload with an Ed25519 key.
+Format parameters as `parameter=value` pairs separated by `&`. Values need to be encoded in UTF-8.
+
+For the first set of example parameters (ASCII only), the signature payload should look like this:
+
+```console
+apiKey=4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
+```
+
+For the second set of example parameters (some non-ASCII characters), the signature payload should look like this:
+
+```console
+apiKey=4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO&price=0.10000000&quantity=1.00000000&recvWindow=5000&side=BUY&symbol=１２３４５６&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
+```
+
+**Step 2: Compute the signature**
+
+1. Sign the UTF-8 bytes of your signature payload constructed in Step 1 using the Ed25519 private key.
+2. Encode the output in base64.
+
+Note that `apiKey`, the payload, and the resulting `signature` are **case-sensitive**.
+
+You can cross-check your signature algorithm implementation with OpenSSL:
+
+For the first set of example parameters (ASCII only):
+
+```console
+echo -n "apiKey=4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT" \
+  | openssl dgst -sign ./test-ed25519-prv.pem \
+  | openssl enc -base64 -A
+
+EocljwPl29jDxWYaaRaOo4pJ9wEblFbklJvPugNscLLuKd5vHM2grWjn1z+rY0aJ7r/44enxHL6mOAJuJ1kqCg==
+```
+
+For the second set of example parameters (some non-ASCII characters):
+
+```console
+echo -n "apiKey=4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO&price=0.10000000&quantity=1.00000000&recvWindow=5000&side=BUY&symbol=１２３４５６&timeInForce=GTC&timestamp=1645423376532&type=LIMIT" \
+  | openssl dgst -sign ./test-ed25519-prv.pem \
+  | openssl enc -base64 -A
+
+dtNHJeyKry+cNjiGv+sv5kynO9S40tf8k7D5CfAEQAp0s2scunZj+ovJdz2OgW8XhkB9G3/HmASkA9uY9eyFCA==
+```
+
+**Step 3: Add the signature to request `params`**
+
+For the first set of example parameters (ASCII only):
+
+```json
+{
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol":           "BTCUSDT",
+    "side":             "SELL",
+    "type":             "LIMIT",
+    "timeInForce":      "GTC",
+    "quantity":         "0.01000000",
+    "price":            "52000.00",
+    "newOrderRespType": "ACK",
+    "recvWindow":       100,
+    "timestamp":        1645423376532,
+    "apiKey":           "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
+    "signature":        "EocljwPl29jDxWYaaRaOo4pJ9wEblFbklJvPugNscLLuKd5vHM2grWjn1z+rY0aJ7r/44enxHL6mOAJuJ1kqCg=="
+  }
+}
+```
+
+For the second set of example parameters (some non-ASCII characters):
+
+```json
+{
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol":           "１２３４５６",
+    "side":             "SELL",
+    "type":             "LIMIT",
+    "timeInForce":      "GTC",
+    "quantity":         "1.00000000",
+    "price":            "0.10000000",
+    "recvWindow":       5000,
+    "timestamp":        1645423376532,
+    "apiKey":           "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
+    "signature":        "dtNHJeyKry+cNjiGv+sv5kynO9S40tf8k7D5CfAEQAp0s2scunZj+ovJdz2OgW8XhkB9G3/HmASkA9uY9eyFCA=="
+  }
+}
+```
+
+Here is a sample Python script performing all the steps above:
 
 ```python
 #!/usr/bin/env python3
@@ -890,28 +1211,32 @@ PRIVATE_KEY_PATH='test-prv-key.pem'
 # In this example the key is expected to be stored without encryption,
 # but we recommend using a strong password for improved security.
 with open(PRIVATE_KEY_PATH, 'rb') as f:
-    private_key = load_pem_private_key(data=f.read(),
-                                       password=None)
+  private_key = load_pem_private_key(data=f.read(), password=None)
 
 # Set up the request parameters
 params = {
-    'apiKey':        API_KEY,
-    'symbol':       'BTCUSDT',
+    'apiKey':       API_KEY,
+    'symbol':       '１２３４５６',
     'side':         'SELL',
     'type':         'LIMIT',
     'timeInForce':  'GTC',
     'quantity':     '1.0000000',
-    'price':        '0.20'
+    'price':        '0.10000000',
+    'recvWindow':   5000
 }
 
 # Timestamp the request
 timestamp = int(time.time() * 1000) # UNIX timestamp in milliseconds
 params['timestamp'] = timestamp
 
-# Sign the request
-payload = '&'.join([f'{param}={value}' for param, value in sorted(params.items())])
+# Sort parameters alphabetically by name
+params = dict(sorted(params.items()))
 
-signature = base64.b64encode(private_key.sign(payload.encode('ASCII')))
+# Compute the signature payload
+payload = '&'.join([f"{k}={v}" for k,v in params.items()]) # no percent encoding here!
+
+# Sign the request
+signature = base64.b64encode(private_key.sign(payload.encode('UTF-8')))
 params['signature'] = signature.decode('ASCII')
 
 # Send the request
@@ -921,13 +1246,12 @@ request = {
     'params': params
 }
 
-ws = create_connection("wss://ws-api.binance.com:443/ws-api/v3")
+ws = create_connection("wss://ws-api.testnet.binance.vision/ws-api/v3")
 ws.send(json.dumps(request))
 result =  ws.recv()
 ws.close()
 
 print(result)
-
 ```
 
 ## Session Authentication

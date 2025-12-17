@@ -519,7 +519,12 @@ API 有多种频率限制间隔。
 
 ### 需要签名的请求
 * 为了授权请求，`SIGNED` 请求必须带 `signature` 参数。
-* 请参考 [签名请求示例（HMAC）](#hmac), [签名请求示例（RSA）](#rsa) 和 [SIGNED 请求示例 (Ed25519)](#ed25519) 理解如何计算签名。
+
+#### 签名区分大小写
+
+* **HMAC：** 使用 HMAC 生成的签名**不区分大小写**。这意味着无论字母大小写如何，签名字符串都可以被验证。
+* **RSA：** 使用 RSA 生成的签名**区分大小写**。
+* **Ed25519：** 使用 Ed25519 生成的签名也**区分大小写**。
 
 <a id="timingsecurity"></a>
 
@@ -556,18 +561,20 @@ if (timestamp < (serverTime + 1 second) && (serverTime - timestamp) <= recvWindo
 
 ### SIGNED 请求示例 (HMAC)
 
-这是有关如何用 HMAC secret key 签署请求的分步指南。
+这是有关如何用一个 HMAC secret key 签署请求的分步指南。
 
 示例 API key 和 secret key：
 
 Key          | Value
 ------------ | ------------
-apiKey       | `vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A`
-secretKey    | `NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j`
+`apiKey`       | `vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A`
+`secretKey`    | `NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j`
 
-**警告：请勿与任何人共享您的私钥。**
+**警告：请勿与任何人分享您的 API 密钥和秘钥。**
 
-示例密钥仅供参考。
+此处提供的示例密钥仅用于示范说明目的。
+
+交易对名称完全由 ASCII 字符组成的请求示例：
 
 请求示例：
 
@@ -591,53 +598,106 @@ secretKey    | `NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j
 }
 ```
 
-如您所见，目前缺少 `signature` 参数。
+交易对名称包含非 ASCII 字符的请求示例：
+
+```json
+{
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol":           "１２３４５６",
+    "side":             "BUY",
+    "type":             "LIMIT",
+    "timeInForce":      "GTC",
+    "quantity":         "0.01000000",
+    "price":            "0.10000000",
+    "recvWindow":       5000,
+    "timestamp":        1645423376532,
+    "apiKey":           "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
+    "signature":        "------ FILL ME ------"
+  }
+}
+```
 
 **第一步：创建签名内容**
 
-除了 `signature` 之外，获取所有请求 `params`，然后按名称按字母顺序进行排序：
+除了 `signature` 之外，获取所有请求 `params`，然后**按参数名称的字母顺序对它们进行排序**：
+
+对于第一组示例参数（仅限 ASCII 字符）：
 
 参数              | 取值
 ---------------- | ------------
-apiKey           | vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A
-newOrderRespType | ACK
-price            | 52000.00
-quantity         | 0.01000000
-recvWindow       | 100
-side             | SELL
-symbol           | BTCUSDT
-timeInForce      | GTC
-timestamp        | 1645423376532
-type             | LIMIT
+`apiKey`           | vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A
+`price`            | 52000.00
+`quantity`         | 0.01000000
+`recvWindow`       | 100
+`side`             | SELL
+`symbol`           | BTCUSDT
+`timeInForce`      | GTC
+`timestamp`        | 1645423376532
+`type`             | LIMIT
 
-将参数格式化为 `参数=取值` 对并用 `&` 分隔每个参数：
+对于第二组示例参数（包含一些 Unicode 字符）：
 
-签名效载荷示例：
+参数           | 取值
+------------  | ------------
+`apiKey`      | vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A
+`price`       | 0.10000000
+`quantity`    | 1.00000000
+`recvWindow`  | 5000
+`side`        | BUY
+`symbol`      | １２３４５６
+`timeInForce` | GTC
+`timestamp`   | 1645423376532
+`type`        | LIMIT
+
+将参数格式化为 `参数=取值` 对并用 `&` 分隔每个参数对。数值需要采用 UTF-8 编码。
+
+对于第一组示例参数（仅限 ASCII 字符），签名有效负载将如下所示：
+
+```console
+apiKey=vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
 ```
-apiKey=vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A&newOrderRespType=ACK&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
+
+对于第二组示例参数（包含一些 Unicode 字符），签名有效负载将如下所示：
+
+```console
+apiKey=vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A&price=0.10000000&quantity=1.00000000&recvWindow=5000&side=BUY&symbol=１２３４５６&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
 ```
 
 **第二步：计算签名**
 
-1. 将 `secretKey` 解释为 ASCII 数据，将其用作 HMAC-SHA-256 的 key。
-2. 将签名有效负载签名为 ASCII 数据。
-3. 将 HMAC-SHA-256 输出编码为 hex string。
+1. 使用 API 密钥中的 `secretKey` 作为 HMAC-SHA-256 算法的签名密钥。
+2. 对步骤 1 中构建的签名 payload 进行签名。
+3. 将 HMAC-SHA-256 的输出编码为十六进制字符串。
 
-请注意，`apiKey`、`secretKey` 和有效负载是**大小写敏感的**。
-生成的签名值是不区分大小写的。
+请注意，`apiKey`、`secretKey` 和有效负载是**大小写敏感的**。而生成的签名值是不区分大小写的。
 
 可以使用 OpenSSL 交叉检查您的签名算法实现：
 
+对于第一组示例参数（仅限 ASCII 字符）：
+
 ```console
-$ echo -n 'apiKey=vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A&newOrderRespType=ACK&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT' \
+$ echo -n 'apiKey=vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT' \
   | openssl dgst -hex -sha256 -hmac 'NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j'
 
-cc15477742bd704c29492d96c7ead9414dfd8e0ec4a00f947bb5bb454ddbd08a
+aa1b5712c094bc4e57c05a1a5c1fd8d88dcd628338ea863fec7b88e59fe2db24
+```
+
+对于第二组示例参数（包含一些 Unicode 字符）：
+
+```console
+$ echo -n 'apiKey=vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A&price=0.10000000&quantity=1.00000000&recvWindow=5000&side=BUY&symbol=１２３４５６&timeInForce=GTC&timestamp=1645423376532&type=LIMIT' \
+  | openssl dgst -hex -sha256 -hmac 'NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j'
+
+b33892ae8e687c939f4468c6268ddd4c40ac1af18ad19a064864c47bae0752cd
 ```
 
 **第三步：添加 `signature` 到 `params` 中**
 
-最后，使用生成的签名完成请求：
+通过在对请求中添加 `signature` 参数和签名字串来完成请求。
+
+对于第一组示例参数（仅限 ASCII 字符）：
 
 ```json
 {
@@ -650,11 +710,31 @@ cc15477742bd704c29492d96c7ead9414dfd8e0ec4a00f947bb5bb454ddbd08a
     "timeInForce":      "GTC",
     "quantity":         "0.01000000",
     "price":            "52000.00",
-    "newOrderRespType": "ACK",
     "recvWindow":       100,
     "timestamp":        1645423376532,
     "apiKey":           "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature":        "cc15477742bd704c29492d96c7ead9414dfd8e0ec4a00f947bb5bb454ddbd08a"
+    "signature":        "aa1b5712c094bc4e57c05a1a5c1fd8d88dcd628338ea863fec7b88e59fe2db24"
+  }
+}
+```
+
+对于第二组示例参数（包含一些 Unicode 字符）：
+
+```json
+{
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol":           "１２３４５６",
+    "side":             "BUY",
+    "type":             "LIMIT",
+    "timeInForce":      "GTC",
+    "quantity":         "1.00000000",
+    "price":            "0.10000000",
+    "recvWindow":       5000,
+    "timestamp":        1645423376532,
+    "apiKey":           "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature":        "b33892ae8e687c939f4468c6268ddd4c40ac1af18ad19a064864c47bae0752cd"
   }
 }
 ```
@@ -663,15 +743,19 @@ cc15477742bd704c29492d96c7ead9414dfd8e0ec4a00f947bb5bb454ddbd08a
 
 ### SIGNED 请求示例 (RSA)
 
+这是有关如何用一个 RSA private key 签署请求的分步指南。
+
 Key          | Value
 ------------ | ------------
-apiKey       | `CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ`
+`apiKey`       | `CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ`
 
-对于这个例子，Private Key 将被引用为 `test-prv-key.pem`。
+这些示例假设私钥存储在文件 `test-prv-key.pem` 中。
 
-**警告：请勿与任何人共享您的私钥。** 示例密钥仅供参考。
+**警告：请勿与任何人分享您的 API 密钥和私钥。**
 
-请求例子：
+此处提供的示例密钥仅用于示范说明目的。
+
+交易对名称完全由 ASCII 字符组成的请求示例：
 
 ```json
 {
@@ -684,7 +768,6 @@ apiKey       | `CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ
     "timeInForce":      "GTC",
     "quantity":         "0.01000000",
     "price":            "52000.00",
-    "newOrderRespType": "ACK",
     "recvWindow":       100,
     "timestamp":        1645423376532,
     "apiKey":           "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
@@ -693,50 +776,107 @@ apiKey       | `CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ
 }
 ```
 
-**第一步：计算 Payload**
+交易对名称包含非 ASCII 字符的请求示例：
 
-除了 `signature`，获取请求的所有其它 `params`，然后按名称字母顺序对它们进行排序：
-
-参数              | 取值
----------------- | ------------
-apiKey           | CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ
-newOrderRespType | ACK
-price            | 52000.00
-quantity         | 0.01000000
-recvWindow       | 100
-side             | SELL
-symbol           | BTCUSDT
-timeInForce      | GTC
-timestamp        | 1645423376532
-type             | LIMIT
-
-将参数格式化为 `参数=取值` 对并用 `&` 分隔每个参数：
-
+```json
+{
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol":           "１２３４５６",
+    "side":             "BUY",
+    "type":             "LIMIT",
+    "timeInForce":      "GTC",
+    "quantity":         "0.01000000",
+    "price":            "0.10000000",
+    "recvWindow":       5000,
+    "timestamp":        1645423376532,
+    "apiKey":           "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
+    "signature":        "------ FILL ME ------"
+  }
+}
 ```
-apiKey=CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ&newOrderRespType=ACK&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
+
+**第一步：创建签名内容**
+
+除了 `signature`，获取请求的所有其它 `params`，然后**按参数名称的字母顺序对它们进行排序**：
+
+对于第一组示例参数（仅限 ASCII 字符）：
+
+参数           | 取值
+---------------- | ------------
+`apiKey`           | CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ
+`price`            | 52000.00
+`quantity`         | 0.01000000
+`recvWindow`       | 100
+`side`             | SELL
+`symbol`           | BTCUSDT
+`timeInForce`      | GTC
+`timestamp`        | 1645423376532
+`type`             | LIMIT
+
+对于第二组示例参数（包含一些 Unicode 字符）：
+
+参数           | 取值
+------------ | ------------
+`apiKey` | CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ
+`price` | 0.10000000
+`quantity` | 1.00000000
+`recvWindow` | 5000
+`side` | BUY
+`symbol` | １２３４５６
+`timeInForce` | GTC
+`timestamp` | 1645423376532
+`type` | LIMIT
+
+将参数格式化为 `参数=取值` 对并用 `&` 分隔每个参数对。数值需要采用 UTF-8 编码。
+
+对于第一组示例参数（仅限 ASCII 字符），签名有效负载将如下所示：
+
+```console
+apiKey=CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
+```
+
+对于第二组示例参数（包含一些 Unicode 字符），签名有效负载将如下所示：
+
+```console
+apiKey=CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ&price=0.10000000&quantity=1.00000000&recvWindow=5000&side=BUY&symbol=１２３４５６&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
 ```
 
 **第二步：计算签名**
 
-1. 将签名有效负载编码为 ASCII 数据。
-2. 使用带有 SHA-256 hash 函数的 RSASSA-PKCS1-v1_5 算法对 payload 进行签名。
-3. 将输出编码为 base64 string。
+1. 使用 RSASSA-PKCS1-v1_5 算法和 SHA-256 哈希函数对步骤 1 中构造的签名有效载荷的 UTF-8 字节进行签名。
+2. 将输出编码为 base64。
 
-请注意，`apiKey`, payload 和生成的签名值都是**大小写敏感**的。
+请注意，`apiKey`, payload 和生成的`签名值`都是**大小写敏感**的。
 
 您可以使用 OpenSSL 交叉检查您的签名算法：
 
+对于第一组示例参数（仅限 ASCII 字符）：
+
 ```console
-$ echo -n 'apiKey=CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ&newOrderRespType=ACK&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT' \
-  | openssl dgst -sha256 -sign test-prv-key.pem \
+$ echo -n 'apiKey=CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT' \
+  | openssl dgst -sha256 -sign test-rsa-prv.pem \
   | openssl enc -base64 -A
 
 OJJaf8C/3VGrU4ATTR4GiUDqL2FboSE1Qw7UnnoYNfXTXHubIl1iaePGuGyfct4NPu5oVEZCH4Q6ZStfB1w4ssgu0uiB/Bg+fBrRFfVgVaLKBdYHMvT+ljUJzqVaeoThG9oXlduiw8PbS9U8DYAbDvWN3jqZLo4Z2YJbyovyDAvDTr/oC0+vssLqP7NmlNb3fF3Bj7StmOwJvQJTbRAtzxK5PP7OQe+0mbW+D7RqVkUiSswR8qJFWTeSe4nXXNIdZdueYhF/Xf25L+KitJS5IHdIHcKfEw3MQzHFb2ZsGWkjDQwxkwr7Noi0Zaa+gFtxCuatGFm9dFIyx217pmSHtA==
 ```
 
+对于第二组示例参数（包含一些 Unicode 字符）：
+
+```console
+$ echo -n 'apiKey=CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ&price=0.10000000&quantity=1.00000000&recvWindow=5000&side=BUY&symbol=１２３４５６&timeInForce=GTC&timestamp=1645423376532&type=LIMIT' \
+  | openssl dgst -sha256 -sign test-rsa-prv.pem \
+  | openssl enc -base64 -A
+
+F3o/79Ttvl2cVYGPfBOF3oEOcm5QcYmTYWpdVIrKve5u+8paMNDAdUE+teqMxFM9HcquetGcfuFpLYtsQames5bDx/tskGM76TWW8HaM+6tuSYBSFLrKqChfA9hQGLYGjAiflf1YBnDhY+7vNbJFusUborNOloOj+ufzP5q42PvI3H0uNy3W5V3pyfXpDGCBtfCYYr9NAqA4d+AQfyllL/zkO9h9JSdozN49t0/hWGoD2dWgSO0Je6MytKEvD4DQXGeqNlBTB6tUXcWnRW+FcaKZ4KYqnxCtb1u8rFXUYgFykr2CbcJLSmw6ydEJ3EZ/NaZopRr+cU0W2m0HZ3qucw==
+```
+
 **第三步：在请求的 `params` 参数添加签名值**
 
-最后，使用生成的签名完成请求：
+通过在对请求中添加 `signature` 参数和签名字串来完成请求。
+
+对于第一组示例参数（仅限 ASCII 字符）：
 
 ```json
 {
@@ -758,26 +898,211 @@ OJJaf8C/3VGrU4ATTR4GiUDqL2FboSE1Qw7UnnoYNfXTXHubIl1iaePGuGyfct4NPu5oVEZCH4Q6ZStf
 }
 ```
 
+对于第二组示例参数（包含一些 Unicode 字符）：
+
+```json
+{
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol":           "１２３４５６",
+    "side":             "SELL",
+    "type":             "LIMIT",
+    "timeInForce":      "GTC",
+    "quantity":         "1.00000000",
+    "price":            "0.10000000",
+    "recvWindow":       5000,
+    "timestamp":        1645423376532,
+    "apiKey":           "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
+    "signature":        "F3o/79Ttvl2cVYGPfBOF3oEOcm5QcYmTYWpdVIrKve5u+8paMNDAdUE+teqMxFM9HcquetGcfuFpLYtsQames5bDx/tskGM76TWW8HaM+6tuSYBSFLrKqChfA9hQGLYGjAiflf1YBnDhY+7vNbJFusUborNOloOj+ufzP5q42PvI3H0uNy3W5V3pyfXpDGCBtfCYYr9NAqA4d+AQfyllL/zkO9h9JSdozN49t0/hWGoD2dWgSO0Je6MytKEvD4DQXGeqNlBTB6tUXcWnRW+FcaKZ4KYqnxCtb1u8rFXUYgFykr2CbcJLSmw6ydEJ3EZ/NaZopRr+cU0W2m0HZ3qucw=="
+  }
+}
+```
+
 <a id="ed25519"></a>
 
 ### SIGNED 请求示例 (Ed25519)
 
-**我们建议使用 Ed25519 API keys**，因为它在所有受支持的 API key 类型中提供最佳性能和安全性。
+**我们强烈建议使用 Ed25519 API keys，因为它在所有受支持的 API key 类型中提供最佳性能和安全性。**
+
+这是有关如何用一个 Ed25519 private key 签署请求的分步指南。
+
+Key          | Value
+------------ | ------------
+`apiKey`       | `4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO`
+
+这些示例假设私钥存储在文件 `test-ed25519-prv.pem` 中。
+
+**警告：请勿与任何人分享您的 API 密钥和私钥。**
+
+此处提供的示例密钥仅用于示范说明目的。
+
+交易对名称完全由 ASCII 字符组成的请求示例：
+
+```json
+{
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol":           "BTCUSDT",
+    "side":             "SELL",
+    "type":             "LIMIT",
+    "timeInForce":      "GTC",
+    "quantity":         "0.01000000",
+    "price":            "52000.00",
+    "recvWindow":       100,
+    "timestamp":        1645423376532,
+    "apiKey":           "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
+    "signature":        "------ FILL ME ------"
+  }
+}
+```
+
+交易对名称包含非 ASCII 字符的请求示例：
+
+```json
+{
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol":           "１２３４５６",
+    "side":             "BUY",
+    "type":             "LIMIT",
+    "timeInForce":      "GTC",
+    "quantity":         "0.01000000",
+    "price":            "0.10000000",
+    "recvWindow":       5000,
+    "timestamp":        1645423376532,
+    "apiKey":           "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
+    "signature":        "------ FILL ME ------"
+  }
+}
+```
+
+**第一步：创建签名内容**
+
+除了 `signature`，获取请求的所有其它 `params`，然后**按参数名称的字母顺序对它们进行排序**：
+
+对于第一组示例参数（仅限 ASCII 字符）：
+
+参数              | 取值
+---------------- | ------------
+`apiKey`           | 4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO
+`price`            | 52000.00
+`quantity`         | 0.01000000
+`recvWindow`       | 100
+`side`             | SELL
+`symbol`           | BTCUSDT
+`timeInForce`      | GTC
+`timestamp`        | 1645423376532
+`type`             | LIMIT
+
+对于第二组示例参数（包含一些 Unicode 字符）：
 
 参数           | 取值
 ------------  | ------------
-`symbol`      | BTCUSDT
+`apiKey`      | 4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO
+`price`       | 0.20000000
+`quantity`    | 1.00000000
+`recvWindow`  | 5000
 `side`        | SELL
-`type`        | LIMIT
+`symbol`      | １２３４５６
 `timeInForce` | GTC
-`quantity`    | 1
-`price`       | 0.2
 `timestamp`   | 1668481559918
+`type`        | LIMIT
 
-下面的 Python 示例代码能说明如何使用 Ed25519 key 对 payload 进行签名。
+将参数格式化为 `参数=取值` 对并用 `&` 分隔每个参数对。数值需要采用 UTF-8 编码。
+
+对于第一组示例参数（仅限 ASCII 字符），签名有效负载将如下所示：
+
+```console
+apiKey=4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
+```
+
+对于第二组示例参数（包含一些 Unicode 字符），签名有效负载将如下所示：
+```console
+apiKey=4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO&price=0.10000000&quantity=1.00000000&recvWindow=5000&side=BUY&symbol=１２３４５６&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
+```
+
+**第二步：计算签名**
+
+1. 使用 Ed25519 密钥对步骤 1 中构造的签名有效载荷的 UTF-8 字节进行签名。
+2. 将输出编码为 base64。
+
+请注意，`apiKey`, payload 和生成的`签名值`都是**大小写敏感**的。
+
+您可以使用 OpenSSL 交叉检查您的签名算法：
+
+对于第一组示例参数（仅限 ASCII 字符）：
+
+```console
+echo -n "apiKey=4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT" \
+  | openssl dgst -sign ./test-ed25519-prv.pem \
+  | openssl enc -base64 -A
+
+EocljwPl29jDxWYaaRaOo4pJ9wEblFbklJvPugNscLLuKd5vHM2grWjn1z+rY0aJ7r/44enxHL6mOAJuJ1kqCg==
+```
+
+对于第二组示例参数（包含一些 Unicode 字符）：
+
+```console
+echo -n "apiKey=4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO&price=0.10000000&quantity=1.00000000&recvWindow=5000&side=BUY&symbol=１２３４５６&timeInForce=GTC&timestamp=1645423376532&type=LIMIT" \
+  | openssl dgst -sign ./test-ed25519-prv.pem \
+  | openssl enc -base64 -A
+
+dtNHJeyKry+cNjiGv+sv5kynO9S40tf8k7D5CfAEQAp0s2scunZj+ovJdz2OgW8XhkB9G3/HmASkA9uY9eyFCA==
+```
+
+**第三步：在请求的 `params` 参数添加签名值**
+
+对于第一组示例参数（仅限 ASCII 字符）：
+
+```json
+{
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol":           "BTCUSDT",
+    "side":             "SELL",
+    "type":             "LIMIT",
+    "timeInForce":      "GTC",
+    "quantity":         "0.01000000",
+    "price":            "52000.00",
+    "newOrderRespType": "ACK",
+    "recvWindow":       100,
+    "timestamp":        1645423376532,
+    "apiKey":           "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
+    "signature":        "EocljwPl29jDxWYaaRaOo4pJ9wEblFbklJvPugNscLLuKd5vHM2grWjn1z+rY0aJ7r/44enxHL6mOAJuJ1kqCg=="
+  }
+}
+```
+
+对于第二组示例参数（包含一些 Unicode 字符）：
+
+```json
+{
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol":           "１２３４５６",
+    "side":             "SELL",
+    "type":             "LIMIT",
+    "timeInForce":      "GTC",
+    "quantity":         "1.00000000",
+    "price":            "0.10000000",
+    "recvWindow":       5000,
+    "timestamp":        1645423376532,
+    "apiKey":           "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
+    "signature":        "dtNHJeyKry+cNjiGv+sv5kynO9S40tf8k7D5CfAEQAp0s2scunZj+ovJdz2OgW8XhkB9G3/HmASkA9uY9eyFCA=="
+  }
+}
+```
+
+下面的 Python 示例代码能执行上述所有步骤。
 
 ```python
 #!/usr/bin/env python3
+
 import base64
 import time
 import json
@@ -787,40 +1112,53 @@ from websocket import create_connection
 # 设置身份验证：
 API_KEY='替换成您的 API Key'
 PRIVATE_KEY_PATH='test-prv-key.pem'
+
 # 加载 private key。
-# 在这个例子中，private key 没有加密，但我们建议使用强密码以提高安全性。
+# 在这个例子中，private key 没有加密
+# 但我们建议使用强密码以提高安全性。
 with open(PRIVATE_KEY_PATH, 'rb') as f:
-    private_key = load_pem_private_key(data=f.read(), password=None)
+  private_key = load_pem_private_key(data=f.read(), password=None)
+
 # 设置请求参数：
 params = {
-    'apiKey':        API_KEY,
-    'symbol':       'BTCUSDT',
+    'apiKey':       API_KEY,
+    'symbol':       '１２３４５６',
     'side':         'SELL',
     'type':         'LIMIT',
     'timeInForce':  'GTC',
     'quantity':     '1.0000000',
-    'price':        '0.20'
+    'price':        '0.10000000',
+    'recvWindow':   5000
 }
+
 # 参数中加时间戳：
-timestamp = int(time.time() * 1000) # 以毫秒为单位的 UNIX 时间戳
+timestamp = int(time.time() * 1000) # UNIX timestamp in milliseconds
 params['timestamp'] = timestamp
-# 参数中加签名：
-payload = '&'.join([f'{param}={value}' for param, value in sorted(params.items())])
-signature = base64.b64encode(private_key.sign(payload.encode('ASCII')))
+
+# 按参数名称的字母顺序进行排序
+params = dict(sorted(params.items()))
+
+# 计算签名有效负载
+payload = '&'.join([f"{k}={v}" for k,v in params.items()]) # no percent encoding here!
+
+# 对请求进行签名
+signature = base64.b64encode(private_key.sign(payload.encode('UTF-8')))
 params['signature'] = signature.decode('ASCII')
+
 # 发送请求：
 request = {
     'id': 'my_new_order',
     'method': 'order.place',
     'params': params
 }
-ws = create_connection('wss://ws-api.binance.com:443/ws-api/v3')
+
+ws = create_connection("wss://ws-api.binance.com:443/ws-api/v3")
 ws.send(json.dumps(request))
 result =  ws.recv()
 ws.close()
+
 print(result)
 ```
-
 
 ## 会话身份验证
 
