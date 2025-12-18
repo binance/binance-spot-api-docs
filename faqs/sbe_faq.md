@@ -68,7 +68,9 @@ response=$(echo $request | websocat -n1 'wss://ws-api.binance.com:443/ws-api/v3?
 
 #### FIX API
 
-See FIX API's [SBE section](../testnet/fix-api.md#fix-sbe) for detailed information.
+See FIX API's [SBE section](../fix-api.md#fix-sbe) for detailed information.
+
+Please continue reading below also.
 
 ### Supported APIs
 
