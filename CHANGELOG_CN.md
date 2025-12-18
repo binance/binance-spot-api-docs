@@ -6,6 +6,7 @@
 
 * [FIX SBE 文档](fix-api_CN.md#fix-sbe) 已更新。
 * 澄清了用户数据流文档中关于 [`eventStreamTerminated`](user-data-stream_CN.md#event-stream-terminated) 的说明
+* 资产 `这是测试币` 和 `456` 以及交易对 `这是测试币456` 已被添加到 [现货测试网](http://testnet.binance.vision) 以供用户测试含有 Unicode 交易对的端点/方法。 预知详情，请参考 [现货测试网的相关更新日志](https://developers.binance.com/docs/binance-spot-api-docs/testnet)。
 
 ---
 

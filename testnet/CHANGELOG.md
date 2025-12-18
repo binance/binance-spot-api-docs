@@ -9,6 +9,7 @@ This is not always synced with the live exchange.
 
 * Updated [FIX SBE documentation](fix-api.md#fix-sbe)
 * Clarified User Data Stream documentation regarding [`eventStreamTerminated`](user-data-stream.md#event-stream-terminated).
+* Assets `这是测试币` and `456` and symbol `这是测试币456` have been added for testing endpoints/methods with a Unicode symbol. Balances for both assets have been distributed to all accounts.
 
 ---
 
@@ -22,7 +23,6 @@ This is not always synced with the live exchange.
 #### WebSocket API
 
 * Updated documentation for WebSocket API regarding [SIGNED request security](https://developers.binance.com/docs/binance-spot-api-docs/testnet/websocket-api/request-security#signed-request-security)
-
 
 ---
 

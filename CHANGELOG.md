@@ -6,6 +6,7 @@
 
 * Updated [FIX SBE documentation](fix-api.md#fix-sbe)
 * Clarified User Data Stream documentation regarding [`eventStreamTerminated`](user-data-stream.md#event-stream-terminated).
+* Assets `这是测试币` and `456` and symbol `这是测试币456` have been added to [SPOT Testnet](http://testnet.binance.vision) for testing endpoints/methods with a Unicode symbol. See the [Testnet CHANGELOG](https://developers.binance.com/docs/binance-spot-api-docs/testnet) for more information.
 
 ---
 
