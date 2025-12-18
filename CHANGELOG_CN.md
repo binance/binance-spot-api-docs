@@ -1,6 +1,13 @@
 # 更新日志
 
-**最近更新： 2025-12-17**
+**最近更新： 2025-12-18**
+
+### 2025-12-18
+
+* [FIX SBE 文档](fix-api_CN.md#fix-sbe) 已更新。
+* 澄清了用户数据流文档中关于 [`eventStreamTerminated`](user-data-stream_CN.md#event-stream-terminated) 的说明
+
+---
 
 ### 2025-12-17
 

@@ -7754,7 +7754,7 @@ Memory
 <a id=general_info_user_data_stream_subscriptions></a>
 **General information:**
 
-* User Data Stream subscriptions allow you to receive all the events related to a given account on a WebSocket connection.
+* [User Data Stream](user-data-stream.md) subscriptions allow you to receive all the events related to a given account on a WebSocket connection.
 * There are 2 ways to start a subscription:
   * If you have an authenticated session, then you can subscribe to events for that authenticated account using [`userDataStream.subscribe`](#user-data-stream-subscribe).
   * In any session, authenticated or not, you can subscribe to events for one or more accounts for which you can provide an API Key signature, using [`userdataStream.subscribe.signature`](#user-data-signature).

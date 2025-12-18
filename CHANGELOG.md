@@ -1,6 +1,13 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-12-17**
+**Last Updated: 2025-12-18**
+
+### 2025-12-18
+
+* Updated [FIX SBE documentation](fix-api.md#fix-sbe)
+* Clarified User Data Stream documentation regarding [`eventStreamTerminated`](user-data-stream.md#event-stream-terminated).
+
+---
 
 ### 2025-12-17
 

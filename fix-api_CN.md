@@ -1315,7 +1315,15 @@ Your connection is about to be closed. Please reconnect.
 
 ## FIX SBE
 
-FIX SBE（简单二进制编码）可以替代 FIX，使用 [spot-fixsbe-1_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot-fixsbe-1_0.xml) 模式文件。
+FIX SBE（简单二进制编码）可以替代 FIX，请使用 [spot_fix_prod_latest.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_fix_prod_latest.xml) 模式文件。
+
+### SBE
+
+请阅读 [简单二进制编码 （SBE） 常见问题](./faqs/sbe_faq_CN.md) 了解有关将 SBE 与币安 API 配合使用的重要信息。
+
+* 在使用 FIX SBE 之前，请务必阅读并理解 [SBE 规范](https://www.fixtrading.org/standards/sbe-online/)。
+
+* 在对 SBE payload 进行编码和解码时，建议使用 [`SbeTool`](https://github.com/aeron-io/simple-binary-encoding) 所生成的代码，以确保符合FIX SBE 规范。
 
 ### 端点
 
@@ -1323,24 +1331,24 @@ FIX SBE（简单二进制编码）可以替代 FIX，使用 [spot-fixsbe-1_0.xml
 
 #### 订单录入
 
-* `tcp+tls://fix-oe.testnet.binance.vision:9001`：发送 FIX 请求；接收 FIX SBE 响应
+* `tcp+tls://fix-oe.binance.com:9001`：发送 FIX 请求；接收 FIX SBE 响应
     * FIX `SbeSchemaId` 标签（=25050）必须设置为 FIX SBE 模式 ID（=1）
     * FIX `SbeSchemaVersion` 标签（=25051）必须设置为 FIX SBE 模式版本（=0）
-* `tcp+tls://fix-oe.testnet.binance.vision:9002`：发送 FIX SBE 请求；接收 FIX SBE 响应
+* `tcp+tls://fix-oe.binance.com:9002`：发送 FIX SBE 请求；接收 FIX SBE 响应
 
 #### Drop Copy（订单副本）
 
-* `tcp+tls://fix-dc.testnet.binance.vision:9001`：发送 FIX 请求；接收 FIX SBE 响应
+* `tcp+tls://fix-dc.binance.com:9001`：发送 FIX 请求；接收 FIX SBE 响应
     * FIX `SbeSchemaId` 标签（=25050）必须设置为 FIX SBE 模式 ID（=1）
     * FIX `SbeSchemaVersion` 标签（=25051）必须设置为 FIX SBE 模式版本（=0）
-* `tcp+tls://fix-dc.testnet.binance.vision:9002`：发送 FIX SBE 请求；接收 FIX SBE 响应
+* `tcp+tls://fix-dc.binance.com:9002`：发送 FIX SBE 请求；接收 FIX SBE 响应
 
 #### 市场数据
 
-* `tcp+tls://fix-md.testnet.binance.vision:9001`：发送 FIX 请求；接收 FIX SBE 响应
+* `tcp+tls://fix-md.binance.com:9001`：发送 FIX 请求；接收 FIX SBE 响应
     * FIX `SbeSchemaId` 标签（=25050）必须设置为 FIX SBE 模式 ID（=1）
     * FIX `SbeSchemaVersion` 标签（=25051）必须设置为 FIX SBE 模式版本（=0）
-* `tcp+tls://fix-md.testnet.binance.vision:9002`：发送 FIX SBE 请求；接收 FIX SBE 响应
+* `tcp+tls://fix-md.binance.com:9002`：发送 FIX SBE 请求；接收 FIX SBE 响应
 
 ### FIX SBE 编码设计
 
@@ -1360,15 +1368,74 @@ SOFH：有关模式文件中的组合类型 "sofh"。这个字段作为一个帧
 
 登录签名（RawData）的计算方法如[签名计算](#signaturecomputation)部分所述。
 
+#### FIX SBE `Logon` 请求消息示例
+
+请参阅下方根据上述说明获取的 FIX SBE `Logon` 十六进制消息示例。
+
+
+| Bytes                                           | Description                 |
+|-------------------------------------------------|-----------------------------|
+| 0xd1, 0x00, 0x00, 0x00                          | sofh.messageLength          |
+| 0x50, 0xeb                                      | sofh.encodingType           |
+| 0x0e, 0x00                                      | messageHeader.blockLength   |
+| 0x28, 0x4e                                      | messageHeader.templateId    |
+| 0x01, 0x00                                      | messageHeader.schemaId      |
+| 0x00, 0x00                                      | messageHeader.version       |
+| 0x01, 0x00, 0x00, 0x00                          | messageHeader.seqNum        |
+| 0x58, 0x7a, 0x5f, 0x99, 0xdb, 0x1b, 0x06, 0x00  | messageHeader.sendingTime   |
+| 0x00                                            | Logon.EncryptMethod         |
+| 0x1e, 0x00, 0x00, 0x00                          | Logon.HeartBtInt            |
+| 0x01                                            | Logon.ResetSeqNumFlag       |
+| 0x02                                            | Logon.MessageHandling       |
+| 0xff                                            | Logon.ResponseMode          |
+| 0xff                                            | Logon.ExecutionReportType   |
+| 0xff                                            | Logon.DropCopyFlag          |
+| 0xff, 0xff, 0xff, 0xff                          | Logon.RecvWindow            |
+| 0x07                                            | Logon.SenderCompId.length   |
+| 0x45, 0x58, 0x41, 0x4d, 0x50, 0x4c, 0x45        | Logon.SenderCompId.varData  |
+| 0x04                                            | Logon.TargetCompId.length   |
+| 0x53, 0x50, 0x4f, 0x54                          | Logon.TargetCompId.varData  |
+| 0x58, 0x00                                      | Logon.RawData.length        |
+| 0x34, 0x4d, 0x48, 0x58, 0x65, 0x6c, 0x56, 0x56  | Logon.RawData.varData       |
+| 0x63, 0x70, 0x6b, 0x64, 0x77, 0x75, 0x4c, 0x62  | Logon.RawData.varData       |
+| 0x6c, 0x36, 0x6e, 0x37, 0x33, 0x48, 0x51, 0x55  | Logon.RawData.varData       |
+| 0x58, 0x55, 0x66, 0x31, 0x64, 0x73, 0x65, 0x32  | Logon.RawData.varData       |
+| 0x50, 0x43, 0x67, 0x54, 0x31, 0x44, 0x59, 0x71  | Logon.RawData.varData       |
+| 0x57, 0x39, 0x77, 0x38, 0x41, 0x56, 0x5a, 0x31  | Logon.RawData.varData       |
+| 0x52, 0x41, 0x43, 0x46, 0x47, 0x4d, 0x2b, 0x35  | Logon.RawData.varData       |
+| 0x55, 0x64, 0x6c, 0x47, 0x50, 0x72, 0x51, 0x48  | Logon.RawData.varData       |
+| 0x72, 0x67, 0x74, 0x53, 0x33, 0x43, 0x76, 0x73  | Logon.RawData.varData       |
+| 0x52, 0x55, 0x52, 0x43, 0x31, 0x6f, 0x6a, 0x37  | Logon.RawData.varData       |
+| 0x33, 0x6a, 0x38, 0x67, 0x43, 0x41, 0x3d, 0x3d  | Logon.RawData.varData       |
+| 0x40, 0x00                                      | Logon.Username.length       |
+| 0x73, 0x42, 0x52, 0x58, 0x72, 0x4a, 0x78, 0x32  | Logon.Username.varData      |
+| 0x44, 0x73, 0x4f, 0x72, 0x61, 0x4d, 0x58, 0x4f  | Logon.Username.varData      |
+| 0x61, 0x55, 0x6f, 0x76, 0x45, 0x68, 0x67, 0x56  | Logon.Username.varData      |
+| 0x52, 0x63, 0x6a, 0x4f, 0x76, 0x43, 0x74, 0x51  | Logon.Username.varData      |
+| 0x77, 0x6e, 0x57, 0x6a, 0x38, 0x56, 0x78, 0x6b  | Logon.Username.varData      |
+| 0x4f, 0x68, 0x31, 0x78, 0x71, 0x62, 0x6f, 0x53  | Logon.Username.varData      |
+| 0x30, 0x32, 0x53, 0x50, 0x47, 0x66, 0x4b, 0x69  | Logon.Username.varData      |
+| 0x32, 0x68, 0x38, 0x73, 0x70, 0x5a, 0x4a, 0x62  | Logon.Username.varData      |
+
+
 <a id="fix-vs-fix-sbe-schema"></a>
 ### FIX 与 FIX SBE 模式对比
 
 通用说明：
+* `sofh.messageLength` 字段 _必须_ 包含 SOFH 的大小（6 字节）
 * FIX SBE 没有 `Checksum` 字段
+* 在端口 9002 上发送 FIX SBE 请求时
+    * payload 中必须设置所有字段
+    * 未设置的可选字段必须设置为相应的 `nullValue`
+        * `SbeTool` 生成的编码器可以正确处理这种情况
+        * 如果 payload 是手动编码生成的，请参阅 [SBE 规范](https://www.fixtrading.org/standards/sbe-online/) 中有关 `nullValue` 的定义
 
 **Logon（登录）消息：**
 * `SenderCompID`、`TargetCompID` 和 `RecvWindow` 字段包含在 `Logon` FIX SBE 消息中，而不是消息头
+    * `Logon` 消息中设置的 `RecvWindow` 字段适用于 FIX SBE 会话内的所有交易请求消息。
+    * 设置后，`RecvWindow` 字段的单位为微秒。
 * 当 `ResponseMode` 字段设置为 `OnlyAcks` 时，`ExecutionReportType` 字段可以设置为 `Mini`，以接收 `ExecutionReportAck` 消息，而非 `ExecutionReport`
+    * 注意：只有订单录入和 Drop Copy（订单副本）接口的 9001 端口和 9002 端口会支持 `ExecutionReportType` 字段
 
 **MarketDataIncrementalRefresh（市场数据增量刷新）** 消息：
 * FIX 模式中的单条消息被拆分为以下 FIX SBE 消息：`MarketDataIncrementalTrade`、`MarketDataIncrementalBookTicker` 和 `MarketDataIncrementalDepth`
@@ -1389,11 +1456,16 @@ SOFH：有关模式文件中的组合类型 "sofh"。这个字段作为一个帧
         * 否则，`MDUpdateAction` 为 `NEW`。
 
 **MarketDataIncrementalDepth（市场数据增量深度）** 消息：
+* FIX SBE 深度更新速度：50 毫秒
 * FIX 模式中可用的 `MDUpdateAction` 字段在 FIX SBE 中被省略，因为其值可能源自 `MDEntrySize`。
     * 当 `MDEntrySize` 未设置（`NullVal`）时，`MDUpdateAction` 为 `DELETE`。
     * 当 `MDEntrySize` 已设置时：
         * 如果价格水平已存在于本地订单簿中，则 `MDUpdateAction` 为 `CHANGE`
         * 否则，`MDUpdateAction` 为 `NEW`。
+
+### 连接限制
+
+FIX 和 FIX SBE 分享连接限制。
 
 ### 错误代码
 

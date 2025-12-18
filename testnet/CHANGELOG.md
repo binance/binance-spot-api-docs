@@ -1,9 +1,16 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2025-12-17**
+**Last Updated: 2025-12-18**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2025-12-18
+
+* Updated [FIX SBE documentation](fix-api.md#fix-sbe)
+* Clarified User Data Stream documentation regarding [`eventStreamTerminated`](user-data-stream.md#event-stream-terminated).
+
+---
 
 ### 2025-12-17
 
@@ -15,6 +22,7 @@ This is not always synced with the live exchange.
 #### WebSocket API
 
 * Updated documentation for WebSocket API regarding [SIGNED request security](https://developers.binance.com/docs/binance-spot-api-docs/testnet/websocket-api/request-security#signed-request-security)
+
 
 ---
 
