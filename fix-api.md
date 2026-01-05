@@ -1023,29 +1023,28 @@ Sent by the server whenever an order list state changes.
 > By default, ListStatus`<N>` is sent for all order lists of an account, including those submitted in different connections.
 > Please see [Response Mode](#responsemode) for other behavior options.
 
-| Tag      | Name                         | Type         | Required | Description                                                                                                                                             |
-|----------|------------------------------|--------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 55       | Symbol                       | STRING       | Y        | Symbol of the order list.                                                                                                                               |
+| Tag      | Name                         | Type         | Required | Description    |
+|----------|------------------------------|--------------|----------|--------------|
+| 55       | Symbol                       | STRING       | Y        | Symbol of the order list.   |
 | 66       | ListID                       | STRING       | N        | `ListID` of the list as assigned by the exchange.                                                                                                       |
-| 25014    | ClListID                     | STRING       | N        | `ClListID` of the list as assigned on the request.                                                                                                      |
-| 25015    | OrigClListID                 | STRING       | N        |                                                                                                                                                         |
-| 1385     | ContingencyType              | INT          | N        | Possible values: <br></br> `1` - ONE_CANCELS_THE_OTHER <br></br> `2` - ONE_TRIGGERS_THE_OTHER                                                                     |
-
-| 429      | ListStatusType               | INT          | Y        | Possible values: <br></br> `2` - RESPONSE <br></br>`4` - EXEC_STARTED <br></br> `5` - ALL_DONE  <br></br> `100` - UPDATED                                                                       |
-| 431      | ListOrderStatus              | INT          | Y        | Possible values: <br></br> `3` - EXECUTING <br></br> `6` - ALL_DONE  <br></br> `7` - REJECT                                                                            |
-| 1386     | ListRejectReason             | INT          | N        | Possible values: <br></br> `99` - OTHER                                                                                                                      |
-| 103      | OrdRejReason                 | INT          | N        | Possible values: <br></br> `99` - OTHER                                                                                                                      |
-| 60       | TransactTime                 | UTCTIMESTAMP | N        | Timestamp when this event occurred.                                                                                                                     |
-| 25016    | ErrorCode                    | INT          | N        | API error code (see [Error Codes](errors.md)).                                                                                                          |
-| 58       | Text                         | STRING       | N        | Human-readable error message.                                                                                                                           |
-| 73       | NoOrders                     | NUMINGROUP   | N        | The length of the array for Orders.                                                                                                           |
-| =>55     | Symbol                       | STRING       | Y        | Symbol of the order.                                                                                                                                    |
+| 25014    | ClListID                     | STRING       | N        | `ClListID` of the list as assigned on the request. |
+| 25015    | OrigClListID                 | STRING       | N        |                                                                                                   |
+| 1385     | ContingencyType              | INT          | N        | Possible values: <br></br> `1` - ONE_CANCELS_THE_OTHER <br></br> `2` - ONE_TRIGGERS_THE_OTHER  |
+| 429      | ListStatusType               | INT          | Y        | Possible values: <br></br> `2` - RESPONSE <br></br>`4` - EXEC_STARTED <br></br> `5` - ALL_DONE  <br></br> `100` - UPDATED|
+| 431      | ListOrderStatus              | INT          | Y        | Possible values: <br></br> `3` - EXECUTING <br></br> `6` - ALL_DONE  <br></br> `7` - REJECT  |
+| 1386     | ListRejectReason             | INT          | N        | Possible values: <br></br> `99` - OTHER    |
+| 103      | OrdRejReason                 | INT          | N        | Possible values: <br></br> `99` - OTHER    |
+| 60       | TransactTime                 | UTCTIMESTAMP | N        | Timestamp when this event occurred.       |
+| 25016    | ErrorCode                    | INT          | N        | API error code (see [Error Codes](errors.md)).   |
+| 58       | Text                         | STRING       | N        | Human-readable error message.     |
+| 73       | NoOrders                     | NUMINGROUP   | N        | The length of the array for Orders.      |
+| =>55     | Symbol                       | STRING       | Y        | Symbol of the order.          |
 | =>37     | OrderID                      | INT          | Y        | `OrderID` of the order as assigned by the exchange.                                                                                                     |
-| =>11     | ClOrdID                      | STRING       | Y        | `ClOrdID` of the order as assigned on the request.                                                                                                      |
-| =>25010  | NoListTriggeringInstructions | NUMINGROUP   | N        | The length of the array for ListTriggeringInstructions.                                                                                          |
-| ==>25011 | ListTriggerType              | CHAR         | N        | Possible values: <br></br> `1` - ACTIVATED <br></br> `2` - PARTIALLY_FILLED <br></br> `3` - FILLED                                                                     |
-| ==>25012 | ListTriggerTriggerIndex      | INT          | N        |                                                                                                                                                         |
-| ==>25013 | ListTriggerAction            | CHAR         | N        | Possible values: <br></br> `1` - RELEASE <br></br> `2` - CANCEL                                                                                                   |
+| =>11     | ClOrdID                      | STRING       | Y        | `ClOrdID` of the order as assigned on the request. |
+| =>25010  | NoListTriggeringInstructions | NUMINGROUP   | N        | The length of the array for ListTriggeringInstructions.  |
+| ==>25011 | ListTriggerType              | CHAR         | N        | Possible values: <br></br> `1` - ACTIVATED <br></br> `2` - PARTIALLY_FILLED <br></br> `3` - FILLED |
+| ==>25012 | ListTriggerTriggerIndex      | INT          | N        |  |
+| ==>25013 | ListTriggerAction            | CHAR         | N        | Possible values: <br></br> `1` - RELEASE <br></br> `2` - CANCEL  |
 
 **Sample message:**
 
