@@ -1,8 +1,3 @@
-
-<h1>
-        F.A.Q.
-</h1>
-
 <h3 id="faq-how-to-use">
         How can I use the Spot Test Network?
 </h3>
