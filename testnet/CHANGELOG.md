@@ -1,9 +1,28 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-01-07**
+**Last Updated: 2026-01-21**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-01-21
+
+#### REST and WebSocket API
+
+Following the announcement from [2025-10-24](#2025-10-24), the following endpoints/methods will no longer be available starting from **2026-02-04, 07:00 UTC**
+
+REST API
+* `POST /api/v3/userDataStream`
+* `PUT /api/v3/userDataStream`
+* `DELETE /api/v3/userDataStream`
+
+WebSocket API
+
+* `userDataStream.start`
+* `userDataStream.ping`
+* `userDataStream.stop`
+
+---
 
 ### 2026-01-07
 
@@ -439,15 +458,15 @@ Please consult the Spot Test Network's [homepage](https://testnet.binance.vision
 Error messages are clearer when a tag is invalid, missing a value, or when the field value is empty or malformed
   * If the tag number was invalid, you will receive the error:
     ```json
-    {"code": -1169, "msg": "Invalid tag number."}
+    { "code": -1169, "msg": "Invalid tag number." }
     ```
   * If a valid tag was specified without a value, you will receive the error:
     ```json
-    {"code": -1177, "msg": "Tag specified without a value."}
+    { "code": -1177, "msg": "Tag specified without a value." }
     ```
   * If the field value was empty or malformed, you will still receive the error:
     ```json
-    {"code": -1102, "msg": "Field value was empty or malformed."}
+    { "code": -1102, "msg": "Field value was empty or malformed." }
     ```
 ---
 

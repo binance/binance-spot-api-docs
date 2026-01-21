@@ -1,6 +1,25 @@
 # 更新日志
 
-**最近更新： 2025-12-18**
+**最近更新： 2026-01-21**
+
+### 2026-01-21
+
+根据 **2025-10-24** 的公告，以下端点和方法将从 **2026-02-20 07:00 UTC** 起不再可用。
+
+## REST API
+
+- `POST /api/v3/userDataStream`
+- `PUT /api/v3/userDataStream`
+- `DELETE /api/v3/userDataStream`
+
+## WebSocket API
+
+- `userDataStream.start`
+- `userDataStream.ping`
+- `userDataStream.stop`
+
+
+---
 
 ### 2025-12-18
 
@@ -331,13 +350,13 @@ REST 和 WebSocket API：
 * 当客户端发送拒绝消息时，FIX API 将不再向客户端返回 `<3>` 拒绝消息。
 * 现在，当标签无效、缺少值、字段值为空或格式错误时，错误消息将更加清晰明了。
   * ```json
-    {"code": -1169, "msg": "Invalid tag number."}
+    { "code": -1169, "msg": "Invalid tag number." }
     ```
   * ```json
-    {"code": -1177, "msg": "Tag specified without a value."}
+    { "code": -1177, "msg": "Tag specified without a value." }
     ```
   * ```json
-    {"code": -1102, "msg": "Field value was empty or malformed."}
+    { "code": -1102, "msg": "Field value was empty or malformed." }
     ```
 
 #### 将会发生的更改
@@ -1472,13 +1491,15 @@ WEBSOCKET API
 请使用现货 REST API 的 `GET /api/v3/exchangeInfo` 或 Websocket API 的 `exchangeInfo` 看 STP 的状态。
 
 ```javascript
-"defaultSelfTradePreventionMode": "NONE",   // selfTradePreventionMode 的默认值
-"allowedSelfTradePreventionModes": [        // selfTradePrevention 的可用模式
-    "NONE",
-    "EXPIRE_TAKER",
-    "EXPIRE_BOTH",
-    "EXPIRE_MAKER"
-]
+{
+    "defaultSelfTradePreventionMode": "NONE",     // selfTradePreventionMode 的默认值
+    "allowedSelfTradePreventionModes": [          // selfTradePrevention 的可用模式
+        "NONE",
+        "EXPIRE_TAKER",
+        "EXPIRE_BOTH",
+        "EXPIRE_MAKER"
+    ]
+}
 ```
 
 在[STP 常见问题](./faqs/stp_faq_CN.md) 文档中可以找到更多其它关于 STP 功能的详细信息。
@@ -1617,19 +1638,19 @@ REST API
     * 之前的行为： API 将根据发送的参数组合发送特定的错误消息。 例如：
 
         ```json
-            {
-                "code": -1106,
-                "msg": "Parameter X was sent when not required."
-            }
+        {
+            "code": -1106,
+            "msg": "Parameter X was sent when not required."
+        }
         ```
 
     * 新的行为: 如果接口不支持可选参数组合，那么服务器会返回一般性的错误:
 
         ```json
-            {
-                "code": -1128,
-                "msg": "Combination of optional parameters invalid."
-            }
+        {
+            "code": -1128,
+            "msg": "Combination of optional parameters invalid."
+        }
         ```
     * 添加一个新的参数组合: `symbol` + `orderId` + `fromId`.
     * 下面的参数组合不再支持:
@@ -1777,8 +1798,8 @@ USER DATA STREAM
     * 如果`symbols`请求超过100个交易对, 会收到如下错误信息:
     ```json
     {
-     "code": -1101,
-     "msg": "Too many values sent for parameter 'symbols', maximum allowed up to 100."
+        "code": -1101,
+        "msg": "Too many values sent for parameter 'symbols', maximum allowed up to 100."
     }
     ```
 * 单请求的权重上限为100.
@@ -1843,8 +1864,8 @@ WEBSOCKETS
 
 ```json
 {
-"code": -1102,
-"msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed."
+    "code": -1102,
+    "msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed."
 }
 ```
 * 下面的接口提供参数 `symbols` 用于查询多个symbol.
@@ -1902,8 +1923,8 @@ USER DATA STREAM
 * `GET api/v3/allOrders` 如果没有提供 `symbol`, 则返回错误信息:
     ```json
     {
-     "code": -1102,
-     "msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed."
+        "code": -1102,
+        "msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed."
     }
     ```
 * 修复一个错误信息中的拼写错误。 如果账号被禁用了相应的权限(比如提款，交易等), 则服务器返回错误:

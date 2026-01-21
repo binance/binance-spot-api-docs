@@ -1,6 +1,23 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2025-12-18**
+**Last Updated: 2026-01-21**
+
+### 2026-01-21
+
+Following the announcement from [2025-10-24](#2025-10-24), the following endpoints/methods will no longer be available starting from **2026-02-20,07:00 UTC**
+
+REST API
+* `POST /api/v3/userDataStream`
+* `PUT /api/v3/userDataStream`
+* `DELETE /api/v3/userDataStream`
+
+WebSocket API
+
+* `userDataStream.start`
+* `userDataStream.ping`
+* `userDataStream.stop`
+
+---
 
 ### 2025-12-18
 
@@ -331,13 +348,13 @@ REST and WebSocket API:
 * When a client sends a reject message, the FIX API will no longer send the client back a Reject `<3>` message.
 * Error messages are now clearer when a tag is invalid, missing a value, or when the field value is empty or malformed.
   * ```json
-    {"code": -1169, "msg": "Invalid tag number."}
+    { "code": -1169, "msg": "Invalid tag number." }
     ```
   * ```json
-    {"code": -1177, "msg": "Tag specified without a value."}
+    { "code": -1177, "msg": "Tag specified without a value." }
     ```
   * ```json
-    {"code": -1102, "msg": "Field value was empty or malformed."}
+    { "code": -1102, "msg": "Field value was empty or malformed." }
     ```
 
 #### Future Changes
@@ -1499,13 +1516,15 @@ New API cluster has been added. Note that all endpoints are functionally equal, 
 Please refer to `GET /api/v3/exchangeInfo` from the Rest API or `exchangeInfo` from the Websocket API on the status.
 
 ```javascript
-"defaultSelfTradePreventionMode": "NONE",   //If selfTradePreventionMode not provided, this will be the value passed to the engine
-"allowedSelfTradePreventionModes": [        //What the allowed modes of selfTradePrevention are
-    "NONE",
-    "EXPIRE_TAKER",
-    "EXPIRE_BOTH",
-    "EXPIRE_MAKER"
-]
+{
+    "defaultSelfTradePreventionMode": "NONE",     // If selfTradePreventionMode not provided, this will be the value passed to the engine
+    "allowedSelfTradePreventionModes": [          // What the allowed modes of selfTradePrevention are
+        "NONE",
+        "EXPIRE_TAKER",
+        "EXPIRE_BOTH",
+        "EXPIRE_MAKER"
+    ]
+}
 ```
 
 Additional details on the functionality of STP is explained in the [STP FAQ](./faqs/stp_faq.md) document.
@@ -1645,18 +1664,18 @@ REST API
     * Previous behavior: The API would send specific error messages depending on the combination of parameters sent. E.g:
 
         ```json
-            {
-                "code": -1106,
-                "msg": "Parameter X was sent when not required."
-            }
+        {
+            "code": -1106,
+            "msg": "Parameter X was sent when not required."
+        }
         ```
     * New behavior: If the combinations of optional parameters to the endpoint were not supported, then the endpoint will respond with the generic error:
 
         ```json
-            {
-                "code": -1128,
-                "msg": "Combination of optional parameters invalid."
-            }
+        {
+            "code": -1128,
+            "msg": "Combination of optional parameters invalid."
+        }
         ```
     * Added a new combination of supported parameters: `symbol` + `orderId` + `fromId`.
     * The following combinations of parameters were previously supported but no longer accepted, as these combinations were only taking `fromId` into consideration, ignoring `startTime` and `endTime`:
@@ -1801,8 +1820,8 @@ Changes to `GET /api/v3/ticker`
     * If the number of `symbols` sent is more than 100, the error will be as follows:
     ```json
     {
-     "code": -1101,
-     "msg": "Too many values sent for parameter 'symbols', maximum allowed up to 100."
+        "code": -1101,
+        "msg": "Too many values sent for parameter 'symbols', maximum allowed up to 100."
     }
     ```
 * The max Weight for this endpoint will cap at 100.
@@ -1860,8 +1879,8 @@ SPOT API
 * Changed error messaging on `GET /api/v3/myTrades` where parameter `symbol` is not provided:
 ```json
 {
-"code": -1102,
-"msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed."
+    "code": -1102,
+    "msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed."
 }
 ```
 *  The following endpoints now support multi-symbol querying using the parameter `symbols`.
@@ -1916,8 +1935,8 @@ USER DATA STREAM
 * Error message changed on `GET api/v3/allOrders` where `symbol` is not provided:
     ```json
     {
-     "code": -1102,
-     "msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed."
+        "code": -1102,
+        "msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed."
     }
     ```
 * Fixed a typo with an error message when an account has disabled permissions (e.g. to withdraw, to trade, etc)
@@ -2111,10 +2130,10 @@ REST API
 * Updated error messages for  -1128
     * Sending an `OCO` with a `stopLimitPrice` but without a `stopLimitTimeInForce` will return the error:
     ```json
-     {
-      "code": -1128,
-      "msg": "Combination of optional parameters invalid. Recommendation: 'stopLimitTimeInForce' should also be sent."
-     }
+    {
+        "code": -1128,
+        "msg": "Combination of optional parameters invalid. Recommendation: 'stopLimitTimeInForce' should also be sent."
+    }
     ```
 * Updated error messages for -1003 to specify the limit is referring to the request weight, not to the number of requests.
 
