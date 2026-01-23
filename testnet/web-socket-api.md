@@ -125,19 +125,19 @@ Example of request:
 
 ```json
 {
-  "id": "e2a85d9f-07a5-4f94-8d5f-789dc3deb097",
-  "method": "order.place",
-  "params": {
-    "symbol": "BTCUSDT",
-    "side": "BUY",
-    "type": "LIMIT",
-    "price": "0.1",
-    "quantity": "10",
-    "timeInForce": "GTC",
-    "timestamp": 1655716096498,
-    "apiKey": "T59MTDLWlpRW16JVeZ2Nju5A5C98WkMm8CSzWC4oqynUlTm1zXOxyauT8LmwXEv9",
-    "signature": "5942ad337e6779f2f4c62cd1c26dba71c91514400a24990a3e7f5edec9323f90"
-  }
+    "id": "e2a85d9f-07a5-4f94-8d5f-789dc3deb097",
+    "method": "order.place",
+    "params": {
+        "symbol": "BTCUSDT",
+        "side": "BUY",
+        "type": "LIMIT",
+        "price": "0.1",
+        "quantity": "10",
+        "timeInForce": "GTC",
+        "timestamp": 1655716096498,
+        "apiKey": "T59MTDLWlpRW16JVeZ2Nju5A5C98WkMm8CSzWC4oqynUlTm1zXOxyauT8LmwXEv9",
+        "signature": "5942ad337e6779f2f4c62cd1c26dba71c91514400a24990a3e7f5edec9323f90"
+    }
 }
 ```
 
@@ -168,49 +168,49 @@ Example of successful response:
 
 ```json
 {
-  "id": "e2a85d9f-07a5-4f94-8d5f-789dc3deb097",
-  "status": 200,
-  "result": {
-    "symbol": "BTCUSDT",
-    "orderId": 12510053279,
-    "orderListId": -1,
-    "clientOrderId": "a097fe6304b20a7e4fc436",
-    "transactTime": 1655716096505,
-    "price": "0.10000000",
-    "origQty": "10.00000000",
-    "executedQty": "0.00000000",
-    "origQuoteOrderQty": "0.000000",
-    "cummulativeQuoteQty": "0.00000000",
-    "status": "NEW",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "BUY",
-    "workingTime": 1655716096505,
-    "selfTradePreventionMode": "NONE"
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 10,
-      "limit": 50,
-      "count": 12
+    "id": "e2a85d9f-07a5-4f94-8d5f-789dc3deb097",
+    "status": 200,
+    "result": {
+        "symbol": "BTCUSDT",
+        "orderId": 12510053279,
+        "orderListId": -1,
+        "clientOrderId": "a097fe6304b20a7e4fc436",
+        "transactTime": 1655716096505,
+        "price": "0.10000000",
+        "origQty": "10.00000000",
+        "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "BUY",
+        "workingTime": 1655716096505,
+        "selfTradePreventionMode": "NONE"
     },
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "DAY",
-      "intervalNum": 1,
-      "limit": 160000,
-      "count": 4043
-    },
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 321
-    }
-  ]
+    "rateLimits": [
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "SECOND",
+            "intervalNum": 10,
+            "limit": 50,
+            "count": 12
+        },
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "DAY",
+            "intervalNum": 1,
+            "limit": 160000,
+            "count": 4043
+        },
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 321
+        }
+    ]
 }
 ```
 
@@ -218,35 +218,35 @@ Example of failed response:
 
 ```json
 {
-  "id": "e2a85d9f-07a5-4f94-8d5f-789dc3deb097",
-  "status": 400,
-  "error": {
-    "code": -2010,
-    "msg": "Account has insufficient balance for requested action."
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 10,
-      "limit": 50,
-      "count": 13
+    "id": "e2a85d9f-07a5-4f94-8d5f-789dc3deb097",
+    "status": 400,
+    "error": {
+        "code": -2010,
+        "msg": "Account has insufficient balance for requested action."
     },
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "DAY",
-      "intervalNum": 1,
-      "limit": 160000,
-      "count": 4044
-    },
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 322
-    }
-  ]
+    "rateLimits": [
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "SECOND",
+            "intervalNum": 10,
+            "limit": 50,
+            "count": 13
+        },
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "DAY",
+            "intervalNum": 1,
+            "limit": 160000,
+            "count": 4044
+        },
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 322
+        }
+    ]
 }
 ```
 
@@ -327,24 +327,24 @@ Example of an event:
 
 ```javascript
 {
-  "subscriptionId": 0,
-  "event": {
-    "e": "outboundAccountPosition",
-    "E": 1728972148778,
-    "u": 1728972148778,
-    "B": [
-      {
-        "a": "BTC",
-        "f": "11818.00000000",
-        "l": "182.00000000"
-      },
-      {
-        "a": "USDT",
-        "f": "10580.00000000",
-        "l": "70.00000000"
-      }
-    ]
-  }
+    "subscriptionId": 0,
+    "event": {
+        "e": "outboundAccountPosition",
+        "E": 1728972148778,
+        "u": 1728972148778,
+        "B": [
+            {
+                "a": "BTC",
+                "f": "11818.00000000",
+                "l": "182.00000000"
+            },
+            {
+                "a": "USDT",
+                "f": "10580.00000000",
+                "l": "70.00000000"
+            }
+        ]
+    }
 }
 ```
 
@@ -376,20 +376,20 @@ A response with rate limit status may look like this:
 
 ```json
 {
-  "id": "7069b743-f477-4ae3-81db-db9b8df085d2",
-  "status": 200,
-  "result": {
-    "serverTime": 1656400526260
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 70
-    }
-  ]
+    "id": "7069b743-f477-4ae3-81db-db9b8df085d2",
+    "status": 200,
+    "result": {
+        "serverTime": 1656400526260
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 70
+        }
+    ]
 }
 ```
 
@@ -434,21 +434,34 @@ the `rateLimits` field can be omitted from responses to reduce their size.
   Default request and response:
 
   ```json
-  {"id":1,"method":"time"}
+  { "id": 1, "method": "time" }
   ```
 
   ```json
-  {"id":1,"status":200,"result":{"serverTime":1656400526260},"rateLimits":[{"rateLimitType":"REQUEST_WEIGHT","interval":"MINUTE","intervalNum":1,"limit":6000,"count":70}]}
+  {
+      "id": 1,
+      "status": 200,
+      "result": { "serverTime": 1656400526260 },
+      "rateLimits": [
+          {
+              "rateLimitType": "REQUEST_WEIGHT",
+              "interval": "MINUTE",
+              "intervalNum": 1,
+              "limit": 6000,
+              "count": 70
+          }
+      ]
+  }
   ```
 
   Request and response without rate limit status:
 
   ```json
-  {"id":2,"method":"time","params":{"returnRateLimits":false}}
+  { "id": 2, "method": "time", "params": { "returnRateLimits": false } }
   ```
 
   ```json
-  {"id":2,"status":200,"result":{"serverTime":1656400527891}}
+  { "id": 2, "status": 200, "result": { "serverTime": 1656400527891 } }
   ```
 
 * Optional `returnRateLimits` boolean parameter in connection URL.
@@ -488,18 +501,18 @@ Successful response indicating that in 1 minute you have used 70 weight out of y
 
 ```json
 {
-  "id": "7069b743-f477-4ae3-81db-db9b8df085d2",
-  "status": 200,
-  "result": [],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 70
-    }
-  ]
+    "id": "7069b743-f477-4ae3-81db-db9b8df085d2",
+    "status": 200,
+    "result": [],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 70
+        }
+    ]
 }
 ```
 
@@ -507,25 +520,25 @@ Failed response indicating that you are banned and the ban will last until epoch
 
 ```json
 {
-  "id": "fc93a61a-a192-4cf4-bb2a-a8f0f0c51e06",
-  "status": 418,
-  "error": {
-    "code": -1003,
-    "msg": "Way too much request weight used; IP banned until 1659146400000. Please use WebSocket Streams for live updates to avoid bans.",
-    "data": {
-      "serverTime": 1659142907531,
-      "retryAfter": 1659146400000
-    }
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 2411
-    }
-  ]
+    "id": "fc93a61a-a192-4cf4-bb2a-a8f0f0c51e06",
+    "status": 418,
+    "error": {
+        "code": -1003,
+        "msg": "Way too much request weight used; IP banned until 1659146400000. Please use WebSocket Streams for live updates to avoid bans.",
+        "data": {
+            "serverTime": 1659142907531,
+            "retryAfter": 1659146400000
+        }
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 2411
+        }
+    ]
 }
 ```
 
@@ -543,49 +556,49 @@ Failed response indicating that you are banned and the ban will last until epoch
 Successful response indicating that you have placed 12 orders in 10 seconds, and 4043 orders in the past 24 hours:
 ```json
 {
-  "id": "e2a85d9f-07a5-4f94-8d5f-789dc3deb097",
-  "status": 200,
-  "result": {
-    "symbol": "BTCUSDT",
-    "orderId": 12510053279,
-    "orderListId": -1,
-    "clientOrderId": "a097fe6304b20a7e4fc436",
-    "transactTime": 1655716096505,
-    "price": "0.10000000",
-    "origQty": "10.00000000",
-    "executedQty": "0.00000000",
-    "origQuoteOrderQty": "0.000000",
-    "cummulativeQuoteQty": "0.00000000",
-    "status": "NEW",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "BUY",
-    "workingTime": 1655716096505,
-    "selfTradePreventionMode": "NONE"
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 10,
-      "limit": 50,
-      "count": 12
+    "id": "e2a85d9f-07a5-4f94-8d5f-789dc3deb097",
+    "status": 200,
+    "result": {
+        "symbol": "BTCUSDT",
+        "orderId": 12510053279,
+        "orderListId": -1,
+        "clientOrderId": "a097fe6304b20a7e4fc436",
+        "transactTime": 1655716096505,
+        "price": "0.10000000",
+        "origQty": "10.00000000",
+        "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "BUY",
+        "workingTime": 1655716096505,
+        "selfTradePreventionMode": "NONE"
     },
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "DAY",
-      "intervalNum": 1,
-      "limit": 160000,
-      "count": 4043
-    },
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 321
-    }
-  ]
+    "rateLimits": [
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "SECOND",
+            "intervalNum": 10,
+            "limit": 50,
+            "count": 12
+        },
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "DAY",
+            "intervalNum": 1,
+            "limit": 160000,
+            "count": 4043
+        },
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 321
+        }
+    ]
 }
 ```
 
@@ -676,20 +689,20 @@ Example of request with a symbol name comprised entirely of ASCII characters:
 
 ```json
 {
-  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-  "method": "order.place",
-  "params": {
-    "symbol":           "BTCUSDT",
-    "side":             "SELL",
-    "type":             "LIMIT",
-    "timeInForce":      "GTC",
-    "quantity":         "0.01000000",
-    "price":            "52000.00",
-    "recvWindow":       100,
-    "timestamp":        1645423376532,
-    "apiKey":           "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature":        "------ FILL ME ------"
-  }
+    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+    "method": "order.place",
+    "params": {
+        "symbol": "BTCUSDT",
+        "side": "SELL",
+        "type": "LIMIT",
+        "timeInForce": "GTC",
+        "quantity": "0.01000000",
+        "price": "52000.00",
+        "recvWindow": 100,
+        "timestamp": 1645423376532,
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "------ FILL ME ------"
+    }
 }
 ```
 
@@ -697,20 +710,20 @@ Example of a request with a symbol name containing non-ASCII characters:
 
 ```json
 {
-  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-  "method": "order.place",
-  "params": {
-    "symbol":           "１２３４５６",
-    "side":             "BUY",
-    "type":             "LIMIT",
-    "timeInForce":      "GTC",
-    "quantity":         "0.01000000",
-    "price":            "0.10000000",
-    "recvWindow":       5000,
-    "timestamp":        1645423376532,
-    "apiKey":           "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature":        "------ FILL ME ------"
-  }
+    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+    "method": "order.place",
+    "params": {
+        "symbol": "１２３４５６",
+        "side": "BUY",
+        "type": "LIMIT",
+        "timeInForce": "GTC",
+        "quantity": "0.01000000",
+        "price": "0.10000000",
+        "recvWindow": 5000,
+        "timestamp": 1645423376532,
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "------ FILL ME ------"
+    }
 }
 ```
 
@@ -798,20 +811,20 @@ For the first set of example parameters (ASCII only):
 
 ```json
 {
-  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-  "method": "order.place",
-  "params": {
-    "symbol":           "BTCUSDT",
-    "side":             "SELL",
-    "type":             "LIMIT",
-    "timeInForce":      "GTC",
-    "quantity":         "0.01000000",
-    "price":            "52000.00",
-    "recvWindow":       100,
-    "timestamp":        1645423376532,
-    "apiKey":           "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature":        "aa1b5712c094bc4e57c05a1a5c1fd8d88dcd628338ea863fec7b88e59fe2db24"
-  }
+    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+    "method": "order.place",
+    "params": {
+        "symbol": "BTCUSDT",
+        "side": "SELL",
+        "type": "LIMIT",
+        "timeInForce": "GTC",
+        "quantity": "0.01000000",
+        "price": "52000.00",
+        "recvWindow": 100,
+        "timestamp": 1645423376532,
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "aa1b5712c094bc4e57c05a1a5c1fd8d88dcd628338ea863fec7b88e59fe2db24"
+    }
 }
 ```
 
@@ -819,20 +832,20 @@ For the second set of example parameters (some non-ASCII characters):
 
 ```json
 {
-  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-  "method": "order.place",
-  "params": {
-    "symbol":           "１２３４５６",
-    "side":             "BUY",
-    "type":             "LIMIT",
-    "timeInForce":      "GTC",
-    "quantity":         "1.00000000",
-    "price":            "0.10000000",
-    "recvWindow":       5000,
-    "timestamp":        1645423376532,
-    "apiKey":           "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature":        "b33892ae8e687c939f4468c6268ddd4c40ac1af18ad19a064864c47bae0752cd"
-  }
+    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+    "method": "order.place",
+    "params": {
+        "symbol": "１２３４５６",
+        "side": "BUY",
+        "type": "LIMIT",
+        "timeInForce": "GTC",
+        "quantity": "1.00000000",
+        "price": "0.10000000",
+        "recvWindow": 5000,
+        "timestamp": 1645423376532,
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "b33892ae8e687c939f4468c6268ddd4c40ac1af18ad19a064864c47bae0752cd"
+    }
 }
 ```
 
@@ -854,20 +867,20 @@ Example of request with a symbol name comprised entirely of ASCII characters:
 
 ```json
 {
-  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-  "method": "order.place",
-  "params": {
-    "symbol":           "BTCUSDT",
-    "side":             "SELL",
-    "type":             "LIMIT",
-    "timeInForce":      "GTC",
-    "quantity":         "0.01000000",
-    "price":            "52000.00",
-    "recvWindow":       100,
-    "timestamp":        1645423376532,
-    "apiKey":           "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
-    "signature":        "------ FILL ME ------"
-  }
+    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+    "method": "order.place",
+    "params": {
+        "symbol": "BTCUSDT",
+        "side": "SELL",
+        "type": "LIMIT",
+        "timeInForce": "GTC",
+        "quantity": "0.01000000",
+        "price": "52000.00",
+        "recvWindow": 100,
+        "timestamp": 1645423376532,
+        "apiKey": "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
+        "signature": "------ FILL ME ------"
+    }
 }
 ```
 
@@ -875,20 +888,20 @@ Example of a request with a symbol name containing non-ASCII characters:
 
 ```json
 {
-  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-  "method": "order.place",
-  "params": {
-    "symbol":           "１２３４５６",
-    "side":             "BUY",
-    "type":             "LIMIT",
-    "timeInForce":      "GTC",
-    "quantity":         "0.01000000",
-    "price":            "0.10000000",
-    "recvWindow":       5000,
-    "timestamp":        1645423376532,
-    "apiKey":           "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
-    "signature":        "------ FILL ME ------"
-  }
+    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+    "method": "order.place",
+    "params": {
+        "symbol": "１２３４５６",
+        "side": "BUY",
+        "type": "LIMIT",
+        "timeInForce": "GTC",
+        "quantity": "0.01000000",
+        "price": "0.10000000",
+        "recvWindow": 5000,
+        "timestamp": 1645423376532,
+        "apiKey": "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
+        "signature": "------ FILL ME ------"
+    }
 }
 ```
 
@@ -975,21 +988,21 @@ For the first set of example parameters (ASCII only):
 
 ```json
 {
-  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-  "method": "order.place",
-  "params": {
-    "symbol":           "BTCUSDT",
-    "side":             "SELL",
-    "type":             "LIMIT",
-    "timeInForce":      "GTC",
-    "quantity":         "0.01000000",
-    "price":            "52000.00",
-    "newOrderRespType": "ACK",
-    "recvWindow":       100,
-    "timestamp":        1645423376532,
-    "apiKey":           "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
-    "signature":        "OJJaf8C/3VGrU4ATTR4GiUDqL2FboSE1Qw7UnnoYNfXTXHubIl1iaePGuGyfct4NPu5oVEZCH4Q6ZStfB1w4ssgu0uiB/Bg+fBrRFfVgVaLKBdYHMvT+ljUJzqVaeoThG9oXlduiw8PbS9U8DYAbDvWN3jqZLo4Z2YJbyovyDAvDTr/oC0+vssLqP7NmlNb3fF3Bj7StmOwJvQJTbRAtzxK5PP7OQe+0mbW+D7RqVkUiSswR8qJFWTeSe4nXXNIdZdueYhF/Xf25L+KitJS5IHdIHcKfEw3MQzHFb2ZsGWkjDQwxkwr7Noi0Zaa+gFtxCuatGFm9dFIyx217pmSHtA=="
-  }
+    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+    "method": "order.place",
+    "params": {
+        "symbol": "BTCUSDT",
+        "side": "SELL",
+        "type": "LIMIT",
+        "timeInForce": "GTC",
+        "quantity": "0.01000000",
+        "price": "52000.00",
+        "newOrderRespType": "ACK",
+        "recvWindow": 100,
+        "timestamp": 1645423376532,
+        "apiKey": "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
+        "signature": "OJJaf8C/3VGrU4ATTR4GiUDqL2FboSE1Qw7UnnoYNfXTXHubIl1iaePGuGyfct4NPu5oVEZCH4Q6ZStfB1w4ssgu0uiB/Bg+fBrRFfVgVaLKBdYHMvT+ljUJzqVaeoThG9oXlduiw8PbS9U8DYAbDvWN3jqZLo4Z2YJbyovyDAvDTr/oC0+vssLqP7NmlNb3fF3Bj7StmOwJvQJTbRAtzxK5PP7OQe+0mbW+D7RqVkUiSswR8qJFWTeSe4nXXNIdZdueYhF/Xf25L+KitJS5IHdIHcKfEw3MQzHFb2ZsGWkjDQwxkwr7Noi0Zaa+gFtxCuatGFm9dFIyx217pmSHtA=="
+    }
 }
 ```
 
@@ -997,20 +1010,20 @@ For the second set of example parameters (some non-ASCII characters):
 
 ```json
 {
-  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-  "method": "order.place",
-  "params": {
-    "symbol":           "１２３４５６",
-    "side":             "SELL",
-    "type":             "LIMIT",
-    "timeInForce":      "GTC",
-    "quantity":         "1.00000000",
-    "price":            "0.10000000",
-    "recvWindow":       5000,
-    "timestamp":        1645423376532,
-    "apiKey":           "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
-    "signature":        "F3o/79Ttvl2cVYGPfBOF3oEOcm5QcYmTYWpdVIrKve5u+8paMNDAdUE+teqMxFM9HcquetGcfuFpLYtsQames5bDx/tskGM76TWW8HaM+6tuSYBSFLrKqChfA9hQGLYGjAiflf1YBnDhY+7vNbJFusUborNOloOj+ufzP5q42PvI3H0uNy3W5V3pyfXpDGCBtfCYYr9NAqA4d+AQfyllL/zkO9h9JSdozN49t0/hWGoD2dWgSO0Je6MytKEvD4DQXGeqNlBTB6tUXcWnRW+FcaKZ4KYqnxCtb1u8rFXUYgFykr2CbcJLSmw6ydEJ3EZ/NaZopRr+cU0W2m0HZ3qucw=="
-  }
+    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+    "method": "order.place",
+    "params": {
+        "symbol": "１２３４５６",
+        "side": "SELL",
+        "type": "LIMIT",
+        "timeInForce": "GTC",
+        "quantity": "1.00000000",
+        "price": "0.10000000",
+        "recvWindow": 5000,
+        "timestamp": 1645423376532,
+        "apiKey": "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
+        "signature": "F3o/79Ttvl2cVYGPfBOF3oEOcm5QcYmTYWpdVIrKve5u+8paMNDAdUE+teqMxFM9HcquetGcfuFpLYtsQames5bDx/tskGM76TWW8HaM+6tuSYBSFLrKqChfA9hQGLYGjAiflf1YBnDhY+7vNbJFusUborNOloOj+ufzP5q42PvI3H0uNy3W5V3pyfXpDGCBtfCYYr9NAqA4d+AQfyllL/zkO9h9JSdozN49t0/hWGoD2dWgSO0Je6MytKEvD4DQXGeqNlBTB6tUXcWnRW+FcaKZ4KYqnxCtb1u8rFXUYgFykr2CbcJLSmw6ydEJ3EZ/NaZopRr+cU0W2m0HZ3qucw=="
+    }
 }
 ```
 
@@ -1034,20 +1047,20 @@ Example of request with a symbol name comprised entirely of ASCII characters:
 
 ```json
 {
-  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-  "method": "order.place",
-  "params": {
-    "symbol":           "BTCUSDT",
-    "side":             "SELL",
-    "type":             "LIMIT",
-    "timeInForce":      "GTC",
-    "quantity":         "0.01000000",
-    "price":            "52000.00",
-    "recvWindow":       100,
-    "timestamp":        1645423376532,
-    "apiKey":           "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
-    "signature":        "------ FILL ME ------"
-  }
+    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+    "method": "order.place",
+    "params": {
+        "symbol": "BTCUSDT",
+        "side": "SELL",
+        "type": "LIMIT",
+        "timeInForce": "GTC",
+        "quantity": "0.01000000",
+        "price": "52000.00",
+        "recvWindow": 100,
+        "timestamp": 1645423376532,
+        "apiKey": "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
+        "signature": "------ FILL ME ------"
+    }
 }
 ```
 
@@ -1055,20 +1068,20 @@ Example of a request with a symbol name containing non-ASCII characters:
 
 ```json
 {
-  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-  "method": "order.place",
-  "params": {
-    "symbol":           "１２３４５６",
-    "side":             "BUY",
-    "type":             "LIMIT",
-    "timeInForce":      "GTC",
-    "quantity":         "0.01000000",
-    "price":            "0.10000000",
-    "recvWindow":       5000,
-    "timestamp":        1645423376532,
-    "apiKey":           "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
-    "signature":        "------ FILL ME ------"
-  }
+    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+    "method": "order.place",
+    "params": {
+        "symbol": "１２３４５６",
+        "side": "BUY",
+        "type": "LIMIT",
+        "timeInForce": "GTC",
+        "quantity": "0.01000000",
+        "price": "0.10000000",
+        "recvWindow": 5000,
+        "timestamp": 1645423376532,
+        "apiKey": "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
+        "signature": "------ FILL ME ------"
+    }
 }
 ```
 
@@ -1153,21 +1166,21 @@ For the first set of example parameters (ASCII only):
 
 ```json
 {
-  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-  "method": "order.place",
-  "params": {
-    "symbol":           "BTCUSDT",
-    "side":             "SELL",
-    "type":             "LIMIT",
-    "timeInForce":      "GTC",
-    "quantity":         "0.01000000",
-    "price":            "52000.00",
-    "newOrderRespType": "ACK",
-    "recvWindow":       100,
-    "timestamp":        1645423376532,
-    "apiKey":           "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
-    "signature":        "EocljwPl29jDxWYaaRaOo4pJ9wEblFbklJvPugNscLLuKd5vHM2grWjn1z+rY0aJ7r/44enxHL6mOAJuJ1kqCg=="
-  }
+    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+    "method": "order.place",
+    "params": {
+        "symbol": "BTCUSDT",
+        "side": "SELL",
+        "type": "LIMIT",
+        "timeInForce": "GTC",
+        "quantity": "0.01000000",
+        "price": "52000.00",
+        "newOrderRespType": "ACK",
+        "recvWindow": 100,
+        "timestamp": 1645423376532,
+        "apiKey": "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
+        "signature": "EocljwPl29jDxWYaaRaOo4pJ9wEblFbklJvPugNscLLuKd5vHM2grWjn1z+rY0aJ7r/44enxHL6mOAJuJ1kqCg=="
+    }
 }
 ```
 
@@ -1175,20 +1188,20 @@ For the second set of example parameters (some non-ASCII characters):
 
 ```json
 {
-  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-  "method": "order.place",
-  "params": {
-    "symbol":           "１２３４５６",
-    "side":             "SELL",
-    "type":             "LIMIT",
-    "timeInForce":      "GTC",
-    "quantity":         "1.00000000",
-    "price":            "0.10000000",
-    "recvWindow":       5000,
-    "timestamp":        1645423376532,
-    "apiKey":           "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
-    "signature":        "dtNHJeyKry+cNjiGv+sv5kynO9S40tf8k7D5CfAEQAp0s2scunZj+ovJdz2OgW8XhkB9G3/HmASkA9uY9eyFCA=="
-  }
+    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+    "method": "order.place",
+    "params": {
+        "symbol": "１２３４５６",
+        "side": "SELL",
+        "type": "LIMIT",
+        "timeInForce": "GTC",
+        "quantity": "1.00000000",
+        "price": "0.10000000",
+        "recvWindow": 5000,
+        "timestamp": 1645423376532,
+        "apiKey": "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
+        "signature": "dtNHJeyKry+cNjiGv+sv5kynO9S40tf8k7D5CfAEQAp0s2scunZj+ovJdz2OgW8XhkB9G3/HmASkA9uY9eyFCA=="
+    }
 }
 ```
 
@@ -1280,12 +1293,12 @@ If during an active session the API key becomes invalid for _any reason_ (e.g. I
 
 ```javascript
 {
-  "id": null,
-  "status": 401,
-  "error": {
-    "code": -2015,
-    "msg": "Invalid API-key, IP, or permissions for action."
-  }
+    "id": null,
+    "status": 401,
+    "error": {
+        "code": -2015,
+        "msg": "Invalid API-key, IP, or permissions for action."
+    }
 }
 ```
 
@@ -1324,8 +1337,8 @@ Database        | moderate | Data is retrieved from the database
 
 ```javascript
 {
-  "id": "922bcc6e-9de8-440d-9e84-7c80933a8d0d",
-  "method": "ping"
+    "id": "922bcc6e-9de8-440d-9e84-7c80933a8d0d",
+    "method": "ping"
 }
 ```
 
@@ -1348,18 +1361,18 @@ Memory
 **Response:**
 ```javascript
 {
-  "id": "922bcc6e-9de8-440d-9e84-7c80933a8d0d",
-  "status": 200,
-  "result": {},
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
+    "id": "922bcc6e-9de8-440d-9e84-7c80933a8d0d",
+    "status": 200,
+    "result": {},
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
+    ]
 }
 ```
 
@@ -1367,8 +1380,8 @@ Memory
 
 ```javascript
 {
-  "id": "187d3cb2-942d-484c-8271-4e2141bbadb1",
-  "method": "time"
+    "id": "187d3cb2-942d-484c-8271-4e2141bbadb1",
+    "method": "time"
 }
 ```
 
@@ -1386,20 +1399,20 @@ Memory
 **Response:**
 ```javascript
 {
-  "id": "187d3cb2-942d-484c-8271-4e2141bbadb1",
-  "status": 200,
-  "result": {
-    "serverTime": 1656400526260
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
+    "id": "187d3cb2-942d-484c-8271-4e2141bbadb1",
+    "status": 200,
+    "result": {
+        "serverTime": 1656400526260
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
+    ]
 }
 ```
 
@@ -1409,11 +1422,11 @@ Memory
 
 ```javascript
 {
-  "id": "5494febb-d167-46a2-996d-70533eb4d976",
-  "method": "exchangeInfo",
-  "params": {
-    "symbols": ["BNBBTC"]
-  }
+    "id": "5494febb-d167-46a2-996d-70533eb4d976",
+    "method": "exchangeInfo",
+    "params": {
+        "symbols": ["BNBBTC"]
+    }
 }
 ```
 
@@ -1489,123 +1502,112 @@ Memory
 **Response:**
 ```javascript
 {
-  "id": "5494febb-d167-46a2-996d-70533eb4d976",
-  "status": 200,
-  "result": {
-    "timezone": "UTC",
-    "serverTime": 1655969291181,
-    // Global rate limits. See "Rate limits" section.
-    "rateLimits": [
-      {
-        "rateLimitType": "REQUEST_WEIGHT",    // Rate limit type: REQUEST_WEIGHT, ORDERS, CONNECTIONS
-        "interval": "MINUTE",                 // Rate limit interval: SECOND, MINUTE, DAY
-        "intervalNum": 1,                     // Rate limit interval multiplier (i.e., "1 minute")
-        "limit": 6000                         // Rate limit per interval
-      },
-      {
-        "rateLimitType": "ORDERS",
-        "interval": "SECOND",
-        "intervalNum": 10,
-        "limit": 50
-      },
-      {
-        "rateLimitType": "ORDERS",
-        "interval": "DAY",
-        "intervalNum": 1,
-        "limit": 160000
-      },
-      {
-        "rateLimitType": "CONNECTIONS",
-        "interval": "MINUTE",
-        "intervalNum": 5,
-        "limit": 300
-      }
-    ],
-    // Exchange filters are explained on the "Filters" page:
-    // https://github.com/binance/binance-spot-api-docs/blob/master/filters.md
-    // All exchange filters are optional.
-    "exchangeFilters": [],
-    "symbols": [
-      {
-        "symbol": "BNBBTC",
-        "status": "TRADING",
-        "baseAsset": "BNB",
-        "baseAssetPrecision": 8,
-        "quoteAsset": "BTC",
-        "quotePrecision": 8,
-        "quoteAssetPrecision": 8,
-        "baseCommissionPrecision": 8,
-        "quoteCommissionPrecision": 8,
-        "orderTypes": [
-          "LIMIT",
-          "LIMIT_MAKER",
-          "MARKET",
-          "STOP_LOSS_LIMIT",
-          "TAKE_PROFIT_LIMIT"
+    "id": "5494febb-d167-46a2-996d-70533eb4d976",
+    "status": 200,
+    "result": {
+        "timezone": "UTC",
+        "serverTime": 1655969291181,
+        // Global rate limits. See "Rate limits" section.
+        "rateLimits": [
+            {
+                "rateLimitType": "REQUEST_WEIGHT",     // Rate limit type: REQUEST_WEIGHT, ORDERS, CONNECTIONS
+                "interval": "MINUTE",                  // Rate limit interval: SECOND, MINUTE, DAY
+                "intervalNum": 1,                      // Rate limit interval multiplier (i.e., "1 minute")
+                "limit": 6000                          // Rate limit per interval
+            },
+            {
+                "rateLimitType": "ORDERS",
+                "interval": "SECOND",
+                "intervalNum": 10,
+                "limit": 50
+            },
+            {
+                "rateLimitType": "ORDERS",
+                "interval": "DAY",
+                "intervalNum": 1,
+                "limit": 160000
+            },
+            {
+                "rateLimitType": "CONNECTIONS",
+                "interval": "MINUTE",
+                "intervalNum": 5,
+                "limit": 300
+            }
         ],
-        "icebergAllowed": true,
-        "ocoAllowed": true,
-        "otoAllowed": true,
-        "opoAllowed": true,
-        "quoteOrderQtyMarketAllowed": true,
-        "allowTrailingStop": true,
-        "cancelReplaceAllowed": true,
-        "amendAllowed":false,
-        "pegInstructionsAllowed": true,
-        "isSpotTradingAllowed": true,
-        "isMarginTradingAllowed": true,
-        // Symbol filters are explained on the "Filters" page:
+        // Exchange filters are explained on the "Filters" page:
         // https://github.com/binance/binance-spot-api-docs/blob/master/filters.md
-        // All symbol filters are optional.
-        "filters": [
-          {
-            "filterType": "PRICE_FILTER",
-            "minPrice": "0.00000100",
-            "maxPrice": "100000.00000000",
-            "tickSize": "0.00000100"
-          },
-          {
-            "filterType": "LOT_SIZE",
-            "minQty": "0.00100000",
-            "maxQty": "100000.00000000",
-            "stepSize": "0.00100000"
-          }
-        ],
-        "permissions": [],
-        "permissionSets": [
-          [
-            "SPOT",
-            "MARGIN",
-            "TRD_GRP_004"
-          ]
-        ],
-        "defaultSelfTradePreventionMode": "NONE",
-        "allowedSelfTradePreventionModes": [
-          "NONE"
-        ]
-      }
-    ],
-    // Optional field. Present only when SOR is available.
-    // https://github.com/binance/binance-spot-api-docs/blob/master/faqs/sor_faq.md
-    "sors": [
-      {
-        "baseAsset": "BTC",
+        // All exchange filters are optional.
+        "exchangeFilters": [],
         "symbols": [
-          "BTCUSDT",
-          "BTCUSDC"
+            {
+                "symbol": "BNBBTC",
+                "status": "TRADING",
+                "baseAsset": "BNB",
+                "baseAssetPrecision": 8,
+                "quoteAsset": "BTC",
+                "quotePrecision": 8,
+                "quoteAssetPrecision": 8,
+                "baseCommissionPrecision": 8,
+                "quoteCommissionPrecision": 8,
+                "orderTypes": [
+                    "LIMIT",
+                    "LIMIT_MAKER",
+                    "MARKET",
+                    "STOP_LOSS_LIMIT",
+                    "TAKE_PROFIT_LIMIT"
+                ],
+                "icebergAllowed": true,
+                "ocoAllowed": true,
+                "otoAllowed": true,
+                "opoAllowed": true,
+                "quoteOrderQtyMarketAllowed": true,
+                "allowTrailingStop": true,
+                "cancelReplaceAllowed": true,
+                "amendAllowed": false,
+                "pegInstructionsAllowed": true,
+                "isSpotTradingAllowed": true,
+                "isMarginTradingAllowed": true,
+                // Symbol filters are explained on the "Filters" page:
+                // https://github.com/binance/binance-spot-api-docs/blob/master/filters.md
+                // All symbol filters are optional.
+                "filters": [
+                    {
+                        "filterType": "PRICE_FILTER",
+                        "minPrice": "0.00000100",
+                        "maxPrice": "100000.00000000",
+                        "tickSize": "0.00000100"
+                    },
+                    {
+                        "filterType": "LOT_SIZE",
+                        "minQty": "0.00100000",
+                        "maxQty": "100000.00000000",
+                        "stepSize": "0.00100000"
+                    }
+                ],
+                "permissions": [],
+                "permissionSets": [["SPOT", "MARGIN", "TRD_GRP_004"]],
+                "defaultSelfTradePreventionMode": "NONE",
+                "allowedSelfTradePreventionModes": ["NONE"]
+            }
+        ],
+        // Optional field. Present only when SOR is available.
+        // https://github.com/binance/binance-spot-api-docs/blob/master/faqs/sor_faq.md
+        "sors": [
+            {
+                "baseAsset": "BTC",
+                "symbols": ["BTCUSDT", "BTCUSDC"]
+            }
         ]
-      }
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 20
+        }
     ]
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 20
-    }
-  ]
 }
 ```
 
@@ -1616,12 +1618,12 @@ Memory
 
 ```javascript
 {
-  "id": "51e2affb-0aba-4821-ba75-f2625006eb43",
-  "method": "depth",
-  "params": {
-    "symbol": "BNBBTC",
-    "limit": 5
-  }
+    "id": "51e2affb-0aba-4821-ba75-f2625006eb43",
+    "method": "depth",
+    "params": {
+        "symbol": "BNBBTC",
+        "limit": 5
+    }
 }
 ```
 
@@ -1660,66 +1662,39 @@ Memory
 **Response:**
 ```javascript
 {
-  "id": "51e2affb-0aba-4821-ba75-f2625006eb43",
-  "status": 200,
-  "result": {
-    "lastUpdateId": 2731179239,
-    // Bid levels are sorted from highest to lowest price.
-    "bids": [
-      [
-        "0.01379900",   // Price
-        "3.43200000"    // Quantity
-      ],
-      [
-        "0.01379800",
-        "3.24300000"
-      ],
-      [
-        "0.01379700",
-        "10.45500000"
-      ],
-      [
-        "0.01379600",
-        "3.82100000"
-      ],
-      [
-        "0.01379500",
-        "10.26200000"
-      ]
-    ],
-    // Ask levels are sorted from lowest to highest price.
-    "asks": [
-      [
-        "0.01380000",
-        "5.91700000"
-      ],
-      [
-        "0.01380100",
-        "6.01400000"
-      ],
-      [
-        "0.01380200",
-        "0.26800000"
-      ],
-      [
-        "0.01380300",
-        "0.33800000"
-      ],
-      [
-        "0.01380400",
-        "0.26800000"
-      ]
+    "id": "51e2affb-0aba-4821-ba75-f2625006eb43",
+    "status": 200,
+    "result": {
+        "lastUpdateId": 2731179239,
+        // Bid levels are sorted from highest to lowest price.
+        "bids": [
+            [
+                "0.01379900",     // Price
+                "3.43200000"      // Quantity
+            ],
+            ["0.01379800", "3.24300000"],
+            ["0.01379700", "10.45500000"],
+            ["0.01379600", "3.82100000"],
+            ["0.01379500", "10.26200000"]
+        ],
+        // Ask levels are sorted from lowest to highest price.
+        "asks": [
+            ["0.01380000", "5.91700000"],
+            ["0.01380100", "6.01400000"],
+            ["0.01380200", "0.26800000"],
+            ["0.01380300", "0.33800000"],
+            ["0.01380400", "0.26800000"]
+        ]
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 2
+        }
     ]
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 2
-    }
-  ]
 }
 ```
 
@@ -1728,12 +1703,12 @@ Memory
 
 ```javascript
 {
-  "id": "409a20bd-253d-41db-a6dd-687862a5882f",
-  "method": "trades.recent",
-  "params": {
-    "symbol": "BNBBTC",
-    "limit": 1
-  }
+    "id": "409a20bd-253d-41db-a6dd-687862a5882f",
+    "method": "trades.recent",
+    "params": {
+        "symbol": "BNBBTC",
+        "limit": 1
+    }
 }
 ```
 
@@ -1759,28 +1734,28 @@ Memory
 **Response:**
 ```javascript
 {
-  "id": "409a20bd-253d-41db-a6dd-687862a5882f",
-  "status": 200,
-  "result": [
-    {
-      "id": 194686783,
-      "price": "0.01361000",
-      "qty": "0.01400000",
-      "quoteQty": "0.00019054",
-      "time": 1660009530807,
-      "isBuyerMaker": true,
-      "isBestMatch": true
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 2
-    }
-  ]
+    "id": "409a20bd-253d-41db-a6dd-687862a5882f",
+    "status": 200,
+    "result": [
+        {
+            "id": 194686783,
+            "price": "0.01361000",
+            "qty": "0.01400000",
+            "quoteQty": "0.00019054",
+            "time": 1660009530807,
+            "isBuyerMaker": true,
+            "isBestMatch": true
+        }
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 2
+        }
+    ]
 }
 ```
 
@@ -1788,13 +1763,13 @@ Memory
 
 ```javascript
 {
-  "id": "cffc9c7d-4efc-4ce0-b587-6b87448f052a",
-  "method": "trades.historical",
-  "params": {
-    "symbol": "BNBBTC",
-    "fromId": 0,
-    "limit": 1
-  }
+    "id": "cffc9c7d-4efc-4ce0-b587-6b87448f052a",
+    "method": "trades.historical",
+    "params": {
+        "symbol": "BNBBTC",
+        "fromId": 0,
+        "limit": 1
+    }
 }
 ```
 
@@ -1821,28 +1796,28 @@ Database
 **Response:**
 ```javascript
 {
-  "id": "cffc9c7d-4efc-4ce0-b587-6b87448f052a",
-  "status": 200,
-  "result": [
-    {
-      "id": 0,
-      "price": "0.00005000",
-      "qty": "40.00000000",
-      "quoteQty": "0.00200000",
-      "time": 1500004800376,
-      "isBuyerMaker": true,
-      "isBestMatch": true
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 10
-    }
-  ]
+    "id": "cffc9c7d-4efc-4ce0-b587-6b87448f052a",
+    "status": 200,
+    "result": [
+        {
+            "id": 0,
+            "price": "0.00005000",
+            "qty": "40.00000000",
+            "quoteQty": "0.00200000",
+            "time": 1500004800376,
+            "isBuyerMaker": true,
+            "isBestMatch": true
+        }
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 10
+        }
+    ]
 }
 ```
 
@@ -1850,13 +1825,13 @@ Database
 
 ```javascript
 {
-  "id": "189da436-d4bd-48ca-9f95-9f613d621717",
-  "method": "trades.aggregate",
-  "params": {
-    "symbol": "BNBBTC",
-    "fromId": 50000000,
-    "limit": 1
-  }
+    "id": "189da436-d4bd-48ca-9f95-9f613d621717",
+    "method": "trades.aggregate",
+    "params": {
+        "symbol": "BNBBTC",
+        "fromId": 50000000,
+        "limit": 1
+    }
 }
 ```
 
@@ -1904,29 +1879,29 @@ Database
 **Response:**
 ```javascript
 {
-  "id": "189da436-d4bd-48ca-9f95-9f613d621717",
-  "status": 200,
-  "result": [
-    {
-      "a": 50000000,        // Aggregate trade ID
-      "p": "0.00274100",    // Price
-      "q": "57.19000000",   // Quantity
-      "f": 59120167,        // First trade ID
-      "l": 59120170,        // Last trade ID
-      "T": 1565877971222,   // Timestamp
-      "m": true,            // Was the buyer the maker?
-      "M": true             // Was the trade the best price match?
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 2
-    }
-  ]
+    "id": "189da436-d4bd-48ca-9f95-9f613d621717",
+    "status": 200,
+    "result": [
+        {
+            "a": 50000000,          // Aggregate trade ID
+            "p": "0.00274100",      // Price
+            "q": "57.19000000",     // Quantity
+            "f": 59120167,          // First trade ID
+            "l": 59120170,          // Last trade ID
+            "T": 1565877971222,     // Timestamp
+            "m": true,              // Was the buyer the maker?
+            "M": true               // Was the trade the best price match?
+        }
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 2
+        }
+    ]
 }
 ```
 
@@ -1934,14 +1909,14 @@ Database
 
 ```javascript
 {
-  "id": "1dbbeb56-8eea-466a-8f6e-86bdcfa2fc0b",
-  "method": "klines",
-  "params": {
-    "symbol": "BNBBTC",
-    "interval": "1h",
-    "startTime": 1655969280000,
-    "limit": 1
-  }
+    "id": "1dbbeb56-8eea-466a-8f6e-86bdcfa2fc0b",
+    "method": "klines",
+    "params": {
+        "symbol": "BNBBTC",
+        "interval": "1h",
+        "startTime": 1655969280000,
+        "limit": 1
+    }
 }
 ```
 
@@ -1999,33 +1974,33 @@ Database
 **Response:**
 ```javascript
 {
-  "id": "1dbbeb56-8eea-466a-8f6e-86bdcfa2fc0b",
-  "status": 200,
-  "result": [
-    [
-      1655971200000,      // Kline open time
-      "0.01086000",       // Open price
-      "0.01086600",       // High price
-      "0.01083600",       // Low price
-      "0.01083800",       // Close price
-      "2290.53800000",    // Volume
-      1655974799999,      // Kline close time
-      "24.85074442",      // Quote asset volume
-      2283,               // Number of trades
-      "1171.64000000",    // Taker buy base asset volume
-      "12.71225884",      // Taker buy quote asset volume
-      "0"                 // Unused field, ignore
+    "id": "1dbbeb56-8eea-466a-8f6e-86bdcfa2fc0b",
+    "status": 200,
+    "result": [
+        [
+            1655971200000,       // Kline open time
+            "0.01086000",        // Open price
+            "0.01086600",        // High price
+            "0.01083600",        // Low price
+            "0.01083800",        // Close price
+            "2290.53800000",     // Volume
+            1655974799999,       // Kline close time
+            "24.85074442",       // Quote asset volume
+            2283,                // Number of trades
+            "1171.64000000",     // Taker buy base asset volume
+            "12.71225884",       // Taker buy quote asset volume
+            "0"                  // Unused field, ignore
+        ]
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 2
+        }
     ]
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 2
-    }
-  ]
 }
 ```
 
@@ -2033,14 +2008,14 @@ Database
 
 ```javascript
 {
-  "id": "b137468a-fb20-4c06-bd6b-625148eec958",
-  "method": "uiKlines",
-  "params": {
-    "symbol": "BNBBTC",
-    "interval": "1h",
-    "startTime": 1655969280000,
-    "limit": 1
-  }
+    "id": "b137468a-fb20-4c06-bd6b-625148eec958",
+    "method": "uiKlines",
+    "params": {
+        "symbol": "BNBBTC",
+        "interval": "1h",
+        "startTime": 1655969280000,
+        "limit": 1
+    }
 }
 ```
 
@@ -2079,33 +2054,33 @@ Database
 **Response:**
 ```javascript
 {
-  "id": "b137468a-fb20-4c06-bd6b-625148eec958",
-  "status": 200,
-  "result": [
-    [
-      1655971200000,      // Kline open time
-      "0.01086000",       // Open price
-      "0.01086600",       // High price
-      "0.01083600",       // Low price
-      "0.01083800",       // Close price
-      "2290.53800000",    // Volume
-      1655974799999,      // Kline close time
-      "24.85074442",      // Quote asset volume
-      2283,               // Number of trades
-      "1171.64000000",    // Taker buy base asset volume
-      "12.71225884",      // Taker buy quote asset volume
-      "0"                 // Unused field, ignore
+    "id": "b137468a-fb20-4c06-bd6b-625148eec958",
+    "status": 200,
+    "result": [
+        [
+            1655971200000,       // Kline open time
+            "0.01086000",        // Open price
+            "0.01086600",        // High price
+            "0.01083600",        // Low price
+            "0.01083800",        // Close price
+            "2290.53800000",     // Volume
+            1655974799999,       // Kline close time
+            "24.85074442",       // Quote asset volume
+            2283,                // Number of trades
+            "1171.64000000",     // Taker buy base asset volume
+            "12.71225884",       // Taker buy quote asset volume
+            "0"                  // Unused field, ignore
+        ]
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 2
+        }
     ]
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 2
-    }
-  ]
 }
 ```
 
@@ -2113,11 +2088,11 @@ Database
 
 ```javascript
 {
-  "id": "ddbfb65f-9ebf-42ec-8240-8f0f91de0867",
-  "method": "avgPrice",
-  "params": {
-    "symbol": "BNBBTC"
-  }
+    "id": "ddbfb65f-9ebf-42ec-8240-8f0f91de0867",
+    "method": "avgPrice",
+    "params": {
+        "symbol": "BNBBTC"
+    }
 }
 ```
 
@@ -2138,22 +2113,22 @@ Memory
 **Response:**
 ```javascript
 {
-  "id": "ddbfb65f-9ebf-42ec-8240-8f0f91de0867",
-  "status": 200,
-  "result": {
-    "mins": 5,                    // Average price interval (in minutes)
-    "price": "9.35751834",        // Average price
-    "closeTime": 1694061154503    // Last trade time
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 2
-    }
-  ]
+    "id": "ddbfb65f-9ebf-42ec-8240-8f0f91de0867",
+    "status": 200,
+    "result": {
+        "mins": 5,                     // Average price interval (in minutes)
+        "price": "9.35751834",         // Average price
+        "closeTime": 1694061154503     // Last trade time
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 2
+        }
+    ]
 }
 ```
 
@@ -2161,11 +2136,11 @@ Memory
 
 ```javascript
 {
-  "id": "93fb61ef-89f8-4d6e-b022-4f035a3fadad",
-  "method": "ticker.24hr",
-  "params": {
-    "symbol": "BNBBTC"
-  }
+    "id": "93fb61ef-89f8-4d6e-b022-4f035a3fadad",
+    "method": "ticker.24hr",
+    "params": {
+        "symbol": "BNBBTC"
+    }
 }
 ```
 
@@ -2242,40 +2217,40 @@ Memory
 
 ```javascript
 {
-  "id": "93fb61ef-89f8-4d6e-b022-4f035a3fadad",
-  "status": 200,
-  "result": {
-    "symbol": "BNBBTC",
-    "priceChange": "0.00013900",
-    "priceChangePercent": "1.020",
-    "weightedAvgPrice": "0.01382453",
-    "prevClosePrice": "0.01362800",
-    "lastPrice": "0.01376700",
-    "lastQty": "1.78800000",
-    "bidPrice": "0.01376700",
-    "bidQty": "4.64600000",
-    "askPrice": "0.01376800",
-    "askQty": "14.31400000",
-    "openPrice": "0.01362800",
-    "highPrice": "0.01414900",
-    "lowPrice": "0.01346600",
-    "volume": "69412.40500000",
-    "quoteVolume": "959.59411487",
-    "openTime": 1660014164909,
-    "closeTime": 1660100564909,
-    "firstId": 194696115,       // First trade ID
-    "lastId": 194968287,        // Last trade ID
-    "count": 272173             // Number of trades
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 2
-    }
-  ]
+    "id": "93fb61ef-89f8-4d6e-b022-4f035a3fadad",
+    "status": 200,
+    "result": {
+        "symbol": "BNBBTC",
+        "priceChange": "0.00013900",
+        "priceChangePercent": "1.020",
+        "weightedAvgPrice": "0.01382453",
+        "prevClosePrice": "0.01362800",
+        "lastPrice": "0.01376700",
+        "lastQty": "1.78800000",
+        "bidPrice": "0.01376700",
+        "bidQty": "4.64600000",
+        "askPrice": "0.01376800",
+        "askQty": "14.31400000",
+        "openPrice": "0.01362800",
+        "highPrice": "0.01414900",
+        "lowPrice": "0.01346600",
+        "volume": "69412.40500000",
+        "quoteVolume": "959.59411487",
+        "openTime": 1660014164909,
+        "closeTime": 1660100564909,
+        "firstId": 194696115,     // First trade ID
+        "lastId": 194968287,      // Last trade ID
+        "count": 272173           // Number of trades
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 2
+        }
+    ]
 }
 ```
 
@@ -2283,31 +2258,31 @@ Memory
 
 ```javascript
 {
-  "id": "9fa2a91b-3fca-4ed7-a9ad-58e3b67483de",
-  "status": 200,
-  "result": {
-    "symbol": "BNBBTC",
-    "openPrice": "0.01362800",
-    "highPrice": "0.01414900",
-    "lowPrice": "0.01346600",
-    "lastPrice": "0.01376700",
-    "volume": "69412.40500000",
-    "quoteVolume": "959.59411487",
-    "openTime": 1660014164909,
-    "closeTime": 1660100564909,
-    "firstId": 194696115,       // First trade ID
-    "lastId": 194968287,        // Last trade ID
-    "count": 272173             // Number of trades
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 2
-    }
-  ]
+    "id": "9fa2a91b-3fca-4ed7-a9ad-58e3b67483de",
+    "status": 200,
+    "result": {
+        "symbol": "BNBBTC",
+        "openPrice": "0.01362800",
+        "highPrice": "0.01414900",
+        "lowPrice": "0.01346600",
+        "lastPrice": "0.01376700",
+        "volume": "69412.40500000",
+        "quoteVolume": "959.59411487",
+        "openTime": 1660014164909,
+        "closeTime": 1660100564909,
+        "firstId": 194696115,     // First trade ID
+        "lastId": 194968287,      // Last trade ID
+        "count": 272173           // Number of trades
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 2
+        }
+    ]
 }
 ```
 
@@ -2315,65 +2290,65 @@ If more than one symbol is requested, response returns an array:
 
 ```javascript
 {
-  "id": "901be0d9-fd3b-45e4-acd6-10c580d03430",
-  "status": 200,
-  "result": [
-    {
-      "symbol": "BNBBTC",
-      "priceChange": "0.00016500",
-      "priceChangePercent": "1.213",
-      "weightedAvgPrice": "0.01382508",
-      "prevClosePrice": "0.01360800",
-      "lastPrice": "0.01377200",
-      "lastQty": "1.01400000",
-      "bidPrice": "0.01377100",
-      "bidQty": "7.55700000",
-      "askPrice": "0.01377200",
-      "askQty": "4.37900000",
-      "openPrice": "0.01360700",
-      "highPrice": "0.01414900",
-      "lowPrice": "0.01346600",
-      "volume": "69376.27900000",
-      "quoteVolume": "959.13277091",
-      "openTime": 1660014615517,
-      "closeTime": 1660101015517,
-      "firstId": 194697254,
-      "lastId": 194969483,
-      "count": 272230
-    },
-    {
-      "symbol": "BTCUSDT",
-      "priceChange": "-938.06000000",
-      "priceChangePercent": "-3.938",
-      "weightedAvgPrice": "23265.34432003",
-      "prevClosePrice": "23819.17000000",
-      "lastPrice": "22880.91000000",
-      "lastQty": "0.00536000",
-      "bidPrice": "22880.40000000",
-      "bidQty": "0.00424000",
-      "askPrice": "22880.91000000",
-      "askQty": "0.04276000",
-      "openPrice": "23818.97000000",
-      "highPrice": "23933.25000000",
-      "lowPrice": "22664.69000000",
-      "volume": "153508.37606000",
-      "quoteVolume": "3571425225.04441220",
-      "openTime": 1660014615977,
-      "closeTime": 1660101015977,
-      "firstId": 1592019902,
-      "lastId": 1597301762,
-      "count": 5281861
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 2
-    }
-  ]
+    "id": "901be0d9-fd3b-45e4-acd6-10c580d03430",
+    "status": 200,
+    "result": [
+        {
+            "symbol": "BNBBTC",
+            "priceChange": "0.00016500",
+            "priceChangePercent": "1.213",
+            "weightedAvgPrice": "0.01382508",
+            "prevClosePrice": "0.01360800",
+            "lastPrice": "0.01377200",
+            "lastQty": "1.01400000",
+            "bidPrice": "0.01377100",
+            "bidQty": "7.55700000",
+            "askPrice": "0.01377200",
+            "askQty": "4.37900000",
+            "openPrice": "0.01360700",
+            "highPrice": "0.01414900",
+            "lowPrice": "0.01346600",
+            "volume": "69376.27900000",
+            "quoteVolume": "959.13277091",
+            "openTime": 1660014615517,
+            "closeTime": 1660101015517,
+            "firstId": 194697254,
+            "lastId": 194969483,
+            "count": 272230
+        },
+        {
+            "symbol": "BTCUSDT",
+            "priceChange": "-938.06000000",
+            "priceChangePercent": "-3.938",
+            "weightedAvgPrice": "23265.34432003",
+            "prevClosePrice": "23819.17000000",
+            "lastPrice": "22880.91000000",
+            "lastQty": "0.00536000",
+            "bidPrice": "22880.40000000",
+            "bidQty": "0.00424000",
+            "askPrice": "22880.91000000",
+            "askQty": "0.04276000",
+            "openPrice": "23818.97000000",
+            "highPrice": "23933.25000000",
+            "lowPrice": "22664.69000000",
+            "volume": "153508.37606000",
+            "quoteVolume": "3571425225.04441220",
+            "openTime": 1660014615977,
+            "closeTime": 1660101015977,
+            "firstId": 1592019902,
+            "lastId": 1597301762,
+            "count": 5281861
+        }
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 2
+        }
+    ]
 }
 ```
 
@@ -2381,15 +2356,12 @@ If more than one symbol is requested, response returns an array:
 
 ```javascript
 {
-  "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
-  "method": "ticker.tradingDay",
-  "params": {
-    "symbols": [
-      "BNBBTC",
-      "BTCUSDT"
-    ],
-    "timeZone": "00:00"
-  }
+    "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
+    "method": "ticker.tradingDay",
+    "params": {
+        "symbols": ["BNBBTC", "BTCUSDT"],
+        "timeZone": "00:00"
+    }
 }
 ```
 
@@ -2454,34 +2426,34 @@ With `symbol`:
 
 ```javascript
 {
-  "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
-  "status": 200,
-  "result": {
-    "symbol": "BTCUSDT",
-    "priceChange": "-83.13000000",                // Absolute price change
-    "priceChangePercent": "-0.317",               // Relative price change in percent
-    "weightedAvgPrice": "26234.58803036",         // quoteVolume / volume
-    "openPrice": "26304.80000000",
-    "highPrice": "26397.46000000",
-    "lowPrice": "26088.34000000",
-    "lastPrice": "26221.67000000",
-    "volume": "18495.35066000",                   // Volume in base asset
-    "quoteVolume": "485217905.04210480",
-    "openTime": 1695686400000,
-    "closeTime": 1695772799999,
-    "firstId": 3220151555,
-    "lastId": 3220849281,
-    "count": 697727
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 4
-    }
-  ]
+    "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
+    "status": 200,
+    "result": {
+        "symbol": "BTCUSDT",
+        "priceChange": "-83.13000000",            // Absolute price change
+        "priceChangePercent": "-0.317",           // Relative price change in percent
+        "weightedAvgPrice": "26234.58803036",     // quoteVolume / volume
+        "openPrice": "26304.80000000",
+        "highPrice": "26397.46000000",
+        "lowPrice": "26088.34000000",
+        "lastPrice": "26221.67000000",
+        "volume": "18495.35066000",               // Volume in base asset
+        "quoteVolume": "485217905.04210480",
+        "openTime": 1695686400000,
+        "closeTime": 1695772799999,
+        "firstId": 3220151555,
+        "lastId": 3220849281,
+        "count": 697727
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 4
+        }
+    ]
 }
 ```
 
@@ -2489,53 +2461,53 @@ With `symbols`:
 
 ```javascript
 {
-  "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
-  "status": 200,
-  "result": [
-    {
-      "symbol": "BTCUSDT",
-      "priceChange": "-83.13000000",
-      "priceChangePercent": "-0.317",
-      "weightedAvgPrice": "26234.58803036",
-      "openPrice": "26304.80000000",
-      "highPrice": "26397.46000000",
-      "lowPrice": "26088.34000000",
-      "lastPrice": "26221.67000000",
-      "volume": "18495.35066000",
-      "quoteVolume": "485217905.04210480",
-      "openTime": 1695686400000,
-      "closeTime": 1695772799999,
-      "firstId": 3220151555,
-      "lastId": 3220849281,
-      "count": 697727
-    },
-    {
-      "symbol": "BNBUSDT",
-      "priceChange": "2.60000000",
-      "priceChangePercent": "1.238",
-      "weightedAvgPrice": "211.92276958",
-      "openPrice": "210.00000000",
-      "highPrice": "213.70000000",
-      "lowPrice": "209.70000000",
-      "lastPrice": "212.60000000",
-      "volume": "280709.58900000",
-      "quoteVolume": "59488753.54750000",
-      "openTime": 1695686400000,
-      "closeTime": 1695772799999,
-      "firstId": 672397461,
-      "lastId": 672496158,
-      "count": 98698
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 8
-    }
-  ]
+    "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
+    "status": 200,
+    "result": [
+        {
+            "symbol": "BTCUSDT",
+            "priceChange": "-83.13000000",
+            "priceChangePercent": "-0.317",
+            "weightedAvgPrice": "26234.58803036",
+            "openPrice": "26304.80000000",
+            "highPrice": "26397.46000000",
+            "lowPrice": "26088.34000000",
+            "lastPrice": "26221.67000000",
+            "volume": "18495.35066000",
+            "quoteVolume": "485217905.04210480",
+            "openTime": 1695686400000,
+            "closeTime": 1695772799999,
+            "firstId": 3220151555,
+            "lastId": 3220849281,
+            "count": 697727
+        },
+        {
+            "symbol": "BNBUSDT",
+            "priceChange": "2.60000000",
+            "priceChangePercent": "1.238",
+            "weightedAvgPrice": "211.92276958",
+            "openPrice": "210.00000000",
+            "highPrice": "213.70000000",
+            "lowPrice": "209.70000000",
+            "lastPrice": "212.60000000",
+            "volume": "280709.58900000",
+            "quoteVolume": "59488753.54750000",
+            "openTime": 1695686400000,
+            "closeTime": 1695772799999,
+            "firstId": 672397461,
+            "lastId": 672496158,
+            "count": 98698
+        }
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 8
+        }
+    ]
 }
 ```
 
@@ -2545,31 +2517,31 @@ With `symbol`:
 
 ```javascript
 {
-  "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
-  "status": 200,
-  "result": {
-    "symbol": "BTCUSDT",
-    "openPrice": "26304.80000000",
-    "highPrice": "26397.46000000",
-    "lowPrice": "26088.34000000",
-    "lastPrice": "26221.67000000",
-    "volume": "18495.35066000",                  // Volume in base asset
-    "quoteVolume": "485217905.04210480",         // Volume in quote asset
-    "openTime": 1695686400000,
-    "closeTime": 1695772799999,
-    "firstId": 3220151555,                       // Trade ID of the first trade in the interval
-    "lastId": 3220849281,                        // Trade ID of the last trade in the interval
-    "count": 697727                              // Number of trades in the interval
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 4
-    }
-  ]
+    "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
+    "status": 200,
+    "result": {
+        "symbol": "BTCUSDT",
+        "openPrice": "26304.80000000",
+        "highPrice": "26397.46000000",
+        "lowPrice": "26088.34000000",
+        "lastPrice": "26221.67000000",
+        "volume": "18495.35066000",              // Volume in base asset
+        "quoteVolume": "485217905.04210480",     // Volume in quote asset
+        "openTime": 1695686400000,
+        "closeTime": 1695772799999,
+        "firstId": 3220151555,                   // Trade ID of the first trade in the interval
+        "lastId": 3220849281,                    // Trade ID of the last trade in the interval
+        "count": 697727                          // Number of trades in the interval
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 4
+        }
+    ]
 }
 ```
 
@@ -2577,47 +2549,47 @@ With `symbols`:
 
 ```javascript
 {
-  "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
-  "status": 200,
-  "result": [
-    {
-      "symbol": "BTCUSDT",
-      "openPrice": "26304.80000000",
-      "highPrice": "26397.46000000",
-      "lowPrice": "26088.34000000",
-      "lastPrice": "26221.67000000",
-      "volume": "18495.35066000",
-      "quoteVolume": "485217905.04210480",
-      "openTime": 1695686400000,
-      "closeTime": 1695772799999,
-      "firstId": 3220151555,
-      "lastId": 3220849281,
-      "count": 697727
-    },
-    {
-      "symbol": "BNBUSDT",
-      "openPrice": "210.00000000",
-      "highPrice": "213.70000000",
-      "lowPrice": "209.70000000",
-      "lastPrice": "212.60000000",
-      "volume": "280709.58900000",
-      "quoteVolume": "59488753.54750000",
-      "openTime": 1695686400000,
-      "closeTime": 1695772799999,
-      "firstId": 672397461,
-      "lastId": 672496158,
-      "count": 98698
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 8
-    }
-  ]
+    "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
+    "status": 200,
+    "result": [
+        {
+            "symbol": "BTCUSDT",
+            "openPrice": "26304.80000000",
+            "highPrice": "26397.46000000",
+            "lowPrice": "26088.34000000",
+            "lastPrice": "26221.67000000",
+            "volume": "18495.35066000",
+            "quoteVolume": "485217905.04210480",
+            "openTime": 1695686400000,
+            "closeTime": 1695772799999,
+            "firstId": 3220151555,
+            "lastId": 3220849281,
+            "count": 697727
+        },
+        {
+            "symbol": "BNBUSDT",
+            "openPrice": "210.00000000",
+            "highPrice": "213.70000000",
+            "lowPrice": "209.70000000",
+            "lastPrice": "212.60000000",
+            "volume": "280709.58900000",
+            "quoteVolume": "59488753.54750000",
+            "openTime": 1695686400000,
+            "closeTime": 1695772799999,
+            "firstId": 672397461,
+            "lastId": 672496158,
+            "count": 98698
+        }
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 8
+        }
+    ]
 }
 ```
 
@@ -2625,15 +2597,12 @@ With `symbols`:
 
 ```javascript
 {
-  "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
-  "method": "ticker",
-  "params": {
-    "symbols": [
-      "BNBBTC",
-      "BTCUSDT"
-    ],
-    "windowSize": "7d"
-  }
+    "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
+    "method": "ticker",
+    "params": {
+        "symbols": ["BNBBTC", "BTCUSDT"],
+        "windowSize": "7d"
+    }
 }
 ```
 
@@ -2652,8 +2621,10 @@ As such, the effective window might be up to 59999 ms wider than the requested `
 For example, a request for `"windowSize": "7d"` might result in the following window:
 
 ```javascript
-"openTime": 1659580020000,
-"closeTime": 1660184865291,
+{
+    "openTime": 1659580020000,
+    "closeTime": 1660184865291
+}
 ```
 
 Time of the request – `closeTime` – is 1660184865291 (August 11, 2022 02:27:45.291).
@@ -2745,34 +2716,34 @@ Database
 
 ```javascript
 {
-  "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
-  "status": 200,
-  "result": {
-    "symbol": "BNBBTC",
-    "priceChange": "0.00061500",
-    "priceChangePercent": "4.735",
-    "weightedAvgPrice": "0.01368242",
-    "openPrice": "0.01298900",
-    "highPrice": "0.01418800",
-    "lowPrice": "0.01296000",
-    "lastPrice": "0.01360400",
-    "volume": "587179.23900000",
-    "quoteVolume": "8034.03382165",
-    "openTime": 1659580020000,
-    "closeTime": 1660184865291,
-    "firstId": 192977765,       // First trade ID
-    "lastId": 195365758,        // Last trade ID
-    "count": 2387994            // Number of trades
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 4
-    }
-  ]
+    "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
+    "status": 200,
+    "result": {
+        "symbol": "BNBBTC",
+        "priceChange": "0.00061500",
+        "priceChangePercent": "4.735",
+        "weightedAvgPrice": "0.01368242",
+        "openPrice": "0.01298900",
+        "highPrice": "0.01418800",
+        "lowPrice": "0.01296000",
+        "lastPrice": "0.01360400",
+        "volume": "587179.23900000",
+        "quoteVolume": "8034.03382165",
+        "openTime": 1659580020000,
+        "closeTime": 1660184865291,
+        "firstId": 192977765,     // First trade ID
+        "lastId": 195365758,      // Last trade ID
+        "count": 2387994          // Number of trades
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 4
+        }
+    ]
 }
 ```
 
@@ -2780,31 +2751,31 @@ Database
 
 ```javascript
 {
-  "id": "bdb7c503-542c-495c-b797-4d2ee2e91173",
-  "status": 200,
-  "result": {
-    "symbol": "BNBBTC",
-    "openPrice": "0.01298900",
-    "highPrice": "0.01418800",
-    "lowPrice": "0.01296000",
-    "lastPrice": "0.01360400",
-    "volume": "587179.23900000",
-    "quoteVolume": "8034.03382165",
-    "openTime": 1659580020000,
-    "closeTime": 1660184865291,
-    "firstId": 192977765,       // First trade ID
-    "lastId": 195365758,        // Last trade ID
-    "count": 2387994            // Number of trades
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 4
-    }
-  ]
+    "id": "bdb7c503-542c-495c-b797-4d2ee2e91173",
+    "status": 200,
+    "result": {
+        "symbol": "BNBBTC",
+        "openPrice": "0.01298900",
+        "highPrice": "0.01418800",
+        "lowPrice": "0.01296000",
+        "lastPrice": "0.01360400",
+        "volume": "587179.23900000",
+        "quoteVolume": "8034.03382165",
+        "openTime": 1659580020000,
+        "closeTime": 1660184865291,
+        "firstId": 192977765,     // First trade ID
+        "lastId": 195365758,      // Last trade ID
+        "count": 2387994          // Number of trades
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 4
+        }
+    ]
 }
 ```
 
@@ -2812,53 +2783,53 @@ If more than one symbol is requested, response returns an array:
 
 ```javascript
 {
-  "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
-  "status": 200,
-  "result": [
-    {
-      "symbol": "BNBBTC",
-      "priceChange": "0.00061500",
-      "priceChangePercent": "4.735",
-      "weightedAvgPrice": "0.01368242",
-      "openPrice": "0.01298900",
-      "highPrice": "0.01418800",
-      "lowPrice": "0.01296000",
-      "lastPrice": "0.01360400",
-      "volume": "587169.48600000",
-      "quoteVolume": "8033.90114517",
-      "openTime": 1659580020000,
-      "closeTime": 1660184820927,
-      "firstId": 192977765,
-      "lastId": 195365700,
-      "count": 2387936
-    },
-    {
-      "symbol": "BTCUSDT",
-      "priceChange": "1182.92000000",
-      "priceChangePercent": "5.113",
-      "weightedAvgPrice": "23349.27074846",
-      "openPrice": "23135.33000000",
-      "highPrice": "24491.22000000",
-      "lowPrice": "22400.00000000",
-      "lastPrice": "24318.25000000",
-      "volume": "1039498.10978000",
-      "quoteVolume": "24271522807.76838630",
-      "openTime": 1659580020000,
-      "closeTime": 1660184820927,
-      "firstId": 1568787779,
-      "lastId": 1604337406,
-      "count": 35549628
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 8
-    }
-  ]
+    "id": "f4b3b507-c8f2-442a-81a6-b2f12daa030f",
+    "status": 200,
+    "result": [
+        {
+            "symbol": "BNBBTC",
+            "priceChange": "0.00061500",
+            "priceChangePercent": "4.735",
+            "weightedAvgPrice": "0.01368242",
+            "openPrice": "0.01298900",
+            "highPrice": "0.01418800",
+            "lowPrice": "0.01296000",
+            "lastPrice": "0.01360400",
+            "volume": "587169.48600000",
+            "quoteVolume": "8033.90114517",
+            "openTime": 1659580020000,
+            "closeTime": 1660184820927,
+            "firstId": 192977765,
+            "lastId": 195365700,
+            "count": 2387936
+        },
+        {
+            "symbol": "BTCUSDT",
+            "priceChange": "1182.92000000",
+            "priceChangePercent": "5.113",
+            "weightedAvgPrice": "23349.27074846",
+            "openPrice": "23135.33000000",
+            "highPrice": "24491.22000000",
+            "lowPrice": "22400.00000000",
+            "lastPrice": "24318.25000000",
+            "volume": "1039498.10978000",
+            "quoteVolume": "24271522807.76838630",
+            "openTime": 1659580020000,
+            "closeTime": 1660184820927,
+            "firstId": 1568787779,
+            "lastId": 1604337406,
+            "count": 35549628
+        }
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 8
+        }
+    ]
 }
 ```
 
@@ -2866,11 +2837,11 @@ If more than one symbol is requested, response returns an array:
 
 ```javascript
 {
-  "id": "043a7cf2-bde3-4888-9604-c8ac41fcba4d",
-  "method": "ticker.price",
-  "params": {
-    "symbol": "BNBBTC"
-  }
+    "id": "043a7cf2-bde3-4888-9604-c8ac41fcba4d",
+    "method": "ticker.price",
+    "params": {
+        "symbol": "BNBBTC"
+    }
 }
 ```
 
@@ -2935,21 +2906,21 @@ Memory
 
 ```javascript
 {
-  "id": "043a7cf2-bde3-4888-9604-c8ac41fcba4d",
-  "status": 200,
-  "result": {
-    "symbol": "BNBBTC",
-    "price": "0.01361900"
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 2
-    }
-  ]
+    "id": "043a7cf2-bde3-4888-9604-c8ac41fcba4d",
+    "status": 200,
+    "result": {
+        "symbol": "BNBBTC",
+        "price": "0.01361900"
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 2
+        }
+    ]
 }
 ```
 
@@ -2957,31 +2928,31 @@ If more than one symbol is requested, response returns an array:
 
 ```javascript
 {
-  "id": "e739e673-24c8-4adf-9cfa-b81f30330b09",
-  "status": 200,
-  "result": [
-    {
-      "symbol": "BNBBTC",
-      "price": "0.01363700"
-    },
-    {
-      "symbol": "BTCUSDT",
-      "price": "24267.15000000"
-    },
-    {
-      "symbol": "BNBBUSD",
-      "price": "331.10000000"
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 4
-    }
-  ]
+    "id": "e739e673-24c8-4adf-9cfa-b81f30330b09",
+    "status": 200,
+    "result": [
+        {
+            "symbol": "BNBBTC",
+            "price": "0.01363700"
+        },
+        {
+            "symbol": "BTCUSDT",
+            "price": "24267.15000000"
+        },
+        {
+            "symbol": "BNBBUSD",
+            "price": "331.10000000"
+        }
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 4
+        }
+    ]
 }
 ```
 
@@ -2989,14 +2960,11 @@ If more than one symbol is requested, response returns an array:
 
 ```javascript
 {
-  "id": "057deb3a-2990-41d1-b58b-98ea0f09e1b4",
-  "method": "ticker.book",
-  "params": {
-    "symbols": [
-      "BNBBTC",
-      "BTCUSDT"
-    ]
-  }
+    "id": "057deb3a-2990-41d1-b58b-98ea0f09e1b4",
+    "method": "ticker.book",
+    "params": {
+        "symbols": ["BNBBTC", "BTCUSDT"]
+    }
 }
 ```
 
@@ -3060,24 +3028,24 @@ Memory
 
 ```javascript
 {
-  "id": "9d32157c-a556-4d27-9866-66760a174b57",
-  "status": 200,
-  "result": {
-    "symbol": "BNBBTC",
-    "bidPrice": "0.01358000",
-    "bidQty": "12.53400000",
-    "askPrice": "0.01358100",
-    "askQty": "17.83700000"
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 2
-    }
-  ]
+    "id": "9d32157c-a556-4d27-9866-66760a174b57",
+    "status": 200,
+    "result": {
+        "symbol": "BNBBTC",
+        "bidPrice": "0.01358000",
+        "bidQty": "12.53400000",
+        "askPrice": "0.01358100",
+        "askQty": "17.83700000"
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 2
+        }
+    ]
 }
 ```
 
@@ -3085,33 +3053,33 @@ If more than one symbol is requested, response returns an array:
 
 ```javascript
 {
-  "id": "057deb3a-2990-41d1-b58b-98ea0f09e1b4",
-  "status": 200,
-  "result": [
-    {
-      "symbol": "BNBBTC",
-      "bidPrice": "0.01358000",
-      "bidQty": "12.53400000",
-      "askPrice": "0.01358100",
-      "askQty": "17.83700000"
-    },
-    {
-      "symbol": "BTCUSDT",
-      "bidPrice": "23980.49000000",
-      "bidQty": "0.01000000",
-      "askPrice": "23981.31000000",
-      "askQty": "0.01512000"
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 4
-    }
-  ]
+    "id": "057deb3a-2990-41d1-b58b-98ea0f09e1b4",
+    "status": 200,
+    "result": [
+        {
+            "symbol": "BNBBTC",
+            "bidPrice": "0.01358000",
+            "bidQty": "12.53400000",
+            "askPrice": "0.01358100",
+            "askQty": "17.83700000"
+        },
+        {
+            "symbol": "BTCUSDT",
+            "bidPrice": "23980.49000000",
+            "bidQty": "0.01000000",
+            "askPrice": "23981.31000000",
+            "askQty": "0.01512000"
+        }
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 4
+        }
+    ]
 }
 ```
 
@@ -3125,13 +3093,13 @@ If more than one symbol is requested, response returns an array:
 
 ```javascript
 {
-  "id": "c174a2b1-3f51-4580-b200-8528bd237cb7",
-  "method": "session.logon",
-  "params": {
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "1cf54395b336b0a9727ef27d5d98987962bc47aca6e13fe978612d0adee066ed",
-    "timestamp": 1649729878532
-  }
+    "id": "c174a2b1-3f51-4580-b200-8528bd237cb7",
+    "method": "session.logon",
+    "params": {
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "1cf54395b336b0a9727ef27d5d98987962bc47aca6e13fe978612d0adee066ed",
+        "timestamp": 1649729878532
+    }
 }
 ```
 
@@ -3161,16 +3129,16 @@ Memory
 
 ```javascript
 {
-  "id": "c174a2b1-3f51-4580-b200-8528bd237cb7",
-  "status": 200,
-  "result": {
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "authorizedSince": 1649729878532,
-    "connectedSince": 1649729873021,
-    "returnRateLimits": false,
-    "serverTime": 1649729878630,
-    "userDataStream": false // is User Data Stream subscription active?
-  }
+    "id": "c174a2b1-3f51-4580-b200-8528bd237cb7",
+    "status": 200,
+    "result": {
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "authorizedSince": 1649729878532,
+        "connectedSince": 1649729873021,
+        "returnRateLimits": false,
+        "serverTime": 1649729878630,
+        "userDataStream": false // is User Data Stream subscription active?
+    }
 }
 ```
 
@@ -3180,8 +3148,8 @@ Memory
 
 ```javascript
 {
-  "id": "b50c16cd-62c9-4e29-89e4-37f10111f5bf",
-  "method": "session.status"
+    "id": "b50c16cd-62c9-4e29-89e4-37f10111f5bf",
+    "method": "session.status"
 }
 ```
 
@@ -3201,17 +3169,17 @@ Memory
 
 ```javascript
 {
-  "id": "b50c16cd-62c9-4e29-89e4-37f10111f5bf",
-  "status": 200,
-  "result": {
-    // if the connection is not authenticated, "apiKey" and "authorizedSince" will be shown as null
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "authorizedSince": 1649729878532,
-    "connectedSince": 1649729873021,
-    "returnRateLimits": false,
-    "serverTime": 1649730611671,
-    "userDataStream": true // is User Data Stream subscription active?
-  }
+    "id": "b50c16cd-62c9-4e29-89e4-37f10111f5bf",
+    "status": 200,
+    "result": {
+        // if the connection is not authenticated, "apiKey" and "authorizedSince" will be shown as null
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "authorizedSince": 1649729878532,
+        "connectedSince": 1649729873021,
+        "returnRateLimits": false,
+        "serverTime": 1649730611671,
+        "userDataStream": true     // is User Data Stream subscription active?
+    }
 }
 ```
 
@@ -3219,8 +3187,8 @@ Memory
 
 ```javascript
 {
-  "id": "c174a2b1-3f51-4580-b200-8528bd237cb7",
-  "method": "session.logout"
+    "id": "c174a2b1-3f51-4580-b200-8528bd237cb7",
+    "method": "session.logout"
 }
 ```
 
@@ -3244,16 +3212,16 @@ Memory
 
 ```javascript
 {
-  "id": "c174a2b1-3f51-4580-b200-8528bd237cb7",
-  "status": 200,
-  "result": {
-    "apiKey": null,
-    "authorizedSince": null,
-    "connectedSince": 1649729873021,
-    "returnRateLimits": false,
-    "serverTime": 1649730611671,
-    "userDataStream": false // is User Data Stream subscription active?
-  }
+    "id": "c174a2b1-3f51-4580-b200-8528bd237cb7",
+    "status": 200,
+    "result": {
+        "apiKey": null,
+        "authorizedSince": null,
+        "connectedSince": 1649729873021,
+        "returnRateLimits": false,
+        "serverTime": 1649730611671,
+        "userDataStream": false // is User Data Stream subscription active?
+    }
 }
 ```
 
@@ -3263,19 +3231,19 @@ Memory
 
 ```javascript
 {
-  "id": "56374a46-3061-486b-a311-99ee972eb648",
-  "method": "order.place",
-  "params": {
-    "symbol": "BTCUSDT",
-    "side": "SELL",
-    "type": "LIMIT",
-    "timeInForce": "GTC",
-    "price": "23416.10000000",
-    "quantity": "0.00847000",
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "15af09e41c36f3cc61378c2fbe2c33719a03dd5eba8d0f9206fbda44de717c88",
-    "timestamp": 1660801715431
-  }
+    "id": "56374a46-3061-486b-a311-99ee972eb648",
+    "method": "order.place",
+    "params": {
+        "symbol": "BTCUSDT",
+        "side": "SELL",
+        "type": "LIMIT",
+        "timeInForce": "GTC",
+        "price": "23416.10000000",
+        "quantity": "0.00847000",
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "15af09e41c36f3cc61378c2fbe2c33719a03dd5eba8d0f9206fbda44de717c88",
+        "timestamp": 1660801715431
+    }
 }
 ```
 
@@ -3549,38 +3517,38 @@ Response format is selected by using the `newOrderRespType` parameter.
 
 ```javascript
 {
-  "id": "56374a46-3061-486b-a311-99ee972eb648",
-  "status": 200,
-  "result": {
-    "symbol": "BTCUSDT",
-    "orderId": 12569099453,
-    "orderListId": -1, // always -1 for singular orders
-    "clientOrderId": "4d96324ff9d44481926157ec08158a40",
-    "transactTime": 1660801715639
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 10,
-      "limit": 50,
-      "count": 1
+    "id": "56374a46-3061-486b-a311-99ee972eb648",
+    "status": 200,
+    "result": {
+        "symbol": "BTCUSDT",
+        "orderId": 12569099453,
+        "orderListId": -1, // always -1 for singular orders
+        "clientOrderId": "4d96324ff9d44481926157ec08158a40",
+        "transactTime": 1660801715639
     },
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "DAY",
-      "intervalNum": 1,
-      "limit": 160000,
-      "count": 1
-    },
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
+    "rateLimits": [
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "SECOND",
+            "intervalNum": 10,
+            "limit": 50,
+            "count": 1
+        },
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "DAY",
+            "intervalNum": 1,
+            "limit": 160000,
+            "count": 1
+        },
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
+    ]
 }
 ```
 
@@ -3588,50 +3556,49 @@ Response format is selected by using the `newOrderRespType` parameter.
 
 ```javascript
 {
-  "id": "56374a46-3061-486b-a311-99ee972eb648",
-  "status": 200,
-  "result": {
-    "symbol": "BTCUSDT",
-    "orderId": 12569099453,
-    "orderListId": -1, // always -1 for singular orders
-    "clientOrderId": "4d96324ff9d44481926157ec08158a40",
-    "transactTime": 1660801715639,
-    "price": "23416.10000000",
-    "origQty": "0.00847000",
-    "executedQty": "0.00000000",
-    "origQuoteOrderQty": "0.000000",
-    "cummulativeQuoteQty": "0.00000000",
-    "status": "NEW",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "SELL",
-    "workingTime": 1660801715639,
-    "selfTradePreventionMode": "NONE"
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 10,
-      "limit": 50,
-      "count": 1
+    "id": "56374a46-3061-486b-a311-99ee972eb648",
+    "status": 200,
+    "result": {
+        "symbol": "BTCUSDT",
+        "orderId": 12569099453,
+        "orderListId": -1, // always -1 for singular orders
+        "clientOrderId": "4d96324ff9d44481926157ec08158a40",
+        "transactTime": 1660801715639,
+        "price": "23416.10000000",
+        "origQty": "0.00847000",
+        "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "SELL",
+        "workingTime": 1660801715639,
+        "selfTradePreventionMode": "NONE"
     },
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "DAY",
-      "intervalNum": 1,
-      "limit": 160000,
-      "count": 1
-    },
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000
-,
-      "count": 1
-    }
-  ]
+    "rateLimits": [
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "SECOND",
+            "intervalNum": 10,
+            "limit": 50,
+            "count": 1
+        },
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "DAY",
+            "intervalNum": 1,
+            "limit": 160000,
+            "count": 1
+        },
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
+    ]
 }
 ```
 
@@ -3639,67 +3606,67 @@ Response format is selected by using the `newOrderRespType` parameter.
 
 ```javascript
 {
-  "id": "56374a46-3061-486b-a311-99ee972eb648",
-  "status": 200,
-  "result": {
-    "symbol": "BTCUSDT",
-    "orderId": 12569099453,
-    "orderListId": -1,
-    "clientOrderId": "4d96324ff9d44481926157ec08158a40",
-    "transactTime": 1660801715793,
-    "price": "23416.10000000",
-    "origQty": "0.00847000",
-    "executedQty": "0.00847000",
-    "origQuoteOrderQty": "0.000000",
-    "cummulativeQuoteQty": "198.33521500",
-    "status": "FILLED",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "SELL",
-    "workingTime": 1660801715793,
-    // FULL response is identical to RESULT response, with the same optional fields
-    // based on the order type and parameters. FULL response additionally includes
-    // the list of trades which immediately filled the order.
-    "fills": [
-      {
+    "id": "56374a46-3061-486b-a311-99ee972eb648",
+    "status": 200,
+    "result": {
+        "symbol": "BTCUSDT",
+        "orderId": 12569099453,
+        "orderListId": -1,
+        "clientOrderId": "4d96324ff9d44481926157ec08158a40",
+        "transactTime": 1660801715793,
         "price": "23416.10000000",
-        "qty": "0.00635000",
-        "commission": "0.000000",
-        "commissionAsset": "BNB",
-        "tradeId": 1650422481
-      },
-      {
-        "price": "23416.50000000",
-        "qty": "0.00212000",
-        "commission": "0.000000",
-        "commissionAsset": "BNB",
-        "tradeId": 1650422482
-      }
+        "origQty": "0.00847000",
+        "executedQty": "0.00847000",
+        "origQuoteOrderQty": "0.000000",
+        "cummulativeQuoteQty": "198.33521500",
+        "status": "FILLED",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "SELL",
+        "workingTime": 1660801715793,
+        // FULL response is identical to RESULT response, with the same optional fields
+        // based on the order type and parameters. FULL response additionally includes
+        // the list of trades which immediately filled the order.
+        "fills": [
+            {
+                "price": "23416.10000000",
+                "qty": "0.00635000",
+                "commission": "0.000000",
+                "commissionAsset": "BNB",
+                "tradeId": 1650422481
+            },
+            {
+                "price": "23416.50000000",
+                "qty": "0.00212000",
+                "commission": "0.000000",
+                "commissionAsset": "BNB",
+                "tradeId": 1650422482
+            }
+        ]
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "SECOND",
+            "intervalNum": 10,
+            "limit": 50,
+            "count": 1
+        },
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "DAY",
+            "intervalNum": 1,
+            "limit": 160000,
+            "count": 1
+        },
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
     ]
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 10,
-      "limit": 50,
-      "count": 1
-    },
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "DAY",
-      "intervalNum": 1,
-      "limit": 160000,
-      "count": 1
-    },
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
 }
 ```
 
@@ -3734,19 +3701,19 @@ Field          |Description                                                     
 
 ```javascript
 {
-  "id": "6ffebe91-01d9-43ac-be99-57cf062e0e30",
-  "method": "order.test",
-  "params": {
-    "symbol": "BTCUSDT",
-    "side": "SELL",
-    "type": "LIMIT",
-    "timeInForce": "GTC",
-    "price": "23416.10000000",
-    "quantity": "0.00847000",
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "15af09e41c36f3cc61378c2fbe2c33719a03dd5eba8d0f9206fbda44de717c88",
-    "timestamp": 1660801715431
-  }
+    "id": "6ffebe91-01d9-43ac-be99-57cf062e0e30",
+    "method": "order.test",
+    "params": {
+        "symbol": "BTCUSDT",
+        "side": "SELL",
+        "type": "LIMIT",
+        "timeInForce": "GTC",
+        "price": "23416.10000000",
+        "quantity": "0.00847000",
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "15af09e41c36f3cc61378c2fbe2c33719a03dd5eba8d0f9206fbda44de717c88",
+        "timestamp": 1660801715431
+    }
 }
 ```
 
@@ -3780,18 +3747,18 @@ Without `computeCommissionRates`:
 
 ```javascript
 {
-  "id": "6ffebe91-01d9-43ac-be99-57cf062e0e30",
-  "status": 200,
-  "result": {},
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
+    "id": "6ffebe91-01d9-43ac-be99-57cf062e0e30",
+    "status": 200,
+    "result": {},
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
+    ]
 }
 ```
 
@@ -3799,37 +3766,37 @@ With `computeCommissionRates`:
 
 ```javascript
 {
-  "id": "6ffebe91-01d9-43ac-be99-57cf062e0e30",
-  "status": 200,
-  "result": {
-    "standardCommissionForOrder": {           //Standard commission rates on trades from the order.
-      "maker": "0.00000112",
-      "taker": "0.00000114"
+    "id": "6ffebe91-01d9-43ac-be99-57cf062e0e30",
+    "status": 200,
+    "result": {
+        "standardCommissionForOrder": {  // Standard commission rates on trades from the order.
+            "maker": "0.00000112",
+            "taker": "0.00000114"
+        },
+        "specialCommissionForOrder": {   // Special commission rates on trades from the order.
+            "maker": "0.05000000",
+            "taker": "0.06000000"
+        },
+        "taxCommissionForOrder": {       // Tax commission rates for trades from the order
+            "maker": "0.00000112",
+            "taker": "0.00000114"
+        },
+        "discount": {                    // Discount on standard commissions when paying in BNB.
+            "enabledForAccount": true,
+            "enabledForSymbol": true,
+            "discountAsset": "BNB",
+            "discount": "0.25000000"     // Standard commission is reduced by this rate when paying in BNB.
+        }
     },
-    "specialCommissionForOrder": {    //Special commission rates on trades from the order.
-       "maker": "0.05000000",
-      "taker": "0.06000000"
-    },
-    "taxCommissionForOrder": {                //Tax commission rates for trades from the order
-      "maker": "0.00000112",
-      "taker": "0.00000114"
-    },
-    "discount": {                             //Discount on standard commissions when paying in BNB.
-      "enabledForAccount": true,
-      "enabledForSymbol": true,
-      "discountAsset": "BNB",
-      "discount": "0.25000000"                //Standard commission is reduced by this rate when paying in BNB.
-    }
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 20
-    }
-  ]
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 20
+        }
+    ]
 }
 ```
 
@@ -3837,15 +3804,15 @@ With `computeCommissionRates`:
 
 ```javascript
 {
-  "id": "5633b6a2-90a9-4192-83e7-925c90b6a2fd",
-  "method": "order.cancel",
-  "params": {
-    "symbol": "BTCUSDT",
-    "origClientOrderId": "4d96324ff9d44481926157",
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "33d5b721f278ae17a52f004a82a6f68a70c68e7dd6776ed0be77a455ab855282",
-    "timestamp": 1660801715830
-  }
+    "id": "5633b6a2-90a9-4192-83e7-925c90b6a2fd",
+    "method": "order.cancel",
+    "params": {
+        "symbol": "BTCUSDT",
+        "origClientOrderId": "4d96324ff9d44481926157",
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "33d5b721f278ae17a52f004a82a6f68a70c68e7dd6776ed0be77a455ab855282",
+        "timestamp": 1660801715830
+    }
 }
 ```
 
@@ -3941,40 +3908,40 @@ When an individual order is canceled:
 
 ```javascript
 {
-  "id": "5633b6a2-90a9-4192-83e7-925c90b6a2fd",
-  "status": 200,
-  "result": {
-    "symbol": "BTCUSDT",
-    "origClientOrderId": "4d96324ff9d44481926157",  // clientOrderId that was canceled
-    "orderId": 12569099453,
-    "orderListId": -1,                              // set only for legs of an order list
-    "clientOrderId": "91fe37ce9e69c90d6358c0",      // newClientOrderId from request
-    "transactTime": 1684804350068,
-    "price": "23416.10000000",
-    "origQty": "0.00847000",
-    "executedQty": "0.00001000",
-    "origQuoteOrderQty": "0.000000",
-    "cummulativeQuoteQty": "0.23416100",
-    "status": "CANCELED",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "SELL",
-    "stopPrice": "0.00000000",          // present only if stopPrice set for the order
-    "trailingDelta": 0,                 // present only if trailingDelta set for the order
-    "icebergQty": "0.00000000",         // present only if icebergQty set for the order
-    "strategyId": 37463720,             // present only if strategyId set for the order
-    "strategyType": 1000000,            // present only if strategyType set for the order
-    "selfTradePreventionMode": "NONE"
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
+    "id": "5633b6a2-90a9-4192-83e7-925c90b6a2fd",
+    "status": 200,
+    "result": {
+        "symbol": "BTCUSDT",
+        "origClientOrderId": "4d96324ff9d44481926157",     // clientOrderId that was canceled
+        "orderId": 12569099453,
+        "orderListId": -1,                                 // set only for legs of an order list
+        "clientOrderId": "91fe37ce9e69c90d6358c0",         // newClientOrderId from request
+        "transactTime": 1684804350068,
+        "price": "23416.10000000",
+        "origQty": "0.00847000",
+        "executedQty": "0.00001000",
+        "origQuoteOrderQty": "0.000000",
+        "cummulativeQuoteQty": "0.23416100",
+        "status": "CANCELED",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "SELL",
+        "stopPrice": "0.00000000",                         // present only if stopPrice set for the order
+        "trailingDelta": 0,                                // present only if trailingDelta set for the order
+        "icebergQty": "0.00000000",                        // present only if icebergQty set for the order
+        "strategyId": 37463720,                            // present only if strategyId set for the order
+        "strategyType": 1000000,                           // present only if strategyType set for the order
+        "selfTradePreventionMode": "NONE"
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
+    ]
 }
 ```
 
@@ -3982,78 +3949,78 @@ When an order list is canceled:
 
 ```javascript
 {
-  "id": "16eaf097-bbec-44b9-96ff-e97e6e875870",
-  "status": 200,
-  "result": {
-    "orderListId": 19431,
-    "contingencyType": "OCO",
-    "listStatusType": "ALL_DONE",
-    "listOrderStatus": "ALL_DONE",
-    "listClientOrderId": "iuVNVJYYrByz6C4yGOPPK0",
-    "transactionTime": 1660803702431,
-    "symbol": "BTCUSDT",
-    "orders": [
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 12569099453,
-        "clientOrderId": "bX5wROblo6YeDwa9iTLeyY"
-      },
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 12569099454,
-        "clientOrderId": "Tnu2IP0J5Y4mxw3IATBfmW"
-      }
-    ],
-    //order list order's status format is the same as for individual orders.
-    "orderReports": [
-      {
-        "symbol": "BTCUSDT",
-        "origClientOrderId": "bX5wROblo6YeDwa9iTLeyY",
-        "orderId": 12569099453,
+    "id": "16eaf097-bbec-44b9-96ff-e97e6e875870",
+    "status": 200,
+    "result": {
         "orderListId": 19431,
-        "clientOrderId": "OFFXQtxVFZ6Nbcg4PgE2DA",
-        "transactTime": 1684804350068,
-        "price": "23450.50000000",
-        "origQty": "0.00850000",
-        "executedQty": "0.00000000",
-        "origQuoteOrderQty": "0.000000",
-        "cummulativeQuoteQty": "0.00000000",
-        "status": "CANCELED",
-        "timeInForce": "GTC",
-        "type": "STOP_LOSS_LIMIT",
-        "side": "BUY",
-        "stopPrice": "23430.00000000",
-        "selfTradePreventionMode": "NONE"
-      },
-      {
+        "contingencyType": "OCO",
+        "listStatusType": "ALL_DONE",
+        "listOrderStatus": "ALL_DONE",
+        "listClientOrderId": "iuVNVJYYrByz6C4yGOPPK0",
+        "transactionTime": 1660803702431,
         "symbol": "BTCUSDT",
-        "origClientOrderId": "Tnu2IP0J5Y4mxw3IATBfmW",
-        "orderId": 12569099454,
-        "orderListId": 19431,
-        "clientOrderId": "OFFXQtxVFZ6Nbcg4PgE2DA",
-        "transactTime": 1684804350068,
-        "price": "23400.00000000",
-        "origQty": "0.00850000",
-        "executedQty": "0.00000000",
-        "origQuoteOrderQty": "0.000000",
-        "cummulativeQuoteQty": "0.00000000",
-        "status": "CANCELED",
-        "timeInForce": "GTC",
-        "type": "LIMIT_MAKER",
-        "side": "BUY",
-        "selfTradePreventionMode": "NONE"
-      }
+        "orders": [
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 12569099453,
+                "clientOrderId": "bX5wROblo6YeDwa9iTLeyY"
+            },
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 12569099454,
+                "clientOrderId": "Tnu2IP0J5Y4mxw3IATBfmW"
+            }
+        ],
+        // order list order's status format is the same as for individual orders.
+        "orderReports": [
+            {
+                "symbol": "BTCUSDT",
+                "origClientOrderId": "bX5wROblo6YeDwa9iTLeyY",
+                "orderId": 12569099453,
+                "orderListId": 19431,
+                "clientOrderId": "OFFXQtxVFZ6Nbcg4PgE2DA",
+                "transactTime": 1684804350068,
+                "price": "23450.50000000",
+                "origQty": "0.00850000",
+                "executedQty": "0.00000000",
+                "origQuoteOrderQty": "0.000000",
+                "cummulativeQuoteQty": "0.00000000",
+                "status": "CANCELED",
+                "timeInForce": "GTC",
+                "type": "STOP_LOSS_LIMIT",
+                "side": "BUY",
+                "stopPrice": "23430.00000000",
+                "selfTradePreventionMode": "NONE"
+            },
+            {
+                "symbol": "BTCUSDT",
+                "origClientOrderId": "Tnu2IP0J5Y4mxw3IATBfmW",
+                "orderId": 12569099454,
+                "orderListId": 19431,
+                "clientOrderId": "OFFXQtxVFZ6Nbcg4PgE2DA",
+                "transactTime": 1684804350068,
+                "price": "23400.00000000",
+                "origQty": "0.00850000",
+                "executedQty": "0.00000000",
+                "origQuoteOrderQty": "0.000000",
+                "cummulativeQuoteQty": "0.00000000",
+                "status": "CANCELED",
+                "timeInForce": "GTC",
+                "type": "LIMIT_MAKER",
+                "side": "BUY",
+                "selfTradePreventionMode": "NONE"
+            }
+        ]
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
     ]
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
 }
 ```
 
@@ -4082,21 +4049,21 @@ When an order list is canceled:
 
 ```javascript
 {
-  "id": "99de1036-b5e2-4e0f-9b5c-13d751c93a1a",
-  "method": "order.cancelReplace",
-  "params": {
-    "symbol": "BTCUSDT",
-    "cancelReplaceMode": "ALLOW_FAILURE",
-    "cancelOrigClientOrderId": "4d96324ff9d44481926157",
-    "side": "SELL",
-    "type": "LIMIT",
-    "timeInForce": "GTC",
-    "price": "23416.10000000",
-    "quantity": "0.00847000",
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "7028fdc187868754d25e42c37ccfa5ba2bab1d180ad55d4c3a7e2de643943dc5",
-    "timestamp": 1660813156900
-  }
+    "id": "99de1036-b5e2-4e0f-9b5c-13d751c93a1a",
+    "method": "order.cancelReplace",
+    "params": {
+        "symbol": "BTCUSDT",
+        "cancelReplaceMode": "ALLOW_FAILURE",
+        "cancelOrigClientOrderId": "4d96324ff9d44481926157",
+        "side": "SELL",
+        "type": "LIMIT",
+        "timeInForce": "GTC",
+        "price": "23416.10000000",
+        "quantity": "0.00847000",
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "7028fdc187868754d25e42c37ccfa5ba2bab1d180ad55d4c3a7e2de643943dc5",
+        "timestamp": 1660813156900
+    }
 }
 ```
 
@@ -4515,74 +4482,74 @@ If both cancel and placement succeed, you get the following response with `"stat
 
 ```javascript
 {
-  "id": "99de1036-b5e2-4e0f-9b5c-13d751c93a1a",
-  "status": 200,
-  "result": {
-    "cancelResult": "SUCCESS",
-    "newOrderResult": "SUCCESS",
-    // Format is identical to "order.cancel" format.
-    // Some fields are optional and are included only for orders that set them.
-    "cancelResponse": {
-      "symbol": "BTCUSDT",
-      "origClientOrderId": "4d96324ff9d44481926157",  // cancelOrigClientOrderId from request
-      "orderId": 125690984230,
-      "orderListId": -1,
-      "clientOrderId": "91fe37ce9e69c90d6358c0",      // cancelNewClientOrderId from request
-      "transactTime": 1684804350068,
-      "price": "23450.00000000",
-      "origQty": "0.00847000",
-      "executedQty": "0.00001000",
-      "origQuoteOrderQty": "0.000000",
-      "cummulativeQuoteQty": "0.23450000",
-      "status": "CANCELED",
-      "timeInForce": "GTC",
-      "type": "LIMIT",
-      "side": "SELL",
-      "selfTradePreventionMode": "NONE"
+    "id": "99de1036-b5e2-4e0f-9b5c-13d751c93a1a",
+    "status": 200,
+    "result": {
+        "cancelResult": "SUCCESS",
+        "newOrderResult": "SUCCESS",
+        // Format is identical to "order.cancel" format.
+        // Some fields are optional and are included only for orders that set them.
+        "cancelResponse": {
+            "symbol": "BTCUSDT",
+            "origClientOrderId": "4d96324ff9d44481926157",     // cancelOrigClientOrderId from request
+            "orderId": 125690984230,
+            "orderListId": -1,
+            "clientOrderId": "91fe37ce9e69c90d6358c0",         // cancelNewClientOrderId from request
+            "transactTime": 1684804350068,
+            "price": "23450.00000000",
+            "origQty": "0.00847000",
+            "executedQty": "0.00001000",
+            "origQuoteOrderQty": "0.000000",
+            "cummulativeQuoteQty": "0.23450000",
+            "status": "CANCELED",
+            "timeInForce": "GTC",
+            "type": "LIMIT",
+            "side": "SELL",
+            "selfTradePreventionMode": "NONE"
+        },
+        // Format is identical to "order.place" format, affected by "newOrderRespType".
+        // Some fields are optional and are included only for orders that set them.
+        "newOrderResponse": {
+            "symbol": "BTCUSDT",
+            "orderId": 12569099453,
+            "orderListId": -1,
+            "clientOrderId": "bX5wROblo6YeDwa9iTLeyY",         // newClientOrderId from request
+            "transactTime": 1660813156959,
+            "price": "23416.10000000",
+            "origQty": "0.00847000",
+            "executedQty": "0.00000000",
+            "origQuoteOrderQty": "0.000000",
+            "cummulativeQuoteQty": "0.00000000",
+            "status": "NEW",
+            "timeInForce": "GTC",
+            "type": "LIMIT",
+            "side": "SELL",
+            "selfTradePreventionMode": "NONE"
+        }
     },
-    // Format is identical to "order.place" format, affected by "newOrderRespType".
-    // Some fields are optional and are included only for orders that set them.
-    "newOrderResponse": {
-      "symbol": "BTCUSDT",
-      "orderId": 12569099453,
-      "orderListId": -1,
-      "clientOrderId": "bX5wROblo6YeDwa9iTLeyY",      // newClientOrderId from request
-      "transactTime": 1660813156959,
-      "price": "23416.10000000",
-      "origQty": "0.00847000",
-      "executedQty": "0.00000000",
-      "origQuoteOrderQty": "0.000000",
-      "cummulativeQuoteQty": "0.00000000",
-      "status": "NEW",
-      "timeInForce": "GTC",
-      "type": "LIMIT",
-      "side": "SELL",
-      "selfTradePreventionMode": "NONE"
-    }
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 10,
-      "limit": 50,
-      "count": 1
-    },
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "DAY",
-      "intervalNum": 1,
-      "limit": 160000,
-      "count": 1
-    },
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
+    "rateLimits": [
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "SECOND",
+            "intervalNum": 10,
+            "limit": 50,
+            "count": 1
+        },
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "DAY",
+            "intervalNum": 1,
+            "limit": 160000,
+            "count": 1
+        },
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
+    ]
 }
 ```
 
@@ -4591,44 +4558,44 @@ and returns the following response with `"status": 400`:
 
 ```javascript
 {
-  "id": "27e1bf9f-0539-4fb0-85c6-06183d36f66c",
-  "status": 400,
-  "error": {
-    "code": -2022,
-    "msg": "Order cancel-replace failed.",
-    "data": {
-      "cancelResult": "FAILURE",
-      "newOrderResult": "NOT_ATTEMPTED",
-      "cancelResponse": {
-        "code": -2011,
-        "msg": "Unknown order sent."
-      },
-      "newOrderResponse": null
-    }
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 10,
-      "limit": 50,
-      "count": 1
+    "id": "27e1bf9f-0539-4fb0-85c6-06183d36f66c",
+    "status": 400,
+    "error": {
+        "code": -2022,
+        "msg": "Order cancel-replace failed.",
+        "data": {
+            "cancelResult": "FAILURE",
+            "newOrderResult": "NOT_ATTEMPTED",
+            "cancelResponse": {
+                "code": -2011,
+                "msg": "Unknown order sent."
+            },
+            "newOrderResponse": null
+        }
     },
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "DAY",
-      "intervalNum": 1,
-      "limit": 160000,
-      "count": 1
-    },
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
+    "rateLimits": [
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "SECOND",
+            "intervalNum": 10,
+            "limit": 50,
+            "count": 1
+        },
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "DAY",
+            "intervalNum": 1,
+            "limit": 160000,
+            "count": 1
+        },
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
+    ]
 }
 ```
 
@@ -4638,122 +4605,122 @@ and the `"data"` field detailing which operation succeeded, which failed, and wh
 
 ```javascript
 {
-  "id": "b220edfe-f3c4-4a3a-9d13-b35473783a25",
-  "status": 409,
-  "error": {
-    "code": -2021,
-    "msg": "Order cancel-replace partially failed.",
-    "data": {
-      "cancelResult": "SUCCESS",
-      "newOrderResult": "FAILURE",
-      "cancelResponse": {
-        "symbol": "BTCUSDT",
-        "origClientOrderId": "4d96324ff9d44481926157",
-        "orderId": 125690984230,
-        "orderListId": -1,
-        "clientOrderId": "91fe37ce9e69c90d6358c0",
-        "transactTime": 1684804350068,
-        "price": "23450.00000000",
-        "origQty": "0.00847000",
-        "executedQty": "0.00001000",
-        "origQuoteOrderQty": "0.000000",
-        "cummulativeQuoteQty": "0.23450000",
-        "status": "CANCELED",
-        "timeInForce": "GTC",
-        "type": "LIMIT",
-        "side": "SELL",
-        "selfTradePreventionMode": "NONE"
-      },
-      "newOrderResponse": {
-        "code": -2010,
-        "msg": "Order would immediately match and take."
-      }
-    }
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 10,
-      "limit": 50,
-      "count": 1
+    "id": "b220edfe-f3c4-4a3a-9d13-b35473783a25",
+    "status": 409,
+    "error": {
+        "code": -2021,
+        "msg": "Order cancel-replace partially failed.",
+        "data": {
+            "cancelResult": "SUCCESS",
+            "newOrderResult": "FAILURE",
+            "cancelResponse": {
+                "symbol": "BTCUSDT",
+                "origClientOrderId": "4d96324ff9d44481926157",
+                "orderId": 125690984230,
+                "orderListId": -1,
+                "clientOrderId": "91fe37ce9e69c90d6358c0",
+                "transactTime": 1684804350068,
+                "price": "23450.00000000",
+                "origQty": "0.00847000",
+                "executedQty": "0.00001000",
+                "origQuoteOrderQty": "0.000000",
+                "cummulativeQuoteQty": "0.23450000",
+                "status": "CANCELED",
+                "timeInForce": "GTC",
+                "type": "LIMIT",
+                "side": "SELL",
+                "selfTradePreventionMode": "NONE"
+            },
+            "newOrderResponse": {
+                "code": -2010,
+                "msg": "Order would immediately match and take."
+            }
+        }
     },
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "DAY",
-      "intervalNum": 1,
-      "limit": 160000,
-      "count": 1
-    },
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
+    "rateLimits": [
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "SECOND",
+            "intervalNum": 10,
+            "limit": 50,
+            "count": 1
+        },
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "DAY",
+            "intervalNum": 1,
+            "limit": 160000,
+            "count": 1
+        },
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
+    ]
 }
 ```
 
 ```javascript
 {
-  "id": "ce641763-ff74-41ac-b9f7-db7cbe5e93b1",
-  "status": 409,
-  "error": {
-    "code": -2021,
-    "msg": "Order cancel-replace partially failed.",
-    "data": {
-      "cancelResult": "FAILURE",
-      "newOrderResult": "SUCCESS",
-      "cancelResponse": {
-        "code": -2011,
-        "msg": "Unknown order sent."
-      },
-      "newOrderResponse": {
-        "symbol": "BTCUSDT",
-        "orderId": 12569099453,
-        "orderListId": -1,
-        "clientOrderId": "bX5wROblo6YeDwa9iTLeyY",
-        "transactTime": 1660813156959,
-        "price": "23416.10000000",
-        "origQty": "0.00847000",
-        "executedQty": "0.00000000",
-        "origQuoteOrderQty": "0.000000",
-        "cummulativeQuoteQty": "0.00000000",
-        "status": "NEW",
-        "timeInForce": "GTC",
-        "type": "LIMIT",
-        "side": "SELL",
-        "workingTime": 1669693344508,
-        "fills": [],
-        "selfTradePreventionMode": "NONE"
-      }
-    }
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 10,
-      "limit": 50,
-      "count": 1
+    "id": "ce641763-ff74-41ac-b9f7-db7cbe5e93b1",
+    "status": 409,
+    "error": {
+        "code": -2021,
+        "msg": "Order cancel-replace partially failed.",
+        "data": {
+            "cancelResult": "FAILURE",
+            "newOrderResult": "SUCCESS",
+            "cancelResponse": {
+                "code": -2011,
+                "msg": "Unknown order sent."
+            },
+            "newOrderResponse": {
+                "symbol": "BTCUSDT",
+                "orderId": 12569099453,
+                "orderListId": -1,
+                "clientOrderId": "bX5wROblo6YeDwa9iTLeyY",
+                "transactTime": 1660813156959,
+                "price": "23416.10000000",
+                "origQty": "0.00847000",
+                "executedQty": "0.00000000",
+                "origQuoteOrderQty": "0.000000",
+                "cummulativeQuoteQty": "0.00000000",
+                "status": "NEW",
+                "timeInForce": "GTC",
+                "type": "LIMIT",
+                "side": "SELL",
+                "workingTime": 1669693344508,
+                "fills": [],
+                "selfTradePreventionMode": "NONE"
+            }
+        }
     },
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "DAY",
-      "intervalNum": 1,
-      "limit": 160000,
-      "count": 1
-    },
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
+    "rateLimits": [
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "SECOND",
+            "intervalNum": 10,
+            "limit": 50,
+            "count": 1
+        },
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "DAY",
+            "intervalNum": 1,
+            "limit": 160000,
+            "count": 1
+        },
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
+    ]
 }
 ```
 
@@ -4761,47 +4728,47 @@ If both operations fail, response will have `"status": 400`:
 
 ```javascript
 {
-  "id": "3b3ac45c-1002-4c7d-88e8-630c408ecd87",
-  "status": 400,
-  "error": {
-    "code": -2022,
-    "msg": "Order cancel-replace failed.",
-    "data": {
-      "cancelResult": "FAILURE",
-      "newOrderResult": "FAILURE",
-      "cancelResponse": {
-        "code": -2011,
-        "msg": "Unknown order sent."
-      },
-      "newOrderResponse": {
-        "code": -2010,
-        "msg": "Order would immediately match and take."
-      }
-    }
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 10,
-      "limit": 50,
-      "count": 1
+    "id": "3b3ac45c-1002-4c7d-88e8-630c408ecd87",
+    "status": 400,
+    "error": {
+        "code": -2022,
+        "msg": "Order cancel-replace failed.",
+        "data": {
+            "cancelResult": "FAILURE",
+            "newOrderResult": "FAILURE",
+            "cancelResponse": {
+                "code": -2011,
+                "msg": "Unknown order sent."
+            },
+            "newOrderResponse": {
+                "code": -2010,
+                "msg": "Order would immediately match and take."
+            }
+        }
     },
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "DAY",
-      "intervalNum": 1,
-      "limit": 160000,
-      "count": 1
-    },
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
+    "rateLimits": [
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "SECOND",
+            "intervalNum": 10,
+            "limit": 50,
+            "count": 1
+        },
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "DAY",
+            "intervalNum": 1,
+            "limit": 160000,
+            "count": 1
+        },
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
+    ]
 }
 ```
 
@@ -4809,35 +4776,35 @@ If `orderRateLimitExceededMode` is `DO_NOTHING` regardless of `cancelReplaceMode
 
 ```javascript
 {
-  "id": "3b3ac45c-1002-4c7d-88e8-630c408ecd87",
-  "status": 429,
-  "error": {
-    "code": -1015,
-    "msg": "Too many new orders; current limit is 50 orders per 10 SECOND."
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 10,
-      "limit": 50,
-      "count": 50
+    "id": "3b3ac45c-1002-4c7d-88e8-630c408ecd87",
+    "status": 429,
+    "error": {
+        "code": -1015,
+        "msg": "Too many new orders; current limit is 50 orders per 10 SECOND."
     },
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "DAY",
-      "intervalNum": 1,
-      "limit": 160000,
-      "count": 50
-    },
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
+    "rateLimits": [
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "SECOND",
+            "intervalNum": 10,
+            "limit": 50,
+            "count": 50
+        },
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "DAY",
+            "intervalNum": 1,
+            "limit": 160000,
+            "count": 50
+        },
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
+    ]
 }
 ```
 
@@ -4845,61 +4812,61 @@ If `orderRateLimitExceededMode` is `CANCEL_ONLY` regardless of `cancelReplaceMod
 
 ```javascript
 {
-  "id": "3b3ac45c-1002-4c7d-88e8-630c408ecd87",
-  "status": 409,
-  "error": {
-    "code": -2021,
-    "msg": "Order cancel-replace partially failed.",
-    "data": {
-      "cancelResult": "SUCCESS",
-      "newOrderResult": "FAILURE",
-      "cancelResponse": {
-        "symbol": "LTCBNB",
-        "origClientOrderId": "GKt5zzfOxRDSQLveDYCTkc",
-        "orderId": 64,
-        "orderListId": -1,
-        "clientOrderId": "loehOJF3FjoreUBDmv739R",
-        "transactTime": 1715779007228,
-        "price": "1.00",
-        "origQty": "10.00000000",
-        "executedQty": "0.00000000",
-        "origQuoteOrderQty": "0.000000",
-        "cummulativeQuoteQty": "0.00",
-        "status": "CANCELED",
-        "timeInForce": "GTC",
-        "type": "LIMIT",
-        "side": "SELL",
-        "selfTradePreventionMode": "NONE"
-      },
-      "newOrderResponse": {
-        "code": -1015,
-        "msg": "Too many new orders; current limit is 50 orders per 10 SECOND."
-      }
-    }
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 10,
-      "limit": 50,
-      "count": 50
+    "id": "3b3ac45c-1002-4c7d-88e8-630c408ecd87",
+    "status": 409,
+    "error": {
+        "code": -2021,
+        "msg": "Order cancel-replace partially failed.",
+        "data": {
+            "cancelResult": "SUCCESS",
+            "newOrderResult": "FAILURE",
+            "cancelResponse": {
+                "symbol": "LTCBNB",
+                "origClientOrderId": "GKt5zzfOxRDSQLveDYCTkc",
+                "orderId": 64,
+                "orderListId": -1,
+                "clientOrderId": "loehOJF3FjoreUBDmv739R",
+                "transactTime": 1715779007228,
+                "price": "1.00",
+                "origQty": "10.00000000",
+                "executedQty": "0.00000000",
+                "origQuoteOrderQty": "0.000000",
+                "cummulativeQuoteQty": "0.00",
+                "status": "CANCELED",
+                "timeInForce": "GTC",
+                "type": "LIMIT",
+                "side": "SELL",
+                "selfTradePreventionMode": "NONE"
+            },
+            "newOrderResponse": {
+                "code": -1015,
+                "msg": "Too many new orders; current limit is 50 orders per 10 SECOND."
+            }
+        }
     },
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "DAY",
-      "intervalNum": 1,
-      "limit": 160000,
-      "count": 50
-    },
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
+    "rateLimits": [
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "SECOND",
+            "intervalNum": 10,
+            "limit": 50,
+            "count": 50
+        },
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "DAY",
+            "intervalNum": 1,
+            "limit": 160000,
+            "count": 50
+        },
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
+    ]
 }
 ```
 
@@ -4909,17 +4876,17 @@ If `orderRateLimitExceededMode` is `CANCEL_ONLY` regardless of `cancelReplaceMod
 
 ```javascript
 {
-  "id": "56374a46-3061-486b-a311-89ee972eb648",
-  "method": "order.amend.keepPriority",
-  "params": {
-  "newQty": "5",
-  "origClientOrderId": "my_test_order1",
-  "recvWindow": 5000,
-  "symbol": "BTCUSDT",
-  "timestamp": 1741922620419,
-  "apiKey": "Rl1KOMDCpSg6xviMYOkNk9ENUB5QOTnufXukVe0Ijd40yduAlpHn78at3rJyJN4F",
-  "signature": "fa49c0c4ebc331c6ebd3fcb20deb387f60081ea858eebe6e35aa6fcdf2a82e08"
-  }
+    "id": "56374a46-3061-486b-a311-89ee972eb648",
+    "method": "order.amend.keepPriority",
+    "params": {
+        "newQty": "5",
+        "origClientOrderId": "my_test_order1",
+        "recvWindow": 5000,
+        "symbol": "BTCUSDT",
+        "timestamp": 1741922620419,
+        "apiKey": "Rl1KOMDCpSg6xviMYOkNk9ENUB5QOTnufXukVe0Ijd40yduAlpHn78at3rJyJN4F",
+        "signature": "fa49c0c4ebc331c6ebd3fcb20deb387f60081ea858eebe6e35aa6fcdf2a82e08"
+    }
 }
 ```
 
@@ -4954,43 +4921,40 @@ Response for a single order:
 
 ```javascript
 {
-  "id": "56374a46-3061-486b-a311-89ee972eb648",
-  "status": 200,
-  "result":
-  {
-    "transactTime": 1741923284382,
-    "executionId": 16,
-    "amendedOrder":
-    {
-      "symbol": "BTCUSDT",
-      "orderId": 12,
-      "orderListId": -1,
-      "origClientOrderId": "my_test_order1",
-      "clientOrderId": "4zR9HFcEq8gM1tWUqPEUHc",
-      "price": "5.00000000",
-      "qty": "5.00000000",
-      "executedQty": "0.00000000",
-      "preventedQty": "0.00000000",
-      "quoteOrderQty": "0.00000000",
-      "cumulativeQuoteQty": "0.00000000",
-      "status": "NEW",
-      "timeInForce": "GTC",
-      "type": "LIMIT",
-      "side": "BUY",
-      "workingTime": 1741923284364,
-      "selfTradePreventionMode": "NONE"
-    }
-  },
-  "rateLimits":
-  [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
+    "id": "56374a46-3061-486b-a311-89ee972eb648",
+    "status": 200,
+    "result": {
+        "transactTime": 1741923284382,
+        "executionId": 16,
+        "amendedOrder": {
+            "symbol": "BTCUSDT",
+            "orderId": 12,
+            "orderListId": -1,
+            "origClientOrderId": "my_test_order1",
+            "clientOrderId": "4zR9HFcEq8gM1tWUqPEUHc",
+            "price": "5.00000000",
+            "qty": "5.00000000",
+            "executedQty": "0.00000000",
+            "preventedQty": "0.00000000",
+            "quoteOrderQty": "0.00000000",
+            "cumulativeQuoteQty": "0.00000000",
+            "status": "NEW",
+            "timeInForce": "GTC",
+            "type": "LIMIT",
+            "side": "BUY",
+            "workingTime": 1741923284364,
+            "selfTradePreventionMode": "NONE"
+        }
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
+    ]
 }
 ```
 
@@ -4998,64 +4962,59 @@ Response for an order which is part of an Order list:
 
 ```javascript
 {
-  "id": "56374b46-3061-486b-a311-89ee972eb648",
-  "status": 200,
-  "result":
-  {
-    "transactTime": 1741924229819,
-    "executionId": 60,
-    "amendedOrder":
-    {
-      "symbol": "BTUCSDT",
-      "orderId": 23,
-      "orderListId": 4,
-      "origClientOrderId": "my_pending_order",
-      "clientOrderId": "xbxXh5SSwaHS7oUEOCI88B",
-      "price": "1.00000000",
-      "qty": "5.00000000",
-      "executedQty": "0.00000000",
-      "preventedQty": "0.00000000",
-      "quoteOrderQty": "0.00000000",
-      "cumulativeQuoteQty": "0.00000000",
-      "status": "NEW",
-      "timeInForce": "GTC",
-      "type": "LIMIT",
-      "side": "BUY",
-      "workingTime": 1741924204920,
-      "selfTradePreventionMode": "NONE"
-    },
-    "listStatus":
-    {
-      "orderListId": 4,
-      "contingencyType": "OTO",
-      "listOrderStatus": "EXECUTING",
-      "listClientOrderId": "8nOGLLawudj1QoOiwbroRH",
-      "symbol": "BTCUSDT",
-      "orders":
-      [
-        {
-          "symbol": "BTCUSDT",
-          "orderId": 22,
-          "clientOrderId": "g04EWsjaackzedjC9wRkWD"
+    "id": "56374b46-3061-486b-a311-89ee972eb648",
+    "status": 200,
+    "result": {
+        "transactTime": 1741924229819,
+        "executionId": 60,
+        "amendedOrder": {
+            "symbol": "BTUCSDT",
+            "orderId": 23,
+            "orderListId": 4,
+            "origClientOrderId": "my_pending_order",
+            "clientOrderId": "xbxXh5SSwaHS7oUEOCI88B",
+            "price": "1.00000000",
+            "qty": "5.00000000",
+            "executedQty": "0.00000000",
+            "preventedQty": "0.00000000",
+            "quoteOrderQty": "0.00000000",
+            "cumulativeQuoteQty": "0.00000000",
+            "status": "NEW",
+            "timeInForce": "GTC",
+            "type": "LIMIT",
+            "side": "BUY",
+            "workingTime": 1741924204920,
+            "selfTradePreventionMode": "NONE"
         },
-        {
-          "symbol": "BTCUSDT",
-          "orderId": 23,
-          "clientOrderId": "xbxXh5SSwaHS7oUEOCI88B"
+        "listStatus": {
+            "orderListId": 4,
+            "contingencyType": "OTO",
+            "listOrderStatus": "EXECUTING",
+            "listClientOrderId": "8nOGLLawudj1QoOiwbroRH",
+            "symbol": "BTCUSDT",
+            "orders": [
+                {
+                    "symbol": "BTCUSDT",
+                    "orderId": 22,
+                    "clientOrderId": "g04EWsjaackzedjC9wRkWD"
+                },
+                {
+                    "symbol": "BTCUSDT",
+                    "orderId": 23,
+                    "clientOrderId": "xbxXh5SSwaHS7oUEOCI88B"
+                }
+            ]
         }
-      ]
-    }
-  },
-  "rateLimits":
-  [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
+    ]
 }
 ```
 
@@ -5065,14 +5024,14 @@ Response for an order which is part of an Order list:
 
 ```javascript
 {
-  "id": "778f938f-9041-4b88-9914-efbf64eeacc8",
-  "method": "openOrders.cancelAll",
-  "params": {
-    "symbol": "BTCUSDT",
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "773f01b6e3c2c9e0c1d217bc043ce383c1ddd6f0e25f8d6070f2b66a6ceaf3a5",
-    "timestamp": 1660805557200
-  }
+    "id": "778f938f-9041-4b88-9914-efbf64eeacc8",
+    "method": "openOrders.cancelAll",
+    "params": {
+        "symbol": "BTCUSDT",
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "773f01b6e3c2c9e0c1d217bc043ce383c1ddd6f0e25f8d6070f2b66a6ceaf3a5",
+        "timestamp": 1660805557200
+    }
 }
 ```
 
@@ -5101,103 +5060,103 @@ Cancellation reports for orders and order lists have the same format as in [`ord
 
 ```javascript
 {
-  "id": "778f938f-9041-4b88-9914-efbf64eeacc8",
-  "status": 200,
-  "result": [
-    {
-      "symbol": "BTCUSDT",
-      "origClientOrderId": "4d96324ff9d44481926157",
-      "orderId": 12569099453,
-      "orderListId": -1,
-      "clientOrderId": "91fe37ce9e69c90d6358c0",
-      "transactTime": 1684804350068,
-      "price": "23416.10000000",
-      "origQty": "0.00847000",
-      "executedQty": "0.00001000",
-      "origQuoteOrderQty": "0.000000",
-      "cummulativeQuoteQty": "0.23416100",
-      "status": "CANCELED",
-      "timeInForce": "GTC",
-      "type": "LIMIT",
-      "side": "SELL",
-      "stopPrice": "0.00000000",
-      "trailingDelta": 0,
-      "trailingTime": -1,
-      "icebergQty": "0.00000000",
-      "strategyId": 37463720,
-      "strategyType": 1000000,
-      "selfTradePreventionMode": "NONE"
-    },
-    {
-      "orderListId": 19431,
-      "contingencyType": "OCO",
-      "listStatusType": "ALL_DONE",
-      "listOrderStatus": "ALL_DONE",
-      "listClientOrderId": "iuVNVJYYrByz6C4yGOPPK0",
-      "transactionTime": 1660803702431,
-      "symbol": "BTCUSDT",
-      "orders": [
+    "id": "778f938f-9041-4b88-9914-efbf64eeacc8",
+    "status": 200,
+    "result": [
         {
-          "symbol": "BTCUSDT",
-          "orderId": 12569099453,
-          "clientOrderId": "bX5wROblo6YeDwa9iTLeyY"
+            "symbol": "BTCUSDT",
+            "origClientOrderId": "4d96324ff9d44481926157",
+            "orderId": 12569099453,
+            "orderListId": -1,
+            "clientOrderId": "91fe37ce9e69c90d6358c0",
+            "transactTime": 1684804350068,
+            "price": "23416.10000000",
+            "origQty": "0.00847000",
+            "executedQty": "0.00001000",
+            "origQuoteOrderQty": "0.000000",
+            "cummulativeQuoteQty": "0.23416100",
+            "status": "CANCELED",
+            "timeInForce": "GTC",
+            "type": "LIMIT",
+            "side": "SELL",
+            "stopPrice": "0.00000000",
+            "trailingDelta": 0,
+            "trailingTime": -1,
+            "icebergQty": "0.00000000",
+            "strategyId": 37463720,
+            "strategyType": 1000000,
+            "selfTradePreventionMode": "NONE"
         },
         {
-          "symbol": "BTCUSDT",
-          "orderId": 12569099454,
-          "clientOrderId": "Tnu2IP0J5Y4mxw3IATBfmW"
+            "orderListId": 19431,
+            "contingencyType": "OCO",
+            "listStatusType": "ALL_DONE",
+            "listOrderStatus": "ALL_DONE",
+            "listClientOrderId": "iuVNVJYYrByz6C4yGOPPK0",
+            "transactionTime": 1660803702431,
+            "symbol": "BTCUSDT",
+            "orders": [
+                {
+                    "symbol": "BTCUSDT",
+                    "orderId": 12569099453,
+                    "clientOrderId": "bX5wROblo6YeDwa9iTLeyY"
+                },
+                {
+                    "symbol": "BTCUSDT",
+                    "orderId": 12569099454,
+                    "clientOrderId": "Tnu2IP0J5Y4mxw3IATBfmW"
+                }
+            ],
+            "orderReports": [
+                {
+                    "symbol": "BTCUSDT",
+                    "origClientOrderId": "bX5wROblo6YeDwa9iTLeyY",
+                    "orderId": 12569099453,
+                    "orderListId": 19431,
+                    "clientOrderId": "OFFXQtxVFZ6Nbcg4PgE2DA",
+                    "transactTime": 1684804350068,
+                    "price": "23450.50000000",
+                    "origQty": "0.00850000",
+                    "executedQty": "0.00000000",
+                    "origQuoteOrderQty": "0.000000",
+                    "cummulativeQuoteQty": "0.00000000",
+                    "status": "CANCELED",
+                    "timeInForce": "GTC",
+                    "type": "STOP_LOSS_LIMIT",
+                    "side": "BUY",
+                    "stopPrice": "23430.00000000",
+                    "selfTradePreventionMode": "NONE"
+                },
+                {
+                    "symbol": "BTCUSDT",
+                    "origClientOrderId": "Tnu2IP0J5Y4mxw3IATBfmW",
+                    "orderId": 12569099454,
+                    "orderListId": 19431,
+                    "clientOrderId": "OFFXQtxVFZ6Nbcg4PgE2DA",
+                    "transactTime": 1684804350068,
+                    "price": "23400.00000000",
+                    "origQty": "0.00850000",
+                    "executedQty": "0.00000000",
+                    "origQuoteOrderQty": "0.000000",
+                    "cummulativeQuoteQty": "0.00000000",
+                    "status": "CANCELED",
+                    "timeInForce": "GTC",
+                    "type": "LIMIT_MAKER",
+                    "side": "BUY",
+                    "selfTradePreventionMode": "NONE"
+                }
+            ]
         }
-      ],
-      "orderReports": [
+    ],
+    "rateLimits": [
         {
-          "symbol": "BTCUSDT",
-          "origClientOrderId": "bX5wROblo6YeDwa9iTLeyY",
-          "orderId": 12569099453,
-          "orderListId": 19431,
-          "clientOrderId": "OFFXQtxVFZ6Nbcg4PgE2DA",
-          "transactTime": 1684804350068,
-          "price": "23450.50000000",
-          "origQty": "0.00850000",
-          "executedQty": "0.00000000",
-          "origQuoteOrderQty": "0.000000",
-          "cummulativeQuoteQty": "0.00000000",
-          "status": "CANCELED",
-          "timeInForce": "GTC",
-          "type": "STOP_LOSS_LIMIT",
-          "side": "BUY",
-          "stopPrice": "23430.00000000",
-          "selfTradePreventionMode": "NONE"
-        },
-        {
-          "symbol": "BTCUSDT",
-          "origClientOrderId": "Tnu2IP0J5Y4mxw3IATBfmW",
-          "orderId": 12569099454,
-          "orderListId": 19431,
-          "clientOrderId": "OFFXQtxVFZ6Nbcg4PgE2DA",
-          "transactTime": 1684804350068,
-          "price": "23400.00000000",
-          "origQty": "0.00850000",
-          "executedQty": "0.00000000",
-          "origQuoteOrderQty": "0.000000",
-          "cummulativeQuoteQty": "0.00000000",
-          "status": "CANCELED",
-          "timeInForce": "GTC",
-          "type": "LIMIT_MAKER",
-          "side": "BUY",
-          "selfTradePreventionMode": "NONE"
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
         }
-      ]
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
+    ]
 }
 ```
 
@@ -5209,23 +5168,22 @@ Cancellation reports for orders and order lists have the same format as in [`ord
 
 ```javascript
 {
-  "id": "56374a46-3261-486b-a211-99ed972eb648",
-  "method": "orderList.place.oco",
-  "params":
-  {
-    "symbol": "LTCBNB",
-    "side": "BUY",
-    "quantity": 1,
-    "timestamp": 1711062760647,
-    "aboveType": "STOP_LOSS_LIMIT",
-    "abovePrice": "1.5",
-    "aboveStopPrice": "1.50000001",
-    "aboveTimeInForce": "GTC",
-    "belowType": "LIMIT_MAKER",
-    "belowPrice": "1.49999999",
-    "apiKey": "duwNf97YPLqhFIk7kZF0dDdGYVAXStA7BeEz0fIT9RAhUbixJtyS6kJ3hhzJsRXC",
-    "signature": "64614cfd8dd38260d4fd86d3c455dbf4b9d1c8a8170ea54f700592a986c30ddb"
-  }
+    "id": "56374a46-3261-486b-a211-99ed972eb648",
+    "method": "orderList.place.oco",
+    "params": {
+        "symbol": "LTCBNB",
+        "side": "BUY",
+        "quantity": 1,
+        "timestamp": 1711062760647,
+        "aboveType": "STOP_LOSS_LIMIT",
+        "abovePrice": "1.5",
+        "aboveStopPrice": "1.50000001",
+        "aboveTimeInForce": "GTC",
+        "belowType": "LIMIT_MAKER",
+        "belowPrice": "1.49999999",
+        "apiKey": "duwNf97YPLqhFIk7kZF0dDdGYVAXStA7BeEz0fIT9RAhUbixJtyS6kJ3hhzJsRXC",
+        "signature": "64614cfd8dd38260d4fd86d3c455dbf4b9d1c8a8170ea54f700592a986c30ddb"
+    }
 }
 ```
 
@@ -5298,95 +5256,91 @@ See [`order.place`](#place-new-order-trade) for more examples.
 
 ```javascript
 {
-  "id": "56374a46-3261-486b-a211-99ed972eb648",
-  "status": 200,
-  "result":
-  {
-    "orderListId": 2,
-    "contingencyType": "OCO",
-    "listStatusType": "EXEC_STARTED",
-    "listOrderStatus": "EXECUTING",
-    "listClientOrderId": "cKPMnDCbcLQILtDYM4f4fX",
-    "transactionTime": 1711062760648,
-    "symbol": "LTCBNB",
-    "orders":
-    [
-      {
-        "symbol": "LTCBNB",
-        "orderId": 2,
-        "clientOrderId": "0m6I4wfxvTUrOBSMUl0OPU"
-      },
-      {
-        "symbol": "LTCBNB",
-        "orderId": 3,
-        "clientOrderId": "Z2IMlR79XNY5LU0tOxrWyW"
-      }
-    ],
-    "orderReports":
-    [
-      {
-        "symbol": "LTCBNB",
-        "orderId": 2,
+    "id": "56374a46-3261-486b-a211-99ed972eb648",
+    "status": 200,
+    "result": {
         "orderListId": 2,
-        "clientOrderId": "0m6I4wfxvTUrOBSMUl0OPU",
-        "transactTime": 1711062760648,
-        "price": "1.50000000",
-        "origQty": "1.000000",
-        "executedQty": "0.000000",
-        "origQuoteOrderQty": "0.000000",
-        "cummulativeQuoteQty": "0.00000000",
-        "status": "NEW",
-        "timeInForce": "GTC",
-        "type": "STOP_LOSS_LIMIT",
-        "side": "BUY",
-        "stopPrice": "1.50000001",
-        "workingTime": -1,
-        "selfTradePreventionMode": "NONE"
-      },
-      {
+        "contingencyType": "OCO",
+        "listStatusType": "EXEC_STARTED",
+        "listOrderStatus": "EXECUTING",
+        "listClientOrderId": "cKPMnDCbcLQILtDYM4f4fX",
+        "transactionTime": 1711062760648,
         "symbol": "LTCBNB",
-        "orderId": 3,
-        "orderListId": 2,
-        "clientOrderId": "Z2IMlR79XNY5LU0tOxrWyW",
-        "transactTime": 1711062760648,
-        "price": "1.49999999",
-        "origQty": "1.000000",
-        "executedQty": "0.000000",
-        "origQuoteOrderQty": "0.000000",
-        "cummulativeQuoteQty": "0.00000000",
-        "status": "NEW",
-        "timeInForce": "GTC",
-        "type": "LIMIT_MAKER",
-        "side": "BUY",
-        "workingTime": 1711062760648,
-        "selfTradePreventionMode": "NONE"
-      }
+        "orders": [
+            {
+                "symbol": "LTCBNB",
+                "orderId": 2,
+                "clientOrderId": "0m6I4wfxvTUrOBSMUl0OPU"
+            },
+            {
+                "symbol": "LTCBNB",
+                "orderId": 3,
+                "clientOrderId": "Z2IMlR79XNY5LU0tOxrWyW"
+            }
+        ],
+        "orderReports": [
+            {
+                "symbol": "LTCBNB",
+                "orderId": 2,
+                "orderListId": 2,
+                "clientOrderId": "0m6I4wfxvTUrOBSMUl0OPU",
+                "transactTime": 1711062760648,
+                "price": "1.50000000",
+                "origQty": "1.000000",
+                "executedQty": "0.000000",
+                "origQuoteOrderQty": "0.000000",
+                "cummulativeQuoteQty": "0.00000000",
+                "status": "NEW",
+                "timeInForce": "GTC",
+                "type": "STOP_LOSS_LIMIT",
+                "side": "BUY",
+                "stopPrice": "1.50000001",
+                "workingTime": -1,
+                "selfTradePreventionMode": "NONE"
+            },
+            {
+                "symbol": "LTCBNB",
+                "orderId": 3,
+                "orderListId": 2,
+                "clientOrderId": "Z2IMlR79XNY5LU0tOxrWyW",
+                "transactTime": 1711062760648,
+                "price": "1.49999999",
+                "origQty": "1.000000",
+                "executedQty": "0.000000",
+                "origQuoteOrderQty": "0.000000",
+                "cummulativeQuoteQty": "0.00000000",
+                "status": "NEW",
+                "timeInForce": "GTC",
+                "type": "LIMIT_MAKER",
+                "side": "BUY",
+                "workingTime": 1711062760648,
+                "selfTradePreventionMode": "NONE"
+            }
+        ]
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "SECOND",
+            "intervalNum": 10,
+            "limit": 50,
+            "count": 2
+        },
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "DAY",
+            "intervalNum": 1,
+            "limit": 160000,
+            "count": 2
+        },
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
     ]
-  },
-  "rateLimits":
-  [
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 10,
-      "limit": 50,
-      "count": 2
-    },
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "DAY",
-      "intervalNum": 1,
-      "limit": 160000,
-      "count": 2
-    },
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
 }
 ```
 
@@ -5394,23 +5348,23 @@ See [`order.place`](#place-new-order-trade) for more examples.
 
 ```javascript
 {
-  "id": "1712544395950",
-  "method": "orderList.place.oto",
-  "params": {
-    "signature": "3e1e5ac8690b0caf9a2afd5c5de881ceba69939cc9d817daead5386bf65d0cbb",
-    "apiKey": "Rf07JlnL9PHVxjs27O5CvKNyOsV4qJ5gXdrRfpvlOdvMZbGZbPO5Ce2nIwfRP0iA",
-    "pendingQuantity": 1,
-    "pendingSide": "BUY",
-    "pendingType": "MARKET",
-    "symbol": "LTCBNB",
-    "recvWindow": "5000",
-    "timestamp": "1712544395951",
-    "workingPrice": 1,
-    "workingQuantity": 1,
-    "workingSide": "SELL",
-    "workingTimeInForce": "GTC",
-    "workingType": "LIMIT"
-  }
+    "id": "1712544395950",
+    "method": "orderList.place.oto",
+    "params": {
+        "signature": "3e1e5ac8690b0caf9a2afd5c5de881ceba69939cc9d817daead5386bf65d0cbb",
+        "apiKey": "Rf07JlnL9PHVxjs27O5CvKNyOsV4qJ5gXdrRfpvlOdvMZbGZbPO5Ce2nIwfRP0iA",
+        "pendingQuantity": 1,
+        "pendingSide": "BUY",
+        "pendingType": "MARKET",
+        "symbol": "LTCBNB",
+        "recvWindow": "5000",
+        "timestamp": "1712544395951",
+        "workingPrice": 1,
+        "workingQuantity": 1,
+        "workingSide": "SELL",
+        "workingTimeInForce": "GTC",
+        "workingType": "LIMIT"
+    }
 }
 ```
 
@@ -5487,83 +5441,83 @@ Matching Engine
 
 ```javascript
 {
-  "id": "1712544395950",
-  "status": 200,
-  "result": {
-    "orderListId": 626,
-    "contingencyType": "OTO",
-    "listStatusType": "EXEC_STARTED",
-    "listOrderStatus": "EXECUTING",
-    "listClientOrderId": "KA4EBjGnzvSwSCQsDdTrlf",
-    "transactionTime": 1712544395981,
-    "symbol": "1712544378871",
-    "orders": [
-      {
-        "symbol": "LTCBNB",
-        "orderId": 13,
-        "clientOrderId": "YiAUtM9yJjl1a2jXHSp9Ny"
-      },
-      {
-        "symbol": "LTCBNB",
-        "orderId": 14,
-        "clientOrderId": "9MxJSE1TYkmyx5lbGLve7R"
-      }
-    ],
-    "orderReports": [
-      {
-        "symbol": "LTCBNB",
-        "orderId": 13,
+    "id": "1712544395950",
+    "status": 200,
+    "result": {
         "orderListId": 626,
-        "clientOrderId": "YiAUtM9yJjl1a2jXHSp9Ny",
-        "transactTime": 1712544395981,
-        "price": "1.000000",
-        "origQty": "1.000000",
-        "executedQty": "0.000000",
-        "origQuoteOrderQty": "0.000000",
-        "cummulativeQuoteQty": "0.000000",
-        "status": "NEW",
-        "timeInForce": "GTC",
-        "type": "LIMIT",
-        "side": "SELL",
-        "workingTime": 1712544395981,
-        "selfTradePreventionMode": "NONE"
-      },
-      {
-        "symbol": "LTCBNB",
-        "orderId": 14,
-        "orderListId": 626,
-        "clientOrderId": "9MxJSE1TYkmyx5lbGLve7R",
-        "transactTime": 1712544395981,
-        "price": "0.000000",
-        "origQty": "1.000000",
-        "executedQty": "0.000000",
-        "origQuoteOrderQty": "0.000000",
-        "cummulativeQuoteQty": "0.000000",
-        "status": "PENDING_NEW",
-        "timeInForce": "GTC",
-        "type": "MARKET",
-        "side": "BUY",
-        "workingTime": -1,
-        "selfTradePreventionMode": "NONE"
-      }
-    ]
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 10000000,
-      "count": 10
+        "contingencyType": "OTO",
+        "listStatusType": "EXEC_STARTED",
+        "listOrderStatus": "EXECUTING",
+        "listClientOrderId": "KA4EBjGnzvSwSCQsDdTrlf",
+        "transactionTime": 1712544395981,
+        "symbol": "1712544378871",
+        "orders": [
+            {
+                "symbol": "LTCBNB",
+                "orderId": 13,
+                "clientOrderId": "YiAUtM9yJjl1a2jXHSp9Ny"
+            },
+            {
+                "symbol": "LTCBNB",
+                "orderId": 14,
+                "clientOrderId": "9MxJSE1TYkmyx5lbGLve7R"
+            }
+        ],
+        "orderReports": [
+            {
+                "symbol": "LTCBNB",
+                "orderId": 13,
+                "orderListId": 626,
+                "clientOrderId": "YiAUtM9yJjl1a2jXHSp9Ny",
+                "transactTime": 1712544395981,
+                "price": "1.000000",
+                "origQty": "1.000000",
+                "executedQty": "0.000000",
+                "origQuoteOrderQty": "0.000000",
+                "cummulativeQuoteQty": "0.000000",
+                "status": "NEW",
+                "timeInForce": "GTC",
+                "type": "LIMIT",
+                "side": "SELL",
+                "workingTime": 1712544395981,
+                "selfTradePreventionMode": "NONE"
+            },
+            {
+                "symbol": "LTCBNB",
+                "orderId": 14,
+                "orderListId": 626,
+                "clientOrderId": "9MxJSE1TYkmyx5lbGLve7R",
+                "transactTime": 1712544395981,
+                "price": "0.000000",
+                "origQty": "1.000000",
+                "executedQty": "0.000000",
+                "origQuoteOrderQty": "0.000000",
+                "cummulativeQuoteQty": "0.000000",
+                "status": "PENDING_NEW",
+                "timeInForce": "GTC",
+                "type": "MARKET",
+                "side": "BUY",
+                "workingTime": -1,
+                "selfTradePreventionMode": "NONE"
+            }
+        ]
     },
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 1000,
-      "count": 38
-    }
-  ]
+    "rateLimits": [
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 10000000,
+            "count": 10
+        },
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 1000,
+            "count": 38
+        }
+    ]
 }
 ```
 
@@ -5573,26 +5527,26 @@ Matching Engine
 
 ```javascript
 {
-  "id": "1712544408508",
-  "method": "orderList.place.otoco",
-  "params": {
-    "signature": "c094473304374e1b9c5f7e2558358066cfa99df69f50f63d09cfee755136cb07",
-    "apiKey": "Rf07JlnL9PHVxjs27O5CvKNyOsV4qJ5gXdrRfpvlOdvMZbGZbPO5Ce2nIwfRP0iA",
-    "pendingQuantity": 5,
-    "pendingSide": "SELL",
-    "pendingBelowPrice": 5,
-    "pendingBelowType": "LIMIT_MAKER",
-    "pendingAboveStopPrice": 0.5,
-    "pendingAboveType": "STOP_LOSS",
-    "symbol": "LTCBNB",
-    "recvWindow": "5000",
-    "timestamp": "1712544408509",
-    "workingPrice": 1.5,
-    "workingQuantity": 1,
-    "workingSide": "BUY",
-    "workingTimeInForce": "GTC",
-    "workingType": "LIMIT"
-  }
+    "id": "1712544408508",
+    "method": "orderList.place.otoco",
+    "params": {
+        "signature": "c094473304374e1b9c5f7e2558358066cfa99df69f50f63d09cfee755136cb07",
+        "apiKey": "Rf07JlnL9PHVxjs27O5CvKNyOsV4qJ5gXdrRfpvlOdvMZbGZbPO5Ce2nIwfRP0iA",
+        "pendingQuantity": 5,
+        "pendingSide": "SELL",
+        "pendingBelowPrice": 5,
+        "pendingBelowType": "LIMIT_MAKER",
+        "pendingAboveStopPrice": 0.5,
+        "pendingAboveType": "STOP_LOSS",
+        "symbol": "LTCBNB",
+        "recvWindow": "5000",
+        "timestamp": "1712544408509",
+        "workingPrice": 1.5,
+        "workingQuantity": 1,
+        "workingSide": "BUY",
+        "workingTimeInForce": "GTC",
+        "workingType": "LIMIT"
+    }
 }
 ```
 
@@ -5682,107 +5636,107 @@ Depending on the `pendingAboveType`/`pendingBelowType` or `workingType`, some op
 
 ```javascript
 {
-  "id": "1712544408508",
-  "status": 200,
-  "result": {
-    "orderListId": 629,
-    "contingencyType": "OTO",
-    "listStatusType": "EXEC_STARTED",
-    "listOrderStatus": "EXECUTING",
-    "listClientOrderId": "GaeJHjZPasPItFj4x7Mqm6",
-    "transactionTime": 1712544408537,
-    "symbol": "1712544378871",
-    "orders": [
-      {
-        "symbol": "LTCBNB",
-        "orderId": 23,
-        "clientOrderId": "OVQOpKwfmPCfaBTD0n7e7H"
-      },
-      {
-        "symbol": "LTCBNB",
-        "orderId": 24,
-        "clientOrderId": "YcCPKCDMQIjNvLtNswt82X"
-      },
-      {
-        "symbol": "LTCBNB",
-        "orderId": 25,
-        "clientOrderId": "ilpIoShcFZ1ZGgSASKxMPt"
-      }
-    ],
-    "orderReports": [
-      {
-        "symbol": "LTCBNB",
-        "orderId": 23,
+    "id": "1712544408508",
+    "status": 200,
+    "result": {
         "orderListId": 629,
-        "clientOrderId": "OVQOpKwfmPCfaBTD0n7e7H",
-        "transactTime": 1712544408537,
-        "price": "1.500000",
-        "origQty": "1.000000",
-        "executedQty": "0.000000",
-        "origQuoteOrderQty": "0.000000",
-        "cummulativeQuoteQty": "0.000000",
-        "status": "NEW",
-        "timeInForce": "GTC",
-        "type": "LIMIT",
-        "side": "BUY",
-        "workingTime": 1712544408537,
-        "selfTradePreventionMode": "NONE"
-      },
-      {
-        "symbol": "LTCBNB",
-        "orderId": 24,
-        "orderListId": 629,
-        "clientOrderId": "YcCPKCDMQIjNvLtNswt82X",
-        "transactTime": 1712544408537,
-        "price": "0.000000",
-        "origQty": "5.000000",
-        "executedQty": "0.000000",
-        "origQuoteOrderQty": "0.000000",
-        "cummulativeQuoteQty": "0.000000",
-        "status": "PENDING_NEW",
-        "timeInForce": "GTC",
-        "type": "STOP_LOSS",
-        "side": "SELL",
-        "stopPrice": "0.500000",
-        "workingTime": -1,
-        "selfTradePreventionMode": "NONE"
-      },
-      {
-        "symbol": "LTCBNB",
-        "orderId": 25,
-        "orderListId": 629,
-        "clientOrderId": "ilpIoShcFZ1ZGgSASKxMPt",
-        "transactTime": 1712544408537,
-        "price": "5.000000",
-        "origQty": "5.000000",
-        "executedQty": "0.000000",
-        "origQuoteOrderQty": "0.000000",
-        "cummulativeQuoteQty": "0.000000",
-        "status": "PENDING_NEW",
-        "timeInForce": "GTC",
-        "type": "LIMIT_MAKER",
-        "side": "SELL",
-        "workingTime": -1,
-        "selfTradePreventionMode": "NONE"
-      }
-    ]
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 10000000,
-      "count": 18
+        "contingencyType": "OTO",
+        "listStatusType": "EXEC_STARTED",
+        "listOrderStatus": "EXECUTING",
+        "listClientOrderId": "GaeJHjZPasPItFj4x7Mqm6",
+        "transactionTime": 1712544408537,
+        "symbol": "1712544378871",
+        "orders": [
+            {
+                "symbol": "LTCBNB",
+                "orderId": 23,
+                "clientOrderId": "OVQOpKwfmPCfaBTD0n7e7H"
+            },
+            {
+                "symbol": "LTCBNB",
+                "orderId": 24,
+                "clientOrderId": "YcCPKCDMQIjNvLtNswt82X"
+            },
+            {
+                "symbol": "LTCBNB",
+                "orderId": 25,
+                "clientOrderId": "ilpIoShcFZ1ZGgSASKxMPt"
+            }
+        ],
+        "orderReports": [
+            {
+                "symbol": "LTCBNB",
+                "orderId": 23,
+                "orderListId": 629,
+                "clientOrderId": "OVQOpKwfmPCfaBTD0n7e7H",
+                "transactTime": 1712544408537,
+                "price": "1.500000",
+                "origQty": "1.000000",
+                "executedQty": "0.000000",
+                "origQuoteOrderQty": "0.000000",
+                "cummulativeQuoteQty": "0.000000",
+                "status": "NEW",
+                "timeInForce": "GTC",
+                "type": "LIMIT",
+                "side": "BUY",
+                "workingTime": 1712544408537,
+                "selfTradePreventionMode": "NONE"
+            },
+            {
+                "symbol": "LTCBNB",
+                "orderId": 24,
+                "orderListId": 629,
+                "clientOrderId": "YcCPKCDMQIjNvLtNswt82X",
+                "transactTime": 1712544408537,
+                "price": "0.000000",
+                "origQty": "5.000000",
+                "executedQty": "0.000000",
+                "origQuoteOrderQty": "0.000000",
+                "cummulativeQuoteQty": "0.000000",
+                "status": "PENDING_NEW",
+                "timeInForce": "GTC",
+                "type": "STOP_LOSS",
+                "side": "SELL",
+                "stopPrice": "0.500000",
+                "workingTime": -1,
+                "selfTradePreventionMode": "NONE"
+            },
+            {
+                "symbol": "LTCBNB",
+                "orderId": 25,
+                "orderListId": 629,
+                "clientOrderId": "ilpIoShcFZ1ZGgSASKxMPt",
+                "transactTime": 1712544408537,
+                "price": "5.000000",
+                "origQty": "5.000000",
+                "executedQty": "0.000000",
+                "origQuoteOrderQty": "0.000000",
+                "cummulativeQuoteQty": "0.000000",
+                "status": "PENDING_NEW",
+                "timeInForce": "GTC",
+                "type": "LIMIT_MAKER",
+                "side": "SELL",
+                "workingTime": -1,
+                "selfTradePreventionMode": "NONE"
+            }
+        ]
     },
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 1000,
-      "count": 65
-    }
-  ]
+    "rateLimits": [
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 10000000,
+            "count": 18
+        },
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 1000,
+            "count": 65
+        }
+    ]
 }
 ```
 
@@ -5792,24 +5746,23 @@ Depending on the `pendingAboveType`/`pendingBelowType` or `workingType`, some op
 
 ```json
 {
-  "id": "1762941318128",
-  "method": "orderList.place.opo",
-  "params": {
-    "workingPrice": "101496",
-    "workingQuantity": "0.0007",
-    "workingType": "LIMIT",
-    "workingTimeInForce": "GTC",
-    "pendingType": "MARKET",
-    "pendingSide": "SELL",
-    "recvWindow": 5000,
-    "workingSide": "BUY",
-    "symbol": "BTCUSDT",
-    "timestamp": 1762941318129,
-    "apiKey": "aHb4Ur1cK1biW3sgibqUFs39SE58f9d5Xwf4uEW0tFh7ibun5g035QKSktxoOBfE",
-    "signature": "b50ce8977333a78a3bbad21df178d7e104a8c985d19007b55df688cdf868639a"
-  }
+    "id": "1762941318128",
+    "method": "orderList.place.opo",
+    "params": {
+        "workingPrice": "101496",
+        "workingQuantity": "0.0007",
+        "workingType": "LIMIT",
+        "workingTimeInForce": "GTC",
+        "pendingType": "MARKET",
+        "pendingSide": "SELL",
+        "recvWindow": 5000,
+        "workingSide": "BUY",
+        "symbol": "BTCUSDT",
+        "timestamp": 1762941318129,
+        "apiKey": "aHb4Ur1cK1biW3sgibqUFs39SE58f9d5Xwf4uEW0tFh7ibun5g035QKSktxoOBfE",
+        "signature": "b50ce8977333a78a3bbad21df178d7e104a8c985d19007b55df688cdf868639a"
+    }
 }
-
 ```
 
 Place an [OPO](../faqs/opo.md).
@@ -5862,66 +5815,66 @@ Place an [OPO](../faqs/opo.md).
 
 ```json
 {
-  "id": "1762941318128",
-  "status": 200,
-  "result": {
-    "orderListId": 2,
-    "contingencyType": "OTO",
-    "listStatusType": "EXEC_STARTED",
-    "listOrderStatus": "EXECUTING",
-    "listClientOrderId": "OiOgqvRagBefpzdM5gjYX3",
-    "transactionTime": 1762941318142,
-    "symbol": "BTCUSDT",
-    "orders": [
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 2,
-        "clientOrderId": "pUzhKBbc0ZVdMScIRAqitH"
-      },
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 3,
-        "clientOrderId": "x7ISSjywZxFXOdzwsThNnd"
-      }
-    ],
-    "orderReports": [
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 2,
+    "id": "1762941318128",
+    "status": 200,
+    "result": {
         "orderListId": 2,
-        "clientOrderId": "pUzhKBbc0ZVdMScIRAqitH",
-        "transactTime": 1762941318142,
-        "price": "101496.00000000",
-        "origQty": "0.00070000",
-        "executedQty": "0.00000000",
-        "origQuoteOrderQty": "0.00000000",
-        "cummulativeQuoteQty": "0.00000000",
-        "status": "NEW",
-        "timeInForce": "GTC",
-        "type": "LIMIT",
-        "side": "BUY",
-        "workingTime": 1762941318142,
-        "selfTradePreventionMode": "NONE"
-      },
-      {
+        "contingencyType": "OTO",
+        "listStatusType": "EXEC_STARTED",
+        "listOrderStatus": "EXECUTING",
+        "listClientOrderId": "OiOgqvRagBefpzdM5gjYX3",
+        "transactionTime": 1762941318142,
         "symbol": "BTCUSDT",
-        "orderId": 3,
-        "orderListId": 2,
-        "clientOrderId": "x7ISSjywZxFXOdzwsThNnd",
-        "transactTime": 1762941318142,
-        "price": "0.00000000",
-        "executedQty": "0.00000000",
-        "origQuoteOrderQty": "0.00000000",
-        "cummulativeQuoteQty": "0.00000000",
-        "status": "PENDING_NEW",
-        "timeInForce": "GTC",
-        "type": "MARKET",
-        "side": "SELL",
-        "workingTime": -1,
-        "selfTradePreventionMode": "NONE"
-      }
-    ]
-  }
+        "orders": [
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 2,
+                "clientOrderId": "pUzhKBbc0ZVdMScIRAqitH"
+            },
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 3,
+                "clientOrderId": "x7ISSjywZxFXOdzwsThNnd"
+            }
+        ],
+        "orderReports": [
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 2,
+                "orderListId": 2,
+                "clientOrderId": "pUzhKBbc0ZVdMScIRAqitH",
+                "transactTime": 1762941318142,
+                "price": "101496.00000000",
+                "origQty": "0.00070000",
+                "executedQty": "0.00000000",
+                "origQuoteOrderQty": "0.00000000",
+                "cummulativeQuoteQty": "0.00000000",
+                "status": "NEW",
+                "timeInForce": "GTC",
+                "type": "LIMIT",
+                "side": "BUY",
+                "workingTime": 1762941318142,
+                "selfTradePreventionMode": "NONE"
+            },
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 3,
+                "orderListId": 2,
+                "clientOrderId": "x7ISSjywZxFXOdzwsThNnd",
+                "transactTime": 1762941318142,
+                "price": "0.00000000",
+                "executedQty": "0.00000000",
+                "origQuoteOrderQty": "0.00000000",
+                "cummulativeQuoteQty": "0.00000000",
+                "status": "PENDING_NEW",
+                "timeInForce": "GTC",
+                "type": "MARKET",
+                "side": "SELL",
+                "workingTime": -1,
+                "selfTradePreventionMode": "NONE"
+            }
+        ]
+    }
 }
 ```
 
@@ -5931,27 +5884,27 @@ Place an [OPO](../faqs/opo.md).
 
 ```json
 {
-  "id": "1763000139090",
-  "method": "orderList.place.opoco",
-  "params": {
-    "workingPrice": "102496",
-    "workingQuantity": "0.0017",
-    "workingType": "LIMIT",
-    "workingTimeInForce": "GTC",
-    "pendingAboveType": "LIMIT_MAKER",
-    "pendingAbovePrice": "104261",
-    "pendingBelowStopPrice": "10100",
-    "pendingBelowPrice": "101613",
-    "pendingBelowType": "STOP_LOSS_LIMIT",
-    "pendingBelowTimeInForce": "IOC",
-    "pendingSide": "SELL",
-    "recvWindow": 5000,
-    "workingSide": "BUY",
-    "symbol": "BTCUSDT",
-    "timestamp": 1763000139091,
-    "apiKey": "2wiKgTLyllTCu0QWXaEtKWX9tUQ5iQMiDQqTQPdUe2bZ1IVT9aXoS6o19wkYIKl2",
-    "signature": "adfa185c50f793392a54ad5a6e2c39fd34ef6d35944adf2ddd6f30e1866e58d3"
-  }
+    "id": "1763000139090",
+    "method": "orderList.place.opoco",
+    "params": {
+        "workingPrice": "102496",
+        "workingQuantity": "0.0017",
+        "workingType": "LIMIT",
+        "workingTimeInForce": "GTC",
+        "pendingAboveType": "LIMIT_MAKER",
+        "pendingAbovePrice": "104261",
+        "pendingBelowStopPrice": "10100",
+        "pendingBelowPrice": "101613",
+        "pendingBelowType": "STOP_LOSS_LIMIT",
+        "pendingBelowTimeInForce": "IOC",
+        "pendingSide": "SELL",
+        "recvWindow": 5000,
+        "workingSide": "BUY",
+        "symbol": "BTCUSDT",
+        "timestamp": 1763000139091,
+        "apiKey": "2wiKgTLyllTCu0QWXaEtKWX9tUQ5iQMiDQqTQPdUe2bZ1IVT9aXoS6o19wkYIKl2",
+        "signature": "adfa185c50f793392a54ad5a6e2c39fd34ef6d35944adf2ddd6f30e1866e58d3"
+    }
 }
 ```
 
@@ -6015,89 +5968,89 @@ Place an [OPOCO](../faqs/opo.md).
 
 ```json
 {
-  "id": "1763000139090",
-  "status": 200,
-  "result": {
-    "orderListId": 1,
-    "contingencyType": "OTO",
-    "listStatusType": "EXEC_STARTED",
-    "listOrderStatus": "EXECUTING",
-    "listClientOrderId": "TVbG6ymkYMXTj7tczbOsBf",
-    "transactionTime": 1763000139104,
-    "symbol": "BTCUSDT",
-    "orders": [
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 6,
-        "clientOrderId": "3czuJSeyjPwV9Xo28j1Dv3"
-      },
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 7,
-        "clientOrderId": "kyIKnMLKQclE5FmyYgaMSo"
-      },
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 8,
-        "clientOrderId": "i76cGJWN9J1FpADS56TtQZ"
-      }
-    ],
-    "orderReports": [
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 6,
+    "id": "1763000139090",
+    "status": 200,
+    "result": {
         "orderListId": 1,
-        "clientOrderId": "3czuJSeyjPwV9Xo28j1Dv3",
-        "transactTime": 1763000139104,
-        "price": "102496.00000000",
-        "origQty": "0.00170000",
-        "executedQty": "0.00000000",
-        "origQuoteOrderQty": "0.00000000",
-        "cummulativeQuoteQty": "0.00000000",
-        "status": "NEW",
-        "timeInForce": "GTC",
-        "type": "LIMIT",
-        "side": "BUY",
-        "workingTime": 1763000139104,
-        "selfTradePreventionMode": "NONE"
-      },
-      {
+        "contingencyType": "OTO",
+        "listStatusType": "EXEC_STARTED",
+        "listOrderStatus": "EXECUTING",
+        "listClientOrderId": "TVbG6ymkYMXTj7tczbOsBf",
+        "transactionTime": 1763000139104,
         "symbol": "BTCUSDT",
-        "orderId": 7,
-        "orderListId": 1,
-        "clientOrderId": "kyIKnMLKQclE5FmyYgaMSo",
-        "transactTime": 1763000139104,
-        "price": "101613.00000000",
-        "executedQty": "0.00000000",
-        "origQuoteOrderQty": "0.00000000",
-        "cummulativeQuoteQty": "0.00000000",
-        "status": "PENDING_NEW",
-        "timeInForce": "IOC",
-        "type": "STOP_LOSS_LIMIT",
-        "side": "SELL",
-        "stopPrice": "10100.00000000",
-        "workingTime": -1,
-        "selfTradePreventionMode": "NONE"
-      },
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 8,
-        "orderListId": 1,
-        "clientOrderId": "i76cGJWN9J1FpADS56TtQZ",
-        "transactTime": 1763000139104,
-        "price": "104261.00000000",
-        "executedQty": "0.00000000",
-        "origQuoteOrderQty": "0.00000000",
-        "cummulativeQuoteQty": "0.00000000",
-        "status": "PENDING_NEW",
-        "timeInForce": "GTC",
-        "type": "LIMIT_MAKER",
-        "side": "SELL",
-        "workingTime": -1,
-        "selfTradePreventionMode": "NONE"
-      }
-    ]
-  }
+        "orders": [
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 6,
+                "clientOrderId": "3czuJSeyjPwV9Xo28j1Dv3"
+            },
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 7,
+                "clientOrderId": "kyIKnMLKQclE5FmyYgaMSo"
+            },
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 8,
+                "clientOrderId": "i76cGJWN9J1FpADS56TtQZ"
+            }
+        ],
+        "orderReports": [
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 6,
+                "orderListId": 1,
+                "clientOrderId": "3czuJSeyjPwV9Xo28j1Dv3",
+                "transactTime": 1763000139104,
+                "price": "102496.00000000",
+                "origQty": "0.00170000",
+                "executedQty": "0.00000000",
+                "origQuoteOrderQty": "0.00000000",
+                "cummulativeQuoteQty": "0.00000000",
+                "status": "NEW",
+                "timeInForce": "GTC",
+                "type": "LIMIT",
+                "side": "BUY",
+                "workingTime": 1763000139104,
+                "selfTradePreventionMode": "NONE"
+            },
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 7,
+                "orderListId": 1,
+                "clientOrderId": "kyIKnMLKQclE5FmyYgaMSo",
+                "transactTime": 1763000139104,
+                "price": "101613.00000000",
+                "executedQty": "0.00000000",
+                "origQuoteOrderQty": "0.00000000",
+                "cummulativeQuoteQty": "0.00000000",
+                "status": "PENDING_NEW",
+                "timeInForce": "IOC",
+                "type": "STOP_LOSS_LIMIT",
+                "side": "SELL",
+                "stopPrice": "10100.00000000",
+                "workingTime": -1,
+                "selfTradePreventionMode": "NONE"
+            },
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 8,
+                "orderListId": 1,
+                "clientOrderId": "i76cGJWN9J1FpADS56TtQZ",
+                "transactTime": 1763000139104,
+                "price": "104261.00000000",
+                "executedQty": "0.00000000",
+                "origQuoteOrderQty": "0.00000000",
+                "cummulativeQuoteQty": "0.00000000",
+                "status": "PENDING_NEW",
+                "timeInForce": "GTC",
+                "type": "LIMIT_MAKER",
+                "side": "SELL",
+                "workingTime": -1,
+                "selfTradePreventionMode": "NONE"
+            }
+        ]
+    }
 }
 ```
 
@@ -6107,15 +6060,15 @@ Place an [OPOCO](../faqs/opo.md).
 
 ```javascript
 {
-  "id": "c5899911-d3f4-47ae-8835-97da553d27d0",
-  "method": "orderList.cancel",
-  "params": {
-    "symbol": "BTCUSDT",
-    "orderListId": 1274512,
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "4973f4b2fee30bf6d45e4a973e941cc60fdd53c8dd5a25edeac96f5733c0ccee",
-    "timestamp": 1660801720210
-  }
+    "id": "c5899911-d3f4-47ae-8835-97da553d27d0",
+    "method": "orderList.cancel",
+    "params": {
+        "symbol": "BTCUSDT",
+        "orderListId": 1274512,
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "4973f4b2fee30bf6d45e4a973e941cc60fdd53c8dd5a25edeac96f5733c0ccee",
+        "timestamp": 1660801720210
+    }
 }
 ```
 
@@ -6199,75 +6152,75 @@ Matching Engine
 
 ```javascript
 {
-  "id": "c5899911-d3f4-47ae-8835-97da553d27d0",
-  "status": 200,
-  "result": {
-    "orderListId": 1274512,
-    "contingencyType": "OCO",
-    "listStatusType": "ALL_DONE",
-    "listOrderStatus": "ALL_DONE",
-    "listClientOrderId": "6023531d7edaad348f5aff",
-    "transactionTime": 1660801720215,
-    "symbol": "BTCUSDT",
-    "orders": [
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 12569138901,
-        "clientOrderId": "BqtFCj5odMoWtSqGk2X9tU"
-      },
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 12569138902,
-        "clientOrderId": "jLnZpj5enfMXTuhKB1d0us"
-      }
-    ],
-    "orderReports": [
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 12569138901,
+    "id": "c5899911-d3f4-47ae-8835-97da553d27d0",
+    "status": 200,
+    "result": {
         "orderListId": 1274512,
-        "clientOrderId": "BqtFCj5odMoWtSqGk2X9tU",
-        "transactTime": 1660801720215,
-        "price": "23410.00000000",
-        "origQty": "0.00650000",
-        "executedQty": "0.00000000",
-        "origQuoteOrderQty": "0.000000",
-        "cummulativeQuoteQty": "0.00000000",
-        "status": "CANCELED",
-        "timeInForce": "GTC",
-        "type": "STOP_LOSS_LIMIT",
-        "side": "SELL",
-        "stopPrice": "23405.00000000",
-        "selfTradePreventionMode": "NONE"
-      },
-      {
+        "contingencyType": "OCO",
+        "listStatusType": "ALL_DONE",
+        "listOrderStatus": "ALL_DONE",
+        "listClientOrderId": "6023531d7edaad348f5aff",
+        "transactionTime": 1660801720215,
         "symbol": "BTCUSDT",
-        "orderId": 12569138902,
-        "orderListId": 1274512,
-        "clientOrderId": "jLnZpj5enfMXTuhKB1d0us",
-        "transactTime": 1660801720215,
-        "price": "23420.00000000",
-        "origQty": "0.00650000",
-        "executedQty": "0.00000000",
-        "origQuoteOrderQty": "0.000000",
-        "cummulativeQuoteQty": "0.00000000",
-        "status": "CANCELED",
-        "timeInForce": "GTC",
-        "type": "LIMIT_MAKER",
-        "side": "SELL",
-        "selfTradePreventionMode": "NONE"
-      }
+        "orders": [
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 12569138901,
+                "clientOrderId": "BqtFCj5odMoWtSqGk2X9tU"
+            },
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 12569138902,
+                "clientOrderId": "jLnZpj5enfMXTuhKB1d0us"
+            }
+        ],
+        "orderReports": [
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 12569138901,
+                "orderListId": 1274512,
+                "clientOrderId": "BqtFCj5odMoWtSqGk2X9tU",
+                "transactTime": 1660801720215,
+                "price": "23410.00000000",
+                "origQty": "0.00650000",
+                "executedQty": "0.00000000",
+                "origQuoteOrderQty": "0.000000",
+                "cummulativeQuoteQty": "0.00000000",
+                "status": "CANCELED",
+                "timeInForce": "GTC",
+                "type": "STOP_LOSS_LIMIT",
+                "side": "SELL",
+                "stopPrice": "23405.00000000",
+                "selfTradePreventionMode": "NONE"
+            },
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 12569138902,
+                "orderListId": 1274512,
+                "clientOrderId": "jLnZpj5enfMXTuhKB1d0us",
+                "transactTime": 1660801720215,
+                "price": "23420.00000000",
+                "origQty": "0.00650000",
+                "executedQty": "0.00000000",
+                "origQuoteOrderQty": "0.000000",
+                "cummulativeQuoteQty": "0.00000000",
+                "status": "CANCELED",
+                "timeInForce": "GTC",
+                "type": "LIMIT_MAKER",
+                "side": "SELL",
+                "selfTradePreventionMode": "NONE"
+            }
+        ]
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
     ]
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
 }
 ```
 
@@ -6277,20 +6230,19 @@ Matching Engine
 
 ```javascript
 {
-  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
-  "method": "sor.order.place",
-  "params":
-  {
-    "symbol": "BTCUSDT",
-    "side": "BUY",
-    "type": "LIMIT",
-    "quantity": 0.5,
-    "timeInForce": "GTC",
-    "price": 31000,
-    "timestamp": 1687485436575,
-    "apiKey": "u5lgqJb97QWXWfgeV4cROuHbReSJM9rgQL0IvYcYc7BVeA5lpAqqc3a5p2OARIFk",
-    "signature": "fd301899567bc9472ce023392160cdc265ad8fcbbb67e0ea1b2af70a4b0cd9c7"
-  }
+    "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+    "method": "sor.order.place",
+    "params": {
+        "symbol": "BTCUSDT",
+        "side": "BUY",
+        "type": "LIMIT",
+        "quantity": 0.5,
+        "timeInForce": "GTC",
+        "price": 31000,
+        "timestamp": 1687485436575,
+        "apiKey": "u5lgqJb97QWXWfgeV4cROuHbReSJM9rgQL0IvYcYc7BVeA5lpAqqc3a5p2OARIFk",
+        "signature": "fd301899567bc9472ce023392160cdc265ad8fcbbb67e0ea1b2af70a4b0cd9c7"
+    }
 }
 ```
 
@@ -6336,50 +6288,50 @@ Matching Engine
 
 ```javascript
 {
-  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
-  "status": 200,
-  "result": [
-    {
-      "symbol": "BTCUSDT",
-      "orderId": 2,
-      "orderListId": -1,
-      "clientOrderId": "sBI1KM6nNtOfj5tccZSKly",
-      "transactTime": 1689149087774,
-      "price": "31000.00000000",
-      "origQty": "0.50000000",
-      "executedQty": "0.50000000",
-      "origQuoteOrderQty": "0.000000",
-      "cummulativeQuoteQty": "14000.00000000",
-      "status": "FILLED",
-      "timeInForce": "GTC",
-      "type": "LIMIT",
-      "side": "BUY",
-      "workingTime": 1689149087774,
-      "fills": [
+    "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+    "status": 200,
+    "result": [
         {
-          "matchType": "ONE_PARTY_TRADE_REPORT",
-          "price": "28000.00000000",
-          "qty": "0.50000000",
-          "commission": "0.00000000",
-          "commissionAsset": "BTC",
-          "tradeId": -1,
-          "allocId": 0
+            "symbol": "BTCUSDT",
+            "orderId": 2,
+            "orderListId": -1,
+            "clientOrderId": "sBI1KM6nNtOfj5tccZSKly",
+            "transactTime": 1689149087774,
+            "price": "31000.00000000",
+            "origQty": "0.50000000",
+            "executedQty": "0.50000000",
+            "origQuoteOrderQty": "0.000000",
+            "cummulativeQuoteQty": "14000.00000000",
+            "status": "FILLED",
+            "timeInForce": "GTC",
+            "type": "LIMIT",
+            "side": "BUY",
+            "workingTime": 1689149087774,
+            "fills": [
+                {
+                    "matchType": "ONE_PARTY_TRADE_REPORT",
+                    "price": "28000.00000000",
+                    "qty": "0.50000000",
+                    "commission": "0.00000000",
+                    "commissionAsset": "BTC",
+                    "tradeId": -1,
+                    "allocId": 0
+                }
+            ],
+            "workingFloor": "SOR",
+            "selfTradePreventionMode": "NONE",
+            "usedSor": true
         }
-      ],
-      "workingFloor": "SOR",
-      "selfTradePreventionMode": "NONE",
-      "usedSor": true
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
+    ]
 }
 ```
 
@@ -6387,20 +6339,19 @@ Matching Engine
 
 ```javascript
 {
-  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
-  "method": "sor.order.test",
-  "params":
-  {
-    "symbol": "BTCUSDT",
-    "side": "BUY",
-    "type": "LIMIT",
-    "quantity": 0.1,
-    "timeInForce": "GTC",
-    "price": 0.1,
-    "timestamp": 1687485436575,
-    "apiKey": "u5lgqJb97QWXWfgeV4cROuHbReSJM9rgQL0IvYcYc7BVeA5lpAqqc3a5p2OARIFk",
-    "signature": "fd301899567bc9472ce023392160cdc265ad8fcbbb67e0ea1b2af70a4b0cd9c7"
-  }
+    "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+    "method": "sor.order.test",
+    "params": {
+        "symbol": "BTCUSDT",
+        "side": "BUY",
+        "type": "LIMIT",
+        "quantity": 0.1,
+        "timeInForce": "GTC",
+        "price": 0.1,
+        "timestamp": 1687485436575,
+        "apiKey": "u5lgqJb97QWXWfgeV4cROuHbReSJM9rgQL0IvYcYc7BVeA5lpAqqc3a5p2OARIFk",
+        "signature": "fd301899567bc9472ce023392160cdc265ad8fcbbb67e0ea1b2af70a4b0cd9c7"
+    }
 }
 ```
 
@@ -6432,18 +6383,18 @@ Without `computeCommissionRates`:
 
 ```javascript
 {
-  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
-  "status": 200,
-  "result": {},
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 1
-    }
-  ]
+    "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+    "status": 200,
+    "result": {},
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 1
+        }
+    ]
 }
 ```
 
@@ -6451,33 +6402,33 @@ With `computeCommissionRates`:
 
 ```javascript
 {
-  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
-  "status": 200,
-  "result": {
-    "standardCommissionForOrder": {                //Commission rates for the order depending on its role (e.g. maker or taker)
-      "maker": "0.00000112",
-      "taker": "0.00000114"
+    "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+    "status": 200,
+    "result": {
+        "standardCommissionForOrder": { // Commission rates for the order depending on its role (e.g. maker or taker)
+            "maker": "0.00000112",
+            "taker": "0.00000114"
+        },
+        "taxCommissionForOrder": {      // Tax deduction rates for the order depending on its role (e.g. maker or taker)
+            "maker": "0.00000112",
+            "taker": "0.00000114"
+        },
+        "discount": {                   // Discount on standard commissions when paying in BNB.
+            "enabledForAccount": true,
+            "enabledForSymbol": true,
+            "discountAsset": "BNB",
+            "discount": "0.25"          // Standard commission is reduced by this rate when paying in BNB.
+        }
     },
-    "taxCommissionForOrder": {                     //Tax deduction rates for the order depending on its role (e.g. maker or taker)
-      "maker": "0.00000112",
-      "taker": "0.00000114"
-    },
-    "discount": {                                  //Discount on standard commissions when paying in BNB.
-      "enabledForAccount": true,
-      "enabledForSymbol": true,
-      "discountAsset": "BNB",
-      "discount": "0.25"                           //Standard commission is reduced by this rate when paying in BNB.
-    }
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 20
-    }
-  ]
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 20
+        }
+    ]
 }
 ```
 
@@ -6487,13 +6438,13 @@ With `computeCommissionRates`:
 
 ```javascript
 {
-  "id": "605a6d20-6588-4cb9-afa0-b0ab087507ba",
-  "method": "account.status",
-  "params": {
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "83303b4a136ac1371795f465808367242685a9e3a42b22edb4d977d0696eb45c",
-    "timestamp": 1660801839480
-  }
+    "id": "605a6d20-6588-4cb9-afa0-b0ab087507ba",
+    "method": "account.status",
+    "params": {
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "83303b4a136ac1371795f465808367242685a9e3a42b22edb4d977d0696eb45c",
+        "timestamp": 1660801839480
+    }
 }
 ```
 
@@ -6518,59 +6469,56 @@ Memory => Database
 **Response:**
 ```javascript
 {
-  "id": "605a6d20-6588-4cb9-afa0-b0ab087507ba",
-  "status": 200,
-  "result": {
-    "makerCommission": 15,
-    "takerCommission": 15,
-    "buyerCommission": 0,
-    "sellerCommission": 0,
-    "canTrade": true,
-    "canWithdraw": true,
-    "canDeposit": true,
-    "commissionRates": {
-      "maker": "0.00150000",
-      "taker": "0.00150000",
-      "buyer": "0.00000000",
-      "seller": "0.00000000"
+    "id": "605a6d20-6588-4cb9-afa0-b0ab087507ba",
+    "status": 200,
+    "result": {
+        "makerCommission": 15,
+        "takerCommission": 15,
+        "buyerCommission": 0,
+        "sellerCommission": 0,
+        "canTrade": true,
+        "canWithdraw": true,
+        "canDeposit": true,
+        "commissionRates": {
+            "maker": "0.00150000",
+            "taker": "0.00150000",
+            "buyer": "0.00000000",
+            "seller": "0.00000000"
+        },
+        "brokered": false,
+        "requireSelfTradePrevention": false,
+        "preventSor": false,
+        "updateTime": 1660801833000,
+        "accountType": "SPOT",
+        "balances": [
+            {
+                "asset": "BNB",
+                "free": "0.00000000",
+                "locked": "0.00000000"
+            },
+            {
+                "asset": "BTC",
+                "free": "1.3447112",
+                "locked": "0.08600000"
+            },
+            {
+                "asset": "USDT",
+                "free": "1021.21000000",
+                "locked": "0.00000000"
+            }
+        ],
+        "permissions": ["SPOT"],
+        "uid": 354937868
     },
-    "brokered": false,
-    "requireSelfTradePrevention": false,
-    "preventSor": false,
-    "updateTime": 1660801833000,
-    "accountType": "SPOT",
-    "balances": [
-      {
-        "asset": "BNB",
-        "free": "0.00000000",
-        "locked": "0.00000000"
-      },
-      {
-        "asset": "BTC",
-        "free": "1.3447112",
-        "locked": "0.08600000"
-      },
-      {
-        "asset": "USDT",
-        "free": "1021.21000000",
-        "locked": "0.00000000"
-      }
-    ],
-    "permissions": [
-      "SPOT"
-    ],
-    "uid": 354937868
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000
-,
-      "count": 20
-    }
-  ]
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 20
+        }
+    ]
 }
 ```
 
@@ -6578,15 +6526,15 @@ Memory => Database
 
 ```javascript
 {
-  "id": "aa62318a-5a97-4f3b-bdc7-640bbe33b291",
-  "method": "order.status",
-  "params": {
-    "symbol": "BTCUSDT",
-    "orderId": 12569099453,
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "2c3aab5a078ee4ea465ecd95523b77289f61476c2f238ec10c55ea6cb11a6f35",
-    "timestamp": 1660801720951
-  }
+    "id": "aa62318a-5a97-4f3b-bdc7-640bbe33b291",
+    "method": "order.status",
+    "params": {
+        "symbol": "BTCUSDT",
+        "orderId": 12569099453,
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "2c3aab5a078ee4ea465ecd95523b77289f61476c2f238ec10c55ea6cb11a6f35",
+        "timestamp": 1660801720951
+    }
 }
 ```
 
@@ -6712,14 +6660,14 @@ Memory => Database
 
 ```javascript
 {
-  "id": "55f07876-4f6f-4c47-87dc-43e5fff3f2e7",
-  "method": "openOrders.status",
-  "params": {
-    "symbol": "BTCUSDT",
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "d632b3fdb8a81dd44f82c7c901833309dd714fe508772a89b0a35b0ee0c48b89",
-    "timestamp": 1660813156812
-  }
+    "id": "55f07876-4f6f-4c47-87dc-43e5fff3f2e7",
+    "method": "openOrders.status",
+    "params": {
+        "symbol": "BTCUSDT",
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "d632b3fdb8a81dd44f82c7c901833309dd714fe508772a89b0a35b0ee0c48b89",
+        "timestamp": 1660813156812
+    }
 }
 ```
 
@@ -6762,41 +6710,41 @@ If all symbols are requested, use the `symbol` field to tell which symbol the or
 
 ```javascript
 {
-  "id": "55f07876-4f6f-4c47-87dc-43e5fff3f2e7",
-  "status": 200,
-  "result": [
-    {
-      "symbol": "BTCUSDT",
-      "orderId": 12569099453,
-      "orderListId": -1,
-      "clientOrderId": "4d96324ff9d44481926157",
-      "price": "23416.10000000",
-      "origQty": "0.00847000",
-      "executedQty": "0.00720000",
-      "cummulativeQuoteQty": "172.43931000",
-      "status": "PARTIALLY_FILLED",
-      "timeInForce": "GTC",
-      "type": "LIMIT",
-      "side": "SELL",
-      "stopPrice": "0.00000000",
-      "icebergQty": "0.00000000",
-      "time": 1660801715639,
-      "updateTime": 1660801717945,
-      "isWorking": true,
-      "workingTime": 1660801715639,
-      "origQuoteOrderQty": "0.00000000",
-      "selfTradePreventionMode": "NONE"
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 6
-    }
-  ]
+    "id": "55f07876-4f6f-4c47-87dc-43e5fff3f2e7",
+    "status": 200,
+    "result": [
+        {
+            "symbol": "BTCUSDT",
+            "orderId": 12569099453,
+            "orderListId": -1,
+            "clientOrderId": "4d96324ff9d44481926157",
+            "price": "23416.10000000",
+            "origQty": "0.00847000",
+            "executedQty": "0.00720000",
+            "cummulativeQuoteQty": "172.43931000",
+            "status": "PARTIALLY_FILLED",
+            "timeInForce": "GTC",
+            "type": "LIMIT",
+            "side": "SELL",
+            "stopPrice": "0.00000000",
+            "icebergQty": "0.00000000",
+            "time": 1660801715639,
+            "updateTime": 1660801717945,
+            "isWorking": true,
+            "workingTime": 1660801715639,
+            "origQuoteOrderQty": "0.00000000",
+            "selfTradePreventionMode": "NONE"
+        }
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 6
+        }
+    ]
 }
 ```
 
@@ -6806,17 +6754,17 @@ If all symbols are requested, use the `symbol` field to tell which symbol the or
 
 ```javascript
 {
-  "id": "734235c2-13d2-4574-be68-723e818c08f3",
-  "method": "allOrders",
-  "params": {
-    "symbol": "BTCUSDT",
-    "startTime": 1660780800000,
-    "endTime": 1660867200000,
-    "limit": 5,
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "f50a972ba7fad92842187643f6b930802d4e20bce1ba1e788e856e811577bd42",
-    "timestamp": 1661955123341
-  }
+    "id": "734235c2-13d2-4574-be68-723e818c08f3",
+    "method": "allOrders",
+    "params": {
+        "symbol": "BTCUSDT",
+        "startTime": 1660780800000,
+        "endTime": 1660867200000,
+        "limit": 5,
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "f50a972ba7fad92842187643f6b930802d4e20bce1ba1e788e856e811577bd42",
+        "timestamp": 1661955123341
+    }
 }
 ```
 
@@ -6865,43 +6813,43 @@ Note that some fields are optional and included only for orders that set them.
 
 ```javascript
 {
-  "id": "734235c2-13d2-4574-be68-723e818c08f3",
-  "status": 200,
-  "result": [
-    {
-      "symbol": "BTCUSDT",
-      "orderId": 12569099453,
-      "orderListId": -1,
-      "clientOrderId": "4d96324ff9d44481926157",
-      "price": "23416.10000000",
-      "origQty": "0.00847000",
-      "executedQty": "0.00847000",
-      "cummulativeQuoteQty": "198.33521500",
-      "status": "FILLED",
-      "timeInForce": "GTC",
-      "type": "LIMIT",
-      "side": "SELL",
-      "stopPrice": "0.00000000",
-      "icebergQty": "0.00000000",
-      "time": 1660801715639,
-      "updateTime": 1660801717945,
-      "isWorking": true,
-      "workingTime": 1660801715639,
-      "origQuoteOrderQty": "0.00000000",
-      "selfTradePreventionMode": "NONE",
-      "preventedMatchId": 0,            // This field only appears if the order expired due to STP.
-      "preventedQuantity": "1.200000"   // This field only appears if the order expired due to STP.
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 20
-    }
-  ]
+    "id": "734235c2-13d2-4574-be68-723e818c08f3",
+    "status": 200,
+    "result": [
+        {
+            "symbol": "BTCUSDT",
+            "orderId": 12569099453,
+            "orderListId": -1,
+            "clientOrderId": "4d96324ff9d44481926157",
+            "price": "23416.10000000",
+            "origQty": "0.00847000",
+            "executedQty": "0.00847000",
+            "cummulativeQuoteQty": "198.33521500",
+            "status": "FILLED",
+            "timeInForce": "GTC",
+            "type": "LIMIT",
+            "side": "SELL",
+            "stopPrice": "0.00000000",
+            "icebergQty": "0.00000000",
+            "time": 1660801715639,
+            "updateTime": 1660801717945,
+            "isWorking": true,
+            "workingTime": 1660801715639,
+            "origQuoteOrderQty": "0.00000000",
+            "selfTradePreventionMode": "NONE",
+            "preventedMatchId": 0,              // This field only appears if the order expired due to STP.
+            "preventedQuantity": "1.200000"     // This field only appears if the order expired due to STP.
+        }
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 20
+        }
+    ]
 }
 ```
 
@@ -6991,38 +6939,38 @@ Database
 
 ```javascript
 {
-  "id": "b53fd5ff-82c7-4a04-bd64-5f9dc42c2100",
-  "status": 200,
-  "result": {
-    "orderListId": 1274512,
-    "contingencyType": "OCO",
-    "listStatusType": "EXEC_STARTED",
-    "listOrderStatus": "EXECUTING",
-    "listClientOrderId": "08985fedd9ea2cf6b28996",
-    "transactionTime": 1660801713793,
-    "symbol": "BTCUSDT",
-    "orders": [
-      {
+    "id": "b53fd5ff-82c7-4a04-bd64-5f9dc42c2100",
+    "status": 200,
+    "result": {
+        "orderListId": 1274512,
+        "contingencyType": "OCO",
+        "listStatusType": "EXEC_STARTED",
+        "listOrderStatus": "EXECUTING",
+        "listClientOrderId": "08985fedd9ea2cf6b28996",
+        "transactionTime": 1660801713793,
         "symbol": "BTCUSDT",
-        "orderId": 12569138901,
-        "clientOrderId": "BqtFCj5odMoWtSqGk2X9tU"
-      },
-      {
-        "symbol": "BTCUSDT",
-        "orderId": 12569138902,
-        "clientOrderId": "jLnZpj5enfMXTuhKB1d0us"
-      }
+        "orders": [
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 12569138901,
+                "clientOrderId": "BqtFCj5odMoWtSqGk2X9tU"
+            },
+            {
+                "symbol": "BTCUSDT",
+                "orderId": 12569138902,
+                "clientOrderId": "jLnZpj5enfMXTuhKB1d0us"
+            }
+        ]
+    },
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 4
+        }
     ]
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 4
-    }
-  ]
 }
 ```
 
@@ -7030,13 +6978,13 @@ Database
 
 ```javascript
 {
-  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
-  "method": "openOrderLists.status",
-  "params": {
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "1bea8b157dd78c3da30359bddcd999e4049749fe50b828e620e12f64e8b433c9",
-    "timestamp": 1660801713831
-  }
+    "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+    "method": "openOrderLists.status",
+    "params": {
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "1bea8b157dd78c3da30359bddcd999e4049749fe50b828e620e12f64e8b433c9",
+        "timestamp": 1660801713831
+    }
 }
 ```
 
@@ -7066,40 +7014,40 @@ Database
 
 ```javascript
 {
-  "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
-  "status": 200,
-  "result": [
-    {
-      "orderListId": 0,
-      "contingencyType": "OCO",
-      "listStatusType": "EXEC_STARTED",
-      "listOrderStatus": "EXECUTING",
-      "listClientOrderId": "08985fedd9ea2cf6b28996",
-      "transactionTime": 1660801713793,
-      "symbol": "BTCUSDT",
-      "orders": [
+    "id": "3a4437e2-41a3-4c19-897c-9cadc5dce8b6",
+    "status": 200,
+    "result": [
         {
-          "symbol": "BTCUSDT",
-          "orderId": 4,
-          "clientOrderId": "CUhLgTXnX5n2c0gWiLpV4d"
-        },
-        {
-          "symbol": "BTCUSDT",
-          "orderId": 5,
-          "clientOrderId": "1ZqG7bBuYwaF4SU8CwnwHm"
+            "orderListId": 0,
+            "contingencyType": "OCO",
+            "listStatusType": "EXEC_STARTED",
+            "listOrderStatus": "EXECUTING",
+            "listClientOrderId": "08985fedd9ea2cf6b28996",
+            "transactionTime": 1660801713793,
+            "symbol": "BTCUSDT",
+            "orders": [
+                {
+                    "symbol": "BTCUSDT",
+                    "orderId": 4,
+                    "clientOrderId": "CUhLgTXnX5n2c0gWiLpV4d"
+                },
+                {
+                    "symbol": "BTCUSDT",
+                    "orderId": 5,
+                    "clientOrderId": "1ZqG7bBuYwaF4SU8CwnwHm"
+                }
+            ]
         }
-      ]
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 6
-    }
-  ]
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 6
+        }
+    ]
 }
 ```
 
@@ -7108,16 +7056,16 @@ Database
 
 ```javascript
 {
-  "id": "8617b7b3-1b3d-4dec-94cd-eefd929b8ceb",
-  "method": "allOrderLists",
-  "params": {
-    "startTime": 1660780800000,
-    "endTime": 1660867200000,
-    "limit": 5,
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "c8e1484db4a4a02d0e84dfa627eb9b8298f07ebf12fcc4eaf86e4a565b2712c2",
-    "timestamp": 1661955123341
-  }
+    "id": "8617b7b3-1b3d-4dec-94cd-eefd929b8ceb",
+    "method": "allOrderLists",
+    "params": {
+        "startTime": 1660780800000,
+        "endTime": 1660867200000,
+        "limit": 5,
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "c8e1484db4a4a02d0e84dfa627eb9b8298f07ebf12fcc4eaf86e4a565b2712c2",
+        "timestamp": 1661955123341
+    }
 }
 ```
 
@@ -7160,40 +7108,40 @@ Status reports for order lists are identical to [`orderList.status`](#query-orde
 
 ```javascript
 {
-  "id": "8617b7b3-1b3d-4dec-94cd-eefd929b8ceb",
-  "status": 200,
-  "result": [
-    {
-      "orderListId": 1274512,
-      "contingencyType": "OCO",
-      "listStatusType": "EXEC_STARTED",
-      "listOrderStatus": "EXECUTING",
-      "listClientOrderId": "08985fedd9ea2cf6b28996",
-      "transactionTime": 1660801713793,
-      "symbol": "BTCUSDT",
-      "orders": [
+    "id": "8617b7b3-1b3d-4dec-94cd-eefd929b8ceb",
+    "status": 200,
+    "result": [
         {
-          "symbol": "BTCUSDT",
-          "orderId": 12569138901,
-          "clientOrderId": "BqtFCj5odMoWtSqGk2X9tU"
-        },
-        {
-          "symbol": "BTCUSDT",
-          "orderId": 12569138902,
-          "clientOrderId": "jLnZpj5enfMXTuhKB1d0us"
+            "orderListId": 1274512,
+            "contingencyType": "OCO",
+            "listStatusType": "EXEC_STARTED",
+            "listOrderStatus": "EXECUTING",
+            "listClientOrderId": "08985fedd9ea2cf6b28996",
+            "transactionTime": 1660801713793,
+            "symbol": "BTCUSDT",
+            "orders": [
+                {
+                    "symbol": "BTCUSDT",
+                    "orderId": 12569138901,
+                    "clientOrderId": "BqtFCj5odMoWtSqGk2X9tU"
+                },
+                {
+                    "symbol": "BTCUSDT",
+                    "orderId": 12569138902,
+                    "clientOrderId": "jLnZpj5enfMXTuhKB1d0us"
+                }
+            ]
         }
-      ]
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 20
-    }
-  ]
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 20
+        }
+    ]
 }
 ```
 
@@ -7201,16 +7149,16 @@ Status reports for order lists are identical to [`orderList.status`](#query-orde
 
 ```javascript
 {
-  "id": "f4ce6a53-a29d-4f70-823b-4ab59391d6e8",
-  "method": "myTrades",
-  "params": {
-    "symbol": "BTCUSDT",
-    "startTime": 1660780800000,
-    "endTime": 1660867200000,
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "c5a5ffb79fd4f2e10a92f895d488943a57954edf5933bde3338dfb6ea6d6eefc",
-    "timestamp": 1661955125250
-  }
+    "id": "f4ce6a53-a29d-4f70-823b-4ab59391d6e8",
+    "method": "myTrades",
+    "params": {
+        "symbol": "BTCUSDT",
+        "startTime": 1660780800000,
+        "endTime": 1660867200000,
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "c5a5ffb79fd4f2e10a92f895d488943a57954edf5933bde3338dfb6ea6d6eefc",
+        "timestamp": 1661955125250
+    }
 }
 ```
 
@@ -7261,49 +7209,49 @@ Memory => Database
 
 ```javascript
 {
-  "id": "f4ce6a53-a29d-4f70-823b-4ab59391d6e8",
-  "status": 200,
-  "result": [
-    {
-      "symbol": "BTCUSDT",
-      "id": 1650422481,
-      "orderId": 12569099453,
-      "orderListId": -1,
-      "price": "23416.10000000",
-      "qty": "0.00635000",
-      "quoteQty": "148.69223500",
-      "commission": "0.00000000",
-      "commissionAsset": "BNB",
-      "time": 1660801715793,
-      "isBuyer": false,
-      "isMaker": true,
-      "isBestMatch": true
-    },
-    {
-      "symbol": "BTCUSDT",
-      "id": 1650422482,
-      "orderId": 12569099453,
-      "orderListId": -1,
-      "price": "23416.50000000",
-      "qty": "0.00212000",
-      "quoteQty": "49.64298000",
-      "commission": "0.00000000",
-      "commissionAsset": "BNB",
-      "time": 1660801715793,
-      "isBuyer": false,
-      "isMaker": true,
-      "isBestMatch": true
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 20
-    }
-  ]
+    "id": "f4ce6a53-a29d-4f70-823b-4ab59391d6e8",
+    "status": 200,
+    "result": [
+        {
+            "symbol": "BTCUSDT",
+            "id": 1650422481,
+            "orderId": 12569099453,
+            "orderListId": -1,
+            "price": "23416.10000000",
+            "qty": "0.00635000",
+            "quoteQty": "148.69223500",
+            "commission": "0.00000000",
+            "commissionAsset": "BNB",
+            "time": 1660801715793,
+            "isBuyer": false,
+            "isMaker": true,
+            "isBestMatch": true
+        },
+        {
+            "symbol": "BTCUSDT",
+            "id": 1650422482,
+            "orderId": 12569099453,
+            "orderListId": -1,
+            "price": "23416.50000000",
+            "qty": "0.00212000",
+            "quoteQty": "49.64298000",
+            "commission": "0.00000000",
+            "commissionAsset": "BNB",
+            "time": 1660801715793,
+            "isBuyer": false,
+            "isMaker": true,
+            "isBestMatch": true
+        }
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 20
+        }
+    ]
 }
 ```
 
@@ -7313,13 +7261,13 @@ Memory => Database
 
 ```javascript
 {
-  "id": "d3783d8d-f8d1-4d2c-b8a0-b7596af5a664",
-  "method": "account.rateLimits.orders",
-  "params": {
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "76289424d6e288f4dc47d167ac824e859dabf78736f4348abbbac848d719eb94",
-    "timestamp": 1660801839500
-  }
+    "id": "d3783d8d-f8d1-4d2c-b8a0-b7596af5a664",
+    "method": "account.rateLimits.orders",
+    "params": {
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "76289424d6e288f4dc47d167ac824e859dabf78736f4348abbbac848d719eb94",
+        "timestamp": 1660801839500
+    }
 }
 ```
 
@@ -7344,33 +7292,33 @@ Memory
 
 ```javascript
 {
-  "id": "d3783d8d-f8d1-4d2c-b8a0-b7596af5a664",
-  "status": 200,
-  "result": [
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 10,
-      "limit": 50,
-      "count": 0
-    },
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "DAY",
-      "intervalNum": 1,
-      "limit": 160000,
-      "count": 0
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 40
-    }
-  ]
+    "id": "d3783d8d-f8d1-4d2c-b8a0-b7596af5a664",
+    "status": 200,
+    "result": [
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "SECOND",
+            "intervalNum": 10,
+            "limit": 50,
+            "count": 0
+        },
+        {
+            "rateLimitType": "ORDERS",
+            "interval": "DAY",
+            "intervalNum": 1,
+            "limit": 160000,
+            "count": 0
+        }
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 40
+        }
+    ]
 }
 ```
 
@@ -7378,15 +7326,15 @@ Memory
 
 ```javascript
 {
-  "id": "g4ce6a53-a39d-4f71-823b-4ab5r391d6y8",
-  "method": "myPreventedMatches",
-  "params": {
-    "symbol": "BTCUSDT",
-    "orderId": 35,
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "c5a5ffb79fd4f2e10a92f895d488943a57954edf5933bde3338dfb6ea6d6eefc",
-    "timestamp": 1673923281052
-  }
+    "id": "g4ce6a53-a39d-4f71-823b-4ab5r391d6y8",
+    "method": "myPreventedMatches",
+    "params": {
+        "symbol": "BTCUSDT",
+        "orderId": 35,
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "c5a5ffb79fd4f2e10a92f895d488943a57954edf5933bde3338dfb6ea6d6eefc",
+        "timestamp": 1673923281052
+    }
 }
 ```
 
@@ -7427,31 +7375,31 @@ Database
 
 ```javascript
 {
-  "id": "g4ce6a53-a39d-4f71-823b-4ab5r391d6y8",
-  "status": 200,
-  "result": [
-    {
-      "symbol": "BTCUSDT",
-      "preventedMatchId": 1,
-      "takerOrderId": 5,
-      "makerSymbol": "BTCUSDT",
-      "makerOrderId": 3,
-      "tradeGroupId": 1,
-      "selfTradePreventionMode": "EXPIRE_MAKER",
-      "price": "1.100000",
-      "makerPreventedQuantity": "1.300000",
-      "transactTime": 1669101687094
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 20
-    }
-  ]
+    "id": "g4ce6a53-a39d-4f71-823b-4ab5r391d6y8",
+    "status": 200,
+    "result": [
+        {
+            "symbol": "BTCUSDT",
+            "preventedMatchId": 1,
+            "takerOrderId": 5,
+            "makerSymbol": "BTCUSDT",
+            "makerOrderId": 3,
+            "tradeGroupId": 1,
+            "selfTradePreventionMode": "EXPIRE_MAKER",
+            "price": "1.100000",
+            "makerPreventedQuantity": "1.300000",
+            "transactTime": 1669101687094
+        }
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 20
+        }
+    ]
 }
 ```
 
@@ -7459,15 +7407,15 @@ Database
 
 ```javascript
 {
-  "id": "g4ce6a53-a39d-4f71-823b-4ab5r391d6y8",
-  "method": "myAllocations",
-  "params": {
-    "symbol": "BTCUSDT",
-    "orderId": 500,
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "c5a5ffb79fd4f2e10a92f895d488943a57954edf5933bde3338dfb6ea6d6eefc",
-    "timestamp": 1673923281052
-  }
+    "id": "g4ce6a53-a39d-4f71-823b-4ab5r391d6y8",
+    "method": "myAllocations",
+    "params": {
+        "symbol": "BTCUSDT",
+        "orderId": 500,
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "c5a5ffb79fd4f2e10a92f895d488943a57954edf5933bde3338dfb6ea6d6eefc",
+        "timestamp": 1673923281052
+    }
 }
 ```
 
@@ -7510,35 +7458,35 @@ Database
 
 ```javascript
 {
-  "id": "g4ce6a53-a39d-4f71-823b-4ab5r391d6y8",
-  "status": 200,
-  "result": [
-    {
-      "symbol": "BTCUSDT",
-      "allocationId": 0,
-      "allocationType": "SOR",
-      "orderId": 500,
-      "orderListId": -1,
-      "price": "1.00000000",
-      "qty": "0.10000000",
-      "quoteQty": "0.10000000",
-      "commission": "0.00000000",
-      "commissionAsset": "BTC",
-      "time": 1687319487614,
-      "isBuyer": false,
-      "isMaker": false,
-      "isAllocator": false
-    }
-  ],
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 20
-    }
-  ]
+    "id": "g4ce6a53-a39d-4f71-823b-4ab5r391d6y8",
+    "status": 200,
+    "result": [
+        {
+            "symbol": "BTCUSDT",
+            "allocationId": 0,
+            "allocationType": "SOR",
+            "orderId": 500,
+            "orderListId": -1,
+            "price": "1.00000000",
+            "qty": "0.10000000",
+            "quoteQty": "0.10000000",
+            "commission": "0.00000000",
+            "commissionAsset": "BTC",
+            "time": 1687319487614,
+            "isBuyer": false,
+            "isMaker": false,
+            "isAllocator": false
+        }
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 20
+        }
+    ]
 }
 ```
 
@@ -7546,14 +7494,14 @@ Database
 
 ```javascript
 {
-  "id": "d3df8a61-98ea-4fe0-8f4e-0fcea5d418b0",
-  "method": "account.commission",
-  "params": {
-    "symbol": "BTCUSDT",
-    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-    "signature": "c5a5ffb79fd4f2e10a92f895d488943a57954edf5933bde3338dfb6ea6d6eefc",
-    "timestamp": 1673923281052
-  }
+    "id": "d3df8a61-98ea-4fe0-8f4e-0fcea5d418b0",
+    "method": "account.commission",
+    "params": {
+        "symbol": "BTCUSDT",
+        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+        "signature": "c5a5ffb79fd4f2e10a92f895d488943a57954edf5933bde3338dfb6ea6d6eefc",
+        "timestamp": 1673923281052
+    }
 }
 ```
 
@@ -7575,44 +7523,44 @@ Database
 
 ```javascript
 {
-  "id": "d3df8a61-98ea-4fe0-8f4e-0fcea5d418b0",
-  "status": 200,
-  "result": {
-    "symbol": "BTCUSDT",
-    "standardCommission": {     //Standard commission rates on trades from the order.
-      "maker": "0.00000010",
-      "taker": "0.00000020",
-      "buyer": "0.00000030",
-      "seller": "0.00000040"
+    "id": "d3df8a61-98ea-4fe0-8f4e-0fcea5d418b0",
+    "status": 200,
+    "result": {
+        "symbol": "BTCUSDT",
+        "standardCommission": {          // Standard commission rates on trades from the order.
+            "maker": "0.00000010",
+            "taker": "0.00000020",
+            "buyer": "0.00000030",
+            "seller": "0.00000040"
+        },
+        "specialCommission": {           // Special commission rates from the order.
+            "maker": "0.01000000",
+            "taker": "0.02000000",
+            "buyer": "0.03000000",
+            "seller": "0.04000000"
+        },
+        "taxCommission": {               // Tax commission rates on trades from the order.
+            "maker": "0.00000112",
+            "taker": "0.00000114",
+            "buyer": "0.00000118",
+            "seller": "0.00000116"
+        },
+        "discount": {                    // Discount on standard commissions when paying in BNB.
+            "enabledForAccount": true,
+            "enabledForSymbol": true,
+            "discountAsset": "BNB",
+            "discount": "0.75000000"     // Standard commission is reduced by this rate when paying commission in BNB.
+        }
     },
-    "specialCommission": {      // Special commission rates from the order.
-      "maker": "0.01000000",
-      "taker": "0.02000000",
-      "buyer": "0.03000000",
-      "seller": "0.04000000"
-    },
-    "taxCommission": {          //Tax commission rates on trades from the order.
-      "maker": "0.00000112",
-      "taker": "0.00000114",
-      "buyer": "0.00000118",
-      "seller": "0.00000116"
-    },
-    "discount": {                //Discount on standard commissions when paying in BNB.
-      "enabledForAccount": true,
-      "enabledForSymbol": true,
-      "discountAsset": "BNB",
-      "discount": "0.75000000"   //Standard commission is reduced by this rate when paying commission in BNB.
-    }
-  },
-  "rateLimits": [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 20
-    }
-  ]
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 20
+        }
+    ]
 }
 ```
 
@@ -7620,16 +7568,16 @@ Database
 
 ```javascript
 {
-  "id": "6f5ebe91-01d9-43ac-be99-57cf062e0e30",
-  "method": "order.amendments",
-  "params": {
-  "orderId": "23",
-  "recvWindow": 5000,
-  "symbol": "BTCUSDT",
-  "timestamp": 1741925524887,
-  "apiKey": "N3Swv7WaBF7S2rzA12UkPunM3udJiDddbgv1W7CzFGnsQXH9H62zzSCST0CndjeE",
-  "signature": "0eed2e9d95b6868ea5ec21da0d14538192ef344c30ecf9fe83d58631699334dc"
-  }
+    "id": "6f5ebe91-01d9-43ac-be99-57cf062e0e30",
+    "method": "order.amendments",
+    "params": {
+        "orderId": "23",
+        "recvWindow": 5000,
+        "symbol": "BTCUSDT",
+        "timestamp": 1741925524887,
+        "apiKey": "N3Swv7WaBF7S2rzA12UkPunM3udJiDddbgv1W7CzFGnsQXH9H62zzSCST0CndjeE",
+        "signature": "0eed2e9d95b6868ea5ec21da0d14538192ef344c30ecf9fe83d58631699334dc"
+    }
 }
 ```
 
@@ -7656,31 +7604,29 @@ Database
 
 ```javascript
 {
-  "id": "6f5ebe91-01d9-43ac-be99-57cf062e0e30",
-  "status": 200,
-  "result":
-  [
-    {
-      "symbol": "BTCUSDT",
-      "orderId": 23,
-      "executionId": 60,
-      "origClientOrderId": "my_pending_order",
-      "newClientOrderId": "xbxXh5SSwaHS7oUEOCI88B",
-      "origQty": "7.00000000",
-      "newQty": "5.00000000",
-      "time": 1741924229819
-    }
-  ],
-  "rateLimits":
-  [
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000,
-      "count": 4
-    }
-  ]
+    "id": "6f5ebe91-01d9-43ac-be99-57cf062e0e30",
+    "status": 200,
+    "result": [
+        {
+            "symbol": "BTCUSDT",
+            "orderId": 23,
+            "executionId": 60,
+            "origClientOrderId": "my_pending_order",
+            "newClientOrderId": "xbxXh5SSwaHS7oUEOCI88B",
+            "origQty": "7.00000000",
+            "newQty": "5.00000000",
+            "time": 1741924229819
+        }
+    ],
+    "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 4
+        }
+    ]
 }
 ```
 
@@ -7689,15 +7635,15 @@ Database
 
 ```javascript
 {
-  "id": "74R4febb-d142-46a2-977d-90533eb4d97g",
-  "method": "myFilters",
-  "params": {
-    "recvWindow": 5000,
-    "symbol": "BTCUSDT",
-    "timestamp": 1758008841149,
-    "apiKey": "nQ6kG5gDExDd5MZSO0MfOOWEVZmdkRllpNMfm1FjMjkMnmw1NUd3zPDfvcnDJlil",
-    "signature": "7edc54dd0493dd5bc47adbab9b17bfc9b378d55c20511ae5a168456d3d37aa3a"
-  }
+    "id": "74R4febb-d142-46a2-977d-90533eb4d97g",
+    "method": "myFilters",
+    "params": {
+        "recvWindow": 5000,
+        "symbol": "BTCUSDT",
+        "timestamp": 1758008841149,
+        "apiKey": "nQ6kG5gDExDd5MZSO0MfOOWEVZmdkRllpNMfm1FjMjkMnmw1NUd3zPDfvcnDJlil",
+        "signature": "7edc54dd0493dd5bc47adbab9b17bfc9b378d55c20511ae5a168456d3d37aa3a"
+    }
 }
 ```
 
@@ -7721,29 +7667,29 @@ Memory
 
 ```javascript
 {
-  "id": "1758009606869",
-  "status": 200,
-  "result": {
-    "exchangeFilters": [
-      {
-        "filterType": "EXCHANGE_MAX_NUM_ORDERS",
-        "maxNumOrders": 1000
-      }
-    ],
-    "symbolFilters": [
-      {
-        "filterType": "MAX_NUM_ORDER_LISTS",
-        "maxNumOrderLists": 20
-      }
-    ],
-    "assetFilters": [
-      {
-        "filterType": "MAX_ASSET",
-        "asset": "JPY",
-        "limit": "1000000.00000000"
-      }
-    ]
-  }
+    "id": "1758009606869",
+    "status": 200,
+    "result": {
+        "exchangeFilters": [
+            {
+                "filterType": "EXCHANGE_MAX_NUM_ORDERS",
+                "maxNumOrders": 1000
+            }
+        ],
+        "symbolFilters": [
+            {
+                "filterType": "MAX_NUM_ORDER_LISTS",
+                "maxNumOrderLists": 20
+            }
+        ],
+        "assetFilters": [
+            {
+                "filterType": "MAX_ASSET",
+                "asset": "JPY",
+                "limit": "1000000.00000000"
+            }
+        ]
+    }
 }
 ```
 
@@ -7778,8 +7724,8 @@ Memory
 
 ```javascript
 {
-  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
-  "method": "userDataStream.subscribe"
+    "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+    "method": "userDataStream.subscribe"
 }
 ```
 
@@ -7803,11 +7749,11 @@ NONE
 
 ```javascript
 {
-  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
-  "status": 200,
-  "result": {
-    "subscriptionId": 0
-  }
+    "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+    "status": 200,
+    "result": {
+        "subscriptionId": 0
+    }
 }
 ```
 
@@ -7815,14 +7761,14 @@ NONE
 
 ```javascript
 {
-  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
-  "method": "userDataStream.unsubscribe"
+    "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+    "method": "userDataStream.unsubscribe"
 }
 ```
 
 Stop listening to the User Data Stream in the current WebSocket connection.
 
-Note that `session.logout` will only close the subscription created with `userdataStream.subscribe` but not subscriptions opened with `userDataStream.subscribe.signature`.
+Note that `session.logout` will only close the subscription created with `userDataStream.subscribe` but not subscriptions opened with `userDataStream.subscribe.signature`.
 
 **Weight**:
 2
@@ -7837,9 +7783,9 @@ Note that `session.logout` will only close the subscription created with `userda
 
 ```javascript
 {
-  "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
-  "status": 200,
-  "result": {}
+    "id": "d3df8a21-98ea-4fe0-8f4e-0fcea5d418b7",
+    "status": 200,
+    "result": {}
 }
 ```
 
@@ -7849,9 +7795,9 @@ Note that `session.logout` will only close the subscription created with `userda
 
 ```javascript
 {
-  "id": "d3df5a22-88ea-4fe0-9f4e-0fcea5d418b7",
-  "method": "session.subscriptions",
-  "params": {}
+    "id": "d3df5a22-88ea-4fe0-9f4e-0fcea5d418b7",
+    "method": "session.subscriptions",
+    "params": {}
 }
 ```
 
@@ -7867,16 +7813,16 @@ Note that `session.logout` will only close the subscription created with `userda
 
 ```javascript
 {
-  "id": "d3df5a22-88ea-4fe0-9f4e-0fcea5d418b7",
-  "status": 200,
-  "result": [
-    {
-      "subscriptionId": 0
-    },
-    {
-      "subscriptionId": 1
-    }
-  ]
+    "id": "d3df5a22-88ea-4fe0-9f4e-0fcea5d418b7",
+    "status": 200,
+    "result": [
+        {
+            "subscriptionId": 0
+        },
+        {
+            "subscriptionId": 1
+        }
+    ]
 }
 ```
 
@@ -7886,13 +7832,13 @@ Note that `session.logout` will only close the subscription created with `userda
 
 ```javascript
 {
-  "id": "d3df8a22-98ea-4fe0-9f4e-0fcea5d418b7",
-  "method": "userDataStream.subscribe.signature",
-  "params": {
-    "apiKey": "mjcKCrJzTU6TChLsnPmgnQJJMR616J4yWvdZWDUeXkk6vL6dLyS7rcVOQlADlVjA",
-    "timestamp": 1747385641636,
-    "signature": "yN1vWpXb+qoZ3/dGiFs9vmpNdV7e3FxkA+BstzbezDKwObcijvk/CVkWxIwMCtCJbP270R0OempYwEpS6rDZCQ=="
-  }
+    "id": "d3df8a22-98ea-4fe0-9f4e-0fcea5d418b7",
+    "method": "userDataStream.subscribe.signature",
+    "params": {
+        "apiKey": "mjcKCrJzTU6TChLsnPmgnQJJMR616J4yWvdZWDUeXkk6vL6dLyS7rcVOQlADlVjA",
+        "timestamp": 1747385641636,
+        "signature": "yN1vWpXb+qoZ3/dGiFs9vmpNdV7e3FxkA+BstzbezDKwObcijvk/CVkWxIwMCtCJbP270R0OempYwEpS6rDZCQ=="
+    }
 }
 ```
 
@@ -7913,10 +7859,10 @@ Note that `session.logout` will only close the subscription created with `userda
 
 ```javascript
 {
-  "id": "d3df8a22-98ea-4fe0-9f4e-0fcea5d418b7",
-  "status": 200,
-  "result": {
-    "subscriptionId": 0
-  }
+    "id": "d3df8a22-98ea-4fe0-9f4e-0fcea5d418b7",
+    "status": 200,
+    "result": {
+        "subscriptionId": 0
+    }
 }
 ```
