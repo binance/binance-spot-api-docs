@@ -1,6 +1,12 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-01-21**
+**Last Updated: 2026-01-26**
+
+### 2026-01-26
+
+* Added undocumented `recvWindow` to `userDataStream.subscribe.signature`.
+
+---
 
 ### 2026-01-21
 

@@ -1,9 +1,15 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-01-21**
+**Last Updated: 2026-01-26**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-01-26
+
+* Added undocumented `recvWindow` to `userDataStream.subscribe.signature`.
+
+---
 
 ### 2026-01-21
 

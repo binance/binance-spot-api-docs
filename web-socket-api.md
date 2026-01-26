@@ -8048,6 +8048,7 @@ Memory
 | `apiKey` | STRING | Yes |  |
 | `timestamp` | LONG | Yes |  |
 | `signature` | STRING | Yes |  |
+|`recvWindow `|DECIMAL | No|
 
 **Data Source:**
 Memory

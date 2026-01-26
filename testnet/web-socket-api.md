@@ -7852,6 +7852,7 @@ Note that `session.logout` will only close the subscription created with `userDa
 | `apiKey` | STRING | Yes |  |
 | `timestamp` | LONG | Yes |  |
 | `signature` | STRING | Yes |  |
+|`recvWindow `|DECIMAL | No|
 
 **Data Source:** Memory
 

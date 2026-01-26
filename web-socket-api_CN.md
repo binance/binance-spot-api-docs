@@ -7924,6 +7924,7 @@ timestamp  | LONG   | YES     |
 | `apiKey`        | STRING  | Yes    |
 | `timestamp`     | LONG    | Yes    |
 | `signature`     | STRING  | Yes    |
+| `recvWindow `   |DECIMAL     | No|
 
 **数据源:**
 缓存
