@@ -1,9 +1,16 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-01-26**
+**Last Updated: 2026-01-27**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-01-27
+
+* [ICEBERG_PARTS](https://developers.binance.com/docs/binance-spot-api-docs/testnet/filters#iceberg_parts) will be increased to 50 for all symbols today.
+
+---
+
 
 ### 2026-01-26
 
