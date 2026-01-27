@@ -1,6 +1,14 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-01-26**
+**Last Updated: 2026-01-27**
+
+### 2026-01-27
+
+**Notice: The following changes will occur at 2026-02-11 7:00 UTC**:
+
+* [ICEBERG_PARTS](https://developers.binance.com/docs/binance-spot-api-docs/filters#iceberg_parts) will be increased to 50 for all symbols.
+
+---
 
 ### 2026-01-26
 
