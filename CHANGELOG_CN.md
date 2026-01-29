@@ -1,6 +1,13 @@
 # 更新日志
 
-**最近更新： 2026-01-26**
+**最近更新： 2026-01-29**
+
+### 2026-01-29
+
+* [模拟交易](./demo-mode/general-info_CN.md) 现已开放。
+* 有关现货模拟交易环境因维护而不可用的时间信息，请参阅 [模拟交易更新日志](./demo-mode/CHANGELOG_CN.md)。
+
+---
 
 ### 2026-01-27
 
@@ -31,7 +38,6 @@
 - `userDataStream.start`
 - `userDataStream.ping`
 - `userDataStream.stop`
-
 
 ---
 

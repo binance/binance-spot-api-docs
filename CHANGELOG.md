@@ -1,6 +1,13 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-01-27**
+**Last Updated: 2026-01-29**
+
+### 2026-01-29
+
+* [Demo Mode](./demo-mode/general-info.md) is now available.
+* For information on when the Spot Demo Mode environment will be unavailable due to maintenance, please refer to the [Demo Mode Changelog](./demo-mode/CHANGELOG.md)
+
+---
 
 ### 2026-01-27
 
