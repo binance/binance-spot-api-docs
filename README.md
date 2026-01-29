@@ -18,6 +18,7 @@ Name | Description
 [sbe_schemas](./sbe/schemas/)   | Spot Simple Binary Encoding (SBE) schemas
 [testnet](./testnet/)           | API docs for features available only on SPOT Testnet
 &#x0020; |
+[demo-mode](./demo-mode/) | Page regarding Demo Mode
 [Margin Trading](https://developers.binance.com/docs/margin_trading) | Details on Margin Trading
 [Derivative UM Futures](https://developers.binance.com/docs/derivatives/usds-margined-futures/general-info) | Details on Derivative UM Futures (`/fapi`)
 [Derivative CM Futures](https://developers.binance.com/docs/derivatives/coin-margined-futures/general-info) | Details on Derivative CM Futures (`/dapi`)
