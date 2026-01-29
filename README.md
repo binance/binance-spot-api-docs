@@ -17,8 +17,8 @@ Name | Description
 [user-data-stream.md](./user-data-stream.md)      | Spot User Data WebSocket streams
 [sbe_schemas](./sbe/schemas/)   | Spot Simple Binary Encoding (SBE) schemas
 [testnet](./testnet/)           | API docs for features available only on SPOT Testnet
-&#x0020; |
 [demo-mode](./demo-mode/) | Page regarding Demo Mode
+ &#x0020; |
 [Margin Trading](https://developers.binance.com/docs/margin_trading) | Details on Margin Trading
 [Derivative UM Futures](https://developers.binance.com/docs/derivatives/usds-margined-futures/general-info) | Details on Derivative UM Futures (`/fapi`)
 [Derivative CM Futures](https://developers.binance.com/docs/derivatives/coin-margined-futures/general-info) | Details on Derivative CM Futures (`/dapi`)
@@ -60,7 +60,6 @@ Name | Description
 [order_amend_keep_priority](./faqs/order_amend_keep_priority.md) | Detailed Information on the behavior of Order Amend Keep Priority
 [pegged_orders](./faqs/pegged_orders.md) | Detailed Information on Pegged Orders
 [sbe_faq](./faqs/sbe_faq.md) | Information on the implementation of Simple Binary Encoding (SBE) on the API
-[testnet](./faqs/testnet.md) | Information on SPOT Testnet
 
 ### Change log
 

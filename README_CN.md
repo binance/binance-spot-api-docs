@@ -18,6 +18,8 @@
 [sbe-market-data-streams_CN.md](./sbe-market-data-streams_CN.md)|SBE 市场数据流
 [user-data-stream_CN.md](./user-data-stream_CN.md)     | 现货用户数据流接口的描述
 [sbe_schemas](./sbe/schemas/) | 现货API的简单二进制编码 (SBE)模式 (Schema)
+[testnet](./testnet) | 仅在现货测试网中可用的 API 文档
+[demo-mode](./demo-mode) | 关于模拟交易的描述
 &#x0020; |
 [Margin Trading](https://developers.binance.com/docs/zh-CN/margin_trading/Introduction) | 关于杠杆交易的描述
 [Derivative UM Futures](https://developers.binance.com/docs/zh-CN/derivatives/usds-margined-futures/general-info) | 关于U本位合约相关接口的描述 (`/fapi`)
