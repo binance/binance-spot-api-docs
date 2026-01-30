@@ -7924,7 +7924,8 @@ timestamp  | LONG   | YES     |
 | `apiKey`        | STRING  | Yes    |
 | `timestamp`     | LONG    | Yes    |
 | `signature`     | STRING  | Yes    |
-| `recvWindow `   |DECIMAL     | No|
+| `recvWindow`   |DECIMAL     | No| 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。|
+
 
 **数据源:**
 缓存
