@@ -1085,7 +1085,7 @@ Your connection is about to be closed. Please reconnect.
 
 #### InstrumentListRequest<code>&lt;x&gt;</code>
 
-由客户端发送以查询有关有效的交易对（即具有处于可交易的交易对）的信息。如果用于未激活的交易对，将以[REJECT`<3>`](#reject)进行响应。
+由客户端发送，用于查询有关交易对的信息。
 
 | Tag | Name                      | Type   | Required | Description                                                                        |
 |-----|---------------------------|--------|----------|------------------------------------------------------------------------------------|

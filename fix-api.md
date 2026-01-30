@@ -1161,7 +1161,7 @@ Sent by the server in response to [LimitQuery`<XLQ>`](#limitquery).
 
 #### InstrumentListRequest `<x>`
 
-Sent by the client to query information about active instruments (i.e., those that have the TRADING status). If used for an inactive instrument, it will be responded to with a [Reject`<3>`](#reject).
+Sent by the client to query information about instruments.
 
 | Tag | Name                      | Type   | Required | Description                                                                        |
 |-----|---------------------------|--------|----------|------------------------------------------------------------------------------------|
