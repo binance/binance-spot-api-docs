@@ -18,18 +18,20 @@
 
 ### FIX API 订单接入会话
 
-- 端点为：`tcp+tls：//fix-oe.binance.com：9000`
-- 支持下单，取消订单和查询当前限制使用情况。
-- 支持接收账户的所有 [ExecutionReport`<8>`](#executionreport) 和 [List Status`<N>`](#liststatus)。
-- 仅允许带有 `FIX_API` 的 API Key 连接。
-- 关于 QuickFIX 模式文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
+* 端点为：`tcp+tls：//fix-oe.binance.com：9000`
+* 支持下单，取消订单和查询当前限制使用情况。
+* 支持接收账户的所有 [ExecutionReport`<8>`](#executionreport) 和 [List Status`<N>`](#liststatus)。
+* 仅允许带有 `FIX_API` 的 API Key 连接。
+* 关于 QuickFIX 模式文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
 
+<a id="fix-api-drop-copy-sessions"></a>
 ### FIX API Drop Copy 会话
 
-- 端点为：`tcp+tls://fix-dc.binance.com:9000`
-- 支持接收账户的所有 [ExecutionReport`<8>`](#executionreport) 和 [List Status`<N>`](#liststatus)。
-- 仅允许连接带有 `FIX_API` 或 `FIX_API_READ_ONLY` 的 API Key。
-- 关于 QuickFIX 模式文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
+* 端点为：`tcp+tls://fix-dc.binance.com:9000`
+* 支持接收账户的所有 [ExecutionReport`<8>`](#executionreport) 和 [List Status`<N>`](#liststatus)。
+* 仅允许连接带有 `FIX_API` 或 `FIX_API_READ_ONLY` 的 API Key。
+* 关于 QuickFIX 模式文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
+* Drop Copy 会话中的数据存在 1 秒的延迟。
 
 ### FIX API Market Data 会话
 

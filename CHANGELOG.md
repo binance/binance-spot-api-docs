@@ -1,6 +1,12 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-01-29**
+**Last Updated: 2026-02-02**
+
+### 2026-02-02
+
+* Documented that [FIX Drop Copy session](fix-api.md#fix-api-drop-copy-sessions) data is delayed by 1 second. This has been the delay since the inception of the FIX API.
+
+---
 
 ### 2026-01-29
 
