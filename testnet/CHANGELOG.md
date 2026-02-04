@@ -1,9 +1,21 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-02-02**
+**Last Updated: 2026-02-04**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-02-04
+
+**Data reset**
+
+All data on the Spot Test Network will be deleted today according to the periodic reset procedure. See [F.A.Q.](../faqs/testnet.md#faq-periodic-reset) for more details.
+
+REST and WebSocket API:
+
+* Reminder that SBE 3:0 schema will be retired on 2026-02-06, [6 months after being deprecated](../faqs/sbe_faq.md#regarding-legacy-support).
+
+---
 
 ### 2026-02-02
 
