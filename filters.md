@@ -1,6 +1,6 @@
 # Filters
 Filters define trading rules on a symbol or an exchange.
-Filters come in two forms: `symbol filters` and `exchange filters`.
+Filters come in three forms: `symbol filters`, `exchange filters` and `asset filters`.
 
 ## Symbol filters
 ### PRICE_FILTER
@@ -45,8 +45,8 @@ In order to pass the `percent price`, the following must be true for `price`:
 ```
 
 ### PERCENT_PRICE_BY_SIDE
-The `PERCENT_PRICE_BY_SIDE` filter defines the valid range for the price based on the average of the previous trades.<br>
-`avgPriceMins` is the number of minutes the average price is calculated over. 0 means the last price is used. <br>
+The `PERCENT_PRICE_BY_SIDE` filter defines the valid range for the price based on the average of the previous trades.<br/>
+`avgPriceMins` is the number of minutes the average price is calculated over. 0 means the last price is used. <br/>
 There is a different range depending on whether the order is placed on the `BUY` side or the `SELL` side.
 
 Buy orders will succeed on this filter if:
@@ -81,7 +81,7 @@ In order to pass the `lot size`, the following must be true for `quantity`/`iceb
 
 * `quantity` >= `minQty`
 * `quantity` <= `maxQty`
-* (`quantity`-`minQty`) % `stepSize` == 0
+* `quantity` % `stepSize` == 0
 
 **/exchangeInfo format:**
 ```javascript
@@ -112,8 +112,8 @@ Since `MARKET` orders have no price, the average price is used over the last `av
 ```
 
 ### NOTIONAL
-The `NOTIONAL` filter defines the acceptable notional range allowed for an order on a symbol. <br><br>
-`applyMinToMarket` determines whether the `minNotional` will be applied to `MARKET` orders. <br>
+The `NOTIONAL` filter defines the acceptable notional range allowed for an order on a symbol. <br/><br/>
+`applyMinToMarket` determines whether the `minNotional` will be applied to `MARKET` orders. <br/>
 `applyMaxToMarket` determines whether the `maxNotional` will be applied to `MARKET` orders.
 
 In order to pass this filter, the notional (`price * quantity`) has to pass the following conditions:
@@ -121,7 +121,7 @@ In order to pass this filter, the notional (`price * quantity`) has to pass the 
 * `price * quantity` <= `maxNotional`
 * `price * quantity` >= `minNotional`
 
-For `MARKET` orders, the average price used over the last `avgPriceMins` minutes will be used for calculation. <br>
+For `MARKET` orders, the average price used over the last `avgPriceMins` minutes will be used for calculation. <br/>
 If the `avgPriceMins` is 0, then the last price will be used.
 
 **/exchangeInfo format:**
@@ -158,7 +158,7 @@ In order to pass the `market lot size`, the following must be true for `quantity
 
 * `quantity` >= `minQty`
 * `quantity` <= `maxQty`
-* (`quantity`-`minQty`) % `stepSize` == 0
+* `quantity` % `stepSize` == 0
 
 **/exchangeInfo format:**
 ```javascript
@@ -206,7 +206,7 @@ An `ICEBERG` order is any order where the `icebergQty` is > 0.
 }
 ```
 
-### MAX_POSITION 
+### MAX_POSITION
 
 The `MAX_POSITION` filter defines the allowed maximum position an account can have on the base asset of a symbol. An account's position defined as the sum of the account's:
 1. free balance of the base asset
@@ -227,14 +227,14 @@ If an order's `quantity` can cause the position to overflow, this will also fail
 
 ### TRAILING_DELTA
 
-The `TRAILING_DELTA` filter defines the minimum and maximum value for the parameter `trailingDelta`.
+The `TRAILING_DELTA` filter defines the minimum and maximum value for the parameter [`trailingDelta`](faqs/trailing-stop-faq.md).
 
 In order for a trailing stop order to pass this filter, the following must be true:
 
-For `STOP_LOSS BUY`, `STOP_LOSS_LIMIT_BUY`,`TAKE_PROFIT SELL` and `TAKE_PROFIT_LIMIT SELL` orders: 
+For `STOP_LOSS BUY`, `STOP_LOSS_LIMIT_BUY`,`TAKE_PROFIT SELL` and `TAKE_PROFIT_LIMIT SELL` orders:
 
 * `trailingDelta` >= `minTrailingAboveDelta`
-* `trailingDelta` <= `maxTrailingAboveDelta` 
+* `trailingDelta` <= `maxTrailingAboveDelta`
 
 For `STOP_LOSS SELL`, `STOP_LOSS_LIMIT SELL`, `TAKE_PROFIT BUY`, and `TAKE_PROFIT_LIMIT BUY` orders:
 
@@ -252,6 +252,34 @@ For `STOP_LOSS SELL`, `STOP_LOSS_LIMIT SELL`, `TAKE_PROFIT BUY`, and `TAKE_PROFI
           "minTrailingBelowDelta": 10,
           "maxTrailingBelowDelta": 2000
    }
+```
+
+### MAX_NUM_ORDER_AMENDS
+
+The `MAX_NUM_ORDER_AMENDS` filter defines the maximum number of times an order can be amended on the given symbol.
+
+If there are too many order amendments made on a single order, you will receive the `-2038` error code.
+
+**/exchangeInfo format:**
+
+```javascript
+        {
+          "filterType": "MAX_NUM_ORDER_AMENDS",
+          "maxNumOrderAmends": 10
+        }
+```
+
+### MAX_NUM_ORDER_LISTS
+
+The `MAX_NUM_ORDER_LISTS` filter defines the maximum number of open order lists an account can have on a symbol. Note that OTOCOs count as one order list.
+
+**/exchangeInfo format:**
+
+```javascript
+        {
+          "filterType": "MAX_NUM_ORDER_LISTS",
+          "maxNumOrderLists": 20
+        }
 ```
 
 
@@ -289,4 +317,39 @@ The `EXCHANGE_MAX_NUM_ICEBERG_ORDERS` filter defines the maximum number of icebe
   "filterType": "EXCHANGE_MAX_NUM_ICEBERG_ORDERS",
   "maxNumIcebergOrders": 10000
 }
+```
+
+### EXCHANGE_MAX_NUM_ORDER_LISTS
+
+The `EXCHANGE_MAX_NUM_ORDERS` filter defines the maximum number of order lists an account is allowed to have open on the exchange. Note that OTOCOs count as one order list.
+
+**/exchangeInfo format:**
+
+```javascript
+   {
+      "filterType": "EXCHANGE_MAX_NUM_ORDER_LISTS",
+      "maxNumOrderLists": 20
+    }
+```
+
+
+## Asset Filters
+### MAX_ASSET
+
+The `MAX_ASSET` filter defines the maximum quantity of an asset that an account is allowed to transact in a single order.
+
+* When the asset is a symbol's base asset, the limit applies to the order's quantity.
+* When the asset is a symbol's quote asset, the limit applies to the order's notional value.
+* For example, a MAX_ASSET filter for USDC applies to all symbols that have USDC as either a base or quote asset, such as:
+  * USDCBNB
+  * BNBUSDC
+
+**/myFilters format:**
+
+```javascript
+   {
+      "filterType": "MAX_ASSET",
+      "asset": "USDC",
+      "limit": "42.00000000"
+    }
 ```

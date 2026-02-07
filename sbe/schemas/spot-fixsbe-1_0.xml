@@ -1,0 +1,815 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbe:messageSchema xmlns:mbx="https://developers.binance.com/docs/binance-spot-api-docs"
+                   xmlns:sbe="http://fixprotocol.io/2016/sbe"
+                   xmlns:xi="http://www.w3.org/2001/XInclude"
+                   package="fix_sbe"
+                   id="1"
+                   version="0"
+                   semanticVersion="5.2"
+                   description="Spot FIX API SBE message schema"
+                   byteOrder="littleEndian">
+    <types>
+        <composite name="sofh" description="Simple Open Framing Header">
+            <!--
+              Notes:
+              * Both of these SOFH fields are encoded as little-endian
+              * The "messageLength" field accounts for the length of the SOFH header, per the SOFH spec
+              * Only the little-endian (0xEB50) encoding type is supported for "encodingType"
+            -->
+            <type name="messageLength" primitiveType="uint32"/>
+            <type name="encodingType" primitiveType="uint16"/>
+        </composite>
+
+        <composite name="messageHeader" description="Template ID and length of message root">
+            <type name="blockLength" primitiveType="uint16"/>
+            <type name="templateId" primitiveType="uint16"/>
+            <type name="schemaId" primitiveType="uint16"/>
+            <type name="version" primitiveType="uint16"/>
+            <type name="seqNum" primitiveType="uint32"/>
+            <ref name="sendingTime" type="utcTimestampUs"/>
+        </composite>
+
+        <composite name="groupSize32Encoding" description="Repeating group dimensions.">
+            <type name="blockLength" primitiveType="uint16"/>
+            <type name="numInGroup" primitiveType="uint32" maxValue="2147483647"/>
+        </composite>
+
+        <composite name="smallGroupSize16Encoding" description="Repeating group dimensions.">
+            <type name="blockLength" primitiveType="uint8"/>
+            <type name="numInGroup" primitiveType="uint16"/>
+        </composite>
+
+        <composite name="groupSize16Encoding" description="Repeating group dimensions.">
+            <type name="blockLength" primitiveType="uint16"/>
+            <type name="numInGroup" primitiveType="uint16"/>
+        </composite>
+
+        <composite name="smallGroupSize8Encoding" description="Repeating group dimensions.">
+            <type name="blockLength" primitiveType="uint8"/>
+            <type name="numInGroup" primitiveType="uint8"/>
+        </composite>
+
+        <composite name="groupSize8Encoding" description="Repeating group dimensions.">
+            <type name="blockLength" primitiveType="uint16"/>
+            <type name="numInGroup" primitiveType="uint8"/>
+        </composite>
+
+        <composite name="varString" description="Variable length UTF-8 string.">
+            <type name="length" primitiveType="uint16"/>
+            <type name="varData" length="0" primitiveType="uint8" characterEncoding="UTF-8"/>
+        </composite>
+
+        <composite name="varString8" description="Variable length UTF-8 string.">
+            <type name="length" primitiveType="uint8"/>
+            <type name="varData" length="0" primitiveType="uint8" characterEncoding="UTF-8"/>
+        </composite>
+
+        <composite name="optionalVarString" description="Variable length UTF-8 string where an empty string means null.">
+            <type name="length" primitiveType="uint16"/>
+            <type name="varData" length="0" primitiveType="uint8" characterEncoding="UTF-8"/>
+        </composite>
+
+        <composite name="optionalVarString8" description="Variable length UTF-8 string where an empty string means null.">
+            <type name="length" primitiveType="uint8"/>
+            <type name="varData" length="0" primitiveType="uint8" characterEncoding="UTF-8"/>
+        </composite>
+
+        <type name="mantissa64" primitiveType="int64" description="
+            64-bit mantissa for a decimal floating point number. The name of
+            the field containing the exponent value is specified in the
+            mbx:exponent attribute of the mantissa64 field. The exponent field
+            will always precede the mantissa field."
+        />
+        <type name="exponent8" primitiveType="int8" description="
+            Exponent for a decimal floating point number."
+        />
+
+        <type name="allocId" primitiveType="int64"/>
+        <type name="durationUs" primitiveType="uint32" description="Duration in microseconds"/>
+        <type name="executionId" primitiveType="int64"/>
+        <type name="ordId" primitiveType="int64"/>
+        <type name="ordListId" primitiveType="int64"/>
+        <type name="preventedMatchId" primitiveType="int64"/>
+        <type name="tradeId" primitiveType="int64"/>
+        <type name="tradeGroupId" primitiveType="int64"/>
+        <type name="utcTimestampUs" primitiveType="int64" description="UTC timestamp in microseconds" semanticType="UTCTimestamp"/>
+
+        <enum name="boolEnum" encodingType="uint8">
+            <validValue name="False">0</validValue>
+            <validValue name="True">1</validValue>
+        </enum>
+
+        <enum name="cancelRestrictions" encodingType="uint8">
+            <validValue name="OnlyNew">1</validValue>
+            <validValue name="OnlyPartiallyFilled">2</validValue>
+            <validValue name="NonRepresentable">254</validValue>
+        </enum>
+
+        <enum name="contingencyType" encodingType="uint8">
+            <validValue name="OneCancelsTheOther">1</validValue>
+            <validValue name="OneTriggersTheOther">2</validValue>
+            <validValue name="NonRepresentable">254</validValue>
+        </enum>
+
+        <enum name="cxlRejResponseTo" encodingType="char">
+            <validValue name="OrderCancelRequest">1</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="execInst" encodingType="char">
+            <validValue name="ParticipateDontInitiate">6</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="executionReportType" encodingType="uint8">
+            <validValue name="Full">1</validValue>
+            <!-- Send "ExecutionReportAck" instead of "ExecutionReport" when "OnlyAcks" is used. -->
+            <validValue name="Mini">2</validValue>
+            <validValue name="NonRepresentable">254</validValue>
+        </enum>
+
+        <enum name="execType" encodingType="char">
+            <validValue name="New">0</validValue>
+            <validValue name="Canceled">4</validValue>
+            <validValue name="Replaced">5</validValue>
+            <validValue name="Rejected">8</validValue>
+            <validValue name="Trade">F</validValue>
+            <validValue name="Expired">C</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="instrumentListRequestType" encodingType="uint8">
+            <validValue name="SingleInstrument">0</validValue>
+            <validValue name="AllInstruments">4</validValue>
+            <validValue name="NonRepresentable">254</validValue>
+        </enum>
+
+        <enum name="limitResetIntervalResolution" encodingType="char">
+            <validValue name="Second">s</validValue>
+            <validValue name="Minute">m</validValue>
+            <validValue name="Hour">h</validValue>
+            <validValue name="Day">d</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="limitType" encodingType="char">
+            <validValue name="OrderLimit">1</validValue>
+            <validValue name="MessageLimit">2</validValue>
+            <validValue name="SubscriptionLimit">3</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="listOrderStatus" encodingType="uint8">
+            <validValue name="Executing">3</validValue>
+            <validValue name="AllDone">6</validValue>
+            <validValue name="Reject">7</validValue>
+            <validValue name="NonRepresentable">254</validValue>
+        </enum>
+
+        <enum name="listRejectReason" encodingType="uint8">
+            <validValue name="Other">99</validValue>
+            <validValue name="NonRepresentable">254</validValue>
+        </enum>
+
+        <enum name="listStatusType" encodingType="uint8">
+            <validValue name="Response">2</validValue>
+            <validValue name="ExecStarted">4</validValue>
+            <validValue name="AllDone">5</validValue>
+            <validValue name="Updated">100</validValue>
+            <validValue name="NonRepresentable">254</validValue>
+        </enum>
+
+        <enum name="listTriggerAction" encodingType="char">
+            <validValue name="Release">1</validValue>
+            <validValue name="Cancel">2</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="listTriggerType" encodingType="char">
+            <validValue name="Activated">1</validValue>
+            <validValue name="PartiallyFilled">2</validValue>
+            <validValue name="Filled">3</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="massCancelRejectReason" encodingType="uint8">
+            <validValue name="Other">99</validValue>
+            <validValue name="NonRepresentable">254</validValue>
+        </enum>
+
+        <enum name="massCancelRequestType" encodingType="char">
+            <validValue name="CancelSymbolOrders">1</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="massCancelResponse" encodingType="char">
+            <validValue name="CancelRequestRejected">0</validValue>
+            <validValue name="CancelSymbolOrders">1</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="matchType" encodingType="char">
+            <validValue name="OnePartyTradeReport">1</validValue>
+            <validValue name="AutoMatch">4</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="mdEntryType" encodingType="char">
+            <validValue name="Bid">0</validValue>
+            <validValue name="Offer">1</validValue>
+            <validValue name="Trade">2</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="mdReqRejReason" encodingType="char">
+            <validValue name="DuplicateMdReqID">1</validValue>
+            <validValue name="TooManySubscriptions">2</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="messageHandling" encodingType="uint8">
+            <validValue name="Unordered">1</validValue>
+            <validValue name="Sequential">2</validValue>
+            <validValue name="NonRepresentable">254</validValue>
+        </enum>
+
+        <enum name="miscFeeType" encodingType="uint8">
+            <validValue name="ExchangeFees">4</validValue>
+            <validValue name="NonRepresentable">254</validValue>
+        </enum>
+
+        <enum name="orderCapacity" encodingType="char">
+            <validValue name="Agency">A</validValue>
+            <validValue name="Principal">P</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="ordRejReason" encodingType="uint8">
+            <validValue name="Other">99</validValue>
+            <validValue name="NonRepresentable">254</validValue>
+        </enum>
+
+        <enum name="ordStatus" encodingType="char">
+            <validValue name="New">0</validValue>
+            <validValue name="PartiallyFilled">1</validValue>
+            <validValue name="Filled">2</validValue>
+            <validValue name="Canceled">4</validValue>
+            <validValue name="PendingCancel">6</validValue>
+            <validValue name="Rejected">8</validValue>
+            <validValue name="PendingNew">A</validValue>
+            <validValue name="Expired">C</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="ordType" encodingType="char">
+            <validValue name="Market">1</validValue>
+            <validValue name="Limit">2</validValue>
+            <validValue name="Stop">3</validValue>
+            <validValue name="StopLimit">4</validValue>
+            <validValue name="Pegged">P</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="orderCancelRequestAndNewOrderSingleMode" encodingType="uint8">
+            <validValue name="StopOnFailure">1</validValue>
+            <validValue name="AllowFailure">2</validValue>
+            <validValue name="NonRepresentable">254</validValue>
+        </enum>
+
+        <enum name="orderRateLimitExceededMode" encodingType="uint8">
+            <validValue name="DoNothing">1</validValue>
+            <validValue name="CancelOnly">2</validValue>
+            <validValue name="NonRepresentable">254</validValue>
+        </enum>
+
+        <enum name="pegMoveType" encodingType="uint8">
+            <validValue name="Fixed">1</validValue>
+            <validValue name="NonRepresentable">254</validValue>
+        </enum>
+
+        <enum name="pegOffsetType" encodingType="char">
+            <validValue name="PriceTier">3</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="pegPriceType" encodingType="char">
+            <validValue name="MarketPeg">4</validValue>
+            <validValue name="PrimaryPeg">5</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="responseMode" encodingType="uint8">
+            <validValue name="Everything">1</validValue>
+            <validValue name="OnlyAcks">2</validValue>
+            <validValue name="NonRepresentable">254</validValue>
+        </enum>
+
+        <enum name="selfTradePreventionMode" encodingType="char">
+            <validValue name="None">1</validValue>
+            <validValue name="ExpireTaker">2</validValue>
+            <validValue name="ExpireMaker">3</validValue>
+            <validValue name="ExpireBoth">4</validValue>
+            <validValue name="Decrement">5</validValue>
+            <validValue name="Transfer">6</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="sessionRejectReason" encodingType="uint8">
+            <validValue name="InvalidTagNumber">0</validValue>
+            <validValue name="RequiredTagMissing">1</validValue>
+            <validValue name="TagNotDefinedForThisMessageType">2</validValue>
+            <validValue name="UndefinedTag">3</validValue>
+            <validValue name="ValueIsIncorrect">5</validValue>
+            <validValue name="IncorrectDataFormatForValue">6</validValue>
+            <validValue name="SignatureProblem">8</validValue>
+            <validValue name="SendingTimeAccuracyProblem">10</validValue>
+            <validValue name="TagAppearsMoreThanOnce">13</validValue>
+            <validValue name="TagSpecifiedOutOfRequiredOrder">14</validValue>
+            <validValue name="RepeatingGroupFieldsOutOfOrder">15</validValue>
+            <validValue name="IncorrectNumInGroupCountForRepeatingGroup">16</validValue>
+            <validValue name="Other">99</validValue>
+            <validValue name="NonRepresentable">254</validValue>
+        </enum>
+
+        <enum name="side" encodingType="char">
+            <validValue name="Buy">1</validValue>
+            <validValue name="Sell">2</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="subscriptionRequestType" encodingType="char">
+            <validValue name="Subscribe">1</validValue>
+            <validValue name="Unsubscribe">2</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="timeInForce" encodingType="char">
+            <validValue name="GoodTillCancel">1</validValue>
+            <validValue name="ImmediateOrCancel">3</validValue>
+            <validValue name="FillOrKill">4</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="triggerAction" encodingType="char">
+            <validValue name="Activate">1</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+        <enum name="triggerPriceDirection" encodingType="char">
+            <validValue name="Up">U</validValue>
+            <validValue name="Down">D</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+        <enum name="triggerPriceType" encodingType="char">
+            <validValue name="LastTrade">2</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+        <enum name="triggerType" encodingType="char">
+            <validValue name="PriceMovement">4</validValue>
+            <validValue name="NonRepresentable">~</validValue>
+        </enum>
+
+        <enum name="workingFloor" encodingType="uint8">
+            <validValue name="Exchange">1</validValue>
+            <validValue name="Broker">2</validValue>
+            <validValue name="Sor">3</validValue>
+            <validValue name="NonRepresentable">254</validValue>
+        </enum>
+
+    </types>
+
+    <sbe:message name="Heartbeat" id="20001" semanticType="0">
+        <data id="112" name="TestReqID" type="optionalVarString8"/>
+    </sbe:message>
+
+    <sbe:message name="TestRequest" id="20002" semanticType="1">
+        <data id="112" name="TestReqID" type="varString8"/>
+    </sbe:message>
+
+    <sbe:message name="Reject" id="20003" semanticType="3">
+        <field id="45" name="RefSeqNum" type="uint32" presence="optional"/>
+        <field id="371" name="RefTagID" type="uint32" presence="optional"/>
+        <field id="373" name="SessionRejectReason" type="sessionRejectReason" presence="optional"/>
+        <field id="25016" name="ErrorCode" type="int32" presence="optional"/>
+        <data id="372" name="RefMsgType" type="optionalVarString8"/>
+        <data id="58" name="Text" type="optionalVarString"/>
+    </sbe:message>
+
+    <sbe:message name="Logout" id="20004" semanticType="5">
+        <data id="58" name="Text" type="optionalVarString"/>
+    </sbe:message>
+
+    <sbe:message name="ExecutionReportAck" id="198" semanticType="8">
+        <field id="37" name="OrderID" type="ordId" presence="optional"/>
+        <field id="66" name="ListID" type="ordListId" presence="optional"/>
+        <field id="60" name="TransactTime" type="utcTimestampUs" presence="optional"/>
+        <field id="150" name="ExecType" type="execType"/>
+        <field id="39" name="OrdStatus" type="ordStatus"/>
+        <field id="103" name="OrdRejReason" type="ordRejReason" presence="optional"/>
+        <field id="25016" name="ErrorCode" type="int32" presence="optional"/>
+        <data id="11" name="ClOrdID" type="optionalVarString8"/>
+        <data id="55" name="Symbol" type="varString8"/>
+        <data id="58" name="ErrorText" type="optionalVarString"/>
+    </sbe:message>
+
+    <sbe:message name="ExecutionReport" id="98" semanticType="8">
+        <field id="25054" name="PriceExponent" type="exponent8"/>
+        <field id="25055" name="QtyExponent" type="exponent8"/>
+        <field id="17" name="ExecID" type="executionId" presence="optional"/>
+        <field id="37" name="OrderID" type="ordId" presence="optional"/>
+        <field id="38" name="OrderQty" type="mantissa64" mbx:exponent="QtyExponent" presence="optional"/>
+        <field id="40" name="OrdType" type="ordType"/>
+        <field id="54" name="Side" type="side"/>
+        <field id="18" name="ExecInst" type="execInst" presence="optional"/>
+        <field id="44" name="Price" type="mantissa64" mbx:exponent="PriceExponent" presence="optional"/>
+        <field id="1100" name="TriggerType" type="triggerType" presence="optional"/>
+        <field id="1101" name="TriggerAction" type="triggerAction" presence="optional"/>
+        <field id="1102" name="TriggerPrice" type="mantissa64" mbx:exponent="PriceExponent" presence="optional"/>
+        <field id="1107" name="TriggerPriceType" type="triggerPriceType" presence="optional"/>
+        <field id="1109" name="TriggerPriceDirection" type="triggerPriceDirection" presence="optional"/>
+        <field id="25009" name="TriggerTrailingDeltaBips" type="uint64" presence="optional"/>
+        <field id="211" name="PegOffsetValue" type="uint8" presence="optional"/>
+        <field id="1094" name="PegPriceType" type="pegPriceType" presence="optional"/>
+        <field id="835" name="PegMoveType" type="pegMoveType" presence="optional"/>
+        <field id="836" name="PegOffsetType" type="pegOffsetType" presence="optional"/>
+        <field id="839" name="PeggedPrice" type="mantissa64" mbx:exponent="PriceExponent" presence="optional"/>
+        <field id="59" name="TimeInForce" type="timeInForce" presence="optional"/>
+        <field id="60" name="TransactTime" type="utcTimestampUs" presence="optional"/>
+        <field id="25018" name="OrderCreationTime" type="utcTimestampUs" presence="optional"/>
+        <field id="111" name="MaxFloor" type="mantissa64" mbx:exponent="QtyExponent" presence="optional"/>
+        <field id="66" name="ListID" type="ordListId" presence="optional"/>
+        <field id="152" name="CashOrderQty" type="mantissa64" mbx:exponent="PriceExponent" presence="optional"/>
+        <field id="847" name="TargetStrategy" type="int32" presence="optional"/>
+        <field id="7940" name="StrategyID" type="int64" presence="optional"/>
+        <field id="528" name="OrderCapacity" type="orderCapacity" presence="optional"/>
+        <field id="25001" name="SelfTradePreventionMode" type="selfTradePreventionMode" presence="optional"/>
+        <field id="150" name="ExecType" type="execType"/>
+        <field id="14" name="CumQty" type="mantissa64" mbx:exponent="QtyExponent"/>
+        <field id="151" name="LeavesQty" type="mantissa64" mbx:exponent="QtyExponent" presence="optional"/>
+        <field id="25017" name="CumQuoteQty" type="mantissa64" mbx:exponent="PriceExponent" presence="optional"/>
+        <field id="1057" name="AggressorIndicator" type="boolEnum" presence="optional"/>
+        <field id="1003" name="TradeID" type="tradeId" presence="optional"/>
+        <field id="31" name="LastPx" type="mantissa64" mbx:exponent="PriceExponent" presence="optional"/>
+        <field id="32" name="LastQty" type="mantissa64" mbx:exponent="QtyExponent"/>
+        <field id="39" name="OrdStatus" type="ordStatus"/>
+        <field id="198" name="SecondaryOrderID" type="ordId" presence="optional"/>
+        <field id="25020" name="SecondaryExternalAccountID" type="int64" presence="optional"/>
+        <field id="70" name="AllocID" type="allocId" presence="optional"/>
+        <field id="574" name="MatchType" type="matchType" presence="optional"/>
+        <field id="25021" name="WorkingFloor" type="workingFloor" presence="optional"/>
+        <field id="636" name="WorkingIndicator" type="boolEnum" presence="optional"/>
+        <field id="25023" name="WorkingTime" type="utcTimestampUs" presence="optional"/>
+        <field id="25022" name="TrailingTime" type="utcTimestampUs" presence="optional"/>
+        <field id="25024" name="PreventedMatchID" type="preventedMatchId" presence="optional"/>
+        <field id="25025" name="PreventedExecutionPrice" type="mantissa64" mbx:exponent="PriceExponent" presence="optional"/>
+        <field id="25026" name="PreventedExecutionQty" type="mantissa64" mbx:exponent="QtyExponent" presence="optional"/>
+        <field id="25027" name="TradeGroupID" type="tradeGroupId" presence="optional"/>
+        <field id="25029" name="CounterOrderID" type="ordId" presence="optional"/>
+        <field id="25030" name="PreventedQty" type="mantissa64" mbx:exponent="QtyExponent" presence="optional"/>
+        <field id="25031" name="LastPreventedQty" type="mantissa64" mbx:exponent="QtyExponent" presence="optional"/>
+        <field id="25032" name="SOR" type="boolEnum" presence="optional"/>
+        <field id="103" name="OrdRejReason" type="ordRejReason" presence="optional"/>
+        <field id="25016" name="ErrorCode" type="int32" presence="optional"/>
+        <group id="136" name="MiscFees" dimensionType="smallGroupSize16Encoding">
+            <field id="25053" name="Exponent" type="exponent8"/>
+            <field id="137" name="MiscFeeAmt" type="mantissa64" mbx:exponent="Exponent"/>
+            <field id="139" name="MiscFeeType" type="miscFeeType"/>
+            <data id="138" name="MiscFeeCurr" type="varString8"/>
+        </group>
+        <data id="11" name="ClOrdID" type="optionalVarString8"/>
+        <data id="41" name="OrigClOrdID" type="optionalVarString8"/>
+        <data id="55" name="Symbol" type="varString8"/>
+        <data id="25019" name="SecondarySymbol" type="optionalVarString8"/>
+        <data id="25028" name="CounterSymbol" type="optionalVarString8"/>
+        <data id="58" name="ErrorText" type="optionalVarString"/>
+    </sbe:message>
+
+    <sbe:message name="OrderCancelReject" id="96" semanticType="9">
+        <field id="37" name="OrderID" type="ordId" presence="optional"/>
+        <field id="66" name="ListID" type="ordListId" presence="optional"/>
+        <field id="25002" name="CancelRestrictions" type="cancelRestrictions" presence="optional"/>
+        <field id="434" name="CxlRejResponseTo" type="cxlRejResponseTo"/>
+        <field id="25016" name="ErrorCode" type="int32"/>
+        <data id="11" name="ClOrdID" type="varString8"/>
+        <data id="41" name="OrigClOrdID" type="optionalVarString8"/>
+        <data id="25015" name="OrigClListID" type="optionalVarString8"/>
+        <data id="55" name="Symbol" type="varString8"/>
+        <data id="58" name="ErrorText" type="varString"/>
+    </sbe:message>
+
+    <sbe:message name="OrderCancelRequestAndNewOrderSingle" id="97" semanticType="XCN">
+        <field id="25033" name="OrderCancelRequestAndNewOrderSingleMode" type="orderCancelRequestAndNewOrderSingleMode"/>
+        <field id="25038" name="OrderRateLimitExceededMode" type="orderRateLimitExceededMode" presence="optional"/>
+        <field id="37" name="OrderID" type="ordId" presence="optional"/>
+        <field id="25002" name="CancelRestrictions" type="cancelRestrictions" presence="optional"/>
+        <field id="25054" name="PriceExponent" type="exponent8"/>
+        <field id="25055" name="QtyExponent" type="exponent8"/>
+        <field id="38" name="OrderQty" type="mantissa64" mbx:exponent="QtyExponent" presence="optional"/>
+        <field id="40" name="OrdType" type="ordType"/>
+        <field id="18" name="ExecInst" type="execInst" presence="optional"/>
+        <field id="44" name="Price" type="mantissa64" mbx:exponent="PriceExponent" presence="optional"/>
+        <field id="1100" name="TriggerType" type="triggerType" presence="optional"/>
+        <field id="1101" name="TriggerAction" type="triggerAction" presence="optional"/>
+        <field id="1102" name="TriggerPrice" type="mantissa64" mbx:exponent="PriceExponent" presence="optional"/>
+        <field id="1107" name="TriggerPriceType" type="triggerPriceType" presence="optional"/>
+        <field id="1109" name="TriggerPriceDirection" type="triggerPriceDirection" presence="optional"/>
+        <field id="25009" name="TriggerTrailingDeltaBips" type="uint64" presence="optional"/>
+        <field id="211" name="PegOffsetValue" type="uint8" presence="optional"/>
+        <field id="1094" name="PegPriceType" type="pegPriceType" presence="optional"/>
+        <field id="835" name="PegMoveType" type="pegMoveType" presence="optional"/>
+        <field id="836" name="PegOffsetType" type="pegOffsetType" presence="optional"/>
+        <field id="54" name="Side" type="side"/>
+        <field id="59" name="TimeInForce" type="timeInForce" presence="optional"/>
+        <field id="111" name="MaxFloor" type="mantissa64" mbx:exponent="QtyExponent" presence="optional"/>
+        <field id="152" name="CashOrderQty" type="mantissa64" mbx:exponent="PriceExponent" presence="optional"/>
+        <field id="847" name="TargetStrategy" type="int32" presence="optional"/>
+        <field id="7940" name="StrategyID" type="int64" presence="optional"/>
+        <field id="25001" name="SelfTradePreventionMode" type="selfTradePreventionMode" presence="optional"/>
+        <data id="25034" name="CancelClOrdID" type="optionalVarString8"/>
+        <data id="41" name="OrigClOrdID" type="optionalVarString8"/>
+        <data id="11" name="ClOrdID" type="varString8"/>
+        <data id="55" name="Symbol" type="varString8"/>
+    </sbe:message>
+
+    <sbe:message name="Logon" id="20008" semanticType="A">
+        <field id="98" name="EncryptMethod" type="uint8" presence="optional"/>
+        <field id="108" name="HeartBtInt" type="uint32"/>
+        <field id="141" name="ResetSeqNumFlag" type="boolEnum" presence="optional"/>
+        <field id="25035" name="MessageHandling" type="messageHandling" presence="optional"/>
+        <field id="25036" name="ResponseMode" type="responseMode" presence="optional"/>
+        <field id="25045" name="ExecutionReportType" type="executionReportType" presence="optional"/>
+        <field id="9406" name="DropCopyFlag" type="boolEnum" presence="optional"/>
+        <field id="25000" name="RecvWindow" type="durationUs" presence="optional"/>
+        <data id="49" name="SenderCompId" type="varString8"/>
+        <data id="56" name="TargetCompId" type="varString8"/>
+        <data id="96" name="RawData" type="varString"/>
+        <data id="553" name="Username" type="varString"/>
+    </sbe:message>
+
+    <sbe:message name="LogonAck" id="20009" semanticType="A">
+        <field id="98" name="EncryptMethod" type="uint8" presence="optional"/>
+        <field id="108" name="HeartBtInt" type="uint32"/>
+        <field id="25052" name="SbeSchemaIdVersionDeprecated" type="boolEnum"/>
+        <data id="25037" name="UUID" type="varString8"/>
+    </sbe:message>
+
+    <sbe:message name="NewOrderSingle" id="99" semanticType="D">
+        <field id="25054" name="PriceExponent" type="exponent8"/>
+        <field id="25055" name="QtyExponent" type="exponent8"/>
+        <field id="38" name="OrderQty" type="mantissa64" mbx:exponent="QtyExponent" presence="optional"/>
+        <field id="40" name="OrdType" type="ordType"/>
+        <field id="18" name="ExecInst" type="execInst" presence="optional"/>
+        <field id="44" name="Price" type="mantissa64" mbx:exponent="PriceExponent" presence="optional"/>
+        <field id="1100" name="TriggerType" type="triggerType" presence="optional"/>
+        <field id="1101" name="TriggerAction" type="triggerAction" presence="optional"/>
+        <field id="1102" name="TriggerPrice" type="mantissa64" mbx:exponent="PriceExponent" presence="optional"/>
+        <field id="1107" name="TriggerPriceType" type="triggerPriceType" presence="optional"/>
+        <field id="1109" name="TriggerPriceDirection" type="triggerPriceDirection" presence="optional"/>
+        <field id="25009" name="TriggerTrailingDeltaBips" type="uint64" presence="optional"/>
+        <field id="211" name="PegOffsetValue" type="uint8" presence="optional"/>
+        <field id="1094" name="PegPriceType" type="pegPriceType" presence="optional"/>
+        <field id="835" name="PegMoveType" type="pegMoveType" presence="optional"/>
+        <field id="836" name="PegOffsetType" type="pegOffsetType" presence="optional"/>
+        <field id="54" name="Side" type="side"/>
+        <field id="59" name="TimeInForce" type="timeInForce" presence="optional"/>
+        <field id="111" name="MaxFloor" type="mantissa64" mbx:exponent="QtyExponent" presence="optional"/>
+        <field id="152" name="CashOrderQty" type="mantissa64" mbx:exponent="PriceExponent" presence="optional"/>
+        <field id="847" name="TargetStrategy" type="int32" presence="optional"/>
+        <field id="7940" name="StrategyID" type="int64" presence="optional"/>
+        <field id="25001" name="SelfTradePreventionMode" type="selfTradePreventionMode" presence="optional"/>
+        <field id="25032" name="SOR" type="boolEnum" presence="optional"/>
+        <data id="11" name="ClOrdID" type="varString8"/>
+        <data id="55" name="Symbol" type="varString8"/>
+    </sbe:message>
+
+    <sbe:message name="NewOrderList" id="100" semanticType="E">
+        <field id="1385" name="ContingencyType" type="contingencyType"/>
+        <field id="25046" name="OPO" type="boolEnum" presence="optional"/>
+        <group id="73" name="Orders" dimensionType="groupSize8Encoding">
+            <field id="25054" name="PriceExponent" type="exponent8"/>
+            <field id="25055" name="QtyExponent" type="exponent8"/>
+            <field id="38" name="OrderQty" type="mantissa64" mbx:exponent="QtyExponent" presence="optional"/>
+            <field id="40" name="OrdType" type="ordType"/>
+            <field id="18" name="ExecInst" type="execInst" presence="optional"/>
+            <field id="44" name="Price" type="mantissa64" mbx:exponent="PriceExponent" presence="optional"/>
+            <field id="1100" name="TriggerType" type="triggerType" presence="optional"/>
+            <field id="1101" name="TriggerAction" type="triggerAction" presence="optional"/>
+            <field id="1102" name="TriggerPrice" type="mantissa64" mbx:exponent="PriceExponent" presence="optional"/>
+            <field id="1107" name="TriggerPriceType" type="triggerPriceType" presence="optional"/>
+            <field id="1109" name="TriggerPriceDirection" type="triggerPriceDirection" presence="optional"/>
+            <field id="25009" name="TriggerTrailingDeltaBips" type="uint64" presence="optional"/>
+            <field id="211" name="PegOffsetValue" type="uint8" presence="optional"/>
+            <field id="1094" name="PegPriceType" type="pegPriceType" presence="optional"/>
+            <field id="835" name="PegMoveType" type="pegMoveType" presence="optional"/>
+            <field id="836" name="PegOffsetType" type="pegOffsetType" presence="optional"/>
+            <field id="54" name="Side" type="side"/>
+            <field id="59" name="TimeInForce" type="timeInForce" presence="optional"/>
+            <field id="111" name="MaxFloor" type="mantissa64" mbx:exponent="QtyExponent" presence="optional"/>
+            <field id="152" name="CashOrderQty" type="mantissa64" mbx:exponent="PriceExponent" presence="optional"/>
+            <field id="847" name="TargetStrategy" type="int32" presence="optional"/>
+            <field id="7940" name="StrategyID" type="int64" presence="optional"/>
+            <field id="25001" name="SelfTradePreventionMode" type="selfTradePreventionMode" presence="optional"/>
+            <group id="25010" name="ListTriggeringInstructions" dimensionType="smallGroupSize8Encoding">
+              <field id="25011" name="ListTriggerType" type="listTriggerType"/>
+              <field id="25012" name="ListTriggerTriggerIndex" type="uint8"/>
+              <field id="25013" name="ListTriggerAction" type="listTriggerAction"/>
+            </group>
+            <data id="11" name="ClOrdID" type="varString8"/>
+            <data id="55" name="Symbol" type="varString8"/>
+        </group>
+        <data id="25014" name="ClListID" type="varString8"/>
+    </sbe:message>
+
+    <sbe:message name="OrderCancelRequest" id="101" semanticType="F">
+        <field id="37" name="OrderID" type="ordId" presence="optional"/>
+        <field id="66" name="ListID" type="ordListId" presence="optional"/>
+        <field id="25002" name="CancelRestrictions" type="cancelRestrictions" presence="optional"/>
+        <data id="11" name="ClOrdID" type="varString8"/>
+        <data id="41" name="OrigClOrdID" type="optionalVarString8"/>
+        <data id="25015" name="OrigClListID" type="optionalVarString8"/>
+        <data id="55" name="Symbol" type="varString8"/>
+    </sbe:message>
+
+    <sbe:message name="ListStatus" id="102" semanticType="N">
+        <field id="66" name="ListID" type="ordListId" presence="optional"/>
+        <field id="1385" name="ContingencyType" type="contingencyType" presence="optional"/>
+        <field id="429" name="ListStatusType" type="listStatusType"/>
+        <field id="431" name="ListOrderStatus" type="listOrderStatus"/>
+        <field id="1386" name="ListRejectReason" type="listRejectReason" presence="optional"/>
+        <field id="60" name="TransactTime" type="utcTimestampUs" presence="optional"/>
+        <group id="73" name="Orders" dimensionType="smallGroupSize8Encoding">
+          <field id="37" name="OrderID" type="ordId" presence="optional"/>
+          <field id="103" name="OrdRejReason" type="ordRejReason" presence="optional"/>
+          <field id="25016" name="ErrorCode" type="int32" presence="optional"/>
+          <group id="25010" name="ListTriggeringInstructions" dimensionType="smallGroupSize8Encoding">
+            <field id="25011" name="ListTriggerType" type="listTriggerType"/>
+            <field id="25012" name="ListTriggerTriggerIndex" type="uint8"/>
+            <field id="25013" name="ListTriggerAction" type="listTriggerAction"/>
+          </group>
+          <data id="11" name="ClOrdID" type="varString8"/>
+          <data id="55" name="Symbol" type="varString8"/>
+          <data id="58" name="ErrorText" type="optionalVarString"/>
+        </group>
+        <data id="25014" name="ClListID" type="optionalVarString8"/>
+        <data id="25015" name="OrigClListID" type="optionalVarString8"/>
+    </sbe:message>
+
+    <sbe:message name="OrderMassCancelRequest" id="103" semanticType="q">
+        <field id="530" name="MassCancelRequestType" type="massCancelRequestType"/>
+        <data id="55" name="Symbol" type="varString8"/>
+        <data id="11" name="ClOrdID" type="varString8"/>
+    </sbe:message>
+
+    <sbe:message name="OrderMassCancelReport" id="104" semanticType="r">
+        <field id="530" name="MassCancelRequestType" type="massCancelRequestType"/>
+        <field id="531" name="MassCancelResponse" type="massCancelResponse"/>
+        <field id="532" name="MassCancelRejectReason" type="massCancelRejectReason" presence="optional"/>
+        <field id="533" name="TotalAffectedOrders" type="int64" presence="optional"/>
+        <field id="25016" name="ErrorCode" type="int32" presence="optional"/>
+        <data id="55" name="Symbol" type="varString8"/>
+        <data id="11" name="ClOrdID" type="varString8"/>
+        <data id="58" name="ErrorText" type="optionalVarString"/>
+    </sbe:message>
+
+    <sbe:message name="OrderAmendKeepPriorityRequest" id="105" semanticType="XAK">
+        <field id="37" name="OrderID" type="ordId" presence="optional"/>
+        <field id="25055" name="QtyExponent" type="exponent8"/>
+        <field id="38" name="OrderQty" type="mantissa64" mbx:exponent="QtyExponent"/>
+        <data id="11" name="ClOrdID" type="varString8"/>
+        <data id="41" name="OrigClOrdID" type="optionalVarString8"/>
+        <data id="55" name="Symbol" type="varString8"/>
+    </sbe:message>
+
+    <sbe:message name="OrderAmendReject" id="106" semanticType="XAR">
+        <field id="37" name="OrderID" type="ordId" presence="optional"/>
+        <field id="25055" name="QtyExponent" type="exponent8"/>
+        <field id="38" name="OrderQty" type="mantissa64" mbx:exponent="QtyExponent"/>
+        <field id="25016" name="ErrorCode" type="int32"/>
+        <data id="11" name="ClOrdID" type="varString8"/>
+        <data id="41" name="OrigClOrdID" type="optionalVarString8"/>
+        <data id="55" name="Symbol" type="varString8"/>
+        <data id="58" name="ErrorText" type="varString"/>
+    </sbe:message>
+
+    <sbe:message name="LimitQuery" id="120" semanticType="XLQ">
+        <data id="6136" name="ReqID" type="varString8"/>
+    </sbe:message>
+
+    <sbe:message name="LimitResponse" id="121" semanticType="XLR">
+        <group id="25003" name="LimitIndicators" dimensionType="smallGroupSize8Encoding">
+            <field id="25004" name="LimitType" type="limitType"/>
+            <field id="25005" name="LimitCount" type="uint64"/>
+            <field id="25006" name="LimitMax" type="uint64"/>
+            <field id="25007" name="LimitResetInterval" type="uint32" presence="optional"/>
+            <field id="25008" name="LimitResetIntervalResolution" type="limitResetIntervalResolution" presence="optional"/>
+        </group>
+        <data id="6136" name="ReqID" type="varString8"/>
+    </sbe:message>
+
+    <sbe:message name="InstrumentListRequest" id="200" semanticType="x">
+        <field id="559" name="InstrumentListRequestType" type="instrumentListRequestType"/>
+        <data id="320" name="InstrumentReqID" type="varString8"/>
+        <data id="55" name="Symbol" type="optionalVarString8"/>
+    </sbe:message>
+
+    <sbe:message name="InstrumentList" id="201" semanticType="y">
+        <group id="146" name="RelatedSym" dimensionType="groupSize16Encoding">
+            <field id="25054" name="PriceExponent" type="exponent8"/>
+            <field id="25055" name="QtyExponent" type="exponent8"/>
+            <field id="562" name="MinTradeVol" type="mantissa64" mbx:exponent="QtyExponent" presence="optional"/>
+            <field id="1140" name="MaxTradeVol" type="mantissa64" mbx:exponent="QtyExponent" presence="optional"/>
+            <field id="25039" name="MinQtyIncrement" type="mantissa64" mbx:exponent="QtyExponent" presence="optional"/>
+            <field id="25040" name="MarketMinTradeVol" type="mantissa64" mbx:exponent="QtyExponent" presence="optional"/>
+            <field id="25041" name="MarketMaxTradeVol" type="mantissa64" mbx:exponent="QtyExponent" presence="optional"/>
+            <field id="25042" name="MarketMinQtyIncrement" type="mantissa64" mbx:exponent="QtyExponent" presence="optional"/>
+            <field id="2551" name="StartPriceRange" type="mantissa64" mbx:exponent="PriceExponent" presence="optional"/>
+            <field id="2552" name="EndPriceRange" type="mantissa64" mbx:exponent="PriceExponent" presence="optional"/>
+            <field id="969" name="MinPriceIncrement" type="mantissa64" mbx:exponent="PriceExponent" presence="optional"/>
+            <data id="55" name="Symbol" type="varString8"/>
+            <data id="15" name="Currency" type="varString8"/>
+        </group>
+        <data id="320" name="InstrumentReqID" type="varString8"/>
+    </sbe:message>
+
+    <sbe:message name="MarketDataRequest" id="202" semanticType="V">
+        <field id="263" name="SubscriptionRequestType" type="subscriptionRequestType"/>
+        <field id="264" name="MarketDepth" type="uint16" presence="optional"/>
+        <field id="266" name="AggregatedBook" type="boolEnum" presence="optional"/>
+        <group id="146" name="RelatedSym" dimensionType="groupSize16Encoding">
+            <data id="55" name="Symbol" type="varString8"/>
+        </group>
+        <group id="267" name="MDEntryTypes" dimensionType="smallGroupSize8Encoding">
+            <field id="269" name="MDEntryType" type="mdEntryType"/>
+        </group>
+        <data id="262" name="MDReqID" type="varString8"/>
+    </sbe:message>
+
+    <sbe:message name="MarketDataRequestReject" id="203" semanticType="Y">
+        <field id="281" name="MDReqRejReason" type="mdReqRejReason" presence="optional"/>
+        <field id="25016" name="ErrorCode" type="int32" presence="optional"/>
+        <data id="262" name="MDReqID" type="varString8"/>
+        <data id="58" name="Text" type="optionalVarString"/>
+    </sbe:message>
+
+    <sbe:message name="MarketDataSnapshot" id="204" semanticType="W">
+        <field id="25044" name="LastBookUpdateID" type="int64" presence="optional"/>
+        <field id="25054" name="PriceExponent" type="exponent8"/>
+        <field id="25055" name="QtyExponent" type="exponent8"/>
+        <group id="25047" name="MDEntriesBids" dimensionType="smallGroupSize16Encoding">
+            <field id="270" name="MDEntryPx" type="mantissa64" mbx:exponent="PriceExponent"/>
+            <field id="271" name="MDEntrySize" type="mantissa64" mbx:exponent="QtyExponent"/>
+        </group>
+        <group id="25048" name="MDEntriesAsks" dimensionType="smallGroupSize16Encoding">
+            <field id="270" name="MDEntryPx" type="mantissa64" mbx:exponent="PriceExponent"/>
+            <field id="271" name="MDEntrySize" type="mantissa64" mbx:exponent="QtyExponent"/>
+        </group>
+        <data id="55" name="Symbol" type="varString8"/>
+    </sbe:message>
+
+    <sbe:message name="MarketDataIncrementalTrade" id="205" semanticType="X">
+        <field id="60" name="TransactTime" type="utcTimestampUs"/>
+        <field id="25054" name="PriceExponent" type="exponent8"/>
+        <field id="25055" name="QtyExponent" type="exponent8"/>
+        <group id="268" name="MDEntries" dimensionType="groupSize32Encoding">
+            <field id="1003" name="TradeID" type="tradeId"/>
+            <field id="270" name="MDEntryPx" type="mantissa64" mbx:exponent="PriceExponent"/>
+            <field id="271" name="MDEntrySize" type="mantissa64" mbx:exponent="QtyExponent"/>
+            <field id="2446" name="AggressorSide" type="side" presence="optional"/>
+        </group>
+        <data id="55" name="Symbol" type="varString8"/>
+    </sbe:message>
+
+    <sbe:message name="MarketDataIncrementalBookTicker" id="206" semanticType="X">
+        <field id="25044" name="LastBookUpdateID" type="int64"/>
+        <field id="25054" name="PriceExponent" type="exponent8"/>
+        <field id="25055" name="QtyExponent" type="exponent8"/>
+        <group id="25047" name="MDEntriesBids" dimensionType="smallGroupSize8Encoding">
+            <field id="270" name="MDEntryPx" type="mantissa64" mbx:exponent="PriceExponent"/>
+            <field id="271" name="MDEntrySize" type="mantissa64" presence="optional" mbx:exponent="QtyExponent"/>
+        </group>
+        <group id="25048" name="MDEntriesAsks" dimensionType="smallGroupSize8Encoding">
+            <field id="270" name="MDEntryPx" type="mantissa64" mbx:exponent="PriceExponent"/>
+            <field id="271" name="MDEntrySize" type="mantissa64" presence="optional" mbx:exponent="QtyExponent"/>
+        </group>
+        <data id="55" name="Symbol" type="varString8"/>
+    </sbe:message>
+
+    <sbe:message name="MarketDataIncrementalDepth" id="207" semanticType="X">
+        <field id="25043" name="FirstBookUpdateID" type="int64"/>
+        <field id="25044" name="LastBookUpdateID" type="int64"/>
+        <field id="25054" name="PriceExponent" type="exponent8"/>
+        <field id="25055" name="QtyExponent" type="exponent8"/>
+        <group id="25047" name="MDEntriesBids" dimensionType="smallGroupSize16Encoding">
+            <field id="270" name="MDEntryPx" type="mantissa64" mbx:exponent="PriceExponent"/>
+            <field id="271" name="MDEntrySize" type="mantissa64" presence="optional" mbx:exponent="QtyExponent"/>
+        </group>
+        <group id="25048" name="MDEntriesAsks" dimensionType="smallGroupSize16Encoding">
+            <field id="270" name="MDEntryPx" type="mantissa64" mbx:exponent="PriceExponent"/>
+            <field id="271" name="MDEntrySize" type="mantissa64" presence="optional" mbx:exponent="QtyExponent"/>
+        </group>
+        <data id="55" name="Symbol" type="varString8"/>
+    </sbe:message>
+
+    <sbe:message name="News" id="20100" semanticType="B">
+        <data id="148" name="Headline" type="varString"/>
+    </sbe:message>
+</sbe:messageSchema>

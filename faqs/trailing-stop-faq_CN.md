@@ -77,7 +77,7 @@
 
 在 `12:05:00` 到 `12:05:30` 之间市场交易让最新价上涨到44,100. 最新的交易价格到达或者超过了订单设置的500个基点要求(`44,100 = 42,000 * 1.05`). 这导致了订单被触发, 然后被以限价45,000的价格放到订单薄(order book)里面.
 
-<img alt="image" src="https://user-images.githubusercontent.com/17701918/167370103-ab3b4c05-1e13-4a25-b99a-42f9e4d6adc8.png">
+<img alt="image" src="https://user-images.githubusercontent.com/17701918/167370103-ab3b4c05-1e13-4a25-b99a-42f9e4d6adc8.png" />
 
 ### 用例 B - 追踪止损限价卖单
 
@@ -93,7 +93,7 @@
 
 在 `12:05:00` 到 `12:05:30` 之间的一些市场交易让最新价下跌到36,900. 最新的交易价格到达或者超过了订单设置的1000个基点要求(`36,900 = 41,000 * 0.90`). 这导致了订单被触发, 然后被以限价38,000的价格放到订单薄(order book)里面.
 
-<img alt="image" src="https://user-images.githubusercontent.com/17701918/167370383-eb813cc1-d9b8-4a94-896c-a1a29551e09d.png">
+<img alt="image" src="https://user-images.githubusercontent.com/17701918/167370383-eb813cc1-d9b8-4a94-896c-a1a29551e09d.png" />
 
 ### 用例 C - 追踪止盈限价买单
 
@@ -110,7 +110,7 @@
 
 在 `12:05:00` 到 `12:05:30` 之间的一些市场交易让最新价上涨到40,145. 最新的交易价格到达或者超过了订单设置的850个基点要求(`40,145 = 37,000 * 1.085`). 这导致了订单被触发, 然后被以限价38,500的价格放到订单薄(order book)里面.
 
-<img alt="image" src="https://user-images.githubusercontent.com/17701918/167370339-f1b83c76-790b-4108-8c9a-db2d89a4850f.png">
+<img alt="image" src="https://user-images.githubusercontent.com/17701918/167370339-f1b83c76-790b-4108-8c9a-db2d89a4850f.png" />
 
 ### 用例 D - 追踪止盈限价卖单
 
@@ -131,7 +131,7 @@
 
 在 `12:06:00` 到 `12:06:50` 之间的一些市场交易让最新价下跌到43,012.5. 当前价格达到或者超过了追踪订单设定的750个基点(`43,012.5 = 46,500 * 0.925`), 导致订单被触发, 以限价(LIMIT)41,000的价格被放入订单薄.
 
-<img alt="image" src="https://user-images.githubusercontent.com/17701918/167370298-172b227a-198d-46ee-a385-5cc267dc253b.png">
+<img alt="image" src="https://user-images.githubusercontent.com/17701918/167370298-172b227a-198d-46ee-a385-5cc267dc253b.png" />
 
 ### 用例 E - 不设置限价的追踪止盈止损订单
 
@@ -145,7 +145,7 @@
 
 在 `12:04:00` 到 `12:04:45` 之间市场上一系列的交易让价格下跌到42,315. 当前价格达到或者超过了追踪订单设定的700个基点(`42,315 = 45,500 * 0.93`), 导致订单被触发, 以限价(LIMIT)39,000的价格被放入订单薄.
 
-<img alt="image" src="https://user-images.githubusercontent.com/17701918/167370616-17d3295a-3e7c-4314-aa13-ad44e685a311.png">
+<img alt="image" src="https://user-images.githubusercontent.com/17701918/167370616-17d3295a-3e7c-4314-aa13-ad44e685a311.png" />
 
 ## 追踪止盈止损下单示例
 
