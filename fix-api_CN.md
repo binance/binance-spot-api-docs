@@ -1432,6 +1432,10 @@ SOFH：有关模式文件中的组合类型 "sofh"。这个字段作为一个帧
         * `SbeTool` 生成的编码器可以正确处理这种情况
         * 如果 payload 是手动编码生成的，请参阅 [SBE 规范](https://www.fixtrading.org/standards/sbe-online/) 中有关 `nullValue` 的定义
 
+
+小数位编码：
+* 在请求消息中，`PriceExponent` 和 `QtyExponent` 的值不得超过其所处理的交易对精度。交易对的精度可以从 `InstrumentList` 响应中获取。
+
 **Logon（登录）消息：**
 * `SenderCompID`、`TargetCompID` 和 `RecvWindow` 字段包含在 `Logon` FIX SBE 消息中，而不是消息头
     * `Logon` 消息中设置的 `RecvWindow` 字段适用于 FIX SBE 会话内的所有交易请求消息。

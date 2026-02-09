@@ -1,9 +1,15 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-02-04**
+**Last Updated: 2026-02-09**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-02-09
+
+* Clarified exponent field requirements in [FIX SBE documentation](fix-api.md#fix-sbe)
+
+---
 
 ### 2026-02-04
 

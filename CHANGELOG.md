@@ -1,6 +1,12 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-02-02**
+**Last Updated: 2026-02-09**
+
+### 2026-02-09
+
+* Clarified exponent field requirements in [FIX SBE documentation](fix-api.md#fix-sbe)
+
+---
 
 ### 2026-02-02
 
