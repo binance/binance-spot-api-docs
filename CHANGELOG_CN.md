@@ -1,6 +1,13 @@
 # 更新日志
 
-**最近更新： 2026-02-12**
+**最近更新： 2026-02-24**
+
+### 2026-02-24
+
+* 所有交易对的 [ICEBERG_PARTS](https://developers.binance.com/docs/zh-CN/binance-spot-api-docs/filters#iceberg_parts-%E5%86%B0%E5%B1%B1%E8%AE%A2%E5%8D%95%E6%8B%86%E5%88%86%E6%95%B0) 将于 **2026-03-12 07:00 UTC** 提升至 100。
+* 根据[2025-12-02](#2025-12-02)的公告，`!ticker@arr` 将于 **2026-03-24 07:00 UTC** 停用。
+
+---
 
 ### 2026-02-12
 

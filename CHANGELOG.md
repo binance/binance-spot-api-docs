@@ -1,6 +1,13 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-02-12**
+**Last Updated: 2026-02-24**
+
+### 2026-02-24
+
+* [ICEBERG_PARTS](https://developers.binance.com/docs/binance-spot-api-docs/filters#iceberg_parts) will be increased to 100 for all symbols at **2026-03-12 07:00 UTC**.
+* Following the announcement on [2025-12-02](#2025-12-02), `!ticker@arr` will be retired on **2026-03-26**.
+
+---
 
 ### 2026-02-12
 

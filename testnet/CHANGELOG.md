@@ -1,9 +1,16 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-02-09**
+**Last Updated: 2026-02-24**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-02-24
+
+* Following the announcement on [2025-11-28](#2025-11-28), `!ticker@arr` will be retired on **2026-03-26**
+* [`ICEBERG_PARTS`](https://developers.binance.com/docs/binance-spot-api-docs/testnet/filters#iceberg_parts) will be increased to 100 for all symbols starting 07:30 UTC.
+
+---
 
 ### 2026-02-09
 
