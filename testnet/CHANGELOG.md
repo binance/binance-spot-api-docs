@@ -1,9 +1,16 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-02-24**
+**Last Updated: 2026-03-05**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-03-05
+
+#### New Features
+* Users of the Spot Test Network can now choose to add commissions on their Testnet orders, if they want to test their integration of commission APIs and fields.
+
+---
 
 ### 2026-02-24
 
