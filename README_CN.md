@@ -63,6 +63,7 @@
 [pegged_orders](./faqs/pegged_orders_CN.md) |  关于挂钩订单的详细信息
 [order_count_decrement_CN](./faqs/order_count_decrement_CN.md) | 现货下单频率限制的更新
 [sbe_faq_CN](./faqs/sbe_faq_CN.md) | 关于在 API 上实施简单二进制编码 (SBE) 的信息
+[price_range_execution_rules_CN](./faqs/price_range_execution_rules_CN.md)| 价格区间执行规则
 
 ### 更新日志
 

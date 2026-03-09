@@ -60,6 +60,7 @@ Name | Description
 [order_amend_keep_priority](./faqs/order_amend_keep_priority.md) | Detailed Information on the behavior of Order Amend Keep Priority
 [pegged_orders](./faqs/pegged_orders.md) | Detailed Information on Pegged Orders
 [sbe_faq](./faqs/sbe_faq.md) | Information on the implementation of Simple Binary Encoding (SBE) on the API
+[price_range_execution_rules](./faqs/price_range_execution_rules.md) | Information on Price Range Execution Rules
 
 ### Change log
 
