@@ -46,12 +46,9 @@
 
   ```javascript
   {
-    "method": "SUBSCRIBE",
-    "params": [
-      "btcusdt@aggTrade",
-      "btcusdt@depth"
-    ],
-    "id": 1
+      "method": "SUBSCRIBE",
+      "params": ["btcusdt@aggTrade", "btcusdt@depth"],
+      "id": 1
   }
   ```
 
@@ -59,8 +56,8 @@
 
   ```javascript
   {
-    "result": null,
-    "id": 1
+      "result": null,
+      "id": 1
   }
   ```
 
@@ -70,11 +67,9 @@
 
   ```javascript
   {
-    "method": "UNSUBSCRIBE",
-    "params": [
-      "btcusdt@depth"
-    ],
-    "id": 312
+      "method": "UNSUBSCRIBE",
+      "params": ["btcusdt@depth"],
+      "id": 312
   }
   ```
 
@@ -82,8 +77,8 @@
 
   ```javascript
   {
-    "result": null,
-    "id": 312
+      "result": null,
+      "id": 312
   }
   ```
 
@@ -94,8 +89,8 @@
 
   ```javascript
   {
-    "method": "LIST_SUBSCRIPTIONS",
-    "id": 3
+      "method": "LIST_SUBSCRIPTIONS",
+      "id": 3
   }
   ```
 
@@ -103,10 +98,8 @@
 
   ```javascript
   {
-    "result": [
-      "btcusdt@aggTrade"
-    ],
-    "id": 3
+      "result": ["btcusdt@aggTrade"],
+      "id": 3
   }
   ```
 
@@ -119,12 +112,9 @@
 
   ```javascript
   {
-    "method": "SET_PROPERTY",
-    "params": [
-      "combined",
-      true
-    ],
-    "id": 5
+      "method": "SET_PROPERTY",
+      "params": ["combined", true],
+      "id": 5
   }
   ```
 
@@ -132,8 +122,8 @@
 
   ```javascript
   {
-    "result": null,
-    "id": 5
+      "result": null,
+      "id": 5
   }
   ```
 
@@ -143,11 +133,9 @@
 
   ```javascript
   {
-    "method": "GET_PROPERTY",
-    "params": [
-      "combined"
-    ],
-    "id": 2
+      "method": "GET_PROPERTY",
+      "params": ["combined"],
+      "id": 2
   }
   ```
 
@@ -155,8 +143,8 @@
 
   ```javascript
   {
-    "result": true, // Indicates that combined is set to true.
-    "id": 2
+      "result": true, // Indicates that combined is set to true.
+      "id": 2
   }
   ```
 
@@ -176,6 +164,24 @@
 
 
 # Stream 详细定义
+
+## 参考价格数据流
+
+**Stream 名称**: `<symbol>@referencePrice`
+
+**更新速度**: 1000ms（1s）
+
+**Payload:**
+
+```javascript
+{
+  "e": "referencePrice",  // 事件类型
+  "s": "BAZUSD",          // 交易对
+  "r": "1.00",            // 参考价格（如果无参考价格则为 null）
+  "t": 1770313263917      // 参考价格生效时的撮合引擎时间
+}
+```
+
 <a id="aggtrade"></a>
 ## 归集交易
 归集交易与逐笔交易的区别在于，同一个taker在同一价格与多个maker成交时，会被归集为一笔成交。
@@ -187,17 +193,17 @@
 **Payload:**
 ```javascript
 {
-  "e": "aggTrade",      // 事件类型
-  "E": 1672515782136,   // 事件时间
-  "s": "BNBBTC",        // 交易对
-  "a": 12345,           // 归集交易ID
-  "p": "0.001",         // 成交价格
-  "q": "100",           // 成交数量
-  "f": 100,             // 被归集的首个交易ID
-  "l": 105,             // 被归集的末次交易ID
-  "T": 1672515782136,   // 成交时间
-  "m": true,            // 买方是否是做市方。如true，则此次成交是一个主动卖出单，否则是一个主动买入单。
-  "M": true             // 请忽略该字段
+    "e": "aggTrade",        // 事件类型
+    "E": 1672515782136,     // 事件时间
+    "s": "BNBBTC",          // 交易对
+    "a": 12345,             // 归集交易ID
+    "p": "0.001",           // 成交价格
+    "q": "100",             // 成交数量
+    "f": 100,               // 被归集的首个交易ID
+    "l": 105,               // 被归集的末次交易ID
+    "T": 1672515782136,     // 成交时间
+    "m": true,              // 买方是否是做市方。如true，则此次成交是一个主动卖出单，否则是一个主动买入单。
+    "M": true               // 请忽略该字段
 }
 ```
 
@@ -213,15 +219,15 @@
 **Payload:**
 ```javascript
 {
-  "e": "trade",        // 事件类型
-  "E": 1672515782136,  // 事件时间
-  "s": "BNBBTC",       // 交易对
-  "t": 12345,          // 交易ID
-  "p": "0.001",        // 成交价格
-  "q": "100",          // 成交数量
-  "T": 1672515782136,  // 成交时间
-  "m": true,           // 买方是否是做市方。如true，则此次成交是一个主动卖出单，否则是一个主动买入单。
-  "M": true            // 请忽略该字段
+    "e": "trade",           // 事件类型
+    "E": 1672515782136,     // 事件时间
+    "s": "BNBBTC",          // 交易对
+    "t": 12345,             // 交易ID
+    "p": "0.001",           // 成交价格
+    "q": "100",             // 成交数量
+    "T": 1672515782136,     // 成交时间
+    "m": true,              // 买方是否是做市方。如true，则此次成交是一个主动卖出单，否则是一个主动买入单。
+    "M": true               // 请忽略该字段
 }
 ```
 <a id="kline"></a>
@@ -256,28 +262,28 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 **Payload:**
 ```javascript
 {
-  "e": "kline",          // 事件类型
-  "E": 1672515782136,    // 事件时间
-  "s": "BNBBTC",         // 交易对
-  "k": {
-    "t": 1672515780000,  // 这根K线的起始时间
-    "T": 1672515839999,  // 这根K线的结束时间
-    "s": "BNBBTC",       // 交易对
-    "i": "1m",           // K线间隔
-    "f": 100,            // 这根K线期间第一笔成交ID
-    "L": 200,            // 这根K线期间末一笔成交ID
-    "o": "0.0010",       // 这根K线期间第一笔成交价
-    "c": "0.0020",       // 这根K线期间末一笔成交价
-    "h": "0.0025",       // 这根K线期间最高成交价
-    "l": "0.0015",       // 这根K线期间最低成交价
-    "v": "1000",         // 这根K线期间成交量
-    "n": 100,            // 这根K线期间成交数量
-    "x": false,          // 这根K线是否完结（是否已经开始下一根K线）
-    "q": "1.0000",       // 这根K线期间成交额
-    "V": "500",          // 主动买入的成交量
-    "Q": "0.500",        // 主动买入的成交额
-    "B": "123456"        // 忽略此参数
-  }
+    "e": "kline",               // 事件类型
+    "E": 1672515782136,         // 事件时间
+    "s": "BNBBTC",              // 交易对
+    "k": {
+        "t": 1672515780000,     // 这根K线的起始时间
+        "T": 1672515839999,     // 这根K线的结束时间
+        "s": "BNBBTC",          // 交易对
+        "i": "1m",              // K线间隔
+        "f": 100,               // 这根K线期间第一笔成交ID
+        "L": 200,               // 这根K线期间末一笔成交ID
+        "o": "0.0010",          // 这根K线期间第一笔成交价
+        "c": "0.0020",          // 这根K线期间末一笔成交价
+        "h": "0.0025",          // 这根K线期间最高成交价
+        "l": "0.0015",          // 这根K线期间最低成交价
+        "v": "1000",            // 这根K线期间成交量
+        "n": 100,               // 这根K线期间成交数量
+        "x": false,             // 这根K线是否完结（是否已经开始下一根K线）
+        "q": "1.0000",          // 这根K线期间成交额
+        "V": "500",             // 主动买入的成交量
+        "Q": "0.500",           // 主动买入的成交额
+        "B": "123456"           // 忽略此参数
+    }
 }
 ```
 ## 带有时区偏移量的K线
@@ -299,28 +305,28 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 **Payload:**
 ```javascript
 {
-  "e": "kline",         // Event type
-  "E": 1672515782136,   // Event time
-  "s": "BNBBTC",        // Symbol
-  "k": {
-    "t": 1672515780000, // Kline start time
-    "T": 1672515839999, // Kline close time
-    "s": "BNBBTC",      // Symbol
-    "i": "1m",          // Interval
-    "f": 100,           // First trade ID
-    "L": 200,           // Last trade ID
-    "o": "0.0010",      // Open price
-    "c": "0.0020",      // Close price
-    "h": "0.0025",      // High price
-    "l": "0.0015",      // Low price
-    "v": "1000",        // Base asset volume
-    "n": 100,           // Number of trades
-    "x": false,         // Is this kline closed?
-    "q": "1.0000",      // Quote asset volume
-    "V": "500",         // Taker buy base asset volume
-    "Q": "0.500",       // Taker buy quote asset volume
-    "B": "123456"       // Ignore
-  }
+    "e": "kline",               // Event type
+    "E": 1672515782136,         // Event time
+    "s": "BNBBTC",              // Symbol
+    "k": {
+        "t": 1672515780000,     // Kline start time
+        "T": 1672515839999,     // Kline close time
+        "s": "BNBBTC",          // Symbol
+        "i": "1m",              // Interval
+        "f": 100,               // First trade ID
+        "L": 200,               // Last trade ID
+        "o": "0.0010",          // Open price
+        "c": "0.0020",          // Close price
+        "h": "0.0025",          // High price
+        "l": "0.0015",          // Low price
+        "v": "1000",            // Base asset volume
+        "n": 100,               // Number of trades
+        "x": false,             // Is this kline closed?
+        "q": "1.0000",          // Quote asset volume
+        "V": "500",             // Taker buy base asset volume
+        "Q": "0.500",           // Taker buy quote asset volume
+        "B": "123456"           // Ignore
+    }
 }
 ```
 
@@ -334,17 +340,17 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 
 **Payload:**
 ```javascript
-  {
-    "e": "24hrMiniTicker",  // 事件类型
-    "E": 1672515782136,     // 事件时间
-    "s": "BNBBTC",          // 交易对
-    "c": "0.0025",          // 最新成交价格
-    "o": "0.0010",          // 24小时前开始第一笔成交价格
-    "h": "0.0025",          // 24小时内最高成交价
-    "l": "0.0010",          // 24小时内最低成交加
-    "v": "10000",           // 成交量
-    "q": "18"               // 成交额
-  }
+{
+    "e": "24hrMiniTicker",     // 事件类型
+    "E": 1672515782136,        // 事件时间
+    "s": "BNBBTC",             // 交易对
+    "c": "0.0025",             // 最新成交价格
+    "o": "0.0010",             // 24小时前开始第一笔成交价格
+    "h": "0.0025",             // 24小时内最高成交价
+    "l": "0.0010",             // 24小时内最低成交加
+    "v": "10000",              // 成交量
+    "q": "18"                  // 成交额
+}
 ```
 
 <a id="all-markets-mini-ticker"></a>
@@ -358,9 +364,9 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 **Payload:**
 ```javascript
 [
-  {
-    // 数组每一个元素对应一个交易对，内容与 \<symbol\>@miniTicker相同
-  }
+    {
+        // 数组每一个元素对应一个交易对，内容与 \<symbol\>@miniTicker相同
+    }
 ]
 ```
 
@@ -376,29 +382,29 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 **Payload:**
 ```javascript
 {
-  "e": "24hrTicker",  // 事件类型
-  "E": 1672515782136, // 事件时间
-  "s": "BNBBTC",      // 交易对
-  "p": "0.0015",      // 24小时价格变化
-  "P": "250.00",      // 24小时价格变化（百分比）
-  "w": "0.0018",      // 平均价格
-  "x": "0.0009",      // 整整24小时之前，向前数的最后一次成交价格
-  "c": "0.0025",      // 最新成交价格
-  "Q": "10",          // 最新成交交易的成交量
-  "b": "0.0024",      // 目前最高买单价
-  "B": "10",          // 目前最高买单价的挂单量
-  "a": "0.0026",      // 目前最低卖单价
-  "A": "100",         // 目前最低卖单价的挂单量
-  "o": "0.0010",      // 整整24小时前，向后数的第一次成交价格
-  "h": "0.0025",      // 24小时内最高成交价
-  "l": "0.0010",      // 24小时内最低成交加
-  "v": "10000",       // 24小时内成交量
-  "q": "18",          // 24小时内成交额
-  "O": 0,             // 统计开始时间
-  "C": 1675216573749, // 统计结束时间
-  "F": 0,             // 24小时内第一笔成交交易ID
-  "L": 18150,         // 24小时内最后一笔成交交易ID
-  "n": 18151          // 24小时内成交数
+    "e": "24hrTicker",      // 事件类型
+    "E": 1672515782136,     // 事件时间
+    "s": "BNBBTC",          // 交易对
+    "p": "0.0015",          // 24小时价格变化
+    "P": "250.00",          // 24小时价格变化（百分比）
+    "w": "0.0018",          // 平均价格
+    "x": "0.0009",          // 整整24小时之前，向前数的最后一次成交价格
+    "c": "0.0025",          // 最新成交价格
+    "Q": "10",              // 最新成交交易的成交量
+    "b": "0.0024",          // 目前最高买单价
+    "B": "10",              // 目前最高买单价的挂单量
+    "a": "0.0026",          // 目前最低卖单价
+    "A": "100",             // 目前最低卖单价的挂单量
+    "o": "0.0010",          // 整整24小时前，向后数的第一次成交价格
+    "h": "0.0025",          // 24小时内最高成交价
+    "l": "0.0010",          // 24小时内最低成交加
+    "v": "10000",           // 24小时内成交量
+    "q": "18",              // 24小时内成交额
+    "O": 0,                 // 统计开始时间
+    "C": 1675216573749,     // 统计结束时间
+    "F": 0,                 // 24小时内第一笔成交交易ID
+    "L": 18150,             // 24小时内最后一笔成交交易ID
+    "n": 18151              // 24小时内成交数
 }
 ```
 
@@ -415,12 +421,12 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 **Payload:**
 ```javascript
 {
-  "u":400900217,     // order book updateId
-  "s":"BNBUSDT",     // 交易对
-  "b":"25.35190000", // 买单最优挂单价格
-  "B":"31.21000000", // 买单最优挂单数量
-  "a":"25.36520000", // 卖单最优挂单价格
-  "A":"40.66000000"  // 卖单最优挂单数量
+    "u": 400900217,         // order book updateId
+    "s": "BNBUSDT",         // 交易对
+    "b": "25.35190000",     // 买单最优挂单价格
+    "B": "31.21000000",     // 买单最优挂单数量
+    "a": "25.36520000",     // 卖单最优挂单价格
+    "A": "40.66000000"      // 卖单最优挂单数量
 }
 ```
 
@@ -437,12 +443,12 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 
 ```javascript
 {
-  "e": "avgPrice",          // Event type
-  "E": 1693907033000,       // Event time
-  "s": "BTCUSDT",           // Symbol
-  "i": "5m",                // Average price interval
-  "w": "25776.86000000",    // Average price
-  "T": 1693907032213        // Last trade time
+    "e": "avgPrice",           // Event type
+    "E": 1693907033000,        // Event time
+    "s": "BTCUSDT",            // Symbol
+    "i": "5m",                 // Average price interval
+    "w": "25776.86000000",     // Average price
+    "T": 1693907032213         // Last trade time
 }
 ```
 
@@ -458,21 +464,21 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 **Payload:**
 ```javascript
 {
-  "lastUpdateId": 160,  // 末次更新ID
-  "bids": [             // 买单
-    [
-      "0.0024",         // 价
-      "10",             // 量
-      []                // 忽略
+    "lastUpdateId": 160,     // 末次更新ID
+    "bids": [                // 买单
+        [
+            "0.0024",        // 价
+            "10",            // 量
+            []               // 忽略
+        ]
+    ],
+    "asks": [                // 卖单
+        [
+            "0.0026",        // 价
+            "100",           // 量
+            []               // 忽略
+        ]
     ]
-  ],
-  "asks": [             // 卖单
-    [
-      "0.0026",         // 价
-      "100",            // 量
-      []                // 忽略
-    ]
-  ]
 }
 ```
 <a id="diff-depth"></a>
@@ -487,25 +493,25 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 **Payload:**
 ```javascript
 {
-  "e": "depthUpdate", // 事件类型
-  "E": 1672515782136, // 事件时间
-  "s": "BNBBTC",      // 交易对
-  "U": 157,           // 从上次推送至今新增的第一个 update Id
-  "u": 160,           // 从上次推送至今新增的最后一个 update Id
-  "b": [              // 变动的买单深度
-    [
-      "0.0024",       // 价
-      "10",           // 量
-      []              // Ignore
+    "e": "depthUpdate",     // 事件类型
+    "E": 1672515782136,     // 事件时间
+    "s": "BNBBTC",          // 交易对
+    "U": 157,               // 从上次推送至今新增的第一个 update Id
+    "u": 160,               // 从上次推送至今新增的最后一个 update Id
+    "b": [                  // 变动的买单深度
+        [
+            "0.0024",       // 价
+            "10",           // 量
+            []              // Ignore
+        ]
+    ],
+    "a": [                  // 变动的卖单深度
+        [
+            "0.0026",       // 价
+            "100",          // 量
+            []              // Ignore
+        ]
     ]
-  ],
-  "a": [              // 变动的卖单深度
-    [
-      "0.0026",       // 价
-      "100",          // 量
-      []              // Ignore
-    ]
-  ]
 }
 ```
 
@@ -528,23 +534,23 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 **Payload:**
 ```javascript
 {
-  "e": "1hTicker",    // Event type
-  "E": 1672515782136, // Event time
-  "s": "BNBBTC",      // Symbol
-  "p": "0.0015",      // Price change
-  "P": "250.00",      // Price change percent
-  "o": "0.0010",      // Open price
-  "h": "0.0025",      // High price
-  "l": "0.0010",      // Low price
-  "c": "0.0025",      // Last price
-  "w": "0.0018",      // Weighted average price
-  "v": "10000",       // Total traded base asset volume
-  "q": "18",          // Total traded quote asset volume
-  "O": 0,             // Statistics open time
-  "C": 86400000,      // Statistics close time
-  "F": 0,             // First trade ID
-  "L": 18150,         // Last trade Id
-  "n": 18151          // Total number of trades
+    "e": "1hTicker",        // Event type
+    "E": 1672515782136,     // Event time
+    "s": "BNBBTC",          // Symbol
+    "p": "0.0015",          // Price change
+    "P": "250.00",          // Price change percent
+    "o": "0.0010",          // Open price
+    "h": "0.0025",          // High price
+    "l": "0.0010",          // Low price
+    "c": "0.0025",          // Last price
+    "w": "0.0018",          // Weighted average price
+    "v": "10000",           // Total traded base asset volume
+    "q": "18",              // Total traded quote asset volume
+    "O": 0,                 // Statistics open time
+    "C": 86400000,          // Statistics close time
+    "F": 0,                 // First trade ID
+    "L": 18150,             // Last trade Id
+    "n": 18151              // Total number of trades
 }
 ```
 <a id="all-market-rolling-window-ticker"></a>
@@ -563,10 +569,10 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 > **Payload:**
 ```javascript
 [
-  {
-    // 同 <symbol>@ticker_<window-size> payload,
-    // 间隔内更新的每个symbol。
-  }
+    {
+        // 同 <symbol>@ticker_<window-size> payload,
+        // 间隔内更新的每个symbol。
+    }
 ]
 ```
 

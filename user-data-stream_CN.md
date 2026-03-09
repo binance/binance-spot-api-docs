@@ -18,19 +18,19 @@
 
 ```javascript
 {
-  "subscriptionId": 0,
-  "event": {
-    "e": "outboundAccountPosition", // 事件类型
-    "E": 1564034571105,             // 事件时间
-    "u": 1564034571073,             // 账户末次更新时间戳
-    "B": [                          // 余额
-      {
-        "a": "ETH",                 // 资产名称
-        "f": "10000.000000",        // 可用余额
-        "l": "0.000000"             // 冻结余额
-      }
-    ]
-  }
+    "subscriptionId": 0,
+    "event": {
+        "e": "outboundAccountPosition",     // 事件类型
+        "E": 1564034571105,                 // 事件时间
+        "u": 1564034571073,                 // 账户末次更新时间戳
+        "B": [                              // 余额
+            {
+                "a": "ETH",                 // 资产名称
+                "f": "10000.000000",        // 可用余额
+                "l": "0.000000"             // 冻结余额
+            }
+        ]
+    }
 }
 ```
 
@@ -45,14 +45,14 @@
 
 ```javascript
 {
-  "subscriptionId": 0,
-  "event": {
-    "e": "balanceUpdate",         // 事件类型
-    "E": 1573200697110,           // 事件时间
-    "a": "BTC",                   // 资产名称
-    "d": "100.00000000",          // 余额增量
-    "T": 1573200697068            // 清算时间
-  }
+    "subscriptionId": 0,
+    "event": {
+        "e": "balanceUpdate",     // 事件类型
+        "E": 1573200697110,       // 事件时间
+        "a": "BTC",               // 资产名称
+        "d": "100.00000000",      // 余额增量
+        "T": 1573200697068        // 清算时间
+    }
 }
 ```
 
@@ -65,44 +65,44 @@
 
 ```javascript
 {
-  "subscriptionId": 0,
-  "event": {
-    "e": "executionReport",         // 事件类型
-    "E": 1499405658658,             // 事件时间
-    "s": "ETHBTC",                  // 交易对
-    "c": "mUvoqJxFIILMdfAW5iGSOW",  // clientOrderId
-    "S": "BUY",                     // 订单方向
-    "o": "LIMIT",                   // 订单类型
-    "f": "GTC",                     // 有效方式
-    "q": "1.00000000",              // 订单原始数量
-    "p": "0.10264410",              // 订单原始价格
-    "P": "0.00000000",              // 止盈止损单触发价格
-    "F": "0.00000000",              // 冰山订单数量
-    "g": -1,                        // OCO订单 OrderListId
-    "C": "",                        // 原始订单自定义ID（原始订单，指撤单操作的对象。撤单本身被视为另一个订单）
-    "x": "NEW",                     // 本次事件的具体执行类型
-    "X": "NEW",                     // 订单的当前状态
-    "r": "NONE",                    // 订单被拒绝的原因；请参阅订单被拒绝的原因（下文）了解更多信息
-    "i": 4293153,                   // orderId
-    "l": "0.00000000",              // 订单末次成交量
-    "z": "0.00000000",              // 订单累计已成交量
-    "L": "0.00000000",              // 订单末次成交价格
-    "n": "0",                       // 手续费数量
-    "N": null,                      // 手续费资产类别
-    "T": 1499405658657,             // 成交时间
-    "t": -1,                        // Trade ID
-    "v": 3,                         // 被阻止的交易Id；仅在订单因为STP被阻止时显示
-    "I": 8641984,                   // Execution ID
-    "w": true,                      // 订单是否在订单簿上？
-    "m": false,                     // 该成交是作为挂单成交吗？
-    "M": false,                     // 请忽略
-    "O": 1499405658657,             // 订单创建时间
-    "Z": "0.00000000",              // 订单累计已成交金额
-    "Y": "0.00000000",              // 订单末次成交金额
-    "Q": "0.00000000",              // Quote Order Quantity
-    "W": 1499405658657,             // Working Time; 订单被添加到 order book 的时间
-    "V": "NONE"                     // SelfTradePreventionMode
-  }
+    "subscriptionId": 0,
+    "event": {
+        "e": "executionReport",            // 事件类型
+        "E": 1499405658658,                // 事件时间
+        "s": "ETHBTC",                     // 交易对
+        "c": "mUvoqJxFIILMdfAW5iGSOW",     // clientOrderId
+        "S": "BUY",                        // 订单方向
+        "o": "LIMIT",                      // 订单类型
+        "f": "GTC",                        // 有效方式
+        "q": "1.00000000",                 // 订单原始数量
+        "p": "0.10264410",                 // 订单原始价格
+        "P": "0.00000000",                 // 止盈止损单触发价格
+        "F": "0.00000000",                 // 冰山订单数量
+        "g": -1,                           // OCO订单 OrderListId
+        "C": "",                           // 原始订单自定义ID（原始订单，指撤单操作的对象。撤单本身被视为另一个订单）
+        "x": "NEW",                        // 本次事件的具体执行类型
+        "X": "NEW",                        // 订单的当前状态
+        "r": "NONE",                       // 订单被拒绝的原因；请参阅订单被拒绝的原因（下文）了解更多信息
+        "i": 4293153,                      // orderId
+        "l": "0.00000000",                 // 订单末次成交量
+        "z": "0.00000000",                 // 订单累计已成交量
+        "L": "0.00000000",                 // 订单末次成交价格
+        "n": "0",                          // 手续费数量
+        "N": null,                         // 手续费资产类别
+        "T": 1499405658657,                // 成交时间
+        "t": -1,                           // Trade ID
+        "v": 3,                            // 被阻止的交易Id；仅在订单因为STP被阻止时显示
+        "I": 8641984,                      // Execution ID
+        "w": true,                         // 订单是否在订单簿上？
+        "m": false,                        // 该成交是作为挂单成交吗？
+        "M": false,                        // 请忽略
+        "O": 1499405658657,                // 订单创建时间
+        "Z": "0.00000000",                 // 订单累计已成交金额
+        "Y": "0.00000000",                 // 订单末次成交金额
+        "Q": "0.00000000",                 // Quote Order Quantity
+        "W": 1499405658657,                // Working Time; 订单被添加到 order book 的时间
+        "V": "NONE"                        // SelfTradePreventionMode
+    }
 }
 ```
 
@@ -238,6 +238,12 @@
       <td>Pegged Price</td>
       <td><code>"gp": "1.00000000"</code></td>
    </tr>
+   <tr>
+      <td><code>eR</code></td>
+      <td>Expiry Reason</td>
+      <td>当订单已过期时出现。</td>
+      <td><code>"eR": "INSUFFICIENT_LIQUIDITY"</code></td>
+   </tr>
 </table>
 
 #### 订单拒绝原因
@@ -258,33 +264,46 @@
 
 ```javascript
 {
-  "subscriptionId": 0,
-  "event": {
-    "e": "listStatus",                // 事件类型
-    "E": 1564035303637,               // 事件时间
-    "s": "ETHBTC",                    // 交易对
-    "g": 2,                           // OrderListId
-    "c": "OCO",                       // Contingency 类型
-    "l": "EXEC_STARTED",              // List 状态类型
-    "L": "EXECUTING",                 // List 订单类型
-    "r": "NONE",                      // List 被拒绝的原因
-    "C": "F4QN4G8DlFATFlIUQ0cjdD",    // List Client Order ID
-    "T": 1564035303625,               // 成交时间
-    "O": [                            // 对象数组
-      {
-        "s": "ETHBTC",                // 交易对
-        "i": 17,                      // orderId
-        "c": "AJYsMjErWJesZvqlJCTUgL" // clientOrderId
-      },
-      {
-        "s": "ETHBTC",
-        "i": 18,
-        "c": "bfYPSQdLoqAJeNrOr9adzq"
-      }
-    ]
-  }
+    "subscriptionId": 0,
+    "event": {
+        "e": "listStatus",                        // 事件类型
+        "E": 1564035303637,                       // 事件时间
+        "s": "ETHBTC",                            // 交易对
+        "g": 2,                                   // OrderListId
+        "c": "OCO",                               // Contingency 类型
+        "l": "EXEC_STARTED",                      // List 状态类型
+        "L": "EXECUTING",                         // List 订单类型
+        "r": "NONE",                              // List 被拒绝的原因
+        "C": "F4QN4G8DlFATFlIUQ0cjdD",            // List Client Order ID
+        "T": 1564035303625,                       // 成交时间
+        "O": [                                    // 对象数组
+            {
+                "s": "ETHBTC",                    // 交易对
+                "i": 17,                          // orderId
+                "c": "AJYsMjErWJesZvqlJCTUgL"     // clientOrderId
+            },
+            {
+                "s": "ETHBTC",
+                "i": 18,
+                "c": "bfYPSQdLoqAJeNrOr9adzq"
+            }
+        ]
+    }
 }
 ```
+
+#### 订单过期原因
+
+| 过期原因 (`eR`)                     | 说明                                                                                              |
+| :--------------------------------- | :------------------------------------------------------------------------------------------------ |
+| `REJECTED`                        | 当尝试将条件单或OTO（One-Triggers-the-Other）订单放入订单簿时，被撮合引擎拒绝。常见原因包括资金不足和过滤器拒绝。 |
+| `EXCHANGE_CANCELED`               | 订单被币安取消。                                                                                  |
+| `OCO_TRIGGER`                    | OCO（One-Cancels-the-Other）订单对中的一个订单被取消，因为其另一个订单开始生效或整个OCO订单对过期。          |
+| `OTO_PHASE_ONE_EXPIRED`           | 订单列表中的生效订单过期，导致整个订单列表过期。                                                  |
+| `UNFILLED_IOC_QUANTITY_EXPIRED`  | IOC（立即成交或取消）订单未完全成交，因此过期。                                                  |
+| `UNFILLED_FOK_ORDER_EXPIRED`     | FOK（全部成交或取消）订单未完全成交，因此过期。                                                  |
+| `INSUFFICIENT_LIQUIDITY`          | 订单簿中没有足够的订单与该订单匹配。                                                              |
+| `EXECUTION_RULE_PRICE_RANGE_EXCEEDED` | 订单尝试以不符合价格区间执行规则的价格进行交易。                                                  |
 
 **可能的执行类型:**
 
@@ -313,11 +332,11 @@
 
 ```javascript
 {
-  "subscriptionId": 0,
-  "event": {
-    "e": "eventStreamTerminated", // 事件类型
-    "E": 1728973001334            // 事件时间
-  }
+    "subscriptionId": 0,
+    "event": {
+        "e": "eventStreamTerminated",     // 事件类型
+        "E": 1728973001334                // 事件时间
+    }
 }
 ```
 
@@ -329,13 +348,13 @@
 
 ```javascript
 {
-  "subscriptionId": 0,
-  "event": {
-    "e": "externalLockUpdate",  // 事件类型
-    "E": 1581557507324,         // 事件时间
-    "a": "NEO",                 // 资产
-    "d": "10.00000000",         // 余额变动量
-    "T": 1581557507268          // 交易时间
-  }
+    "subscriptionId": 0,
+    "event": {
+        "e": "externalLockUpdate",     // 事件类型
+        "E": 1581557507324,            // 事件时间
+        "a": "NEO",                    // 资产
+        "d": "10.00000000",            // 余额变动量
+        "T": 1581557507268             // 交易时间
+    }
 }
 ```

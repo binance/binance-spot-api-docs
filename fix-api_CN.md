@@ -675,6 +675,7 @@ Your connection is about to be closed. Please reconnect.
 | 835   | PegMoveType              | CHAR    | N        | 描述挂钩是固定的还是浮动的。挂钩订单必用且必须为 `1` (FIXED) |
 | 836   | PegOffsetType            | CHAR    | N        | 定义了挂钩价格偏移类型。 <br> 可能的值: <br></br> `3`  - PRICE_TIER|
 | 839   | PeggedPrice              | PRICE   | N        | 订单所挂钩的当前价格|
+| 25056 | ExpiryReason             | STRING  | N        | 订单过期的原因 |
 
 **示例消息:**
 

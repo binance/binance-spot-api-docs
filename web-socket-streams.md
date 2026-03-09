@@ -12,6 +12,7 @@
     - [Retrieving Properties](#retrieving-properties)
     - [Error Messages](#error-messages)
 - [Detailed Stream information](#detailed-stream-information)
+  - [Reference Price Streams](#reference-price-streams)
   - [Aggregate Trade Streams](#aggregate-trade-streams)
   - [Trade Streams](#trade-streams)
   - [Kline/Candlestick Streams for UTC](#klinecandlestick-streams-for-utc)
@@ -71,20 +72,17 @@
 * Request
   ```javascript
   {
-    "method": "SUBSCRIBE",
-    "params": [
-      "btcusdt@aggTrade",
-      "btcusdt@depth"
-    ],
-    "id": 1
+      "method": "SUBSCRIBE",
+      "params": ["btcusdt@aggTrade", "btcusdt@depth"],
+      "id": 1
   }
   ```
 
 * Response
   ```javascript
   {
-    "result": null,
-    "id": 1
+      "result": null,
+      "id": 1
   }
   ```
 
@@ -92,19 +90,17 @@
 * Request
   ```javascript
   {
-    "method": "UNSUBSCRIBE",
-    "params": [
-      "btcusdt@depth"
-    ],
-    "id": 312
+      "method": "UNSUBSCRIBE",
+      "params": ["btcusdt@depth"],
+      "id": 312
   }
   ```
 
 * Response
   ```javascript
   {
-    "result": null,
-    "id": 312
+      "result": null,
+      "id": 312
   }
   ```
 
@@ -113,18 +109,16 @@
 * Request
   ```javascript
   {
-    "method": "LIST_SUBSCRIPTIONS",
-    "id": 3
+      "method": "LIST_SUBSCRIPTIONS",
+      "id": 3
   }
   ```
 
 * Response
   ```javascript
   {
-    "result": [
-      "btcusdt@aggTrade"
-    ],
-    "id": 3
+      "result": ["btcusdt@aggTrade"],
+      "id": 3
   }
   ```
 
@@ -136,20 +130,17 @@ The combined property is set to `false` when connecting using `/ws/` ("raw strea
 * Request
   ```javascript
   {
-    "method": "SET_PROPERTY",
-    "params": [
-      "combined",
-      true
-    ],
-    "id": 5
+      "method": "SET_PROPERTY",
+      "params": ["combined", true],
+      "id": 5
   }
   ```
 
 * Response
   ```javascript
   {
-    "result": null,
-    "id": 5
+      "result": null,
+      "id": 5
   }
   ```
 
@@ -157,19 +148,17 @@ The combined property is set to `false` when connecting using `/ws/` ("raw strea
 * Request
   ```javascript
   {
-    "method": "GET_PROPERTY",
-    "params": [
-      "combined"
-    ],
-    "id": 2
+      "method": "GET_PROPERTY",
+      "params": ["combined"],
+      "id": 2
   }
   ```
 
 * Response
   ```javascript
   {
-    "result": true, // Indicates that combined is set to true.
-    "id": 2
+      "result": true, // Indicates that combined is set to true.
+      "id": 2
   }
   ```
 
@@ -189,6 +178,24 @@ Error Message | Description
 
 
 # Detailed Stream information
+
+## Reference Price Streams
+
+**Stream Name**: \<symbol\>@referencePrice
+
+**Update Speed**: 1000ms
+
+**Payload:**
+
+```javascript
+{
+  "e": "referencePrice",  // eventType
+  "s": "BAZUSD",          // symbol
+  "r": "1.00",            // reference price (null if no reference price)
+  "t": 1770313263917      // engine timestamp when reference price was valid
+}
+```
+
 ## Aggregate Trade Streams
 The Aggregate Trade Streams push trade information that is aggregated for a single taker order.
 
@@ -199,17 +206,17 @@ The Aggregate Trade Streams push trade information that is aggregated for a sing
 **Payload:**
 ```javascript
 {
-  "e": "aggTrade",    // Event type
-  "E": 1672515782136, // Event time
-  "s": "BNBBTC",      // Symbol
-  "a": 12345,         // Aggregate trade ID
-  "p": "0.001",       // Price
-  "q": "100",         // Quantity
-  "f": 100,           // First trade ID
-  "l": 105,           // Last trade ID
-  "T": 1672515782136, // Trade time
-  "m": true,          // Is the buyer the market maker?
-  "M": true           // Ignore
+    "e": "aggTrade",        // Event type
+    "E": 1672515782136,     // Event time
+    "s": "BNBBTC",          // Symbol
+    "a": 12345,             // Aggregate trade ID
+    "p": "0.001",           // Price
+    "q": "100",             // Quantity
+    "f": 100,               // First trade ID
+    "l": 105,               // Last trade ID
+    "T": 1672515782136,     // Trade time
+    "m": true,              // Is the buyer the market maker?
+    "M": true               // Ignore
 }
 ```
 
@@ -223,15 +230,15 @@ The Trade Streams push raw trade information; each trade has a unique buyer and 
 **Payload:**
 ```javascript
 {
-  "e": "trade",       // Event type
-  "E": 1672515782136, // Event time
-  "s": "BNBBTC",      // Symbol
-  "t": 12345,         // Trade ID
-  "p": "0.001",       // Price
-  "q": "100",         // Quantity
-  "T": 1672515782136, // Trade time
-  "m": true,          // Is the buyer the market maker?
-  "M": true           // Ignore
+    "e": "trade",           // Event type
+    "E": 1672515782136,     // Event time
+    "s": "BNBBTC",          // Symbol
+    "t": 12345,             // Trade ID
+    "p": "0.001",           // Price
+    "q": "100",             // Quantity
+    "T": 1672515782136,     // Trade time
+    "m": true,              // Is the buyer the market maker?
+    "M": true               // Ignore
 }
 ```
 
@@ -268,28 +275,28 @@ s-> seconds; m -> minutes; h -> hours; d -> days; w -> weeks; M -> months
 **Payload:**
 ```javascript
 {
-  "e": "kline",         // Event type
-  "E": 1672515782136,   // Event time
-  "s": "BNBBTC",        // Symbol
-  "k": {
-    "t": 1672515780000, // Kline start time
-    "T": 1672515839999, // Kline close time
-    "s": "BNBBTC",      // Symbol
-    "i": "1m",          // Interval
-    "f": 100,           // First trade ID
-    "L": 200,           // Last trade ID
-    "o": "0.0010",      // Open price
-    "c": "0.0020",      // Close price
-    "h": "0.0025",      // High price
-    "l": "0.0015",      // Low price
-    "v": "1000",        // Base asset volume
-    "n": 100,           // Number of trades
-    "x": false,         // Is this kline closed?
-    "q": "1.0000",      // Quote asset volume
-    "V": "500",         // Taker buy base asset volume
-    "Q": "0.500",       // Taker buy quote asset volume
-    "B": "123456"       // Ignore
-  }
+    "e": "kline",               // Event type
+    "E": 1672515782136,         // Event time
+    "s": "BNBBTC",              // Symbol
+    "k": {
+        "t": 1672515780000,     // Kline start time
+        "T": 1672515839999,     // Kline close time
+        "s": "BNBBTC",          // Symbol
+        "i": "1m",              // Interval
+        "f": 100,               // First trade ID
+        "L": 200,               // Last trade ID
+        "o": "0.0010",          // Open price
+        "c": "0.0020",          // Close price
+        "h": "0.0025",          // High price
+        "l": "0.0015",          // Low price
+        "v": "1000",            // Base asset volume
+        "n": 100,               // Number of trades
+        "x": false,             // Is this kline closed?
+        "q": "1.0000",          // Quote asset volume
+        "V": "500",             // Taker buy base asset volume
+        "Q": "0.500",           // Taker buy quote asset volume
+        "B": "123456"           // Ignore
+    }
 }
 ```
 
@@ -312,28 +319,28 @@ Supported intervals: See [`Kline/Candlestick chart intervals`](#kline-intervals)
 **Payload:**
 ```javascript
 {
-  "e": "kline",         // Event type
-  "E": 1672515782136,   // Event time
-  "s": "BNBBTC",        // Symbol
-  "k": {
-    "t": 1672515780000, // Kline start time
-    "T": 1672515839999, // Kline close time
-    "s": "BNBBTC",      // Symbol
-    "i": "1m",          // Interval
-    "f": 100,           // First trade ID
-    "L": 200,           // Last trade ID
-    "o": "0.0010",      // Open price
-    "c": "0.0020",      // Close price
-    "h": "0.0025",      // High price
-    "l": "0.0015",      // Low price
-    "v": "1000",        // Base asset volume
-    "n": 100,           // Number of trades
-    "x": false,         // Is this kline closed?
-    "q": "1.0000",      // Quote asset volume
-    "V": "500",         // Taker buy base asset volume
-    "Q": "0.500",       // Taker buy quote asset volume
-    "B": "123456"       // Ignore
-  }
+    "e": "kline",               // Event type
+    "E": 1672515782136,         // Event time
+    "s": "BNBBTC",              // Symbol
+    "k": {
+        "t": 1672515780000,     // Kline start time
+        "T": 1672515839999,     // Kline close time
+        "s": "BNBBTC",          // Symbol
+        "i": "1m",              // Interval
+        "f": 100,               // First trade ID
+        "L": 200,               // Last trade ID
+        "o": "0.0010",          // Open price
+        "c": "0.0020",          // Close price
+        "h": "0.0025",          // High price
+        "l": "0.0015",          // Low price
+        "v": "1000",            // Base asset volume
+        "n": 100,               // Number of trades
+        "x": false,             // Is this kline closed?
+        "q": "1.0000",          // Quote asset volume
+        "V": "500",             // Taker buy base asset volume
+        "Q": "0.500",           // Taker buy quote asset volume
+        "B": "123456"           // Ignore
+    }
 }
 ```
 
@@ -346,17 +353,17 @@ Supported intervals: See [`Kline/Candlestick chart intervals`](#kline-intervals)
 
 **Payload:**
 ```javascript
-  {
-    "e": "24hrMiniTicker",  // Event type
-    "E": 1672515782136,     // Event time
-    "s": "BNBBTC",          // Symbol
-    "c": "0.0025",          // Close price
-    "o": "0.0010",          // Open price
-    "h": "0.0025",          // High price
-    "l": "0.0010",          // Low price
-    "v": "10000",           // Total traded base asset volume
-    "q": "18"               // Total traded quote asset volume
-  }
+{
+    "e": "24hrMiniTicker",     // Event type
+    "E": 1672515782136,        // Event time
+    "s": "BNBBTC",             // Symbol
+    "c": "0.0025",             // Close price
+    "o": "0.0010",             // Open price
+    "h": "0.0025",             // High price
+    "l": "0.0010",             // Low price
+    "v": "10000",              // Total traded base asset volume
+    "q": "18"                  // Total traded quote asset volume
+}
 ```
 
 ## All Market Mini Tickers Stream
@@ -369,9 +376,9 @@ Supported intervals: See [`Kline/Candlestick chart intervals`](#kline-intervals)
 **Payload:**
 ```javascript
 [
-  {
-    // Same as <symbol>@miniTicker payload
-  }
+    {
+        // Same as <symbol>@miniTicker payload
+    }
 ]
 ```
 
@@ -385,29 +392,29 @@ Supported intervals: See [`Kline/Candlestick chart intervals`](#kline-intervals)
 **Payload:**
 ```javascript
 {
-  "e": "24hrTicker",  // Event type
-  "E": 1672515782136, // Event time
-  "s": "BNBBTC",      // Symbol
-  "p": "0.0015",      // Price change
-  "P": "250.00",      // Price change percent
-  "w": "0.0018",      // Weighted average price
-  "x": "0.0009",      // First trade(F)-1 price (first trade before the 24hr rolling window)
-  "c": "0.0025",      // Last price
-  "Q": "10",          // Last quantity
-  "b": "0.0024",      // Best bid price
-  "B": "10",          // Best bid quantity
-  "a": "0.0026",      // Best ask price
-  "A": "100",         // Best ask quantity
-  "o": "0.0010",      // Open price
-  "h": "0.0025",      // High price
-  "l": "0.0010",      // Low price
-  "v": "10000",       // Total traded base asset volume
-  "q": "18",          // Total traded quote asset volume
-  "O": 0,             // Statistics open time
-  "C": 86400000,      // Statistics close time
-  "F": 0,             // First trade ID
-  "L": 18150,         // Last trade Id
-  "n": 18151          // Total number of trades
+    "e": "24hrTicker",      // Event type
+    "E": 1672515782136,     // Event time
+    "s": "BNBBTC",          // Symbol
+    "p": "0.0015",          // Price change
+    "P": "250.00",          // Price change percent
+    "w": "0.0018",          // Weighted average price
+    "x": "0.0009",          // First trade(F)-1 price (first trade before the 24hr rolling window)
+    "c": "0.0025",          // Last price
+    "Q": "10",              // Last quantity
+    "b": "0.0024",          // Best bid price
+    "B": "10",              // Best bid quantity
+    "a": "0.0026",          // Best ask price
+    "A": "100",             // Best ask quantity
+    "o": "0.0010",          // Open price
+    "h": "0.0025",          // High price
+    "l": "0.0010",          // Low price
+    "v": "10000",           // Total traded base asset volume
+    "q": "18",              // Total traded quote asset volume
+    "O": 0,                 // Statistics open time
+    "C": 86400000,          // Statistics close time
+    "F": 0,                 // First trade ID
+    "L": 18150,             // Last trade Id
+    "n": 18151              // Total number of trades
 }
 ```
 
@@ -429,23 +436,23 @@ As such, the effective window might be up to 59999ms wider than \<window_size\>.
 
 ```javascript
 {
-  "e": "1hTicker",    // Event type
-  "E": 1672515782136, // Event time
-  "s": "BNBBTC",      // Symbol
-  "p": "0.0015",      // Price change
-  "P": "250.00",      // Price change percent
-  "o": "0.0010",      // Open price
-  "h": "0.0025",      // High price
-  "l": "0.0010",      // Low price
-  "c": "0.0025",      // Last price
-  "w": "0.0018",      // Weighted average price
-  "v": "10000",       // Total traded base asset volume
-  "q": "18",          // Total traded quote asset volume
-  "O": 0,             // Statistics open time
-  "C": 1675216573749, // Statistics close time
-  "F": 0,             // First trade ID
-  "L": 18150,         // Last trade Id
-  "n": 18151          // Total number of trades
+    "e": "1hTicker",        // Event type
+    "E": 1672515782136,     // Event time
+    "s": "BNBBTC",          // Symbol
+    "p": "0.0015",          // Price change
+    "P": "250.00",          // Price change percent
+    "o": "0.0010",          // Open price
+    "h": "0.0025",          // High price
+    "l": "0.0010",          // Low price
+    "c": "0.0025",          // Last price
+    "w": "0.0018",          // Weighted average price
+    "v": "10000",           // Total traded base asset volume
+    "q": "18",              // Total traded quote asset volume
+    "O": 0,                 // Statistics open time
+    "C": 1675216573749,     // Statistics close time
+    "F": 0,                 // First trade ID
+    "L": 18150,             // Last trade Id
+    "n": 18151              // Total number of trades
 }
 ```
 
@@ -464,10 +471,10 @@ Note that only tickers that have changed will be present in the array.
 **Payload:**
 ```javascript
 [
-  {
-    // Same as <symbol>@ticker_<window_size> payload,
-    // one for each symbol updated within the interval.
-  }
+    {
+        // Same as <symbol>@ticker_<window_size> payload,
+        // one for each symbol updated within the interval.
+    }
 ]
 ```
 
@@ -483,12 +490,12 @@ Multiple `<symbol>@bookTicker` streams can be subscribed to over one connection.
 **Payload:**
 ```javascript
 {
-  "u":400900217,     // order book updateId
-  "s":"BNBUSDT",     // symbol
-  "b":"25.35190000", // best bid price
-  "B":"31.21000000", // best bid qty
-  "a":"25.36520000", // best ask price
-  "A":"40.66000000"  // best ask qty
+    "u": 400900217,         // order book updateId
+    "s": "BNBUSDT",         // symbol
+    "b": "25.35190000",     // best bid price
+    "B": "31.21000000",     // best bid qty
+    "a": "25.36520000",     // best ask price
+    "A": "40.66000000"      // best ask qty
 }
 ```
 
@@ -504,12 +511,12 @@ Average price streams push changes in the average price over a fixed time interv
 
 ```javascript
 {
-  "e": "avgPrice",          // Event type
-  "E": 1693907033000,       // Event time
-  "s": "BTCUSDT",           // Symbol
-  "i": "5m",                // Average price interval
-  "w": "25776.86000000",    // Average price
-  "T": 1693907032213        // Last trade time
+    "e": "avgPrice",           // Event type
+    "E": 1693907033000,        // Event time
+    "s": "BTCUSDT",            // Symbol
+    "i": "5m",                 // Average price interval
+    "w": "25776.86000000",     // Average price
+    "T": 1693907032213         // Last trade time
 }
 ```
 
@@ -523,19 +530,19 @@ Top **\<levels\>** bids and asks, pushed every second. Valid **\<levels\>** are 
 **Payload:**
 ```javascript
 {
-  "lastUpdateId": 160,  // Last update ID
-  "bids": [             // Bids to be updated
-    [
-      "0.0024",         // Price level to be updated
-      "10"              // Quantity
+    "lastUpdateId": 160,     // Last update ID
+    "bids": [                // Bids to be updated
+        [
+            "0.0024",        // Price level to be updated
+            "10"             // Quantity
+        ]
+    ],
+    "asks": [                // Asks to be updated
+        [
+            "0.0026",        // Price level to be updated
+            "100"            // Quantity
+        ]
     ]
-  ],
-  "asks": [             // Asks to be updated
-    [
-      "0.0026",         // Price level to be updated
-      "100"             // Quantity
-    ]
-  ]
 }
 ```
 
@@ -549,23 +556,23 @@ Order book price and quantity depth updates used to locally manage an order book
 **Payload:**
 ```javascript
 {
-  "e": "depthUpdate", // Event type
-  "E": 1672515782136, // Event time
-  "s": "BNBBTC",      // Symbol
-  "U": 157,           // First update ID in event
-  "u": 160,           // Final update ID in event
-  "b": [              // Bids to be updated
-    [
-      "0.0024",       // Price level to be updated
-      "10"            // Quantity
+    "e": "depthUpdate",     // Event type
+    "E": 1672515782136,     // Event time
+    "s": "BNBBTC",          // Symbol
+    "U": 157,               // First update ID in event
+    "u": 160,               // Final update ID in event
+    "b": [                  // Bids to be updated
+        [
+            "0.0024",       // Price level to be updated
+            "10"            // Quantity
+        ]
+    ],
+    "a": [                  // Asks to be updated
+        [
+            "0.0026",       // Price level to be updated
+            "100"           // Quantity
+        ]
     ]
-  ],
-  "a": [              // Asks to be updated
-    [
-      "0.0026",       // Price level to be updated
-      "100"           // Quantity
-    ]
-  ]
 }
 ```
 

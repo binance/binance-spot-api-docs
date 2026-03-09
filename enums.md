@@ -134,34 +134,34 @@ Status | Description
 * REQUEST_WEIGHT
 
 ```json
-    {
-      "rateLimitType": "REQUEST_WEIGHT",
-      "interval": "MINUTE",
-      "intervalNum": 1,
-      "limit": 6000
-    }
+{
+    "rateLimitType": "REQUEST_WEIGHT",
+    "interval": "MINUTE",
+    "intervalNum": 1,
+    "limit": 6000
+}
 ```
 
 * ORDERS
 
 ```json
-    {
-      "rateLimitType": "ORDERS",
-      "interval": "SECOND",
-      "intervalNum": 1,
-      "limit": 10
-    }
+{
+    "rateLimitType": "ORDERS",
+    "interval": "SECOND",
+    "intervalNum": 1,
+    "limit": 10
+}
 ```
 
 * RAW_REQUESTS
 
 ```json
-    {
-      "rateLimitType": "RAW_REQUESTS",
-      "interval": "MINUTE",
-      "intervalNum": 5,
-      "limit": 61000
-    }
+{
+    "rateLimitType": "RAW_REQUESTS",
+    "interval": "MINUTE",
+    "intervalNum": 5,
+    "limit": 61000
+}
 ```
 
 ## Rate limit intervals (interval)
@@ -182,3 +182,9 @@ Read [Self Trade Prevention (STP) FAQ](faqs/stp_faq.md) to learn more.
 * `EXPIRE_BOTH`
 * `DECREMENT`
 * `TRANSFER`
+
+<a id="execution rules"></a>
+
+## Execution Rules
+
+* `PRICE_RANGE`

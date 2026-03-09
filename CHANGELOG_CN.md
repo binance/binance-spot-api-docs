@@ -1,6 +1,100 @@
 # 更新日志
 
-**最近更新： 2026-02-24**
+**最近更新： 2026-03-09**
+
+### 2026-03-09
+
+**注意：** 本部分的变更将逐步推出，预计大约需要三周时间完成。
+
+#### 新功能
+
+* 价格区间执行规则
+  * 新增接口/方法
+    * REST API:
+      * `GET /api/v3/executionRules`
+      * `GET /api/v3/referencePrice`
+      * `GET /api/v3/referencePrice/calculation`
+    * WebSocket API:
+      * `executionRules`
+      * `referencePrice`
+      * `referencePrice.calculation`
+  * 新增 JSON 数据流：`<symbol>@referencePrice`
+* REST 和 WebSocket API SBE schema 3:3
+  * 当前的 schema 3:2 [spot_3_2.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_2.xml) 已被废止，将根据我们的 schema 废止政策在6个月内停止使用。
+  * schema 3:3 的变更内容：
+    * 新消息 `ExecutionRulesResponse`
+    * 新消息 `PriceRangeExecutionRule`（嵌入于 `ExecutionRulesResponse` 中）
+    * 新消息 `ReferencePriceResponse`
+    * 新消息 `ReferencePriceCalculationResponse`
+    * 新枚举 `executionRuleType`
+    * 新枚举 `expiryReason`
+    * 新枚举 `calculationType`
+    * 在 `NewOrderResultResponse`、`NewOrderFullResponse`、`NewOrderListResultResponse` 和 `NewOrderListFullResponse` 中新增字段 `expiryReason`
+    * 在 `ExecutionReportEvent` 中新增字段 `expiryReason`
+    * 新消息 `ServerShutdownEvent`（仅限 WebSocket API）
+* FIX SBE schema 1:1
+  * 该 schema 将用于 FIX 订单接入、FIX Drop Copy 和 FIX 市场数据流。
+  * 当前的 FIX schema 1:0 [spot-fixsbe-1_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot-fixsbe-1_0.xml) 已被废止，将根据我们的 schema 废止政策在6个月内停用。
+  * schema 1:1 的变更内容：
+    * 新枚举 `expiryReason`
+    * 在 `ExecutionReport` 中新增字段 `ExpiryReason`
+
+#### FIX API
+
+* 在 ExecutionReport `<T>` 消息中可选新增字段 ExpiryReason `<25056>`。
+  * 更新了用于 FIX 市场数据流和 FIX 订单接入的 QuickFIX Schema。
+
+#### WebSocket API
+
+* 新增 `serverShutdown` 事件。
+
+#### 未来的更新
+
+* 以下接口已在 **2019-11-13** 废止，将于 **2026-03-25** 停用：
+  * `GET /api/v1/ping`
+  * `GET /api/v1/time`
+  * `POST /api/v1/userDataStream`
+  * `PUT /api/v1/userDataStream`
+  * `GET /api/v1/ticker/bookTicker`
+  * `GET /api/v1/ticker/price`
+  * `GET /api/v1/klines`
+  * `GET /api/v1/historicalTrades`
+  * `GET /api/v1/depth`
+  * `GET /api/v1/aggTrades`
+  * `GET /api/v1/ticker/24hr`
+* 以下接口将于 **2026-03-25** 停用：
+  * `GET /api/v1/userDataStream`
+  * `DELETE /api/v1/userDataStream`
+  * `GET /api/v1/trades`
+* **以下变更将于 2026-03-26 约 07:00 UTC 生效**
+  * 下单及订单列表下单接口的响应将根据 `newOrderRespAck` 的值显示订单过期原因：
+    * 如果 `newOrderRespType=ACK`，则不显示过期原因。
+    * 如果 `newOrderRespType=RESULT` 或 `newOrderRespType=FULL` 模式，如果出现订单过期，则在字段 `expiryReason` 中显示过期原因。
+      * 影响的接口/方法包括：
+        * REST API
+          * `POST /api/v3/order`
+          * `POST /api/v3/sor/order`
+          * `POST /api/v3/order/cancelReplace`
+          * `POST /api/v3/order/oco`
+          * `POST /api/v3/orderList/oco`
+          * `POST /api/v3/orderList/oto`
+          * `POST /api/v3/orderList/otoco`
+          * `POST /api/v3/orderList/opo`
+          * `POST /api/v3/orderList/opoco`
+        * WebSocket API
+          * `order.place`
+          * `sor.order.place`
+          * `order.cancelReplace`
+          * `orderList.place`
+          * `orderList.place.oco`
+          * `orderList.place.oto`
+          * `orderList.place.otoco`
+          * `orderList.place.opo`
+          * `orderList.place.opoco`
+  * 在用户数据流中，`executionReport` 事件新增可选字段 `eR`，如果出现订单过期，则用于显示订单过期原因。
+
+
+---
 
 ### 2026-02-24
 
@@ -13,7 +107,7 @@
 
 REST 和 WebSocket API：
 
-* 注意：根据我们的 SBE 政策，[在被废止 6 个月后](faqs/sbe_faq_CN.md#sbe-schema)， SBE 3：0 模式将于 2026 年 02 月 19 日被禁用。
+* 注意：根据我们的 SBE 政策，[在被废止 6 个月后](faqs/sbe_faq_CN.md#sbe-schema)， SBE 3：0 模式将于 2026 年 02 月 19 日被停用。
 * [面向生产的 SBE 生命周期](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) 已基于本次更改进行了更新。
 
 ---

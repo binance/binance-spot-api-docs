@@ -7,6 +7,7 @@
   * 如果使用标准443端口时遇到问题，可以使用替代端口9443。
   * [现货测试网](https://testnet.binance.vision)的 base URL 是 `wss://ws-api.testnet.binance.vision/ws-api/v3`。
 * 每个到 base URL 的链接有效期不超过24小时，请妥善处理断线重连。
+* 在因维护或链接保持24小时后被断开之前，会发送 [`serverShutdown`](#serverShutdown) 事件。请尽快重新连接以防止数据流中断。
 * 我们支持 HMAC，RSA 以及 Ed25519 Key 类型。 如需进一步了解，请参考 [API Key 类型](faqs/api_key_types_CN.md)。
 * 响应默认为 JSON 格式。如果您想接收 SBE 格式的响应，请参考 [简单二进制编码 （SBE） 常见问题](./faqs/sbe_faq_CN.md)。
 * 如果您的请求包含非 ASCII 字符的交易对名称，那么响应中可能包含以 UTF-8 编码的非 ASCII 字符。
@@ -1512,6 +1513,103 @@ NONE
 }
 ```
 
+<a id="serverShutdown"></a>
+### 服务器关闭
+
+```javascript
+{
+  "event": {
+    "e": "serverShutdown", // 事件类型
+    "E": 1770123456789     // 事件时间
+   }
+}
+```
+
+当服务器即将关闭时，会发送 `serverShutdown` 事件。
+
+请尽快重新连接 WebSocket API，以避免数据流中断。
+
+
+### 查询执行规则
+
+```javascript
+{
+    "id": "5162affb-0aba-4821-b475-f2625006eb43",
+    "method": "executionRules",
+    "params": {
+        "symbol": "BAZUSD"
+    }
+}
+```
+
+**权重和参数：**
+
+**注意：** 不允许多个参数组合使用。
+
+<table>
+  <tr>
+    <th>名称</th>
+    <th>权重</th>
+    <th>类型</th>
+    <th>是否必需</th>
+    <th>描述</th>
+  </tr>
+  <tr>
+    <td><code>symbol</code></td>
+    <td>2</td>
+    <td rowspan="2">STRING</td>
+    <td rowspan="2">NO</td>
+    <td>查询指定的交易对</td>
+  </tr>
+  <tr>
+    <td><code>symbols</code></td>
+    <td>每个 <code>symbol</code> 权重为 2，最多支持 40 </td>
+    <td>查询多个交易对</td>
+  </tr>
+  <tr>
+    <td>无参数</td>
+    <td>40</td>
+    <td>N/A</td>
+    <td>N/A</td>
+    <td>查询所有交易对</td>
+  </tr>
+  <tr>
+    <td><code>symbolStatus</code></td>
+    <td>40</td>
+    <td>ENUM</td>
+    <td>NO</td>
+    <td>查询指定状态的所有交易对<br>支持的值：<code>TRADING</code>（正常交易中）、<code>HALT</code>（交易终止）、<code>BREAK</code>（交易暂停）</td>
+  </tr>
+</table>
+
+**数据来源：** 缓存
+
+**响应示例：**
+
+```javascript
+{
+  "id": "5162affb-0aba-4821-b475-f2625006eb43",
+  "status": 200,
+  "result": {
+    "symbolRules": [
+      {
+        "symbol": "BAZUSD",
+        "rules": [
+          {
+            "ruleType": "PRICE_RANGE",
+            "bidLimitMultUp": "1.0001",
+            "bidLimitMultDown": "0.9999",
+            "askLimitMultUp": "1.0001",
+            "askLimitMultDown": "0.9999"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+
 ## 行情接口
 
 ### 订单薄深度信息
@@ -2271,7 +2369,7 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
 
 <table>
   <tr>
-    <th>参数名</th>
+    <th>名称</th>
     <th>类型</th>
     <th>是否必需</th>
     <th>描述</th>
@@ -2977,6 +3075,121 @@ days    | `1d`, `2d` ... `7d`
     ]
 }
 ```
+
+### 查询参考价格
+
+```json
+{
+  "id": "5132affb-0aba-4821-b475-f262504556b43",
+  "method": "referencePrice",
+  "params": {
+    "symbol": "BAZUSD"
+  }
+}
+```
+
+**权重：** 2
+
+**参数：**
+
+| 名称     | 类型     | 是否必需 | 描述 |
+| -------- | -------- | -------- | ---- |
+| `symbol` | STRING| YES       |      |
+
+**数据来源：** 缓存
+
+**响应示例：**
+
+如果设置了参考价格：
+
+```javascript
+{
+  "id": "5132affb-0aba-4821-b475-f262504556b43",
+  "status": 200,
+  "result": {
+    "symbol": "BAZUSD",
+    "referencePrice": "0.00501900",
+    "timestamp": 1770946889251     //参考价格生效的时间
+  }
+}
+```
+
+如果未设置参考价格：
+
+```javascript
+{
+  "id": "5132affb-0aba-4821-b475-f262504556b43",
+  "status": 200,
+  "result": {
+    "symbol": "BAZUSD",
+    "referencePrice": null,
+    "timestamp": 1770946889251      //参考价格生效的时间
+  }
+}
+```
+
+### 查询参考价格计算方式
+
+```json
+{
+  "id": "5132affa-0aba-4831-b475-f262504556b41",
+  "method": "referencePrice.calculation",
+  "params": {
+    "symbol": "BAZUSD"
+  }
+}
+```
+
+描述指定交易对参考价格的计算方式。
+
+**权重：** 2
+
+**参数：**
+
+| 名称           | 类型           | 是否必需 | 描述                                                                                  |
+| -------------- | -------------- | -------- | ------------------------------------------------------------------------------------- |
+| `symbol`       | STRING| YES       |                                                                                       |
+| `symbolStatus` | ENUM   | NO     | 支持的值：`TRADING`（正常交易中）、`HALT`（交易终止）、`BREAK`（交易暂停）                         |
+
+**数据来源：** 缓存
+
+**响应示例：**
+
+如果参考价格未被计算：
+
+```json
+{
+    "id": "5132affa-0aba-4831-b475-f262504556b41",
+    "status": 400,
+    "error":
+    {
+        "code": -2043,
+        "msg": "This symbol doesn't have a reference price."
+    }
+}
+```
+
+如果参考价格由撮合引擎以算术平均数计算：
+
+```json
+{
+  "symbol": "BAZUSD",
+  "calculationType": "ARITHMETIC_MEAN",
+  "bucketCount": 10,
+  "bucketWidthMs": 1000
+}
+```
+
+如果参考价格由撮合引擎外部计算：
+
+```json
+{
+  "symbol": "BAZUSD",
+  "calculationType": "EXTERNAL",
+  "externalCalculationId": 42
+}
+```
+
 
 ## 身份验证请求
 
@@ -3954,9 +4167,9 @@ NONE
 }
 ```
 
-撤消挂单并在同个交易对上重新下单。
-
-即使请求中没有尝试发送新订单，比如(`newOrderResult: NOT_ATTEMPTED`)，未成交订单的数量仍然会加1。
+* 撤消一个现有订单，并立即重新下单。
+* 即使新订单未被尝试（即 `newOrderResult: NOT_ATTEMPTED`），未成交订单数量仍会增加1。
+* 通过此接口只能撤消订单列表中的单个订单，但结果与撤消整个订单列表相同。
 
 **权重:**
 1

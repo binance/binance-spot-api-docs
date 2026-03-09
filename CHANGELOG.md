@@ -1,6 +1,99 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-02-24**
+**Last Updated: 2026-03-09**
+
+### 2026-03-09
+
+**Notice:** The changes in this section will be gradually rolled out and will take approximately three weeks to complete.
+
+#### New Features
+
+* [Price Range Execution Rule](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/price_range_execution_rules.md)
+  * New Endpoints/Methods
+    * REST API:
+      * `GET /api/v3/executionRules`
+      * `GET /api/v3/referencePrice`
+      * `GET /api/v3/referencePrice/calculation`
+    * WebSocket API:
+      * `executionRules`
+      * `referencePrice`
+      * `referencePrice.calculation`
+  * New JSON Stream: `<symbol>@referencePrice`
+* REST and WebSocket API SBE schema 3:3
+  * The current schema 3:2 [spot_3_2.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_2.xml) is deprecated and will be retired in 6 months as per our schema deprecation policy.
+  * Changes in schema 3:3:
+    * New message `ExecutionRulesResponse`
+    * New message `PriceRangeExecutionRule` (to be embedded in `ExecutionRulesResponse`)
+    * New message `ReferencePriceResponse`
+    * New message `ReferencePriceCalculationResponse`
+    * New enum `executionRuleType`
+    * New enum `expiryReason`
+    * New enum `calculationType`
+    * New field `expiryReason` in `NewOrderResultResponse`, `NewOrderFullResponse`, `NewOrderListResultResponse` and `NewOrderListFullResponse`
+    * New field `expiryReason` in `ExecutionReportEvent`
+    * New message `ServerShutdownEvent` for WebSocket API only
+* FIX SBE schema 1:1
+  * This will be used for FIX Order Entry, FIX Drop Copy, and FIX Market Data.
+  * The current FIX schema 1:0 [spot-fixsbe-1_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot-fixsbe-1_0.xml) is deprecated and will be retired in 6 months as per our schema deprecation policy.
+  * Changes in schema 1:1:
+    * New enum `expiryReason`
+    * New field `ExpiryReason` in `ExecutionReport`
+
+#### FIX API
+
+* ExpiryReason `<25056>` is optionally added to the ExecutionReport `<T>` message.
+  * Updated QuickFIX Schema for FIX Market Data and FIX Order Entry.
+
+#### WebSocket API
+
+* `serverShutdown` event added.
+
+#### Future Changes
+
+* These endpoints have been [deprecated](#2019-11-13) for a long time and will be retired on **2026-03-25**:
+  * `GET /api/v1/ping`
+  * `GET /api/v1/time`
+  * `POST /api/v1/userDataStream`
+  * `PUT /api/v1/userDataStream`
+  * `GET /api/v1/ticker/bookTicker`
+  * `GET /api/v1/ticker/price`
+  * `GET /api/v1/klines`
+  * `GET /api/v1/historicalTrades`
+  * `GET /api/v1/depth`
+  * `GET /api/v1/aggTrades`
+  * `GET /api/v1/ticker/24hr`
+* The following endpoints will be retired **2026-03-25**:
+  * `GET /api/v1/userDataStream`
+  * `DELETE /api/v1/userDataStream`
+  * `GET /api/v1/trades`
+* **The following changes will occur at 2026-03-26 at approximately 07:00 UTC**
+  * The responses to order placement and order list placement endpoints display the expiry reason depending on the value of `newOrderRespAck`:
+    * If `newOrderRespType=ACK`, the expiry reason is not displayed.
+    * If `newOrderRespType=RESULT` or `newOrderRespType=FULL` mode, the expiry reason, if any, is displayed in field `expiryReason`.
+      * This affects the following endpoints/methods:
+        * REST API
+          * `POST /api/v3/order`
+          * `POST /api/v3/sor/order`
+          * `POST /api/v3/order/cancelReplace`
+          * `POST /api/v3/order/oco`
+          * `POST /api/v3/orderList/oco`
+          * `POST /api/v3/orderList/oto`
+          * `POST /api/v3/orderList/otoco`
+          * `POST /api/v3/orderList/opo`
+          * `POST /api/v3/orderList/opoco`
+        * WebSocket API
+          * `order.place`
+          * `sor.order.place`
+          * `order.cancelReplace`
+          * `orderList.place`
+          * `orderList.place.oco`
+          * `orderList.place.oto`
+          * `orderList.place.otoco`
+          * `orderList.place.opo`
+          * `orderList.place.opoco`
+  * In User Data Streams, `executionReport` events have a new optional field, `eR`, which shows the expiry reason, if any.
+
+---
 
 ### 2026-02-24
 

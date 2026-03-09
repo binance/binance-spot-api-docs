@@ -181,3 +181,9 @@
 * `EXPIRE_BOTH`
 * `DECREMENT`
 * `TRANSFER`
+
+<a id="execution rules"></a>
+
+## 执行规则
+
+* `PRICE_RANGE`
