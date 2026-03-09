@@ -78,7 +78,7 @@ If a taker order attempts to execute at a price outside of the allowed price ran
 | ---- | ---- |
 | Non-FIX APIs | `expiryReason` |
 | FIX APIs | `ExpiryReason <25056>` |
-| User Data Streamer | `"eR"` |
+| User Data Stream | `"eR"` |
 
 ## How is the reference price calculated?
 
