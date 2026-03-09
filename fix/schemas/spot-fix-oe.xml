@@ -82,6 +82,7 @@
    <field name='OrdRejReason' required='N'/>
    <field name='ErrorCode' required='N'/>
    <field name='Text' required='N'/>
+   <field name='ExpiryReason' required='N'/>
   </message>
   <message name='OrderCancelReject' msgcat='app' msgtype='9'>
    <field name='ClOrdID' required='Y'/>
@@ -539,5 +540,15 @@
   <field number='25050' name='SBESchemaID' type='INT'/>
   <field number='25051' name='SBESchemaVersion' type='INT'/>
   <field number='25052' name='SBESchemaVersionDeprecated' type='INT'/>
+  <field number='25056' name='ExpiryReason' type='INT'>
+   <value enum='1' description='REJECTED'/>
+   <value enum='2' description='EXCHANGE_CANCELED'/>
+   <value enum='3' description='OCO_TRIGGER'/>
+   <value enum='4' description='OTO_PHASE_ONE_EXPIRED'/>
+   <value enum='5' description='UNFILLED_IOC_QUANTITY_EXPIRED'/>
+   <value enum='6' description='UNFILLED_FOK_ORDER_EXPIRED'/>
+   <value enum='7' description='INSUFFICIENT_LIQUIDITY'/>
+   <value enum='8' description='EXECUTION_RULE_PRICE_RANGE_EXCEEDED'/>
+  </field>
  </fields>
 </fix>
