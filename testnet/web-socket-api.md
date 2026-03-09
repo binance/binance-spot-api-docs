@@ -30,6 +30,8 @@
     - [Test connectivity](#test-connectivity)
     - [Check server time](#check-server-time)
     - [Exchange information](#exchange-information)
+    - [Query Execution Rules](#query-execution-rules)
+    - [Server Shutdown](#server-shutdown)
   - [Market data requests](#market-data-requests)
     - [Order book](#order-book)
     - [Recent trades](#recent-trades)
@@ -43,6 +45,8 @@
     - [Rolling window price change statistics](#rolling-window-price-change-statistics)
     - [Symbol price ticker](#symbol-price-ticker)
     - [Symbol order book ticker](#symbol-order-book-ticker)
+    - [Query Reference Price](#query-reference-price)
+    - [Query Reference Price Calculation](#query-reference-price-calculation)
   - [Authentication requests](#authentication-requests)
     - [Log in with API key (SIGNED)](#log-in-with-api-key-signed)
     - [Query session status](#query-session-status)
@@ -95,6 +99,7 @@
 * The base endpoint is: **`wss://ws-api.testnet.binance.vision/ws-api/v3`**
   * If you experience issues with the standard 443 port, alternative port 9443 is also available.
 * A single connection to the API is only valid for 24 hours; expect to be disconnected after the 24-hour mark.
+* Before a disconnection either due to maintenance or after 24 hours, a [`serverShutdown`](#server-shutdown) event will be sent. Please reconnect as soon as possible to prevent stream interruption.
 * We support HMAC, RSA, and Ed25519 keys. For more information, please see [API Key types](../faqs/api_key_types.md).
 * Responses are in JSON by default. To receive responses in SBE, refer to the [SBE FAQ](../faqs/sbe_faq.md) page.
 * If your request contains a symbol name containing non-ASCII characters, then the response may contain non-ASCII characters encoded in UTF-8.
@@ -1611,6 +1616,98 @@ Memory
 }
 ```
 
+### Query Execution Rules
+
+```javascript
+{
+    "id": "5162affb-0aba-4821-b475-f2625006eb43",
+    "method": "executionRules",
+    "params": {
+        "symbol": "BAZUSD"
+    }
+}
+```
+
+**Weight and Parameters:**
+
+**Note:** No combination of multiple parameters is allowed.
+
+<table>
+  <tr>
+    <th>Parameter</th>
+    <th>Weight</th>
+    <th>Type</th>
+    <th>Mandatory</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><code>symbol</code></td>
+    <td>2</td>
+    <td rowspan="2">STRING</td>
+    <td rowspan=2>No</td>
+    <td>Query for specified symbol</td>
+  </tr>
+  <tr>
+    <td><code>symbols</code></td>
+    <td>2 for each <code>symbol</code>, capped at a max of 40</td>
+    <td>Query for multiple symbols</td>
+  </tr>
+    <td>No parameter</td>
+    <td>40</td>
+    <td>N/A</td>
+    <td>N/A</td>
+    <td>Query for all symbols</td>
+  </tr>
+  <tr>
+    <td><code>symbolStatus</code></td>
+    <td>40</td>
+    <td>ENUM</td>
+    <td>No</td>
+    <td>Query for all symbols with the specified status<br> Supported values: <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code></td>
+  </tr>
+</table>
+
+**Data Source:** Memory
+
+**Response:**
+
+```javascript
+{
+  "id": "5162affb-0aba-4821-b475-f2625006eb43",
+  "status": 200,
+  "result": {
+    "symbolRules": [
+      {
+        "symbol": "BAZUSD",
+        "rules": [
+          {
+            "ruleType": "PRICE_RANGE",
+            "bidLimitMultUp": "1.0001",
+            "bidLimitMultDown": "0.9999",
+            "askLimitMultUp": "1.0001",
+            "askLimitMultDown": "0.9999"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Server Shutdown
+
+```javascript
+{
+  "event": {
+    "e": "serverShutdown", // Event Type
+    "E": 1770123456789     // Event Time
+  }
+}
+```
+
+`serverShutdown` is sent when the server is about to shut down.
+
+Please re-establish a new connection to the WebSocket API as soon as possible.
 
 ## Market data requests
 
@@ -3083,6 +3180,130 @@ If more than one symbol is requested, response returns an array:
 }
 ```
 
+### Query Reference Price
+
+```json
+{
+  "id": "5132affb-0aba-4821-b475-f262504556b43",
+  "method": "referencePrice",
+  "params": {
+    "symbol": "BAZUSD"
+  }
+}
+```
+
+**Weight:** 2
+
+**Parameters**:
+
+| Name | Type | Mandatory | Description |
+| :---: | :---: | :---: | ----- |
+| `symbol` | STRING | Yes | |
+
+**Data Source:** Memory
+
+**Response:**
+
+If a reference price is set:
+
+```javascript
+{
+  "id": "5132affb-0aba-4821-b475-f262504556b43",
+  "status": 200,
+  "result": {
+    "symbol": "BAZUSD",
+    "referencePrice": "0.00501900",
+    "timestamp": 1770946889251     //Timestamp when the reference price was valid
+  }
+}
+```
+
+If no reference price is set:
+
+```javascript
+{
+  "id": "5132affb-0aba-4821-b475-f262504556b43",
+  "status": 200,
+  "result": {
+    "symbol": "BAZUSD",
+    "referencePrice": null,
+    "timestamp": 1770946889251      //Timestamp when the reference price was valid
+  }
+}
+```
+
+### Query Reference Price Calculation
+
+```json
+{
+  "id": "5132affa-0aba-4831-b475-f262504556b41",
+  "method": "referencePrice.calculation",
+  "params": {
+    "symbol": "BAZUSD"
+  }
+}
+```
+
+Describes how reference price is calculated for a given symbol.
+
+**Weight:** 2
+
+**Parameters**:
+
+| Name | Type | Mandatory | Description |
+| ----- | ----- | ----- | ----- |
+|`symbol` | STRING | Yes |  |
+|`symbolStatus`|ENUM| No|Supported values: `TRADING`, `HALT`, `BREAK`|
+
+**Data Source:** Memory
+
+**Response:**
+
+If reference price is not being calculated:
+
+```json
+{
+    "id": "5132affa-0aba-4831-b475-f262504556b41",
+    "status": 400,
+    "error":
+    {
+        "code": -2043,
+        "msg": "This symbol doesn't have a reference price."
+    }
+}
+```
+
+If the reference price is being calculated by the matching engine as an arithmetic mean:
+
+```json
+{
+    "id": "5132affa-0aba-4831-b475-f262504556b41",
+    "status": 200,
+    "result":
+    {
+        "symbol": "BAZUSD",
+        "calculationType": "ARITHMETIC_MEAN",
+        "bucketCount": 10,
+        "bucketWidthMs": 1000
+    }
+}
+```
+
+If the reference price is being calculated outside the matching engine:
+
+```json
+{
+    "id": "5132affa-0aba-4831-b475-f262504556b41",
+    "status": 200,
+    "result":
+    {
+        "symbol": "BAZUSD",
+        "calculationType": "EXTERNAL",
+        "externalCalculationId": 42
+    }
+}
+```
+
 ## Authentication requests
 
 **Note:** Only _Ed25519_ keys are supported for this feature.
@@ -3696,6 +3917,7 @@ Field          |Description                                                     
 `pegOffsetType` | Price peg offset type | Only for pegged orders, if requested  | `"pegOffsetType": "PRICE_LEVEL"` |
 `pegOffsetValue` | Price peg offset value  | Only for pegged orders, if requested  | `"pegOffsetValue": 5` |
 `peggedPrice` | Current price order is pegged at | Only for pegged orders, once determined | `"peggedPrice": "87523.83710000"` |
+`expiryReason` | Cause of the order’s expiration | When an order has expired | `“expiryReason”: “INSUFFICIENT_LIQUIDITY”` |
 
 ### Test new order (TRADE)
 
@@ -4067,9 +4289,9 @@ When an order list is canceled:
 }
 ```
 
-Cancel an existing order and immediately place a new order instead of the canceled one.
-
-A new order that was not attempted (i.e. when `newOrderResult: NOT_ATTEMPTED`), will still increase the unfilled order count by 1.
+* Cancel an existing order and immediately place a new order instead of the canceled one.
+* A new order that was not attempted (i.e. when `newOrderResult: NOT_ATTEMPTED`), will still increase the unfilled order count by 1.
+* You can only cancel an individual order from an orderList using this method, but the result is the same as canceling the entire orderList.
 
 **Weight:**
 1

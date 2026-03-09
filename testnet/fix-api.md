@@ -743,6 +743,7 @@ Sent by the server whenever an order state changes.
 |835 | PegMoveType | CHAR | N | Describes whether peg is fixed or floats. Required for Pegged Orders and must be set to `1` (FIXED) |
 |836 | PegOffsetType | CHAR | N | Type of price peg offset. <br> Possible values: <br></br> `3`  - PRICE_TIER|
 |839 | PeggedPrice  | PRICE  | N |  Current price the order is pegged at|
+| 25056| ExpiryReason | STRING | N| Cause of the order’s expiration |
 
 **Sample message:**
 

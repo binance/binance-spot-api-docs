@@ -19,10 +19,10 @@ Any of the above variables can be set to 0, which disables that rule in the `pri
 **/exchangeInfo format:**
 ```javascript
 {
-  "filterType": "PRICE_FILTER",
-  "minPrice": "0.00000100",
-  "maxPrice": "100000.00000000",
-  "tickSize": "0.00000100"
+    "filterType": "PRICE_FILTER",
+    "minPrice": "0.00000100",
+    "maxPrice": "100000.00000000",
+    "tickSize": "0.00000100"
 }
 ```
 
@@ -37,10 +37,10 @@ In order to pass the `percent price`, the following must be true for `price`:
 **/exchangeInfo format:**
 ```javascript
 {
-  "filterType": "PERCENT_PRICE",
-  "multiplierUp": "1.3000",
-  "multiplierDown": "0.7000",
-  "avgPriceMins": 5
+    "filterType": "PERCENT_PRICE",
+    "multiplierUp": "1.3000",
+    "multiplierDown": "0.7000",
+    "avgPriceMins": 5
 }
 ```
 
@@ -59,14 +59,14 @@ Sell orders will succeed on this filter if:
 
 **/exchangeInfo format:**
 ```javascript
-  {
+{
     "filterType": "PERCENT_PRICE_BY_SIDE",
     "bidMultiplierUp": "1.2",
     "bidMultiplierDown": "0.2",
     "askMultiplierUp": "5",
     "askMultiplierDown": "0.8",
     "avgPriceMins": 1
-  }
+}
 ```
 
 
@@ -86,10 +86,10 @@ In order to pass the `lot size`, the following must be true for `quantity`/`iceb
 **/exchangeInfo format:**
 ```javascript
 {
-  "filterType": "LOT_SIZE",
-  "minQty": "0.00100000",
-  "maxQty": "100000.00000000",
-  "stepSize": "0.00100000"
+    "filterType": "LOT_SIZE",
+    "minQty": "0.00100000",
+    "maxQty": "100000.00000000",
+    "stepSize": "0.00100000"
 }
 ```
 
@@ -104,10 +104,10 @@ Since `MARKET` orders have no price, the average price is used over the last `av
 **/exchangeInfo format:**
 ```javascript
 {
-  "filterType": "MIN_NOTIONAL",
-  "minNotional": "0.00100000",
-  "applyToMarket": true,
-  "avgPriceMins": 5
+    "filterType": "MIN_NOTIONAL",
+    "minNotional": "0.00100000",
+    "applyToMarket": true,
+    "avgPriceMins": 5
 }
 ```
 
@@ -127,12 +127,12 @@ If the `avgPriceMins` is 0, then the last price will be used.
 **/exchangeInfo format:**
 ```javascript
 {
-   "filterType": "NOTIONAL",
-   "minNotional": "10.00000000",
-   "applyMinToMarket": false,
-   "maxNotional": "10000.00000000",
-   "applyMaxToMarket": false,
-   "avgPriceMins": 5
+    "filterType": "NOTIONAL",
+    "minNotional": "10.00000000",
+    "applyMinToMarket": false,
+    "maxNotional": "10000.00000000",
+    "applyMaxToMarket": false,
+    "avgPriceMins": 5
 }
 ```
 
@@ -142,8 +142,8 @@ The `ICEBERG_PARTS` filter defines the maximum parts an iceberg order can have. 
 **/exchangeInfo format:**
 ```javascript
 {
-  "filterType": "ICEBERG_PARTS",
-  "limit": 10
+    "filterType": "ICEBERG_PARTS",
+    "limit": 10
 }
 ```
 
@@ -163,10 +163,10 @@ In order to pass the `market lot size`, the following must be true for `quantity
 **/exchangeInfo format:**
 ```javascript
 {
-  "filterType": "MARKET_LOT_SIZE",
-  "minQty": "0.00100000",
-  "maxQty": "100000.00000000",
-  "stepSize": "0.00100000"
+    "filterType": "MARKET_LOT_SIZE",
+    "minQty": "0.00100000",
+    "maxQty": "100000.00000000",
+    "stepSize": "0.00100000"
 }
 ```
 
@@ -177,8 +177,8 @@ Note that both "algo" orders and normal orders are counted for this filter.
 **/exchangeInfo format:**
 ```javascript
 {
-  "filterType": "MAX_NUM_ORDERS",
-  "maxNumOrders": 25
+    "filterType": "MAX_NUM_ORDERS",
+    "maxNumOrders": 25
 }
 ```
 
@@ -189,8 +189,8 @@ The `MAX_NUM_ALGO_ORDERS` filter defines the maximum number of "algo" orders an 
 **/exchangeInfo format:**
 ```javascript
 {
-  "filterType": "MAX_NUM_ALGO_ORDERS",
-  "maxNumAlgoOrders": 5
+    "filterType": "MAX_NUM_ALGO_ORDERS",
+    "maxNumAlgoOrders": 5
 }
 ```
 
@@ -201,8 +201,8 @@ An `ICEBERG` order is any order where the `icebergQty` is > 0.
 **/exchangeInfo format:**
 ```javascript
 {
-  "filterType": "MAX_NUM_ICEBERG_ORDERS",
-  "maxNumIcebergOrders": 5
+    "filterType": "MAX_NUM_ICEBERG_ORDERS",
+    "maxNumIcebergOrders": 5
 }
 ```
 
@@ -220,8 +220,8 @@ If an order's `quantity` can cause the position to overflow, this will also fail
 **/exchangeInfo format:**
 ```javascript
 {
-  "filterType":"MAX_POSITION",
-  "maxPosition":"10.00000000"
+    "filterType": "MAX_POSITION",
+    "maxPosition": "10.00000000"
 }
 ```
 
@@ -245,13 +245,13 @@ For `STOP_LOSS SELL`, `STOP_LOSS_LIMIT SELL`, `TAKE_PROFIT BUY`, and `TAKE_PROFI
 **/exchangeInfo format:**
 
 ```javascript
-    {
-          "filterType": "TRAILING_DELTA",
-          "minTrailingAboveDelta": 10,
-          "maxTrailingAboveDelta": 2000,
-          "minTrailingBelowDelta": 10,
-          "maxTrailingBelowDelta": 2000
-   }
+{
+    "filterType": "TRAILING_DELTA",
+    "minTrailingAboveDelta": 10,
+    "maxTrailingAboveDelta": 2000,
+    "minTrailingBelowDelta": 10,
+    "maxTrailingBelowDelta": 2000
+}
 ```
 
 ### MAX_NUM_ORDER_AMENDS
@@ -263,10 +263,10 @@ If there are too many order amendments made on a single order, you will receive 
 **/exchangeInfo format:**
 
 ```javascript
-        {
-          "filterType": "MAX_NUM_ORDER_AMENDS",
-          "maxNumOrderAmends": 10
-        }
+{
+    "filterType": "MAX_NUM_ORDER_AMENDS",
+    "maxNumOrderAmends": 10
+}
 ```
 
 ### MAX_NUM_ORDER_LISTS
@@ -276,10 +276,10 @@ The `MAX_NUM_ORDER_LISTS` filter defines the maximum number of open order lists 
 **/exchangeInfo format:**
 
 ```javascript
-        {
-          "filterType": "MAX_NUM_ORDER_LISTS",
-          "maxNumOrderLists": 20
-        }
+{
+    "filterType": "MAX_NUM_ORDER_LISTS",
+    "maxNumOrderLists": 20
+}
 ```
 
 
@@ -291,8 +291,8 @@ Note that both "algo" orders and normal orders are counted for this filter.
 **/exchangeInfo format:**
 ```javascript
 {
-  "filterType": "EXCHANGE_MAX_NUM_ORDERS",
-  "maxNumOrders": 1000
+    "filterType": "EXCHANGE_MAX_NUM_ORDERS",
+    "maxNumOrders": 1000
 }
 ```
 
@@ -303,8 +303,8 @@ The `EXCHANGE_MAX_NUM_ALGO_ORDERS` filter defines the maximum number of "algo" o
 **/exchangeInfo format:**
 ```javascript
 {
-  "filterType": "EXCHANGE_MAX_NUM_ALGO_ORDERS",
-  "maxNumAlgoOrders": 200
+    "filterType": "EXCHANGE_MAX_NUM_ALGO_ORDERS",
+    "maxNumAlgoOrders": 200
 }
 ```
 
@@ -314,8 +314,8 @@ The `EXCHANGE_MAX_NUM_ICEBERG_ORDERS` filter defines the maximum number of icebe
 **/exchangeInfo format:**
 ```javascript
 {
-  "filterType": "EXCHANGE_MAX_NUM_ICEBERG_ORDERS",
-  "maxNumIcebergOrders": 10000
+    "filterType": "EXCHANGE_MAX_NUM_ICEBERG_ORDERS",
+    "maxNumIcebergOrders": 10000
 }
 ```
 
@@ -326,10 +326,10 @@ The `EXCHANGE_MAX_NUM_ORDERS` filter defines the maximum number of order lists a
 **/exchangeInfo format:**
 
 ```javascript
-   {
-      "filterType": "EXCHANGE_MAX_NUM_ORDER_LISTS",
-      "maxNumOrderLists": 20
-    }
+{
+    "filterType": "EXCHANGE_MAX_NUM_ORDER_LISTS",
+    "maxNumOrderLists": 20
+}
 ```
 
 
@@ -347,9 +347,9 @@ The `MAX_ASSET` filter defines the maximum quantity of an asset that an account 
 **/myFilters format:**
 
 ```javascript
-   {
-      "filterType": "MAX_ASSET",
-      "asset": "USDC",
-      "limit": "42.00000000"
-    }
+{
+    "filterType": "MAX_ASSET",
+    "asset": "USDC",
+    "limit": "42.00000000"
+}
 ```
