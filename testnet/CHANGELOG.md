@@ -11,7 +11,7 @@ This is not always synced with the live exchange.
 
 #### New Features
 
-* [Price Range Execution Rule](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/price_range_execution_rules.md)
+* [Price Range Execution Rule](../faqs/price_range_execution_rules.md)
   * New Endpoints/Methods
     * REST API:
       * `GET /api/v3/executionRules`
@@ -77,7 +77,7 @@ This is not always synced with the live exchange.
       * `orderList.place.opo`
       * `orderList.place.opoco`
   * In User Data Streams, `executionReport` events have a new optional field, `eR`, which shows the expiry reason, if any.
-* These endpoints have been [deprecated](#2019-11-13) for a long time and will be retired:
+* These endpoints have been deprecated for a long time and will be retired:
   * `GET /api/v1/ping`
   * `GET /api/v1/time`
   * `POST /api/v1/userDataStream`
