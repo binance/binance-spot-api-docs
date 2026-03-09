@@ -320,16 +320,6 @@ If the order is an order list, an event named `ListStatus` will be sent in addit
 | `INSUFFICIENT_LIQUIDITY` | There were not enough orders in the order book to match with this order. |
 | `EXECUTION_RULE_PRICE_RANGE_EXCEEDED` | The order attempted to trade at a price that would not meet the Price Range Execution Rule.|
 
-**Execution types:**
-
-* `NEW` - The order has been accepted into the engine.
-* `CANCELED` - The order has been canceled by the user.
-* `REPLACED` - The order has been amended.
-* `REJECTED` - The order has been rejected and was not processed (e.g. Cancel Replace Orders wherein the new order placement is rejected but the request to cancel request succeeds.)
-* `TRADE` - Part of the order or all of the order's quantity has filled.
-* `EXPIRED` - The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance).
-* `TRADE_PREVENTION` - The order has expired due to STP.
-
 Check the [Enums page](./enums.md) for more relevant enum definitions.
 
 ## Event Stream Terminated

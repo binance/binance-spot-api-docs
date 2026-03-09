@@ -303,17 +303,7 @@
 | `UNFILLED_IOC_QUANTITY_EXPIRED`  | IOC（立即成交或取消）订单未完全成交，因此过期。                                                  |
 | `UNFILLED_FOK_ORDER_EXPIRED`     | FOK（全部成交或取消）订单未完全成交，因此过期。                                                  |
 | `INSUFFICIENT_LIQUIDITY`          | 订单簿中没有足够的订单与该订单匹配。                                                              |
-| `EXECUTION_RULE_PRICE_RANGE_EXCEEDED` | 订单尝试以不符合价格区间执行规则的价格进行交易。                                                  |
-
-**可能的执行类型:**
-
-* `NEW` - 新订单已被引擎接受。
-* `CANCELED` - 订单被用户取消。
-* `REPLACED` - 订单已被修改。
-* `REJECTED` - 新订单被拒绝 （e.g. 在撤消挂单再下单时，其中新订单被拒绝但撤消挂单请求成功）。
-* `TRADE` - 订单有新成交。
-* `EXPIRED` - 订单已根据 Time In Force 参数的规则取消（e.g. 没有成交的 LIMIT FOK 订单或部分成交的 LIMIT IOC 订单）或者被交易所取消（e.g. 强平或维护期间取消的订单）。
-* `TRADE_PREVENTION` - 订单因 STP 触发而过期。
+| `EXECUTION_RULE_PRICE_RANGE_EXCEEDED` | 订单尝试以不符合价格区间执行规则的价格进行交易。
 
 请查阅 [枚举定义](./enums_CN.md) 文档获取更多枚举定义。
 
