@@ -137,14 +137,14 @@ REST API, WebSocket API and FIX API for SPOT support SBE.
             "version": 1,
             "releaseDate": "3024-03-01",
             "deprecatedDate": "3024-08-01",
-            "retiredDate": "3025-02-01",
+            "retiredDate": "3025-02-01"
         },
         {
             "id": 1,
             "version": 0,
             "releaseDate": "3024-01-01",
             "deprecatedDate": "3024-03-01",
-            "retiredDate": "3024-09-01",
+            "retiredDate": "3024-09-01"
         }
     ]
 }
@@ -181,3 +181,4 @@ A few field attributes prefixed with `mbx:` were added to the schema file for do
 - `mbx:exponent`: Points to the exponent field corresponding to the mantissa field
 - `mbx:jsonPath`: Contains the name of the equivalent field in the JSON response
 - `mbx:jsonValue`: Contains the name of the equivalent ENUM value in the JSON response
+- `mbx:defaultJsonValue`: Contains the default value of the JSON response.
