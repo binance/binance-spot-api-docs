@@ -92,8 +92,8 @@ The matching engine calculates the reference price as a simple moving average of
 
 When a trade occurs, the matching engine captures the trade price and adds it to the current bucket. Each bucket has
 * an open time, which is aligned to engine time modulo the bucket width
-* a trade count
-* a sum of all the trade prices represented in that bucket.
+* a trade count, which is a fixed-point integer with four decimal places of precision
+* a sum of all the trade prices represented in that bucket, which is a fixed-point integer with an extra four decimal places of precision over the quote asset precision.
 
 The matching engine calculates the average of a particular bucket by dividing the sum by the trade count.
 The first trade for a given open time creates a bucket and the matching engine gradually accumulates buckets as trades happen. The matching engine drops a bucket when its close time is outside the time window. This means that:
