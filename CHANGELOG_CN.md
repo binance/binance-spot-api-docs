@@ -1,6 +1,12 @@
 # 更新日志
 
-**最近更新： 2026-03-09**
+**最近更新： 2026-03-10**
+
+### 2026-03-10
+
+说明了关于[价格区间执行规则](./faqs/price_range_execution_rules_CN.md#matching-engine-calculation) 中参考价格的计算方法。
+
+---
 
 ### 2026-03-09
 
@@ -8,7 +14,7 @@
 
 #### 新功能
 
-* 价格区间执行规则
+* [价格区间执行规则](./faqs/price_range_execution_rules_CN.md))
   * 新增接口/方法
     * REST API:
       * `GET /api/v3/executionRules`

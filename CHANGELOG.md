@@ -1,6 +1,12 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-03-09**
+**Last Updated: 2026-03-10**
+
+### 2026-03-10
+
+* Clarified about the reference price calculation for [Price Range Execution Rule](./faqs/price_range_execution_rules.md#matching-engine-calculation)
+
+---
 
 ### 2026-03-09
 
@@ -8,7 +14,7 @@
 
 #### New Features
 
-* [Price Range Execution Rule](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/price_range_execution_rules.md)
+* [Price Range Execution Rule](./faqs/price_range_execution_rules.md)
   * New Endpoints/Methods
     * REST API:
       * `GET /api/v3/executionRules`
