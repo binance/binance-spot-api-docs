@@ -11,6 +11,30 @@
   * 这并不总是意味着该请求在撮合引擎中失败。
   * 如果请求状态未显示在 [WebSocket 账户接口](user-data-stream_CN.md) 中，请执行 API 查询以获取其状态。
 * 如果您的请求包含非 ASCII 字符的交易对名称，那么响应中可能包含以 UTF-8 编码的非 ASCII 字符。
+* 为确保连接不中断，请确保您的客户端在 TLS 握手过程中发送 **SNI（服务器名称指示）**，并对目标主机名进行证书验证。
+* 未发送 SNI 的客户端可能会收到证书错误的消息，导致 TLS 握手或主机名验证失败。
+
+<details>
+<summary>示例实现</summary>
+
+```javascript
+  const tls = require("tls");
+  const hostname = "fix-dc.binance.com"; //示例
+
+  const options = {
+     host: hostname,
+     port: 9002,
+     servername: hostname                // 启用 SNI
+   };
+```
+
+注意：NodeJS 默认不启用 TLS 的 SNI（详见 [https://nodejs.org/api/tls.html#tlsconnectoptions-callback](https://nodejs.org/api/tls.html#tlsconnectoptions-callback)）。
+如果您使用 Node.js 中的标准 HTTPS 库（例如 `https.request()`、`axios`、`fetch`），通常在通过主机名/URL 连接时会自动设置 SNI。
+
+### 其他语言/自定义 TLS 实现
+使用自定义 TLS 代理或 TLS API 时，请确保将相应字段（通常名为 `server_hostname`、`hostname` 或 `ServerName`）设置为目标主机名，以便发送 SNI。
+
+</details>
 
 **FIX 会话仅支持 Ed25519 密钥。**
 

@@ -1,6 +1,18 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-03-10**
+**Last Updated: 2026-03-11**
+
+### 2026-03-13
+
+**Notice:** FIX TLS Connectivity Update on **2026-06-08**, starting from **03:00 UTC** and will take about 1 hour to complete.
+
+**Action Required:**
+
+During the update window, existing FIX connections may drop intermittently. To ensure successful reconnections and new connections afterward, please verify before our update that your client sends SNI (Server Name Indication) during the TLS handshake and validates the certificate against the requested hostname.
+Clients without SNI may receive an error message during handshake related to incorrect certificate during or after the update window, leading to TLS handshake or hostname verification failures. This can occur with some Node.js clients if SNI is not explicitly configured.<br>
+Please consult the [FIX API documentation](./fix-api.md#general-api-information) for full context.
+
+---
 
 ### 2026-03-10
 

@@ -84,6 +84,32 @@
   * This does not always mean that the request failed in the Matching Engine.
   * If the status of the request has not appeared in [User Data Stream](user-data-stream.md), please perform an API query for its status.
 * If your request contains a symbol name containing non-ASCII characters, then the response may contain non-ASCII characters encoded in UTF-8.
+* To ensure uninterrupted connectivity, please make sure that your client sends **SNI (Server Name Indication)** during the TLS handshake and performs certificate validation against the intended hostname. <br>
+Clients that do not send SNI may receive an unexpected certificate, which can result in TLS handshake or hostname verification failures.
+
+<details>
+<summary>Example implementations</summary>
+
+### NodeJS
+If you are using Node.js and connecting via raw TLS sockets (`tls.connect()`), you must explicitly set the servername option. Please refer to the sample below:
+
+```javascript
+  const tls = require("tls");
+  const hostname = "fix-dc.binance.com"; //EXAMPLE
+
+  const options = {
+     host: hostname,
+     port: 9002,
+     servername: hostname                // enables SNI
+   };
+```
+
+Note that: NodeJS doesn't enable SNI by default for TLS (See [https://nodejs.org/api/tls.html#tlsconnectoptions-callback](https://nodejs.org/api/tls.html#tlsconnectoptions-callback)). <br>
+If you are using standard HTTPS libraries in Node.js (e.g., `https.request()`, `axios`, `fetch`), these typically set SNI automatically when connecting via a hostname/URL.
+
+### Other languages/custom TLS implementations
+When using custom TLS agents / TLS APIs, ensure you set the equivalent field (often named `server_hostname`, `hostname`, or `ServerName`) to the endpoint hostname so SNI is sent.
+</details>
 
 **FIX sessions only support Ed25519 keys.** </br>
 
