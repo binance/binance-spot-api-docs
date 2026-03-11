@@ -2,7 +2,7 @@
 
 **Last Updated: 2026-03-11**
 
-### 2026-03-13
+### 2026-03-11
 
 **Notice:** FIX TLS Connectivity Update on **2026-06-08**, starting from **03:00 UTC** and will take about 1 hour to complete.
 
