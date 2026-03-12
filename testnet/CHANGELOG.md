@@ -1,9 +1,14 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-03-11**
+**Last Updated: 2026-03-12**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-03-12
+
+* The removal of `!ticker@arr` for Spot Testnet has been **moved to today at 07:30 UTC**.
+---
 
 ### 2026-03-11
 
