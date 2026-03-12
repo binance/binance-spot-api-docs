@@ -1542,45 +1542,24 @@ NONE
 }
 ```
 
-**权重和参数：**
+**权重:**
+
+限制 | 权重
+------------ | ------------
+`symbol`  | 2
+`symbols` | 权重为 2，最多支持 40|
+`symbolStatus` |40|
+None            |40|
+
+**参数:**
+
+名称 | 类型 | 是否必须 | 描述
+------------ | ------------ | ------------ | ------------
+`symbol`   | STRING| No      | 查询指定的交易对
+`symbols`  | STRING | No     | 查询多个交易对
+`symbolStatus` |ENUM| 查询指定状态的所有交易对<br>支持的值：`TRADING`（正常交易中）、`HALT`（交易终止）、BREAK（交易暂停)
 
 **注意：** 不允许多个参数组合使用。
-
-<table>
-  <tr>
-    <th>名称</th>
-    <th>权重</th>
-    <th>类型</th>
-    <th>是否必需</th>
-    <th>描述</th>
-  </tr>
-  <tr>
-    <td><code>symbol</code></td>
-    <td>2</td>
-    <td rowspan="2">STRING</td>
-    <td rowspan="2">NO</td>
-    <td>查询指定的交易对</td>
-  </tr>
-  <tr>
-    <td><code>symbols</code></td>
-    <td>每个 <code>symbol</code> 权重为 2，最多支持 40 </td>
-    <td>查询多个交易对</td>
-  </tr>
-  <tr>
-    <td>无参数</td>
-    <td>40</td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td>查询所有交易对</td>
-  </tr>
-  <tr>
-    <td><code>symbolStatus</code></td>
-    <td>40</td>
-    <td>ENUM</td>
-    <td>NO</td>
-    <td>查询指定状态的所有交易对<br>支持的值：<code>TRADING</code>（正常交易中）、<code>HALT</code>（交易终止）、<code>BREAK</code>（交易暂停）</td>
-  </tr>
-</table>
 
 **数据来源：** 缓存
 

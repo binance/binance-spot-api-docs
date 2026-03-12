@@ -1631,44 +1631,24 @@ Memory
 }
 ```
 
-**Weight and Parameters:**
+**Weight**
+
+Parameter | Weight|
+---        | ---
+`symbol`  | 2
+`symbols` | 2 for each `symbol`, capped at a max of 40|
+`symbolStatus` |40|
+None            |40|
+
+**Parameters:**
+
+Name | Type | Mandatory | Description
+------------ | ------------ | ------------ | ------------
+`symbol`   | STRING| No      | Query for specified symbol
+`symbols`  | STRING | No     | Query for multiple symbols
+`symbolStatus` |ENUM| Query for all symbols with the specified status. Supported values: `TRADING`, `HALT`, `BREAK`
 
 **Note:** No combination of multiple parameters is allowed.
-
-<table>
-  <tr>
-    <th>Parameter</th>
-    <th>Weight</th>
-    <th>Type</th>
-    <th>Mandatory</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td><code>symbol</code></td>
-    <td>2</td>
-    <td rowspan="2">STRING</td>
-    <td rowspan=2>No</td>
-    <td>Query for specified symbol</td>
-  </tr>
-  <tr>
-    <td><code>symbols</code></td>
-    <td>2 for each <code>symbol</code>, capped at a max of 40</td>
-    <td>Query for multiple symbols</td>
-  </tr>
-    <td>No parameter</td>
-    <td>40</td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td>Query for all symbols</td>
-  </tr>
-  <tr>
-    <td><code>symbolStatus</code></td>
-    <td>40</td>
-    <td>ENUM</td>
-    <td>No</td>
-    <td>Query for all symbols with the specified status<br> Supported values: <code>TRADING</code>, <code>HALT</code>, <code>BREAK</code></td>
-  </tr>
-</table>
 
 **Data Source:** Memory
 
