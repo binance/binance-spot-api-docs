@@ -1646,7 +1646,7 @@ Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 `symbol`   | STRING| No      | Query for specified symbol
 `symbols`  | STRING | No     | Query for multiple symbols
-`symbolStatus` |ENUM| Query for all symbols with the specified status. Supported values: `TRADING`, `HALT`, `BREAK`
+`symbolStatus` |ENUM| No |Query for all symbols with the specified status. Supported values: `TRADING`, `HALT`, `BREAK`
 
 **Note:** No combination of multiple parameters is allowed.
 

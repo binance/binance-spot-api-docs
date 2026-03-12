@@ -1555,9 +1555,9 @@ None            |40|
 
 名称 | 类型 | 是否必须 | 描述
 ------------ | ------------ | ------------ | ------------
-`symbol`   | STRING| No      | 查询指定的交易对
-`symbols`  | STRING | No     | 查询多个交易对
-`symbolStatus` |ENUM| 查询指定状态的所有交易对<br>支持的值：`TRADING`（正常交易中）、`HALT`（交易终止）、BREAK（交易暂停)
+`symbol`   | STRING| NO      | 查询指定的交易对
+`symbols`  | STRING | NO    | 查询多个交易对
+`symbolStatus` |ENUM| NO |查询指定状态的所有交易对<br>支持的值：`TRADING`（正常交易中）、`HALT`（交易终止）、BREAK（交易暂停)
 
 **注意：** 不允许多个参数组合使用。
 
