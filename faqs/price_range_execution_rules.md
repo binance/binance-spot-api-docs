@@ -86,6 +86,8 @@ If the reference price is being calculated by the Matching Engine, then a query 
 
 If the reference price is being calculated outside the matching engine, then a query for the reference price calculation returns `"calculationType": "EXTERNAL"`. See below for more details.
 
+<a id="matching-engine-calculation"></a>
+
 ## How does the Matching Engine calculate the reference price?
 
 The matching engine calculates the reference price as a simple moving average of trade prices over a time window. The calculation is configured with a bucket width in milliseconds (`bucketWidthMs`) and the number of buckets (`bucketCount`). The bucket width multiplied by the number of buckets defines the size of the time window.
@@ -114,4 +116,6 @@ The reference price is the total of the sum in each bucket divided by the total 
 
 If the reference price is being calculated outside the matching engine, then a query for the reference price calculation returns `"externalCalculationId":` followed by an integer number. Each of these numbers indicates a different calculation method.
 
-Currently, there are no external reference price calculation methods.
+## External Reference Price Calculation Method 0
+
+The reference price was set manually by a human operator. This calculation method will only be used in situations when algorithmic calculation of the reference price has been deemed unsuitable.
