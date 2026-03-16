@@ -1,9 +1,17 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-03-12**
+**Last Updated: 2026-03-16**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-03-16
+
+**Notice: This will be rolled out at approximately 9:00 UTC today.**
+
+* Symbols `BTCUSDT` and `BROCCOLI714USDC` have [Price Range Execution Rule](../faqs/price_range_execution_rules.md) enabled. The settings are for testing only and may not be indicative of settings on the live exchange.
+
+---
 
 ### 2026-03-12
 
