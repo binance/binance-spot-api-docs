@@ -1,6 +1,45 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-03-13**
+**Last Updated: 2026-03-27**
+
+### 2026-03-27
+
+The following will occur on **2026-04-02 at approximately 07:00 UTC**.
+* `RAW_REQUESTS` rate limit increases to 300,000 per 5 minutes.
+* Request weights for the following endpoints and methods become 0 when the request is successful. Failed requests are still charged the documented weight. <br>IPs that only call these endpoints and methods successfully will never hit the `REQUEST_WEIGHT` rate limit.
+  * REST API
+    * `POST /api/v3/order`
+    * `POST /api/v3/sor/order`
+    * `DELETE /api/v3/order`
+    * `DELETE /api/v3/openOrders`
+    * `POST /api/v3/order/cancelReplace`
+    * `POST /api/v3/order/oco`
+    * `POST /api/v3/orderList/oco`
+    * `POST /api/v3/orderList/oto`
+    * `POST /api/v3/orderList/otoco`
+    * `POST /api/v3/orderList/opo`
+    * `POST /api/v3/orderList/opoco`
+    * `DELETE /api/v3/orderList`
+    * `PUT /api/v3/order/amend/keepPriority`
+  * WebSocket API
+    * `order.place`
+    * `sor.order.place`
+    * `order.cancel`
+    * `openOrders.cancelAll`
+    * `order.cancelReplace`
+    * `orderList.place`
+    * `orderList.place.oco`
+    * `orderList.place.oto`
+    * `orderList.place.otoco`
+    * `orderList.place.opo`
+    * `orderList.place.opoco`
+    * `orderList.cancel`
+    * `order.amend.keepPriority`
+
+
+* [STP Transfer](./faqs/stp_faq.md) will be allowed on all symbols on **2026-04-02 at approximately 07:00 UTC**.
+
+---
 
 ### 2026-03-13
 

@@ -1,6 +1,46 @@
 # 更新日志
 
-**最近更新： 2026-03-13**
+**最近更新： 2026-03-27**
+
+### 2026-03-27
+
+以下内容将于**2026年4月2日大约07:00 UTC**生效。
+
+* `RAW_REQUESTS` 速率限制提升至每5分钟300,000次。
+* 以下端点和方法的请求权重在请求成功时变为0。请求失败仍会按照文档中规定的方法计算权重。<br> 仅有成功调用这些端点的IP将永远不会受到 `REQUEST_WEIGHT` 速率限制。
+  * REST API
+    * `POST /api/v3/order`
+    * `POST /api/v3/sor/order`
+    * `DELETE /api/v3/order`
+    * `DELETE /api/v3/openOrders`
+    * `POST /api/v3/order/cancelReplace`
+    * `POST /api/v3/order/oco`
+    * `POST /api/v3/orderList/oco`
+    * `POST /api/v3/orderList/oto`
+    * `POST /api/v3/orderList/otoco`
+    * `POST /api/v3/orderList/opo`
+    * `POST /api/v3/orderList/opoco`
+    * `DELETE /api/v3/orderList`
+    * `PUT /api/v3/order/amend/keepPriority`
+  * WebSocket API
+    * `order.place`
+    * `sor.order.place`
+    * `order.cancel`
+    * `openOrders.cancelAll`
+    * `order.cancelReplace`
+    * `orderList.place`
+    * `orderList.place.oco`
+    * `orderList.place.oto`
+    * `orderList.place.otoco`
+    * `orderList.place.opo`
+    * `orderList.place.opoco`
+    * `orderList.cancel`
+    * `order.amend.keepPriority`
+
+
+* [STP TRANSFER 模式](./faqs/stp_faq_CN.md) 将在 **2026-04-02 07:00 UTC** 生效
+
+---
 
 ### 2026-03-13
 
