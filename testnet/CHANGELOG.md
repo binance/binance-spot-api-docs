@@ -40,7 +40,7 @@ The following will occur **today at approximately 07:00 UTC**.
     * `orderList.cancel`
     * `order.amend.keepPriority`
 
-* [STP Transfer](./faqs/stp_faq.md) will be allowed on all symbols **today at approximately 07:00 UTC**.
+* [STP Transfer](../faqs/stp_faq.md) will be allowed on all symbols **today at approximately 07:00 UTC**.
 
 ---
 
