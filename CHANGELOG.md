@@ -1,6 +1,12 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-03-27**
+**Last Updated: 2026-03-30**
+
+### 2026-03-30
+
+* Updated [Price Range Execution Rule](./faqs/price_range_execution_rules.md#execution_price_limits) to explain execution price limits for an order.
+
+---
 
 ### 2026-03-27
 

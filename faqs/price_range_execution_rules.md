@@ -70,6 +70,12 @@ This means that at time `1770736694138`:
 1. an order to `BUY` may not execute at a price more than twice the reference price or less than half the reference price and
 2. an order to `SELL` may not execute at a price more than twice the reference price or less than half the reference price.
 
+<a id="execution_price_limits"></a>
+
+## When are the execution price limits for an order set?
+
+When an order enters its taker phase, the reference price is recalculated to set the execution price limits for the order's entire taker phase. Note that a single taker order may match with many maker orders during its taker phase.
+
 ## What happens if an order attempts to execute at a price outside of the allowed price range?
 
 If a taker order attempts to execute at a price outside of the allowed price range, it will be expired (i.e. status: `EXPIRED`) with the expiry reason `EXECUTION_RULE_PRICE_RANGE_EXCEEDED`.
