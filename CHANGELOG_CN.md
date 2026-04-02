@@ -1,6 +1,20 @@
 # 更新日志
 
-**最近更新： 2026-03-30**
+**最近更新： 2026-04-02**
+
+### 2026-04-02
+
+关于 [2026-03-27](#2026-03-27) 公告中针对部分端点请求权重计算的说明：
+
+对于被修改的订单，只有当订单因该次修改过期时，请求权重才会变为 0。
+未导致订单过期的成功请求，仍会按文档中说明的方法消耗权重值。
+失败的请求，同样会按文档中说明的计算方法消耗权重值。
+
+此规则适用于以下端点和方法：
+* REST API: `PUT /api/v3/order/amend/keepPriority`
+* WebSocket API: `order.amend.keepPriority`
+
+---
 
 ### 2026-03-30
 
@@ -27,7 +41,7 @@
     * `POST /api/v3/orderList/opo`
     * `POST /api/v3/orderList/opoco`
     * `DELETE /api/v3/orderList`
-    * `PUT /api/v3/order/amend/keepPriority`
+    * `PUT /api/v3/order/amend/keepPriority` （请参见 [2026-04-02](#2026-04-02) 的更新）
   * WebSocket API
     * `order.place`
     * `sor.order.place`
@@ -41,7 +55,7 @@
     * `orderList.place.opo`
     * `orderList.place.opoco`
     * `orderList.cancel`
-    * `order.amend.keepPriority`
+    * `order.amend.keepPriority` （请参见 [2026-04-02](#2026-04-02) 的更新）
 
 
 * [STP TRANSFER 模式](./faqs/stp_faq_CN.md) 将在 **2026-04-02 07:00 UTC** 生效

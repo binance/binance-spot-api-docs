@@ -1,6 +1,18 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-03-30**
+**Last Updated: 2026-04-02**
+
+### 2026-04-02
+
+Clarifcation on the announcement from [2026-03-27](#2026-03-27) regarding new behavior for request weight charged on selected endpoints:
+
+For orders that are amended, the request weight only becomes 0 when the order expires because of the amendment. Successful requests that do not cause the order to expire are still charged the documented weight. Failed requests are still charged the documented weight.
+
+This applies to the following endpoint and method:
+* REST API: `PUT /api/v3/order/amend/keepPriority`
+* WebSocket API: `order.amend.keepPriority`
+
+---
 
 ### 2026-03-30
 
@@ -26,7 +38,7 @@ The following will occur on **2026-04-02 at approximately 07:00 UTC**.
     * `POST /api/v3/orderList/opo`
     * `POST /api/v3/orderList/opoco`
     * `DELETE /api/v3/orderList`
-    * `PUT /api/v3/order/amend/keepPriority`
+    * `PUT /api/v3/order/amend/keepPriority` (see [2026-04-02](#2026-04-02) for an update)
   * WebSocket API
     * `order.place`
     * `sor.order.place`
@@ -40,7 +52,7 @@ The following will occur on **2026-04-02 at approximately 07:00 UTC**.
     * `orderList.place.opo`
     * `orderList.place.opoco`
     * `orderList.cancel`
-    * `order.amend.keepPriority`
+    * `order.amend.keepPriority` (see [2026-04-02](#2026-04-02) for an update)
 
 
 * [STP Transfer](./faqs/stp_faq.md) will be allowed on all symbols on **2026-04-02 at approximately 07:00 UTC**.
