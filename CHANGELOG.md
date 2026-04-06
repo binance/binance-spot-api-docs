@@ -1,6 +1,12 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-04-02**
+**Last Updated: 2026-04-06**
+
+### 2026-04-06
+
+* Updated [Price Range Execution Rule](./faqs/price_range_execution_rules.md#price_range_enforcement) with additional information on rule enforcement.
+
+---
 
 ### 2026-04-02
 

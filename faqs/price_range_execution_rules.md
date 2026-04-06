@@ -70,6 +70,28 @@ This means that at time `1770736694138`:
 1. an order to `BUY` may not execute at a price more than twice the reference price or less than half the reference price and
 2. an order to `SELL` may not execute at a price more than twice the reference price or less than half the reference price.
 
+<a id="price_range_enforcement"></a>
+
+## What happens if a symbol has no execution rule of type `PRICE_RANGE` and no reference price?
+
+The Price Range Execution Rule is not enforced on the symbol.
+
+## What happens if a symbol has no execution rule of type `PRICE_RANGE` but does have a reference price?
+
+The Price Range Execution Rule is not enforced on the symbol.
+
+## What happens if a symbol has an execution rule of type `PRICE_RANGE` but does not have a reference price?
+
+The Price Range Execution Rule is not enforced on the symbol.
+
+## What happens if a symbol has an execution rule of type `PRICE_RANGE` that does not have all four multipliers?
+
+When a multiplier is not set, then Price Range Execution Rule is not enforced on the symbol for that order side and price direction. For example, if `bidMultiplierDown` was not present in the hypothetical execution rule above, then an order to `BUY` could execute at any price at or below twice the reference price.
+
+## What happens if the symbol's reference price is `null`?
+
+The Price Range Execution Rule is not enforced on the symbol.
+
 <a id="execution_price_limits"></a>
 
 ## When are the execution price limits for an order set?
