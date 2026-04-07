@@ -60,9 +60,6 @@ The following will occur on **2026-04-02 at approximately 07:00 UTC**.
     * `orderList.cancel`
     * `order.amend.keepPriority` (see [2026-04-02](#2026-04-02) for an update)
 
-
-* [STP Transfer](./faqs/stp_faq.md) will be allowed on all symbols on **2026-04-02 at approximately 07:00 UTC**.
-
 ---
 
 ### 2026-03-13
@@ -117,8 +114,7 @@ Please consult the [FIX API documentation](./fix-api.md#general-api-information)
     * New enum `expiryReason`
     * New enum `calculationType`
     * New field `expiryReason` in `NewOrderResultResponse`, `NewOrderFullResponse`, `NewOrderListResultResponse` and `NewOrderListFullResponse`
-    * New field `expiryReason` in `ExecutionReportEvent`
-    * New message `ServerShutdownEvent` for WebSocket API only
+     
 * FIX SBE schema 1:1
   * This will be used for FIX Order Entry, FIX Drop Copy, and FIX Market Data.
   * The current FIX schema 1:0 [spot-fixsbe-1_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot-fixsbe-1_0.xml) is deprecated and will be retired in 6 months as per our schema deprecation policy.
@@ -129,11 +125,7 @@ Please consult the [FIX API documentation](./fix-api.md#general-api-information)
 #### FIX API
 
 * ExpiryReason `<25056>` is optionally added to the ExecutionReport `<T>` message.
-  * Updated QuickFIX Schema for FIX Market Data and FIX Order Entry.
-
-#### WebSocket API
-
-* `serverShutdown` event added.
+  * Updated QuickFIX Schema for FIX Market Data and FIX Order Entr
 
 #### Future Changes
 
@@ -149,36 +141,16 @@ Please consult the [FIX API documentation](./fix-api.md#general-api-information)
   * `GET /api/v1/depth`
   * `GET /api/v1/aggTrades`
   * `GET /api/v1/ticker/24hr`
-* The following endpoints will be retired **2026-03-25**:
+* The following endpoints will be retired **2026-07-2027
   * `GET /api/v1/userDataStream`
-  * `DELETE /api/v1/userDataStream`
   * `GET /api/v1/trades`
-* **The following changes will occur at 2026-03-26 at approximately 07:00 UTC**
+ 
   * The responses to order placement and order list placement endpoints display the expiry reason depending on the value of `newOrderRespAck`:
     * If `newOrderRespType=ACK`, the expiry reason is not displayed.
     * If `newOrderRespType=RESULT` or `newOrderRespType=FULL` mode, the expiry reason, if any, is displayed in field `expiryReason`.
-      * This affects the following endpoints/methods:
-        * REST API
-          * `POST /api/v3/order`
-          * `POST /api/v3/sor/order`
-          * `POST /api/v3/order/cancelReplace`
-          * `POST /api/v3/order/oco`
-          * `POST /api/v3/orderList/oco`
-          * `POST /api/v3/orderList/oto`
-          * `POST /api/v3/orderList/otoco`
-          * `POST /api/v3/orderList/opo`
-          * `POST /api/v3/orderList/opoco`
-        * WebSocket API
-          * `order.place`
-          * `sor.order.place`
-          * `order.cancelReplace`
-          * `orderList.place`
-          * `orderList.place.oco`
-          * `orderList.place.oto`
-          * `orderList.place.otoco`
-          * `orderList.place.opo`
-          * `orderList.place.opoco`
-  * In User Data Streams, `executionReport` events have a new optional field, `eR`, which shows the expiry reason, if any.
+  
+      
+   
 
 ---
 
@@ -248,10 +220,7 @@ WebSocket API
 
 ---
 
-### 2025-12-18
-
-* Updated [FIX SBE documentation](fix-api.md#fix-sbe)
-* Clarified User Data Stream documentation regarding [`eventStreamTerminated`](user-data-stream.md#event-stream-terminated).
+### 2025-12-
 * Assets `这是测试币` and `456` and symbol `这是测试币456` have been added to [SPOT Testnet](http://testnet.binance.vision) for testing endpoints/methods with a Unicode symbol. See the [Testnet CHANGELOG](https://developers.binance.com/docs/binance-spot-api-docs/testnet) for more information.
 
 ---
@@ -259,8 +228,7 @@ WebSocket API
 ### 2025-12-17
 
 #### Time-sensitive Notice
-
-* **The following change to REST API will occur at approximately 2026-01-15 07:00 UTC:** <br>When calling endpoints that require signatures, percent-encode payloads before computing signatures. Requests that do not follow this order will be rejected with [`-1022 INVALID_SIGNATURE`](errors.md#-1022-invalid_signature). Please review and update your signing logic accordingly. This has now been enabled on [SPOT Testnet](http://testnet.binance.vision)
+calling endpoints that require signatures, percent-encode payloads before computing signatures. Requests that do not follow this order will be rejected with [`-1022 INVALID_SIGNATURE`](errors.md#-1022-invalid_signature). Please review and update your signing logic accordingly. This has now been enabled on [SPOT Testnet](http://testnet.binance.vision)
 
 #### REST API
 
@@ -454,7 +422,7 @@ REST and WebSocket API:
 #### FIX API
 
 * Updated [QuickFIX Schema](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml) for FIX Market Data:
-  * Updated `RecvWindow(25000)` to reflect microsecond support announced on [2025-08-12](#2025-08-12).
+  ` to reflect microsecond support announced on [2025-08-12](#2025-08-12).
   * Updated [InstrumentList `<y>`](fix-api.md#instrumentlist) message:
     * Added fields: `StartPriceRange`, `EndPriceRange`.
     * Made the following fields optional: `MinTradeVol(562)`, `MaxTradeVol(1140)`, `MinQtyIncrement(25039)`, `MarketMinTradeVol(25040)`, `MarketMaxTradeVol(25041)`, `MarketMinQtyIncrement(25042)`, `MinPriceIncrement(969)`.
@@ -486,7 +454,7 @@ REST and WebSocket API:
 ### 2025-09-12
 
 * The [QuickFix schema for FIX Order Entry](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml) has been updated to support Pegged Orders.
-* Updated FIX API Documentation for `RecvWindow` in
+* Updated FIX API Documentation for `` in
   * [Message Components](fix-api.md#header)
   * [Timing Security](fix-api.md#timing-security)
 
