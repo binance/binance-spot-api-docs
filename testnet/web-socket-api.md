@@ -77,7 +77,7 @@
     - [Current open order lists (USER_DATA)](#current-open-order-lists-user_data)
     - [Account order list history (USER_DATA)](#account-order-list-history-user_data)
     - [Account trade history (USER_DATA)](#account-trade-history-user_data)
-    - [Account unfilled order count (USER_DATA)](#account-unfilled-order-count-user_data)
+    - [Unfilled Order Count (USER_DATA)](#unfilled-order-count-user_data)
     - [Account prevented matches (USER_DATA)](#account-prevented-matches-user_data)
     - [Account allocations (USER_DATA)](#account-allocations-user_data)
     - [Account Commission Rates (USER_DATA)](#account-commission-rates-user_data)
@@ -1933,10 +1933,10 @@ please consider using [data.binance.vision](https://github.com/binance/binance-p
 Name        | Type    | Mandatory | Description
 ----------- | ------- | --------- | -----------
 `symbol`    | STRING  | YES       |
-`fromId`    | INT     | NO        | Aggregate trade ID to begin at
+`fromId`    | LONG     | NO        | Aggregate trade ID to begin at
 `startTime` | LONG    | NO        |
 `endTime`   | LONG    | NO        |
-`limit`     | INT     | NO        | Default: 500; Maximum: 1000
+`limit`     | LONG    | NO        | Default: 500; Maximum: 1000
 
 Notes:
 
@@ -3477,9 +3477,9 @@ Name                | Type    | Mandatory | Description
 `strategyId`        | LONG    | NO        | Arbitrary numeric value identifying the order within an order strategy.
 `strategyType`      | INT     | NO        | <p>Arbitrary numeric value identifying the order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
 `selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. Supported values: [STP Modes](enums.md#stpmodes)
-`pegPriceType`      | ENUM    | NO        | `PRIMARY_PEG` or `MARKET_PEG` <br> See [Pegged Orders](#pegged-orders) | |
-`pegOffsetValue`    | INT     | NO        | Price level to peg the price to (max: 100) <br> See [Pegged Orders](#pegged-orders) |
-`pegOffsetType`     | ENUM    | NO        | Only `PRICE_LEVEL` is supported <br> See [Pegged Orders](#pegged-orders)|   |
+`pegPriceType`      | ENUM    | NO        | `PRIMARY_PEG` or `MARKET_PEG` <br> See [Pegged Orders](#pegged-orders-info) | |
+`pegOffsetValue`    | INT     | NO        | Price level to peg the price to (max: 100) <br> See [Pegged Orders](#pegged-orders-info) |
+`pegOffsetType`     | ENUM    | NO        | Only `PRICE_LEVEL` is supported <br> See [Pegged Orders](#pegged-orders-info)|   |
 `apiKey`            | STRING  | YES       |
 `recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `signature`         | STRING  | YES       |
@@ -5399,7 +5399,7 @@ Send in an one-cancels-the-other (OCO) pair, where activation of one order immed
     * `TAKE_PROFIT stopPrice` \> Last Traded Price \> `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
   * If the OCO is on the `BUY` side:
     * `LIMIT_MAKER` `price` \< Last Traded Price \< `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`
-    * `TAKE_PROFIT stopPrice >` Last Traded Price `> STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
+    * `TAKE_PROFIT stopPrice` \> Last Traded Price \> `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
 * OCOs add **2 orders** to the `EXCHANGE_MAX_ORDERS` filter and `MAX_NUM_ORDERS` filter.
 
 **Weight:**
@@ -7062,7 +7062,7 @@ Note that some fields are optional and included only for orders that set them.
   "id": "b53fd5ff-82c7-4a04-bd64-5f9dc42c2100",
   "method": "orderList.status",
   "params": {
-    "origClientOrderId": "08985fedd9ea2cf6b28996"
+    "origClientOrderId": "08985fedd9ea2cf6b28996",
     "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
     "signature": "d12f4e8892d46c0ddfbd43d556ff6d818581b3be22a02810c2c20cb719aed6a4",
     "timestamp": 1660801713965
@@ -7459,7 +7459,7 @@ Memory => Database
 
 <a id="query-unfilled-order-count"></a>
 
-### Account unfilled order count (USER_DATA)
+### Unfilled Order Count (USER_DATA)
 
 ```javascript
 {

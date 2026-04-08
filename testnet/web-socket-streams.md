@@ -34,14 +34,12 @@
 
 ## General WSS information
 * The base endpoint is: **wss://stream.testnet.binance.vision/ws**.
-* Streams can be accessed either in a single raw stream or in a combined stream
+* Streams can be accessed either in a single raw stream or in a combined stream.
 * Raw streams are accessed at **/ws/\<streamName\>**
 * Combined streams are accessed at **/stream?streams=\<streamName1\>/\<streamName2\>/\<streamName3\>**
 * Combined stream events are wrapped as follows: **{"stream":"\<streamName\>","data":\<rawPayload\>}**
 * All symbols for streams are **lowercase**
-* All time and timestamp related fields are **milliseconds by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND` or `timeUnit=microsecond` in the URL.
-  * For example: `/stream?streams=btcusdt@trade&timeUnit=MICROSECOND`
-* A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark
+* A single connection to **stream.testnet.binance.vision** is only valid for 24 hours; expect to be disconnected at the 24 hour mark.
 * The WebSocket server will send a `ping frame` every 20 seconds.
   * If the WebSocket server does not receive a `pong frame` back from the connection within a minute, the connection will be disconnected.
   * When you receive a ping, you must send a pong with a copy of ping's payload as soon as possible.
@@ -433,7 +431,7 @@ Rolling window ticker statistics for a single symbol, computed over multiple win
 
 **Note**: This stream is different from the \<symbol\>@ticker stream.
 The open time `O` always starts on a minute, while the closing time `C` is the current time of the update.
-As such, the effective window might be up to 59999ms wider that \<window_size\>.
+As such, the effective window might be up to 59999ms wider than \<window_size\>.
 
 **Payload:**
 
