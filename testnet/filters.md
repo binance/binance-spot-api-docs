@@ -321,7 +321,7 @@ The `EXCHANGE_MAX_NUM_ICEBERG_ORDERS` filter defines the maximum number of icebe
 
 ### EXCHANGE_MAX_NUM_ORDER_LISTS
 
-The `EXCHANGE_MAX_NUM_ORDERS` filter defines the maximum number of order lists an account is allowed to have open on the exchange. Note that OTOCOs count as one order list.
+The `EXCHANGE_MAX_NUM_ORDER_LISTS` filter defines the maximum number of order lists an account is allowed to have open on the exchange. Note that OTOCOs count as one order list.
 
 **/exchangeInfo format:**
 
