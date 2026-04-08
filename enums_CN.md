@@ -130,7 +130,7 @@
 
 ## 速率限制种类（rateLimitType）
 
-* REQUESTS_WEIGHT - 单位时间请求权重之和上限
+* REQUEST_WEIGHT - 单位时间请求权重之和上限
 
 ```json
 {
