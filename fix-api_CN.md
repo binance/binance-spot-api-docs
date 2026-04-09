@@ -62,13 +62,8 @@
 * 端点为：`tcp+tls：//fix-md.binance.com：9000`
 * 支持市场数据流和活动工具查询。
 * 不支持下订单或取消订单。
-* 仅允许连接带有“FIX_API”或“FIX_API_READ_ONLY”的 API 密钥。
-
-关于 QuickFIX 模式 (Schema) 文件， 请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml)。
-
-FIX 连接需要 TLS 加密。请使用本地 TCP+TLS 连接或设置本地代理如 [stunnel](https://www.stunnel.org/) 来处理 TLS 加密。
-
-FIX Market Data 的 QuickFIX Schema 可以在 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml)
+* 仅允许连接带有 `FIX_API` 或 `FIX_API_READ_ONLY` 的 API 密钥。
+* 关于 QuickFIX 模式文件，请点击 [这里](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml)。
 
 
 ### FIX 连接生命周期
