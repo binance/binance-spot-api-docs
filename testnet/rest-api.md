@@ -3274,7 +3274,7 @@ workingIcebergQty      |DECIMAL|NO       |This can only be used if `workingTimeI
 workingTimeInForce     |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
 workingStrategyId      |LONG   |NO        |Arbitrary numeric value identifying the working order within an order strategy.
 workingStrategyType    |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
-workingPegPriceType    |ENUM   | NO       | See [Pegged Orders](#pegged-order-info) |
+workingPegPriceType    |ENUM   | NO       | See [Pegged Orders](#pegged-orders-info) |
 workingPegOffsetType   |ENUM   | NO       |
 workingPegOffsetValue  |INT | NO |  |
 pendingType            |ENUM   |YES       |Supported values: [Order Types](#order-type)<br> Note that `MARKET` orders using `quoteOrderQty` are not supported.
@@ -3288,7 +3288,7 @@ pendingIcebergQty      |DECIMAL|NO        |This can only be used if `pendingTime
 pendingTimeInForce     |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
 pendingStrategyId      |LONG   |NO        |Arbitrary numeric value identifying the pending order within an order strategy.
 pendingStrategyType    |INT    |NO        |Arbitrary numeric value identifying the pending order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
-pendingPegPriceType    |ENUM   |NO        |See [Pegged Orders](#pegged-order-info) |
+pendingPegPriceType    |ENUM   |NO        |See [Pegged Orders](#pegged-orders-info) |
 pendingPegOffsetType   |ENUM | NO |  |
 pendingPegOffsetValue  |INT | NO |  |
 recvWindow             |DECIMAL  |NO        |The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
