@@ -3183,7 +3183,7 @@ If more than one symbol is requested, response returns an array:
 | :---: | :---: | :---: | ----- |
 | `symbol` | STRING | Yes | |
 
-**Data Source:**
+**Data Source:** Memory
 
 **Response:**
 
@@ -5973,7 +5973,7 @@ Name                     |Type   |Mandatory | Description
 `workingClientOrderId`     |STRING |NO        |Arbitrary unique ID among open orders for the working order.<br> Automatically generated if not sent.
 `workingPrice`             |DECIMAL|YES       |
 `workingQuantity`          |DECIMAL|YES       |
-`workingIcebergQty`        |DECIMAL|NO        |This can only be used if `workingTimeInForce` is `GTC`.
+`workingIcebergQty`        |DECIMAL|NO        |This can only be used if `workingTimeInForce` is `GTC`, or if `workingType` is `LIMIT_MAKER`.
 `workingTimeInForce`       |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
 `workingStrategyId`        |LONG    |NO        |Arbitrary numeric value identifying the working order within an order strategy.
 `workingStrategyType`      |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
