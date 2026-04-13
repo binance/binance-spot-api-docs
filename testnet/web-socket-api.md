@@ -5395,11 +5395,11 @@ Send in an one-cancels-the-other (OCO) pair, where activation of one order immed
 * One of the orders must be a `LIMIT_MAKER/TAKE_PROFIT/TAKE_PROFIT_LIMIT` order and the other must be `STOP_LOSS` or `STOP_LOSS_LIMIT` order.
 * Price restrictions:
   * If the OCO is on the `SELL` side:
-    * `LIMIT_MAKER/TAKE_PROFIT_LIMIT` `price` \> Last Traded Price \> `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`
-    * `TAKE_PROFIT stopPrice` \> Last Traded Price \> `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
+    * `LIMIT_MAKER/TAKE_PROFIT_LIMIT` `price` > Last Traded Price > `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`
+    * `TAKE_PROFIT stopPrice` > Last Traded Price > `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
   * If the OCO is on the `BUY` side:
-    * `LIMIT_MAKER` `price` \< Last Traded Price \< `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`
-    * `TAKE_PROFIT stopPrice` \> Last Traded Price \> `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
+    * `LIMIT_MAKER` `price` < Last Traded Price < `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`
+    * `TAKE_PROFIT stopPrice` > Last Traded Price > `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
 * OCOs add **2 orders** to the `EXCHANGE_MAX_ORDERS` filter and `MAX_NUM_ORDERS` filter.
 
 **Weight:**
@@ -5779,7 +5779,7 @@ Name                     |Type   |Mandatory | Description
 `workingClientOrderId`     |STRING |NO        |Arbitrary unique ID among open orders for the working order.<br> Automatically generated if not sent.
 `workingPrice`             |DECIMAL|YES       |
 `workingQuantity`          |DECIMAL|YES       |
-`workingIcebergQty`        |DECIMAL|NO        |This can only be used if `workingTimeInForce` is `GTC` or if `workingType` is `LIMIT_MAKER`.|
+`workingIcebergQty`        |DECIMAL|NO        |This can only be used if `workingTimeInForce` is `GTC`, or if `workingType` is `LIMIT_MAKER`.|
 `workingTimeInForce`       |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
 `workingStrategyId`        |LONG    |NO        |Arbitrary numeric value identifying the working order within an order strategy.
 `workingStrategyType`      |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
