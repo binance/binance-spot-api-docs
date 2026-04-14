@@ -48,7 +48,7 @@
 * All time and timestamp related fields are **milliseconds by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND or timeUnit=microsecond` in the URL.
   * For example: `/stream?streams=btcusdt@trade&timeUnit=MICROSECOND`
 * If your request contains a symbol name containing non-ASCII characters, then the stream events may contain non-ASCII characters encoded in UTF-8.
-* [All Market Mini Tickers Stream](#all-market-mini-tickers-stream and [All Market Rolling Window Statistics Streams](#all-market-rolling-window-statistics-streams) events may contain non-ASCII characters encoded in UTF-8.
+* [All Market Mini Tickers Stream](#all-market-mini-tickers-stream) and [All Market Rolling Window Statistics Streams](#all-market-rolling-window-statistics-streams) events may contain non-ASCII characters encoded in UTF-8.
 
 ## WebSocket Limits
 * WebSocket connections have a limit of 5 incoming messages per second. A message is considered:
