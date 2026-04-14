@@ -23,7 +23,7 @@
 * 如需进一步了解枚举或术语，请参考 [现货交易API术语表](faqs/spot_glossary_CN.md) 页面。
 * API 处理请求的超时时间为 10 秒。如果撮合引擎的响应时间超过此时间，API 将返回 “Timeout waiting for response from backend server. Send status unknown; execution status unknown.”。[(-1007 超时)](errors_CN.md#-1007-timeout)
   * 这并不总是意味着该请求在撮合引擎中失败。
-  * 如果请求状态未显示在 [WebSocket 账户接口](user-data-stream_CN.md) 中，请执行 API 查询以获取其状态。
+  * 如果请求状态未显示在 [用户数据流](user-data-stream_CN.md) 中，请执行 API 查询以获取其状态。
 * **请避免在请求中使用 SQL 关键字**，因为这可能会触发 Web 应用防火墙（WAF）规则导致安全拦截。详情请参见 https://www.binance.com/zh-CN/support/faq/detail/360004492232
 * 如果您的请求包含非 ASCII 字符的交易对名称，那么响应中可能会包含以 UTF-8 编码的非 ASCII 字符。
 * 即使请求中不包含非 ASCII 字符，某些接口也可能返回包含以 UTF-8 编码的非 ASCII 字符的资产和/或交易对名称。
@@ -2069,7 +2069,7 @@ POST /api/v3/order
 symbol | STRING | YES |
 side | ENUM | YES |详见枚举定义：[订单方向](./enums_CN.md#side)
 type | ENUM | YES |详见枚举定义：[订单类型](./enums_CN.md#ordertype)
-timeInForce | ENUM | NO |详见枚举定义：[生效时间](./enums.md#timeinforce)
+timeInForce | ENUM | NO |详见枚举定义：[生效时间](./enums_CN.md#timeinforce)
 quantity | DECIMAL | NO |
 quoteOrderQty | DECIMAL | NO |
 price | DECIMAL | NO |
@@ -3141,7 +3141,9 @@ timestamp|LONG|YES|
 }
 ```
 
-#### New Order list - OCO (TRADE)
+<a id="new-order-list---oco-trade"></a>
+
+#### 新订单列表 - OCO (TRADE)
 
 ```
 POST /api/v3/orderList/oco
@@ -3277,7 +3279,7 @@ timestamp              |LONG   |Yes         |
 
 <a id="new-order-list---oto-trade"></a>
 
-#### New Order List - OTO (TRADE)
+#### 新订单列表 - OTO (TRADE)
 
 ```
 POST /api/v3/orderList/oto
@@ -3419,7 +3421,7 @@ timestamp              |LONG   |YES       |
 
 <a id="new-order-list---otoco-trade"></a>
 
-#### New Order List - OTOCO (TRADE)
+#### 新订单列表 - OTOCO (TRADE)
 
 ```
 POST /api/v3/orderList/otoco
@@ -3599,7 +3601,7 @@ timestamp                |LONG   |YES       |
 
 **注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 [订单响应中的特定条件时才会出现的字段](#conditional-fields-in-order-responses) 部分。
 
-#### New Order List - OPO（TRADE）
+#### 新订单列表 - OPO（TRADE）
 
 ```
 POST /api/v3/orderList/opo
@@ -3716,7 +3718,7 @@ POST /api/v3/orderList/opo
 
 **注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 [订单响应中的特定条件时才会出现的字段](#conditional-fields-in-order-responses) 部分。
 
-#### New Order List - OPOCO (TRADE）
+#### 新订单列表 - OPOCO (TRADE)
 
 ```
 POST /api/v3/orderList/opoco
@@ -4328,7 +4330,7 @@ timestamp | LONG | YES |
 
 **注意:** 上面的 payload 没有显示所有可以出现的字段，更多请看 [订单响应中的特定条件时才会出现的字段](#conditional-fields-in-order-responses) 部分。
 
-#### 查询订单列表 (USER_DATA)
+### 查询订单列表 (USER_DATA)
 
 ```
 GET /api/v3/orderList
@@ -4376,7 +4378,7 @@ timestamp|LONG|YES|
 }
 ```
 
-#### 查询所有订单列表 (USER_DATA)
+### 查询所有订单列表 (USER_DATA)
 
 ```
 GET /api/v3/allOrderList
@@ -4451,7 +4453,7 @@ timestamp|LONG|YES|
 ]
 ```
 
-#### 查询订单列表挂单 (USER_DATA)
+### 查询订单列表挂单 (USER_DATA)
 
 ```
 GET /api/v3/openOrderList
@@ -4538,7 +4540,7 @@ timestamp | LONG | YES |
   * `symbol`+ `orderId` + `fromId`
 
 **数据源:**
-数据库
+缓存 => 数据库
 
 **响应:**
 ```javascript
@@ -4588,14 +4590,14 @@ timestamp | LONG | YES |
         "rateLimitType": "ORDERS",
         "interval": "SECOND",
         "intervalNum": 10,
-        "limit": 10000,
+        "limit": 50,
         "count": 0
     },
     {
         "rateLimitType": "ORDERS",
         "interval": "DAY",
         "intervalNum": 1,
-        "limit": 20000,
+        "limit": 160000,
         "count": 0
     }
 ]
@@ -4773,7 +4775,7 @@ symbol        | STRING | YES          |
         "enabledForAccount": true,
         "enabledForSymbol": true,
         "discountAsset": "BNB",
-        "discount": "0.7500000"      // 当用BNB支付佣金时，在标准佣金上按此比率打折。
+        "discount": "0.75000000"      // 当用BNB支付佣金时，在标准佣金上按此比率打折。
     }
 }
 ```

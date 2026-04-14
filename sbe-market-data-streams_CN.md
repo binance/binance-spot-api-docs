@@ -52,6 +52,9 @@
 
 当订单簿发生变化时，会实时推送最优买入价和卖出价和数量。
 
+> [!NOTE]
+> SBE 中的最优挂单信息等同于 JSON 格式的 bookTicker 流，不同之处在于它们支持自动剔除（auto-culling），并且还包含 `eventTime` 字段。
+
 **SBE 消息名称:** `BestBidAskStreamEvent`
 
 **Stream 名称**: \<symbol\>@bestBidAsk

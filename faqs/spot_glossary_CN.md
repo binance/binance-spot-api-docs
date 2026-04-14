@@ -244,7 +244,7 @@ Order Book
 * 订单薄；包括了当前市场上买卖挂单。
 
 Order List
-* 订单列表；将多个订单组合为一个单元。请参考 `OCO` 与/或 `OTO`
+* 订单列表；将多个订单列表合为一个单元。请参考 `OCO` 与/或 `OTO`
 
 `orderId`
 * 订单数据里用来唯一标识的ID。
@@ -425,7 +425,7 @@ Smart Order Routing (SOR)
 * 订单的上次更新时间。默认情况下，此字段（以及所有与时间戳相关的字段）在 JSON 响应中单位是毫秒。
 
 User Data Stream
-* 通过 WebSocket 推送及时的个人用户信息，包括了账户余额的变动，订单的更新等。请阅读 [WebSocket 账户接口](../user-data-stream_CN.md) 来了解更多详情。
+* 通过 WebSocket 推送及时的个人用户信息，包括了账户余额的变动，订单的更新等。请阅读 [用户数据流](../user-data-stream_CN.md) 来了解更多详情。
 
 `usedSor`
 * 用以标识该订单是否是通过 [智能指令路由 (SOR)](sor_faq_CN.md) 提交的。

@@ -1,6 +1,13 @@
 # 更新日志
 
-**最近更新： 2026-04-06**
+**最近更新： 2026-04-14**
+
+### 2026-04-14
+
+* “WebSocket 账户接口”文档已更名为“用户数据流”，详见：[用户数据流](user-data-stream_CN.md)。相关词条的引用部分也已同步更新。
+* 对中文版与英文版因翻译或排版导致的部分差异进行了修正。
+
+---
 
 ### 2026-04-06
 
@@ -283,10 +290,10 @@ REST 和 WebSocket API：
 
 * 在 [FIX API](fix-api_CN.md)、[REST API](rest-api_CN.md) 和 [WebSocket API](web-socket-api_CN.md) 中，如果您的请求包含非 ASCII 字符的交易对名称，那么响应中可能包含以 UTF-8 编码的非 ASCII 字符。
 * 在 REST 和 WebSocket API 中，即使请求本身不包含非 ASCII 字符，某些端点/方法也可能返回包含以 UTF-8 编码的非 ASCII 字符的资产和/或交易对名称。
-* 在 [WebSocket 数据流](web-socket-streams_CN.md) 中，如果您的请求包含非 ASCII 字符的交易对名称，那么数据流事件中可能包含以 UTF-8 编码的非 ASCII 字符。
-* 在 WebSocket 数据流中，[全市场所有 Symbol 的精简 Ticker](web-socket-streams_CN.md#all-markets-mini-ticker) 和 [全市场滚动窗口统计](web-socket-streams_CN.md#all-market-rolling-window-ticker) 事件可能包含以 UTF-8 编码的非 ASCII 字符。
+* 在 [WebSocket 行情接口](web-socket-streams_CN.md) 中，如果您的请求包含非 ASCII 字符的交易对名称，那么数据流事件中可能包含以 UTF-8 编码的非 ASCII 字符。
+* 在 WebSocket 行情接口中，[全市场所有 Symbol 的精简 Ticker](web-socket-streams_CN.md#all-markets-mini-ticker) 和 [全市场滚动窗口统计](web-socket-streams_CN.md#all-market-rolling-window-ticker) 事件可能包含以 UTF-8 编码的非 ASCII 字符。
 * 在 [SBE 市场数据流](sbe-market-data-streams_CN.md) 中，如果您的请求包含包含非 ASCII 字符的交易对名称，那么数据流事件中可能包含以 UTF-8 编码的非 ASCII 字符。
-* 如果您持有或交易任何名称包含非 ASCII 字符的资产或交易对，那么 [WebSocket 账户接口](user-data-stream_CN.md) 中可能包含以 UTF-8 编码的非 ASCII 字符。
+* 如果您持有或交易任何名称包含非 ASCII 字符的资产或交易对，那么 [用户数据流](user-data-stream_CN.md) 中可能包含以 UTF-8 编码的非 ASCII 字符。
 * 为了与币安 API 完全兼容，请务必确保您的代码能够处理 UTF-8 编码的字符串。
 
 ---
@@ -657,7 +664,7 @@ REST 和 WebSocket API：
 
 ### 2025-07-03
 
-* 自 **2025-07-08 07:00 UTC** 起，[WebSocket 账户接口](web-socket-streams_CN.md) 将会进行升级。
+* 自 **2025-07-08 07:00 UTC** 起，[WebSocket 行情接口](web-socket-streams_CN.md) 将会进行升级。
 * 升级期间，**现有连接和新连接可能会在 24 小时内断开**。
 * 升级过程最多可能需要 2 小时。若有不便之处，敬请谅解。
 
@@ -796,7 +803,7 @@ REST 和 WebSocket API：
     * `userDataStream.start`
     * `userDataStream.ping`
     * `userDataStream.stop`
-* [WebSocket 账户接口文档](user-data-stream_CN.md) 将保留可以接收的有效负载，以供您参考。
+* [用户数据流](user-data-stream_CN.md) 将保留可以接收的有效负载，以供您参考。
 
 #### 将会发生的更改
 
@@ -906,7 +913,7 @@ REST 和 WebSocket API：
 
 **注意: 该变更会在2025年2月3日到2025年2月14日之间逐步推出。**
 
-* **以下变更将会同时应用于WebSocket 市场数据流，WebSocket 账户接口 和 WebSocket API:**
+* **以下变更将会同时应用于用户数据流，WebSocket 行情接口 和 WebSocket API:**
     * WebSocket 服务将会**每20秒**发送发送 PING 消息而不是每3分钟。
     * PONG 消息的延迟将会是每1分钟而不是每10分钟。
     * 相关服务的更改所对应的文档都已经更新。
@@ -1150,8 +1157,8 @@ Exchange Information 的更改 （即 REST API 的 [`GET /api/v3/exchangeInfo`](
             * `orderList.place.oto`
             * `orderList.place.otoco`
 * 在 **6月18日 UTC 时间 05:00**，我们将会把买方的订单 ID（`b`） 和卖方的订单 ID（`a`） 从交易流中删除（i.e. `<symbol>@trade`）。 （请注意，我们可能需要花几个小时来部署到所有服务器。）
-    * [WebSocket 账户接口](web-socket-streams_CN.md) 与其相关的文档已经被更改了。
-    * 要监控您的订单是否是交易的一部分，请订阅 [WebSocket 账户接口](user-data-stream_CN.md)。
+    * [WebSocket 行情接口](web-socket-streams_CN.md) 与其相关的文档已经被更改了。
+    * 要监控您的订单是否是交易的一部分，请订阅 [用户数据流](user-data-stream_CN.md)。
 
 ---
 

@@ -9,13 +9,16 @@
 * FIX 连接需要 TLS 加密。请使用本地 TCP+TLS 连接或设置本地代理如 [stunnel](https://www.stunnel.org/) 来处理 TLS 加密。
 * API 处理请求的超时时间为 10 秒。如果撮合引擎的响应时间超过此时间，API 将返回 “Timeout waiting for response from backend server. Send status unknown; execution status unknown.”。[(-1007 超时)](errors_CN.md#-1007-timeout)
   * 这并不总是意味着该请求在撮合引擎中失败。
-  * 如果请求状态未显示在 [WebSocket 账户接口](user-data-stream_CN.md) 中，请执行 API 查询以获取其状态。
+  * 如果请求状态未显示在 [用户数据流](user-data-stream_CN.md) 中，请执行 API 查询以获取其状态。
 * 如果您的请求包含非 ASCII 字符的交易对名称，那么响应中可能包含以 UTF-8 编码的非 ASCII 字符。
 * 为确保连接不中断，请确保您的客户端在 TLS 握手过程中发送 **SNI（服务器名称指示）**，并对目标主机名进行证书验证。
 * 未发送 SNI 的客户端可能会收到证书错误的消息，导致 TLS 握手或主机名验证失败。
 
 <details>
 <summary>示例实现</summary>
+
+### NodeJS
+如果你正在使用 Node.js，并且通过原始 TLS 套接字（`tls.connect()`）进行连接，你必须显式设置 servername 选项。请参考下面的示例：
 
 ```javascript
   const tls = require("tls");
@@ -42,7 +45,7 @@
 
 ### FIX API 订单接入会话
 
-* 端点为：`tcp+tls：//fix-oe.binance.com：9000`
+* 端点为：`tcp+tls://fix-oe.binance.com:9000`
 * 支持下单，取消订单和查询当前限制使用情况。
 * 支持接收账户的所有 [ExecutionReport`<8>`](#executionreport) 和 [List Status`<N>`](#liststatus)。
 * 仅允许带有 `FIX_API` 的 API Key 连接。
@@ -59,7 +62,7 @@
 
 ### FIX API Market Data 会话
 
-* 端点为：`tcp+tls：//fix-md.binance.com：9000`
+* 端点为：`tcp+tls://fix-md.binance.com:9000`
 * 支持市场数据流和活动工具查询。
 * 不支持下订单或取消订单。
 * 仅允许连接带有 `FIX_API` 或 `FIX_API_READ_ONLY` 的 API 密钥。
@@ -339,7 +342,7 @@ MC4CAQAwBQYDK2VwBCIEIIJEYWtGBrhACmb9Dvy+qa8WEf0lQOl1s4CLIAB9m89u
 | 9     | BodyLength   | LENGTH       | Y        | 消息长度（以字节为单位）。 <br></br> 必须是消息的第二个字段。|
 | 35    | MsgType      | STRING       | Y        | 必须是消息的第三个字段。 <br></br> 可能的值： <br></br>`0` - [HEARTBEAT](#heartbeat) <br></br>`1` - [TEST_REQUEST](#testrequest) <br></br>`3` - [REJECT](#reject) <br></br>`5` - [LOGOUT](#logout) <br></br>`8` - [EXECUTION_REPORT](#executionreport) <br></br> `9` - [ORDER_CANCEL_REJECT](#ordercancelreject) <br></br> `A` - [LOGON](#logon-main) <br></br> `D` - [NEW_ORDER_SINGLE](#newordersingle) <br></br> `E` - [NEW_ORDER_LIST](#neworderlist) <br></br> `F` - [ORDER_CANCEL_REQUEST](#ordercancelrequest) <br></br> `N` - [LIST_STATUS](#liststatus) <br></br> `q` - [ORDER_MASS_CANCEL_REQUEST](#ordermasscancelrequest) <br></br> `r` - [ORDER_MASS_CANCEL_REPORT](#ordermasscancelreport) <br></br> `XCN` - [ORDER_CANCEL_REQUEST_AND_NEW_ORDER_SINGLE](#ordercancelrequestandnewordersingle) <br></br> `XLQ` - [LIMIT_QUERY](#limitquery) <br></br> `XLR` - [LIMIT_RESPONSE](#limitresponse) <br></br> `B` - [NEWS](#news) <br></br> `x`- [INSTRUMENT_LIST_REQUEST](#instrumentlistrequest) <br></br> `y` - [INSTRUMENT_LIST](#instrumentlist) <br></br>`V` - [MARKET_DATA_REQUEST](#marketdatarequest) <br></br> `Y` - [MARKET_DATA_REQUEST_REJECT](#marketdatarequestreject) <br></br>`W` - [MARKET_DATA_SNAPSHOT](#marketdatasnapshot) <br></br>`X` - [MARKET_DATA_INCREMENTAL_REFRESH](#marketdataincrementalrefresh) <br></br> `XAK` - [ORDER_AMEND_KEEP_PRIORITY_REQUEST](#orderamendkeeppriorityrequest) <br></br> `XAR` - [ORDER_AMEND_REJECT](#orderamendreject) |
 | 49    | SenderCompID | STRING       | Y        | 在账户的活动会话中必须是独特的。<br></br> 必须使用正则表达式：`^[a-zA-Z0-9-_]{1,8}$` |
-| 56    | TargetCompID | STRING       | Y        | 在客户端的消息中必须设置为`SPOT`。|
+| 56    | TargetCompID | STRING       | Y        | 用于标识此 TCP 连接的字符串。<br></br>在来自客户端的消息中，该字段必须设置为 `SPOT`。<br></br>在各个 TCP 连接之间必须保持唯一。<br></br>必须符合以下正则表达式：`^[a-zA-Z0-9-_]{1,8}$` |
 | 34    | MsgSeqNum    | SEQNUM       | Y        | 整数消息序列号。 <br></br> 会导致间隙的值将被拒绝。|
 | 52    | SendingTime  | UTCTIMESTAMP | Y        | 消息传输时间（始终以 UTC 表示）。|
 | 25000 | RecvWindow   | FLOAT          | N        | 在`SendingTime (52)` 后，用于标识请求有效时间的毫秒数。 <br></br> 在 [Logon`<A>`](#logon-request) 中默认为 `5000` 毫秒，最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |

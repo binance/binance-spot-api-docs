@@ -1,4 +1,4 @@
-# WebSocket 账户接口
+# 用户数据流
 
 ## 一般信息
 
@@ -258,7 +258,7 @@
 |`WOULD_MATCH_IMMEDIATELY`|"Order would immediately match and take."|
 |`OCO_BAD_PRICES`|"The relationship of the prices for the orders is not correct."|
 
-如果是一个订单组，则除了显示 `executionReport` 事件外，还将显示一个名为 `ListStatus` 的事件。
+如果是一个订单列表，则除了显示 `executionReport` 事件外，还将显示一个名为 `ListStatus` 的事件。
 
 **Payload**
 
