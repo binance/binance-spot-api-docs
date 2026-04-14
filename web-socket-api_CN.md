@@ -27,7 +27,7 @@
 * 如需进一步了解枚举或术语，请参考 [现货交易API术语表](faqs/spot_glossary_CN.md) 页面。
 * API 处理请求的超时时间为 10 秒。如果撮合引擎的响应时间超过此时间，API 将返回 “Timeout waiting for response from backend server. Send status unknown; execution status unknown.”。[(-1007 超时)](errors_CN.md#-1007-timeout)
   * 这并不总是意味着该请求在撮合引擎中失败。
-  * 如果请求状态未显示在 [WebSocket 账户接口](user-data-stream_CN.md) 中，请执行 API 查询以获取其状态。
+  * 如果请求状态未显示在 [用户数据流](user-data-stream_CN.md) 中，请执行 API 查询以获取其状态。
 * **请避免在请求中使用 SQL 关键字**，因为这可能会触发 Web 应用防火墙（WAF）规则导致安全拦截。详情请参见 https://www.binance.com/zh-CN/support/faq/detail/360004492232
 
 ## 请求格式
@@ -1513,23 +1513,6 @@ NONE
 }
 ```
 
-<a id="serverShutdown"></a>
-### 服务器关闭
-
-```javascript
-{
-  "event": {
-    "e": "serverShutdown", // 事件类型
-    "E": 1770123456789     // 事件时间
-   }
-}
-```
-
-当服务器即将关闭时，会发送 `serverShutdown` 事件。
-
-请尽快重新连接 WebSocket API，以避免数据流中断。
-
-
 ### 查询执行规则
 
 ```javascript
@@ -1588,6 +1571,21 @@ None            |40|
 }
 ```
 
+<a id="serverShutdown"></a>
+### 服务器关闭
+
+```javascript
+{
+  "event": {
+    "e": "serverShutdown", // 事件类型
+    "E": 1770123456789     // 事件时间
+   }
+}
+```
+
+当服务器即将关闭时，会发送 `serverShutdown` 事件。
+
+请尽快重新连接 WebSocket API，以避免数据流中断。
 
 ## 行情接口
 
@@ -6484,8 +6482,9 @@ NONE
 ```
 
 <a id="sor-order-place"></a>
+### SOR
 
-### 下 SOR 订单 (TRADE)
+#### 下 SOR 订单 (TRADE)
 
 ```javascript
 {
@@ -7113,7 +7112,7 @@ NONE
 
 <a id="orderList-status"></a>
 
-#### 查询订单列表 (USER_DATA)
+### 查询订单列表 (USER_DATA)
 
 ```javascript
 {
@@ -7233,7 +7232,7 @@ NONE
 }
 ```
 
-#### 查询订单列表挂单 (USER_DATA)
+### 查询订单列表挂单 (USER_DATA)
 
 ```javascript
 {

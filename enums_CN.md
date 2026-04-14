@@ -46,7 +46,7 @@
 状态 |描述
 -----------|--------------
 `NEW` | 该订单被交易引擎接受。
-`PENDING_NEW` | 该订单处于待处理 (`PENDING`) 阶段，直到其所属订单组（order list） 中的 `working order` 完全成交。
+`PENDING_NEW` | 该订单处于待处理 (`PENDING`) 阶段，直到其所属订单列表（order list） 中的 `working order` 完全成交。
 `PARTIALLY_FILLED` | 部分订单已被成交。
 `FILLED`| 订单已完全成交。
 `CANCELED` | 用户撤销了订单。
@@ -55,24 +55,24 @@
 `EXPIRED` | 该订单根据订单类型的规则被取消（例如，没有成交的 LIMIT FOK 订单, LIMIT IOC 或部分成交的 MARKET 订单）<br/>或者被交易引擎取消（例如，在强平期间被取消的订单，在交易所维护期间被取消的订单）
 `EXPIRED_IN_MATCH` | 表示订单由于 STP 而过期。（例如，带有 `EXPIRE_TAKER` 的订单与账簿上同属相同帐户或相同 `tradeGroupId` 的现有订单匹配）
 
-## 订单组（order list）状态 （状态类型集 listStatusType）
+## 订单列表（order list）状态 （状态类型集 listStatusType）
 
 状态 |描述
 -----------|--------------
-`RESPONSE` | 在 ListStatus 用于响应失败的操作时会被使用。（例如，下订单组或取消订单组）
-`EXEC_STARTED` | 订单组已被下达或订单组状态有更新。
-`UPDATED`  | 订单组里的某个订单的 clientOrderId 被改变。
-`ALL_DONE` | 订单组执行结束，因此不再处于活动状态。
+`RESPONSE` | 在 ListStatus 用于响应失败的操作时会被使用。（例如，下订单列表或取消订单列表）
+`EXEC_STARTED` | 订单列表已被下达或订单列表状态有更新。
+`UPDATED`  | 订单列表里的某个订单的 clientOrderId 被改变。
+`ALL_DONE` | 订单列表执行结束，因此不再处于活动状态。
 
-## 订单组（order list）中的订单状态 （订单状态集 listOrderStatus）
+## 订单列表（order list）中的订单状态 （订单状态集 listOrderStatus）
 
 状态 |描述
 -----------|--------------
-`EXECUTING` | 订单组已被下达或订单组状态有更新。
-`ALL_DONE`| 订单组执行结束，因此不再处于活动状态。
-`REJECT` | 在 ListStatus 用于响应在下单阶段或取消订单组期间的失败操作时会被使用，
+`EXECUTING` | 订单列表已被下达或订单列表状态有更新。
+`ALL_DONE`| 订单列表执行结束，因此不再处于活动状态。
+`REJECT` | 在 ListStatus 用于响应在下单阶段或取消订单列表期间的失败操作时会被使用，
 
-## 订单组的类型
+## 订单列表的类型
 
 * `OCO`
 * `OTO`
