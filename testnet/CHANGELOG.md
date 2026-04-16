@@ -1,9 +1,17 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-03-27**
+**Last Updated: 2026-04-16**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-04-16
+
+* Updated the documentation to clarify that if a symbol has never had a reference price set, an error code [`-2043`](errors.md#-2043-no_reference_price) is returned when querying the reference price. This applies to the following endpoint/method:
+  * REST API: `GET /api/v3/referencePrice`
+  * WebSocket API: `referencePrice`
+
+---
 
 ### 2026-03-27
 

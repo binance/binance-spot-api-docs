@@ -4,8 +4,8 @@
 以下是一个完整错误码实例
 ```javascript
 {
-  "code":-1121,
-  "msg":"Invalid symbol."
+    "code": -1121,
+    "msg": "Invalid symbol."
 }
 ```
 
@@ -54,6 +54,7 @@
  * 时延过大，服务器根据接请求中的时间戳判定耗时已经超出了recevWindow。请改善网络条件或者增大recevWindow。
  * 时间偏移过大，服务器根据请求中的时间戳判定客户端时间比服务器时间提前了1秒钟以上。(该参数不可由客户端调节)
 
+<a id="-1022-invalid_signature"></a>
 ### -1022 签名不正确
  * 请求中携带的signature与服务器根据规则计算得到的signature不一致。通常是因为客户端代码中使用的apisecret错误。
 
@@ -355,6 +356,10 @@
 
 ### -2042 最大订阅 ID
 * Maximum subscription ID reached for this connection.
+
+<a id="-2043-no_reference_price"></a>
+### -2043 无参考价格
+* This symbol doesn't have a reference price.
 
 <a id="other-errors"></a>
 

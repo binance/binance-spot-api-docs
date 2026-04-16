@@ -3105,6 +3105,20 @@ days    | `1d`, `2d` ... `7d`
 }
 ```
 
+如果从未设置过参考价格：
+
+```javascript
+{
+    "id": "5132affa-0aba-4831-b475-f262504556b41",
+    "status": 200,
+    "result":
+    {
+        "code": -2043,
+        "msg": "This symbol doesn't have a reference price."
+    }
+}
+```
+
 ### 查询参考价格计算方式
 
 ```json

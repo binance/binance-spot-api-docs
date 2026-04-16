@@ -1996,6 +1996,15 @@ GET /api/v3/referencePrice
 }
 ```
 
+如果从未设置过参考价格：
+
+```javascript
+{
+    "code": -2043,
+    "msg": "This symbol doesn't have a reference price."
+}
+```
+
 ### 查询参考价格计算方式
 
 ```

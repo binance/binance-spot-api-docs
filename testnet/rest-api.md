@@ -2003,7 +2003,7 @@ If a reference price is set:
 {
   "symbol": "BAZUSD",
   "referencePrice": "10.00",
-  "timestamp": 1770736694138   // Timestamp when reference price was valid
+  "timestamp": 1770736694138  // Timestamp when reference price was valid
 }
 ```
 
@@ -2014,6 +2014,15 @@ If no reference price is set:
   "symbol": "BAZUSD",
   "referencePrice": null,
   "timestamp": 1770736694138  // Timestamp when reference price was valid
+}
+```
+
+If no reference price has ever been set:
+
+```javascript
+{
+    "code": -2043,
+    "msg": "This symbol doesn't have a reference price."
 }
 ```
 
