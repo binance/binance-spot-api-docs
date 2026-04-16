@@ -3193,7 +3193,7 @@ If a reference price is set:
   "result": {
     "symbol": "BAZUSD",
     "referencePrice": "0.00501900",
-    "timestamp": 1770946889251     //Timestamp when the reference price was valid
+    "timestamp": 1770946889251  // Timestamp when the reference price was valid
   }
 }
 ```
@@ -3207,8 +3207,22 @@ If no reference price is set:
   "result": {
     "symbol": "BAZUSD",
     "referencePrice": null,
-    "timestamp": 1770946889251      //Timestamp when the reference price was valid
+    "timestamp": 1770946889251  // Timestamp when the reference price was valid
   }
+}
+```
+
+If no reference price has ever been set:
+
+```javascript
+{
+    "id": "5132affa-0aba-4831-b475-f262504556b41",
+    "status": 200,
+    "result":
+    {
+        "code": -2043,
+        "msg": "This symbol doesn't have a reference price."
+    }
 }
 ```
 
