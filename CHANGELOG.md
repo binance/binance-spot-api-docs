@@ -1,6 +1,17 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-04-16**
+**Last Updated: 2026-04-17**
+
+### 2026-04-17
+
+The following will occur on **2026-05-05 at approximately 10:00 UTC**.
+
+* The update speed of the below SBE Market Data Streams will be changed **from 50ms to 25ms**:
+  * SBE Market Data Streams: [Diff Depth Streams](sbe-market-data-streams.md#diff-depth-streams)
+  * FIX SBE: [MarketDataIncrementalDepth](fix-api.md#marketdataincrementaldepth)
+
+
+---
 
 ### 2026-04-16
 

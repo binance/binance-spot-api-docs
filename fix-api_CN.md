@@ -1484,8 +1484,9 @@ SOFH：有关模式文件中的组合类型 "sofh"。这个字段作为一个帧
         * 如果价格水平已存在于本地订单簿中，则 `MDUpdateAction` 为 `CHANGE`
         * 否则，`MDUpdateAction` 为 `NEW`。
 
+<a id="marketdataincrementaldepth"></a>
 **MarketDataIncrementalDepth（市场数据增量深度）** 消息：
-* FIX SBE 深度更新速度：50 毫秒
+* FIX SBE 深度更新速度：25 毫秒
 * FIX 模式中可用的 `MDUpdateAction` 字段在 FIX SBE 中被省略，因为其值可能源自 `MDEntrySize`。
     * 当 `MDEntrySize` 未设置（`NullVal`）时，`MDUpdateAction` 为 `DELETE`。
     * 当 `MDEntrySize` 已设置时：
