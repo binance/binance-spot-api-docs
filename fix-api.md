@@ -1550,8 +1550,9 @@ Decimal encoding:
         * if the price level exists in your local order book, `MDUpdateAction` is `CHANGE`
         * else `MDUpdateAction` is `NEW`.
 
+<a id="marketdataincrementaldepth"></a>
 **MarketDataIncrementalDepth** message:
-* FIX SBE depth update speed: 50ms
+* FIX SBE depth update speed: 25ms
 * The `MDUpdateAction` field available in the FIX schema is omitted in FIX SBE as its value may be derived from `MDEntrySize`.
     * When `MDEntrySize` is unset (`NullVal`), `MDUpdateAction` is `DELETE`.
     * When `MDEntrySize` is set,

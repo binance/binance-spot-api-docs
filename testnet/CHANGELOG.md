@@ -1,9 +1,19 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-04-16**
+**Last Updated: 2026-04-17**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-04-17
+
+The following will occur **today at approximately 10:00 UTC**.
+
+* The update speed of the below SBE Market Data Streams has been changed **from 50ms to 25ms**:
+  * SBE Market Data Streams: [Diff Depth Streams](sbe-market-data-streams.md#diff-depth-streams)
+  * FIX SBE: [MarketDataIncrementalDepth](fix-api.md#marketdataincrementaldepth)
+
+---
 
 ### 2026-04-16
 
