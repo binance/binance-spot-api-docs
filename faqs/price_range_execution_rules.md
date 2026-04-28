@@ -45,10 +45,10 @@ As an example, given the hypothetical execution rule for this symbol:
       "rules": [
         {
           "ruleType": "PRICE_RANGE",
-          "bidMultiplierUp": "2.0000",
-          "bidMultiplierDown": "0.5000",
-          "askMultiplierUp": "2.0000",
-          "askMultiplierDown": "0.5000"
+          "bidLimitMultUp": "2.0000",
+          "bidLimitMultDown": "0.5000",
+          "askLimitMultUp": "2.0000",
+          "askLimitMultDown": "0.5000"
         }
       ]
     }

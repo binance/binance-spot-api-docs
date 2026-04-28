@@ -32,7 +32,7 @@
 | WebSocket 数据流 | `<symbol>@referencePrice` |
 
 请注意，**参考价格是持续变化的**，建议通过 WebSocket 数据流实时监控参考价格。
-
+<a id="how-does-the-price-range-execution-rule-work"></a>
 ## 价格区间执行规则如何工作？
 
 举例说明，假设该交易对的执行规则如下：
@@ -45,10 +45,10 @@
       "rules": [
         {
           "ruleType": "PRICE_RANGE",
-          "bidMultiplierUp": "2.0000",
-          "bidMultiplierDown": "0.5000",
-          "askMultiplierUp": "2.0000",
-          "askMultiplierDown": "0.5000"
+          "bidLimitMultUp": "2.0000",
+          "bidLimitMultDown": "0.5000",
+          "askLimitMultUp": "2.0000",
+          "askLimitMultDown": "0.5000"
         }
       ]
     }
