@@ -1,6 +1,12 @@
 # 更新日志
 
-**最近更新： 2026-04-17**
+**最近更新： 2026-04-28**
+
+### 2026-04-28
+
+* 更正了 `价格区间执行规则 FAQ` 内 [`价格区间执行规则如何工作？`](./faqs/price_range_execution_rules_CN.md#how-does-the-price-range-execution-rule-work)问题中所对应的 JSON 内容。
+
+---
 
 ### 2026-04-17
 
@@ -9,7 +15,6 @@
 * 以下SBE 市场数据流中的更新速度将从 **50毫秒调整为25毫秒**。
   * SBE 市场数据流: [增量深度信息](sbe-market-data-streams_CN.md#diff-depth-streams)
   * FIX SBE: [市场数据增量深度](fix-api_CN.md#marketdataincrementaldepth)
-
 
 ---
 

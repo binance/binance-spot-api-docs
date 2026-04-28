@@ -1,9 +1,15 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-04-17**
+**Last Updated: 2026-04-28**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-04-28
+
+* Corrected the JSON in the `Price Range Execution Rule FAQ` for the question [`How does the Price Range Execution Rule work?`](../faqs/price_range_execution_rules.md#how-does-the-price-range-execution-rule-work).
+
+---
 
 ### 2026-04-17
 
