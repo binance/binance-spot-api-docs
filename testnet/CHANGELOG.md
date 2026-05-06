@@ -1,9 +1,55 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-04-28**
+**Last Updated: 2026-05-06**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-05-06
+
+#### Data reset
+
+All data on the Spot Test Network will be deleted today according to the periodic reset procedure. See [F.A.Q.](../faqs/testnet.md#faq-periodic-reset) for more details.
+
+#### New Features
+
+**Notice: The following changes will take effect once the Spot Test Network is back online.**
+
+* Added `serverShutdown` event to [WebSocket API](web-socket-api.md) and [WebSocket Streams](web-socket-streams.md).
+  * `serverShutdown` event will be sent 10 minutes before disconnection.
+
+* [`PERCENT_PRICE`](./filters.md#percent_price), [`PERCENT_PRICE_BY_SIDE`](./filters.md#percent_price_by_side), [`MIN_NOTIONAL`](./filters.md#min_notional), and [`NOTIONAL`](./filters.md#notional) filters now use [reference price](../faqs/price_range_execution_rules.md) when it exists and is non-null. The filters fall back to their previous behavior when the reference price does not exist or is null.
+
+* Market data for [Block Trades](https://www.binance.info/en/support/faq/detail/557f95eaf8fb4460aed0a891d42a1425).
+  * New Endpoints/Methods
+    * REST API:
+      * `GET /api/v3/historicalBlockTrades`
+    * WebSocket API:
+      * `blockTrades.historical`
+
+* Order query responses may include an [`expiryReason`](./enums.md#expiryreasons) field.
+  * This field is returned **only for expired orders** and helps users understand why an order expired, including cases where the order is expired due to the **execution price range rule**.
+  * This field is included in both JSON and SBE 3:4 responses.
+  * This applies to the following endpoint/method:
+    * REST API:
+      * `GET /api/v3/order`
+      * `GET /api/v3/allOrders`
+      * `GET /api/v3/orderList`
+      * `GET /api/v3/allOrderList`
+    * WebSocket API:
+      * `order.status`
+      * `allOrders`
+      * `orderList.status`
+      * `allOrderLists`
+
+* REST and WebSocket API SBE schema 3:4
+  * The current schema 3:3 [spot_3_3.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_3.xml) is deprecated and will be retired in 6 months as per our schema deprecation policy.
+  * Changes in schema 3:4:
+    * New message `BlockTradesResponse`
+    * New type `blockTradeId`
+    * New field `expiryReason` in `OrderResponse` and `OrdersResponse`
+
+---
 
 ### 2026-04-28
 

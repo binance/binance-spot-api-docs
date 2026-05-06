@@ -4,6 +4,7 @@
 - [WebSocket Streams for Binance](#websocket-streams-for-binance)
   - [General WSS information](#general-wss-information)
   - [WebSocket Limits](#websocket-limits)
+  - [Server Shutdown](#server-shutdown)
   - [Live Subscribing/Unsubscribing to streams](#live-subscribingunsubscribing-to-streams)
     - [Subscribe to a stream](#subscribe-to-a-stream)
     - [Unsubscribe to a stream](#unsubscribe-to-a-stream)
@@ -39,7 +40,8 @@
 * Combined streams are accessed at **/stream?streams=\<streamName1\>/\<streamName2\>/\<streamName3\>**
 * Combined stream events are wrapped as follows: **{"stream":"\<streamName\>","data":\<rawPayload\>}**
 * All symbols for streams are **lowercase**
-* A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark
+* A single connection to **stream.binance.com** is only valid for 24 hours; expect to be disconnected at the 24 hour mark.
+* A [`serverShutdown`](#server-shutdown) event will be sent 10 minutes before disconnection. Please establish a new connection as soon as possible to prevent interruption.
 * The WebSocket server will send a `ping frame` every 20 seconds.
   * If the WebSocket server does not receive a `pong frame` back from the connection within a minute the connection will be disconnected.
   * When you receive a ping, you must send a pong with a copy of ping's payload as soon as possible.
@@ -58,6 +60,33 @@
 * A connection that goes beyond the limit will be disconnected; IPs that are repeatedly disconnected may be banned.
 * A single connection can listen to a maximum of 1024 streams.
 * There is a limit of **300 connections per attempt every 5 minutes per IP**.
+
+## Server Shutdown
+
+`serverShutdown` event is sent when the server is about to shut down.
+
+* `raw` stream:
+
+```javascript
+{
+  "e": "serverShutdown", // Event type
+  "E": 1770123456789     // Event time
+}
+```
+
+* `combined` stream:
+
+```javascript
+{
+  "stream": "!serverShutdown",
+  "data: {
+    "e": "serverShutdown", // Event type
+    "E": 1770123456789     // Event time
+  }
+}
+```
+
+Please establish a new connection as soon as possible to prevent interruption.
 
 ## Live Subscribing/Unsubscribing to streams
 

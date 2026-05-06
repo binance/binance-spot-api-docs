@@ -9,6 +9,7 @@
 * 订阅组合streams时，事件payload会以这样的格式封装 **{"stream":"\<streamName\>","data":\<rawPayload\>}**
 * stream名称中所有交易对均为**小写**
 * 每个到**stream.binance.com**的链接有效期不超过24小时，请妥善处理断线重连。
+* 系统会在断开连接前 10 分钟会发送 [`serverShutdown`](#serverShutdown) 事件。请尽快建立新连接，以防止中断。
 * WebSocket 服务器**每20秒**发送 PING 消息。
   * 如果 WebSocket 服务器没有在一分钟之内收到PONG 消息应答，连接会被断开。
   * 当客户收到PING消息，必须尽快回复PONG消息，同时payload需要和PING消息一致。
@@ -29,7 +30,33 @@
 * 单个连接最多可以订阅1024个Streams。
 * 每IP地址、每5分钟最多可以发送300次连接请求。
 
+<a id="serverShutdown"></a>
+## 服务器关闭
 
+当服务器即将关闭时，会发送 `serverShutdown` 事件。
+
+* `raw`("原始")信息流：
+
+```javascript
+{
+  "e": "serverShutdown", // 事件类型
+  "E": 1770123456789     // 事件时间
+}
+```
+
+* `combined`("组合")信息流：
+
+```javascript
+{
+  "stream": "!serverShutdown",
+  "data: {
+    "e": "serverShutdown", // 事件类型
+    "E": 1770123456789     // 事件事件
+  }
+}
+```
+
+请尽快建立新连接，以防中断。
 
 ## 实时订阅/取消数据流
 

@@ -1,6 +1,46 @@
 # 更新日志
 
-**最近更新： 2026-04-28**
+**最近更新： 2026-05-06**
+
+### 2026-05-06
+
+**注意：以下变更将于 2026 年 05 月 08 日 06:00 (UTC) 推出，可能需要几个小时才能完成部署。**
+
+* 在 [WebSocket API](web-socket-api_CN.md) 和 [WebSocket 行情接口](web-socket-streams_CN.md) 中新增了 `serverShutdown` 事件。
+  * 系统会在断开连接前 10 分钟发送 `serverShutdown` 事件。
+
+* 当 [`参考价格`](./faqs/price_range_execution_rules_CN.md) 存在且不为空时， [`PERCENT_PRICE`](./filters_CN.md#percent_price)、[`PERCENT_PRICE_BY_SIDE`](./filters_CN.md#percent_price_by_side)、[`MIN_NOTIONAL`](./filters_CN.md#min_notional) 和 [`NOTIONAL`](./filters_CN.md#notional) 过滤器现在将使用`参考价格`。当参考价格不存在或为空时，这些过滤器将改为使用原有行为。
+
+* [大宗交易](https://www.binance.info/zh-CN/support/faq/detail/557f95eaf8fb4460aed0a891d42a1425) 的市场数据。
+  * 新增端点/方法
+    * REST API:
+      * `GET /api/v3/historicalBlockTrades`
+    * WebSocket API:
+      * `blockTrades.historical`
+
+* 订单查询响应中可能会包含 [`expiryReason`](./enums_CN.md#expiryreasons) 字段。
+  * 该字段仅针对**已过期订单**返回，用于帮助用户了解订单过期的原因，包括因**价格区间执行规则**而导致订单过期的情况。
+  * 该字段会包含在 JSON 和 SBE 3:4 响应中。
+  * 适用于以下端点/方法：
+    * REST API:
+      * `GET /api/v3/order`
+      * `GET /api/v3/allOrders`
+      * `GET /api/v3/orderList`
+      * `GET /api/v3/allOrderList`
+    * WebSocket API:
+      * `order.status`
+      * `allOrders`
+      * `orderList.status`
+      * `allOrderLists`
+
+* REST 和 WebSocket API SBE schema 3:4
+  * 当前的 schema 3:3 [spot_3_3.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_3.xml) 已被弃用，将根据我们的 schema 弃用政策在 6 个月后停用。
+  * schema 3:4 中的变更：
+    * 新增消息 `BlockTradesResponse`
+    * 新增类型 `blockTradeId`
+    * 在 `OrderResponse` 和 `OrdersResponse` 中新增字段 `expiryReason`
+
+---
 
 ### 2026-04-28
 

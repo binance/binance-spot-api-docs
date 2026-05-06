@@ -7,7 +7,7 @@
   * 如果使用标准443端口时遇到问题，可以使用替代端口9443。
   * [现货测试网](https://testnet.binance.vision)的 base URL 是 `wss://ws-api.testnet.binance.vision/ws-api/v3`。
 * 每个到 base URL 的链接有效期不超过24小时，请妥善处理断线重连。
-* 在因维护或链接保持24小时后被断开之前，会发送 [`serverShutdown`](#serverShutdown) 事件。请尽快重新连接以防止数据流中断。
+* 系统会在断开连接前 10 分钟会发送 [`serverShutdown`](#serverShutdown) 事件。请尽快建立新连接，以防止中断。
 * 我们支持 HMAC，RSA 以及 Ed25519 Key 类型。 如需进一步了解，请参考 [API Key 类型](faqs/api_key_types_CN.md)。
 * 响应默认为 JSON 格式。如果您想接收 SBE 格式的响应，请参考 [简单二进制编码 （SBE） 常见问题](./faqs/sbe_faq_CN.md)。
 * 如果您的请求包含非 ASCII 字符的交易对名称，那么响应中可能包含以 UTF-8 编码的非 ASCII 字符。
@@ -266,6 +266,25 @@
 | --------------- | ------- | --------- | -----------
 | `event` | OBJECT    | YES       | 事件 payload。请看 [用户数据流](user-data-stream_CN.md)
 | `subscriptionId` | INT | NO | 用以标识事件来自于哪个订阅。详见 [用户数据流订阅](#general_info_user_data_stream_subscriptions) |
+
+<a id="connectionevents"></a>
+## 连接事件
+
+<a id="serverShutdown"></a>
+### 服务器关闭
+
+当服务器即将关闭时，会发送 `serverShutdown` 事件。
+
+```javascript
+{
+  "event": {
+    "e": "serverShutdown", // 事件类型
+    "E": 1770123456789     // 事件时间
+   }
+}
+```
+
+请尽快建立新连接，以防中断
 
 <a id="ratelimits"></a>
 
@@ -1571,22 +1590,6 @@ None            |40|
 }
 ```
 
-<a id="serverShutdown"></a>
-### 服务器关闭
-
-```javascript
-{
-  "event": {
-    "e": "serverShutdown", // 事件类型
-    "E": 1770123456789     // 事件时间
-   }
-}
-```
-
-当服务器即将关闭时，会发送 `serverShutdown` 事件。
-
-请尽快重新连接 WebSocket API，以避免数据流中断。
-
 ## 行情接口
 
 ### 订单薄深度信息
@@ -1786,6 +1789,68 @@ None            |40|
         }
     ],
     "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 10
+        }
+    ]
+}
+```
+
+<a id="historicalBlockTrades"></a>
+
+### 查询历史大宗交易
+
+```javascript
+{
+    "id": "189da436-d4bd-48ca-9f95-9f613d621717",
+    "method": "blockTrades.historical",
+    "params": {
+        "symbol": "BNBBTC",
+        "fromId": 582,
+        "limit": 1
+    }
+}
+```
+
+获取历史大宗交易。
+
+**权重:**
+25
+
+**参数:**
+
+名称 | 类型 | 是否必需 | 描述
+----------- | ------- | --------- | -----------
+`symbol`    | STRING  | YES       |
+`fromId`    | LONG    | YES       | 起始大宗交易ID
+`limit`     | LONG    | NO        | 默认值：500; 最大值：1000
+
+**数据源:**
+数据库
+
+**响应:**
+
+```javascript
+{
+    "id": "cffc9c7d-4efc-4ce0-b587-6b87448f052a",
+    "status": 200,
+    "result":
+    [
+        {
+            "id": 582,
+            "price": "0.052",
+            "qty": "5838",
+            "quoteQty": "303.576",
+            "time": 1772506983321,
+            "isBuyerMaker": true
+        }
+    ],
+    "rateLimits":
+    [
         {
             "rateLimitType": "REQUEST_WEIGHT",
             "interval": "MINUTE",
