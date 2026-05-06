@@ -7,6 +7,8 @@
   - [Response format](#response-format)
     - [Status codes](#status-codes)
   - [Event format](#event-format)
+  - [Connection events](#connection-events)
+    - [Server Shutdown](#server-shutdown)
   - [Rate limits](#rate-limits)
     - [Connection limits](#connection-limits)
     - [General information on rate limits](#general-information-on-rate-limits)
@@ -31,11 +33,11 @@
     - [Check server time](#check-server-time)
     - [Exchange information](#exchange-information)
     - [Query Execution Rules](#query-execution-rules)
-    - [Server Shutdown](#server-shutdown)
   - [Market data requests](#market-data-requests)
     - [Order book](#order-book)
     - [Recent trades](#recent-trades)
     - [Historical trades](#historical-trades)
+    - [Historical Block Trades](#historical-block-trades)
     - [Aggregate trades](#aggregate-trades)
     - [Klines](#klines)
     - [UI Klines](#ui-klines)
@@ -101,7 +103,7 @@
   * If you experience issues with the standard 443 port, alternative port 9443 is also available.
   * The base endpoint for [testnet](https://testnet.binance.vision/) is: `wss://ws-api.testnet.binance.vision/ws-api/v3`
 * A single connection to the API is only valid for 24 hours; expect to be disconnected after the 24-hour mark.
-* Before a disconnection either due to maintenance or after 24 hours, a [`serverShutdown`](#server-shutdown) event will be sent. Please reconnect as soon as possible to prevent stream interruption.
+* A [`serverShutdown`](#server-shutdown) event will be sent 10 minutes before disconnection. Please establish a new connection as soon as possible to prevent interruption.
 * We support HMAC, RSA, and Ed25519 keys. For more information, please see [API Key types](faqs/api_key_types.md).
 * Responses are in JSON by default. To receive responses in SBE, refer to the [SBE FAQ](faqs/sbe_faq.md) page.
 * If your request contains a symbol name containing non-ASCII characters, then the response may contain non-ASCII characters encoded in UTF-8.
@@ -362,6 +364,23 @@ Event fields:
 | :---- | :---- | :---- | :---- |
 | `event` | OBJECT | YES | Event payload. See [User Data Streams](user-data-stream.md) |
 | `subscriptionId`|INT| NO| Identifies which subscription the event is coming from. See [User Data Stream subscriptions](#general_info_user_data_stream_subscriptions) |
+
+## Connection events
+
+### Server Shutdown
+
+`serverShutdown` event is sent when the server is about to shut down.
+
+```javascript
+{
+  "event": {
+    "e": "serverShutdown", // Event Type
+    "E": 1770123456789     // Event Time
+  }
+}
+```
+
+Please establish a new connection as soon as possible to prevent interruption.
 
 ## Rate limits
 
@@ -1677,21 +1696,6 @@ Name | Type | Mandatory | Description
 }
 ```
 
-### Server Shutdown
-
-```javascript
-{
-  "event": {
-    "e": "serverShutdown", // Event Type
-    "E": 1770123456789     // Event Time
-  }
-}
-```
-
-`serverShutdown` is sent when the server is about to shut down.
-
-Please reconnect to WebSocket API as soon as possible to avoid stream interruption.
-
 ## Market data requests
 
 ### Order book
@@ -1890,6 +1894,66 @@ Database
         }
     ],
     "rateLimits": [
+        {
+            "rateLimitType": "REQUEST_WEIGHT",
+            "interval": "MINUTE",
+            "intervalNum": 1,
+            "limit": 6000,
+            "count": 10
+        }
+    ]
+}
+```
+
+### Historical Block Trades
+
+```javascript
+{
+    "id": "189da436-d4bd-48ca-9f95-9f613d621717",
+    "method": "blockTrades.historical",
+    "params": {
+        "symbol": "BNBBTC",
+        "fromId": 582,
+        "limit": 1
+    }
+}
+```
+
+Get block trades.
+
+**Weight:**
+25
+
+**Parameters:**
+
+Name        | Type    | Mandatory | Description
+----------- | ------- | --------- | -----------
+`symbol`    | STRING  | YES       |
+`fromId`    | LONG    | YES       | Block trade ID to fetch from
+`limit`     | LONG    | NO        | Default: 500; Maximum: 1000
+
+**Data Source:**
+Database
+
+**Response:**
+
+```javascript
+{
+    "id": "cffc9c7d-4efc-4ce0-b587-6b87448f052a",
+    "status": 200,
+    "result":
+    [
+        {
+            "id": 582,
+            "price": "0.052",
+            "qty": "5838",
+            "quoteQty": "303.576",
+            "time": 1772506983321,
+            "isBuyerMaker": true
+        }
+    ],
+    "rateLimits":
+    [
         {
             "rateLimitType": "REQUEST_WEIGHT",
             "interval": "MINUTE",

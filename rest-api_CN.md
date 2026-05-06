@@ -975,6 +975,43 @@ fromId | LONG | NO | 从哪一条成交id开始返回，缺省返回最近的成
 ]
 ```
 
+<a id="historicalBlockTrades"></a>
+
+### 查询历史大宗交易
+
+```
+GET /api/v3/historicalBlockTrades
+```
+
+**权重:**
+25
+
+**参数:**
+
+名称 | 类型 | 是否必需 | 描述
+------------ | ------------ | ------------ | ------------
+`symbol`    | STRING  | YES       |
+`fromId`    | LONG    | YES       | 起始大宗交易ID
+`limit`     | LONG    | NO        | 默认值：500; 最大值：1000
+
+**数据源:**
+数据库
+
+**响应:**
+
+```javascript
+[
+  {
+    "id": 582,
+    "price": "0.052",
+    "qty": "5838",
+    "quoteQty": "303.576",
+    "time": 1772506983321,
+    "isBuyerMaker": true
+  }
+]
+```
+
 <a id="aggTrades"></a>
 
 ### 近期成交(归集)

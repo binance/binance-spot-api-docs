@@ -6,13 +6,14 @@
 <a id="price"></a>
 ### PRICE_FILTER 价格过滤器
 价格过滤器用于检测order订单中price参数的合法性
+
 * `minPrice` 定义了 `price`/`stopPrice` 允许的最小值; `minPrice` == 0 的时候则失效。
 * `maxPrice` 定义了 `price`/`stopPrice` 允许的最大值; `maxPrice` == 0 的时候则失效。
 * `tickSize` 定义了 `price`/`stopPrice` 的步进间隔; `tickSize` == 0 的时候则失效。
 
 以上每一项均可为0，为0时代表这一项不再做限制。
 
-逻辑伪代码如下：
+订单需满足以下条件，方可通过该过滤器校验：
 * `price` >= `minPrice`
 * `price` <= `maxPrice`
 * `price` % `tickSize` == 0
@@ -26,14 +27,17 @@
     "tickSize": "0.00000100"
 }
 ```
-
+<a id="percent_price"></a>
 ### PERCENT_PRICE 价格振幅过滤器
-可以理解为一个瞬时的涨跌停限制，不允许价格瞬间剧烈浮动。
-`avgPriceMins` 指用过去几分钟的平均价格来计算价格基准. 0 表示用最新成交价格作为价格计准。
+`PERCENT_PRICE` 过滤器会根据`前序交易的平均成交价`来定义订单`价格`的有效范围。
 
-逻辑伪代码如下：
-* `price` <= `weightedAveragePrice` * `multiplierUp`
-* `price` >= `weightedAveragePrice` * `multiplierDown`
+* 当该交易对存在非空的 [参考价格](./faqs/price_range_execution_rules_CN.md) 时，过滤器校验将使用该参考价格。
+* 当该交易对不存在非空的参考价格时，过滤器校验将使用 `avgPriceMins` 分钟前的成交量加权平均价。
+  * 如果 `avgPriceMins` 为 0，那么过滤器校验将使用最新成交价。
+
+订单需满足以下条件，方可通过该过滤器校验：
+* `price` <= `average of previous trade prices` * `multiplierUp`
+* `price` >= `average of previous trade prices` * `multiplierDown`
 
 **/exchangeInfo 响应中的格式:**
 ```javascript
@@ -44,22 +48,22 @@
     "avgPriceMins": 5
 }
 ```
-
+<a id="percent_price_by_side"></a>
 #### PERCENT_PRICE_BY_SIDE
-`PERCENT_PRICE_BY_SIDE` 过滤器定义了基于交易对平均价格的合法价格范围. 取决于`BUY`或者`SELL`, 价格范围可能有所不同.<br/>
+`PERCENT_PRICE_BY_SIDE` 过滤器会根据`前序交易的平均成交价`来定义订单`价格`的有效范围。
 
-`avgPriceMins` 是用来计算平均价格的分钟数. 0 表示用最新价(last price).<br/>
+* 当该交易对存在非空的 [参考价格](./faqs/price_range_execution_rules_CN.md) 时，过滤器校验将使用该参考价格。
+* 当该交易对不存在非空的参考价格时，过滤器校验将使用 `avgPriceMins` 分钟前的成交量加权平均价。
+  * `avgPriceMins` 为 0，那么过滤器校验将使用最新成交价。
 
-买向订单需要满足:
+`买方`订单需满足以下条件，方可通过该过滤器校验：
 
-* `Order price` <= `weightedAveragePrice` * `bidMultiplierUp`
-* `Order price` >= `weightedAveragePrice` * `bidMultiplierDown`
+* `price` <= `average of previous trade prices` * `bidMultiplierUp`
+* `price` >= `average of previous trade prices` * `bidMultiplierDown`
 
-卖向订单需要满足:
-
-* `Order Price` <= `weightedAveragePrice` * `askMultiplierUp`
-* `Order Price` >= `weightedAveragePrice` * `askMultiplierDown`
-
+`卖方`订单需满足以下条件，方可通过该过滤器校验：
+* `price` <= `average of previous trade prices` * `askMultiplierUp`
+* `price` >= `average of previous trade prices` * `askMultiplierDown`
 
 **/exchangeInfo 响应中的格式:**
 ```javascript
@@ -80,7 +84,7 @@
 * `maxQty` 表示 `quantity`/`icebergQty` 允许的最大值
 * `stepSize` 表示 `quantity`/`icebergQty` 允许的步进值。
 
-逻辑伪代码如下：
+订单需满足以下条件，方可通过该过滤器校验：
 
 * `quantity` >= `minQty`
 * `quantity` <= `maxQty`
@@ -95,14 +99,19 @@
     "stepSize": "0.00100000"
 }
 ```
-
+<a id="min_notional"></a>
 ### MIN_NOTIONAL 最小金额
 `MIN_NOTIONAL` 过滤器定义了交易对订单所允许的最小名义价值(成交额)。
-订单的名义价值是`价格`*`数量`。
-`applyToMarket` 确定 `MIN_NOTIONAL` 过滤器是否也将应用于 `MARKET` 订单。
-由于 `MARKET` 订单没有价格，因此会在最后 `avgPriceMins` 分钟内使用平均价格。
-`avgPriceMins` 是计算平均价格的分钟数。 0 表示使用最后的价格。
 
+* 订单的名义价值是 `价格` * `数量` 。
+* `applyToMarket` 确定 `MIN_NOTIONAL` 过滤器是否也将应用于 `MARKET` 订单。
+  * 由于 `MARKET` 订单没有`价格`，因此会使用`前序交易的平均成交价`。
+    * 当该交易对存在非空的 [参考价格](./faqs/price_range_execution_rules_CN.md) 时，过滤器校验将使用该参考价格来作为`价格`。
+    * 当该交易对不存在非空的参考价格时，过滤器校验将使用 `avgPriceMins` 分钟前的成交量加权平均价来作为`价格`。
+      * 如果 `avgPriceMins` 为 0，那么过滤器校验将使用最新成交价来作为`价格`。
+
+订单需满足以下条件，方可通过该过滤器校验：
+* `price` * `quantity` >= `minNotional`
 
 **/exchangeInfo 响应中的格式:**
 ```javascript
@@ -113,8 +122,20 @@
     "avgPriceMins": 5
 }
 ```
-
+<a id="notional"></a>
 ### NOTIONAL 名义价值
+名义价值过滤器(`NOTIONAL`)定义了订单在一个交易对上可以下单的名义价值区间。
+
+* `applyMinToMarket` 定义了 `minNotional` 是否适用于市价单(`MARKET`)。
+* `applyMaxToMarket` 定义了 `maxNotional` 是否适用于市价单(`MARKET`)。
+  * 由于 `MARKET` 订单没有`价格`，因此会使用`前序交易的平均成交价`。
+    * 当该交易对存在非空的 [参考价格](./faqs/price_range_execution_rules_CN.md) 时，过滤器校验将使用该参考价格来作为`价格`。
+    * 当该交易对不存在非空的参考价格时，过滤器校验将使用 `avgPriceMins` 分钟前的成交量加权平均价来作为`价格`。
+      * 如果 `avgPriceMins` 为 0，那么过滤器校验将使用最新成交价来作为`价格`。
+
+订单需满足以下条件，方可通过该过滤器校验：
+* `price` * `quantity` <= `maxNotional`
+* `price` * `quantity` >= `minNotional`
 
 **/exchangeInfo 响应中的格式:**
 
@@ -128,18 +149,6 @@
     "avgPriceMins": 5
 }
 ```
-
-名义价值过滤器(`NOTIONAL`)定义了订单在一个交易对上可以下单的名义价值区间.<br/><br/>
-`applyMinToMarket` 定义了 `minNotional` 是否适用于市价单(`MARKET`)  <br/>
-`applyMaxToMarket` 定义了 `maxNotional` 是否适用于市价单(`MARKET`).
-
-要通过此过滤器, 订单的名义价值 (单价 x 数量, `price * quantity`) 需要满足如下条件:
-
-* `price * quantity` <= `maxNotional`
-* `price * quantity` >= `minNotional`
-
-对于市价单(`MARKET`), 用于计算的价格采用的是在 `avgPriceMins` 定义的时间之内的平均价.<br/>
-如果 `avgPriceMins` 为 0, 则采用最新的价格.
 
 ### ICEBERG_PARTS 冰山订单拆分数
 `ICEBERG_PARTS` 代表冰山订单最多可以拆分成多少个小订单。

@@ -29,6 +29,7 @@
     - [Order book](#order-book)
     - [Recent trades list](#recent-trades-list)
     - [Old trade lookup](#old-trade-lookup)
+    - [Historical Block Trades](#historical-block-trades)
     - [Compressed/Aggregate trades list](#compressedaggregate-trades-list)
     - [Kline/Candlestick data](#klinecandlestick-data)
     - [UIKlines](#uiklines)
@@ -1023,6 +1024,43 @@ Database
         "isBuyerMaker": true,
         "isBestMatch": true
     }
+]
+```
+
+### Historical Block Trades
+
+```
+GET /api/v3/historicalBlockTrades
+```
+
+Get block trades.
+
+**Weight:**
+25
+
+**Parameters:**
+
+Name        | Type    | Mandatory | Description
+----------- | ------- | --------- | -----------
+`symbol`    | STRING  | YES       |
+`fromId`    | LONG    | YES       | Block trade ID to fetch from
+`limit`     | LONG    | NO        | Default: 500; Maximum: 1000
+
+**Data Source:**
+Database
+
+**Response:**
+
+```javascript
+[
+  {
+    "id": 582,
+    "price": "0.052",
+    "qty": "5838",
+    "quoteQty": "303.576",
+    "time": 1772506983321,
+    "isBuyerMaker": true
+  }
 ]
 ```
 
