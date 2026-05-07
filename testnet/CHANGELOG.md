@@ -15,7 +15,7 @@ All data on the Spot Test Network will be deleted today according to the periodi
 
 **Notice: The following changes will take effect once the Spot Test Network is back online.**
 
-* Added `serverShutdown` event to [WebSocket API](web-socket-api.md) and [WebSocket Streams](web-socket-streams.md).
+* Added `serverShutdown` event to [WebSocket API](./web-socket-api.md#serverShutdown) and [WebSocket Streams](./web-socket-streams.md#serverShutdown).
   * `serverShutdown` event will be sent 10 minutes before disconnection.
 
 * [`PERCENT_PRICE`](./filters.md#percent_price), [`PERCENT_PRICE_BY_SIDE`](./filters.md#percent_price_by_side), [`MIN_NOTIONAL`](./filters.md#min_notional), and [`NOTIONAL`](./filters.md#notional) filters now use [reference price](../faqs/price_range_execution_rules.md) when it exists and is non-null. The filters fall back to their previous behavior when the reference price does not exist or is null.

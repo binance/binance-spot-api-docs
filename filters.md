@@ -29,7 +29,7 @@ Any of the above variables can be set to 0, which disables that rule in the `pri
 ### PERCENT_PRICE
 The `PERCENT_PRICE` filter defines the valid range for an order `price` based on an `average of previous trade prices`.
 
-* When a non-null [reference price](../faqs/price_range_execution_rules.md) for the symbol exists, it is used in the filter evaluation.
+* When a non-null [reference price](./faqs/price_range_execution_rules.md) for the symbol exists, it is used in the filter evaluation.
 * When a non-null reference price for the symbol does not exist, then the volume weighted average price over the preceding `avgPriceMins` minutes is used in the filter evaluation.
   * If `avgPriceMins` is 0, then the last price is used in the filter evaluation.
 
@@ -50,7 +50,7 @@ An order will pass this filter evaluation if:
 ### PERCENT_PRICE_BY_SIDE
 The `PERCENT_PRICE_BY_SIDE` filter defines the valid range for an order `price` based on an `average of previous trade prices`.
 
-* When a non-null [reference price](../faqs/price_range_execution_rules.md) for the symbol exists, it is used in the filter evaluation.
+* When a non-null [reference price](./faqs/price_range_execution_rules.md) for the symbol exists, it is used in the filter evaluation.
 * When a non-null reference price for the symbol does not exist, then the volume weighted average price over the preceding `avgPriceMins` minutes is used in the filter evaluation.
   * If `avgPriceMins` is 0, then the last price is used in the filter evaluation.
 
@@ -106,7 +106,7 @@ The `MIN_NOTIONAL` filter defines the minimum notional value allowed for an orde
 * An order's notional value is the `price` * `quantity`.
 * `applyToMarket` determines whether or not the `MIN_NOTIONAL` filter will also be applied to `MARKET` orders.
   * Since `MARKET` orders have no `price`, an `average of previous trade prices` is used instead.
-    * When a non-null [reference price](../faqs/price_range_execution_rules.md) for the symbol exists, it is used as `price`.
+    * When a non-null [reference price](./faqs/price_range_execution_rules.md) for the symbol exists, it is used as `price`.
     * When a non-null reference price for the symbol does not exist, then the volume weighted average price over the preceding `avgPriceMins` minutes is used as `price`.
       * If `avgPriceMins` is 0, then the last price is used as `price`.
 
@@ -129,7 +129,7 @@ The `NOTIONAL` filter defines the acceptable notional range allowed for an order
 * `applyMinToMarket` determines whether `minNotional` will be applied to `MARKET` orders.
 * `applyMaxToMarket` determines whether `maxNotional` will be applied to `MARKET` orders.
   * Since `MARKET` orders have no `price`, an `average of previous trade prices` is used instead.
-    * When a non-null [reference price](../faqs/price_range_execution_rules.md) for the symbol exists, it is used as `price`.
+    * When a non-null [reference price](./faqs/price_range_execution_rules.md) for the symbol exists, it is used as `price`.
     * When a non-null reference price for the symbol does not exist, then the volume weighted average price over the preceding `avgPriceMins` minutes is used as `price`.
       * If `avgPriceMins` is 0, then the last price is used as `price`.
 

@@ -6,7 +6,7 @@
 
 **注意：以下变更将于 2026 年 05 月 08 日 06:00 (UTC) 推出，可能需要几个小时才能完成部署。**
 
-* 在 [WebSocket API](web-socket-api_CN.md) 和 [WebSocket 行情接口](web-socket-streams_CN.md) 中新增了 `serverShutdown` 事件。
+* 在 [WebSocket API](./web-socket-api_CN.md#serverShutdown) 和 [WebSocket 行情接口](./web-socket-streams_CN.md#serverShutdown) 中新增了 `serverShutdown` 事件。
   * 系统会在断开连接前 10 分钟发送 `serverShutdown` 事件。
 
 * 当 [`参考价格`](./faqs/price_range_execution_rules_CN.md) 存在且不为空时， [`PERCENT_PRICE`](./filters_CN.md#percent_price)、[`PERCENT_PRICE_BY_SIDE`](./filters_CN.md#percent_price_by_side)、[`MIN_NOTIONAL`](./filters_CN.md#min_notional) 和 [`NOTIONAL`](./filters_CN.md#notional) 过滤器现在将使用`参考价格`。当参考价格不存在或为空时，这些过滤器将改为使用原有行为。

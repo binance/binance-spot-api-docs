@@ -41,7 +41,7 @@
 * Combined stream events are wrapped as follows: **{"stream":"\<streamName\>","data":\<rawPayload\>}**
 * All symbols for streams are **lowercase**
 * A single connection to **stream.testnet.binance.vision** is only valid for 24 hours; expect to be disconnected at the 24 hour mark.
-* A [`serverShutdown`](#server-shutdown) event will be sent 10 minutes before disconnection. Please establish a new connection as soon as possible to prevent interruption.
+* A [`serverShutdown`](#serverShutdown) event will be sent 10 minutes before disconnection. Please establish a new connection as soon as possible to prevent interruption.
 * The WebSocket server will send a `ping frame` every 20 seconds.
   * If the WebSocket server does not receive a `pong frame` back from the connection within a minute, the connection will be disconnected.
   * When you receive a ping, you must send a pong with a copy of ping's payload as soon as possible.
@@ -60,7 +60,7 @@
 * A connection that goes beyond the limit will be disconnected; IPs that are repeatedly disconnected may be banned.
 * A single connection can listen to a maximum of 1024 streams.
 * There is a limit of **300 connections per attempt every 5 minutes per IP**.
-
+<a id="serverShutdown"></a>
 ## Server Shutdown
 
 `serverShutdown` event is sent when the server is about to shut down.
