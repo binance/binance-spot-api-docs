@@ -6,7 +6,7 @@
 
 **Notice: The following changes will be deployed on 2026-05-08, starting at 06:00 UTC and may take several hours to complete.**
 
-* Added `serverShutdown` event to [WebSocket API](web-socket-api.md) and [WebSocket Streams](web-socket-streams.md).
+* Added `serverShutdown` event to [WebSocket API](./web-socket-api.md#serverShutdown) and [WebSocket Streams](./web-socket-streams.md#serverShutdown).
   * `serverShutdown` event will be sent 10 minutes before disconnection.
 
 * [`PERCENT_PRICE`](./filters.md#percent_price), [`PERCENT_PRICE_BY_SIDE`](./filters.md#percent_price_by_side), [`MIN_NOTIONAL`](./filters.md#min_notional), and [`NOTIONAL`](./filters.md#notional) filters now use [reference price](./faqs/price_range_execution_rules.md) when it exists and is non-null. The filters fall back to their previous behavior when the reference price does not exist or is null.

@@ -101,7 +101,7 @@
 * The base endpoint is: **`wss://ws-api.testnet.binance.vision/ws-api/v3`**
   * If you experience issues with the standard 443 port, alternative port 9443 is also available.
 * A single connection to the API is only valid for 24 hours; expect to be disconnected after the 24-hour mark.
-* A [`serverShutdown`](#server-shutdown) event will be sent 10 minutes before disconnection. Please establish a new connection as soon as possible to prevent interruption.
+* A [`serverShutdown`](#serverShutdown) event will be sent 10 minutes before disconnection. Please establish a new connection as soon as possible to prevent interruption.
 * We support HMAC, RSA, and Ed25519 keys. For more information, please see [API Key types](../faqs/api_key_types.md).
 * Responses are in JSON by default. To receive responses in SBE, refer to the [SBE FAQ](../faqs/sbe_faq.md) page.
 * If your request contains a symbol name containing non-ASCII characters, then the response may contain non-ASCII characters encoded in UTF-8.
@@ -363,7 +363,7 @@ Event fields:
 | `subscriptionId`|INT| NO| Identifies which subscription the event is coming from. See [User Data Stream subscriptions](#general_info_user_data_stream_subscriptions) |
 
 ## Connection events
-
+<a id="serverShutdown"></a>
 ### Server Shutdown
 
 `serverShutdown` event is sent when the server is about to shut down.
