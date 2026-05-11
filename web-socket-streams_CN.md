@@ -257,6 +257,28 @@
     "M": true               // 请忽略该字段
 }
 ```
+
+<a id="blocktrade"></a>
+## 大宗交易
+
+**Stream 名称:** \<symbol\>@blockTrade
+
+**更新速度:** 实时
+
+**Payload:**
+```javascript
+{
+  "e": "blockTrade",  // Event type
+  "E": 1772506983582, // Event time
+  "s": "BNBBTC",      // Symbol
+  "t": 582,           // Block Trade ID
+  "p": "0.052",       // Price
+  "q": "5838",        // Quantity
+  "T": 1772506983321, // Trade time
+  "m": true           // Is the buyer the maker?
+}
+```
+
 <a id="kline"></a>
 ## UTC K线
 K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更新是基于 `UTC+0` 时区的。

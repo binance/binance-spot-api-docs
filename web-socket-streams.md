@@ -16,6 +16,7 @@
   - [Reference Price Streams](#reference-price-streams)
   - [Aggregate Trade Streams](#aggregate-trade-streams)
   - [Trade Streams](#trade-streams)
+  - [Block Trade Streams](#block-trade-streams)
   - [Kline/Candlestick Streams for UTC](#klinecandlestick-streams-for-utc)
   - [Kline/Candlestick Streams with timezone offset](#klinecandlestick-streams-with-timezone-offset)
   - [Individual Symbol Mini Ticker Stream](#individual-symbol-mini-ticker-stream)
@@ -268,6 +269,26 @@ The Trade Streams push raw trade information; each trade has a unique buyer and 
     "T": 1672515782136,     // Trade time
     "m": true,              // Is the buyer the market maker?
     "M": true               // Ignore
+}
+```
+
+## Block Trade Streams
+
+**Stream Name:** \<symbol\>@blockTrade
+
+**Update Speed:** Real-time
+
+**Payload:**
+```javascript
+{
+  "e": "blockTrade",  // Event type
+  "E": 1772506983582, // Event time
+  "s": "BNBBTC",      // Symbol
+  "t": 582,           // Block Trade ID
+  "p": "0.052",       // Price
+  "q": "5838",        // Quantity
+  "T": 1772506983321, // Trade time
+  "m": true           // Is the buyer the maker?
 }
 ```
 

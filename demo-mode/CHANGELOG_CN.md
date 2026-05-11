@@ -1,6 +1,16 @@
 # 更新日志
 
-**最近更新： 2026-03-11**
+**最近更新： 2026-05-11**
+
+### 2026-05-11
+
+**注意：以下变更将于 2026 年 05 月 12 日 07:00 (UTC) 左右发生。**
+
+* 新增对 [大宗交易](https://www.binance.info/zh-CN/support/faq/detail/557f95eaf8fb4460aed0a891d42a1425) 的 WebSocket 行情接口支持。
+  * 新 Stream:
+    * `<symbol>@blockTrade`
+
+---
 
 ### 2026-03-11
 
