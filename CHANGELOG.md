@@ -1,6 +1,16 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-05-06**
+**Last Updated: 2026-05-11**
+
+### 2026-05-11
+
+The following rollout will occur at **approximately 07:00 UTC on 2026-05-12**.
+
+* Added WebSocket Stream support for [Block Trades](https://www.binance.info/en/support/faq/detail/557f95eaf8fb4460aed0a891d42a1425).
+  * New stream:
+    * `<symbol>@blockTrade`
+
+---
 
 ### 2026-05-06
 

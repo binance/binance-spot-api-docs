@@ -1,9 +1,19 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-05-06**
+**Last Updated: 2026-05-11**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-05-11
+
+The following rollout will occur at **approximately 08:00 UTC today**.
+
+* Added WebSocket Stream support for [Block Trades](https://www.binance.info/en/support/faq/detail/557f95eaf8fb4460aed0a891d42a1425).
+  * New stream:
+    * `<symbol>@blockTrade`
+
+---
 
 ### 2026-05-06
 
