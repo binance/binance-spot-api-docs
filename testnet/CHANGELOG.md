@@ -19,7 +19,7 @@ The following rollout will occur at **approximately 08:00 UTC today**.
 
 #### Data reset
 
-All data on the Spot Test Network will be deleted today according to the periodic reset procedure. See [F.A.Q.](../faqs/testnet.md#faq-periodic-reset) for more details.
+All data on the Spot Test Network will be deleted today according to the periodic reset procedure. See [General Info](general-info.md#faq-periodic-reset) for more details.
 
 #### New Features
 
@@ -264,7 +264,7 @@ Please consult the [FIX API documentation](./fix-api.md#general-api-information)
 
 **Data reset**
 
-All data on the Spot Test Network will be deleted today according to the periodic reset procedure. See [F.A.Q.](../faqs/testnet.md#faq-periodic-reset) for more details.
+All data on the Spot Test Network will be deleted today according to the periodic reset procedure. See [General Info](general-info.md#faq-periodic-reset) for more details.
 
 REST and WebSocket API:
 
@@ -313,7 +313,7 @@ WebSocket API
 
 **Data reset**
 
-All data on the Spot Test Network will be deleted today according to the periodic reset procedure. See [F.A.Q.](../faqs/testnet.md#faq-periodic-reset) for more details.
+All data on the Spot Test Network will be deleted today according to the periodic reset procedure. See [General Info](general-info.md#faq-periodic-reset) for more details.
 
 ---
 
@@ -470,7 +470,7 @@ All data on the Spot Test Network will be deleted today according to the periodi
 
 **Data reset**
 
-All data on the Spot Test Network will be deleted today according to the periodic reset procedure. See [F.A.Q.](../faqs/testnet.md#faq-periodic-reset) for more details.
+All data on the Spot Test Network will be deleted today according to the periodic reset procedure. See [General Info](general-info.md#faq-periodic-reset) for more details.
 
 ---
 
@@ -546,7 +546,7 @@ WebSocket API
 
 **Data reset**
 
-All data on the Spot Test Network will be deleted today according to the periodic reset procedure. See [F.A.Q.](../faqs/testnet.md#faq-periodic-reset) for more details.
+All data on the Spot Test Network will be deleted today according to the periodic reset procedure. See [General Info](general-info.md#faq-periodic-reset) for more details.
 
 REST and WebSocket API:
 
@@ -589,7 +589,7 @@ REST and WebSocket API:
 
 **Data reset**
 
-All data on the Spot Test Network will be deleted today according to the periodic reset procedure. See [F.A.Q.](../faqs/testnet.md#faq-periodic-reset) for more details.
+All data on the Spot Test Network will be deleted today according to the periodic reset procedure. See [General Info](general-info.md#faq-periodic-reset) for more details.
 
 ---
 
@@ -759,7 +759,7 @@ Error messages are clearer when a tag is invalid, missing a value, or when the f
 
 **Data reset**
 
-All data on the Spot Test Network will be deleted today according to the periodic reset procedure. (see [F.A.Q.](../faqs/testnet.md#faq-periodic-reset) for more details)
+All data on the Spot Test Network will be deleted today according to the periodic reset procedure. (see [General Info](general-info.md#faq-periodic-reset) for more details)
 
 ---
 
@@ -767,7 +767,7 @@ All data on the Spot Test Network will be deleted today according to the periodi
 
 **Data reset**
 
-All data on the Spot Test Network will be deleted today according to the periodic reset procedure. (see [F.A.Q.](../faqs/testnet.md#faq-periodic-reset) for more details)
+All data on the Spot Test Network will be deleted today according to the periodic reset procedure. (see [General Info](general-info.md#faq-periodic-reset) for more details)
 
 ---
 
