@@ -1086,7 +1086,7 @@ This adds 0 orders to the `EXCHANGE_MAX_ORDERS` filter and the `MAX_NUM_ORDERS` 
 
 **Unfilled Order Count:** 0
 
-Read [Order Amend Keep Priority FAQ](faqs/order_amend_keep_priority.md) to learn more.
+Read [Order Amend Keep Priority FAQ](../faqs/order_amend_keep_priority.md) to learn more.
 
 **Notes:**
 
