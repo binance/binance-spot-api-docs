@@ -6725,7 +6725,7 @@ Places an order using smart order routing (SOR).
 
 This adds 1 order to the `EXCHANGE_MAX_ORDERS` filter and the `MAX_NUM_ORDERS` filter.
 
-Read [SOR FAQ](../faqs/sor_faq.md) to learn more.
+Read [SOR FAQ](faqs/sor_faq.md) to learn more.
 
 **Weight:**
 1
