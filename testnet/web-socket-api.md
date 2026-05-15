@@ -5499,7 +5499,7 @@ Name                     |Type    | Mandatory | Description
 `aboveIcebergQty`        |LONG    |NO         |Note that this can only be used if `aboveTimeInForce` is `GTC`.
 `abovePrice`             |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
 `aboveStopPrice`         |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`. <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
-`aboveTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](..faqs/trailing-stop-faq.md).
+`aboveTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](../faqs/trailing-stop-faq.md).
 `aboveTimeInForce`       |ENUM    |NO         |Required if `aboveType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`.
 `aboveStrategyId`        |LONG    |NO         |Arbitrary numeric value identifying the above order within an order strategy.
 `aboveStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the above order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
@@ -5511,7 +5511,7 @@ Name                     |Type    | Mandatory | Description
 `belowIcebergQty`        |LONG    |NO         |Note that this can only be used if `belowTimeInForce` is `GTC`.
 `belowPrice`             |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
 `belowStopPrice`         |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT` or `TAKE_PROFIT_LIMIT`. <br>Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
-`belowTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](..faqs/trailing-stop-faq.md).
+`belowTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](../faqs/trailing-stop-faq.md).
 `belowTimeInForce`       |ENUM    |NO         |Required if `belowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`
 `belowStrategyId`        |LONG    |NO         |Arbitrary numeric value identifying the below order within an order strategy.
 `belowStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the below order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.

@@ -6275,7 +6275,7 @@ NONE
 | `pendingAboveClientOrderId` | STRING | NO | 待执行上方订单中开放订单的任意唯一 ID。如果未发送，则自动生成。 |
 | `pendingAbovePrice` | DECIMAL | NO | 当 `pendingAboveType` 为 `STOP_LOSS_LIMIT`、`LIMIT_MAKER` 或 `TAKE_PROFIT_LIMIT` 时，可用于指定限价。 |
 | `pendingAboveStopPrice` | DECIMAL | NO | 当 `pendingAboveType` 为 `STOP_LOSS`、`STOP_LOSS_LIMIT`、`TAKE_PROFIT`、`TAKE_PROFIT_LIMIT` 时可用。 |
-| `pendingAboveTrailingDelta` | DECIMAL | NO | 详见 [追踪止盈止损订单常见问题](../faqs/trailing-stop-faq_CN.md) |
+| `pendingAboveTrailingDelta` | DECIMAL | NO | 详见 [追踪止盈止损订单常见问题](faqs/trailing-stop-faq_CN.md) |
 | `pendingAboveIcebergQty` | DECIMAL | NO | 仅当 `pendingAboveTimeInForce` 为 `GTC` 或 `pendingAboveType` 为 `LIMIT_MAKER` 时可用。 |
 | `pendingAboveTimeInForce` | ENUM | NO |  |
 | `pendingAboveStrategyId` | LONG | NO | 用于标识订单策略中待执行上方订单的任意数值。 |
@@ -6587,7 +6587,7 @@ NONE
 
 这个请求会把1个订单添加到 `EXCHANGE_MAX_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
 
-请参阅 [智能指令路由 (SOR)](../faqs/sor_faq_CN.md) 来了解更多详情。
+请参阅 [智能指令路由 (SOR)](faqs/sor_faq_CN.md) 来了解更多详情。
 
 **权重:**
 1
