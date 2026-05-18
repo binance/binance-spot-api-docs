@@ -4,8 +4,8 @@ Errors consist of two parts: an error code and a message. Codes are universal,
  but messages can vary. Here is the error JSON payload:
 ```javascript
 {
-  "code":-1121,
-  "msg":"Invalid symbol."
+    "code": -1121,
+    "msg": "Invalid symbol."
 }
 ```
 
@@ -358,6 +358,9 @@ Errors consist of two parts: an error code and a message. Codes are universal,
 
 ### -2042 MAXIMUM_SUBSCRIPTION_IDS
 * Maximum subscription ID reached for this connection.
+
+### -2043 NO_REFERENCE_PRICE
+* This symbol doesn't have a reference price.
 
 <a id="other-errors"></a>
 
