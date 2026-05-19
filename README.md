@@ -81,6 +81,7 @@ Please refer to [CHANGELOG](./CHANGELOG.md) for latest changes on our APIs and S
         * [PHP](https://github.com/binance/binance-connector-php)
         * [Go](https://github.com/binance/binance-connector-go)
         * [TypeScript](https://github.com/binance/binance-connector-typescript)
+        * [R](https://github.com/OliverLDS/binxr)
 * FIX Connector - This provides access to the exchange using the FIX protocol.
     * [Python](https://github.com/binance/binance-fix-connector-python)
 * [Swagger](https://github.com/binance/binance-api-swagger)
