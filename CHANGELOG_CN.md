@@ -1,6 +1,6 @@
 # 更新日志
 
-**最近更新： 2026-05-11**
+**最近更新：2026-05-11**
 
 ### 2026-05-11
 
@@ -375,7 +375,7 @@ REST 和 WebSocket API：
 ### 2025-12-09
 
 * [FIX SBE Schema](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot-fixsbe-1_0.xml) 已更新，会在 `MarketDataSnapshot` 中使用 `smallGroupSize16Encoding`。并在增量单个交易对订单簿数据流/深度数据流的 `MDEntrySize` 的字段中使用 `presence="optional"`。
-* 更新了关于 [FIX 与 FIX SBE](fix-api.md#fix-vs-fix-sbe-schema) 的文档说明
+* 更新了关于 [FIX 与 FIX SBE](fix-api_CN.md#fix-vs-fix-sbe-schema) 的文档说明
 * 在 REST 和 WebSocket API 文档中新增说明：**请避免在请求中使用 SQL 关键字**，因为这可能会触发 Web 应用防火墙（WAF）规则导致安全拦截。详情请参见 https://www.binance.com/zh-CN/support/faq/detail/360004492232 。
 
 ---
@@ -1385,7 +1385,7 @@ SBE 的 [FAQ](./faqs/sbe_faq_CN.md) 已经更新。
 * 现在，当指定`startTime`或`fromId`时，请求查询所有 OCO 订单会正确返回**升序**的结果。这会影响以下请求：
     * REST API: `GET /api/v3/allOrderList`
     * WebSocket API: `allOrderLists`
-* 修复了一个错误。订单查询请求不再会对新下的订单错误返回[`-2026 ORDER_ARCHIVED`](./errors.md#-2026-order_archived)错误。
+* 修复了一个错误。订单查询请求不再会对新下的订单错误返回[`-2026 ORDER_ARCHIVED`](./errors_CN.md#-2026-order_archived)错误。
     * REST API: `GET /api/v3/order`
     * WebSocket API: `order.status`
 
@@ -2354,7 +2354,7 @@ USER DATA STREAM
 ---
 
 ### 2020-05-01
-* 从2020-05-01 UTC 00:00开始, 所有交易对都会有最多200个挂单的限制, 体现在过滤器[MAX_NUM_ORDERS](./rest-api_CN.md#max_num_orders-%E6%9C%80%E5%A4%9A%E8%AE%A2%E5%8D%95%E6%95%B0)上.
+* 从2020-05-01 UTC 00:00开始, 所有交易对都会有最多200个挂单的限制, 体现在过滤器[MAX_NUM_ORDERS](./filters_CN.md#max_num_orders)上.
   * 已经存在的挂单不会被移除或者撤销。
   * 单交易对(`symbol`)的挂单数量达到或超过200的账号, 无法在此交易对上下新的订单, 除非挂单数量低于200。
   * OCO订单在被触发成`LIMIT`订单, 或者被触发成`STOP_LOSS`(或者`STOP_LOSS_LIMIT`)前, 被认为是2个挂单量. 一旦OCO订单被触发, 就只被算作一个挂单。

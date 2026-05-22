@@ -1259,7 +1259,7 @@ Your connection is about to be closed. Please reconnect.
 |-------|----------------|--------|----------|-------------------------------------------------------------------------------------------|
 | 262   | MDReqID        | STRING | Y        | 不正确的ID [MarketDataRequest`<V>`](#marketdatarequest)                            |
 | 281   | MDReqRejReason | CHAR   | N        | 可能的错误原因: <br></br> `1` - DUPLICATE_MDREQID <br></br> `2` - TOO_MANY_SUBSCRIPTIONS |
-| 25016 | ErrorCode      | INT    | N        | API 错误代码 [参见 错误代码](errors.md)。  |
+| 25016 | ErrorCode      | INT    | N        | API 错误代码 [参见 错误代码](errors_CN.md)。  |
 | 58    | Text           | STRING | N        | 错误信息。                                                             |
 
 

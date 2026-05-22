@@ -229,7 +229,7 @@
  * Continuation of sequence numbers to new session is currently unsupported. Sequence numbers must be reset for each new session.
 
 ### -1176 已登录
- * [Logon`<A>`](fix-api.md#logon-main) should only be sent once.
+ * [Logon`<A>`](fix-api_CN.md#logon-main) should only be sent once.
 
 ### -1177 错误消息
  * `CheckSum(10)` contains an incorrect value.

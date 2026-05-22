@@ -363,7 +363,7 @@ WebSocket API
 ### 2025-12-09
 
 * [Schema for FIX SBE](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot-fixsbe-1_0.xml) has been updated to use `smallGroupSize16Encoding` in `MarketDataSnapshot` and use `presence="optional"` for incremental book ticker/depth `MDEntrySize` fields.
-* Updated documentation re: [FIX vs FIX SBE](fix-api.md#fix-vs-fix-sbe-schema)
+* Updated documentation re: [FIX vs FIX SBE](fix-api.md#fix-vs-fix-sbe)
 * Added documentation in REST, and WebSocket APIs stating: <br>**Please avoid SQL keywords in requests** as they may trigger a security block by a WAF (Web Application Firewall) rule. <br> See https://www.binance.com/en/support/faq/detail/360004492232 for more details.
 
 ---
@@ -644,7 +644,7 @@ REST and WebSocket API:
   * When called with no parameter, this will close all subscriptions.
   * When called with `subscriptionId`, this will attempt to close the subscription matching that Id, if it exists.
   * The authorization for this request has been changed to `NONE`.
-* Field `subscriptionId` has been added to the User Data Stream events payload when listening through the [WebSocket API](web-socket-api.md#user_data_stream_subscribe). This will identify which subscription the event is coming from.
+* Field `subscriptionId` has been added to the User Data Stream events payload when listening through the [WebSocket API](web-socket-api.md#user-data-stream-subscribe). This will identify which subscription the event is coming from.
 
 #### FIX API
 
@@ -2351,7 +2351,7 @@ USER DATA STREAM
 ---
 
 ### 2020-05-01
-* From 2020-05-01 UTC 00:00, all symbols will have a limit of 200 open orders using the [MAX_NUM_ORDERS](./rest-api.md#max_num_orders) filter.
+* From 2020-05-01 UTC 00:00, all symbols will have a limit of 200 open orders using the [MAX_NUM_ORDERS](./filters.md#max_num_orders) filter.
     * No existing orders will be removed or canceled.
     * Accounts that have 200 or more open orders on a symbol will not be able to place new orders on that symbol until the open order count is below 200.
     * OCO orders count as 2 open orders before the `LIMIT` order is touched or the `STOP_LOSS` (or `STOP_LOSS_LIMIT`) order is triggered; once this happens the other order is canceled and will no longer count as an open order.

@@ -1224,9 +1224,9 @@ Sent by the server in a response to the [InstrumentListRequest`<x>`](#instrument
 | =>25040 | MarketMinTradeVol     | QTY        | N        | Corresponds to the [MARKET_LOT_SIZE](filters.md#market_lot_size) filter|
 | =>25041 | MarketMaxTradeVol     | QTY        | N        | Corresponds to the [MARKET_LOT_SIZE](filters.md#market_lot_size) filter|
 | =>25042 | MarketMinQtyIncrement | QTY        | N        | Corresponds to the [MARKET_LOT_SIZE](filters.md#market_lot_size) filter|
-| =>969   | MinPriceIncrement     | PRICE      | N        | Corresponds to the [PRICE](filters.md#price) filter|
-| =>2551  | StartPriceRange       | PRICE      | N        | Corresponds to the [PRICE](filters.md#price) filter|
-| =>2552  | EndPriceRange         | PRICE      | N        | Corresponds to the [PRICE](filters.md#price) filter|
+| =>969   | MinPriceIncrement     | PRICE      | N        | Corresponds to the [PRICE](filters.md#price_filter) filter|
+| =>2551  | StartPriceRange       | PRICE      | N        | Corresponds to the [PRICE](filters.md#price_filter) filter|
+| =>2552  | EndPriceRange         | PRICE      | N        | Corresponds to the [PRICE](filters.md#price_filter) filter|
 
 **Sample message:**
 

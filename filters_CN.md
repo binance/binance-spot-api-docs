@@ -185,7 +185,7 @@
     "stepSize": "0.00100000"
 }
 ```
-
+<a id="max_num_orders"></a>
 ### MAX_NUM_ORDERS 最多订单数
 定义了某个交易对最多允许的挂单数量（不包括已关闭的订单）
 普通订单与条件订单均计算在内
@@ -269,6 +269,7 @@
 }
 ```
 
+<a id="max_num_order_amends"></a>
 ### MAX_NUM_ORDER_AMENDS 过滤器
 
 此过滤器定义了指定交易对的订单修改次数上限。

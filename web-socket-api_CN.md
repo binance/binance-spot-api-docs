@@ -233,7 +233,7 @@
 
 [SBE 会话](faqs/sbe_faq_CN.md)中的事件将作为 **二进制帧** 发送。
 
-有关如何在 WebSocket API 中订阅用户数据流的详细信息，请参阅 [`订阅用户数据流`](#user_data_stream_susbcribe)。
+有关如何在 WebSocket API 中订阅用户数据流的详细信息，请参阅 [`订阅用户数据流`](#user-data-stream-subscribe)。
 
 事件示例:
 
