@@ -183,7 +183,7 @@ This means that the endpoint will check the first Data Source, and if it cannot 
 
 ## Request Security
 
-* Each endpoint has a security type indicating required API key permissions, shown next to the endpoint name (e.g., [New order (TRADE)](#place-new-order-trade)).
+* Each endpoint has a security type indicating required API key permissions, shown next to the endpoint name (e.g., [New order (TRADE)](#new-order-trade).
 * If unspecified, the security type is `NONE`.
 * Except for `NONE`, all endpoints with a security type are considered `SIGNED` requests (i.e. including a `signature`), except for [listenKey management](#user-data-stream-requests).
 * Secure endpoints require a valid API key to be specified and authenticated.

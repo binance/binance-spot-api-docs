@@ -711,7 +711,7 @@ The following changes will be available on **2025-08-28 starting at 07:00 UTC**:
       * FIX API
       * REST API
       * WebSocket API
-* New [`MAX_NUM_ORDER_LISTS`](filters.md#max-num-order-lists) filter will be enabled, limiting the number of order lists to 20 per symbol.
+* New [`MAX_NUM_ORDER_LISTS`](filters.md#max_num_order_lists) filter will be enabled, limiting the number of order lists to 20 per symbol.
 * New [`MAX_NUM_ORDER_AMENDS`](filters.md#max_num_order_amends) filter will be enabled, limiting each order to a maximum of 10 amendments.
 
 
