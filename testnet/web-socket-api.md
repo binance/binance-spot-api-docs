@@ -2067,7 +2067,7 @@ Klines are uniquely identified by their open & close time.
 
 If you need access to real-time kline updates, please consider using WebSocket Streams:
 
-* [`<symbol>@kline_<interval>`](web-socket-streams.md#klinecandlestick-streams)
+* [`<symbol>@kline_<interval>`](web-socket-streams.md#klinecandlestick-streams-for-utc)
 
 If you need historical kline data,
 please consider using [data.binance.vision](https://github.com/binance/binance-public-data/#klines).

@@ -355,7 +355,7 @@ All data on the Spot Test Network will be deleted today according to the periodi
 ### 2025-12-09
 
 * [Schema for FIX SBE](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot-fixsbe-1_0.xml) has been updated to use `smallGroupSize16Encoding` in `MarketDataSnapshot` and use `presence="optional"` for incremental book ticker/depth `MDEntrySize` fields.
-* Updated documentation re: [FIX vs FIX SBE](fix-api.md#fix-vs-fix-sbe-schema)
+* Updated documentation re: [FIX vs FIX SBE](fix-api.md#fix-vs-fix-sbe)
 * Added documentation in REST, and WebSocket APIs stating:
 <br> **Please avoid SQL keywords in requests** as they may trigger a security block by a WAF (Web Application Firewall) rule. <br> See https://www.binance.com/en/support/faq/detail/360004492232 for more details.
 
@@ -630,7 +630,7 @@ All data on the Spot Test Network will be deleted today according to the periodi
 
 **Notice: The following will be enabled on 2025-08-08, 07:00 UTC**
 
-* Filter [`MAX_NUM_ORDER_LISTS`](filters.md#max-num-order-lists), is enabled with the limit of 20 per symbol.
+* Filter [`MAX_NUM_ORDER_LISTS`](filters.md#max_num_order_lists), is enabled with the limit of 20 per symbol.
 
 ---
 
@@ -735,7 +735,7 @@ Please consult the Spot Test Network's [homepage](https://testnet.binance.vision
 
 #### User Data Stream
 
-* Field `subscriptionId` has been added to the User Data Stream events payload when listening through the [WebSocket API](web-socket-api.md#user_data_stream_subscribe). This will identify which subscription the event is coming from.
+* Field `subscriptionId` has been added to the User Data Stream events payload when listening through the [WebSocket API](web-socket-api.md#user-data-stream-subscribe). This will identify which subscription the event is coming from.
 
 #### FIX API
 

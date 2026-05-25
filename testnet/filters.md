@@ -1,3 +1,33 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+- [Filters](#filters)
+  - [Symbol filters](#symbol-filters)
+    - [PRICE_FILTER](#price_filter)
+    - [PERCENT_PRICE](#percent_price)
+    - [PERCENT_PRICE_BY_SIDE](#percent_price_by_side)
+    - [LOT_SIZE](#lot_size)
+    - [MIN_NOTIONAL](#min_notional)
+    - [NOTIONAL](#notional)
+    - [ICEBERG_PARTS](#iceberg_parts)
+    - [MARKET_LOT_SIZE](#market_lot_size)
+    - [MAX_NUM_ORDERS](#max_num_orders)
+    - [MAX_NUM_ALGO_ORDERS](#max_num_algo_orders)
+    - [MAX_NUM_ICEBERG_ORDERS](#max_num_iceberg_orders)
+    - [MAX_POSITION](#max_position)
+    - [TRAILING_DELTA](#trailing_delta)
+    - [MAX_NUM_ORDER_AMENDS](#max_num_order_amends)
+    - [MAX_NUM_ORDER_LISTS](#max_num_order_lists)
+  - [Exchange Filters](#exchange-filters)
+    - [EXCHANGE_MAX_NUM_ORDERS](#exchange_max_num_orders)
+    - [EXCHANGE_MAX_NUM_ALGO_ORDERS](#exchange_max_num_algo_orders)
+    - [EXCHANGE_MAX_NUM_ICEBERG_ORDERS](#exchange_max_num_iceberg_orders)
+    - [EXCHANGE_MAX_NUM_ORDER_LISTS](#exchange_max_num_order_lists)
+  - [Asset Filters](#asset-filters)
+    - [MAX_ASSET](#max_asset)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Filters
 Filters define trading rules on a symbol or an exchange.
 Filters come in three forms: `symbol filters`, `exchange filters` and `asset filters`.
