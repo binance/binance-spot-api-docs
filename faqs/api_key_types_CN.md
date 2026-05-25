@@ -12,9 +12,9 @@
 
 **我们建议使用 Ed25519 API keys**，因为它在所有受支持的 API key 类型中提供最佳性能和安全性。
 
-请读 [REST API](../rest-api_CN.md#需要签名的接口-trade-与-user_data) 或者 [WebSocket API](../web-socket-api_CN.md#请求鉴权类型) 文档以了解如何使用不同的 API Key 类型。
+请读 [REST API](../rest-api_CN.md#request-security) 或者 [WebSocket API](../web-socket-api_CN.md#request-security) 文档以了解如何使用不同的 API Key 类型。
 
-## Ed25519 
+### Ed25519
 
 Ed25519 keys 使用非对称加密技术。
 您只与币安共享您的 public key 并在本地使用 private key 签署 API 请求。
@@ -38,7 +38,7 @@ Ed25519 签名例子:
 E7luAubOlcRxL10iQszvNCff+xJjwJrfajEHj1hOncmsgaSB4NE+A/BbQhCWwit/usNJ32/LeTwDYPoA7Qz4BA==
 ```
 
-## HMAC
+### HMAC
 
 HMAC keys 使用对称加密技术。
 币安生成并与您共享一个 secret key，您可以使用该 secret key 对 API 请求进行签名。
@@ -61,7 +61,7 @@ HMAC 签名例子:
 7f3fc79c57d7a70d2b644ad4589672f4a5d55a62af2a336a0af7d4896f8d48b8
 ```
 
-## RSA
+### RSA
 
 RSA keys 使用非对称加密技术。 <br>
 您只与币安共享您的 public key 并在本地使用 private key 签署 API 请求。

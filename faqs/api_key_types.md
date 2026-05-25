@@ -12,9 +12,9 @@ This document provides an overview of supported API keys.
 
 **We recommend to use Ed25519 API keys** as it should provide the best performance and security out of all supported key types.
 
-Read [REST API](../rest-api.md#signed-trade-and-user_data-endpoint-security) or [WebSocket API](../web-socket-api.md#request-security) documentation to learn how to use different API keys.
+Read [REST API](../rest-api.md#signed-endpoint-security) or [WebSocket API](../web-socket-api.md#request-security) documentation to learn how to use different API keys.
 
-## Ed25519 
+### Ed25519
 
 Ed25519 keys use asymmetric cryptography.
 You share your public key with Binance and use the private key to sign API requests.
@@ -37,7 +37,7 @@ Sample Ed25519 signature:
 E7luAubOlcRxL10iQszvNCff+xJjwJrfajEHj1hOncmsgaSB4NE+A/BbQhCWwit/usNJ32/LeTwDYPoA7Qz4BA==
 ```
 
-## HMAC
+### HMAC
 
 HMAC keys use symmetric cryptography.
 Binance generates and shares with you a secret key which you use to sign API requests.
@@ -60,7 +60,7 @@ Sample HMAC signature:
 7f3fc79c57d7a70d2b644ad4589672f4a5d55a62af2a336a0af7d4896f8d48b8
 ```
 
-## RSA
+### RSA
 
 RSA keys use asymmetric cryptography. <br>
 You share your public key with Binance and use the private key to sign API requests. <br>
