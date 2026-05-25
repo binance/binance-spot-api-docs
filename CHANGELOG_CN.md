@@ -723,7 +723,7 @@ REST 和 WebSocket API：
       * FIX API
       * REST API
       * WebSocket API
-* 新的 [`MAX_NUM_ORDER_LISTS`](filters.md#max-num-order-lists) 过滤器将被启用：会允许每个交易对上最多有 20 个订单列表挂单。
+* 新的 [`MAX_NUM_ORDER_LISTS`](filters_CN.md#max-num-order-lists) 过滤器将被启用：会允许每个交易对上最多有 20 个订单列表挂单。
 * 新的 [`MAX_NUM_ORDER_AMENDS`](filters_CN.md#max_num_order_amends) 过滤器将被启用：会以 10 次为上限来限制订单修改次数。
 
 ---
