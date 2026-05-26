@@ -149,7 +149,7 @@
     <td><code>"v": 3</code></td>
   </tr>
   <tr>
-    <td><code>A</code>
+    <td><code>A</code></td>
     <td>Prevented Quantity</td>
     <td><code>"A":"3.000000"</code></td>
   </tr>

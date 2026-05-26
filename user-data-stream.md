@@ -163,7 +163,7 @@ For additional information on these parameters, please refer to the [Spot Glossa
     <td><code>"v": 3</code></td>
   </tr>
   <tr>
-    <td><code>A</code>
+    <td><code>A</code></td>
     <td>Prevented Quantity</td>
     <td><code>"A":"3.000000"</code></td>
   </tr>
@@ -256,7 +256,7 @@ For additional information on these parameters, please refer to the [Spot Glossa
     <td><code>eR</code></td>
     <td>Expiry Reason</td>
     <td>Appears when the order has expired.</td>
-    <td><code>"eR": “INSUFFICIENT_LIQUIDITY”</code></td>
+    <td><code>"eR": "INSUFFICIENT_LIQUIDITY"</code></td>
    </tr>
 </table>
 
