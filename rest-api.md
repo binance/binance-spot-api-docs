@@ -2316,7 +2316,7 @@ Field          |Description                                                     
 `pegOffsetType` | Price peg offset type | Only for pegged orders, if requested  |`"pegOffsetType": "PRICE_LEVEL"` |
 `pegOffsetValue` | Price peg offset value  | Only for pegged orders, if requested  |`"pegOffsetValue": 5` |
 `peggedPrice` | Current price order is pegged at | Only for pegged orders, once determined |`"peggedPrice": "87523.83710000"` |
-`expiryReason` | Cause of the order’s expiration | When an order has expired | `“expiryReason”: “INSUFFICIENT_LIQUIDITY”` |
+`expiryReason` | Cause of the order’s expiration | When an order has expired | `"expiryReason": "INSUFFICIENT_LIQUIDITY"` |
 
 ### Test new order (TRADE)
 ```
