@@ -76,6 +76,7 @@ Please refer to the following table:
     <tr>
       <td>NewOrderList <code>&lt;E&gt;</code></td>
     </tr>
+    <tr>
       <td>OrderCancelRequestAndNewOrderSingle <code>&lt;XCN&gt;</code></td>
     </tr>
   </tbody>
@@ -87,25 +88,25 @@ This sample REST API response shows that for pegged orders, `peggedPrice` reflec
 
 ```json
 {
-  "symbol": "BTCUSDT",
-  "orderId": 18,
-  "orderListId": -1,
-  "clientOrderId": "q1fKs4Y7wgE61WSFMYRFKo",
-  "transactTime": 1750313780050,
-  "price": "0.00000000",
-  "pegPriceType": "PRIMARY_PEG",
-  "peggedPrice": "0.04000000",
-  "origQty": "1.00000000",
-  "executedQty": "0.00000000",
-  "origQuoteOrderQty": "0.00000000",
-  "cummulativeQuoteQty": "0.00000000",
-  "status": "NEW",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "BUY",
-  "workingTime": 1750313780050,
-  "fills": [],
-  "selfTradePreventionMode": "NONE"
+    "symbol": "BTCUSDT",
+    "orderId": 18,
+    "orderListId": -1,
+    "clientOrderId": "q1fKs4Y7wgE61WSFMYRFKo",
+    "transactTime": 1750313780050,
+    "price": "0.00000000",
+    "pegPriceType": "PRIMARY_PEG",
+    "peggedPrice": "0.04000000",
+    "origQty": "1.00000000",
+    "executedQty": "0.00000000",
+    "origQuoteOrderQty": "0.00000000",
+    "cummulativeQuoteQty": "0.00000000",
+    "status": "NEW",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "workingTime": 1750313780050,
+    "fills": [],
+    "selfTradePreventionMode": "NONE"
 }
 ```
 
