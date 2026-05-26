@@ -49,7 +49,7 @@
 ```javascript
 {
   "stream": "!serverShutdown",
-  "data: {
+  "data": {
     "e": "serverShutdown", // 事件类型
     "E": 1770123456789     // 事件事件
   }

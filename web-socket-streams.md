@@ -80,7 +80,7 @@
 ```javascript
 {
   "stream": "!serverShutdown",
-  "data: {
+  "data": {
     "e": "serverShutdown", // Event type
     "E": 1770123456789     // Event time
   }

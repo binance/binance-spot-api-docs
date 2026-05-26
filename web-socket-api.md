@@ -2292,7 +2292,7 @@ Get 24-hour rolling window price change statistics.
 
 If you need to continuously monitor trading statistics, please consider using WebSocket Streams:
 
-* [`<symbol>@ticker`](web-socket-streams.md#individual-symbol-ticker-streams) or [`!ticker@arr`](web-socket-streams.md#all-market-tickers-stream)
+* [`<symbol>@ticker`](web-socket-streams.md#individual-symbol-ticker-streams)
 * [`<symbol>@miniTicker`](web-socket-streams.md#individual-symbol-mini-ticker-stream) or [`!miniTicker@arr`](web-socket-streams.md#all-market-mini-tickers-stream)
 
 If you need different window sizes,
@@ -3979,7 +3979,7 @@ Field          |Description                                                     
 `pegOffsetType`| Price peg offset type | Only for pegged orders, if requested  | `"pegOffsetType": "PRICE_LEVEL"`
 `pegOffsetValue` | Price peg offset value  | Only for pegged orders, if requested  | `"pegOffsetValue": 5`
 `peggedPrice`  | Current price order is pegged at | Only for pegged orders, once determined | `"peggedPrice": "87523.83710000"`
-`expiryReason` | Cause of the order’s expiration | When an order has expired | `“expiryReason”: “INSUFFICIENT_LIQUIDITY”` |
+`expiryReason` | Cause of the order’s expiration | When an order has expired | `"expiryReason": "INSUFFICIENT_LIQUIDITY"` |
 
 ### Test new order (TRADE)
 
@@ -6030,7 +6030,7 @@ Place an OTOCO.
 * The first order is called the **working order** and must be `LIMIT` or `LIMIT_MAKER`. Initially, only the working order goes on the order book.
   * The behavior of the working order is the same as the [OTO](#place-new-order-list---oto-trade).
 * OTOCO has 2 pending orders (pending above and pending below), forming an OCO pair. The pending orders are only placed on the order book when the working order gets **fully filled**.
-    * The rules of the pending above and pending below follow the same rules as the [Order list OCO](#new-order-list---oco-trade).
+    * The rules of the pending above and pending below follow the same rules as the [Order list OCO](#place-new-order-list---oco-trade).
 * OTOCOs add **3 orders** to the `EXCHANGE_MAX_NUM_ORDERS` filter and `MAX_NUM_ORDERS` filter.
 
 **Weight:** 1
