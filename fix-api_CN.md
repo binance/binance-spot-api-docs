@@ -1035,8 +1035,8 @@ Your connection is about to be closed. Please reconnect.
 
 * [Reject `<3>`](#reject) 请求会由于缺少必填字段，无效字段，引用无效的符号，或超过消息限制而成为无效请求。
 * [OrderAmendReject `<XAR>`](#orderamendreject) 如果请求失败，则由于订单速率限制不足，指向不存在的订单，数量无效等。
-* [ExecutionReport `<8>`](#executionReport) 请求成功修改了单个订单。
-* [ExecutionReport `<8>`](#executionReport) \+ [ListStatus `<N>`](#liststatus) 请求成功修改了隶属于订单列表中的单个订单。
+* [ExecutionReport `<8>`](#executionreport) 请求成功修改了单个订单。
+* [ExecutionReport `<8>`](#executionreport) \+ [ListStatus `<N>`](#liststatus) 请求成功修改了隶属于订单列表中的单个订单。
 
 <a id="orderamendreject"></a>
 

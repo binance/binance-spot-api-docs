@@ -1115,8 +1115,8 @@ Read [Order Amend Keep Priority FAQ](faqs/order_amend_keep_priority.md) to learn
 
 * [Reject `<3>`](#reject) if the incoming request is invalid either due to missing required fields, invalid fields, refers to an invalid symbol, or exceeds the message limit.
 * [OrderAmendReject `<XAR>`](#orderamendreject) if failed due to insufficient order rate limits, pointing to a non-existent order, quantity is invalid, etc.
-* [ExecutionReport `<8>`](#executionReport) if the request succeeded for amending a single order.
-* [ExecutionReport `<8>`](#executionReport) \+ [ListStatus `<N>`](#liststatus) if the request succeeded for amending an order which is part of an Order list.
+* [ExecutionReport `<8>`](#executionreport) if the request succeeded for amending a single order.
+* [ExecutionReport `<8>`](#executionreport) \+ [ListStatus `<N>`](#liststatus) if the request succeeded for amending an order which is part of an Order list.
 
 <a id="orderamendreject"></a>
 
