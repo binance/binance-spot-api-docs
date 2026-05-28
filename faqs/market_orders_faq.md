@@ -13,7 +13,7 @@ If the exchange does not have enough liquidity to fill the order, your `MARKET` 
 
 If the order expires due to insufficient liquidity, the `status` field of the API response will be `EXPIRED`.
 
-Additionally, if you monitor the User Data Stream, in the payload `ExecutionReport`, you will see that both the Execution Type (`x`) and Order Status (`X`) are marked as `EXPIRED`. 
+Additionally, if you monitor the User Data Stream, in the payload `ExecutionReport`, you will see that both the Execution Type (`x`) and Order Status (`X`) are marked as `EXPIRED`.
 
 Please refer to the sample payload below.
 
@@ -93,7 +93,7 @@ Please refer to the sample payload below.
   "Q": "0.00000000",
   "W": 1719467634105,
   "V": "NONE"
-}
+},
 {
   "e": "executionReport",
   "E": 1719467634107,
@@ -129,7 +129,7 @@ Please refer to the sample payload below.
   "Q": "0.00000000",
   "W": 1719467634105,
   "V": "NONE"
-}
+},
 {
   "e": "executionReport",
   "E": 1719467634107,
@@ -165,7 +165,7 @@ Please refer to the sample payload below.
   "Q": "0.00000000",
   "W": 1719467634105,
   "V": "NONE"
-}
+},
 {
   "e": "executionReport",
   "E": 1719467634107,
@@ -201,7 +201,7 @@ Please refer to the sample payload below.
   "Q": "0.00000000",
   "W": 1719467634105,
   "V": "NONE"
-}
+},
 {
   "e": "outboundAccountPosition",
   "E": 1719467634107,

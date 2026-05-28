@@ -1,6 +1,6 @@
 # Spot Trailing Stop order FAQ
 
-## What is a trailing stop order?
+### What is a trailing stop order?
 
 Trailing stop is a type of contingent order with a dynamic trigger price influenced by price changes in the market. For the SPOT API, the change required to trigger order entry is specified in the `trailingDelta` parameter, and is defined in BIPS.
 
@@ -10,7 +10,7 @@ Buy orders: _low_ prices are good. Unlimited price _decreases_ are allowed but t
 
 Sell orders: _high_ prices are good. Unlimited price _increases_ are allowed but the order will trigger after a price _decrease_ of the supplied delta, relative to the _highest_ trade price since submission.
 
-## What are BIPs?
+### What are BIPs?
 
 Basis Points, also known as BIP or BIPS, are used to indicate a percentage change.
 
@@ -25,19 +25,19 @@ BIPS | Percentage | Multiplier
 
 For example, a `STOP_LOSS` `SELL` order with a `trailingDelta` of 100 is a trailing stop order which will be triggered after a price decrease of 1% from the highest price after placing the order.
 
-## What order types can be trailing stop orders?
+### What order types can be trailing stop orders?
 
 Trailing stop orders are supported for contingent orders such as `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, and `TAKE_PROFIT_LIMIT`.
 
 OCO orders also support trailing stop orders in the contingent leg. In this scenario if the trailing stop condition is triggered, the limit leg of the OCO order will be canceled.
 
-## How do I place a trailing stop order?
+### How do I place a trailing stop order?
 
 Trailing stop orders are entered the same way as regular `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, or `TAKE_PROFIT_LIMIT` orders, but with an additional `trailingDelta` parameter. This parameter must be within the range of the `TRAILING_DELTA` filter for that symbol.
 
 Unlike regular contingent orders, the `stopPrice` parameter is optional for trailing stop orders. If it is provided then the order will only start tracking price changes after the `stopPrice` condition is met. If the `stopPrice` parameter is omitted then the order starts tracking price changes from the next trade.
 
-## What kind of price changes will trigger my trailing stop order?
+### What kind of price changes will trigger my trailing stop order?
 
 Trailing order type | Side | Stop price condition       | Market price movement required to trigger
 ------------------- | ---- | -------------------------- | ----------------------------------
@@ -50,7 +50,7 @@ Trailing order type | Side | Stop price condition       | Market price movement 
 `TAKE_PROFIT`       | BUY  | market price <= stop price | *increase* from minimum
 `TAKE_PROFIT_LIMIT` | BUY  | market price <= stop price | *increase* from minimum
 
-## How do I pass the `TRAILING_DELTA` filter?
+### How do I pass the `TRAILING_DELTA` filter?
 
 For `STOP_LOSS` `BUY`, `STOP_LOSS_LIMIT` `BUY`, `TAKE_PROFIT` `SELL`, and `TAKE_PROFIT_LIMIT` `SELL` orders:
 
@@ -62,9 +62,9 @@ For `STOP_LOSS` `SELL`, `STOP_LOSS_LIMIT` `SELL`, `TAKE_PROFIT` `BUY`, and `TAKE
 * `trailingDelta` >= `minTrailingBelowDelta`
 * `trailingDelta` <= `maxTrailingBelowDelta`
 
-## Trailing Stop Order Scenarios
+### Trailing Stop Order Scenarios
 
-### Scenario A - Trailing Stop Loss Limit Buy Order
+#### Scenario A - Trailing Stop Loss Limit Buy Order
 
 At `12:01:00` there is a trade at a price of 40,000 and a `STOP_LOSS_LIMIT` order is placed on the `BUY` side of the exchange. The order has of a `stopPrice` of 44,000, a `trailingDelta` of 500 (5%), and a limit `price` of 45,000.
 
@@ -80,7 +80,7 @@ Between `12:05:00` and `12:05:30` a series of linear trades lead to an increase 
 
 <img alt="image" src="https://user-images.githubusercontent.com/17701918/167370103-ab3b4c05-1e13-4a25-b99a-42f9e4d6adc8.png" />
 
-### Scenario B - Trailing Stop Loss Limit Sell Order
+#### Scenario B - Trailing Stop Loss Limit Sell Order
 
 At `12:01:00` there is a trade at a price of 40,000 and a `STOP_LOSS_LIMIT` order is placed on the `SELL` side of the exchange. The order has of a `stopPrice` of 39,000, a `trailingDelta` of 1000 (10%), and a limit `price` of 38,000.
 
@@ -96,7 +96,7 @@ Between `12:05:00` and `12:05:30` a series of linear trades lead to a decrease i
 
 <img alt="image" src="https://user-images.githubusercontent.com/17701918/167370383-eb813cc1-d9b8-4a94-896c-a1a29551e09d.png" />
 
-### Scenario C - Trailing Take Profit Limit Buy Order
+#### Scenario C - Trailing Take Profit Limit Buy Order
 
 At `12:01:00` there is a trade at a price of 40,000 and a `TAKE_PROFIT_LIMIT` order is placed on the `BUY` side of the exchange. The order has of a `stopPrice` of 38,000, a `trailingDelta` of 850 (8.5%), and a limit `price` of 38,500.
 
@@ -114,7 +114,7 @@ Between `12:05:00` and `12:05:30` a series of linear trades lead to an increase 
 
 <img alt="image" src="https://user-images.githubusercontent.com/17701918/167370339-f1b83c76-790b-4108-8c9a-db2d89a4850f.png" />
 
-### Scenario D - Trailing Take Profit Limit Sell Order
+#### Scenario D - Trailing Take Profit Limit Sell Order
 
 At `12:01:00` there is a trade at a price of 40,000 and a `TAKE_PROFIT_LIMIT` order is placed on the `SELL` side of the exchange. The order has of a `stopPrice` of 42,000, a `trailingDelta` of 750 (7.5%), and a limit `price` of 41,000.
 
@@ -134,7 +134,7 @@ Between `12:06:00` and `12:06:50` a series of linear trades lead to a decrease i
 
 <img alt="image" src="https://user-images.githubusercontent.com/17701918/167370298-172b227a-198d-46ee-a385-5cc267dc253b.png" />
 
-### Scenario E - Trailing Stop Order Without A Stop Price
+#### Scenario E - Trailing Stop Order Without A Stop Price
 
 At `12:01:00` there is a trade at a price of 40,000 and a `STOP_LOSS_LIMIT` order is placed on the `SELL` side of the exchange. The order has a `trailingDelta` of 700 (7%), a limit `price` of 39,000 and no `stopPrice`. The order starts tracking price changes once placed. If there is a 700 BIPS decrease from 40,000 then the order will trigger.
 
@@ -148,7 +148,7 @@ Between `12:04:00` and `12:04:45` a series of linear trades lead to a decrease i
 
 <img alt="image" src="https://user-images.githubusercontent.com/17701918/167370616-17d3295a-3e7c-4314-aa13-ad44e685a311.png" />
 
-## Trailing Stop Order Examples
+### Trailing Stop Order Examples
 
 Assuming a last price of 40,000.
 

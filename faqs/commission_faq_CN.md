@@ -36,24 +36,24 @@ WebSocket API: `account.commission`
 
 ```json
 {
-  "standardCommissionForOrder": {
-    "maker": "0.00000050",
-    "taker": "0.00000060"
-  },
-  "specialCommissionForOrder": {
-    "maker": "0.05000000",
-    "taker": "0.06000000"
-  },
-  "taxCommissionForOrder": {
-    "maker": "0.00000228",
-    "taker": "0.00000230"
-  },
-  "discount": {
-    "enabledForAccount": true,
-    "enabledForSymbol": true,
-    "discountAsset": "BNB",
-    "discount": "0.25000000"
-  }
+    "standardCommissionForOrder": {
+        "maker": "0.00000050",
+        "taker": "0.00000060"
+    },
+    "specialCommissionForOrder": {
+        "maker": "0.05000000",
+        "taker": "0.06000000"
+    },
+    "taxCommissionForOrder": {
+        "maker": "0.00000228",
+        "taker": "0.00000230"
+    },
+    "discount": {
+        "enabledForAccount": true,
+        "enabledForSymbol": true,
+        "discountAsset": "BNB",
+        "discount": "0.25000000"
+    }
 }
 ```
 注意：因为买方/卖方佣金已根据订单方向计算在内，所以买方/卖方佣金不会被单独显示出来。
@@ -62,31 +62,31 @@ WebSocket API: `account.commission`
 
 ```json
 {
-  "symbol": "BTCUSDT",
-  "standardCommission": {
-    "maker": "0.00000040",
-    "taker": "0.00000050",
-    "buyer": "0.00000010",
-    "seller": "0.00000010"
-  },
-  "specialCommission": {
-    "maker": "0.04000000",
-    "taker": "0.05000000",
-    "buyer": "0.01000000",
-    "seller": "0.01000000"
-  },
-  "taxCommission": {
-    "maker": "0.00000128",
-    "taker": "0.00000130",
-    "buyer": "0.00000100",
-    "seller": "0.00000100"
-  },
-  "discount": {
-    "enabledForAccount": true,
-    "enabledForSymbol": true,
-    "discountAsset": "BNB",
-    "discount": "0.25000000"
-  }
+    "symbol": "BTCUSDT",
+    "standardCommission": {
+        "maker": "0.00000040",
+        "taker": "0.00000050",
+        "buyer": "0.00000010",
+        "seller": "0.00000010"
+    },
+    "specialCommission": {
+        "maker": "0.04000000",
+        "taker": "0.05000000",
+        "buyer": "0.01000000",
+        "seller": "0.01000000"
+    },
+    "taxCommission": {
+        "maker": "0.00000128",
+        "taker": "0.00000130",
+        "buyer": "0.00000100",
+        "seller": "0.00000100"
+    },
+    "discount": {
+        "enabledForAccount": true,
+        "enabledForSymbol": true,
+        "discountAsset": "BNB",
+        "discount": "0.25000000"
+    }
 }
 ```
 
@@ -97,31 +97,31 @@ WebSocket API: `account.commission`
 
 ```json
 {
-  "symbol": "BTCUSDT",
-  "standardCommission": {
-    "maker": "0.00000010",
-    "taker": "0.00000020",
-    "buyer": "0.00000030",
-    "seller": "0.00000040"
-  },
-  "specialCommission": {
-    "maker": "0.01000000",
-    "taker": "0.02000000",
-    "buyer": "0.03000000",
-    "seller": "0.04000000"
-  },
-  "taxCommission": {
-    "maker": "0.00000112",
-    "taker": "0.00000114",
-    "buyer": "0.00000118",
-    "seller": "0.00000116"
-  },
-  "discount": {
-    "enabledForAccount": true,
-    "enabledForSymbol": true,
-    "discountAsset": "BNB",
-    "discount": "0.25000000"
-  }
+    "symbol": "BTCUSDT",
+    "standardCommission": {
+        "maker": "0.00000010",
+        "taker": "0.00000020",
+        "buyer": "0.00000030",
+        "seller": "0.00000040"
+    },
+    "specialCommission": {
+        "maker": "0.01000000",
+        "taker": "0.02000000",
+        "buyer": "0.03000000",
+        "seller": "0.04000000"
+    },
+    "taxCommission": {
+        "maker": "0.00000112",
+        "taker": "0.00000114",
+        "buyer": "0.00000118",
+        "seller": "0.00000116"
+    },
+    "discount": {
+        "enabledForAccount": true,
+        "enabledForSymbol": true,
+        "discountAsset": "BNB",
+        "discount": "0.25000000"
+    }
 }
 ```
 

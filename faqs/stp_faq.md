@@ -65,18 +65,18 @@ This is a sample of the output request for reference:
 
 ```javascript
 [
-  {
-    "symbol": "BTCDUSDT",                       //Symbol of the orders
-    "preventedMatchId": 8,                      //Identifies the prevented match of the expired order(s) for the symbol.
-    "takerOrderId": 12,                         //Order Id of the Taker Order
-    "makerOrderId": 10,                         //Order Id of the Maker Order
-    "tradeGroupId": 1,                          //Identifies the Trade Group Id. (If the account is not part of a trade group, this will be -1.)
-    "selfTradePreventionMode": "EXPIRE_BOTH",   //STP mode that expired the order(s).
-    "price": "50.00000000",                     //Price at which the match occurred.
-    "takerPreventedQuantity": "1.00000000",     //Taker's remaining quantity before the STP. Only appears if the STP mode is EXPIRE_TAKER, EXPIRE_BOTH or DECREMENT.
-    "makerPreventedQuantity": "10.00000000",    //Maker's remaining quantity before the STP. Only appears if the STP mode is EXPIRE_MAKER, EXPIRE_BOTH, or DECREMENT.
-    "transactTime": 1663190634060               //Time the order(s) expired due to STP.
-  }
+    {
+        "symbol": "BTCDUSDT",                         // Symbol of the orders
+        "preventedMatchId": 8,                        // Identifies the prevented match of the expired order(s) for the symbol.
+        "takerOrderId": 12,                           // Order Id of the Taker Order
+        "makerOrderId": 10,                           // Order Id of the Maker Order
+        "tradeGroupId": 1,                            // Identifies the Trade Group Id. (If the account is not part of a trade group, this will be -1.)
+        "selfTradePreventionMode": "EXPIRE_BOTH",     // STP mode that expired the order(s).
+        "price": "50.00000000",                       // Price at which the match occurred.
+        "takerPreventedQuantity": "1.00000000",       // Taker's remaining quantity before the STP. Only appears if the STP mode is EXPIRE_TAKER, EXPIRE_BOTH or DECREMENT.
+        "makerPreventedQuantity": "10.00000000",      // Maker's remaining quantity before the STP. Only appears if the STP mode is EXPIRE_MAKER, EXPIRE_BOTH, or DECREMENT.
+        "transactTime": 1663190634060                 // Time the order(s) expired due to STP.
+    }
 ]
 ```
 
@@ -88,8 +88,8 @@ Prevented quantity is the amount of quantity that is expired due to STP events f
 
 ```javascript
 {
-  "A":"3.000000", // Prevented Quantity
-  "B":"3.000000"  // Last Prevented Quantity
+    "A": "3.000000",     // Prevented Quantity
+    "B": "3.000000"      // Last Prevented Quantity
 }
 ```
 
@@ -118,12 +118,10 @@ Symbols may be configured to allow different sets of STP modes and take differen
 For example, if a symbol has the following configuration:
 
 ```json
-"defaultSelfTradePreventionMode": "NONE",
-"allowedSelfTradePreventionModes": [
-    "NONE",
-    "EXPIRE_TAKER",
-    "EXPIRE_BOTH"
-  ]
+{
+    "defaultSelfTradePreventionMode": "NONE",
+    "allowedSelfTradePreventionModes": ["NONE", "EXPIRE_TAKER", "EXPIRE_BOTH"]
+}
 ```
 
 Then that means if a user sends an order with no `selfTradePreventionMode` provided, then the order sent will have the value of `NONE`.
@@ -160,26 +158,26 @@ Order Status of the Maker Order
 
 ```json
 {
-  "symbol": "BTCUSDT",
-  "orderId": 2,
-  "orderListId": -1,
-  "clientOrderId": "FaDk4LPRxastaICEFE9YTf",
-  "price": "1.000000",
-  "origQty": "1.000000",
-  "executedQty": "1.000000",
-  "cummulativeQuoteQty": "1.000000",
-  "status": "FILLED",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "BUY",
-  "stopPrice": "0.000000",
-  "icebergQty": "0.000000",
-  "time": 1670217090310,
-  "updateTime": 1670217090330,
-  "isWorking": true,
-  "workingTime": 1670217090310,
-  "origQuoteOrderQty": "0.000000",
-  "selfTradePreventionMode": "NONE"
+    "symbol": "BTCUSDT",
+    "orderId": 2,
+    "orderListId": -1,
+    "clientOrderId": "FaDk4LPRxastaICEFE9YTf",
+    "price": "1.000000",
+    "origQty": "1.000000",
+    "executedQty": "1.000000",
+    "cummulativeQuoteQty": "1.000000",
+    "status": "FILLED",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "stopPrice": "0.000000",
+    "icebergQty": "0.000000",
+    "time": 1670217090310,
+    "updateTime": 1670217090330,
+    "isWorking": true,
+    "workingTime": 1670217090310,
+    "origQuoteOrderQty": "0.000000",
+    "selfTradePreventionMode": "NONE"
 }
 ```
 
@@ -187,30 +185,30 @@ Order Status of the Taker Order
 
 ```json
 {
-  "symbol": "BTCUSDT",
-  "orderId": 3,
-  "orderListId": -1,
-  "clientOrderId": "Ay48Vtpghnsvy6w8RPQEde",
-  "transactTime": 1670207731263,
-  "price": "1.000000",
-  "origQty": "1.000000",
-  "executedQty": "1.000000",
-  "cummulativeQuoteQty": "1.000000",
-  "status": "FILLED",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "SELL",
-  "workingTime": 1670207731263,
-  "fills": [
-    {
-      "price": "1.000000",
-      "qty": "1.000000",
-      "commission": "0.000000",
-      "commissionAsset": "USDT",
-      "tradeId": 1
-    }
-  ],
-  "selfTradePreventionMode": "NONE"
+    "symbol": "BTCUSDT",
+    "orderId": 3,
+    "orderListId": -1,
+    "clientOrderId": "Ay48Vtpghnsvy6w8RPQEde",
+    "transactTime": 1670207731263,
+    "price": "1.000000",
+    "origQty": "1.000000",
+    "executedQty": "1.000000",
+    "cummulativeQuoteQty": "1.000000",
+    "status": "FILLED",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "SELL",
+    "workingTime": 1670207731263,
+    "fills": [
+        {
+            "price": "1.000000",
+            "qty": "1.000000",
+            "commission": "0.000000",
+            "commissionAsset": "USDT",
+            "tradeId": 1
+        }
+    ],
+    "selfTradePreventionMode": "NONE"
 }
 ```
 
@@ -229,28 +227,28 @@ Taker Order 1: symbol=BTCUSDT side=SELL type=LIMIT quantity=3   price=1   selfTr
 Maker Order 1
 ```json
 {
-  "symbol": "BTCUSDT",
-  "orderId": 2,
-  "orderListId": -1,
-  "clientOrderId": "wpNzhSclc16pV8g5THIOR3",
-  "price": "1.200000",
-  "origQty": "1.200000",
-  "executedQty": "0.000000",
-  "cummulativeQuoteQty": "0.000000",
-  "status": "EXPIRED_IN_MATCH",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "BUY",
-  "stopPrice": "0.000000",
-  "icebergQty": "0.000000",
-  "time": 1670217957437,
-  "updateTime": 1670217957498,
-  "isWorking": true,
-  "workingTime": 1670217957437,
-  "origQuoteOrderQty": "0.000000",
-  "selfTradePreventionMode": "NONE",
-  "preventedMatchId": 0,
-  "preventedQuantity": "1.200000"
+    "symbol": "BTCUSDT",
+    "orderId": 2,
+    "orderListId": -1,
+    "clientOrderId": "wpNzhSclc16pV8g5THIOR3",
+    "price": "1.200000",
+    "origQty": "1.200000",
+    "executedQty": "0.000000",
+    "cummulativeQuoteQty": "0.000000",
+    "status": "EXPIRED_IN_MATCH",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "stopPrice": "0.000000",
+    "icebergQty": "0.000000",
+    "time": 1670217957437,
+    "updateTime": 1670217957498,
+    "isWorking": true,
+    "workingTime": 1670217957437,
+    "origQuoteOrderQty": "0.000000",
+    "selfTradePreventionMode": "NONE",
+    "preventedMatchId": 0,
+    "preventedQuantity": "1.200000"
 }
 ```
 
@@ -258,56 +256,56 @@ Maker Order 2
 
 ```json
 {
-  "symbol": "BTCUSDT",
-  "orderId": 3,
-  "orderListId": -1,
-  "clientOrderId": "ZT9emqia99V7x8B6FW0pFF",
-  "price": "1.100000",
-  "origQty": "1.300000",
-  "executedQty": "0.000000",
-  "cummulativeQuoteQty": "0.000000",
-  "status": "EXPIRED_IN_MATCH",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "BUY",
-  "stopPrice": "0.000000",
-  "icebergQty": "0.000000",
-  "time": 1670217957458,
-  "updateTime": 1670217957498,
-  "isWorking": true,
-  "workingTime": 1670217957458,
-  "origQuoteOrderQty": "0.000000",
-  "selfTradePreventionMode": "NONE",
-  "preventedMatchId": 1,
-  "preventedQuantity": "1.300000"
+    "symbol": "BTCUSDT",
+    "orderId": 3,
+    "orderListId": -1,
+    "clientOrderId": "ZT9emqia99V7x8B6FW0pFF",
+    "price": "1.100000",
+    "origQty": "1.300000",
+    "executedQty": "0.000000",
+    "cummulativeQuoteQty": "0.000000",
+    "status": "EXPIRED_IN_MATCH",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "stopPrice": "0.000000",
+    "icebergQty": "0.000000",
+    "time": 1670217957458,
+    "updateTime": 1670217957498,
+    "isWorking": true,
+    "workingTime": 1670217957458,
+    "origQuoteOrderQty": "0.000000",
+    "selfTradePreventionMode": "NONE",
+    "preventedMatchId": 1,
+    "preventedQuantity": "1.300000"
 }
 ```
 
 Maker Order 3
 ```json
 {
-  "symbol": "BTCUSDT",
-  "orderId": 4,
-  "orderListId": -1,
-  "clientOrderId": "8QZ3taGcU4gND59TxHAcR0",
-  "price": "1.000000",
-  "origQty": "8.100000",
-  "executedQty": "0.000000",
-  "cummulativeQuoteQty": "0.000000",
-  "status": "EXPIRED_IN_MATCH",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "BUY",
-  "stopPrice": "0.000000",
-  "icebergQty": "0.000000",
-  "time": 1670217957478,
-  "updateTime": 1670217957498,
-  "isWorking": true,
-  "workingTime": 1670217957478,
-  "origQuoteOrderQty": "0.000000",
-  "selfTradePreventionMode": "NONE",
-  "preventedMatchId": 2,
-  "preventedQuantity": "8.100000"
+    "symbol": "BTCUSDT",
+    "orderId": 4,
+    "orderListId": -1,
+    "clientOrderId": "8QZ3taGcU4gND59TxHAcR0",
+    "price": "1.000000",
+    "origQty": "8.100000",
+    "executedQty": "0.000000",
+    "cummulativeQuoteQty": "0.000000",
+    "status": "EXPIRED_IN_MATCH",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "stopPrice": "0.000000",
+    "icebergQty": "0.000000",
+    "time": 1670217957478,
+    "updateTime": 1670217957498,
+    "isWorking": true,
+    "workingTime": 1670217957478,
+    "origQuoteOrderQty": "0.000000",
+    "selfTradePreventionMode": "NONE",
+    "preventedMatchId": 2,
+    "preventedQuantity": "8.100000"
 }
 ```
 
@@ -315,42 +313,42 @@ Output of the Taker Order
 
 ```json
 {
-  "symbol": "BTCUSDT",
-  "orderId": 5,
-  "orderListId": -1,
-  "clientOrderId": "WRzbhp257NhZsIJW4y2Nri",
-  "transactTime": 1670217957498,
-  "price": "1.000000",
-  "origQty": "3.000000",
-  "executedQty": "0.000000",
-  "cummulativeQuoteQty": "0.000000",
-  "status": "NEW",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "SELL",
-  "workingTime": 1670217957498,
-  "fills": [],
-  "preventedMatches": [
-    {
-      "preventedMatchId": 0,
-      "makerOrderId": 2,
-      "price": "1.200000",
-      "makerPreventedQuantity": "1.200000"
-    },
-    {
-      "preventedMatchId": 1,
-      "makerOrderId": 3,
-      "price": "1.100000",
-      "makerPreventedQuantity": "1.300000"
-    },
-    {
-      "preventedMatchId": 2,
-      "makerOrderId": 4,
-      "price": "1.000000",
-      "makerPreventedQuantity": "8.100000"
-    }
-  ],
-  "selfTradePreventionMode": "EXPIRE_MAKER"
+    "symbol": "BTCUSDT",
+    "orderId": 5,
+    "orderListId": -1,
+    "clientOrderId": "WRzbhp257NhZsIJW4y2Nri",
+    "transactTime": 1670217957498,
+    "price": "1.000000",
+    "origQty": "3.000000",
+    "executedQty": "0.000000",
+    "cummulativeQuoteQty": "0.000000",
+    "status": "NEW",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "SELL",
+    "workingTime": 1670217957498,
+    "fills": [],
+    "preventedMatches": [
+        {
+            "preventedMatchId": 0,
+            "makerOrderId": 2,
+            "price": "1.200000",
+            "makerPreventedQuantity": "1.200000"
+        },
+        {
+            "preventedMatchId": 1,
+            "makerOrderId": 3,
+            "price": "1.100000",
+            "makerPreventedQuantity": "1.300000"
+        },
+        {
+            "preventedMatchId": 2,
+            "makerOrderId": 4,
+            "price": "1.000000",
+            "makerPreventedQuantity": "8.100000"
+        }
+    ],
+    "selfTradePreventionMode": "EXPIRE_MAKER"
 }
 ```
 
@@ -368,26 +366,26 @@ Taker Order 1: symbol=BTCUSDT side=SELL type=LIMIT quantity=3   price=1    selfT
 Maker Order 1
 ```json
 {
-  "symbol": "BTCUSDT",
-  "orderId": 2,
-  "orderListId": -1,
-  "clientOrderId": "NpwW2t0L4AGQnCDeNjHIga",
-  "price": "1.200000",
-  "origQty": "1.200000",
-  "executedQty": "0.000000",
-  "cummulativeQuoteQty": "0.000000",
-  "status": "NEW",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "BUY",
-  "stopPrice": "0.000000",
-  "icebergQty": "0.000000",
-  "time": 1670219811986,
-  "updateTime": 1670219811986,
-  "isWorking": true,
-  "workingTime": 1670219811986,
-  "origQuoteOrderQty": "0.000000",
-  "selfTradePreventionMode": "NONE"
+    "symbol": "BTCUSDT",
+    "orderId": 2,
+    "orderListId": -1,
+    "clientOrderId": "NpwW2t0L4AGQnCDeNjHIga",
+    "price": "1.200000",
+    "origQty": "1.200000",
+    "executedQty": "0.000000",
+    "cummulativeQuoteQty": "0.000000",
+    "status": "NEW",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "stopPrice": "0.000000",
+    "icebergQty": "0.000000",
+    "time": 1670219811986,
+    "updateTime": 1670219811986,
+    "isWorking": true,
+    "workingTime": 1670219811986,
+    "origQuoteOrderQty": "0.000000",
+    "selfTradePreventionMode": "NONE"
 }
 ```
 
@@ -395,52 +393,52 @@ Maker Order 2
 
 ```json
 {
-  "symbol": "BTCUSDT",
-  "orderId": 3,
-  "orderListId": -1,
-  "clientOrderId": "TSAmJqGWk4YTB2yA9p04UO",
-  "price": "1.100000",
-  "origQty": "1.300000",
-  "executedQty": "0.000000",
-  "cummulativeQuoteQty": "0.000000",
-  "status": "NEW",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "BUY",
-  "stopPrice": "0.000000",
-  "icebergQty": "0.000000",
-  "time": 1670219812007,
-  "updateTime": 1670219812007,
-  "isWorking": true,
-  "workingTime": 1670219812007,
-  "origQuoteOrderQty": "0.000000",
-  "selfTradePreventionMode": "NONE"
+    "symbol": "BTCUSDT",
+    "orderId": 3,
+    "orderListId": -1,
+    "clientOrderId": "TSAmJqGWk4YTB2yA9p04UO",
+    "price": "1.100000",
+    "origQty": "1.300000",
+    "executedQty": "0.000000",
+    "cummulativeQuoteQty": "0.000000",
+    "status": "NEW",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "stopPrice": "0.000000",
+    "icebergQty": "0.000000",
+    "time": 1670219812007,
+    "updateTime": 1670219812007,
+    "isWorking": true,
+    "workingTime": 1670219812007,
+    "origQuoteOrderQty": "0.000000",
+    "selfTradePreventionMode": "NONE"
 }
 ```
 
 Maker Order 3
 ```json
 {
-  "symbol": "BTCUSDT",
-  "orderId": 4,
-  "orderListId": -1,
-  "clientOrderId": "L6FmpCJJP6q4hCNv4MuZDG",
-  "price": "1.000000",
-  "origQty": "8.100000",
-  "executedQty": "0.000000",
-  "cummulativeQuoteQty": "0.000000",
-  "status": "NEW",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "BUY",
-  "stopPrice": "0.000000",
-  "icebergQty": "0.000000",
-  "time": 1670219812026,
-  "updateTime": 1670219812026,
-  "isWorking": true,
-  "workingTime": 1670219812026,
-  "origQuoteOrderQty": "0.000000",
-  "selfTradePreventionMode": "NONE"
+    "symbol": "BTCUSDT",
+    "orderId": 4,
+    "orderListId": -1,
+    "clientOrderId": "L6FmpCJJP6q4hCNv4MuZDG",
+    "price": "1.000000",
+    "origQty": "8.100000",
+    "executedQty": "0.000000",
+    "cummulativeQuoteQty": "0.000000",
+    "status": "NEW",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "stopPrice": "0.000000",
+    "icebergQty": "0.000000",
+    "time": 1670219812026,
+    "updateTime": 1670219812026,
+    "isWorking": true,
+    "workingTime": 1670219812026,
+    "origQuoteOrderQty": "0.000000",
+    "selfTradePreventionMode": "NONE"
 }
 ```
 
@@ -448,28 +446,28 @@ Output of the Taker order
 
 ```json
 {
-  "symbol": "BTCUSDT",
-  "orderId": 5,
-  "orderListId": -1,
-  "clientOrderId": "kocvDAi4GNN2y1l1Ojg1Ri",
-  "price": "1.000000",
-  "origQty": "3.000000",
-  "executedQty": "0.000000",
-  "cummulativeQuoteQty": "0.000000",
-  "status": "EXPIRED_IN_MATCH",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "SELL",
-  "stopPrice": "0.000000",
-  "icebergQty": "0.000000",
-  "time": 1670219812046,
-  "updateTime": 1670219812046,
-  "isWorking": true,
-  "workingTime": 1670219812046,
-  "origQuoteOrderQty": "0.000000",
-  "selfTradePreventionMode": "EXPIRE_TAKER",
-  "preventedMatchId": 0,
-  "preventedQuantity": "3.000000"
+    "symbol": "BTCUSDT",
+    "orderId": 5,
+    "orderListId": -1,
+    "clientOrderId": "kocvDAi4GNN2y1l1Ojg1Ri",
+    "price": "1.000000",
+    "origQty": "3.000000",
+    "executedQty": "0.000000",
+    "cummulativeQuoteQty": "0.000000",
+    "status": "EXPIRED_IN_MATCH",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "SELL",
+    "stopPrice": "0.000000",
+    "icebergQty": "0.000000",
+    "time": 1670219812046,
+    "updateTime": 1670219812046,
+    "isWorking": true,
+    "workingTime": 1670219812046,
+    "origQuoteOrderQty": "0.000000",
+    "selfTradePreventionMode": "EXPIRE_TAKER",
+    "preventedMatchId": 0,
+    "preventedQuantity": "3.000000"
 }
 ```
 
@@ -487,28 +485,28 @@ Maker Order
 
 ```json
 {
-  "symbol": "BTCUSDT",
-  "orderId": 2,
-  "orderListId": -1,
-  "clientOrderId": "2JPC8xjpLq6Q0665uYWAcs",
-  "price": "1.000000",
-  "origQty": "1.000000",
-  "executedQty": "0.000000",
-  "cummulativeQuoteQty": "0.000000",
-  "status": "EXPIRED_IN_MATCH",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "BUY",
-  "stopPrice": "0.000000",
-  "icebergQty": "0.000000",
-  "time": 1673842412831,
-  "updateTime": 1673842413170,
-  "isWorking": true,
-  "workingTime": 1673842412831,
-  "origQuoteOrderQty": "0.000000",
-  "selfTradePreventionMode": "NONE",
-  "preventedMatchId": 0,
-  "preventedQuantity": "1.000000"
+    "symbol": "BTCUSDT",
+    "orderId": 2,
+    "orderListId": -1,
+    "clientOrderId": "2JPC8xjpLq6Q0665uYWAcs",
+    "price": "1.000000",
+    "origQty": "1.000000",
+    "executedQty": "0.000000",
+    "cummulativeQuoteQty": "0.000000",
+    "status": "EXPIRED_IN_MATCH",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "stopPrice": "0.000000",
+    "icebergQty": "0.000000",
+    "time": 1673842412831,
+    "updateTime": 1673842413170,
+    "isWorking": true,
+    "workingTime": 1673842412831,
+    "origQuoteOrderQty": "0.000000",
+    "selfTradePreventionMode": "NONE",
+    "preventedMatchId": 0,
+    "preventedQuantity": "1.000000"
 }
 ```
 
@@ -516,33 +514,33 @@ Taker Order
 
 ```json
 {
-  "symbol": "BTCUSDT",
-  "orderId": 5,
-  "orderListId": -1,
-  "clientOrderId": "qMaz8yrOXk2iUIz74cFkiZ",
-  "transactTime": 1673842413170,
-  "price": "1.000000",
-  "origQty": "3.000000",
-  "executedQty": "0.000000",
-  "cummulativeQuoteQty": "0.000000",
-  "status": "EXPIRED_IN_MATCH",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "SELL",
-  "workingTime": 1673842413170,
-  "fills": [],
-  "preventedMatches": [
-    {
-      "preventedMatchId": 0,
-      "makerOrderId": 2,
-      "price": "1.000000",
-      "takerPreventedQuantity": "3.000000",
-      "makerPreventedQuantity": "1.000000"
-    }
-  ],
-  "selfTradePreventionMode": "EXPIRE_BOTH",
-  "tradeGroupId": 1,
-  "preventedQuantity": "3.000000"
+    "symbol": "BTCUSDT",
+    "orderId": 5,
+    "orderListId": -1,
+    "clientOrderId": "qMaz8yrOXk2iUIz74cFkiZ",
+    "transactTime": 1673842413170,
+    "price": "1.000000",
+    "origQty": "3.000000",
+    "executedQty": "0.000000",
+    "cummulativeQuoteQty": "0.000000",
+    "status": "EXPIRED_IN_MATCH",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "SELL",
+    "workingTime": 1673842413170,
+    "fills": [],
+    "preventedMatches": [
+        {
+            "preventedMatchId": 0,
+            "makerOrderId": 2,
+            "price": "1.000000",
+            "takerPreventedQuantity": "3.000000",
+            "makerPreventedQuantity": "1.000000"
+        }
+    ],
+    "selfTradePreventionMode": "EXPIRE_BOTH",
+    "tradeGroupId": 1,
+    "preventedQuantity": "3.000000"
 }
 ```
 
@@ -626,58 +624,58 @@ Maker Order
 
 ```json
 {
-  "symbol": "BTCUSDT",
-  "orderId": 2,
-  "orderListId": -1,
-  "clientOrderId": "7sgrQQInL69XDMQpiqMaG2",
-  "price": "1.000000",
-  "origQty": "1.000000",
-  "executedQty": "0.000000",
-  "cummulativeQuoteQty": "0.000000",
-  "status": "EXPIRED_IN_MATCH",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "BUY",
-  "stopPrice": "0.000000",
-  "icebergQty": "0.000000",
-  "time": 1670222557456,
-  "updateTime": 1670222557478,
-  "isWorking": true,
-  "workingTime": 1670222557456,
-  "origQuoteOrderQty": "0.000000",
-  "selfTradePreventionMode": "NONE",
-  "preventedMatchId": 0,
-  "preventedQuantity": "1.000000"
+    "symbol": "BTCUSDT",
+    "orderId": 2,
+    "orderListId": -1,
+    "clientOrderId": "7sgrQQInL69XDMQpiqMaG2",
+    "price": "1.000000",
+    "origQty": "1.000000",
+    "executedQty": "0.000000",
+    "cummulativeQuoteQty": "0.000000",
+    "status": "EXPIRED_IN_MATCH",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "stopPrice": "0.000000",
+    "icebergQty": "0.000000",
+    "time": 1670222557456,
+    "updateTime": 1670222557478,
+    "isWorking": true,
+    "workingTime": 1670222557456,
+    "origQuoteOrderQty": "0.000000",
+    "selfTradePreventionMode": "NONE",
+    "preventedMatchId": 0,
+    "preventedQuantity": "1.000000"
 }
 ```
 
 Taker Order
 ```json
 {
-  "symbol": "BTCUSDT",
-  "orderId": 3,
-  "orderListId": -1,
-  "clientOrderId": "zqhsgGDEcdhxy2oza2Ljxd",
-  "transactTime": 1670222557478,
-  "price": "0.000000",
-  "origQty": "1.000000",
-  "executedQty": "0.000000",
-  "cummulativeQuoteQty": "0.000000",
-  "status": "EXPIRED",
-  "timeInForce": "GTC",
-  "type": "MARKET",
-  "side": "SELL",
-  "workingTime": 1670222557478,
-  "fills": [],
-  "preventedMatches": [
-    {
-      "preventedMatchId": 0,
-      "makerOrderId": 2,
-      "price": "1.000000",
-      "makerPreventedQuantity": "1.000000"
-    }
-  ],
-  "selfTradePreventionMode": "EXPIRE_MAKER"
+    "symbol": "BTCUSDT",
+    "orderId": 3,
+    "orderListId": -1,
+    "clientOrderId": "zqhsgGDEcdhxy2oza2Ljxd",
+    "transactTime": 1670222557478,
+    "price": "0.000000",
+    "origQty": "1.000000",
+    "executedQty": "0.000000",
+    "cummulativeQuoteQty": "0.000000",
+    "status": "EXPIRED",
+    "timeInForce": "GTC",
+    "type": "MARKET",
+    "side": "SELL",
+    "workingTime": 1670222557478,
+    "fills": [],
+    "preventedMatches": [
+        {
+            "preventedMatchId": 0,
+            "makerOrderId": 2,
+            "price": "1.000000",
+            "makerPreventedQuantity": "1.000000"
+        }
+    ],
+    "selfTradePreventionMode": "EXPIRE_MAKER"
 }
 ```
 
@@ -694,28 +692,28 @@ Maker Order
 
 ```json
 {
-  "symbol": "BTCUSDT",
-  "orderId": 23,
-  "orderListId": -1,
-  "clientOrderId": "Kxb4RpsBhfQrkK2r2YO2Z9",
-  "price": "2.00000000",
-  "origQty": "6.00000000",
-  "executedQty": "0.00000000",
-  "cummulativeQuoteQty": "0.00000000",
-  "status": "NEW",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "BUY",
-  "stopPrice": "0.00000000",
-  "icebergQty": "0.00000000",
-  "time": 1741682807892,
-  "updateTime": 1741682816376,
-  "isWorking": true,
-  "workingTime": 1741682807892,
-  "origQuoteOrderQty": "0.00000000",
-  "selfTradePreventionMode": "DECREMENT",
-  "preventedMatchId": 4,
-  "preventedQuantity": "2.00000000"
+    "symbol": "BTCUSDT",
+    "orderId": 23,
+    "orderListId": -1,
+    "clientOrderId": "Kxb4RpsBhfQrkK2r2YO2Z9",
+    "price": "2.00000000",
+    "origQty": "6.00000000",
+    "executedQty": "0.00000000",
+    "cummulativeQuoteQty": "0.00000000",
+    "status": "NEW",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "stopPrice": "0.00000000",
+    "icebergQty": "0.00000000",
+    "time": 1741682807892,
+    "updateTime": 1741682816376,
+    "isWorking": true,
+    "workingTime": 1741682807892,
+    "origQuoteOrderQty": "0.00000000",
+    "selfTradePreventionMode": "DECREMENT",
+    "preventedMatchId": 4,
+    "preventedQuantity": "2.00000000"
 }
 ```
 
@@ -723,28 +721,28 @@ Taker Order
 
 ```json
 {
-  "symbol": "BTCUSDT",
-  "orderId": 24,
-  "orderListId": -1,
-  "clientOrderId": "dwf3qOzD7GM9ysDn9XG9AS",
-  "price": "2.00000000",
-  "origQty": "2.00000000",
-  "executedQty": "0.00000000",
-  "cummulativeQuoteQty": "0.00000000",
-  "status": "EXPIRED_IN_MATCH",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "SELL",
-  "stopPrice": "0.00000000",
-  "icebergQty": "0.00000000",
-  "time": 1741682816376,
-  "updateTime": 1741682816376,
-  "isWorking": true,
-  "workingTime": 1741682816376,
-  "origQuoteOrderQty": "0.00000000",
-  "selfTradePreventionMode": "DECREMENT",
-  "preventedMatchId": 4,
-  "preventedQuantity": "2.00000000"
+    "symbol": "BTCUSDT",
+    "orderId": 24,
+    "orderListId": -1,
+    "clientOrderId": "dwf3qOzD7GM9ysDn9XG9AS",
+    "price": "2.00000000",
+    "origQty": "2.00000000",
+    "executedQty": "0.00000000",
+    "cummulativeQuoteQty": "0.00000000",
+    "status": "EXPIRED_IN_MATCH",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "SELL",
+    "stopPrice": "0.00000000",
+    "icebergQty": "0.00000000",
+    "time": 1741682816376,
+    "updateTime": 1741682816376,
+    "isWorking": true,
+    "workingTime": 1741682816376,
+    "origQuoteOrderQty": "0.00000000",
+    "selfTradePreventionMode": "DECREMENT",
+    "preventedMatchId": 4,
+    "preventedQuantity": "2.00000000"
 }
 ```
 
@@ -756,18 +754,18 @@ Maker's Balances
 
 ```json
 {
-  "balances": [
-    {
-      "asset": "BTC",
-      "free": "20000.00000000",
-      "locked": "0.00000000"
-    },
-    {
-      "asset": "USDT",
-      "free": "20000.00000000",
-      "locked": "0.00000000"
-    }
-  ]
+    "balances": [
+        {
+            "asset": "BTC",
+            "free": "20000.00000000",
+            "locked": "0.00000000"
+        },
+        {
+            "asset": "USDT",
+            "free": "20000.00000000",
+            "locked": "0.00000000"
+        }
+    ]
 }
 ```
 
@@ -775,18 +773,18 @@ Taker's Balances
 
 ```json
 {
-  "balances": [
-    {
-      "asset": "BTC",
-      "free": "20000.00000000",
-      "locked": "0.00000000"
-    },
-    {
-      "asset": "USDT",
-      "free": "20000.00000000",
-      "locked": "0.00000000"
-    }
-  ]
+    "balances": [
+        {
+            "asset": "BTC",
+            "free": "20000.00000000",
+            "locked": "0.00000000"
+        },
+        {
+            "asset": "USDT",
+            "free": "20000.00000000",
+            "locked": "0.00000000"
+        }
+    ]
 }
 ```
 
@@ -868,18 +866,18 @@ Maker Balances
 
 ```json
 {
-  "balances": [
-    {
-      "asset": "BTC",
-      "free": "20000.20000000",
-      "locked": "0.00000000"
-    },
-    {
-      "asset": "USDT",
-      "free": "19999.88000000",
-      "locked": "0.08000000"
-    }
-  ]
+    "balances": [
+        {
+            "asset": "BTC",
+            "free": "20000.20000000",
+            "locked": "0.00000000"
+        },
+        {
+            "asset": "USDT",
+            "free": "19999.88000000",
+            "locked": "0.08000000"
+        }
+    ]
 }
 ```
 
@@ -887,17 +885,17 @@ Taker's Balances
 
 ```json
 {
-  "balances": [
-    {
-      "asset": "BTC",
-      "free": "19999.80000000",
-      "locked": "0.00000000"
-    },
-    {
-      "asset": "USDT",
-      "free": "20000.04000000",
-      "locked": "0.00000000"
-    }
-  ]
+    "balances": [
+        {
+            "asset": "BTC",
+            "free": "19999.80000000",
+            "locked": "0.00000000"
+        },
+        {
+            "asset": "USDT",
+            "free": "20000.04000000",
+            "locked": "0.00000000"
+        }
+    ]
 }
 ```

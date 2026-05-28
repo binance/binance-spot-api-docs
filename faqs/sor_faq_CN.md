@@ -1,11 +1,11 @@
 # 智能指令路由 (SOR)
 
-**声明:** 
+**声明:**
 
 * 这里使用的符号和数值是虚构的，并不意味着真实交易所中的设置。
 * 为简单起见，本文档中的示例不包括佣金。
 
-## 什么是智能指令路由 (SOR)?
+### 什么是智能指令路由 (SOR)?
 
 **智能订单路由**（Smart Order Routing，简称SOR）允许客户通过使用具有相同基础资产(`base asset `)和可互换报价资产(`interchangeable quote assets`)的其他订单簿(order books)中的流动性来潜在获得更好的流动性。可互换报价资产是具有固定的1比1兑换率的报价资产，例如与同一法定货币挂钩的稳定币。
 
@@ -15,7 +15,7 @@
 
 **注意：** 如果使用SOR的订单无法根据符合条件的订单簿流动性完全成交，IOC限价单(`LIMIT IOC`)或市价单(`MARKET`)将立即过期，而GTC限价单(`LIMIT GTC`)将把剩余数量放置在您最初提交订单的订单簿(order book)上。
 
-示例 1:
+**示例 1**
 
 让我们考虑一个包含交易对`BTCUSDT`，`BTCUSDC`和`BTCUSDP`的SOR配置，并给出以下这些符号的卖出(`ASK`)方向的订单簿:
 
@@ -36,38 +36,38 @@ BTCUSDP quantity 1 price 29,000
 
 ```javascript
 {
-  "symbol": "BTCUSDT",
-  "orderId": 2,
-  "orderListId": -1,
-  "clientOrderId": "sBI1KM6nNtOfj5tccZSKly",
-  "transactTime": 1689149087774,
-  "price": "31000.00000000",
-  "origQty": "0.50000000",
-  "executedQty": "0.50000000",
-  "cummulativeQuoteQty": "14000.00000000",
-  "status": "FILLED",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "BUY",
-  "workingTime": 1689149087774,
-  "fills": [
-    {
-      "matchType": "ONE_PARTY_TRADE_REPORT",
-      "price": "28000.00000000",
-      "qty": "0.50000000",
-      "commission": "0.00000000",
-      "commissionAsset": "BTC",
-      "tradeId": -1,
-      "allocId": 0
-    }
-  ],
-  "workingFloor": "SOR",
-  "selfTradePreventionMode": "NONE",
-  "usedSor": true
+    "symbol": "BTCUSDT",
+    "orderId": 2,
+    "orderListId": -1,
+    "clientOrderId": "sBI1KM6nNtOfj5tccZSKly",
+    "transactTime": 1689149087774,
+    "price": "31000.00000000",
+    "origQty": "0.50000000",
+    "executedQty": "0.50000000",
+    "cummulativeQuoteQty": "14000.00000000",
+    "status": "FILLED",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "workingTime": 1689149087774,
+    "fills": [
+        {
+            "matchType": "ONE_PARTY_TRADE_REPORT",
+            "price": "28000.00000000",
+            "qty": "0.50000000",
+            "commission": "0.00000000",
+            "commissionAsset": "BTC",
+            "tradeId": -1,
+            "allocId": 0
+        }
+    ],
+    "workingFloor": "SOR",
+    "selfTradePreventionMode": "NONE",
+    "usedSor": true
 }
 ```
- 
-示例 2:
+
+**示例 2**
 
 使用示例1中同样的订单薄:
 
@@ -100,65 +100,65 @@ BTCUSDP quantity 1 price 29,000
 
 ```javascript
 {
-  "symbol": "BTCUSDT",
-  "orderId": 2,
-  "orderListId": -1,
-  "clientOrderId": "tHonoNjWfOSaKiTygN3bfY",
-  "transactTime": 1689146154686,
-  "price": "31000.00000000",
-  "origQty": "5.00000000",
-  "executedQty": "5.00000000",
-  "cummulativeQuoteQty": "148000.00000000",
-  "status": "FILLED",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "BUY",
-  "workingTime": 1689146154686,
-  "fills": [
-    {
-      "matchType": "ONE_PARTY_TRADE_REPORT",
-      "price": "28000.00000000",
-      "qty": "1.00000000",
-      "commission": "0.00000000",
-      "commissionAsset": "BTC",
-      "tradeId": -1,
-      "allocId": 0
-    },
-    {
-      "matchType": "ONE_PARTY_TRADE_REPORT",
-      "price": "29000.00000000",
-      "qty": "1.00000000",
-      "commission": "0.00000000",
-      "commissionAsset": "BTC",
-      "tradeId": -1,
-      "allocId": 1
-    },
-    {
-      "matchType": "ONE_PARTY_TRADE_REPORT",
-      "price": "30000.00000000",
-      "qty": "1.00000000",
-      "commission": "0.00000000",
-      "commissionAsset": "BTC",
-      "tradeId": -1,
-      "allocId": 2
-    },
-    {
-      "matchType": "ONE_PARTY_TRADE_REPORT",
-      "price": "30500.00000000",
-      "qty": "2.00000000",
-      "commission": "0.00000000",
-      "commissionAsset": "BTC",
-      "tradeId": -1,
-      "allocId": 3
-    }
-  ],
-  "workingFloor": "SOR",
-  "selfTradePreventionMode": "NONE",
-  "usedSor": true
+    "symbol": "BTCUSDT",
+    "orderId": 2,
+    "orderListId": -1,
+    "clientOrderId": "tHonoNjWfOSaKiTygN3bfY",
+    "transactTime": 1689146154686,
+    "price": "31000.00000000",
+    "origQty": "5.00000000",
+    "executedQty": "5.00000000",
+    "cummulativeQuoteQty": "148000.00000000",
+    "status": "FILLED",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "workingTime": 1689146154686,
+    "fills": [
+        {
+            "matchType": "ONE_PARTY_TRADE_REPORT",
+            "price": "28000.00000000",
+            "qty": "1.00000000",
+            "commission": "0.00000000",
+            "commissionAsset": "BTC",
+            "tradeId": -1,
+            "allocId": 0
+        },
+        {
+            "matchType": "ONE_PARTY_TRADE_REPORT",
+            "price": "29000.00000000",
+            "qty": "1.00000000",
+            "commission": "0.00000000",
+            "commissionAsset": "BTC",
+            "tradeId": -1,
+            "allocId": 1
+        },
+        {
+            "matchType": "ONE_PARTY_TRADE_REPORT",
+            "price": "30000.00000000",
+            "qty": "1.00000000",
+            "commission": "0.00000000",
+            "commissionAsset": "BTC",
+            "tradeId": -1,
+            "allocId": 2
+        },
+        {
+            "matchType": "ONE_PARTY_TRADE_REPORT",
+            "price": "30500.00000000",
+            "qty": "2.00000000",
+            "commission": "0.00000000",
+            "commissionAsset": "BTC",
+            "tradeId": -1,
+            "allocId": 3
+        }
+    ],
+    "workingFloor": "SOR",
+    "selfTradePreventionMode": "NONE",
+    "usedSor": true
 }
 ```
 
-示例 3:
+**示例 3**
 
 使用示例1和2中同样的订单薄:
 
@@ -177,83 +177,83 @@ BTCUSDP quantity 1 price 29,000
 
 ```javascript
 {
-  "symbol": "BTCUSDT",
-  "orderId": 2,
-  "orderListId": -1,
-  "clientOrderId": "jdFYWTNyzplbNvVJEzQa0o",
-  "transactTime": 1689149513461,
-  "price": "0.00000000",
-  "origQty": "11.00000000",
-  "executedQty": "10.00000000",
-  "cummulativeQuoteQty": "305900.00000000",
-  "status": "EXPIRED",
-  "timeInForce": "GTC",
-  "type": "MARKET",
-  "side": "BUY",
-  "workingTime": 1689149513461,
-  "fills": [
-    {
-      "matchType": "ONE_PARTY_TRADE_REPORT",
-      "price": "28000.00000000",
-      "qty": "1.00000000",
-      "commission": "0.00000000",
-      "commissionAsset": "BTC",
-      "tradeId": -1,
-      "allocId": 0
-    },
-    {
-      "matchType": "ONE_PARTY_TRADE_REPORT",
-      "price": "29000.00000000",
-      "qty": "1.00000000",
-      "commission": "0.00000000",
-      "commissionAsset": "BTC",
-      "tradeId": -1,
-      "allocId": 1
-    },
-    {
-      "matchType": "ONE_PARTY_TRADE_REPORT",
-      "price": "30000.00000000",
-      "qty": "1.00000000",
-      "commission": "0.00000000",
-      "commissionAsset": "BTC",
-      "tradeId": -1,
-      "allocId": 2
-    },
-    {
-      "matchType": "ONE_PARTY_TRADE_REPORT",
-      "price": "30500.00000000",
-      "qty": "3.00000000",
-      "commission": "0.00000000",
-      "commissionAsset": "BTC",
-      "tradeId": -1,
-      "allocId": 3
-    },
-    {
-      "matchType": "ONE_PARTY_TRADE_REPORT",
-      "price": "30800.00000000",
-      "qty": "3.00000000",
-      "commission": "0.00000000",
-      "commissionAsset": "BTC",
-      "tradeId": -1,
-      "allocId": 4
-    },
-    {
-      "matchType": "ONE_PARTY_TRADE_REPORT",
-      "price": "35000.00000000",
-      "qty": "1.00000000",
-      "commission": "0.00000000",
-      "commissionAsset": "BTC",
-      "tradeId": -1,
-      "allocId": 5
-    }
-  ],
-  "workingFloor": "SOR",
-  "selfTradePreventionMode": "NONE",
-  "usedSor": true
+    "symbol": "BTCUSDT",
+    "orderId": 2,
+    "orderListId": -1,
+    "clientOrderId": "jdFYWTNyzplbNvVJEzQa0o",
+    "transactTime": 1689149513461,
+    "price": "0.00000000",
+    "origQty": "11.00000000",
+    "executedQty": "10.00000000",
+    "cummulativeQuoteQty": "305900.00000000",
+    "status": "EXPIRED",
+    "timeInForce": "GTC",
+    "type": "MARKET",
+    "side": "BUY",
+    "workingTime": 1689149513461,
+    "fills": [
+        {
+            "matchType": "ONE_PARTY_TRADE_REPORT",
+            "price": "28000.00000000",
+            "qty": "1.00000000",
+            "commission": "0.00000000",
+            "commissionAsset": "BTC",
+            "tradeId": -1,
+            "allocId": 0
+        },
+        {
+            "matchType": "ONE_PARTY_TRADE_REPORT",
+            "price": "29000.00000000",
+            "qty": "1.00000000",
+            "commission": "0.00000000",
+            "commissionAsset": "BTC",
+            "tradeId": -1,
+            "allocId": 1
+        },
+        {
+            "matchType": "ONE_PARTY_TRADE_REPORT",
+            "price": "30000.00000000",
+            "qty": "1.00000000",
+            "commission": "0.00000000",
+            "commissionAsset": "BTC",
+            "tradeId": -1,
+            "allocId": 2
+        },
+        {
+            "matchType": "ONE_PARTY_TRADE_REPORT",
+            "price": "30500.00000000",
+            "qty": "3.00000000",
+            "commission": "0.00000000",
+            "commissionAsset": "BTC",
+            "tradeId": -1,
+            "allocId": 3
+        },
+        {
+            "matchType": "ONE_PARTY_TRADE_REPORT",
+            "price": "30800.00000000",
+            "qty": "3.00000000",
+            "commission": "0.00000000",
+            "commissionAsset": "BTC",
+            "tradeId": -1,
+            "allocId": 4
+        },
+        {
+            "matchType": "ONE_PARTY_TRADE_REPORT",
+            "price": "35000.00000000",
+            "qty": "1.00000000",
+            "commission": "0.00000000",
+            "commissionAsset": "BTC",
+            "tradeId": -1,
+            "allocId": 5
+        }
+    ],
+    "workingFloor": "SOR",
+    "selfTradePreventionMode": "NONE",
+    "usedSor": true
 }
 ```
 
-示例 4:
+**示例 4**
 
 假设有一个包含 `BTCUSDT`, `BTCUSDC` 和 `BTCUSDP` 交易对的SOR配置, 以及下面这些交易对买方(`BID`)的订单簿：
 
@@ -277,75 +277,73 @@ BTCUSDP quantity 5 price 28,000
 
 ```javascript
 {
-  "symbol": "BTCUSDT",
-  "orderId": 1,
-  "orderListId": -1,
-  "clientOrderId": "W1iXSng1fS77dvanQJDGA5",
-  "transactTime": 1689147920113,
-  "price": "29000.00000000",
-  "origQty": "10.00000000",
-  "executedQty": "10.00000000",
-  "cummulativeQuoteQty": "325000.00000000",
-  "status": "FILLED",
-  "timeInForce": "GTC",
-  "type": "LIMIT",
-  "side": "SELL",
-  "workingTime": 1689147920113,
-  "fills": [
-    {
-      "matchType": "ONE_PARTY_TRADE_REPORT",
-      "price": "35000.00000000",
-      "qty": "5.00000000",
-      "commission": "0.00000000",
-      "commissionAsset": "USDT",
-      "tradeId": -1,
-      "allocId": 0
-    },
-    {
-      "matchType": "ONE_PARTY_TRADE_REPORT",
-      "price": "30000.00000000",
-      "qty": "5.00000000",
-      "commission": "0.00000000",
-      "commissionAsset": "USDT",
-      "tradeId": -1,
-      "allocId": 1
-    }
-  ],
-  "workingFloor": "SOR",
-  "selfTradePreventionMode": "NONE",
-  "usedSor": true
+    "symbol": "BTCUSDT",
+    "orderId": 1,
+    "orderListId": -1,
+    "clientOrderId": "W1iXSng1fS77dvanQJDGA5",
+    "transactTime": 1689147920113,
+    "price": "29000.00000000",
+    "origQty": "10.00000000",
+    "executedQty": "10.00000000",
+    "cummulativeQuoteQty": "325000.00000000",
+    "status": "FILLED",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "SELL",
+    "workingTime": 1689147920113,
+    "fills": [
+        {
+            "matchType": "ONE_PARTY_TRADE_REPORT",
+            "price": "35000.00000000",
+            "qty": "5.00000000",
+            "commission": "0.00000000",
+            "commissionAsset": "USDT",
+            "tradeId": -1,
+            "allocId": 0
+        },
+        {
+            "matchType": "ONE_PARTY_TRADE_REPORT",
+            "price": "30000.00000000",
+            "qty": "5.00000000",
+            "commission": "0.00000000",
+            "commissionAsset": "USDT",
+            "tradeId": -1,
+            "allocId": 1
+        }
+    ],
+    "workingFloor": "SOR",
+    "selfTradePreventionMode": "NONE",
+    "usedSor": true
 }
 ```
 
 **概要：SOR的目标是潜在地在具有可互换报价资产(`interchangeable quote assets`)的订单簿之间获得更好的流动性。更好的流动性可以使订单以更好的价格，并更充分成交。**
 
-## 什么交易对支持SOR?
+### 什么交易对支持SOR?
 
 当前SOR配置可以在交易所信息接口查询(Restful接口`GET /api/v3/exchangeInfo`, Websocket API的 `exchangeInfo`).
 
 ```json
-  "sors": [
-    {
-      "baseAsset": "BTC",
-      "symbols": [
-        "BTCUSDT",
-        "BTCUSDC",
-        "BTCUSDP"
-      ]
-    }
-  ]
+{
+    "sors": [
+        {
+            "baseAsset": "BTC",
+            "symbols": ["BTCUSDT", "BTCUSDC", "BTCUSDP"]
+        }
+    ]
+}
 ```
 
 `sors` 字段是可选的。
 如果 SOR 不可用， 该字段在响应中会被忽略。
 
-## 如何下SOR订单?
+### 如何下SOR订单?
 
 通过Rest API接口 `POST /api/v3/sor/order`.
 
 通过WebSocket API接口 `sor.order.place`.
 
-## 在API响应里, 有个字段workingFloor是什么意思?
+### 在API响应里, 有个字段workingFloor是什么意思?
 
 这是一个用于确定订单的最后更新操作（成交、过期或作为新订单下达等）的术语。
 
@@ -353,36 +351,36 @@ BTCUSDP quantity 5 price 28,000
 
 如果 workingFloor 是 EXCHANGE，这表示您的订单在您发送该订单的订单簿上进行了交互。
 
-## 如果查询订单是否使用过SOR?
+### 如果查询订单是否使用过SOR?
 
 您可以像查询任何其他订单一样来查询。主要的区别是对于使用SOR的订单，在响应中会有两个额外的字段：`usedSor` 和 `workingFloor`。
 
-## 什么是资产分配?
+### 什么是资产分配?
 
 **资产分配**是从交易所转移资产到您的账户。例如，当SOR从符合条件的订单簿中获取流动性时，您的订单将通过资产分配来填充。在这种情况下，您不直接进行交易，而是通过SOR代表您进行交易，并接收对应于SOR为您进行的交易的资产分配。
 
 ```javascript
 [
-  {
-    "symbol": "BTCUSDT",            // Symbol the order was submitted to
-    "allocationId": 0,    
-    "allocationType": "SOR",
-    "orderId": 2,       
-    "orderListId": -1,
-    "price": "30000.00000000",      // Price of the fill
-    "qty": "5.00000000",            // Quantity of the fill
-    "quoteQty": "150000.00000000",
-    "commission": "0.00000000",
-    "commissionAsset": "BTC",
-    "time": 1688379272280,          // Time the allocation occurred
-    "isBuyer": true,
-    "isMaker": false,
-    "isAllocator": false
-  }
+    {
+        "symbol": "BTCUSDT",           // Symbol the order was submitted to
+        "allocationId": 0,
+        "allocationType": "SOR",
+        "orderId": 2,
+        "orderListId": -1,
+        "price": "30000.00000000",     // Price of the fill
+        "qty": "5.00000000",           // Quantity of the fill
+        "quoteQty": "150000.00000000",
+        "commission": "0.00000000",
+        "commissionAsset": "BTC",
+        "time": 1688379272280,         // Time the allocation occurred
+        "isBuyer": true,
+        "isMaker": false,
+        "isAllocator": false
+    }
 ]
-````
+```
 
-## 如何获取使用SOR的订单成交细节？
+### 如何获取使用SOR的订单成交细节？
 
 当SOR订单与非提交订单的订单簿进行交易时，订单将通过资产分配（allocation）而不是交易(trade)来成交。使用SOR下达的订单可能同时拥有资产分配和交易。
 
@@ -394,21 +392,17 @@ BTCUSDP quantity 5 price 28,000
 
 查询交易：使用Rest API接口 `GET /api/v3/myTrades` 或 WebSocket API 的 `myTrades`。
 
-## 什么交易对支持SOR?
+### 什么交易对支持SOR?
 
 当前SOR配置可以在交易所信息接口查询(Rest API接口`GET /api/v3/exchangeInfo`, WebSocket API的 `exchangeInfo`).
 
 ```json
-  "sors": [
-    {
-      "baseAsset": "BTC",
-      "symbols": [
-        "BTCUSDT",
-        "BTCUSDC",
-        "BTCUSDP"
-      ]
-    }
-  ]
+{
+    "sors": [
+        {
+            "baseAsset": "BTC",
+            "symbols": ["BTCUSDT", "BTCUSDC", "BTCUSDP"]
+        }
+    ]
+}
 ```
-
-

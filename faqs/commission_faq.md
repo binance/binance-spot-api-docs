@@ -35,24 +35,24 @@ A test order with `computeCommissionRates` returns detailed commission rates for
 
 ```json
 {
-  "standardCommissionForOrder": {
-    "maker": "0.00000050",
-    "taker": "0.00000060"
-  },
-  "specialCommissionForOrder": {
-    "maker": "0.05000000",
-    "taker": "0.06000000"
-  },
-  "taxCommissionForOrder": {
-    "maker": "0.00000228",
-    "taker": "0.00000230"
-  },
-  "discount": {
-    "enabledForAccount": true,
-    "enabledForSymbol": true,
-    "discountAsset": "BNB",
-    "discount": "0.25000000"
-  }
+    "standardCommissionForOrder": {
+        "maker": "0.00000050",
+        "taker": "0.00000060"
+    },
+    "specialCommissionForOrder": {
+        "maker": "0.05000000",
+        "taker": "0.06000000"
+    },
+    "taxCommissionForOrder": {
+        "maker": "0.00000228",
+        "taker": "0.00000230"
+    },
+    "discount": {
+        "enabledForAccount": true,
+        "enabledForSymbol": true,
+        "discountAsset": "BNB",
+        "discount": "0.25000000"
+    }
 }
 ```
 Note: It does not show buyer/seller commissions separately, as these are already taken into account based on the order side.
@@ -61,31 +61,31 @@ In contrast, querying commission rates returns your current commission rates for
 
 ```json
 {
-  "symbol": "BTCUSDT",
-  "standardCommission": {
-    "maker": "0.00000040",
-    "taker": "0.00000050",
-    "buyer": "0.00000010",
-    "seller": "0.00000010"
-  },
-  "specialCommission": {
-    "maker": "0.04000000",
-    "taker": "0.05000000",
-    "buyer": "0.01000000",
-    "seller": "0.01000000"
-  },
-  "taxCommission": {
-    "maker": "0.00000128",
-    "taker": "0.00000130",
-    "buyer": "0.00000100",
-    "seller": "0.00000100"
-  },
-  "discount": {
-    "enabledForAccount": true,
-    "enabledForSymbol": true,
-    "discountAsset": "BNB",
-    "discount": "0.25000000"
-  }
+    "symbol": "BTCUSDT",
+    "standardCommission": {
+        "maker": "0.00000040",
+        "taker": "0.00000050",
+        "buyer": "0.00000010",
+        "seller": "0.00000010"
+    },
+    "specialCommission": {
+        "maker": "0.04000000",
+        "taker": "0.05000000",
+        "buyer": "0.01000000",
+        "seller": "0.01000000"
+    },
+    "taxCommission": {
+        "maker": "0.00000128",
+        "taker": "0.00000130",
+        "buyer": "0.00000100",
+        "seller": "0.00000100"
+    },
+    "discount": {
+        "enabledForAccount": true,
+        "enabledForSymbol": true,
+        "discountAsset": "BNB",
+        "discount": "0.25000000"
+    }
 }
 ```
 
@@ -95,31 +95,31 @@ Using an example commission configuration:
 
 ```json
 {
-  "symbol": "BTCUSDT",
-  "standardCommission": {
-    "maker": "0.00000010",
-    "taker": "0.00000020",
-    "buyer": "0.00000030",
-    "seller": "0.00000040"
-  },
-  "specialCommission": {
-    "maker": "0.01000000",
-    "taker": "0.02000000",
-    "buyer": "0.03000000",
-    "seller": "0.04000000"
-  },
-  "taxCommission": {
-    "maker": "0.00000112",
-    "taker": "0.00000114",
-    "buyer": "0.00000118",
-    "seller": "0.00000116"
-  },
-  "discount": {
-    "enabledForAccount": true,
-    "enabledForSymbol": true,
-    "discountAsset": "BNB",
-    "discount": "0.25000000"
-  }
+    "symbol": "BTCUSDT",
+    "standardCommission": {
+        "maker": "0.00000010",
+        "taker": "0.00000020",
+        "buyer": "0.00000030",
+        "seller": "0.00000040"
+    },
+    "specialCommission": {
+        "maker": "0.01000000",
+        "taker": "0.02000000",
+        "buyer": "0.03000000",
+        "seller": "0.04000000"
+    },
+    "taxCommission": {
+        "maker": "0.00000112",
+        "taker": "0.00000114",
+        "buyer": "0.00000118",
+        "seller": "0.00000116"
+    },
+    "discount": {
+        "enabledForAccount": true,
+        "enabledForSymbol": true,
+        "discountAsset": "BNB",
+        "discount": "0.25000000"
+    }
 }
 ```
 
