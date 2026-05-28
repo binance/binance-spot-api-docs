@@ -102,7 +102,7 @@
 
 * 每个接口都有一个鉴权类型，指示所需的 API 密钥权限，显示在接口名称旁边（例如，[下新订单 (TRADE)](#place-new-order-trade)）。
 * 如果未指定，则鉴权类型为 `NONE`。
-* 除了为 `NONE` 外，所有具有鉴权类型的接口均视为 `SIGNED` 请求（即包含 `signature`），[listenKey 管理](#user-data-stream-requests) 除外。
+* 除了为 `NONE` 外，所有具有鉴权类型的接口均视为 `SIGNED` 请求（即包含 `signature`）。
 * 具有鉴权类型的接口需要提供有效的 API 密钥并验证通过。
   * API 密钥可在您的 Binance 账户的 [API 管理](https://www.binance.com/en/support/faq/360002502072) 页面创建。
   * **API 密钥和密钥对均为敏感信息，切勿与他人分享。** 如果发现账户有异常活动，请立即撤销所有密钥并联系 Binance 支持。
@@ -2114,7 +2114,7 @@ POST /api/v3/order
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
 side | ENUM | YES |详见枚举定义：[订单方向](./enums_CN.md#side)
-type | ENUM | YES |详见枚举定义：[订单类型](./enums_CN.md#ordertype)
+type | ENUM | YES |详见枚举定义：[订单类型](./enums_CN.md#ordertypes)
 timeInForce | ENUM | NO |详见枚举定义：[生效时间](./enums_CN.md#timeinforce)
 quantity | DECIMAL | NO |
 quoteOrderQty | DECIMAL | NO |
