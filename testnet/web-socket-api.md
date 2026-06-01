@@ -6955,8 +6955,8 @@ Query execution status of all open orders.
 
 If you need to continuously monitor order status updates, please consider using WebSocket Streams:
 
-* [`userDataStream.start`](#user-data-stream-requests) request
-* [`executionReport`](./user-data-stream.md#order-update) user data stream event
+* [`userDataStream.subscribe`](#user-data-stream-subscribe) if on an authenticated session
+* [`userDataStream.subscribe.signature`](#user-data-signature) if subscribing through signature subscription
 
 **Weight:**
 Adjusted based on the number of requested symbols:
@@ -7272,8 +7272,8 @@ Query execution status of all open order lists.
 
 If you need to continuously monitor order status updates, please consider using WebSocket Streams:
 
-* [`userDataStream.start`](#user-data-stream-requests) request
-* [`executionReport`](./user-data-stream.md#order-update) user data stream event
+* [`userDataStream.subscribe`](#user-data-stream-subscribe) if on an authenticated session
+* [`userDataStream.subscribe.signature`](#user-data-signature) if subscribing through signature subscription
 
 **Weight**:
 6

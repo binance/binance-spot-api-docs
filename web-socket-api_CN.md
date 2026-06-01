@@ -7012,8 +7012,8 @@ NONE
 
 如果您需要持续监控订单状态更新，请考虑使用 WebSocket Streams：
 
-* [`userDataStream.start`](#user-data-stream-requests) 请求
-* [`executionReport`](./user-data-stream_CN.md#executionReport) 更新
+* 如果会话已通过验证，请使用 [`userDataStream.subscribe`](#user-data-stream-subscribe)
+* 如果通过签名订阅的方式订阅，请使用 [`userDataStream.subscribe.signature`](#user-data-signature)
 
 **权重:**
 根据交易对的数量进行调整：
@@ -7329,8 +7329,8 @@ NONE
 
 如果您需要持续监控订单状态更新，请考虑使用 WebSocket Streams：
 
-* [`userDataStream.start`](#user-data-stream-requests) 请求
-* [`executionReport`](./user-data-stream_CN.md#executionReport) 更新
+* 如果会话已通过验证，请使用 [`userDataStream.subscribe`](#user-data-stream-subscribe)
+* 如果通过签名订阅的方式订阅，请使用 [`userDataStream.subscribe.signature`](#user-data-signature)
 
 **权重:**
 6
