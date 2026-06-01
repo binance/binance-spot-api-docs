@@ -4537,7 +4537,7 @@ recvWindow|DECIMAL|NO| The value cannot be greater than `60000`. <br> Supports u
 timestamp|LONG|YES|
 
 **Data Source:**
-Database
+Memory -> Database
 
 **Response:**
 

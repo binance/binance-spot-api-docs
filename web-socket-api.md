@@ -7484,7 +7484,7 @@ Name                | Type    | Mandatory | Description
 `timestamp`         | LONG    | YES       |
 
 **Data Source:**
-Database
+Memory -> Database
 
 **Response:**
 
