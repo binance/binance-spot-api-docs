@@ -1357,22 +1357,22 @@ FIX SBE（简单二进制编码）可以替代 FIX，请使用 [spot_fix_prod_la
 #### 订单录入
 
 * `tcp+tls://fix-oe.binance.com:9001`：发送 FIX 请求；接收 FIX SBE 响应
-    * FIX `SbeSchemaId` 标签（=25050）必须设置为 FIX SBE 模式 ID（=1）
-    * FIX `SbeSchemaVersion` 标签（=25051）必须设置为 FIX SBE 模式版本（=0）
+    * FIX `SbeSchemaId` 标签（=25050）必须设置为 FIX SBE 模式 ID（例如 1）
+    * FIX `SbeSchemaVersion` 标签（=25051）必须设置为 FIX SBE 模式版本（例如 0）
 * `tcp+tls://fix-oe.binance.com:9002`：发送 FIX SBE 请求；接收 FIX SBE 响应
 
 #### Drop Copy（订单副本）
 
 * `tcp+tls://fix-dc.binance.com:9001`：发送 FIX 请求；接收 FIX SBE 响应
-    * FIX `SbeSchemaId` 标签（=25050）必须设置为 FIX SBE 模式 ID（=1）
-    * FIX `SbeSchemaVersion` 标签（=25051）必须设置为 FIX SBE 模式版本（=0）
+    * FIX `SbeSchemaId` 标签（=25050）必须设置为 FIX SBE 模式 ID（例如 1）
+    * FIX `SbeSchemaVersion` 标签（=25051）必须设置为 FIX SBE 模式版本（例如 0）
 * `tcp+tls://fix-dc.binance.com:9002`：发送 FIX SBE 请求；接收 FIX SBE 响应
 
 #### 市场数据
 
 * `tcp+tls://fix-md.binance.com:9001`：发送 FIX 请求；接收 FIX SBE 响应
-    * FIX `SbeSchemaId` 标签（=25050）必须设置为 FIX SBE 模式 ID（=1）
-    * FIX `SbeSchemaVersion` 标签（=25051）必须设置为 FIX SBE 模式版本（=0）
+    * FIX `SbeSchemaId` 标签（=25050）必须设置为 FIX SBE 模式 ID（例如 1）
+    * FIX `SbeSchemaVersion` 标签（=25051）必须设置为 FIX SBE 模式版本（例如 0）
 * `tcp+tls://fix-md.binance.com:9002`：发送 FIX SBE 请求；接收 FIX SBE 响应
 
 ### FIX SBE 编码设计

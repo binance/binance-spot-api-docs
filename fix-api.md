@@ -1425,22 +1425,22 @@ In addition to FIX encoding available on port 9000, two request/response encodin
 #### Order Entry
 
 * `tcp+tls://fix-oe.binance.com:9001`: Send FIX requests; receive FIX SBE responses
-    * FIX `SbeSchemaId` tag (=25050) must be set to the FIX SBE schema ID (=1)
-    * The FIX `SbeSchemaVersion` tag (=25051) must be set to the FIX SBE schema version (=0)
+    * FIX `SbeSchemaId` tag (=25050) must be set to the FIX SBE schema ID (e.g. 1)
+    * The FIX `SbeSchemaVersion` tag (=25051) must be set to the FIX SBE schema version (e.g. 0)
 * `tcp+tls://fix-oe.binance.com:9002`: Send FIX SBE requests; receive FIX SBE responses
 
 #### Drop Copy
 
 * `tcp+tls://fix-dc.binance.com:9001`: Send FIX requests; receive FIX SBE responses
-    * FIX `SbeSchemaId` tag (=25050) must be set to the FIX SBE schema ID (=1)
-    * The FIX `SbeSchemaVersion` tag (=25051) must be set to the FIX SBE schema version (=0)
+    * FIX `SbeSchemaId` tag (=25050) must be set to the FIX SBE schema ID (e.g. 1)
+    * The FIX `SbeSchemaVersion` tag (=25051) must be set to the FIX SBE schema version (e.g. 0)
 * `tcp+tls://fix-dc.binance.com:9002`: Send FIX SBE requests; receive FIX SBE responses
 
 #### Market data
 
 * `tcp+tls://fix-md.binance.com:9001`: Send FIX requests; receive FIX SBE responses
-    * FIX `SbeSchemaId` tag (=25050) must be set to the FIX SBE schema ID (=1)
-    * The FIX `SbeSchemaVersion` tag (=25051) must be set to the FIX SBE schema version (=0)
+    * FIX `SbeSchemaId` tag (=25050) must be set to the FIX SBE schema ID (e.g. 1)
+    * The FIX `SbeSchemaVersion` tag (=25051) must be set to the FIX SBE schema version (e.g. 0)
 * `tcp+tls://fix-md.binance.com:9002`: Send FIX SBE requests; receive FIX SBE responses
 
 ### FIX SBE encoding layout
