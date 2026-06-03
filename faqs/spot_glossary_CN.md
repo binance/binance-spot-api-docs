@@ -42,7 +42,7 @@ allocation
 * 基础资产精度；Exchange Information 响应中的一个字段，代表了基础资产（`baseAsset`）可以允许的最多小数位数。
 
 `baseCommissionPrecision`
-* Exchange Information 响应中用来表示基础资产手续费可以允许的最多小数位数。
+* Exchange Information 响应中用来表示基础资产佣金可以允许的最多小数位数。
 
 `bidPrice`
 * `ticker` 请求返回的来自“买"方的最高价格。
@@ -73,16 +73,16 @@ allocation
 * 用于下单请求，用户可以用此字段来设置自定义值，便于用来跟踪订单。
 
 `commission`
-* 交易费
+* 佣金
 
 `commissionAsset`
-* 用于计算交易费的资产。
+* 用于计算佣金的资产。
 
 Counter Order Id
-* 用户数据流 execution reports 中的一个字段，用来表示被阻止的撮合交易事务中的对手方订单。
+* 用户数据流 execution reports 中的一个字段，用来表示被阻止的撮合交易中的对手方订单。
 
 Counter Symbol
-* 用户数据流 execution reports 中的一个字段，用来表示被阻止的撮合交易事务中的对手方订单所使用的交易对。
+* 用户数据流 execution reports 中的一个字段，用来表示被阻止的撮合交易中的对手方订单所使用的交易对。
 
 `cummulativeQuoteQty`
 * 订单的成交交易记录里面所有价格（`price`）乘以数量（`qty`）的和。
@@ -154,7 +154,7 @@ Data Source
 * 表示交易双方的买家是否是市场的做市商（`Maker`）。
 
 `isWorking`
-* 表示订单是否出现在订单薄上。
+* 表示订单是否出现在订单簿上。
 
 ---
 
@@ -203,7 +203,7 @@ Matching Engine
 * 也可以指代的是处理所有请求，撮合所有订单的后台系统。
 
 Match Type
-* 订单响应或 execution reports 中的一个字段，用来表示该订单是否通过 [智能指令路由 (SOR)](./sor_faq_CN.md) 成交。
+* 订单响应或 execution reports 中的一个字段，用来表示该订单是否通过 [智能订单路由 (SOR)](./sor_faq_CN.md) 成交。
 
 Memory
 * 数据源（`Data Source`）中指代数据存储在系统内部的缓冲。
@@ -231,17 +231,17 @@ Notional value
 
 `OPO`
 * [一个订单支付另一个订单（One-Pays-The-Other）](opo_CN.md)，OTO 的一个特殊子集。
-* 当生效订单完全成交时，累计接收的数量将作为待执行订单的数量。
+* 当生效订单完全成交时，累计接收的数量将作为待处理订单的数量。
 
 `OPOCO`
 * [一个订单支付另一个订单（One-Pays-The-Other）](opo_CN.md)，OTOCO 的一个特殊子集。
-* 当生效订单完全成交时，累计接收的数量将作为待执行 OCO 组合订单的数量。
+* 当生效订单完全成交时，累计接收的数量将作为待处理 OCO 组合订单的数量。
 
 Order Amend Keep Priority
 * 参考 [保留优先级的修改订单请求 (Order Amend Keep Priority)](order_amend_keep_priority_CN.md)
 
 Order Book
-* 订单薄；包括了当前市场上买卖挂单。
+* 订单簿；包括了当前市场上买卖挂单。
 
 Order List
 * 订单列表；将多个订单列表合为一个单元。请参考 `OCO` 与/或 `OTO`
@@ -290,6 +290,9 @@ Prevented execution quote quantity
 `preventedQuantity`
 * 因为 STP 导致订单失效的数量。
 
+Prevented Match
+* 当订单因为 STP 而失效时，"prevented match" 会记录该事件。
+
 `preventedMatchId`
 * 与 `symbol` 结合使用时，可用于查询因为 STP 导致订单失效的过期订单。
 
@@ -307,7 +310,7 @@ Prevented execution quote quantity
 * Exchange Information 响应中用来指明 `quoteAsset` 允许的最多小数位数。
 
 `quoteCommissionPrecision`
-* Exchange Information 响应中用来指明交易费用是 `quoteAsset` 允许的最多小数位数。
+* Exchange Information 响应中用来指明佣金是 `quoteAsset` 允许的最多小数位数。
 
 `quoteOrderQty`
 * 市价单（`MARKET`）的下单接口中用于下反向市价单中的数量。
@@ -357,7 +360,7 @@ Smart Order Routing (SOR)
 * 用于下OCO订单的接口；此ID可以用来标识OCO中 `STOP_LOSS` 或 `STOP_LOSS_LIMIT` 的订单。
 
 `stopPrice`
-* 用于设置逻辑订单（比如 `STOP_LOSS`， `TAKE_PROFIT`）中的触发价；此价格被触发后，订单会被放置到订单薄里面（`OrderBook`）。
+* 用于设置逻辑订单（比如 `STOP_LOSS`， `TAKE_PROFIT`）中的触发价；此价格被触发后，订单会被放置到订单簿里面（`OrderBook`）。
 * 用于设置追踪止盈止损订单中的触发价；此价格被触发后，订单会被开始追踪。
 
 `STOP_LOSS`
@@ -380,10 +383,10 @@ Smart Order Routing (SOR)
 ### T
 
 `TAKE_PROFIT`
-* 止盈订单；当市场价格触及 `stopPrice` 价，此订单会以市价单（`MARKET`）被执行。
+* 止盈单；当市场价格触及 `stopPrice` 价，此订单会以市价单（`MARKET`）被执行。
 
 `TAKE_PROFIT_LIMIT`
-* 限价止盈订单；当市场价格触及 `stopPrice` 价，此订单会以限价单（`LIMIT`）被执行。
+* 限价止盈单；当市场价格触及 `stopPrice` 价，此订单会以限价单（`LIMIT`）被执行。
 
 `taxCommissionForOrder`/`taxCommission`
 * 参考 [佣金率](commission_faq_CN.md)
@@ -428,7 +431,7 @@ User Data Stream
 * 通过 WebSocket 推送及时的个人用户信息，包括了账户余额的变动，订单的更新等。请阅读 [用户数据流](../user-data-stream_CN.md) 来了解更多详情。
 
 `usedSor`
-* 用以标识该订单是否是通过 [智能指令路由 (SOR)](sor_faq_CN.md) 提交的。
+* 用以标识该订单是否是通过 [智能订单路由 (SOR)](sor_faq_CN.md) 提交的。
 
 ---
 
@@ -438,7 +441,7 @@ User Data Stream
 * 成交量加权平均价；将过去N分钟内所有交易的价格按各自的成交量加权而算出的平均价。
 
 `workingFloor`
-* 工作平台；该字段用于定义订单是通过 SOR 还是由订单提交到的订单薄（order book）成交的。
+* 工作平台；该字段用于定义订单是通过 SOR 还是由订单提交到的订单簿（order book）成交的。
 
 Working order
 * 订单列表中的订单，该订单会立即放置在订单簿上。当此订单完全成交时，一个或多个待处理订单的自动下单会被触发。

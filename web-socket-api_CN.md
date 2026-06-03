@@ -1592,7 +1592,7 @@ None            |40|
 
 ## 行情接口
 
-### 订单薄深度信息
+### 订单簿深度信息
 
 ```javascript
 {
@@ -3003,9 +3003,9 @@ days    | `1d`, `2d` ... `7d`
 }
 ```
 
-在订单薄获取当前最优价格和数量。
+在订单簿获取当前最优价格和数量。
 
-如果您需要访问实时订单薄 ticker 更新，请考虑使用 WebSocket Streams:
+如果您需要访问实时订单簿 ticker 更新，请考虑使用 WebSocket Streams:
 
 * [`<symbol>@bookTicker`](web-socket-streams_CN.md#bookticker)
 
@@ -3845,7 +3845,7 @@ NONE
 `trailingDelta`| 用以定义追踪止盈止损订单被触发的价格差。                             | 出现在追踪止损订单中。                                | `"trailingDelta": 10` |
 `trailingTime` | 追踪单被激活和跟踪价格变化的时间。                                  | 出现在追踪止损订单中。                                 | `"trailingTime": -1`|
 `usedSor` | 用于确定订单是否使用`SOR`的字段 | 在使用`SOR`下单时出现 |`"usedSor": true`
-`workingFloor` | 用以定义订单是通过 SOR 还是由订单提交到的订单薄（order book）成交的。   |出现在使用了 SOR 的订单中。                             |`"workingFloor": "SOR"`|
+`workingFloor` | 用以定义订单是通过 SOR 还是由订单提交到的订单簿（order book）成交的。   |出现在使用了 SOR 的订单中。                             |`"workingFloor": "SOR"`|
 `pegPriceType` |  挂钩价格类型  | 仅用于挂钩订单 | `"pegPriceType": "PRIMARY_PEG"`
 `pegOffsetType`| 挂钩价格偏移类型 | 如若需要，仅用于挂钩订单   | `"pegOffsetType": "PRICE_LEVEL"`
 `pegOffsetValue` | 挂钩价格偏移值  | 如若需要，仅用于挂钩订单   | `"pegOffsetValue": 5`
@@ -6131,14 +6131,14 @@ NONE
 | `workingPegOffsetValue` | INT | NO |  |
 | `pendingType` | ENUM | YES | 支持的数值：[订单类型](#order-type)。注意，不支持使用 `quoteOrderQty` 的 `MARKET` 订单。 |
 | `pendingSide` | ENUM | YES | 支持的数值：[订单方向](./enums_CN.md#side) |
-| `pendingClientOrderId` | STRING | NO | 待执行订单中挂单的任意唯一 ID。如果未发送，则自动生成。 |
-| `pendingPrice` | DECIMAL | NO | 待执行订单价格 |
-| `pendingStopPrice` | DECIMAL | NO | 待执行订单止损价格 |
-| `pendingTrailingDelta` | DECIMAL | NO | 待执行订单跟踪止损差值 |
+| `pendingClientOrderId` | STRING | NO | 待处理订单中挂单的任意唯一 ID。如果未发送，则自动生成。 |
+| `pendingPrice` | DECIMAL | NO | 待处理订单价格 |
+| `pendingStopPrice` | DECIMAL | NO | 待处理订单止损价格 |
+| `pendingTrailingDelta` | DECIMAL | NO | 待处理订单跟踪止损差值 |
 | `pendingIcebergQty` | DECIMAL | NO | 仅当 `pendingTimeInForce` 为 `GTC` 或 `pendingType` 为 `LIMIT_MAKER` 时可用 |
 | `pendingTimeInForce` | ENUM | NO | 支持的数值：[生效时间](./enums_CN.md#timeinforce) |
-| `pendingStrategyId` | LONG | NO | 用于标识订单策略中待执行订单的任意数字值 |
-| `pendingStrategyType` | INT | NO | 用于标识待执行订单策略的任意数字值。小于 1000000 为保留值，不能使用。 |
+| `pendingStrategyId` | LONG | NO | 用于标识订单策略中待处理订单的任意数字值 |
+| `pendingStrategyType` | INT | NO | 用于标识待处理订单策略的任意数字值。小于 1000000 为保留值，不能使用。 |
 | `pendingPegPriceType` | ENUM | NO | 详见 [挂钩订单](#pegged-orders-info) |
 | `pendingPegOffsetType` | ENUM | NO |  |
 | `pendingPegOffsetValue` | INT | NO |  |
@@ -6272,26 +6272,26 @@ NONE
 | `workingPegOffsetValue` | INT | NO |  |
 | `pendingSide` | ENUM | YES | 支持的值见：[订单方向](./enums_CN.md#side) |
 | `pendingAboveType` | ENUM | YES | 支持的值：`STOP_LOSS_LIMIT`，`STOP_LOSS`，`LIMIT_MAKER`，`TAKE_PROFIT`，`TAKE_PROFIT_LIMIT` |
-| `pendingAboveClientOrderId` | STRING | NO | 待执行上方订单中开放订单的任意唯一 ID。如果未发送，则自动生成。 |
+| `pendingAboveClientOrderId` | STRING | NO | 待处理上方订单中开放订单的任意唯一 ID。如果未发送，则自动生成。 |
 | `pendingAbovePrice` | DECIMAL | NO | 当 `pendingAboveType` 为 `STOP_LOSS_LIMIT`、`LIMIT_MAKER` 或 `TAKE_PROFIT_LIMIT` 时，可用于指定限价。 |
 | `pendingAboveStopPrice` | DECIMAL | NO | 当 `pendingAboveType` 为 `STOP_LOSS`、`STOP_LOSS_LIMIT`、`TAKE_PROFIT`、`TAKE_PROFIT_LIMIT` 时可用。 |
 | `pendingAboveTrailingDelta` | DECIMAL | NO | 详见 [追踪止盈止损订单常见问题](faqs/trailing-stop-faq_CN.md) |
 | `pendingAboveIcebergQty` | DECIMAL | NO | 仅当 `pendingAboveTimeInForce` 为 `GTC` 或 `pendingAboveType` 为 `LIMIT_MAKER` 时可用。 |
 | `pendingAboveTimeInForce` | ENUM | NO |  |
-| `pendingAboveStrategyId` | LONG | NO | 用于标识订单策略中待执行上方订单的任意数值。 |
-| `pendingAboveStrategyType` | INT | NO | 用于标识待执行上方订单策略的任意数字值。小于 1000000 的值为保留，不能使用。 |
+| `pendingAboveStrategyId` | LONG | NO | 用于标识订单策略中待处理上方订单的任意数值。 |
+| `pendingAboveStrategyType` | INT | NO | 用于标识待处理上方订单策略的任意数字值。小于 1000000 的值为保留，不能使用。 |
 | `pendingAbovePegPriceType` | ENUM | NO | 详见 [挂钩订单](#pegged-orders-info) |
 | `pendingAbovePegOffsetType` | ENUM | NO |  |
 | `pendingAbovePegOffsetValue` | INT | NO |  |
 | `pendingBelowType` | ENUM | NO | 支持的值：`STOP_LOSS`，`STOP_LOSS_LIMIT`，`TAKE_PROFIT`，`TAKE_PROFIT_LIMIT` |
-| `pendingBelowClientOrderId` | STRING | NO | 待执行下方订单中开放订单的任意唯一 ID。如果未发送，则自动生成。 |
+| `pendingBelowClientOrderId` | STRING | NO | 待处理下方订单中开放订单的任意唯一 ID。如果未发送，则自动生成。 |
 | `pendingBelowPrice` | DECIMAL | NO | 当 `pendingBelowType` 为 `STOP_LOSS_LIMIT` 或 `TAKE_PROFIT_LIMIT` 时，可用于指定限价。 |
 | `pendingBelowStopPrice` | DECIMAL | NO | 当 `pendingBelowType` 为 `STOP_LOSS`、`STOP_LOSS_LIMIT`、`TAKE_PROFIT` 或 `TAKE_PROFIT_LIMIT` 时可用。`pendingBelowStopPrice`、`pendingBelowTrailingDelta` 或两者之一必须被指定。 |
 | `pendingBelowTrailingDelta` | DECIMAL | NO |  |
 | `pendingBelowIcebergQty` | DECIMAL | NO | 仅当 `pendingBelowTimeInForce` 为 `GTC` 或 `pendingBelowType` 为 `LIMIT_MAKER` 时可用。 |
 | `pendingBelowTimeInForce` | ENUM | NO | 支持的值见：[生效时间](./enums_CN.md#timeinforce) |
-| `pendingBelowStrategyId` | LONG | NO | 用于标识订单策略中待执行下方订单的任意数值。 |
-| `pendingBelowStrategyType` | INT | NO | 用于标识待执行下方订单策略的任意数值。小于 1000000 为保留值，不能使用。 |
+| `pendingBelowStrategyId` | LONG | NO | 用于标识订单策略中待处理下方订单的任意数值。 |
+| `pendingBelowStrategyType` | INT | NO | 用于标识待处理下方订单策略的任意数值。小于 1000000 为保留值，不能使用。 |
 | `pendingBelowPegPriceType` | ENUM | NO | 详见 [挂钩订单](#pegged-orders-info) |
 | `pendingBelowPegOffsetType` | ENUM | NO |  |
 | `pendingBelowPegOffsetValue` | INT | NO |  |
@@ -6587,7 +6587,7 @@ NONE
 
 这个请求会把1个订单添加到 `EXCHANGE_MAX_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中。
 
-请参阅 [智能指令路由 (SOR)](faqs/sor_faq_CN.md) 来了解更多详情。
+请参阅 [智能订单路由 (SOR)](faqs/sor_faq_CN.md) 来了解更多详情。
 
 **权重:**
 1

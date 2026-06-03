@@ -156,7 +156,7 @@
     <ul>
             <li><a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints" target="_blank">Market Data Endpoints (REST API)</a></li>
             <li><a href="https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/market-data-requests" target="_blank">Market Data Requests (WebSocket API)</a></li>
-            <li><a href="https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams" target="_blank">Websocket Market Streams</a></li>
+            <li><a href="https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams" target="_blank">WebSocket Market Streams</a></li>
             <li><a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/trading-endpoints" target="_blank">Trading Endpoints (REST API)</a></li>
             <li><a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/account-endpoints" target="_blank">Account Endpoints (REST API)</a></li>
             <li><a href="https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/trading-requests" target="_blank">Trading Requests (WebSocket API)</a></li>

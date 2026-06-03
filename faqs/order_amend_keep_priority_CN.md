@@ -73,7 +73,7 @@
 
 如果订单修改成功，API 响应会包含具有新数量的订单。
 
-在账户信息流上，您将收到执行类型为 `"x": "REPLACED"` 的 `"executionReport"` 事件。
+在用户数据流上，您将收到执行类型为 `"x": "REPLACED"` 的 `"executionReport"` 事件。
 
 如果修改后的订单隶属于订单列表，并且 client order ID 已被更改，您还将收到一个列表状态类型为 `"l": "UPDATED"` 的 "listStatus" 事件。
 

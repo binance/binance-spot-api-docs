@@ -58,7 +58,7 @@
 [stp_faq_CN](./faqs/stp_faq_CN.md) | 关于 Self Trade Prevention (STP) 的详细信息
 [market_orders_faq_CN](./faqs/market_orders_faq_CN.md)| 关于市价单行为的详细信息
 [market_data_only_CN](./faqs/market_data_only_CN.md) | 仅提供市场数据的 API 和 WebSocket Streams
-[sor_faq_CN](./faqs/sor_faq_CN.md) | 智能指令路由 (SOR)
+[sor_faq_CN](./faqs/sor_faq_CN.md) | 智能订单路由 (SOR)
 [order_amend_keep_priority_CN](./faqs/order_amend_keep_priority_CN.md)| 关于修改订单并保留其优先级的详细信息
 [pegged_orders](./faqs/pegged_orders_CN.md) |  关于挂钩订单的详细信息
 [order_count_decrement_CN](./faqs/order_count_decrement_CN.md) | 现货下单频率限制的更新

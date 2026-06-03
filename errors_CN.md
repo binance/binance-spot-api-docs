@@ -315,13 +315,13 @@
 ### -1222 OPO 的生效订单必须是买单
 * Working order in an OPO list must be a bid.
 
-### -1223 OPO 的待执行订单必须是卖单
+### -1223 OPO 的待处理订单必须是卖单
 * Pending orders in an OPO list must be asks.
 
 ### -1224 生效订单缺少必须的 Tag
 * Working order must include the '{param}' tag.
 
-### -1225 待执行订单包含不需要的 Tag
+### -1225 待处理订单包含不需要的 Tag
 * Pending orders should not include the '%s' tag.
 
 ### -2010 新订单被拒绝
@@ -409,7 +409,7 @@
 "This price peg cannot be used with this order type." | 在 `LIMIT_MAKER` 订单上使用 `pegPriceType`=`MARKET_PEG`。|
 "Order book liquidity is too low for this pegged order." | 订单簿中没有最佳价格水平可用以固定价格。 |
 | OPO orders are not supported for this symbol. |  该交易对不支持 OPO 订单|
-| Order amend (pending OPO order) is not supported. | OPO 订单中的待执行订单无法修改数量 |
+| Order amend (pending OPO order) is not supported. | OPO 订单中的待处理订单无法修改数量 |
 
 ## 有关使用 cancelReplace 下订单的错误
 

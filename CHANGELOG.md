@@ -1117,7 +1117,7 @@ WebSocket API
 
 User Data Stream
 
-* WebSocket API only: New event `eventStreamTerminated` is emitted when you either logout from your websocket session or you have unsubscribed from the user data stream.
+* WebSocket API only: New event `eventStreamTerminated` is emitted when you either logout from your WebSocket session or you have unsubscribed from the user data stream.
 * New event `externalLockUpdate` is sent when your spot wallet balance is locked/unlocked by an external system.
 
 FIX API

@@ -29,7 +29,7 @@ curl -sX GET "https://data-api.binance.vision/api/v3/exchangeInfo?symbol=BTCUSDT
 ### Websocket Streams
 
 Public market data can also be retrieved through the websocket market data using the URL `data-stream.binance.vision`.
-The streams available through this domain are the same that can be found in the [Websocket Market Streams](../web-socket-streams.md) documentation.
+The streams available through this domain are the same that can be found in the [WebSocket Market Streams](../web-socket-streams.md) documentation.
 
 Note that User Data Streams **cannot** be accessed through this URL.
 

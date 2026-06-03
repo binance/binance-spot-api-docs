@@ -1,11 +1,11 @@
-# 智能指令路由 (SOR)
+# 智能订单路由 (SOR)
 
 **声明:**
 
 * 这里使用的符号和数值是虚构的，并不意味着真实交易所中的设置。
 * 为简单起见，本文档中的示例不包括佣金。
 
-### 什么是智能指令路由 (SOR)?
+### 什么是智能订单路由 (SOR)?
 
 **智能订单路由**（Smart Order Routing，简称SOR）允许客户通过使用具有相同基础资产(`base asset `)和可互换报价资产(`interchangeable quote assets`)的其他订单簿(order books)中的流动性来潜在获得更好的流动性。可互换报价资产是具有固定的1比1兑换率的报价资产，例如与同一法定货币挂钩的稳定币。
 
@@ -69,7 +69,7 @@ BTCUSDP quantity 1 price 29,000
 
 **示例 2**
 
-使用示例1中同样的订单薄:
+使用示例1中同样的订单簿:
 
 ```
 BTCUSDT quantity 3 price 30,800
@@ -160,7 +160,7 @@ BTCUSDP quantity 1 price 29,000
 
 **示例 3**
 
-使用示例1和2中同样的订单薄:
+使用示例1和2中同样的订单簿:
 
 ```
 BTCUSDT quantity 3 price 30,800
@@ -355,9 +355,9 @@ BTCUSDP quantity 5 price 28,000
 
 您可以像查询任何其他订单一样来查询。主要的区别是对于使用SOR的订单，在响应中会有两个额外的字段：`usedSor` 和 `workingFloor`。
 
-### 什么是资产分配?
+### 什么是分配?
 
-**资产分配**是从交易所转移资产到您的账户。例如，当SOR从符合条件的订单簿中获取流动性时，您的订单将通过资产分配来填充。在这种情况下，您不直接进行交易，而是通过SOR代表您进行交易，并接收对应于SOR为您进行的交易的资产分配。
+**分配**是从交易所转移资产到您的账户。例如，当SOR从符合条件的订单簿中获取流动性时，您的订单将通过分配来填充。在这种情况下，您不直接进行交易，而是通过SOR代表您进行交易，并接收对应于SOR为您进行的交易的分配。
 
 ```javascript
 [
@@ -382,27 +382,12 @@ BTCUSDP quantity 5 price 28,000
 
 ### 如何获取使用SOR的订单成交细节？
 
-当SOR订单与非提交订单的订单簿进行交易时，订单将通过资产分配（allocation）而不是交易(trade)来成交。使用SOR下达的订单可能同时拥有资产分配和交易。
+当SOR订单与非提交订单的订单簿进行交易时，订单将通过分配（allocation）而不是交易(trade)来成交。使用SOR下达的订单可能同时拥有分配和交易。
 
-在API响应中，您可以查看`fills`字段。资产分配具有`allocId`和`matchType`: "ONE_PARTY_TRADE_REPORT"，而交易将具有非负的`tradeId`。
+在API响应中，您可以查看`fills`字段。分配具有`allocId`和`matchType`: "ONE_PARTY_TRADE_REPORT"，而交易将具有非负的`tradeId`。
 
-您可以使用以下方式查询资产分配和交易：
+您可以使用以下方式查询分配和交易：
 
-查询资产分配：使用Rest API接口 `GET /api/v3/myAllocations` 或 WebSocket API 的 `myAllocations`。
+查询分配：使用Rest API接口 `GET /api/v3/myAllocations` 或 WebSocket API 的 `myAllocations`。
 
 查询交易：使用Rest API接口 `GET /api/v3/myTrades` 或 WebSocket API 的 `myTrades`。
-
-### 什么交易对支持SOR?
-
-当前SOR配置可以在交易所信息接口查询(Rest API接口`GET /api/v3/exchangeInfo`, WebSocket API的 `exchangeInfo`).
-
-```json
-{
-    "sors": [
-        {
-            "baseAsset": "BTC",
-            "symbols": ["BTCUSDT", "BTCUSDC", "BTCUSDP"]
-        }
-    ]
-}
-```
