@@ -3850,6 +3850,7 @@ NONE
 `pegOffsetType`| 挂钩价格偏移类型 | 如若需要，仅用于挂钩订单   | `"pegOffsetType": "PRICE_LEVEL"`
 `pegOffsetValue` | 挂钩价格偏移值  | 如若需要，仅用于挂钩订单   | `"pegOffsetValue": 5`
 `peggedPrice`   | 订单对应的当前挂钩价格 | 一旦确定，仅用于挂钩订单 | `"peggedPrice": "87523.83710000"`
+`expiryReason` | 订单失效原因          | 当订单失效时           | `"expiryReason": "INSUFFICIENT_LIQUIDITY"` |
 
 ### 测试下单 (TRADE)
 
