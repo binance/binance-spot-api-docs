@@ -7,10 +7,18 @@ This is not always synced with the live exchange.
 
 ### 2026-06-09
 
+**Update:**
+
+The `serverShutdown` event will be sent when the **server is about to be shut down**; when you receive this event, please disconnect and open a new connection.
+
+All mention of a fixed time before the server shuts down has been removed from the documentation.
+
 * Documented the `serverShutdown` event in [SBE Market Data Streams](./sbe-market-data-streams.md#serverShutdown).
-  * `serverShutdown` event will be sent 10 minutes before disconnection.
-  * Please establish a new connection as soon as possible to prevent interruption.
+  * ~~`serverShutdown` event will be sent 10 minutes before disconnection.~~
+  * Please establish a new connection as soon as possible to prevent connection interruption.
   * Note that you will receive `serverShutdown` events in JSON in WebSocket text frames.
+
+* Updated the [Price Range Execution Rule FAQ](../faqs/price_range_execution_rules.md#external-reference-price-calculation-method-1) with new External Reference Price Calculation Methods.
 
 ---
 

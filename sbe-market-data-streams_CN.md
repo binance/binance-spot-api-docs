@@ -9,7 +9,7 @@
 * 订阅单个streams时，可用的URL格式示例： **/ws/\<streamName\>**。
 * 订阅组合streams时，可用的URL格式示例： **/stream?streams=\<streamName1\>/\<streamName2\>/\<streamName3\>**。
 * 每个到**stream-sbe.binance.com**的链接有效期不超过24小时，请妥善处理断线重连。
-* 系统会在断开连接前 10 分钟会发送 [`serverShutdown`](#serverShutdown) 事件。请尽快建立新连接，以防止中断。
+* 当服务器即将关闭时，系统将发送 [`serverShutdown`](#serverShutdown) 事件，并导致连接断开。请尽快建立新连接，以防止中断。
 * 所有时间和时间戳相关的字段均以 **微秒** 为单位。
 * **需要 API Key 身份验证。**
   * 只允许使用 Ed25519 密钥。
@@ -42,6 +42,8 @@
 ## 服务器关闭
 
 当服务器即将关闭时，会发送 `serverShutdown` 事件。
+
+请注意，此消息将以 JSON 格式发送。
 
 ```javascript
 {

@@ -9,7 +9,7 @@
 * You can subscribe to a single stream at **/ws/\<streamName\>**.
 * You can subscribe to multiple streams at **/stream?streams=\<streamName1\>/\<streamName2\>/\<streamName3\>**.
 * A single connection to **stream-sbe.binance.com** is **only valid for 24 hours**; expect to be disconnected at the 24 hour mark.
-* A [`serverShutdown`](#serverShutdown) event will be sent 10 minutes before disconnection. Please establish a new connection as soon as possible to prevent interruption.
+* A [`serverShutdown`](#serverShutdown) event will be sent when the server is about to shutdown, resulting in disconnection. Please establish a new connection as soon as possible to prevent interruption.
 * All time and timestamp fields are in **microseconds**.
 * **An API Key is necessary for access**.
   * Only Ed25519 keys are allowed.
@@ -42,6 +42,8 @@
 ## Server Shutdown
 
 `serverShutdown` event is sent when the server is about to shut down.
+
+Note that this message will be in JSON.
 
 ```javascript
 {

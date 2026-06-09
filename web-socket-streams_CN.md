@@ -9,7 +9,7 @@
 * 订阅组合streams时，事件payload会以这样的格式封装 **{"stream":"\<streamName\>","data":\<rawPayload\>}**
 * stream名称中所有交易对均为**小写**
 * 每个到**stream.binance.com**的链接有效期不超过24小时，请妥善处理断线重连。
-* 系统会在断开连接前 10 分钟会发送 [`serverShutdown`](#serverShutdown) 事件。请尽快建立新连接，以防止中断。
+* 当服务器即将关闭时，系统将发送 [`serverShutdown`](#serverShutdown) 事件，并导致连接断开。请尽快建立新连接，以防止中断。
 * WebSocket 服务器**每20秒**发送 PING 消息。
   * 如果 WebSocket 服务器没有在一分钟之内收到PONG 消息应答，连接会被断开。
   * 当客户收到PING消息，必须尽快回复PONG消息，同时payload需要和PING消息一致。

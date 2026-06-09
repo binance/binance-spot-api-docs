@@ -4,10 +4,18 @@
 
 ### 2026-06-09
 
+**更新：**
+
+当**服务器即将关闭**时，系统将发送 `serverShutdown` 事件；当您收到此事件时，请断开连接并建立新连接。
+
+文档中所有关于服务器关闭前固定时间的描述均已移除。
+
 * 在 [SBE 行情接口](./sbe-market-data-streams_CN.md#serverShutdown) 中补充了 `serverShutdown` 事件的说明。
-  * 系统会在断开连接前 10 分钟发送 `serverShutdown` 事件。
+  * ~~系统会在断开连接前 10 分钟发送 `serverShutdown` 事件。~~
   * 请尽快建立新连接，以防中断。
   * 请注意，`serverShutdown` 事件将以 JSON 格式通过 WebSocket text 帧发送。
+
+* 更新了 [价格区间执行规则 FAQ](./faqs/price_range_execution_rules_CN.md#externalCalculationId1)，新增了外部参考价格计算方法。
 
 ---
 

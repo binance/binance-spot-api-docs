@@ -147,3 +147,15 @@ If the reference price is being calculated outside the matching engine, then a q
 ## External Reference Price Calculation Method 0
 
 The reference price was set manually by a human operator. This calculation method will only be used in situations when algorithmic calculation of the reference price has been deemed unsuitable.
+
+## External Reference Price Calculation Method 1
+
+The reference price is calculated as the average of the trading price from 4 external data providers.
+
+## External Reference Price Calculation Method 2
+
+The reference price is the index price of the corresponding USDⓈ-M Binance Futures.
+
+## External Reference Price Calculation Method 3
+
+The reference price is calculated as the 5 minute SMA of the Binance Spot mid-spread price.
