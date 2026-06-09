@@ -144,7 +144,7 @@ on how to set up an Ed25519 key pair.
 
 * All FIX API sessions will remain open for as long as possible, on a best-effort basis.
 * There is no minimum connection time guarantee; a server can enter maintenance at any time.
-  * When a server enters maintenance, a [News `<B>`](#news) message will be sent to clients **every 10 seconds for 10 minutes**, prompting clients to reconnect. Upon receiving this message, a client is expected to establish a new session and close the old one. If the client does not close the old session within the time frame, the server will proceed to log it out and close the session.
+  * When a server enters maintenance, a [News `<B>`](#news) message will be sent to clients **every 10 seconds until disconnection**, prompting clients to reconnect. Upon receiving this message, a client is expected to establish a new session and close the old one. If the client does not close the old session before the server disconnects it, the server will proceed to log it out and close the session.
 * After connecting, the client must send a Logon `<A>` request. For more information please refer to [How to sign a Logon request](#signaturecomputation).
 * The client should send a Logout `<5>` message to close the session before disconnecting. Failure to send the logout message will result in the session’s `SenderCompID (49)` being unusable for new session establishment for a duration of 2x the `HeartInt (108)` interval.
 * The system allows negotiation of the `HeartInt (108)` value during the logon process. Accepted values range between 5 and 60 seconds.
@@ -565,8 +565,8 @@ Logout Response
 
 ### News `<B>`
 
-When the server enters maintenance, a `News` message will be sent to clients **every 10 seconds for 10 minutes**.
-After this period, clients will be logged out and their sessions will be closed.
+When the server enters maintenance, a `News` message will be sent to clients **every 10 seconds**, counting down to disconnection.
+When the countdown ends, clients are logged out and their sessions are closed.
 
 Upon receiving this message, clients are expected to establish a new session and close the old one.
 
