@@ -1,9 +1,18 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-06-03**
+**Last Updated: 2026-06-09**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-06-09
+
+* Documented the `serverShutdown` event in [SBE Market Data Streams](./sbe-market-data-streams.md#serverShutdown).
+  * `serverShutdown` event will be sent 10 minutes before disconnection.
+  * Please establish a new connection as soon as possible to prevent interruption.
+  * Note that you will receive `serverShutdown` events in JSON in WebSocket text frames.
+
+---
 
 ### 2026-06-03
 

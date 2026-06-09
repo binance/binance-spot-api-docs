@@ -9,6 +9,7 @@
 * You can subscribe to a single stream at **/ws/\<streamName\>**.
 * You can subscribe to multiple streams at **/stream?streams=\<streamName1\>/\<streamName2\>/\<streamName3\>**.
 * A single connection to **stream-sbe.testnet.binance.vision** is **only valid for 24 hours**; expect to be disconnected at the 24 hour mark.
+* A [`serverShutdown`](#serverShutdown) event will be sent 10 minutes before disconnection. Please establish a new connection as soon as possible to prevent interruption.
 * All time and timestamp fields are in **microseconds**.
 * **An API Key is necessary for access**.
   * Only Ed25519 keys are allowed.
@@ -20,8 +21,10 @@
   * When you receive a ping, you must send a pong with a copy of ping's payload as soon as possible.
   * Unsolicited `pong frames` are allowed, but will not prevent disconnection. **It is recommended that the payload for these pong frames are empty.**
 * [Live Subscribing and Unsubscribing](web-socket-streams.md#live-subscribingunsubscribing-to-streams) is also supported.
-  * You must send the subscription requests in JSON, and will receive the subscription response also in JSON.
-  * You can differentiate subscription responses from market data events by looking at the WebSocket frame type: subscription responses are always sent in text frames (containing JSON), and events are always sent in binary frames (containing SBE).
+  * You must send subscription requests in JSON in WebSocket text frames. You will receive subscription responses in JSON in WebSocket text frames.
+  * You will receive [`serverShutdown`](#serverShutdown) events in JSON in WebSocket text frames.
+  * You will receive market data events in SBE in WebSocket binary frames.
+* If your request contains a symbol name containing non-ASCII characters, then the stream events may contain non-ASCII characters encoded in UTF-8.
 
 ## WebSocket Limits
 
@@ -34,6 +37,20 @@
   * Connections that go beyond the limit will be closed. Repeatedly disconnected IP addresses may be banned.
 * A single connection can listen to a maximum of 1024 streams.
 * There is a limit of **300 connection attempts every 5 minutes per IP address**.
+
+<a id="serverShutdown"></a>
+## Server Shutdown
+
+`serverShutdown` event is sent when the server is about to shut down.
+
+```javascript
+{
+  "e": "serverShutdown", // Event type
+  "E": 1770123456789     // Event time
+}
+```
+
+Please establish a new connection as soon as possible to prevent interruption.
 
 ## Available Streams
 

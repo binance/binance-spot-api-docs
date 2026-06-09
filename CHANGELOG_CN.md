@@ -1,6 +1,15 @@
 # 更新日志
 
-**最近更新：2026-06-03**
+**最近更新：2026-06-09**
+
+### 2026-06-09
+
+* 在 [SBE 行情接口](./sbe-market-data-streams_CN.md#serverShutdown) 中补充了 `serverShutdown` 事件的说明。
+  * 系统会在断开连接前 10 分钟发送 `serverShutdown` 事件。
+  * 请尽快建立新连接，以防中断。
+  * 请注意，`serverShutdown` 事件将以 JSON 格式通过 WebSocket text 帧发送。
+
+---
 
 ### 2026-06-03
 

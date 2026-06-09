@@ -1,6 +1,15 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-05-11**
+**Last Updated: 2026-06-09**
+
+### 2026-06-09
+
+* Documented the `serverShutdown` event in [SBE Market Data Streams](./sbe-market-data-streams.md#serverShutdown).
+  * `serverShutdown` event will be sent 10 minutes before disconnection.
+  * Please establish a new connection as soon as possible to prevent interruption.
+  * Note that you will receive `serverShutdown` events in JSON in WebSocket text frames.
+
+---
 
 ### 2026-05-11
 
