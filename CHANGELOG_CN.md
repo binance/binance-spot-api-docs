@@ -1,6 +1,17 @@
 # 更新日志
 
-**最近更新：2026-06-09**
+**最近更新：2026-06-10**
+
+### 2026-06-10
+
+#### FIX API
+
+* 文档更新：从 [FIX API](./fix-api_CN.md#marketdataincrementalrefresh) 中移除了 `LastFragment (893)`。
+  * 正如[此前公告](#2025-12-02)中所述，`MarketDataIncrementalRefresh <X>` 消息已于 2025-12-18 起不再分片，服务器也不再发送 `LastFragment (893)`。
+  * 该字段已从 [FIX API](fix-api_CN.md) 字段列表和对应的 [QuickFIX MD schema](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml) 中移除。
+* 文档更新：更新了 [News `<B>`](./fix-api_CN.md#news-b) 消息的说明，以与 [2026-06-09](#2026-06-09) 的公告保持一致。
+
+---
 
 ### 2026-06-09
 

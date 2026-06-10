@@ -1,9 +1,20 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-06-09**
+**Last Updated: 2026-06-10**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-06-10
+
+#### FIX API
+
+* Documentation update: removed `LastFragment (893)` from [FIX API](./fix-api.md#marketdataincrementalrefresh).
+  * As [previously announced](#2025-11-28), `MarketDataIncrementalRefresh <X>` messages stopped being fragmented on 2025-12-02, and the server no longer sends `LastFragment (893)`.
+  * The field has been removed from the [FIX API](fix-api.md) field list and from the corresponding [QuickFIX MD schema](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-md.xml).
+* Documentation update: updated the [News `<B>`](./fix-api.md#news-b) message description to be consistent with the announcement from [2026-06-09](#2026-06-09).
+
+---
 
 ### 2026-06-09
 
