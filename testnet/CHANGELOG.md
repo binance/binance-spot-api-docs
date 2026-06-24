@@ -1,9 +1,16 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-06-22**
+**Last Updated: 2026-06-24**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-06-24
+
+* Beginning at **2026-07-02 07:00 UTC**, [WebSocket Streams](web-socket-streams.md) will undergo an infrastructure upgrade and will approximately take up to an hour.
+* During the upgrade, your WebSocket connection may be disconnected; please reconnect to restore your connection.
+
+---
 
 ### 2026-06-22
 
