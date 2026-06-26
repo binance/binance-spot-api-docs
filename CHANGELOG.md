@@ -185,7 +185,7 @@ The following will occur on **2026-04-02 at approximately 07:00 UTC**.
 
 ### 2026-03-13
 
-* Updated [Price Range Execution Rule](./faqs/price_range_execution_rules.md#external-reference-price-calculation-method-0) with a new External Reference Price Calculation Method.
+* Updated [Price Range Execution Rule](./faqs/price_range_execution_rules.md#externalCalculationId0) with a new External Reference Price Calculation Method.
 
 ---
 
