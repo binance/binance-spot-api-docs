@@ -1,9 +1,25 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-06-24**
+**Last Updated: 2026-06-29**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-06-29
+
+**Notice:** The changes in this section will be gradually rolled out and will take approximately 2 days to complete.
+
+#### New Features
+
+* The new `symbolStatus` value `CANCEL_ONLY` can appear in Exchange Information responses.
+    * REST API: `GET /api/v3/exchangeInfo`
+    * WebSocket API: `exchangeInfo`
+* REST and WebSocket API SBE schema [spot_3_5.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_5.xml)
+  * The current schema 3:4 [spot_3_4.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_4.xml) is deprecated and will be retired in 6 months as per our schema deprecation policy.
+  * Changes in schema 3:5:
+    * Updated `symbolStatus` enum: new variant `CANCEL_ONLY`
+
+---
 
 ### 2026-06-24
 

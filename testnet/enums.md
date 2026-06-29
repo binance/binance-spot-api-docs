@@ -8,6 +8,7 @@ This will apply for both REST API and WebSocket API.
 * `END_OF_DAY`
 * `HALT`
 * `BREAK`
+* `CANCEL_ONLY`
 
 <a id="account-and-symbol-permissions"></a>
 
