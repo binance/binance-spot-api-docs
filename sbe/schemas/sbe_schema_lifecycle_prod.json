@@ -2,10 +2,16 @@
   "environment": "PROD",
   "latestSchema": {
     "id": 3,
-    "version": 4,
-    "releaseDate": "2026-05-08"
+    "version": 5,
+    "releaseDate": "2026-07-07"
   },
   "deprecatedSchemas": [
+    {
+      "id": 3,
+      "version": 4,
+      "releaseDate": "2026-05-08",
+      "deprecatedDate": "2026-07-07"
+    },
     {
       "id": 3,
       "version": 3,
