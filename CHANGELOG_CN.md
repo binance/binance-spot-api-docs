@@ -1,6 +1,22 @@
 # 更新日志
 
-**最近更新：2026-06-24**
+**最近更新：2026-07-01**
+
+### 2026-07-01
+
+**注意：以下变更将于 2026 年 07 月 07 日推出，需要几天才能完成部署。**
+
+#### 新功能
+
+* Exchange Information 响应中可能出现新的 `symbolStatus` 取值 `CANCEL_ONLY`。
+    * REST API: `GET /api/v3/exchangeInfo`
+    * WebSocket API: `exchangeInfo`
+* REST 和 WebSocket API SBE schema [spot_3_5.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_5.xml)
+  * 当前的 schema 3:4 [spot_3_4.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_4.xml) 已被弃用，将根据我们的 schema 弃用政策在 6 个月后停用。
+  * schema 3:5 中的变更：
+    * 更新 `symbolStatus` 枚举：新增取值 `CANCEL_ONLY`
+
+---
 
 ### 2026-06-24
 

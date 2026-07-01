@@ -1,6 +1,13 @@
 # CHANGELOG for Binance SPOT Demo Mode
 
-**Last Updated: 2026-05-11**
+**Last Updated: 2026-07-01**
+
+### 2026-07-01
+
+* Scheduled downtime maintenance will begin at **2026-07-03 07:00 UTC** and will last for approximately 4 hours.
+* This window will include upgrades to our infrastructure.
+
+---
 
 ### 2026-05-11
 

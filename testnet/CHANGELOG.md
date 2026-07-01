@@ -1,13 +1,13 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-06-29**
+**Last Updated: 2026-07-01**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
 
-### 2026-06-29
+### 2026-07-01
 
-**Notice:** The changes in this section will be gradually rolled out and will take approximately 2 days to complete.
+**Notice:** The changes in this section will be gradually rolled out and will take approximately 3 days to complete.
 
 #### New Features
 

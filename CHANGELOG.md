@@ -1,6 +1,21 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-06-24**
+**Last Updated: 2026-07-01**
+
+### 2026-07-01
+
+**Notice: The following changes will occur on 2026-07-07 and will take a few days to complete.**
+
+#### New Features
+
+* The new `symbolStatus` value `CANCEL_ONLY` can appear in Exchange Information responses.
+    * REST API: `GET /api/v3/exchangeInfo`
+    * WebSocket API: `exchangeInfo`
+* REST and WebSocket API SBE schema [spot_3_5.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_5.xml)
+  * The current schema 3:4 [spot_3_4.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_4.xml) is deprecated and will be retired in 6 months as per our schema deprecation policy.
+  * Changes in schema 3:5:
+    * Updated `symbolStatus` enum: new variant `CANCEL_ONLY`
+---
 
 ### 2026-06-24
 

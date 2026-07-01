@@ -1,288 +1,106 @@
-<h3 id="faq-how-to-use">
-        How can I use the Spot Test Network?
-</h3>
+# Testnet General Info
 
-<p>
-        Step 1: Log in on this <a href="https://testnet.binance.vision/">website</a>, and generate an API Key.
-</p>
+<a id="faq-how-to-use"></a>
+## How can I use the Spot Test Network?
 
-<p>
-        Step 2: Follow the <a href="https://developers.binance.com/docs/binance-spot-api-docs/CHANGELOG" target="_blank">official documentation of the Spot API</a>,
-        replacing the URLs of the endpoints with the following values:
-<table>
-    <thead>
-    <tr>
-        <th>Spot API URLs</th>
-        <th>Spot Test Network URLs</th>
-    </tr>
-    </thead>
-    <body>
-        <tr>
-            <td>
-                <ul>
-                    <li>https://api.binance.com/api</li>
-                    <li>https://api-gcp.binance.com/api</li>
-                    <li>https://api1.binance.com/api</li>
-                    <li>https://api2.binance.com/api</li>
-                    <li>https://api3.binance.com/api</li>
-                    <li>https://api4.binance.com/api</li>
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    <li><strong>https://testnet.binance.vision/api</strong></li>
-                    <li><strong>https://api1.testnet.binance.vision/api</strong></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <ul>
-                    <li>wss://ws-api.binance.com/ws-api/v3</li>
-                    <li>wss://ws-api.binance.com:9443/ws-api/v3</li>
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    <li><strong>wss://ws-api.testnet.binance.vision/ws-api/v3</strong></li>
-                    <li><strong>wss://ws-api.testnet.binance.vision:9443/ws-api/v3</strong></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <ul>
-                    <li>wss://stream.binance.com/ws</li>
-                    <li>wss://stream.binance.com:9443/ws</li>
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    <li><strong>wss://stream.testnet.binance.vision/stream</strong></li>
-                    <li><strong>wss://stream.testnet.binance.vision:9443/stream</strong></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <ul>
-                    <li>wss://stream.binance.com/stream</li>
-                    <li>wss://stream.binance.com:9443/stream</li>
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    <li><strong>wss://stream.testnet.binance.vision/stream</strong></li>
-                    <li><strong>wss://stream.testnet.binance.vision:9443/stream</strong></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <ul>
-                    <li>wss://stream-sbe.binance.com/ws</li>
-                    <li>wss://stream-sbe.binance.com:9443/ws</li>
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    <li><strong>wss://stream-sbe.testnet.binance.vision/ws</strong></li>
-                    <li><strong>wss://stream-sbe.testnet.binance.vision:9443/ws</strong></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <ul>
-                    <li>wss://stream-sbe.binance.com/stream</li>
-                    <li>wss://stream-sbe.binance.com:9443/stream</li>
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    <li><strong>wss://stream-sbe.testnet.binance.vision/stream</strong></li>
-                    <li><strong>wss://stream-sbe.testnet.binance.vision:9443/stream</strong></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <ul>
-                    <li>tcp+tls://fix-oe.binance.com:9000</li>
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    <li><strong>tcp+tls://fix-oe.testnet.binance.vision:9000</strong></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <ul>
-                    <li>tcp+tls://fix-dc.binance.com:9000</li>
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    <li><strong>tcp+tls://fix-dc.testnet.binance.vision:9000</strong></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <ul>
-                    <li>tcp+tls://fix-md.binance.com:9000</li>
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    <li><strong>tcp+tls://fix-md.testnet.binance.vision:9000</strong></li>
-                </ul>
-            </td>
-        </tr>
-        </body>
-        </table>
-</p>
+Step 1: Log in on this [website](https://testnet.binance.vision/), and generate an API Key.
 
-<hr>
+Step 2: Follow the [official documentation of the Spot API](https://developers.binance.com/docs/binance-spot-api-docs/CHANGELOG), replacing the URLs of the endpoints with the following values:
 
-<h3 id="faq-supported-endpoints">
-        Can I use the <code>/sapi</code> endpoints on the Spot Test Network?
-</h3>
+| Spot API URLs | Spot Test Network URLs |
+| --- | --- |
+| https://api.binance.com/api<br>https://api-gcp.binance.com/api<br>https://api1.binance.com/api<br>https://api2.binance.com/api<br>https://api3.binance.com/api<br>https://api4.binance.com/api | **https://testnet.binance.vision/api**<br>**https://api1.testnet.binance.vision/api** |
+| wss://ws-api.binance.com/ws-api/v3<br>wss://ws-api.binance.com:9443/ws-api/v3 | **wss://ws-api.testnet.binance.vision/ws-api/v3**<br>**wss://ws-api.testnet.binance.vision:9443/ws-api/v3** |
+| wss://stream.binance.com/ws<br>wss://stream.binance.com:9443/ws | **wss://stream.testnet.binance.vision/stream**<br>**wss://stream.testnet.binance.vision:9443/stream** |
+| wss://stream.binance.com/stream<br>wss://stream.binance.com:9443/stream | **wss://stream.testnet.binance.vision/stream**<br>**wss://stream.testnet.binance.vision:9443/stream** |
+| wss://stream-sbe.binance.com/ws<br>wss://stream-sbe.binance.com:9443/ws | **wss://stream-sbe.testnet.binance.vision/ws**<br>**wss://stream-sbe.testnet.binance.vision:9443/ws** |
+| wss://stream-sbe.binance.com/stream<br>wss://stream-sbe.binance.com:9443/stream | **wss://stream-sbe.testnet.binance.vision/stream**<br>**wss://stream-sbe.testnet.binance.vision:9443/stream** |
+| tcp+tls://fix-oe.binance.com:9000 | **tcp+tls://fix-oe.testnet.binance.vision:9000** |
+| tcp+tls://fix-oe.binance.com:9001<br>(Send FIX requests; receive FIX SBE responses) | **tcp+tls://fix-oe.testnet.binance.vision:9001** |
+| tcp+tls://fix-oe.binance.com:9002<br>(Send FIX SBE requests; receive FIX SBE responses) | **tcp+tls://fix-oe.testnet.binance.vision:9002** |
+| tcp+tls://fix-dc.binance.com:9000 | **tcp+tls://fix-dc.testnet.binance.vision:9000** |
+| tcp+tls://fix-dc.binance.com:9001<br>(Send FIX requests; receive FIX SBE responses) | **tcp+tls://fix-dc.testnet.binance.vision:9001** |
+| tcp+tls://fix-dc.binance.com:9002<br>(Send FIX SBE requests; receive FIX SBE responses) | **tcp+tls://fix-dc.testnet.binance.vision:9002** |
+| tcp+tls://fix-md.binance.com:9000 | **tcp+tls://fix-md.testnet.binance.vision:9000** |
+| tcp+tls://fix-md.binance.com:9001<br>(Send FIX requests; receive FIX SBE responses) | **tcp+tls://fix-md.testnet.binance.vision:9001** |
+| tcp+tls://fix-md.binance.com:9002<br>(Send FIX SBE requests; receive FIX SBE responses) | **tcp+tls://fix-md.testnet.binance.vision:9002** |
 
-<p>
-        No, only the <code>/api</code> endpoints are available on the Spot Test Network:
-    <ul>
-            <li><a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints" target="_blank">Market Data Endpoints (REST API)</a></li>
-            <li><a href="https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/market-data-requests" target="_blank">Market Data Requests (WebSocket API)</a></li>
-            <li><a href="https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams" target="_blank">WebSocket Market Streams</a></li>
-            <li><a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/trading-endpoints" target="_blank">Trading Endpoints (REST API)</a></li>
-            <li><a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/account-endpoints" target="_blank">Account Endpoints (REST API)</a></li>
-            <li><a href="https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/trading-requests" target="_blank">Trading Requests (WebSocket API)</a></li>
-            <li><a href="https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/account-requests" target="_blank">Account Requests (WebSocket API)</a></li>
-            <li><a href="https://developers.binance.com/docs/binance-spot-api-docs/user-data-stream" target="_blank">User Data Streams</a></li>
-        </ul>
-</p>
+<a id="faq-supported-endpoints"></a>
+## Can I use the `/sapi` endpoints on the Spot Test Network?
 
-<hr>
+No, only the `/api` endpoints are available on the Spot Test Network:
 
-<h3 id="faq-funds-transfer">
-        How to get funds in/out of the Spot Test Network?
-</h3>
+* [Market Data Endpoints (REST API)](https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints)
+* [Market Data Requests (WebSocket API)](https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/market-data-requests)
+* [WebSocket Market Streams](https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams)
+* [Trading Endpoints (REST API)](https://developers.binance.com/docs/binance-spot-api-docs/rest-api/trading-endpoints)
+* [Account Endpoints (REST API)](https://developers.binance.com/docs/binance-spot-api-docs/rest-api/account-endpoints)
+* [Trading Requests (WebSocket API)](https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/trading-requests)
+* [Account Requests (WebSocket API)](https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/account-requests)
+* [User Data Streams](https://developers.binance.com/docs/binance-spot-api-docs/user-data-stream)
 
-<p>
-        All users registering on the Spot Test Network automatically receive a balance in many different assets.
-        Please note that these are not real assets and can be used only on the Spot Test Network itself.
-</p>
+<a id="faq-funds-transfer"></a>
+## How to get funds in/out of the Spot Test Network?
 
-<p>
-        All funds on the Spot Test Network are virtual, and can not be transferred in/out of the Spot Test Network.
-</p>
+All users registering on the Spot Test Network automatically receive a balance in many different assets. Please note that these are not real assets and can be used only on the Spot Test Network itself.
 
-<hr>
+All funds on the Spot Test Network are virtual, and can not be transferred in/out of the Spot Test Network.
 
-<h3 id="faq-restrictions">
-        What are the restrictions on the Spot Test Network?
-</h3>
+<a id="faq-restrictions"></a>
+## What are the restrictions on the Spot Test Network?
 
-<p>
-        <strong>IP Limits</strong>, <strong>Order Rate Limits</strong>, <strong>Exchange Filters</strong> and <strong>Symbol Filters</strong>
-        on the Spot Test Network are generally the same as on the Spot API.
-</p>
+**IP Limits**, **Order Rate Limits**, **Exchange Filters** and **Symbol Filters** on the Spot Test Network are generally the same as on the Spot API.
 
-<p>
-        All users are encouraged to regularly query the API to get the most up-to-date rate limits &amp; filters, for
-        example by doing:
-</p>
+All users are encouraged to regularly query the API to get the most up-to-date rate limits & filters, for example by doing:
 
-<pre>curl "https://testnet.binance.vision/api/v3/exchangeInfo"</pre>
+```
+curl "https://testnet.binance.vision/api/v3/exchangeInfo"
+```
 
-<hr>
+<a id="faq-periodic-reset"></a>
+## All my data has disappeared! What happened?
 
-<h3 id="faq-periodic-reset">
-        All my data has disappeared! What happened?
-</h3>
+The Spot Test Network is periodically reset to a blank state. That includes all pending and executed orders. During that reset procedure, all users automatically receive a fresh allowance of all assets.
 
-<p>
-        The Spot Test Network is periodically reset to a blank state. That includes all pending and executed orders.
-        During that reset procedure, all users automatically receive a fresh allowance of all assets.
-</p>
+These resets happen approximately **once per month**, and we do not offer prior notification for them.
 
-<p>
-        These resets happen approximately <strong>once per month</strong>, and we do not offer prior notification
-        for them.
-</p>
+Starting from August 2020, API Keys are preserved during resets. Users no longer need to re-register new API Keys after a reset.
 
-<p>
-        Starting from August 2020, API Keys are preserved during resets. Users no longer need to re-register new API
-        Keys after a reset.
-</p>
+<a id="ui-klines"></a>
+## What is the difference between `klines` and `uiKlines`?
 
-<hr>
+On the Spot Test Network, these 2 requests always return the same data.
 
-<h3 id="ui-klines">
-        What is the difference between <code>klines</code> and <code>uiKlines</code>?
-</h3>
+<a id="faq-rsa-keys"></a>
+## What are RSA API Keys?
 
-<p>
-        On the Spot Test Network, these 2 requests always return the same data.
-</p>
+RSA API Keys are an alternative to the typical HMAC-SHA-256 API Keys that are used to authenticate your requests on the Spot API.
 
-<hr>
+Unlike HMAC-SHA-256 API Keys where we generate the secret signing key for you, with RSA API Keys, *you* generate a pair of public+private RSA keys, send us the public key, and sign your requests with your private key.
 
-<h3 id="faq-rsa-keys">
-        What are RSA API Keys?
-</h3>
+<a id="faq-rsa-types"></a>
+## What type of RSA keys are supported?
 
-<p>
-        RSA API Keys are an alternative to the typical HMAC-SHA-256 API Keys that are used to authenticate your requests
-        on the Spot API.
-</p>
+We support RSA keys of any length from 2048 bits up to 4096 bits. We recommend **2048 bits keys** as a good balance between security and signature speed.
 
-<p>
-        Unlike HMAC-SHA-256 API Keys where we generate the secret signing key for you, with RSA API Keys, *you* generate a
-        pair of public+private RSA keys, send us the public key, and sign your requests with your private key.
-</p>
+When generating the RSA signature, use the **PKCS#1 v1.5** signature scheme. This is the default when using OpenSSL. We currently do not support the PSS signature scheme.
 
-<hr>
+<a id="faq-rsa-how-to"></a>
+## How can I use RSA API Keys?
 
-<h3 id="faq-rsa-types">
-        What type of RSA keys are supported?
-</h3>
+Step 1: Generate the private key `test-prv-key.pem`. **Do not share this file with anyone!**
 
-<p>
-        We support RSA keys of any length from 2048 bits up to 4096 bits. We recommend <strong>2048 bits keys</strong>
-        as a good balance between security and signature speed.
-</p>
+```
+openssl genrsa -out test-prv-key.pem 2048
+```
 
-<p>
-        When generating the RSA signature, use the <strong>PKCS#1 v1.5</strong> signature scheme. This is the default when
-        using OpenSSL. We currently do not support the PSS signature scheme.
-</p>
+Step 2: Generate the public key `test-pub-key.pem` from the private key.
 
-<hr>
+```
+openssl rsa -in test-prv-key.pem -pubout -outform PEM -out test-pub-key.pem
+```
 
-<h3 id="faq-rsa-how-to">
-        How can I use RSA API Keys?
-</h3>
-
-<p>
-        Step 1: Generate the private key <code>test-prv-key.pem</code>.
-        <strong>Do not share this file with anyone!</strong>
-</p>
-
-<pre>openssl genrsa -out test-prv-key.pem 2048</pre>
-
-<p>
-        Step 2: Generate the public key <code>test-pub-key.pem</code> from the private key.
-</p>
-
-<pre>openssl rsa -in test-prv-key.pem -pubout -outform PEM -out test-pub-key.pem</pre>
-
-<p>
-        The public key should look something like this:
-</p>
+The public key should look something like this:
 
 ```
 -----BEGIN PUBLIC KEY-----
@@ -301,27 +119,15 @@ rTUSEp3t4aINKUC1QC0CYKECAwEAAQ==
 -----END PUBLIC KEY-----
 ```
 
-<p>
-        Step 3:
-        Register your public key
-        on the Spot Test Network.
-</p>
+Step 3: Register your public key on the Spot Test Network.
 
-<p>
-        During registration, we will generate an API Key for you that you will have to put in the <code>X-MBX-APIKEY</code>
-        header of your requests, exactly the same way as you would do for HMAC-SHA-256 API Keys.
-</p>
+During registration, we will generate an API Key for you that you will have to put in the `X-MBX-APIKEY` header of your requests, exactly the same way as you would do for HMAC-SHA-256 API Keys.
 
-<p>
-        Step 4: When you send a request to the Spot Test Network, sign the payload using your private key.
-</p>
+Step 4: When you send a request to the Spot Test Network, sign the payload using your private key.
 
-<p>
-        Here is an example Bash script to post a new order and sign the request using OpenSSL. You can adapt it to your
-        favorite programming language:
-</p>
+Here is an example Bash script to post a new order and sign the request using OpenSSL. You can adapt it to your favorite programming language:
 
-````bash
+```bash
 #!/usr/bin/env bash
 
 # Set up authentication:
@@ -344,88 +150,43 @@ signature=$(echo -n "$api_params_with_timestamp" \
 curl -H "X-MBX-APIKEY: $API_KEY" -X "$API_METHOD" \
     "https://testnet.binance.vision/$API_CALL?$api_params_with_timestamp" \
     --data-urlencode "signature=$signature"
-````
-<hr>
+```
 
-<h3 id="faq-ed25519-keys">
-        What are Ed25519 API keys?
-</h3>
+<a id="faq-ed25519-keys"></a>
+## What are Ed25519 API keys?
 
-<p>
-        Ed25519 API keys are an alternative to <a href="#faq-rsa-keys">RSA API keys</a>,
-        using asymmetric cryptography to authenticate your requests on the Spot API.
-</p>
+Ed25519 API keys are an alternative to [RSA API keys](#faq-rsa-keys), using asymmetric cryptography to authenticate your requests on the Spot API.
 
-<p>
-        Like RSA API keys, Ed25519 keys are <em>asymmetric</em>:
-        you generate a keypair, share the public key with Binance, and use your private key to sign requests.
-</p>
+Like RSA API keys, Ed25519 keys are *asymmetric*: you generate a keypair, share the public key with Binance, and use your private key to sign requests.
 
-<hr>
+<a id="faq-ed25519-vs-rsa"></a>
+## Why use Ed25519 instead of RSA API keys?
 
-<h3 id="faq-ed25519-vs-rsa">
-        Why use Ed25519 instead of RSA API keys?
-</h3>
+Ed25519 digital signature scheme provides security comparable to 3072-bit RSA keys, while having much smaller signatures that are faster to compute:
 
-<p>
-        Ed25519 digital signature scheme provides security comparable to 3072-bit RSA keys,
-        while having much smaller signatures that are faster to compute:
-</p>
+| API key type   | Signature size | Signature operation |
+|----------------|----------------|---------------------|
+| HMAC-SHA-256   | 64 bytes       | 0.00 ms             |
+| Ed25519        | 88 bytes       | 0.03 ms             |
+| RSA (2048-bit) | 344 bytes      | 0.55 ms             |
+| RSA (4096-bit) | 684 bytes      | 3.42 ms             |
 
-<table>
-    <thead>
-    <tr>
-        <th>API key type</th>
-        <th>Signature size</th>
-        <th>Signature operation</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>HMAC-SHA-256</td>
-        <td>64 bytes</td>
-        <td>0.00 ms</td>
-    </tr>
-    <tr>
-        <td>Ed25519</td>
-        <td>88 bytes</td>
-        <td>0.03 ms</td>
-    </tr>
-    <tr>
-        <td>RSA (2048-bit)</td>
-        <td>344 bytes</td>
-        <td>0.55 ms</td>
-    </tr>
-    <tr>
-        <td>RSA (4096-bit)</td>
-        <td>684 bytes</td>
-        <td>3.42 ms</td>
-    </tr>
-    </tbody>
-</table>
+<a id="faq-ed25519-how-to"></a>
+## How can I use Ed25519 API keys?
 
-<hr>
+Step 1: Generate the private key `test-prv-key.pem`. **Do not share this file with anyone!**
 
-<h3 id="faq-ed25519-how-to">
-        How can I use Ed25519 API keys?
-</h3>
+```
+openssl genpkey -algorithm ed25519 -out test-prv-key.pem
+```
 
-<p>
-        Step 1: Generate the private key <code>test-prv-key.pem</code>.
-        <strong>Do not share this file with anyone!</strong>
-</p>
+Step 2: Compute the public key `test-pub-key.pem` from the private key.
 
-<pre>openssl genpkey -algorithm ed25519 -out test-prv-key.pem</pre>
+```
+openssl pkey -pubout -in test-prv-key.pem -out test-pub-key.pem
+```
 
-<p>
-        Step 2: Compute the public key <code>test-pub-key.pem</code> from the private key.
-</p>
-
-<pre>openssl pkey -pubout -in test-prv-key.pem -out test-pub-key.pem</pre>
-
-<p>
-        The public key should look something like this:
-</p>
+The public key should look something like this:
 
 ```
 -----BEGIN PUBLIC KEY-----
@@ -433,26 +194,13 @@ MCowBQYDK2VwAyEACeCSz7VJkh3Bb+NF794hLMU8fLB9Zr+/tGMdVKCC2eo=
 -----END PUBLIC KEY-----
 ```
 
-<p>
-        Step 3:
-        Register your public key
-        on the Spot Test Network.
-</p>
+Step 3: Register your public key on the Spot Test Network.
 
-<p>
-        During registration, we will generate an API key for you.
-        Please put it in the <code>X-MBX-APIKEY</code> header of your requests,
-        exactly the same way as with other API key types.
-</p>
+During registration, we will generate an API key for you. Please put it in the `X-MBX-APIKEY` header of your requests, exactly the same way as with other API key types.
 
-<p>
-        Step 4: When you send a request to the Spot Test Network, sign the payload using your private key.
-</p>
+Step 4: When you send a request to the Spot Test Network, sign the payload using your private key.
 
-<p>
-        Here is an example in Python that posts a new order signed with Ed25519 key.
-        You can adapt it to your favorite programming language.
-</p>
+Here is an example in Python that posts a new order signed with Ed25519 key. You can adapt it to your favorite programming language.
 
 ```python
 #!/usr/bin/env python3
@@ -503,4 +251,3 @@ response = requests.post(
 )
 print(response.json())
 ```
-</div>

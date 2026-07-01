@@ -8,6 +8,7 @@
 * `END_OF_DAY` - 收盘
 * `HALT` - 交易终止(该交易对已下线)
 * `BREAK` - 交易暂停
+* `CANCEL_ONLY` - 仅可撤单
 
 <a id="account-and-symbol-permissions"></a>
 

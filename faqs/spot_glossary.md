@@ -69,6 +69,10 @@ allocation
 `cancelReplaceMode`
 * Parameter used in Cancel Replace orders that define whether the New Order Placement should proceed if the Cancel Request fails.
 
+ `CANCEL_ONLY`
+  * Trading status where users can **only cancel and amend orders** on that symbol.
+  * Market data is still generated on this trading status (except for klines)
+
 `clientOrderId`
 * A field, which can be set by the user, in the JSON response for order placement requests to identify the newly placed order.
 
