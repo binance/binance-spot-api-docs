@@ -797,7 +797,7 @@ Your connection is about to be closed. Please reconnect.
 | 11    | ClOrdID                                 | STRING | Y        | 用于分配给新订单的 `ClOrdID`。                    |
 | 25002 | CancelRestrictions                      | INT    | N        | 取消的限制。可能值 ：<br></br> `1` - ONLY_NEW <br></br> `2` - ONLY_PARTIALLY_FILLED|
 | 38    | OrderQty                                | QTY    | N        | 新订单的数量                                                      |
-| 40    | OrdType                                 | CHAR   | Y        | 请参阅 [表格]（#ordertype）以了解支持的订单类型以及相关的必填字段 。 <br></br> 可能的值 ：<br></br> `1` - MARKET <br></br> `2` - LIMIT <br></br> `3` - STOP <br></br> `4` - STOP_LIMIT <br></br> `P` - PEGGED         |
+| 40    | OrdType                                 | CHAR   | Y        | 请参阅 [表格](#ordertype) 以了解支持的订单类型以及相关的必填字段 。 <br></br> 可能的值 ：<br></br> `1` - MARKET <br></br> `2` - LIMIT <br></br> `3` - STOP <br></br> `4` - STOP_LIMIT <br></br> `P` - PEGGED         |
 | 18    | ExecInst                                | CHAR   | N        | 可能的值： <br></br> `6` - PARTICIPATE_DONT_INITIATE  |
 | 44    | Price                                   | PRICE  | N        | 新订单的价格  |
 | 54    | Side                                    | CHAR   | Y        | 订单方向。<br></br>可能的值： <br></br> `1` - BUY <br></br> `2` - SELL    |
@@ -1131,7 +1131,7 @@ Your connection is about to be closed. Please reconnect.
 由服务器在响应 [InstrumentListRequest`<x>`](#instrumentlistrequest) 时发送。
 
 > [!NOTE]
-> 有关交易对（例如，过滤器）的其他信息可通过 [exchangeInfo]https://github.com/binance/binance-spot-api-docs/blob/master/rest-api_CN.md#exchangeInfo） 请求来获得。
+> 有关交易对（例如，过滤器）的其他信息可通过 [exchangeInfo](https://github.com/binance/binance-spot-api-docs/blob/master/rest-api_CN.md#exchangeInfo) 请求来获得。
 
 | Tag     | Name                  | Type       | Required | Description                                |
 |---------|-----------------------|------------|----------|--------------------------------------------|
