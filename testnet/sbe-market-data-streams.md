@@ -94,7 +94,7 @@ Incremental updates to the order book, pushed at regular intervals. Use this str
 
 **Stream Name**: \<symbol\>@depth
 
-**Update Speed:** 25ms
+**Update Speed:** 20ms
 
 ### Partial Book Depth Streams
 

@@ -1533,7 +1533,7 @@ Decimal encoding:
 
 <a id="marketdataincrementaldepth"></a>
 **MarketDataIncrementalDepth** message:
-* FIX SBE depth update speed: 25ms
+* FIX SBE depth update speed: 20ms
 * The `MDUpdateAction` field available in the FIX schema is omitted in FIX SBE as its value may be derived from `MDEntrySize`.
     * When `MDEntrySize` is unset (`NullVal`), `MDUpdateAction` is `DELETE`.
     * When `MDEntrySize` is set,

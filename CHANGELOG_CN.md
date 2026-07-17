@@ -1,6 +1,16 @@
 # 更新日志
 
-**最近更新：2026-07-01**
+**最近更新：2026-07-17**
+
+### 2026-07-17
+
+以下事项将于 **2026年8月4日 大约07:00 UTC** 发生。
+
+* 以下SBE 市场数据流中的更新速度将从 **25毫秒调整为20毫秒**。
+  * SBE 市场数据流: [增量深度信息](sbe-market-data-streams_CN.md#diff-depth-streams)
+  * FIX SBE: [市场数据增量深度](fix-api_CN.md#marketdataincrementaldepth)
+
+---
 
 ### 2026-07-01
 
