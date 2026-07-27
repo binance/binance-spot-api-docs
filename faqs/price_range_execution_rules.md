@@ -144,18 +144,34 @@ The reference price is the total of the sum in each bucket divided by the total 
 
 If the reference price is being calculated outside the matching engine, then a query for the reference price calculation returns `"externalCalculationId":` followed by an integer number. Each of these numbers indicates a different calculation method.
 
+<a id="externalCalculationId0"></a>
 ## External Reference Price Calculation Method 0
 
 The reference price was set manually by a human operator. This calculation method will only be used in situations when algorithmic calculation of the reference price has been deemed unsuitable.
 
+<a id="externalCalculationId1"></a>
 ## External Reference Price Calculation Method 1
 
-The reference price is calculated as the average of the trading price from 4 external data providers.
+The reference price is calculated as the average of the trading price from up to 4 external data providers.
 
+<a id="externalCalculationId2"></a>
 ## External Reference Price Calculation Method 2
 
 The reference price is the index price of the corresponding USDⓈ-M Binance Futures.
 
+<a id="externalCalculationId3"></a>
 ## External Reference Price Calculation Method 3
 
 The reference price is calculated as the 5 minute SMA of the Binance Spot mid-spread price.
+
+<a id="externalCalculationId4"></a>
+## External Reference Price Calculation Method 4
+
+The reference price is set to a fixed value.
+
+<a id="externalCalculationId5"></a>
+## External Reference Price Calculation Method 5
+
+The reference price is calculated as the product of a chain of 5 minute SMA Binance Spot mid-spread prices.
+
+Example: The reference price for symbol XXXUSD1 could be calculated as the 5 minute SMA for XXXUSDT multiplied by the 5 minute SMA for USDTUSD1.

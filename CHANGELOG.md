@@ -1,6 +1,12 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-07-17**
+**Last Updated: 2026-07-27**
+
+### 2026-07-27
+
+* Updated [Price Range Execution Rule](./faqs/price_range_execution_rules.md#externalCalculationId4) with additional External Reference Price Calculation Methods.
+
+---
 
 ### 2026-07-17
 

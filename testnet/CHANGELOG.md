@@ -1,9 +1,15 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-07-17**
+**Last Updated: 2026-07-27**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-07-27
+
+* Updated [Price Range Execution Rule](../faqs/price_range_execution_rules.md#externalCalculationId4) with additional External Reference Price Calculation Methods.
+
+---
 
 ### 2026-07-17
 

@@ -154,7 +154,7 @@
 <a id="externalCalculationId1"></a>
 ## 外部参考价格计算方法 1
 
-参考价格为 4 个外部数据提供方的交易价格的平均值。
+参考价格为最多 4 个外部数据提供方的交易价格的平均值。
 
 <a id="externalCalculationId2"></a>
 ## 外部参考价格计算方法 2
@@ -165,3 +165,15 @@
 ## 外部参考价格计算方法 3
 
 参考价格为币安现货买卖中间价的 5 分钟简单移动平均值（SMA）。
+
+<a id="externalCalculationId4"></a>
+## 外部参考价格计算方法 4
+
+参考价格设置为一个固定值。
+
+<a id="externalCalculationId5"></a>
+## 外部参考价格计算方法 5
+
+参考价格为一系列币安现货买卖中间价的 5 分钟简单移动平均值（SMA）的乘积。
+
+示例：交易对 XXXUSD1 的参考价格可以由 XXXUSDT 的 5 分钟 SMA 乘以 USDTUSD1 的 5 分钟 SMA 计算得出。
