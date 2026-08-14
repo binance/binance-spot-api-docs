@@ -426,7 +426,8 @@ Error message                                                   | Description
 Error message | Description
 ------------ | ------------
 "Filter failure: PRICE_FILTER" | `price` is too high, too low, and/or not following the tick size rule for the symbol.
-"Filter failure: PERCENT_PRICE" | `price` is X% too high or X% too low from the average weighted price over the last Y minutes.
+"Filter failure: PERCENT_PRICE" | `price` is too high or too low from the average of previous trade prices. Details [here](./filters.md#percent_price).
+"Filter failure: PERCENT_PRICE_BY_SIDE" | `price` is too high or too low from the average of previous trade prices. Details [here](./filters.md#percent_price_by_side).
 "Filter failure: LOT_SIZE" | `quantity` is too high, too low, and/or not following the step size rule for the symbol.
 "Filter failure: MIN_NOTIONAL" | `price` * `quantity` is too low to be a valid order for the symbol.
 "Filter failure: NOTIONAL"    | `price` * `quantity` is not within range of the `minNotional` and `maxNotional`

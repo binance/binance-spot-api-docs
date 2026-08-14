@@ -425,7 +425,8 @@
 错误信息 | 描述
 ------------ | ------------
 "Filter failure: PRICE_FILTER" | 检查价格的上限、下限、步进间隔。
-"Filter failure: PERCENT_PRICE" |检查订单中价格是否相对于过去N分钟的平均价格变动超过了百分之X。
+"Filter failure: PERCENT_PRICE" | 价格相对于前序交易的平均成交价是否过高或过低。详情见[此处](./filters_CN.md#percent_price)。
+"Filter failure: PERCENT_PRICE_BY_SIDE" | 价格相对于前序交易的平均成交价是否过高或过低。详情见[此处](./filters_CN.md#percent_price_by_side)。
 "Filter failure: LOT_SIZE" | 检查订单中数量的上限、下线、步进间隔。
 "Filter failure: MIN_NOTIONAL" | `price` * `quantity`，也就是订单金额，是否超过了最小值。
 "Filter failure: NOTIONAL" | `price` * `quantity` 不在 `minNotional` 和 `maxNotional` 的范围内

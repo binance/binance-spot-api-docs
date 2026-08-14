@@ -19,7 +19,7 @@ Name | Description
 [testnet](./testnet/)           | API docs for features available only on SPOT Testnet
 [demo-mode](./demo-mode/) | Page regarding Demo Mode
  &#x0020; |
-[Margin Trading](https://developers.binance.com/docs/margin_trading) | Details on Margin Trading
+[Margin Trading](https://developers.binance.com/en/docs/products/margin-trading/general-info) | Details on Margin Trading
 [Derivative UM Futures](https://developers.binance.com/docs/derivatives/usds-margined-futures/general-info) | Details on Derivative UM Futures (`/fapi`)
 [Derivative CM Futures](https://developers.binance.com/docs/derivatives/coin-margined-futures/general-info) | Details on Derivative CM Futures (`/dapi`)
 [Derivative Options](https://developers.binance.com/docs/derivatives/option/general-info) | Details on Derivative European Options (`/eapi`)

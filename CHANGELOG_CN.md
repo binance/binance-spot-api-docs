@@ -587,7 +587,7 @@ REST 和 WebSocket API：
 
 #### SBE
 
-* SBE：schema 3:1（[spot_3_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml)）已更新，支持保证金交易的[listenToken 订阅方法](https://developers.binance.com/docs/zh-CN/margin_trading/trade-data-stream/Listen-Token-Websocket-API)。
+* SBE：schema 3:1（[spot_3_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml)）已更新，支持保证金交易的[listenToken 订阅方法](https://developers.binance.com/zh-CN/docs/products/margin-trading/listen-token-data-stream)。
 
 #### REST 和 WebSocket API
 

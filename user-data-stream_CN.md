@@ -314,7 +314,7 @@
 
 `eventStreamTerminated` 会在以下情况下发送：
 
-* 当 [Listen Token 订阅](https://developers.binance.com/docs/zh-CN/margin_trading/trade-data-stream/Listen-Token-Websocket-API) 因 Token 过期而失效时。
+* 当 [Listen Token 订阅](https://developers.binance.com/zh-CN/docs/products/margin-trading/listen-token-data-stream) 因 Token 过期而失效时。
 * 在发送 [`session.logout`](https://developers.binance.com/docs/zh-CN/binance-spot-api-docs/websocket-api/authentication-requests#%E9%80%80%E5%87%BA%E4%BC%9A%E8%AF%9D) 方法后，[登录订阅](https://developers.binance.com/docs/zh-CN/binance-spot-api-docs/websocket-api/authentication-requests#%E7%94%A8api-key%E7%99%BB%E5%BD%95-signed) 结束时。
 * 通过 [`userDataStream.unsubscribe`](https://developers.binance.com/docs/zh-CN/binance-spot-api-docs/websocket-api/user-data-stream-requests#%E5%8F%96%E6%B6%88%E8%AE%A2%E9%98%85%E7%94%A8%E6%88%B7%E6%95%B0%E6%8D%AE%E6%B5%81) 方法终止订阅时。
 

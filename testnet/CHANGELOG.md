@@ -570,7 +570,7 @@ All data on the Spot Test Network will be deleted today according to the periodi
 
 #### SBE
 
-* SBE: schema 3:1 ([spot_3_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml)) has been updated to support [listenToken Subscription Methods](https://developers.binance.com/docs/margin_trading/trade-data-stream/Listen-Token-Websocket-API) for Margin Trading.
+* SBE: schema 3:1 ([spot_3_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_1.xml)) has been updated to support [listenToken Subscription Methods](https://developers.binance.com/en/docs/products/margin-trading/listen-token-data-stream) for Margin Trading.
 
 #### REST and WebSocket API
 
