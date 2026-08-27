@@ -592,7 +592,7 @@ if (timestamp < (serverTime + 1 second) && (serverTime - timestamp) <= recvWindo
 
 <a id="hmac"></a>
 
-### SIGNED 请求示例 (HMAC)
+### `SIGNED` 请求示例 (HMAC)
 
 这是有关如何用一个 HMAC secret key 签署请求的分步指南。
 
@@ -774,7 +774,7 @@ b33892ae8e687c939f4468c6268ddd4c40ac1af18ad19a064864c47bae0752cd
 
 <a id="rsa"></a>
 
-### SIGNED 请求示例 (RSA)
+### `SIGNED` 请求示例 (RSA)
 
 这是有关如何用一个 RSA private key 签署请求的分步指南。
 
@@ -954,7 +954,7 @@ F3o/79Ttvl2cVYGPfBOF3oEOcm5QcYmTYWpdVIrKve5u+8paMNDAdUE+teqMxFM9HcquetGcfuFpLYts
 
 <a id="ed25519"></a>
 
-### SIGNED 请求示例 (Ed25519)
+### `SIGNED` 请求示例 (Ed25519)
 
 **我们强烈建议使用 Ed25519 API keys，因为它在所有受支持的 API key 类型中提供最佳性能和安全性。**
 
@@ -3253,7 +3253,7 @@ days    | `1d`, `2d` ... `7d`
 
 <a id="session-logon"></a>
 
-### 用API key登录 (SIGNED)
+### 用API key登录 (`SIGNED`)
 
 ```javascript
 {
@@ -4375,7 +4375,7 @@ NONE
         <td><code>cancelRestrictions</code></td>
         <td>ENUM</td>
         <td>NO</td>
-        <td>支持的值: <br><code>ONLY_NEW</code> - 如果订单状态为 <code>NEW</code>，撤销将成功。<br> <code>ONLY_PARTIALLY_FILLED</code> - 如果订单状态为 <code>PARTIALLY_FILLED</code>，撤销将成功。</td>
+        <td>支持的值: <br><code>ONLY_NEW</code> - 如果订单状态为 <code>NEW</code>，撤销将成功。<br> <code>ONLY_PARTIALLY_FILLED</code> - 如果订单状态为 <code>PARTIALLY_FILLED</code>，撤销将成功。 参阅 <a href="#regarding-cancelrestrictions">关于 <code>cancelRestrictions</code></a>。</td>
     </tr>
     <tr>
         <td><code>apiKey</code></td>
@@ -5785,7 +5785,7 @@ NONE
         "listOrderStatus": "EXECUTING",
         "listClientOrderId": "KA4EBjGnzvSwSCQsDdTrlf",
         "transactionTime": 1712544395981,
-        "symbol": "1712544378871",
+        "symbol": "LTCBNB",
         "orders": [
             {
                 "symbol": "LTCBNB",
@@ -5982,7 +5982,7 @@ NONE
         "listOrderStatus": "EXECUTING",
         "listClientOrderId": "GaeJHjZPasPItFj4x7Mqm6",
         "transactionTime": 1712544408537,
-        "symbol": "1712544378871",
+        "symbol": "LTCBNB",
         "orders": [
             {
                 "symbol": "LTCBNB",

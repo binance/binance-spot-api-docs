@@ -5730,7 +5730,7 @@ Matching Engine
         "listOrderStatus": "EXECUTING",
         "listClientOrderId": "KA4EBjGnzvSwSCQsDdTrlf",
         "transactionTime": 1712544395981,
-        "symbol": "1712544378871",
+        "symbol": "LTCBNB",
         "orders": [
             {
                 "symbol": "LTCBNB",
@@ -5925,7 +5925,7 @@ Depending on the `pendingAboveType`/`pendingBelowType` or `workingType`, some op
         "listOrderStatus": "EXECUTING",
         "listClientOrderId": "GaeJHjZPasPItFj4x7Mqm6",
         "transactionTime": 1712544408537,
-        "symbol": "1712544378871",
+        "symbol": "LTCBNB",
         "orders": [
             {
                 "symbol": "LTCBNB",

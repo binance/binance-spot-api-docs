@@ -16,7 +16,7 @@
   * 如果指定 `startTime`，则返回从 `startTime` 到限制值为止最老的条目。
   * 如果指定 `endTime`，则返回截至 `endTime` 和限制值为止最近的条目。
   * 如果同时指定 `startTime` 和 `endTime`，则行为类似于 `startTime`，但不超过 `endTime`。
-* JSON 响应中的所有时间和时间戳相关字段均以**毫秒为默认单位**。要以微秒为单位接收信息，请添加报文头 `X-MBX-TIME-UNIT：MICROSECOND` 或 `X-MBX-TIME-UNIT：microsecond`。
+* JSON 响应中的所有时间和时间戳相关字段均以**毫秒为默认单位**。要以微秒为单位接收信息，请添加报文头 `X-MBX-TIME-UNIT:MICROSECOND` 或 `X-MBX-TIME-UNIT:microsecond`。
 * 我们支持 HMAC，RSA 以及 Ed25519 Key 类型。 如需进一步了解，请参考 [API Key 类型](faqs/api_key_types_CN.md)。
 * 时间戳参数（例如 `startTime`、`endTime`、`timestamp`）可以以毫秒或微秒为单位传递。
 * 对于仅发送公开市场数据的 API，您可以使用接口的 base URL https://data-api.binance.vision 。请参考 [Market Data Only_CN](./faqs/market_data_only_CN.md) 页面。
@@ -2589,7 +2589,7 @@ trailingDelta|LONG|NO|参考 [追踪止盈止损(Trailing Stop)订单常见问�
 icebergQty|DECIMAL|NO|
 newOrderRespType|ENUM|NO|指定响应类型: <br/> 指定响应类型 `ACK`, `RESULT`, or `FULL`; `MARKET` 与 `LIMIT` 订单默认为`FULL`， 其他默认为`ACK`。
 selfTradePreventionMode|ENUM|NO|允许的 ENUM 取决于交易对的配置。支持的值有：[STP 模式](./enums_CN.md#stpmodes)。
-cancelRestrictions| ENUM | NO | 支持的值: <br>`ONLY_NEW` - 如果订单状态为 `NEW`，撤销将成功。<br> `ONLY_PARTIALLY_FILLED` - 如果订单状态为 `PARTIALLY_FILLED`，撤销将成功。
+cancelRestrictions| ENUM | NO | 支持的值: <br>`ONLY_NEW` - 如果订单状态为 `NEW`，撤销将成功。<br> `ONLY_PARTIALLY_FILLED` - 如果订单状态为 `PARTIALLY_FILLED`，撤销将成功。 请参阅[关于 `cancelRestrictions`](#regarding-cancelrestrictions) 了解更多信息。
 orderRateLimitExceededMode| ENUM | NO |支持的值： <br></br> `DO_NOTHING`（默认值）- 仅在账户未超过未成交订单频率限制时，会尝试取消订单。<br></br> `CANCEL_ONLY` - 将始终取消订单。|
 pegPriceType | ENUM | NO | `PRIMARY_PEG` 或 `MARKET_PEG`。 <br> 参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)|
 pegOffsetValue | INT | NO | 用于挂钩的价格水平（最大值：100）。 <br> 参阅 [关于挂钩订单参数的注意事项](#pegged-orders-info)  |
