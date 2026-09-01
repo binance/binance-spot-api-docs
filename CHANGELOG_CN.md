@@ -353,7 +353,7 @@ REST 和 WebSocket API：
 
 ### 2026-02-24
 
-* 所有交易对的 [ICEBERG_PARTS](https://developers.binance.com/docs/zh-CN/binance-spot-api-docs/filters#iceberg_parts-%E5%86%B0%E5%B1%B1%E8%AE%A2%E5%8D%95%E6%8B%86%E5%88%86%E6%95%B0) 将于 **2026-03-12 07:00 UTC** 提升至 100。
+* 所有交易对的 [ICEBERG_PARTS](filters_CN.md#iceberg_parts) 将于 **2026-03-12 07:00 UTC** 提升至 100。
 * 根据[2025-12-02](#2025-12-02)的公告，`!ticker@arr` 将于 **2026-03-24 07:00 UTC** 停用。
 
 ---
@@ -390,7 +390,7 @@ REST 和 WebSocket API：
 
 **通知：以下变更将于 2026-02-11 07:00 UTC 生效**：
 
-* 所有交易对的 [ICEBERG_PARTS](https://developers.binance.com/docs/zh-CN/binance-spot-api-docs/filters#iceberg_parts-%E5%86%B0%E5%B1%B1%E8%AE%A2%E5%8D%95%E6%8B%86%E5%88%86%E6%95%B0) 将增加到 50。
+* 所有交易对的 [ICEBERG_PARTS](filters_CN.md#iceberg_parts) 将增加到 50。
 
 ---
 
@@ -422,7 +422,7 @@ REST 和 WebSocket API：
 
 * [FIX SBE 文档](fix-api_CN.md#fix-sbe) 已更新。
 * 澄清了用户数据流文档中关于 [`eventStreamTerminated`](user-data-stream_CN.md#event-stream-terminated) 的说明
-* 资产 `这是测试币` 和 `456` 以及交易对 `这是测试币456` 已被添加到 [现货测试网](http://testnet.binance.vision) 以供用户测试含有 Unicode 交易对的端点/方法。 预知详情，请参考 [现货测试网的相关更新日志](https://developers.binance.com/docs/binance-spot-api-docs/testnet)。
+* 资产 `这是测试币` 和 `456` 以及交易对 `这是测试币456` 已被添加到 [现货测试网](http://testnet.binance.vision) 以供用户测试含有 Unicode 交易对的端点/方法。 预知详情，请参考 [现货测试网的相关更新日志](testnet/CHANGELOG.md)。
 
 ---
 
@@ -494,7 +494,7 @@ REST 和 WebSocket API：
 <br>
 
 **注意：以下变更预计于 2025-12-18 07:00 UTC 左右生效**：
-* [ICEBERG_PARTS](https://developers.binance.com/docs/zh-CN/binance-spot-api-docs/filters#iceberg_parts) 将对所有交易对提升至 25。
+* [ICEBERG_PARTS](filters_CN.md#iceberg_parts) 将对所有交易对提升至 25。
 * [FIX SBE 支持](fix-api_CN.md) 将上线。
 * [一个订单支付另一个订单（OPO）](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/opo_CN.md) 将在所有交易对上线。
   * `opoAllowed` 将开始出现在 `Exchange Information` 请求中，指示每个交易对是否支持一个订单支付另一个订单（OPO）。
@@ -528,13 +528,13 @@ REST 和 WebSocket API：
 ### 2025-11-14
 
 * 全市场所有交易对的完整Ticker（`!ticker@arr`）已被弃用；这意味着该接口将在后续从文档和系统中移除，具体时间另行通知。
-* 请改用 [`<symbol>@ticker`](https://developers.binance.com/docs/zh-CN/binance-spot-api-docs/web-socket-streams#twentyfourhourticker) 或 [`!miniTicker@arr`](https://developers.binance.com/docs/zh-CN/binance-spot-api-docs/web-socket-streams#all-markets-mini-ticker)。
+* 请改用 [`<symbol>@ticker`](web-socket-streams_CN.md#twentyfourhourticker) 或 [`!miniTicker@arr`](web-socket-streams_CN.md#all-markets-mini-ticker)。
 
 ---
 
 ### 2025-11-12
 
-* 关于[如何正确管理本地订单簿](https://developers.binance.com/docs/zh-CN/binance-spot-api-docs/web-socket-streams#how-to-maintain-orderbook)的步骤已被修正。
+* 关于[如何正确管理本地订单簿](web-socket-streams_CN.md#how-to-maintain-orderbook)的步骤已被修正。
 
 ---
 
@@ -594,7 +594,7 @@ REST 和 WebSocket API：
 根据 [2025-04-07](#2025-04-07) 的公告，所有关于在 `wss://stream.binance.com` 上使用 `listenKey` 的文档已被移除。请参阅以下请求和方法列表以获取详细信息。
 该功能将在未来发布停用公告之前继续可用。
 
-**特此提醒您： 您应该通过订阅 [在 WebSocket API 内的用户数据流](https://developers.binance.com/docs/zh-CN/binance-spot-api-docs/websocket-api/user-data-stream-requests) 来获得用户账户更新。这样可以提供更好的性能（更低的延迟）。**
+**特此提醒您： 您应该通过订阅 [在 WebSocket API 内的用户数据流](web-socket-api_CN.md#user-data-stream-requests) 来获得用户账户更新。这样可以提供更好的性能（更低的延迟）。**
 
 请参阅下方请求和方法列表来了解更多详情。
 
@@ -950,7 +950,7 @@ REST 和 WebSocket API：
 
 * **我们将弃用此功能： 通过使用 `listenKey` 来访问 wss://stream.binance.com:9443 以监听账户信息的。**
     * 以后但不是当前，此功将被能从我们的系统中删除。
-* **您应该通过订阅 [在 WebSocket API 内的用户数据流](https://developers.binance.com/docs/zh-CN/binance-spot-api-docs/websocket-api/user-data-stream-requests) 来获得用户账户更新。**
+* **您应该通过订阅 [在 WebSocket API 内的用户数据流](web-socket-api_CN.md#user-data-stream-requests) 来获得用户账户更新。**
   * 这个方式会提供稍好的性能 **（较低的延迟）**。
   * 必须使用 Ed25519 API 密钥
 * 在未来的更新中，将删除有关账户数据流的 WebSocket 基本访问地址的信息。

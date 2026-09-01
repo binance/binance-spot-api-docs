@@ -333,7 +333,7 @@ Please consult the [FIX API documentation](./fix-api.md#general-api-information)
 
 ### 2026-02-24
 
-* [ICEBERG_PARTS](https://developers.binance.com/docs/binance-spot-api-docs/filters#iceberg_parts) will be increased to 100 for all symbols at **2026-03-12 07:00 UTC**.
+* [ICEBERG_PARTS](filters.md#iceberg_parts) will be increased to 100 for all symbols at **2026-03-12 07:00 UTC**.
 * Following the announcement on [2025-12-02](#2025-12-02), `!ticker@arr` will be retired on **2026-03-26**.
 
 ---
@@ -370,7 +370,7 @@ REST and WebSocket API:
 
 **Notice: The following changes will occur at 2026-02-11 7:00 UTC**:
 
-* [ICEBERG_PARTS](https://developers.binance.com/docs/binance-spot-api-docs/filters#iceberg_parts) will be increased to 50 for all symbols.
+* [ICEBERG_PARTS](filters.md#iceberg_parts) will be increased to 50 for all symbols.
 
 ---
 
@@ -401,7 +401,7 @@ WebSocket API
 
 * Updated [FIX SBE documentation](fix-api.md#fix-sbe)
 * Clarified User Data Stream documentation regarding [`eventStreamTerminated`](user-data-stream.md#event-stream-terminated).
-* Assets `这是测试币` and `456` and symbol `这是测试币456` have been added to [SPOT Testnet](http://testnet.binance.vision) for testing endpoints/methods with a Unicode symbol. See the [Testnet CHANGELOG](https://developers.binance.com/docs/binance-spot-api-docs/testnet) for more information.
+* Assets `这是测试币` and `456` and symbol `这是测试币456` have been added to [SPOT Testnet](http://testnet.binance.vision) for testing endpoints/methods with a Unicode symbol. See the [Testnet CHANGELOG](testnet/CHANGELOG.md) for more information.
 
 ---
 
@@ -413,11 +413,11 @@ WebSocket API
 
 #### REST API
 
-* Updated documentation for REST API regarding [Signed Endpoints examples for placing an order](https://developers.binance.com/docs/binance-spot-api-docs/rest-api/request-security#signed-endpoint-examples-for-post-apiv3order).
+* Updated documentation for REST API regarding [Signed Endpoints examples for placing an order](rest-api.md#signed-endpoint-examples-for-post-apiv3order).
 
 #### WebSocket API
 
-* Updated documentation for WebSocket API regarding [SIGNED request security](https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/request-security#signed-request-security).
+* Updated documentation for WebSocket API regarding [SIGNED request security](web-socket-api.md#signed-request-security).
 
 ---
 
@@ -425,7 +425,7 @@ WebSocket API
 
 **Clarification Regarding UTF-8 Encoding:**
 
-* In [FIX](fix-api.md), [REST](https://developers.binance.com/docs/binance-spot-api-docs/rest-api/general-api-information), and [WebSocket APIs](https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/general-api-information), if your request contains a symbol name containing non-ASCII characters, then the response may contain non-ASCII characters encoded in UTF-8.
+* In [FIX](fix-api.md), [REST](rest-api.md#general-api-information), and [WebSocket APIs](web-socket-api.md#general-api-information), if your request contains a symbol name containing non-ASCII characters, then the response may contain non-ASCII characters encoded in UTF-8.
 * In REST and WebSocket APIs, some endpoints/methods may return asset and/or symbol names containing non-ASCII characters encoded in UTF-8 even if the request did not contain non-ASCII characters.
 * In [WebSocket Streams](web-socket-streams.md), if your request contains a symbol name containing non-ASCII characters, then the stream events may contain non-ASCII characters encoded in UTF-8.
 * In WebSocket Streams, [All Market Mini Tickers Stream](web-socket-streams.md#all-market-mini-tickers-stream) and [All Market Rolling Window Statistics Streams](web-socket-streams.md#all-market-rolling-window-statistics-streams) events may contain non-ASCII characters encoded in UTF-8.
@@ -473,7 +473,7 @@ WebSocket API
 <br>
 
 **Notice: The following changes will occur at approximately 2025-12-18 7:00 UTC**:
-* [ICEBERG_PARTS](https://developers.binance.com/docs/binance-spot-api-docs/filters#iceberg_parts) will be increased to 25 for all symbols.
+* [ICEBERG_PARTS](filters.md#iceberg_parts) will be increased to 25 for all symbols.
 * [FIX SBE support](fix-api.md) becomes available.
 * [One Pays the Other (OPO)](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/opo.md) becomes available on all symbols.
   * `opoAllowed` begins to appear in Exchange Information requests, indicating if One-Pays-the-Other (OPO) orders are supported on each symbol.
@@ -506,13 +506,13 @@ WebSocket API
 ### 2025-11-14
 
 * All Market Tickers Stream (`!ticker@arr`) has been deprecated; This means this will be removed both from the documentation and from our systems at a later date. More details to follow.
-* Please use [`<symbol>@ticker`](https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams#individual-symbol-ticker-streams) or [`!miniTicker@arr`](https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams#all-market-mini-tickers-stream) instead.
+* Please use [`<symbol>@ticker`](web-socket-streams.md#individual-symbol-ticker-streams) or [`!miniTicker@arr`](web-socket-streams.md#all-market-mini-tickers-stream) instead.
 
 ---
 
 ### 2025-11-12
 
-* The steps on [how to manage a local order book correctly](https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams#how-to-manage-a-local-order-book-correctly) has been corrected.
+* The steps on [how to manage a local order book correctly](web-socket-streams.md#how-to-manage-a-local-order-book-correctly) has been corrected.
 
 ---
 
@@ -571,7 +571,7 @@ WebSocket API
 
 Following the announcement from [2025-04-07](#2025-04-07), all documentation related with `listenKey` for use on `wss://stream.binance.com` has been removed.
 
-**We remind you that you should instead get user data updates by subscribing to the [User Data Stream on the WebSocket API](https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/user-data-stream-requests). This will offer better performance (lower latency).**
+**We remind you that you should instead get user data updates by subscribing to the [User Data Stream on the WebSocket API](web-socket-api.md#user-data-stream-requests). This will offer better performance (lower latency).**
 
 Please refer to the list of requests and methods below for more information.
 
@@ -930,7 +930,7 @@ REST and WebSocket API:
 
 * **Receiving user data streams on wss://stream.binance.com:9443 using a `listenKey` is now deprecated.**
     * This feature will be removed from our systems at a later date.
-* **Instead, you should get user data updates by subscribing to the [User Data Stream on the WebSocket API](https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/user-data-stream-requests)**.
+* **Instead, you should get user data updates by subscribing to the [User Data Stream on the WebSocket API](web-socket-api.md#user-data-stream-requests)**.
     * This should offer slightly better performance **(lower latency)**.
     * This requires the use of an Ed25519 API Key.
 * In a future update, information about the base WebSocket endpoint for the User Data Streams will be removed.

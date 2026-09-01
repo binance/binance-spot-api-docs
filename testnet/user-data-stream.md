@@ -322,8 +322,8 @@ Check the [Enums Documentation](enums.md) for more relevant enum definitions.
 
 `eventStreamTerminated` is sent when:
 * [A listen token subscription](https://developers.binance.com/en/docs/products/margin-trading/listen-token-data-stream#websocket-api-method--userdatastreamsubscribelistentoken) expires due to token expiration.
-* A [logon subscription](https://developers.binance.com/docs/binance-spot-api-docs/testnet/websocket-api/authentication-requests#log-in-with-api-key-signed) ends after sending [`session.logout`](https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/authentication-requests#log-out-of-the-session) method.
-* The subscription is stopped via the [`userDataStream.unsubscribe`](https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/user-data-stream-requests#unsubscribe-from-user-data-stream) method.
+* A [logon subscription](web-socket-api.md#log-in-with-api-key-signed) ends after sending [`session.logout`](web-socket-api.md#log-out-of-the-session) method.
+* The subscription is stopped via the [`userDataStream.unsubscribe`](web-socket-api.md#unsubscribe-from-user-data-stream) method.
 
 
 **Payload:**

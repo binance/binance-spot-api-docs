@@ -30,14 +30,14 @@ Step 2: Follow the [official documentation of the Spot API](https://developers.b
 
 No, only the `/api` endpoints are available on the Spot Test Network:
 
-* [Market Data Endpoints (REST API)](https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints)
-* [Market Data Requests (WebSocket API)](https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/market-data-requests)
-* [WebSocket Market Streams](https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams)
-* [Trading Endpoints (REST API)](https://developers.binance.com/docs/binance-spot-api-docs/rest-api/trading-endpoints)
-* [Account Endpoints (REST API)](https://developers.binance.com/docs/binance-spot-api-docs/rest-api/account-endpoints)
-* [Trading Requests (WebSocket API)](https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/trading-requests)
-* [Account Requests (WebSocket API)](https://developers.binance.com/docs/binance-spot-api-docs/websocket-api/account-requests)
-* [User Data Streams](https://developers.binance.com/docs/binance-spot-api-docs/user-data-stream)
+* [Market Data Endpoints (REST API)](rest-api.md#market-data-endpoints)
+* [Market Data Requests (WebSocket API)](web-socket-api.md#market-data-requests)
+* [WebSocket Market Streams](web-socket-streams.md)
+* [Trading Endpoints (REST API)](rest-api.md#trading-endpoints)
+* [Account Endpoints (REST API)](rest-api.md#account-endpoints)
+* [Trading Requests (WebSocket API)](web-socket-api.md#trading-requests)
+* [Account Requests (WebSocket API)](web-socket-api.md#account-requests)
+* [User Data Streams](user-data-stream.md)
 
 <a id="faq-funds-transfer"></a>
 ## How to get funds in/out of the Spot Test Network?
