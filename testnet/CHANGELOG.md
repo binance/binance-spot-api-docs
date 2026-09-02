@@ -1,9 +1,17 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-08-05**
+**Last Updated: 2026-09-02**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-09-02
+
+#### FIX API
+
+* Removed the top-level `Symbol (55)` field from `ListStatus <N>` in the [QuickFIX Order Entry schema](../fix/schemas/spot-fix-oe.xml) and API documentation since, as [previously announced](#2025-11-28) the API no longer emits this field.
+
+---
 
 ### 2026-08-05
 

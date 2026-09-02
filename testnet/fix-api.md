@@ -1049,7 +1049,6 @@ Sent by the server whenever an order list state changes.
 
 | Tag      | Name                         | Type         | Required | Description                                                                                                                                             |
 |----------|------------------------------|--------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 55       | Symbol                       | STRING       | N        | Symbol of the order list.                                                                                                                               |
 | 66       | ListID                       | STRING       | N        | `ListID` of the list as assigned by the exchange.                                                                                                       |
 | 25014    | ClListID                     | STRING       | N        | `ClListID` of the list as assigned on the request.                                                                                                      |
 | 25015    | OrigClListID                 | STRING       | N        |                                                                                                                                                         |
@@ -1073,7 +1072,7 @@ Sent by the server whenever an order list state changes.
 **Sample message:**
 
 ```
-8=FIX.4.4|9=293|35=N|34=2|49=SPOT|52=20240607-02:19:07.837191|56=Eg13pOvN|55=BTCUSDT|60=20240607-02:19:07.836000|66=25|73=2|55=BTCUSDT|37=52|11=w1717726747805308656|55=BTCUSDT|37=53|11=p1717726747805308656|25010=1|25011=3|25012=0|25013=1|429=4|431=3|1385=2|25014=1717726747805308656|25015=1717726747805308656|10=162|
+8=FIX.4.4|9=282|35=N|34=2|49=SPOT|52=20240607-02:19:07.837191|56=Eg13pOvN|60=20240607-02:19:07.836000|66=25|73=2|55=BTCUSDT|37=52|11=w1717726747805308656|55=BTCUSDT|37=53|11=p1717726747805308656|25010=1|25011=3|25012=0|25013=1|429=4|431=3|1385=2|25014=1717726747805308656|25015=1717726747805308656|10=223|
 ```
 
 <a id="orderamendkeeppriorityrequest"></a>

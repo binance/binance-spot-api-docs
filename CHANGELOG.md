@@ -1,6 +1,14 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-07-27**
+**Last Updated: 2026-09-02**
+
+### 2026-09-02
+
+#### FIX API
+
+* Removed the top-level `Symbol (55)` field from `ListStatus <N>` in the [QuickFIX Order Entry schema](./fix/schemas/spot-fix-oe.xml) and API documentation since, as [previously announced](#2025-11-28) the API no longer emits this field.
+
+---
 
 ### 2026-07-27
 
