@@ -143,7 +143,6 @@
    <field name='CancelRestrictions' required='N'/>
   </message>
   <message name='ListStatus' msgcat='app' msgtype='N'>
-   <field name='Symbol' required='N'/>
    <field name='ListID' required='N'/>
    <field name='ClListID' required='N'/>
    <field name='OrigClListID' required='N'/>
