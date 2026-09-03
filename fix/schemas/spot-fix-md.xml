@@ -103,7 +103,6 @@
   </message>
   <message name='MarketDataIncrementalRefresh' msgcat='app' msgtype='X'>
    <field name='MDReqID' required='Y'/>
-   <field name='LastFragment' required='N'/>
    <group name='NoMDEntries' required='Y'>
     <field name='MDUpdateAction' required='Y'/>
     <field name='MDEntryPx' required='Y'/>
@@ -221,10 +220,6 @@
    <value enum='4' description='ALL_INSTRUMENTS'/>
   </field>
   <field number='562' name='MinTradeVol' type='QTY'/>
-  <field number='893' name='LastFragment' type='BOOLEAN'>
-   <value enum='N' description='NOT_LAST_MESSAGE'/>
-   <value enum='Y' description='LAST_MESSAGE'/>
-  </field>
   <field number='969' name='MinPriceIncrement' type='PRICE'/>
   <field number='1003' name='TradeID' type='INT'/>
   <field number='1140' name='MaxTradeVol' type='QTY'/>
