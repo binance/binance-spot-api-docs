@@ -1,6 +1,16 @@
 # CHANGELOG for Binance SPOT Demo Mode
 
-**Last Updated: 2026-07-01**
+**Last Updated: 2026-09-03**
+
+### 2026-09-03
+
+* Scheduled maintenance will begin at **2026-09-03 05:00 UTC** and will last for approximately 1 hour.
+* This window will include upgrades to our infrastructure.
+* The following endpoints may return stale data, affecting Web and App trading displays:
+  * `GET /api/v3/aggTrades`
+  * `GET /api/v3/klines`
+
+---
 
 ### 2026-07-01
 
