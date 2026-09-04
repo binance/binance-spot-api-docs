@@ -5,6 +5,20 @@
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
 
+### 2026-09-04
+
+REST and WebSocket API:
+
+* Reminder that SBE 3:2 schema will be retired on 2026-09-14, [6 months after being deprecated](../faqs/sbe_faq.md#regarding-legacy-support).
+* The [SBE lifecycle for Testnet](../sbe/schemas/sbe_schema_lifecycle_testnet.json) has been updated to reflect this change.
+
+FIX API:
+
+* Reminder that FIX SBE 1:0 schema will be retired on 2026-09-14, [6 months after being deprecated](../faqs/sbe_faq.md#regarding-legacy-support).
+* The [FIX SBE lifecycle for Testnet](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_fix_schema_lifecycle_testnet.json) has been updated to reflect this change.
+
+---
+
 ### 2026-09-02
 
 #### FIX API
