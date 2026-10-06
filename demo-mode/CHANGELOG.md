@@ -1,6 +1,13 @@
 # CHANGELOG for Binance SPOT Demo Mode
 
-**Last Updated: 2026-09-03**
+**Last Updated: 2026-10-05**
+
+### 2026-10-05
+
+* Scheduled maintenance will begin at **2026-10-05 08:00 UTC** and will last for approximately 1 hour.
+* During this window, `aggTrade AOR` data from the `WebSocket Stream` may be stale.
+
+---
 
 ### 2026-09-03
 
