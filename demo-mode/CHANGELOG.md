@@ -1,6 +1,13 @@
 # CHANGELOG for Binance SPOT Demo Mode
 
-**Last Updated: 2026-10-13**
+**Last Updated: 2026-10-14**
+
+### 2026-10-14
+
+- Scheduled maintenance will begin at **2026-10-14 10:00 UTC** and will last for approximately 2 hours.
+- During this window, `aggtrade` and `kline` data from the `REST API` and `WebSocket API` may be stale.
+
+---
 
 ### 2026-10-13
 
@@ -21,7 +28,7 @@
 
 ### 2026-10-02
 
-- Scheduled maintenance will begin at 2026-10-02 12:00 UTC and will last for approximately 1 hour.  
+- Scheduled maintenance will begin at **2026-10-02 12:00 UTC** and will last for approximately 1 hour.
   During this window, kline data from the WebSocket Stream and WebSocket API may be stale.
 
 ---
