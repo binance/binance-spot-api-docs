@@ -1,5 +1,7 @@
 # 一个订单支付另一个订单（One Pays the Other，简称 OPO）
 
+<a id="what-is-one-pays-the-other"></a>
+
 ## 什么是一个订单支付另一个订单（OPO）？
 
 这是 OTO 和 OTOCO 的一种特殊行为，其中生效订单收到的数量将用作待处理订单的数量。因此，订单触发时唯一的数量要求是生效订单的数量。
@@ -8,28 +10,36 @@
 
 OPO 与 `OTO` 几乎相同，唯一的区别是待处理订单不用指定`数量`。
 
+<a id="how-can-i-use-this"></a>
+
 ## 我如何使用它？
 
 请参考下表：
 
-| API         | 请求方式                                      |
-| ----------- | --------------------------------------------- |
-| REST API    | `POST /api/v3/orderList/opo` <br> `POST /api/v3/orderList/opoco` |
+| API           | 请求方式                                                         |
+| ------------- | ---------------------------------------------------------------- |
+| REST API      | `POST /api/v3/orderList/opo` <br> `POST /api/v3/orderList/opoco` |
 | WebSocket API | `orderList.place.opo` <br> `orderList.place.opoco`               |
-| FIX API     | NewOrderList `<E>`，其中 OPO `(25046)`=`true`                    |
+| FIX API       | NewOrderList `<E>`，其中 OPO `(25046)`=`true`                    |
+
+<a id="what-is-the-difference-with-this-order-list-from-other-order-lists"></a>
 
 ## 该订单列表与其他订单列表有什么区别？
 
-* 待处理订单在提交到撮合引擎时没有数量；数量将基于生效订单完全成交后收到的数量确定。
-* 收到的数量会扣除相应的佣金。如果收到的资产不是 BNB 且有足够的可用资金，佣金将从可用资金（即 `free` 余额）中扣除。
-* 待处理订单的数量会在生效订单完全成交后进行检查（例如过滤器）。
-* 如果某个交易对配置了 `LOT_SIZE` 和/或 `MARKET_LOT_SIZE` 过滤器，待处理订单的数量会被调整以满足这些要求。未使用的锁定数量将被解锁并返还到 `free` 余额。
-* 待处理的 OPO 订单的数量在生效订单完全成交之前不可修改。
-* 仅接受生效订单为买入（BUY）方向，待处理订单为卖出（SELL）方向的情况。
+- 待处理订单在提交到撮合引擎时没有数量；数量将基于生效订单完全成交后收到的数量确定。
+- 收到的数量会扣除相应的手续费。如果收到的资产不是 BNB 且有足够的可用资金，手续费将从可用资金（即
+  `free` 余额）中扣除。
+- 待处理订单的数量会在生效订单完全成交后进行检查（例如过滤器）。
+- 如果某个交易对配置了 `LOT_SIZE` 和/或 `MARKET_LOT_SIZE`
+  过滤器，待处理订单的数量会被调整以满足这些要求。未使用的锁定数量将被解锁并返还到 `free` 余额。
+- 待处理的 OPO 订单的数量在生效订单完全成交之前不可修改。
+- 仅接受生效订单为买入（BUY）方向，待处理订单为卖出（SELL）方向的情况。
+
+<a id="which-symbols-allow-opo-orders"></a>
 
 ## 哪些交易对支持 OPO 订单？
 
-| 订单类型 | Exchange Information 中需要包含   |
-| -------- | --------------------------------- |
-| OPO      | `otoAllowed` 和 `opoAllowed`      |
+| 订单类型 | Exchange Information 中需要包含            |
+| -------- | ------------------------------------------ |
+| OPO      | `otoAllowed` 和 `opoAllowed`               |
 | OPOCO    | `otoAllowed`、`opoAllowed` 和 `ocoAllowed` |

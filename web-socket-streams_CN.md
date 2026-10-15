@@ -1,41 +1,62 @@
+<a id="通用-websocket-流信息"></a>
+
+<a id="websocket-streams-for-binance"></a>
+
+<a id="general-websocket-streams-information"></a>
 
 # WebSocket 行情接口
 
+<a id="general-wss-information"></a>
+
 ## 基本信息
-* 本篇所列出的所有wss接口的baseurl为: **wss://stream.binance.com:9443** 或者 **wss://stream.binance.com:443**
-* 所有stream均可以直接访问，或者作为组合streams的一部分。
-* 直接访问时URL格式为 **/ws/\<streamName\>**
-* 组合streams的URL格式为 **/stream?streams=\<streamName1\>/\<streamName2\>/\<streamName3\>**
-* 订阅组合streams时，事件payload会以这样的格式封装 **{"stream":"\<streamName\>","data":\<rawPayload\>}**
-* stream名称中所有交易对均为**小写**
-* 每个到**stream.binance.com**的链接有效期不超过24小时，请妥善处理断线重连。
-* 当服务器即将关闭时，系统将发送 [`serverShutdown`](#serverShutdown) 事件，并导致连接断开。请尽快建立新连接，以防止中断。
-* WebSocket 服务器**每20秒**发送 PING 消息。
-  * 如果 WebSocket 服务器没有在一分钟之内收到PONG 消息应答，连接会被断开。
-  * 当客户收到PING消息，必须尽快回复PONG消息，同时payload需要和PING消息一致。
-  * 服务器允许未经请求的PONG消息，但这不会保证连接不断开。**对于这些PONG 消息，建议payload为空。**
-* **wss://data-stream.binance.vision** 可以用来订阅仅有市场信息的数据流。账户信息**无法**从此URL获得。
-* 所有时间和时间戳相关字段均以**毫秒为默认单位**。 要以微秒为单位接收信息，请在 URL 中添加参数 `timeUnit=MICROSECOND` 或 `timeUnit=microsecond`。
-  * 例如： `/stream?streams=btcusdt@trade&timeUnit=MICROSECOND`
-* 如果您的请求包含非 ASCII 字符的交易对名称，那么数据流事件中可能包含以 UTF-8 编码的非 ASCII 字符。
-* [全市场所有 Symbol 的精简 Ticker](web-socket-streams_CN.md#all-markets-mini-ticker) 和 [全市场滚动窗口统计](web-socket-streams_CN.md#all-market-rolling-window-ticker) 事件可能包含以 UTF-8 编码的非 ASCII 字符。
+
+- 本篇所列出的所有wss接口的baseurl为: **wss://stream.binance.com:9443** 或者
+  **wss://stream.binance.com:443**
+- 所有stream均可以直接访问，或者作为组合streams的一部分。
+- 直接访问时URL格式为 **/ws/\<streamName\>**
+- 组合streams的URL格式为 **/stream?streams=\<streamName1\>/\<streamName2\>/\<streamName3\>**
+- 订阅组合streams时，事件payload会以这样的格式封装
+  **{"stream":"\<streamName\>","data":\<rawPayload\>}**
+- stream名称中所有交易对均为**小写**
+- 每个到**stream.binance.com**的链接有效期不超过24小时，请妥善处理断线重连。
+- 当服务器即将关闭时，系统将发送 [`serverShutdown`](#server-shutdown)
+  事件，并导致连接断开。请尽快建立新连接，以防止中断。
+- WebSocket 服务器**每20秒**发送 PING 消息。
+  - 如果 WebSocket 服务器没有在一分钟之内收到PONG 消息应答，连接会被断开。
+  - 当客户收到PING消息，必须尽快回复PONG消息，同时payload需要和PING消息一致。
+  - 服务器允许未经请求的PONG消息，但这不会保证连接不断开。**对于这些PONG 消息，建议payload为空。**
+- **wss://data-stream.binance.vision**
+  可以用来订阅仅有市场信息的数据流。账户信息**无法**从此URL获得。
+- 所有时间和时间戳相关字段均以**毫秒为默认单位**。 要以微秒为单位接收信息，请在 URL 中添加参数
+  `timeUnit=MICROSECOND` 或 `timeUnit=microsecond`。
+  - 例如： `/stream?streams=btcusdt@trade&timeUnit=MICROSECOND`
+- 如果您的请求包含非 ASCII 字符的交易对名称，那么数据流事件中可能包含以 UTF-8 编码的非 ASCII 字符。
+- [全市场所有 Symbol 的精简 Ticker](web-socket-streams_CN.md#all-market-mini-tickers-stream)
+  和
+  [全市场滚动窗口统计](web-socket-streams_CN.md#all-market-rolling-window-statistics-streams)
+  事件可能包含以 UTF-8 编码的非 ASCII 字符。
+
+<a id="websocket-limits"></a>
 
 ## WebSocket 连接限制
 
-* WebSocket服务器每秒最多接受5个消息。消息包括:
-    * PING帧
-    * PONG帧
-    * JSON格式的消息, 比如订阅, 断开订阅.
-* 如果用户发送的消息超过限制，连接会被断开连接。反复被断开连接的IP有可能被服务器屏蔽。
-* 单个连接最多可以订阅1024个Streams。
-* 每IP地址、每5分钟最多可以发送300次连接请求。
+- WebSocket服务器每秒最多接受5个消息。消息包括:
+  - PING帧
+  - PONG帧
+  - JSON格式的消息, 比如订阅, 断开订阅.
+- 如果用户发送的消息超过限制，连接会被断开连接。反复被断开连接的IP有可能被服务器屏蔽。
+- 单个连接最多可以订阅1024个Streams。
+- 每IP地址、每5分钟最多可以发送300次连接请求。
+
+<a id="server-shutdown"></a>
 
 <a id="serverShutdown"></a>
+
 ## 服务器关闭
 
-当服务器即将关闭时，会发送 `serverShutdown` 事件。
+`serverShutdown` 事件在服务器即将关闭时发送。
 
-* `raw`("原始")信息流：
+- `raw` 数据流：
 
 ```javascript
 {
@@ -44,7 +65,7 @@
 }
 ```
 
-* `combined`("组合")信息流：
+- `combined` 数据流：
 
 ```javascript
 {
@@ -56,161 +77,200 @@
 }
 ```
 
-请尽快建立新连接，以防中断。
+请尽快建立新的连接以避免中断。
+
+<a id="live-subscribingunsubscribing-to-streams"></a>
 
 ## 实时订阅/取消数据流
 
-* 以下数据可以通过 WebSocket 发送以实现订阅或取消订阅数据流。示例如下.
-* 请求中的`id`被用作唯一标识来区分来回传递的消息。以下格式被接受:
-  * 64位有符号整数
-  * 字母数字字符串；最大长度36
-  * `null`
-* 如果相应内容中的`result` 为 `null`，表示请求发送成功。
+- 以下数据可以通过 WebSocket 发送以实现订阅或取消订阅数据流。示例如下.
+- 请求中的`id`被用作唯一标识来区分来回传递的消息。以下格式被接受:
+  - 64位有符号整数
+  - 字母数字字符串；最大长度36
+  - `null`
+- 如果相应内容中的`result` 为 `null`，表示请求发送成功。
+
+<a id="subscribe-to-a-stream"></a>
 
 ### 订阅一个信息流
 
-* 请求
+- 请求
 
   ```javascript
   {
-      "method": "SUBSCRIBE",
-      "params": ["btcusdt@aggTrade", "btcusdt@depth"],
-      "id": 1
+    "method": "SUBSCRIBE",
+    "params": [
+      "btcusdt@aggTrade",
+      "btcusdt@depth"
+    ],
+    "id": 1
   }
   ```
 
-* 响应
+- 响应
 
   ```javascript
   {
-      "result": null,
-      "id": 1
+    "result": null,
+    "id": 1
   }
   ```
+
+<a id="unsubscribe-to-a-stream"></a>
 
 ### 取消订阅一个信息流
 
-* 请求
+- 请求
 
   ```javascript
   {
-      "method": "UNSUBSCRIBE",
-      "params": ["btcusdt@depth"],
-      "id": 312
+    "method": "UNSUBSCRIBE",
+    "params": [
+      "btcusdt@depth"
+    ],
+    "id": 312
   }
   ```
 
-* 响应
+- 响应
 
   ```javascript
   {
-      "result": null,
-      "id": 312
+    "result": null,
+    "id": 312
   }
   ```
 
+<a id="listing-subscriptions"></a>
 
 ### 已订阅信息流
 
-* 请求
+- 请求
 
   ```javascript
   {
-      "method": "LIST_SUBSCRIPTIONS",
-      "id": 3
+    "method": "LIST_SUBSCRIPTIONS",
+    "id": 3
   }
   ```
 
-* 响应
+- 响应
 
   ```javascript
   {
-      "result": ["btcusdt@aggTrade"],
-      "id": 3
+    "result": [
+      "btcusdt@aggTrade"
+    ],
+    "id": 3
   }
   ```
 
+<a id="setting-properties"></a>
 
 ### 设定属性
-当前，唯一可以设置的属性是设置是否启用`combined`("组合")信息流。
-当使用`/ws/`("原始信息流")进行连接时，combined属性设置为`false`，而使用 `/stream/`进行连接时则将属性设置为`true`。
 
-* 请求
+当前，唯一可以设置的属性是设置是否启用`combined`("组合")信息流。当使用`/ws/`("原始信息流")进行连接时，combined属性设置为`false`，而使用
+`/stream/`进行连接时则将属性设置为`true`。
 
-  ```javascript
-  {
-      "method": "SET_PROPERTY",
-      "params": ["combined", true],
-      "id": 5
-  }
-  ```
-
-* 响应
+- 请求
 
   ```javascript
   {
-      "result": null,
-      "id": 5
+    "method": "SET_PROPERTY",
+    "params": [
+      "combined",
+      true
+    ],
+    "id": 5
   }
   ```
+
+- 响应
+
+  ```javascript
+  {
+    "result": null,
+    "id": 5
+  }
+  ```
+
+<a id="retrieving-properties"></a>
 
 ### 检索属性
 
-* 请求
+- 请求
 
   ```javascript
   {
-      "method": "GET_PROPERTY",
-      "params": ["combined"],
-      "id": 2
+    "method": "GET_PROPERTY",
+    "params": [
+      "combined"
+    ],
+    "id": 2
   }
   ```
 
-* 响应
+- 响应
 
   ```javascript
   {
-      "result": true, // Indicates that combined is set to true.
-      "id": 2
+    "result": true, // Indicates that combined is set to true.
+    "id": 2
   }
   ```
+
+<a id="error-messages"></a>
 
 ### 错误信息
 
-错误信息 | 描述
----|---
-{"code": 0, "msg": "Unknown property","id": %s} | `SET_PROPERTY` 或 `GET_PROPERTY`中应用的参数无效
-{"code": 1, "msg": "Invalid value type: expected Boolean"} | 仅接受`true`或`false`
-{"code": 2, "msg": "Invalid request: property name must be a string"}| 提供的属性名无效
-{"code": 2, "msg": "Invalid request: request ID must be an unsigned integer"}| 参数`id`未提供或`id`值是无效类型
-{"code": 2, "msg": "Invalid request: unknown variant %s, expected one of `SUBSCRIBE`, `UNSUBSCRIBE`, `LIST_SUBSCRIPTIONS`, `SET_PROPERTY`, `GET_PROPERTY` at line 1 column 28"} | 错字提醒，或提供的值不是预期类型
-{"code": 2, "msg": "Invalid request: too many parameters"}| 数据中提供了不必要参数
-{"code": 2, "msg": "Invalid request: property name must be a string"} | 未提供属性名
-{"code": 2, "msg": "Invalid request: missing field `method` at line 1 column 73"} | 数据未提供`method`
-{"code":3,"msg":"Invalid JSON: expected value at line %s column %s"} | JSON 语法有误.
+| 错误信息                                                                                                                                                                        | 描述                                             |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| {"code": 0, "msg": "Unknown property","id": %s}                                                                                                                                 | `SET_PROPERTY` 或 `GET_PROPERTY`中应用的参数无效 |
+| {"code": 1, "msg": "Invalid value type: expected Boolean"}                                                                                                                      | 仅接受`true`或`false`                            |
+| {"code": 2, "msg": "Invalid request: property name must be a string"}                                                                                                           | 提供的属性名无效                                 |
+| {"code": 2, "msg": "Invalid request: request ID must be an unsigned integer"}                                                                                                   | 参数`id`未提供或`id`值是无效类型                 |
+| {"code": 2, "msg": "Invalid request: unknown variant %s, expected one of `SUBSCRIBE`, `UNSUBSCRIBE`, `LIST_SUBSCRIPTIONS`, `SET_PROPERTY`, `GET_PROPERTY` at line 1 column 28"} | 错字提醒，或提供的值不是预期类型                 |
+| {"code": 2, "msg": "Invalid request: too many parameters"}                                                                                                                      | 数据中提供了不必要参数                           |
+| {"code": 2, "msg": "Invalid request: property name must be a string"}                                                                                                           | 未提供属性名                                     |
+| {"code": 2, "msg": "Invalid request: missing field `method` at line 1 column 73"}                                                                                               | 数据未提供`method`                               |
+| {"code":3,"msg":"Invalid JSON: expected value at line %s column %s"}                                                                                                            | JSON 语法有误.                                   |
 
+<a id="detailed-stream-information"></a>
 
 # Stream 详细定义
 
+<a id="referencePrice"></a>
+<a id="reference-price"></a>
+<a id="referenceprice"></a>
+
+<a id="reference-price-streams"></a>
+
 ## 参考价格数据流
 
-**Stream 名称**: `<symbol>@referencePrice`
+推送交易对参考价格信息。
 
-**更新速度**: 1000ms（1s）
+**Stream 名称:** \<symbol\>@referencePrice
+
+**更新速度:** 1000ms
 
 **Payload:**
-
 ```javascript
 {
-  "e": "referencePrice",  // 事件类型
-  "s": "BAZUSD",          // 交易对
-  "r": "1.00",            // 参考价格（如果无参考价格则为 null）
-  "t": 1770313263917      // 参考价格生效时的撮合引擎时间
+    "e": "referencePrice", // 事件类型
+    "s": "BAZUSD",         // 交易对
+    "r": "1.00",           // 参考价格（如果无参考价格则为 null）
+    "t": 1770313263917     // 参考价格生效时的撮合引擎时间
 }
 ```
 
+<a id="aggTrade"></a>
+<a id="agg-trade"></a>
 <a id="aggtrade"></a>
+
+<a id="aggregate-trade-streams"></a>
+
 ## 归集交易
+
 归集交易与逐笔交易的区别在于，同一个taker在同一价格与多个maker成交时，会被归集为一笔成交。
 
 **Stream 名称:** \<symbol\>@aggTrade
@@ -220,23 +280,26 @@
 **Payload:**
 ```javascript
 {
-    "e": "aggTrade",        // 事件类型
-    "E": 1672515782136,     // 事件时间
-    "s": "BNBBTC",          // 交易对
-    "a": 12345,             // 归集交易ID
-    "p": "0.001",           // 成交价格
-    "q": "100",             // 成交数量
-    "f": 100,               // 被归集的首个交易ID
-    "l": 105,               // 被归集的末次交易ID
-    "T": 1672515782136,     // 成交时间
-    "m": true,              // 买方是否是做市方。如true，则此次成交是一个主动卖出单，否则是一个主动买入单。
-    "M": true               // 请忽略该字段
+    "e": "aggTrade",    // 事件类型
+    "E": 1672515782136, // 事件时间
+    "s": "BNBBTC",      // 交易对
+    "a": 12345,         // 归集交易ID
+    "p": "0.001",       // 成交价格
+    "q": "100",         // 成交数量
+    "f": 100,           // 被归集的首个交易ID
+    "l": 105,           // 被归集的末次交易ID
+    "T": 1672515782136, // 成交时间
+    "m": true,          // 买方是否是做市方。如true，则此次成交是一个主动卖出单，否则是一个主动买入单。
+    "M": true           // 请忽略该字段
 }
 ```
 
 <a id="trade"></a>
 
+<a id="trade-streams"></a>
+
 ## 逐笔交易
+
 逐笔交易推送每一笔成交的信息。**成交**，或者说交易的定义是仅有一个吃单者与一个挂单者相互交易。
 
 **Stream 名称:** \<symbol\>@trade
@@ -246,20 +309,27 @@
 **Payload:**
 ```javascript
 {
-    "e": "trade",           // 事件类型
-    "E": 1672515782136,     // 事件时间
-    "s": "BNBBTC",          // 交易对
-    "t": 12345,             // 交易ID
-    "p": "0.001",           // 成交价格
-    "q": "100",             // 成交数量
-    "T": 1672515782136,     // 成交时间
-    "m": true,              // 买方是否是做市方。如true，则此次成交是一个主动卖出单，否则是一个主动买入单。
-    "M": true               // 请忽略该字段
+    "e": "trade",       // 事件类型
+    "E": 1672515782136, // 事件时间
+    "s": "BNBBTC",      // 交易对
+    "t": 12345,         // 交易ID
+    "p": "0.001",       // 成交价格
+    "q": "100",         // 成交数量
+    "T": 1672515782136, // 成交时间
+    "m": true,          // 买方是否是做市方。如true，则此次成交是一个主动卖出单，否则是一个主动买入单。
+    "M": true           // 请忽略该字段
 }
 ```
 
+<a id="blockTrade"></a>
+<a id="block-trade"></a>
 <a id="blocktrade"></a>
+
+<a id="block-trade-streams"></a>
+
 ## 大宗交易
+
+大宗交易推送实时的大宗交易信息。
 
 **Stream 名称:** \<symbol\>@blockTrade
 
@@ -268,26 +338,32 @@
 **Payload:**
 ```javascript
 {
-  "e": "blockTrade",  // 事件类型
-  "E": 1772506983582, // 事件时间
-  "s": "BNBBTC",      // 交易对
-  "t": 582,           // 大宗交易ID
-  "p": "0.052",       // 成交价格
-  "q": "5838",        // 成交数量
-  "T": 1772506983321, // 成交时间
-  "m": true           // 买方是否是做市方。
+    "e": "blockTrade",  // 事件类型
+    "E": 1772506983582, // 事件时间
+    "s": "BNBBTC",      // 交易对
+    "t": 582,           // 大宗交易ID
+    "p": "0.052",       // 成交价格
+    "q": "5838",        // 成交数量
+    "T": 1772506983321, // 成交时间
+    "m": true           // 买方是否是做市方。
 }
 ```
 
 <a id="kline"></a>
+
+<a id="klinecandlestick-streams-for-utc"></a>
+
 ## UTC K线
+
 K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更新是基于 `UTC+0` 时区的。
 
 <a id="kline-intervals"></a>
+
 **订阅Kline需要提供间隔参数，最短为分钟线，最长为月线。支持以下间隔:**
 
 m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 
+* 1s
 * 1m
 * 3m
 * 5m
@@ -311,31 +387,40 @@ m -> 分钟; h -> 小时; d -> 天; w -> 周; M -> 月
 **Payload:**
 ```javascript
 {
-    "e": "kline",               // 事件类型
-    "E": 1672515782136,         // 事件时间
-    "s": "BNBBTC",              // 交易对
+    "e": "kline",       // 事件类型
+    "E": 1672515782136, // 事件时间
+    "s": "BNBBTC",      // 交易对
+    // K线数据
     "k": {
-        "t": 1672515780000,     // 该K线的起始时间
-        "T": 1672515839999,     // 该K线的结束时间
-        "s": "BNBBTC",          // 交易对
-        "i": "1m",              // K线间隔
-        "f": 100,               // 该K线期间第一笔成交ID
-        "L": 200,               // 该K线期间末一笔成交ID
-        "o": "0.0010",          // 该K线期间第一笔成交价
-        "c": "0.0020",          // 该K线期间末一笔成交价
-        "h": "0.0025",          // 该K线期间最高成交价
-        "l": "0.0015",          // 该K线期间最低成交价
-        "v": "1000",            // 该K线期间成交量
-        "n": 100,               // 该K线期间成交数量
-        "x": false,             // 该K线是否完结（是否已经开始下一根K线）
-        "q": "1.0000",          // 该K线期间成交额
-        "V": "500",             // 主动买入的成交量
-        "Q": "0.500",           // 主动买入的成交额
-        "B": "123456"           // 忽略此参数
+        "t": 1672515780000, // 该K线的起始时间
+        "T": 1672515839999, // 该K线的结束时间
+        "s": "BNBBTC",      // 交易对
+        "i": "1m",          // K线间隔
+        "f": 100,           // 该K线期间第一笔成交ID
+        "L": 200,           // 该K线期间末一笔成交ID
+        "o": "0.0010",      // 该K线期间第一笔成交价
+        "c": "0.0020",      // 该K线期间末一笔成交价
+        "h": "0.0025",      // 该K线期间最高成交价
+        "l": "0.0015",      // 该K线期间最低成交价
+        "v": "1000",        // 该K线期间成交量
+        "n": 100,           // 该K线期间成交数量
+        "x": false,         // 该K线是否完结（是否已经开始下一根K线）
+        "q": "1.0000",      // 该K线期间成交额
+        "V": "500",         // 主动买入的成交量
+        "Q": "0.500",       // 主动买入的成交额
+        "B": "123456"       // 忽略此参数
     }
 }
 ```
+
+<a id="klineOffset"></a>
+<a id="kline-offset"></a>
+<a id="klineoffset"></a>
+
+<a id="klinecandlestick-streams-with-timezone-offset"></a>
+
 ## 带有时区偏移量的K线
+
 K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更新是基于 `UTC+8` 时区的。
 
 **订阅Kline需要提供的间隔参数:**
@@ -344,8 +429,8 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 
 **UTC+8 时区偏移量：**
 
-* K线间隔的开始和结束时间会基于 `UTC+8` 时区。例如， `1d` K线将在 `UTC+8` 当天开始，并在 `UTC+8` 当日完结时随之结束。
-* 请注意，Payload中的 `E`（event time），`t`（start time）和 `T`（close time）是 Unix 时间戳，它们始终以 UTC 格式解释。
+- K线间隔的开始和结束时间会基于 `UTC+8` 时区。例如， `1d` K线将在 `UTC+8` 当天开始，并在 `UTC+8` 当日完结时随之结束。
+- 请注意，Payload中的 `E`（event time），`t`（start time）和 `T`（close time）是 Unix 时间戳，它们始终以 UTC 格式解释。
 
 **Stream 名称:** \<symbol\>@kline_\<interval\>@+08:00
 
@@ -354,33 +439,41 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 **Payload:**
 ```javascript
 {
-    "e": "kline",               // 事件类型
-    "E": 1672515782136,         // 事件时间
-    "s": "BNBBTC",              // 交易对
+    "e": "kline",       // 事件类型
+    "E": 1672515782136, // 事件时间
+    "s": "BNBBTC",      // 交易对
+    // K线数据
     "k": {
-        "t": 1672515780000,     // 该K线的起始时间
-        "T": 1672515839999,     // 该K线的结束时间
-        "s": "BNBBTC",          // 交易对
-        "i": "1m",              // K线间隔
-        "f": 100,               // 该K线期间第一笔成交ID
-        "L": 200,               // 该K线期间末一笔成交ID
-        "o": "0.0010",          // 该K线期间第一笔成交价
-        "c": "0.0020",          // 该K线期间末一笔成交价
-        "h": "0.0025",          // 该K线期间最高成交价
-        "l": "0.0015",          // 该K线期间最低成交价
-        "v": "1000",            // 该K线期间成交量
-        "n": 100,               // 该K线期间成交数量
-        "x": false,             // 该K线是否完结（是否已经开始下一根K线）
-        "q": "1.0000",          // 该K线期间成交额
-        "V": "500",             // 主动买入的成交量
-        "Q": "0.500",           // 主动买入的成交额
-        "B": "123456"           // 忽略此参数
+        "t": 1672515780000, // 该K线的起始时间
+        "T": 1672515839999, // 该K线的结束时间
+        "s": "BNBBTC",      // 交易对
+        "i": "1m",          // K线间隔
+        "f": 100,           // 该K线期间第一笔成交ID
+        "L": 200,           // 该K线期间末一笔成交ID
+        "o": "0.0010",      // 该K线期间第一笔成交价
+        "c": "0.0020",      // 该K线期间末一笔成交价
+        "h": "0.0025",      // 该K线期间最高成交价
+        "l": "0.0015",      // 该K线期间最低成交价
+        "v": "1000",        // 该K线期间成交量
+        "n": 100,           // 该K线期间成交数量
+        "x": false,         // 该K线是否完结（是否已经开始下一根K线）
+        "q": "1.0000",      // 该K线期间成交额
+        "V": "500",         // 主动买入的成交量
+        "Q": "0.500",       // 主动买入的成交额
+        "B": "123456"       // 忽略此参数
     }
 }
 ```
 
+<a id="miniTicker"></a>
+<a id="mini-ticker"></a>
+<a id="miniticker"></a>
 <a id="twentyfourhourminiticker"></a>
+
+<a id="individual-symbol-mini-ticker-stream"></a>
+
 ## 按Symbol的精简Ticker
+
 按Symbol逐秒刷新的24小时精简ticker信息
 
 **Stream 名称:** \<symbol\>@miniTicker
@@ -390,23 +483,30 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 **Payload:**
 ```javascript
 {
-    "e": "24hrMiniTicker",     // 事件类型
-    "E": 1672515782136,        // 事件时间
-    "s": "BNBBTC",             // 交易对
-    "c": "0.0025",             // 最新成交价格
-    "o": "0.0010",             // 24小时前开始第一笔成交价格
-    "h": "0.0025",             // 24小时内最高成交价
-    "l": "0.0010",             // 24小时内最低成交价
-    "v": "10000",              // 成交量
-    "q": "18"                  // 成交额
+    "e": "24hrMiniTicker", // 事件类型
+    "E": 1672515782136,    // 事件时间
+    "s": "BNBBTC",         // 交易对
+    "c": "0.0025",         // 最新成交价格
+    "o": "0.0010",         // 24小时前开始第一笔成交价格
+    "h": "0.0025",         // 24小时内最高成交价
+    "l": "0.0010",         // 24小时内最低成交价
+    "v": "10000",          // 成交量
+    "q": "18"              // 成交额
 }
 ```
 
+<a id="allMiniTicker"></a>
+<a id="all-mini-ticker"></a>
+<a id="allminiticker"></a>
 <a id="all-markets-mini-ticker"></a>
-## 全市场所有Symbol的精简Ticker
-同上，只是推送所有交易对
 
-**Stream名称:** !miniTicker@arr
+<a id="all-market-mini-tickers-stream"></a>
+
+## 全市场所有Symbol的精简Ticker
+
+所有交易对的24小时滚动窗口迷你行情统计，以数组形式推送。这些不是UTC日统计数据，而是过去24小时的滚动窗口。注意，只有发生变化的行情才会出现在数组中。
+
+**Stream 名称:** !miniTicker@arr
 
 **更新速度:** 1000ms
 
@@ -414,14 +514,26 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 ```javascript
 [
     {
-        // 数组每一个元素对应一个交易对，内容与 \<symbol\>@miniTicker相同
+        "e": "24hrMiniTicker", // 事件类型
+        "E": 1672515782136,    // 事件时间
+        "s": "BNBBTC",         // 交易对
+        "c": "0.0025",         // 最新成交价格
+        "o": "0.0010",         // 24小时前开始第一笔成交价格
+        "h": "0.0025",         // 24小时内最高成交价
+        "l": "0.0010",         // 24小时内最低成交价
+        "v": "10000",          // 成交量
+        "q": "18"              // 成交额
     }
 ]
 ```
 
+<a id="ticker"></a>
 <a id="twentyfourhourticker"></a>
 
+<a id="individual-symbol-ticker-streams"></a>
+
 ## 按Symbol的完整Ticker
+
 按Symbol逐秒刷新的24小时完整ticker信息
 
 **Stream 名称:** \<symbol\>@ticker
@@ -431,33 +543,38 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 **Payload:**
 ```javascript
 {
-    "e": "24hrTicker",      // 事件类型
-    "E": 1672515782136,     // 事件时间
-    "s": "BNBBTC",          // 交易对
-    "p": "0.0015",          // 24小时价格变化
-    "P": "250.00",          // 24小时价格变化（百分比）
-    "w": "0.0018",          // 平均价格
-    "x": "0.0009",          // 整整24小时之前，向前数的最后一次成交价格
-    "c": "0.0025",          // 最新成交价格
-    "Q": "10",              // 最新成交交易的成交量
-    "b": "0.0024",          // 目前最高买单价
-    "B": "10",              // 目前最高买单价的挂单量
-    "a": "0.0026",          // 目前最低卖单价
-    "A": "100",             // 目前最低卖单价的挂单量
-    "o": "0.0010",          // 整整24小时前，向后数的第一次成交价格
-    "h": "0.0025",          // 24小时内最高成交价
-    "l": "0.0010",          // 24小时内最低成交价
-    "v": "10000",           // 24小时内成交量
-    "q": "18",              // 24小时内成交额
-    "O": 0,                 // 统计开始时间
-    "C": 1675216573749,     // 统计结束时间
-    "F": 0,                 // 24小时内第一笔成交交易ID
-    "L": 18150,             // 24小时内最后一笔成交交易ID
-    "n": 18151              // 24小时内成交数
+    "e": "24hrTicker",  // 事件类型
+    "E": 1672515782136, // 事件时间
+    "s": "BNBBTC",      // 交易对
+    "p": "0.0015",      // 24小时价格变化
+    "P": "250.00",      // 24小时价格变化（百分比）
+    "w": "0.0018",      // 平均价格
+    "x": "0.0009",      // 整整24小时之前，向前数的最后一次成交价格
+    "c": "0.0025",      // 最新成交价格
+    "Q": "10",          // 最新成交交易的成交量
+    "b": "0.0024",      // 目前最高买单价
+    "B": "10",          // 目前最高买单价的挂单量
+    "a": "0.0026",      // 目前最低卖单价
+    "A": "100",         // 目前最低卖单价的挂单量
+    "o": "0.0010",      // 整整24小时前，向后数的第一次成交价格
+    "h": "0.0025",      // 24小时内最高成交价
+    "l": "0.0010",      // 24小时内最低成交价
+    "v": "10000",       // 24小时内成交量
+    "q": "18",          // 24小时内成交额
+    "O": 0,             // 统计开始时间
+    "C": 1675216573749, // 统计结束时间
+    "F": 0,             // 24小时内第一笔成交交易ID
+    "L": 18150,         // 24小时内最后一笔成交交易ID
+    "n": 18151          // 24小时内成交数
 }
 ```
 
+<a id="bookTicker"></a>
+<a id="book-ticker"></a>
 <a id="bookticker"></a>
+
+<a id="individual-symbol-rolling-window-statistics-streams"></a>
+
 ## 按Symbol的最优挂单信息
 
 实时推送指定交易对最优挂单信息
@@ -470,15 +587,20 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 **Payload:**
 ```javascript
 {
-    "u": 400900217,         // order book updateId
-    "s": "BNBUSDT",         // 交易对
-    "b": "25.35190000",     // 买单最优挂单价格
-    "B": "31.21000000",     // 买单最优挂单数量
-    "a": "25.36520000",     // 卖单最优挂单价格
-    "A": "40.66000000"      // 卖单最优挂单数量
+    "u": 400900217,     // order book updateId
+    "s": "BNBUSDT",     // 交易对
+    "b": "25.35190000", // 买单最优挂单价格
+    "B": "31.21000000", // 买单最优挂单数量
+    "a": "25.36520000", // 卖单最优挂单价格
+    "A": "40.66000000"  // 卖单最优挂单数量
 }
 ```
 
+<a id="avgPrice"></a>
+<a id="avg-price"></a>
+<a id="avgprice"></a>
+
+<a id="all-market-rolling-window-statistics-streams"></a>
 
 ## 平均价格
 
@@ -489,21 +611,26 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 **更新速度:** 1000ms
 
 **Payload:**
-
 ```javascript
 {
-    "e": "avgPrice",           // 事件类型
-    "E": 1693907033000,        // 事件时间
-    "s": "BTCUSDT",            // 交易对
-    "i": "5m",                 // 平均价格间隔
-    "w": "25776.86000000",     // 平均价格
-    "T": 1693907032213         // 结束时间
+    "e": "avgPrice",       // 事件类型
+    "E": 1693907033000,    // 事件时间
+    "s": "BTCUSDT",        // 交易对
+    "i": "5m",             // 平均价格间隔
+    "w": "25776.86000000", // 平均价格
+    "T": 1693907032213     // 最后成交时间
 }
 ```
 
+<a id="partialBookDepth"></a>
+<a id="partial-book-depth"></a>
+<a id="partialbookdepth"></a>
 <a id="depth"></a>
 
+<a id="individual-symbol-book-ticker-streams"></a>
+
 ## 有限档深度信息
+
 每秒推送有限档深度信息。levels 表示几档买卖单信息, 可选 5/10/20档
 
 **Stream 名称:** \<symbol\>@depth\<levels\> 或者 \<symbol\>@depth\<levels\>@100ms
@@ -513,26 +640,33 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 **Payload:**
 ```javascript
 {
-    "lastUpdateId": 160,     // 末次更新ID
-    "bids": [                // 买单
+    "lastUpdateId": 160, // 末次更新ID
+    // 买单
+    "bids": [
         [
-            "0.0024",        // 价
-            "10",            // 量
-            []               // 忽略
+            "0.0024", // 价
+            "10"      // 挂单量
         ]
     ],
-    "asks": [                // 卖单
+    // 卖单
+    "asks": [
         [
-            "0.0026",        // 价
-            "100",           // 量
-            []               // 忽略
+            "0.0026", // 价
+            "100"     // 挂单量
         ]
     ]
 }
 ```
+
+<a id="diffBookDepth"></a>
+<a id="diff-book-depth"></a>
+<a id="diffbookdepth"></a>
 <a id="diff-depth"></a>
 
+<a id="average-price"></a>
+
 ## 增量深度信息stream
+
 每秒推送orderbook的变化部分（如果有）
 
 **Stream 名称:** \<symbol\>@depth 或者 \<symbol\>@depth@100ms
@@ -542,111 +676,146 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 **Payload:**
 ```javascript
 {
-    "e": "depthUpdate",     // 事件类型
-    "E": 1672515782136,     // 事件时间
-    "s": "BNBBTC",          // 交易对
-    "U": 157,               // 从上次推送至今新增的第一个 update Id
-    "u": 160,               // 从上次推送至今新增的最后一个 update Id
-    "b": [                  // 变动的买单深度
+    "e": "depthUpdate", // 事件类型
+    "E": 1672515782136, // 事件时间
+    "s": "BNBBTC",      // 交易对
+    "U": 157,           // 从上次推送至今新增的第一个 update Id
+    "u": 160,           // 从上次推送至今新增的最后一个 update Id
+    // 变动的买单深度
+    "b": [
         [
-            "0.0024",       // 价
-            "10",           // 量
-            []              // Ignore
+            "0.0024", // 价
+            "10"      // 挂单量
         ]
     ],
-    "a": [                  // 变动的卖单深度
+    // 变动的卖单深度
+    "a": [
         [
-            "0.0026",       // 价
-            "100",          // 量
-            []              // Ignore
+            "0.0026", // 价
+            "100"     // 挂单量
         ]
     ]
 }
 ```
 
+<a id="rollingWindowTicker"></a>
 <a id="rolling-window-ticker"></a>
+<a id="rollingwindowticker"></a>
+
+<a id="partial-book-depth-streams"></a>
+
 ## 按Symbol的滚动窗口统计
 
 单个symbol的滚动窗口统计, 支持多个时间窗口。
 
-**Stream 名称:** \<symbol\>@ticker_\<window_size\>
+**注意:**
+
+- 该数据流和 `<symbol>@ticker` 不一样。
+- `O` (`open time`) 会在每分钟整点开始, 而 `C` (`closing time`)是当前更新时间。
+- 实际统计的时间范围会比 `<windowSize>` 多不超过59999ms。
+
+**Stream 名称:** \<symbol\>@ticker_\<windowSize\>
 
 **Window Sizes:** 1h, 4h, 1d
 
 **更新速度:** 1000ms
 
-*注意*: <br/>
-- 该数据流和 \<symbol\>@ticker 不一样。
-- `O` (`open time`) 会在每分钟整点开始, 而 `C` (`closing time`)是当前更新时间。
-- 实际统计的时间范围会比\<window_size\>多不超过59999ms。
-
 **Payload:**
 ```javascript
 {
-    "e": "1hTicker",        // 事件类型
-    "E": 1672515782136,     // 事件时间
-    "s": "BNBBTC",          // 交易对
-    "p": "0.0015",          // 价格变化
-    "P": "250.00",          // 价格变化（百分比）
-    "o": "0.0010",          // 第一次成交价格
-    "h": "0.0025",          // 最高成交价
-    "l": "0.0010",          // 最低成交价
-    "c": "0.0025",          // 最新成交价
-    "w": "0.0018",          // 平均价格
-    "v": "10000",           // 总成交量
-    "q": "18",              // 总成交额
-    "O": 0,                 // 统计开始时间
-    "C": 86400000,          // 统计结束时间
-    "F": 0,                 // 第一笔成交交易ID
-    "L": 18150,             // 最后一笔成交交易ID
-    "n": 18151              // 总成交数
+    "e": "1hTicker",    // 事件类型
+    "E": 1672515782136, // 事件时间
+    "s": "BNBBTC",      // 交易对
+    "p": "0.0015",      // 价格变化
+    "P": "250.00",      // 价格变化百分比
+    "o": "0.0010",      // 开盘价
+    "h": "0.0025",      // 最高价
+    "l": "0.0010",      // 最低价
+    "c": "0.0025",      // 最新价
+    "w": "0.0018",      // 加权平均价格
+    "v": "10000",       // 总成交基础资产量
+    "q": "18",          // 总成交计价资产量
+    "O": 0,             // 统计开始时间
+    "C": 1675216573749, // 统计结束时间
+    "F": 0,             // 第一笔成交ID
+    "L": 18150,         // 最后一笔成交ID
+    "n": 18151          // 总成交笔数
 }
 ```
+
+<a id="allMarketRollingWindowTicker"></a>
 <a id="all-market-rolling-window-ticker"></a>
+<a id="allmarketrollingwindowticker"></a>
+
+<a id="diff-depth-stream"></a>
+
 ## 全市场滚动窗口统计
 
-全市场symbols的滚动窗口ticker统计，计算于多个窗口。<br/>
+全市场symbols的滚动窗口ticker统计，计算于多个窗口。
 
 注意：有变动的ticker才会推送。
 
-**Stream 名称:** !ticker_\<window-size\>@arr
+**Stream 名称:** !ticker_\<windowSize\>@arr
 
-**Window Size:** 1h, 4h, 1d
+**Window Sizes:** 1h, 4h, 1d
 
 **更新速度:** 1000ms
 
-> **Payload:**
+**Payload:**
 ```javascript
 [
     {
-        // 同 <symbol>@ticker_<window-size> payload,
-        // 间隔内更新的每个symbol。
+        "e": "1hTicker",    // 事件类型
+        "E": 1672515782136, // 事件时间
+        "s": "BNBBTC",      // 交易对
+        "p": "0.0015",      // 价格变化
+        "P": "250.00",      // 价格变化百分比
+        "o": "0.0010",      // 开盘价
+        "h": "0.0025",      // 最高价
+        "l": "0.0010",      // 最低价
+        "c": "0.0025",      // 最新价
+        "w": "0.0018",      // 加权平均价格
+        "v": "10000",       // 总成交基础资产量
+        "q": "18",          // 总成交计价资产量
+        "O": 0,             // 统计开始时间
+        "C": 1675216573749, // 统计结束时间
+        "F": 0,             // 第一笔成交ID
+        "L": 18150,         // 最后一笔成交ID
+        "n": 18151          // 总成交笔数
     }
 ]
 ```
 
 <a id="how-to-maintain-orderbook"></a>
 
+<a id="how-to-manage-a-local-order-book-correctly"></a>
+
 ## 如何正确在本地维护一个order book副本
+
 1. 打开与 `wss://stream.binance.com:9443/ws/bnbbtc@depth` 的 WebSocket 连接。
 2. 开始缓存收到的event。请记录您收到的第一个event的 `U`值。
 3. 访问 `https://api.binance.com/api/v3/depth?symbol=BNBBTC&limit=5000` 获取深度快照。
 4. 如果快照中的 `lastUpdateId` 小于等于步骤 2 中的 `U` 值，请返回步骤 3。
-5. 在收到的event中，丢弃快照中 `u` <= `lastUpdateId` 的所有event。现在第一个event的 `lastUpdateId` 应该在 `[U;u]` 范围以内。
+5. 在收到的event中，丢弃快照中 `u` <= `lastUpdateId` 的所有event。现在第一个event的 `lastUpdateId`
+   应该在 `[U;u]` 范围以内。
 6. 将本地order book设置为快照。它的更新ID 为 `lastUpdateId`。
 7. 更新所有缓存的event，以及后续的所有event。
 
 要将一个event应用于您的本地order book，请遵循以下更新过程：
+
 1. 判断是否需要处理event：
-    * 如果event的最后一次更新ID（`u`）小于本地order book的更新ID，忽略该event。
-    * 如果event的首次更新ID（`U`）大于本地order book的更新ID加1，说明你错过了一些events。<br>请丢弃您的本地order book并从头开始重新同步。
-    * 通常，下一event的`U`等于上一event的`u + 1`。
+   - 如果event的最后一次更新ID（`u`）小于本地order book的更新ID，忽略该event。
+   - 如果event的首次更新ID（`U`）大于本地order
+     book的更新ID加1，说明你错过了一些events。<br>请丢弃您的本地order book并从头开始重新同步。
+   - 通常，下一event的`U`等于上一event的`u + 1`。
 1. 对买价（`b`）和卖价（`a`）中的每个价位，设置order book中的新数量：
-    * 如果该价位在order book中不存在，则插入该价位及其数量。
-    * 如果数量为零，则从order book中删除此价位。
+   - 如果该价位在order book中不存在，则插入该价位及其数量。
+   - 如果数量为零，则从order book中删除此价位。
 1. 将order book的更新ID设置为已处理event的最后一次更新ID（`u`）。
 
 > [!NOTE]
+>
 > 由于从 API 检索的深度快照对价位的数量有限制（每侧最多 5000 个），因此除非它们发生变化，否则您将无法了解初始快照之外的价位数量。<br>
 > 因此，在使用这些级别的信息时要小心，因为它们可能无法反映订单簿的完整视图。<br>
 > 但是，对于大多数场景，可以每侧看到 5000 个价位就足以了解市场并进行有效交易。
+>

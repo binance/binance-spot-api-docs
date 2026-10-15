@@ -98,31 +98,50 @@
 
 ## General API Information
 
-* The base endpoint is: **`wss://ws-api.testnet.binance.vision/ws-api/v3`**
-  * If you experience issues with the standard 443 port, alternative port 9443 is also available.
-* A single connection to the API is only valid for 24 hours; expect to be disconnected after the 24-hour mark.
-* A [`serverShutdown`](#serverShutdown) event will be sent when the server is about to shutdown, resulting in disconnection. Please establish a new connection as soon as possible to prevent interruption.
-* We support HMAC, RSA, and Ed25519 keys. For more information, please see [API Key types](../faqs/api_key_types.md).
-* Responses are in JSON by default. To receive responses in SBE, refer to the [SBE FAQ](../faqs/sbe_faq.md) page.
-* If your request contains a symbol name containing non-ASCII characters, then the response may contain non-ASCII characters encoded in UTF-8.
-* Some methods may return asset and/or symbol names containing non-ASCII characters encoded in UTF-8 even if the request did not contain non-ASCII characters.
-* The WebSocket server will send a `ping frame` every 20 seconds.
-  * If the WebSocket server does not receive a `pong frame` back from the connection within a minute the connection will be disconnected.
-  * When you receive a ping, you must send a pong with a copy of ping's payload as soon as possible.
-  * Unsolicited `pong frames` are allowed, but will not prevent disconnection. **It is recommended that the payload for these pong frames are empty.**
-* Data is returned in **chronological order**, unless noted otherwise.
-  * Without `startTime` or `endTime`, returns the most recent items up to the limit.
-  * With `startTime`, returns oldest items from `startTime` up to the limit.
-  * With `endTime`, returns most recent items up to `endTime` and the limit.
-  * With both, behaves like `startTime` but does not exceed `endTime`.
-* All timestamps in the JSON responses are in **milliseconds in UTC by default**. To receive the information in microseconds, please add the parameter `timeUnit=MICROSECOND` or `timeUnit=microsecond` in the URL.
-* Timestamp parameters (e.g. `startTime`, `endTime`, `timestamp`) can be passed in milliseconds or microseconds.
-* All field names and values are **case-sensitive**, unless noted otherwise.
-* If there are enums or terms you want clarification on, please see [SPOT Glossary](../faqs/spot_glossary.md) for more information.
-* APIs have a timeout of 10 seconds when processing a request. If a response from the Matching Engine takes longer than this, the API responds with "Timeout waiting for response from backend server. Send status unknown; execution status unknown." [(-1007 TIMEOUT)](errors.md#-1007-timeout)
-  * This does not always mean that the request failed in the Matching Engine.
-  * If the status of the request has not appeared in [User Data Stream](user-data-stream.md), please perform an API query for its status.
-* **Please avoid SQL keywords in requests** as they may trigger a security block by a WAF (Web Application Firewall) rule. See https://www.binance.com/en/support/faq/detail/360004492232 for more details.
+- The base endpoint is: **`wss://ws-api.testnet.binance.vision/ws-api/v3`**
+  - If you experience issues with the standard 443 port, alternative port 9443 is also available.
+- A single connection to the API is only valid for 24 hours; expect to be disconnected after the
+  24-hour mark.
+- A [`serverShutdown`](#server-shutdown) event will be sent when the server is about to shutdown,
+  resulting in disconnection. Please establish a new connection as soon as possible to prevent
+  interruption.
+- We support HMAC, RSA, and Ed25519 keys. For more information, please see
+  [API Key types](../faqs/api_key_types.md).
+- Responses are in JSON by default. To receive responses in SBE, refer to the
+  [SBE FAQ](../faqs/sbe_faq.md) page.
+- If your request contains a symbol name containing non-ASCII characters, then the response may
+  contain non-ASCII characters encoded in UTF-8.
+- Some methods may return asset and/or symbol names containing non-ASCII characters encoded in UTF-8
+  even if the request did not contain non-ASCII characters.
+- The WebSocket server will send a `ping frame` every 20 seconds.
+  - If the WebSocket server does not receive a `pong frame` back from the connection within a minute
+    the connection will be disconnected.
+  - When you receive a ping, you must send a pong with a copy of ping's payload as soon as possible.
+  - Unsolicited `pong frames` are allowed, but will not prevent disconnection. **It is recommended
+    that the payload for these pong frames are empty.**
+- Data is returned in **chronological order**, unless noted otherwise.
+  - Without `startTime` or `endTime`, returns the most recent items up to the limit.
+  - With `startTime`, returns oldest items from `startTime` up to the limit.
+  - With `endTime`, returns most recent items up to `endTime` and the limit.
+  - With both, behaves like `startTime` but does not exceed `endTime`.
+- All timestamps in the JSON responses are in **milliseconds in UTC by default**. To receive the
+  information in microseconds, please add the parameter `timeUnit=MICROSECOND` or
+  `timeUnit=microsecond` in the URL.
+- Timestamp parameters (e.g. `startTime`, `endTime`, `timestamp`) can be passed in milliseconds or
+  microseconds.
+- All field names and values are **case-sensitive**, unless noted otherwise.
+- If there are enums or terms you want clarification on, please see
+  [SPOT Glossary](../faqs/spot_glossary.md) for more information.
+- APIs have a timeout of 10 seconds when processing a request. If a response from the Matching
+  Engine takes longer than this, the API responds with "Timeout waiting for response from backend
+  server. Send status unknown; execution status unknown."
+  [(-1007 TIMEOUT)](errors.md#-1007-timeout)
+  - This does not always mean that the request failed in the Matching Engine.
+  - If the status of the request has not appeared in
+    [User Data Stream](user-data-stream.md), please perform an API query for its status.
+- **Please avoid SQL keywords in requests** as they may trigger a security block by a WAF (Web
+  Application Firewall) rule. See https://www.binance.com/en/support/faq/detail/360004492232 for
+  more details.
 
 ## Request format
 
@@ -132,40 +151,39 @@ Example of request:
 
 ```json
 {
-    "id": "e2a85d9f-07a5-4f94-8d5f-789dc3deb097",
-    "method": "order.place",
-    "params": {
-        "symbol": "BTCUSDT",
-        "side": "BUY",
-        "type": "LIMIT",
-        "price": "0.1",
-        "quantity": "10",
-        "timeInForce": "GTC",
-        "timestamp": 1655716096498,
-        "apiKey": "T59MTDLWlpRW16JVeZ2Nju5A5C98WkMm8CSzWC4oqynUlTm1zXOxyauT8LmwXEv9",
-        "signature": "5942ad337e6779f2f4c62cd1c26dba71c91514400a24990a3e7f5edec9323f90"
-    }
+  "id": "e2a85d9f-07a5-4f94-8d5f-789dc3deb097",
+  "method": "order.place",
+  "params": {
+    "symbol": "BTCUSDT",
+    "side": "BUY",
+    "type": "LIMIT",
+    "price": "0.1",
+    "quantity": "10",
+    "timeInForce": "GTC",
+    "timestamp": 1655716096498,
+    "apiKey": "T59MTDLWlpRW16JVeZ2Nju5A5C98WkMm8CSzWC4oqynUlTm1zXOxyauT8LmwXEv9",
+    "signature": "5942ad337e6779f2f4c62cd1c26dba71c91514400a24990a3e7f5edec9323f90"
+  }
 }
 ```
 
 Request fields:
 
-Name     | Type    | Mandatory | Description
---------- | ------- | --------- | -----------
-`id`      | INT / STRING / `null` | YES | Arbitrary ID used to match responses to requests
-`method`  | STRING  | YES       | Request method name
-`params`  | OBJECT  | NO        | Request parameters. May be omitted if there are no parameters
+| Name     | Type                  | Mandatory | Description                                                   |
+| -------- | --------------------- | --------- | ------------------------------------------------------------- |
+| `id`     | INT / STRING / `null` | YES       | Arbitrary ID used to match responses to requests              |
+| `method` | STRING                | YES       | Request method name                                           |
+| `params` | OBJECT                | NO        | Request parameters. May be omitted if there are no parameters |
 
-* Request `id` is truly arbitrary. You can use UUIDs, sequential IDs, current timestamp, etc.
-  The server does not interpret `id` in any way, simply echoing it back in the response.
+- Request `id` is truly arbitrary. You can use UUIDs, sequential IDs, current timestamp, etc. The
+  server does not interpret `id` in any way, simply echoing it back in the response.
 
-  You can freely reuse IDs within a session.
-  However, be careful to not send more than one request at a time with the same ID,
-  since otherwise it might be impossible to tell the responses apart.
+  You can freely reuse IDs within a session. However, be careful to not send more than one request
+  at a time with the same ID, since otherwise it might be impossible to tell the responses apart.
 
-* Request method names may be prefixed with explicit version: e.g., `"v3/order.place"`.
+- Request method names may be prefixed with explicit version: e.g., `"v3/order.place"`.
 
-* The order of `params` is not significant.
+- The order of `params` is not significant.
 
 ## Response format
 
@@ -175,49 +193,49 @@ Example of successful response:
 
 ```json
 {
-    "id": "e2a85d9f-07a5-4f94-8d5f-789dc3deb097",
-    "status": 200,
-    "result": {
-        "symbol": "BTCUSDT",
-        "orderId": 12510053279,
-        "orderListId": -1,
-        "clientOrderId": "a097fe6304b20a7e4fc436",
-        "transactTime": 1655716096505,
-        "price": "0.10000000",
-        "origQty": "10.00000000",
-        "executedQty": "0.00000000",
-        "origQuoteOrderQty": "0.000000",
-        "cummulativeQuoteQty": "0.00000000",
-        "status": "NEW",
-        "timeInForce": "GTC",
-        "type": "LIMIT",
-        "side": "BUY",
-        "workingTime": 1655716096505,
-        "selfTradePreventionMode": "NONE"
+  "id": "e2a85d9f-07a5-4f94-8d5f-789dc3deb097",
+  "status": 200,
+  "result": {
+    "symbol": "BTCUSDT",
+    "orderId": 12510053279,
+    "orderListId": -1,
+    "clientOrderId": "a097fe6304b20a7e4fc436",
+    "transactTime": 1655716096505,
+    "price": "0.10000000",
+    "origQty": "10.00000000",
+    "executedQty": "0.00000000",
+    "origQuoteOrderQty": "0.000000",
+    "cummulativeQuoteQty": "0.00000000",
+    "status": "NEW",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "workingTime": 1655716096505,
+    "selfTradePreventionMode": "NONE"
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "SECOND",
+      "intervalNum": 10,
+      "limit": 50,
+      "count": 12
     },
-    "rateLimits": [
-        {
-            "rateLimitType": "ORDERS",
-            "interval": "SECOND",
-            "intervalNum": 10,
-            "limit": 50,
-            "count": 12
-        },
-        {
-            "rateLimitType": "ORDERS",
-            "interval": "DAY",
-            "intervalNum": 1,
-            "limit": 160000,
-            "count": 4043
-        },
-        {
-            "rateLimitType": "REQUEST_WEIGHT",
-            "interval": "MINUTE",
-            "intervalNum": 1,
-            "limit": 6000,
-            "count": 321
-        }
-    ]
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "DAY",
+      "intervalNum": 1,
+      "limit": 160000,
+      "count": 4043
+    },
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 321
+    }
+  ]
 }
 ```
 
@@ -225,35 +243,35 @@ Example of failed response:
 
 ```json
 {
-    "id": "e2a85d9f-07a5-4f94-8d5f-789dc3deb097",
-    "status": 400,
-    "error": {
-        "code": -2010,
-        "msg": "Account has insufficient balance for requested action."
+  "id": "e2a85d9f-07a5-4f94-8d5f-789dc3deb097",
+  "status": 400,
+  "error": {
+    "code": -2010,
+    "msg": "Account has insufficient balance for requested action."
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "SECOND",
+      "intervalNum": 10,
+      "limit": 50,
+      "count": 13
     },
-    "rateLimits": [
-        {
-            "rateLimitType": "ORDERS",
-            "interval": "SECOND",
-            "intervalNum": 10,
-            "limit": 50,
-            "count": 13
-        },
-        {
-            "rateLimitType": "ORDERS",
-            "interval": "DAY",
-            "intervalNum": 1,
-            "limit": 160000,
-            "count": 4044
-        },
-        {
-            "rateLimitType": "REQUEST_WEIGHT",
-            "interval": "MINUTE",
-            "intervalNum": 1,
-            "limit": 6000,
-            "count": 322
-        }
-    ]
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "DAY",
+      "intervalNum": 1,
+      "limit": 160000,
+      "count": 4044
+    },
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 322
+    }
+  ]
 }
 ```
 
@@ -307,28 +325,32 @@ Status codes in the `status` field are the same as in HTTP.
 
 Here are some common status codes that you might encounter:
 
-* `200` indicates a successful response.
-* `4XX` status codes indicate invalid requests; the issue is on your side.
-  * `400` – your request failed, see `error` for the reason.
-  * `403` – you have been blocked by the Web Application Firewall. This can indicate a rate limit violation or a security block. See https://www.binance.com/en/support/faq/detail/360004492232 for more details.
-  * `409` – your request partially failed but also partially succeeded, see `error` for details.
-  * `418` – you have been auto-banned for repeated violation of rate limits.
-  * `429` – you have exceeded API request rate limit, please slow down.
-* `5XX` status codes indicate internal errors; the issue is on Binance's side.
-  * **Important:** If a response contains 5xx status code, it **does not** necessarily mean that your request has failed.
-    Execution status is _unknown_ and the request might have actually succeeded.
-    Please use query methods to confirm the status.
-    You might also want to establish a new WebSocket connection for that.
+- `200` indicates a successful response.
+- `4XX` status codes indicate invalid requests; the issue is on your side.
+  - `400` – your request failed, see `error` for the reason.
+  - `403` – you have been blocked by the Web Application Firewall. This can indicate a rate limit
+    violation or a security block. See https://www.binance.com/en/support/faq/detail/360004492232
+    for more details.
+  - `409` – your request partially failed but also partially succeeded, see `error` for details.
+  - `418` – you have been auto-banned for repeated violation of rate limits.
+  - `429` – you have exceeded API request rate limit, please slow down.
+- `5XX` status codes indicate internal errors; the issue is on Binance's side.
+  - **Important:** If a response contains 5xx status code, it **does not** necessarily mean that
+    your request has failed. Execution status is _unknown_ and the request might have actually
+    succeeded. Please use query methods to confirm the status. You might also want to establish a
+    new WebSocket connection for that.
 
 See [Error codes for Binance](errors.md) for a list of error codes and messages.
 
 ## Event format
 
-[User Data Stream](user-data-stream.md) events for non-SBE sessions are sent as JSON in **text frames**, one event per frame.
+[User Data Stream](user-data-stream.md) events for non-SBE sessions are sent as JSON in
+**text frames**, one event per frame.
 
 Events in [SBE sessions](../faqs/sbe_faq.md) will be sent as **binary frames**.
 
-Please refer to [`userDataStream.subscribe`](#user-data-stream-subscribe) for details on how to subscribe to User Data Stream in WebSocket API.
+Please refer to [`userDataStream.subscribe`](#subscribe-to-user-data-stream-user_stream) for details
+on how to subscribe to User Data Stream in WebSocket API.
 
 Example of an event:
 
@@ -357,13 +379,15 @@ Example of an event:
 
 Event fields:
 
-| Name | Type | Mandatory | Description |
-| :---- | :---- | :---- | :---- |
-| `event` | OBJECT | YES | Event payload. See [User Data Streams](user-data-stream.md) |
-| `subscriptionId`|INT| NO| Identifies which subscription the event is coming from. See [User Data Stream subscriptions](#general_info_user_data_stream_subscriptions) |
+| Name             | Type   | Mandatory | Description                                                                                                                  |
+| :--------------- | :----- | :-------- | :--------------------------------------------------------------------------------------------------------------------------- |
+| `event`          | OBJECT | YES       | Event payload. See [User Data Streams](user-data-stream.md)                                                      |
+| `subscriptionId` | INT    | NO        | Identifies which subscription the event is coming from. See [User Data Stream subscriptions](#user-data-stream-subscription) |
 
 ## Connection events
+
 <a id="serverShutdown"></a>
+
 ### Server Shutdown
 
 `serverShutdown` event is sent when the server is about to shut down.
@@ -389,10 +413,10 @@ The connection is per **IP address**.
 
 ### General information on rate limits
 
-* Current API rate limits can be queried using the [`exchangeInfo`](#exchange-information) request.
-* There are multiple rate limit types across multiple intervals.
-* Responses can indicate current rate limit status in the optional `rateLimits` field.
-* Requests fail with status `429` when unfilled order count or request rate limits are violated.
+- Current API rate limits can be queried using the [`exchangeInfo`](#exchange-information) request.
+- There are multiple rate limit types across multiple intervals.
+- Responses can indicate current rate limit status in the optional `rateLimits` field.
+- Requests fail with status `429` when unfilled order count or request rate limits are violated.
 
 #### How to interpret rate limits
 
@@ -400,60 +424,58 @@ A response with rate limit status may look like this:
 
 ```json
 {
-    "id": "7069b743-f477-4ae3-81db-db9b8df085d2",
-    "status": 200,
-    "result": {
-        "serverTime": 1656400526260
-    },
-    "rateLimits": [
-        {
-            "rateLimitType": "REQUEST_WEIGHT",
-            "interval": "MINUTE",
-            "intervalNum": 1,
-            "limit": 6000,
-            "count": 70
-        }
-    ]
+  "id": "7069b743-f477-4ae3-81db-db9b8df085d2",
+  "status": 200,
+  "result": {
+    "serverTime": 1656400526260
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 70
+    }
+  ]
 }
 ```
 
 The `rateLimits` array describes all currently active rate limits affected by the request.
 
-| Name            | Type    | Mandatory | Description
-| --------------- | ------- | --------- | -----------
-| `rateLimitType` | ENUM    | YES       | Rate limit type: `REQUEST_WEIGHT`, `ORDERS`
-| `interval`      | ENUM    | YES       | Rate limit interval: `SECOND`, `MINUTE`, `HOUR`, `DAY`
-| `intervalNum`   | INT     | YES       | Rate limit interval multiplier
-| `limit`         | INT     | YES       | Request limit per interval
-| `count`         | INT     | YES       | Current usage per interval
+| Name            | Type | Mandatory | Description                                            |
+| --------------- | ---- | --------- | ------------------------------------------------------ |
+| `rateLimitType` | ENUM | YES       | Rate limit type: `REQUEST_WEIGHT`, `ORDERS`            |
+| `interval`      | ENUM | YES       | Rate limit interval: `SECOND`, `MINUTE`, `HOUR`, `DAY` |
+| `intervalNum`   | INT  | YES       | Rate limit interval multiplier                         |
+| `limit`         | INT  | YES       | Request limit per interval                             |
+| `count`         | INT  | YES       | Current usage per interval                             |
 
 Rate limits are accounted by intervals.
 
-For example, a `1 MINUTE` interval starts every minute.
-Request submitted at 00:01:23.456 counts towards the 00:01:00 minute's limit.
-Once the 00:02:00 minute starts, the count will reset to zero again.
+For example, a `1 MINUTE` interval starts every minute. Request submitted at 00:01:23.456 counts
+towards the 00:01:00 minute's limit. Once the 00:02:00 minute starts, the count will reset to zero
+again.
 
-Other intervals behave in a similar manner.
-For example, `1 DAY` rate limit resets at 00:00 UTC every day,
-and `10 SECOND` interval resets at 00, 10, 20... seconds of each minute.
+Other intervals behave in a similar manner. For example, `1 DAY` rate limit resets at 00:00 UTC
+every day, and `10 SECOND` interval resets at 00, 10, 20... seconds of each minute.
 
-APIs have multiple rate-limiting intervals.
-If you exhaust a shorter interval but the longer interval still allows requests,
-you will have to wait for the shorter interval to expire and reset.
-If you exhaust a longer interval, you will have to wait for that interval to reset,
-even if shorter rate limit count is zero.
+APIs have multiple rate-limiting intervals. If you exhaust a shorter interval but the longer
+interval still allows requests, you will have to wait for the shorter interval to expire and reset.
+If you exhaust a longer interval, you will have to wait for that interval to reset, even if shorter
+rate limit count is zero.
 
 #### How to show/hide rate limit information
 
 `rateLimits` field is included with every response by default.
 
-However, rate limit information can be quite bulky.
-If you are not interested in detailed rate limit status of every request,
-the `rateLimits` field can be omitted from responses to reduce their size.
+However, rate limit information can be quite bulky. If you are not interested in detailed rate limit
+status of every request, the `rateLimits` field can be omitted from responses to reduce their size.
 
-* Optional `returnRateLimits` boolean parameter in request.
+- Optional `returnRateLimits` boolean parameter in request.
 
-  Use `returnRateLimits` parameter to control whether to include `rateLimits` fields in response to individual requests.
+  Use `returnRateLimits` parameter to control whether to include `rateLimits` fields in response to
+  individual requests.
 
   Default request and response:
 
@@ -463,18 +485,18 @@ the `rateLimits` field can be omitted from responses to reduce their size.
 
   ```json
   {
-      "id": 1,
-      "status": 200,
-      "result": { "serverTime": 1656400526260 },
-      "rateLimits": [
-          {
-              "rateLimitType": "REQUEST_WEIGHT",
-              "interval": "MINUTE",
-              "intervalNum": 1,
-              "limit": 6000,
-              "count": 70
-          }
-      ]
+    "id": 1,
+    "status": 200,
+    "result": { "serverTime": 1656400526260 },
+    "rateLimits": [
+      {
+        "rateLimitType": "REQUEST_WEIGHT",
+        "interval": "MINUTE",
+        "intervalNum": 1,
+        "limit": 6000,
+        "count": 70
+      }
+    ]
   }
   ```
 
@@ -488,55 +510,58 @@ the `rateLimits` field can be omitted from responses to reduce their size.
   { "id": 2, "status": 200, "result": { "serverTime": 1656400527891 } }
   ```
 
-* Optional `returnRateLimits` boolean parameter in connection URL.
+- Optional `returnRateLimits` boolean parameter in connection URL.
 
-  If you wish to omit `rateLimits` from all responses by default,
-  use `returnRateLimits` parameter in the query string instead:
+  If you wish to omit `rateLimits` from all responses by default, use `returnRateLimits` parameter
+  in the query string instead:
 
   ```
   wss://ws-api.binance.com:443/ws-api/v3?returnRateLimits=false
   ```
 
-  This will make all requests made through this connection behave as if you have passed `"returnRateLimits": false`.
+  This will make all requests made through this connection behave as if you have passed
+  `"returnRateLimits": false`.
 
-  If you _want_ to see rate limits for a particular request,
-  you need to explicitly pass the `"returnRateLimits": true` parameter.
+  If you _want_ to see rate limits for a particular request, you need to explicitly pass the
+  `"returnRateLimits": true` parameter.
 
 **Note:** Your requests are still rate limited if you hide the `rateLimits` field in responses.
 
 ### IP limits
 
-* Every request has a certain **weight**, added to your limit as you perform requests.
-  * The heavier the request (e.g. querying data from multiple symbols), the more weight the request will cost.
-  * Connecting to WebSocket API costs 2 weight.
-* Current weight usage is indicated by the `REQUEST_WEIGHT` rate limit type.
-* Use the [`exchangeInfo`](#exchange-information) request
-  to keep track of the current weight limits.
-* Weight is accumulated **per IP address** and is shared by all connections from that address.
-* If you go over the weight limit, requests fail with status `429`.
-  * This status code indicates you should back off and stop spamming the API.
-  * Rate-limited responses include a `retryAfter` field, indicating when you can retry the request.
-* **Repeatedly violating rate limits and/or failing to back off after receiving 429s will result in an automated IP ban and you will be disconnected.**
-  * Requests from a banned IP address fail with status `418`.
-  * `retryAfter` field indicates the timestamp when the ban will be lifted.
-* IP bans are tracked and **scale in duration** for repeat offenders, **from 2 minutes to 3 days**.
+- Every request has a certain **weight**, added to your limit as you perform requests.
+  - The heavier the request (e.g. querying data from multiple symbols), the more weight the request
+    will cost.
+  - Connecting to WebSocket API costs 2 weight.
+- Current weight usage is indicated by the `REQUEST_WEIGHT` rate limit type.
+- Use the [`exchangeInfo`](#exchange-information) request to keep track of the current weight
+  limits.
+- Weight is accumulated **per IP address** and is shared by all connections from that address.
+- If you go over the weight limit, requests fail with status `429`.
+  - This status code indicates you should back off and stop spamming the API.
+  - Rate-limited responses include a `retryAfter` field, indicating when you can retry the request.
+- **Repeatedly violating rate limits and/or failing to back off after receiving 429s will result in
+  an automated IP ban and you will be disconnected.**
+  - Requests from a banned IP address fail with status `418`.
+  - `retryAfter` field indicates the timestamp when the ban will be lifted.
+- IP bans are tracked and **scale in duration** for repeat offenders, **from 2 minutes to 3 days**.
 
 Successful response indicating that in 1 minute you have used 70 weight out of your 6000 limit:
 
 ```json
 {
-    "id": "7069b743-f477-4ae3-81db-db9b8df085d2",
-    "status": 200,
-    "result": [],
-    "rateLimits": [
-        {
-            "rateLimitType": "REQUEST_WEIGHT",
-            "interval": "MINUTE",
-            "intervalNum": 1,
-            "limit": 6000,
-            "count": 70
-        }
-    ]
+  "id": "7069b743-f477-4ae3-81db-db9b8df085d2",
+  "status": 200,
+  "result": [],
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 70
+    }
+  ]
 }
 ```
 
@@ -544,131 +569,147 @@ Failed response indicating that you are banned and the ban will last until epoch
 
 ```json
 {
-    "id": "fc93a61a-a192-4cf4-bb2a-a8f0f0c51e06",
-    "status": 418,
-    "error": {
-        "code": -1003,
-        "msg": "Way too much request weight used; IP banned until 1659146400000. Please use WebSocket Streams for live updates to avoid bans.",
-        "data": {
-            "serverTime": 1659142907531,
-            "retryAfter": 1659146400000
-        }
-    },
-    "rateLimits": [
-        {
-            "rateLimitType": "REQUEST_WEIGHT",
-            "interval": "MINUTE",
-            "intervalNum": 1,
-            "limit": 6000,
-            "count": 2411
-        }
-    ]
+  "id": "fc93a61a-a192-4cf4-bb2a-a8f0f0c51e06",
+  "status": 418,
+  "error": {
+    "code": -1003,
+    "msg": "Way too much request weight used; IP banned until 1659146400000. Please use WebSocket Streams for live updates to avoid bans.",
+    "data": {
+      "serverTime": 1659142907531,
+      "retryAfter": 1659146400000
+    }
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 2411
+    }
+  ]
 }
 ```
 
 ### Unfilled Order Count
 
-* Successfully placed orders update the `ORDERS` rate limit type.
-* Rejected or unsuccessful orders might or might not update the `ORDERS` rate limit type.
-* **Please note that if your orders are consistently filled by trades, you can continuously place orders on the API**. For more information, please see [Spot Unfilled Order Count Rules](../faqs/order_count_decrement.md).
-* Use the [`account.rateLimits.orders`](#query-unfilled-order-count) request to keep track of how many orders you have placed within this interval.
-* If you exceed this, requests fail with status `429`.
-  * This status code indicates you should back off and stop spamming the API.
-  * Responses that have a status `429` include a `retryAfter` field, indicating when you can retry the request.
-* This is maintained **per account** and is shared by all API keys of the account.
+- Successfully placed orders update the `ORDERS` rate limit type.
+- Rejected or unsuccessful orders might or might not update the `ORDERS` rate limit type.
+- **Please note that if your orders are consistently filled by trades, you can continuously place
+  orders on the API**. For more information, please see
+  [Spot Unfilled Order Count Rules](../faqs/order_count_decrement.md).
+- Use the [`account.rateLimits.orders`](#unfilled-order-count-user_data) request to keep track of
+  how many orders you have placed within this interval.
+- If you exceed this, requests fail with status `429`.
+  - This status code indicates you should back off and stop spamming the API.
+  - Responses that have a status `429` include a `retryAfter` field, indicating when you can retry
+    the request.
+- This is maintained **per account** and is shared by all API keys of the account.
 
-Successful response indicating that you have placed 12 orders in 10 seconds, and 4043 orders in the past 24 hours:
+Successful response indicating that you have placed 12 orders in 10 seconds, and 4043 orders in the
+past 24 hours:
+
 ```json
 {
-    "id": "e2a85d9f-07a5-4f94-8d5f-789dc3deb097",
-    "status": 200,
-    "result": {
-        "symbol": "BTCUSDT",
-        "orderId": 12510053279,
-        "orderListId": -1,
-        "clientOrderId": "a097fe6304b20a7e4fc436",
-        "transactTime": 1655716096505,
-        "price": "0.10000000",
-        "origQty": "10.00000000",
-        "executedQty": "0.00000000",
-        "origQuoteOrderQty": "0.000000",
-        "cummulativeQuoteQty": "0.00000000",
-        "status": "NEW",
-        "timeInForce": "GTC",
-        "type": "LIMIT",
-        "side": "BUY",
-        "workingTime": 1655716096505,
-        "selfTradePreventionMode": "NONE"
+  "id": "e2a85d9f-07a5-4f94-8d5f-789dc3deb097",
+  "status": 200,
+  "result": {
+    "symbol": "BTCUSDT",
+    "orderId": 12510053279,
+    "orderListId": -1,
+    "clientOrderId": "a097fe6304b20a7e4fc436",
+    "transactTime": 1655716096505,
+    "price": "0.10000000",
+    "origQty": "10.00000000",
+    "executedQty": "0.00000000",
+    "origQuoteOrderQty": "0.000000",
+    "cummulativeQuoteQty": "0.00000000",
+    "status": "NEW",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "side": "BUY",
+    "workingTime": 1655716096505,
+    "selfTradePreventionMode": "NONE"
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "SECOND",
+      "intervalNum": 10,
+      "limit": 50,
+      "count": 12
     },
-    "rateLimits": [
-        {
-            "rateLimitType": "ORDERS",
-            "interval": "SECOND",
-            "intervalNum": 10,
-            "limit": 50,
-            "count": 12
-        },
-        {
-            "rateLimitType": "ORDERS",
-            "interval": "DAY",
-            "intervalNum": 1,
-            "limit": 160000,
-            "count": 4043
-        },
-        {
-            "rateLimitType": "REQUEST_WEIGHT",
-            "interval": "MINUTE",
-            "intervalNum": 1,
-            "limit": 6000,
-            "count": 321
-        }
-    ]
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "DAY",
+      "intervalNum": 1,
+      "limit": 160000,
+      "count": 4043
+    },
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 6000,
+      "count": 321
+    }
+  ]
 }
 ```
 
 ## Request security
 
-* Each method has a security type indicating required API key permissions, shown next to the method name (e.g., [Place new order (TRADE)](#place-new-order-trade)).
-* If unspecified, the security type is `NONE`.
-* Except for `NONE`, all methods with a security type are considered `SIGNED` requests (i.e. including a `signature`), except for [listenKey management](#user-data-stream-requests).
-* Secure methods require a valid API key to be specified and authenticated.
-  * API keys can be created on the [SPOT Test Network](https://testnet.binance.vision) upon logging in with your Github account.
-  * **Both API key and secret key are sensitive.** Never share them with anyone.
-    If you notice unusual activity in your account, immediately revoke all the keys and contact Binance support.
-* API keys can be configured to allow access only to certain types of secure methods.
-  * For example, you can have an API key with `TRADE` permission for trading,
-    while using a separate API key with `USER_DATA` permission to monitor your order status.
-  * By default, an API key cannot `TRADE`. You need to enable trading in API Management first.
+- Each method has a security type indicating required API key permissions, shown next to the method
+  name (e.g., [Place new order (TRADE)](#place-new-order-trade)).
+- If unspecified, the security type is `NONE`.
+- Except for `NONE`, all methods with a security type are considered `SIGNED` requests (i.e.
+  including a `signature`), except for [listenKey management](#user-data-stream-requests).
+- Secure methods require a valid API key to be specified and authenticated.
+  - API keys can be created on the [SPOT Test Network](https://testnet.binance.vision) upon logging
+    in with your Github account.
+  - **Both API key and secret key are sensitive.** Never share them with anyone. If you notice
+    unusual activity in your account, immediately revoke all the keys and contact Binance support.
+- API keys can be configured to allow access only to certain types of secure methods.
+  - For example, you can have an API key with `TRADE` permission for trading, while using a separate
+    API key with `USER_DATA` permission to monitor your order status.
+  - By default, an API key cannot `TRADE`. You need to enable trading in API Management first.
 
-Security type |  Description
-------------- | ------------
-`NONE`        | Public market data
-`TRADE`       | Trading on the exchange, placing and canceling orders
-`USER_DATA`   | Private account information, such as order status and your trading history
-`USER_STREAM` | Managing User Data Stream subscriptions
+| Security type | Description                                                                |
+| ------------- | -------------------------------------------------------------------------- |
+| `NONE`        | Public market data                                                         |
+| `TRADE`       | Trading on the exchange, placing and canceling orders                      |
+| `USER_DATA`   | Private account information, such as order status and your trading history |
+| `USER_STREAM` | Managing User Data Stream subscriptions                                    |
 
 ### SIGNED request security
 
-* `SIGNED` requests require an additional parameter: `signature`, authorizing the request.
+- `SIGNED` requests require an additional parameter: `signature`, authorizing the request.
 
 #### Signature Case Sensitivity
 
-* **HMAC:** Signatures generated using HMAC are **not case-sensitive**. This means the signature string can be verified regardless of letter casing.
-* **RSA:** Signatures generated using RSA are **case-sensitive**.
-* **Ed25519:** Signatures generated using ED25519 are also **case-sensitive**
+- **HMAC:** Signatures generated using HMAC are **not case-sensitive**. This means the signature
+  string can be verified regardless of letter casing.
+- **RSA:** Signatures generated using RSA are **case-sensitive**.
+- **Ed25519:** Signatures generated using ED25519 are also **case-sensitive**
 
-Please consult [SIGNED request example (HMAC)](#signed-request-example-hmac), [SIGNED request example (RSA)](#signed-request-example-rsa), and [SIGNED request example (Ed25519)](#signed-request-example-ed25519) on how to compute signature, depending on which API key type you are using.
+Please consult [SIGNED request example (HMAC)](#signed-request-example-hmac),
+[SIGNED request example (RSA)](#signed-request-example-rsa), and
+[SIGNED request example (Ed25519)](#signed-request-example-ed25519) on how to compute signature,
+depending on which API key type you are using.
 
 <a id="timingsecurity"></a>
 
 ### Timing security
 
-* `SIGNED` requests also require a `timestamp` parameter which should be the current timestamp either in milliseconds or microseconds. (See [General API Information](#general-api-information))
-* An additional optional parameter, `recvWindow`, specifies for how long the request stays valid and may only be specified in milliseconds.
-  * `recvWindow` supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
-  * If `recvWindow` is not sent, **it defaults to 5000 milliseconds**.
-  * Maximum `recvWindow` is 60000 milliseconds.
-* Request processing logic is as follows:
+- `SIGNED` requests also require a `timestamp` parameter which should be the current timestamp
+  either in milliseconds or microseconds. (See [General API Information](#general-api-information))
+- An additional optional parameter, `recvWindow`, specifies for how long the request stays valid and
+  may only be specified in milliseconds.
+  - `recvWindow` supports up to three decimal places of precision (e.g., 6000.346) so that
+    microseconds may be specified.
+  - If `recvWindow` is not sent, **it defaults to 5000 milliseconds**.
+  - Maximum `recvWindow` is 60000 milliseconds.
+- Request processing logic is as follows:
 
 ```javascript
 serverTime = getCurrentTime()
@@ -684,12 +725,11 @@ if (timestamp < (serverTime + 1 second) && (serverTime - timestamp) <= recvWindo
 } else {
   // reject request
 }
-  ```
+```
 
-**Serious trading is about timing.** Networks can be unstable and unreliable,
-which can lead to requests taking varying amounts of time to reach the
-servers. With `recvWindow`, you can specify that the request must be
-processed within a certain number of milliseconds or be rejected by the
+**Serious trading is about timing.** Networks can be unstable and unreliable, which can lead to
+requests taking varying amounts of time to reach the servers. With `recvWindow`, you can specify
+that the request must be processed within a certain number of milliseconds or be rejected by the
 server.
 
 **It is recommended to use a small `recvWindow` of 5000 or less!**
@@ -700,10 +740,10 @@ Here is a step-by-step guide on how to sign requests using an HMAC secret key.
 
 Example API key and secret key:
 
-Key          | Value
------------- | ------------
-`apiKey`       | `vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A`
-`secretKey`    | `NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j`
+| Key         | Value                                                              |
+| ----------- | ------------------------------------------------------------------ |
+| `apiKey`    | `vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A` |
+| `secretKey` | `NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j` |
 
 **WARNING: DO NOT SHARE YOUR API KEY AND SECRET KEY WITH ANYONE.**
 
@@ -713,20 +753,20 @@ Example of request with a symbol name comprised entirely of ASCII characters:
 
 ```json
 {
-    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-    "method": "order.place",
-    "params": {
-        "symbol": "BTCUSDT",
-        "side": "SELL",
-        "type": "LIMIT",
-        "timeInForce": "GTC",
-        "quantity": "0.01000000",
-        "price": "52000.00",
-        "recvWindow": 100,
-        "timestamp": 1645423376532,
-        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-        "signature": "------ FILL ME ------"
-    }
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol": "BTCUSDT",
+    "side": "SELL",
+    "type": "LIMIT",
+    "timeInForce": "GTC",
+    "quantity": "0.01000000",
+    "price": "52000.00",
+    "recvWindow": 100,
+    "timestamp": 1645423376532,
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "------ FILL ME ------"
+  }
 }
 ```
 
@@ -734,20 +774,20 @@ Example of a request with a symbol name containing non-ASCII characters:
 
 ```json
 {
-    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-    "method": "order.place",
-    "params": {
-        "symbol": "１２３４５６",
-        "side": "BUY",
-        "type": "LIMIT",
-        "timeInForce": "GTC",
-        "quantity": "0.01000000",
-        "price": "0.10000000",
-        "recvWindow": 5000,
-        "timestamp": 1645423376532,
-        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-        "signature": "------ FILL ME ------"
-    }
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol": "１２３４５６",
+    "side": "BUY",
+    "type": "LIMIT",
+    "timeInForce": "GTC",
+    "quantity": "0.01000000",
+    "price": "0.10000000",
+    "recvWindow": 5000,
+    "timestamp": 1645423376532,
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "------ FILL ME ------"
+  }
 }
 ```
 
@@ -755,35 +795,36 @@ As you can see, the `signature` parameter is currently missing.
 
 **Step 1: Construct the signature payload**
 
-Take all request `params` except `signature` and **sort them in alphabetical order by parameter name**:
+Take all request `params` except `signature` and **sort them in alphabetical order by parameter
+name**:
 
 For the first set of example parameters (ASCII only):
 
-Parameter        | Value
----------------- | ------------
-`apiKey`           | vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A
-`price`            | 52000.00
-`quantity`         | 0.01000000
-`recvWindow`       | 100
-`side`             | SELL
-`symbol`           | BTCUSDT
-`timeInForce`      | GTC
-`timestamp`        | 1645423376532
-`type`             | LIMIT
+| Parameter     | Value                                                            |
+| ------------- | ---------------------------------------------------------------- |
+| `apiKey`      | vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A |
+| `price`       | 52000.00                                                         |
+| `quantity`    | 0.01000000                                                       |
+| `recvWindow`  | 100                                                              |
+| `side`        | SELL                                                             |
+| `symbol`      | BTCUSDT                                                          |
+| `timeInForce` | GTC                                                              |
+| `timestamp`   | 1645423376532                                                    |
+| `type`        | LIMIT                                                            |
 
 For the second set of example parameters (some non-ASCII characters):
 
-Parameter | Value
------------- | ------------
-`apiKey` | vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A
-`price` | 0.10000000
-`quantity` | 1.00000000
-`recvWindow` | 5000
-`side` | BUY
-`symbol` | １２３４５６
-`timeInForce` | GTC
-`timestamp` | 1645423376532
-`type` | LIMIT
+| Parameter     | Value                                                            |
+| ------------- | ---------------------------------------------------------------- |
+| `apiKey`      | vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A |
+| `price`       | 0.10000000                                                       |
+| `quantity`    | 1.00000000                                                       |
+| `recvWindow`  | 5000                                                             |
+| `side`        | BUY                                                              |
+| `symbol`      | １２３４５６                                                     |
+| `timeInForce` | GTC                                                              |
+| `timestamp`   | 1645423376532                                                    |
+| `type`        | LIMIT                                                            |
 
 Format parameters as `parameter=value` pairs separated by `&`. Values need to be encoded in UTF-8.
 
@@ -793,7 +834,8 @@ For the first set of example parameters (ASCII only), the signature payload shou
 apiKey=vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
 ```
 
-For the second set of example parameters (some non-ASCII characters), the signature payload should look like this:
+For the second set of example parameters (some non-ASCII characters), the signature payload should
+look like this:
 
 ```console
 apiKey=vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A&price=0.10000000&quantity=1.00000000&recvWindow=5000&side=BUY&symbol=１２３４５６&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
@@ -805,7 +847,8 @@ apiKey=vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A&price=0.
 2. Sign the UTF-8 bytes of the signature payload constructed in Step 1.
 3. Encode the HMAC-SHA-256 output as a hex string.
 
-Note that `apiKey`, `secretKey`, and the payload are **case-sensitive**, while the resulting signature value is case-insensitive.
+Note that `apiKey`, `secretKey`, and the payload are **case-sensitive**, while the resulting
+signature value is case-insensitive.
 
 You can cross-check your signature algorithm implementation with OpenSSL:
 
@@ -835,20 +878,20 @@ For the first set of example parameters (ASCII only):
 
 ```json
 {
-    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-    "method": "order.place",
-    "params": {
-        "symbol": "BTCUSDT",
-        "side": "SELL",
-        "type": "LIMIT",
-        "timeInForce": "GTC",
-        "quantity": "0.01000000",
-        "price": "52000.00",
-        "recvWindow": 100,
-        "timestamp": 1645423376532,
-        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-        "signature": "aa1b5712c094bc4e57c05a1a5c1fd8d88dcd628338ea863fec7b88e59fe2db24"
-    }
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol": "BTCUSDT",
+    "side": "SELL",
+    "type": "LIMIT",
+    "timeInForce": "GTC",
+    "quantity": "0.01000000",
+    "price": "52000.00",
+    "recvWindow": 100,
+    "timestamp": 1645423376532,
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "aa1b5712c094bc4e57c05a1a5c1fd8d88dcd628338ea863fec7b88e59fe2db24"
+  }
 }
 ```
 
@@ -856,20 +899,20 @@ For the second set of example parameters (some non-ASCII characters):
 
 ```json
 {
-    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-    "method": "order.place",
-    "params": {
-        "symbol": "１２３４５６",
-        "side": "BUY",
-        "type": "LIMIT",
-        "timeInForce": "GTC",
-        "quantity": "1.00000000",
-        "price": "0.10000000",
-        "recvWindow": 5000,
-        "timestamp": 1645423376532,
-        "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
-        "signature": "b33892ae8e687c939f4468c6268ddd4c40ac1af18ad19a064864c47bae0752cd"
-    }
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol": "１２３４５６",
+    "side": "BUY",
+    "type": "LIMIT",
+    "timeInForce": "GTC",
+    "quantity": "1.00000000",
+    "price": "0.10000000",
+    "recvWindow": 5000,
+    "timestamp": 1645423376532,
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "b33892ae8e687c939f4468c6268ddd4c40ac1af18ad19a064864c47bae0752cd"
+  }
 }
 ```
 
@@ -877,9 +920,9 @@ For the second set of example parameters (some non-ASCII characters):
 
 Here is a step-by-step guide on how to sign requests using an RSA private key.
 
-Key          | Value
------------- | ------------
-`apiKey`       | `CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ`
+| Key      | Value                                                              |
+| -------- | ------------------------------------------------------------------ |
+| `apiKey` | `CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ` |
 
 These examples assume the private key is stored in the file `test-rsa-prv.pem`.
 
@@ -891,20 +934,20 @@ Example of request with a symbol name comprised entirely of ASCII characters:
 
 ```json
 {
-    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-    "method": "order.place",
-    "params": {
-        "symbol": "BTCUSDT",
-        "side": "SELL",
-        "type": "LIMIT",
-        "timeInForce": "GTC",
-        "quantity": "0.01000000",
-        "price": "52000.00",
-        "recvWindow": 100,
-        "timestamp": 1645423376532,
-        "apiKey": "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
-        "signature": "------ FILL ME ------"
-    }
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol": "BTCUSDT",
+    "side": "SELL",
+    "type": "LIMIT",
+    "timeInForce": "GTC",
+    "quantity": "0.01000000",
+    "price": "52000.00",
+    "recvWindow": 100,
+    "timestamp": 1645423376532,
+    "apiKey": "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
+    "signature": "------ FILL ME ------"
+  }
 }
 ```
 
@@ -912,54 +955,55 @@ Example of a request with a symbol name containing non-ASCII characters:
 
 ```json
 {
-    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-    "method": "order.place",
-    "params": {
-        "symbol": "１２３４５６",
-        "side": "BUY",
-        "type": "LIMIT",
-        "timeInForce": "GTC",
-        "quantity": "0.01000000",
-        "price": "0.10000000",
-        "recvWindow": 5000,
-        "timestamp": 1645423376532,
-        "apiKey": "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
-        "signature": "------ FILL ME ------"
-    }
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol": "１２３４５６",
+    "side": "BUY",
+    "type": "LIMIT",
+    "timeInForce": "GTC",
+    "quantity": "0.01000000",
+    "price": "0.10000000",
+    "recvWindow": 5000,
+    "timestamp": 1645423376532,
+    "apiKey": "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
+    "signature": "------ FILL ME ------"
+  }
 }
 ```
 
 **Step 1: Construct the signature payload**
 
-Take all request `params` except `signature` and **sort them in alphabetical order by parameter name**:
+Take all request `params` except `signature` and **sort them in alphabetical order by parameter
+name**:
 
 For the first set of example parameters (ASCII only):
 
-Parameter        | Value
----------------- | ------------
-`apiKey`           | CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ
-`price`            | 52000.00
-`quantity`         | 0.01000000
-`recvWindow`       | 100
-`side`             | SELL
-`symbol`           | BTCUSDT
-`timeInForce`      | GTC
-`timestamp`        | 1645423376532
-`type`             | LIMIT
+| Parameter     | Value                                                            |
+| ------------- | ---------------------------------------------------------------- |
+| `apiKey`      | CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ |
+| `price`       | 52000.00                                                         |
+| `quantity`    | 0.01000000                                                       |
+| `recvWindow`  | 100                                                              |
+| `side`        | SELL                                                             |
+| `symbol`      | BTCUSDT                                                          |
+| `timeInForce` | GTC                                                              |
+| `timestamp`   | 1645423376532                                                    |
+| `type`        | LIMIT                                                            |
 
 For the second set of example parameters (some non-ASCII characters):
 
-Parameter | Value
------------- | ------------
-`apiKey` | CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ
-`price` | 0.10000000
-`quantity` | 1.00000000
-`recvWindow` | 5000
-`side` | BUY
-`symbol` | １２３４５６
-`timeInForce` | GTC
-`timestamp` | 1645423376532
-`type` | LIMIT
+| Parameter     | Value                                                            |
+| ------------- | ---------------------------------------------------------------- |
+| `apiKey`      | CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ |
+| `price`       | 0.10000000                                                       |
+| `quantity`    | 1.00000000                                                       |
+| `recvWindow`  | 5000                                                             |
+| `side`        | BUY                                                              |
+| `symbol`      | １２３４５６                                                     |
+| `timeInForce` | GTC                                                              |
+| `timestamp`   | 1645423376532                                                    |
+| `type`        | LIMIT                                                            |
 
 Format parameters as `parameter=value` pairs separated by `&`. Values need to be encoded in UTF-8.
 
@@ -969,7 +1013,8 @@ For the first set of example parameters (ASCII only), the signature payload shou
 apiKey=CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
 ```
 
-For the second set of example parameters (some non-ASCII characters), the signature payload should look like this:
+For the second set of example parameters (some non-ASCII characters), the signature payload should
+look like this:
 
 ```console
 apiKey=CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ&price=0.10000000&quantity=1.00000000&recvWindow=5000&side=BUY&symbol=１２３４５６&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
@@ -977,7 +1022,8 @@ apiKey=CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ&price=0.
 
 **Step 2: Compute the signature**
 
-1. Sign the UTF-8 bytes of the signature payload constructed in Step 1 using the RSASSA-PKCS1-v1_5 algorithm with SHA-256 hash function.
+1. Sign the UTF-8 bytes of the signature payload constructed in Step 1 using the RSASSA-PKCS1-v1_5
+   algorithm with SHA-256 hash function.
 2. Encode the output in base64.
 
 Note that `apiKey`, the payload, and the resulting `signature` are **case-sensitive**.
@@ -1012,21 +1058,21 @@ For the first set of example parameters (ASCII only):
 
 ```json
 {
-    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-    "method": "order.place",
-    "params": {
-        "symbol": "BTCUSDT",
-        "side": "SELL",
-        "type": "LIMIT",
-        "timeInForce": "GTC",
-        "quantity": "0.01000000",
-        "price": "52000.00",
-        "newOrderRespType": "ACK",
-        "recvWindow": 100,
-        "timestamp": 1645423376532,
-        "apiKey": "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
-        "signature": "OJJaf8C/3VGrU4ATTR4GiUDqL2FboSE1Qw7UnnoYNfXTXHubIl1iaePGuGyfct4NPu5oVEZCH4Q6ZStfB1w4ssgu0uiB/Bg+fBrRFfVgVaLKBdYHMvT+ljUJzqVaeoThG9oXlduiw8PbS9U8DYAbDvWN3jqZLo4Z2YJbyovyDAvDTr/oC0+vssLqP7NmlNb3fF3Bj7StmOwJvQJTbRAtzxK5PP7OQe+0mbW+D7RqVkUiSswR8qJFWTeSe4nXXNIdZdueYhF/Xf25L+KitJS5IHdIHcKfEw3MQzHFb2ZsGWkjDQwxkwr7Noi0Zaa+gFtxCuatGFm9dFIyx217pmSHtA=="
-    }
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol": "BTCUSDT",
+    "side": "SELL",
+    "type": "LIMIT",
+    "timeInForce": "GTC",
+    "quantity": "0.01000000",
+    "price": "52000.00",
+    "newOrderRespType": "ACK",
+    "recvWindow": 100,
+    "timestamp": 1645423376532,
+    "apiKey": "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
+    "signature": "OJJaf8C/3VGrU4ATTR4GiUDqL2FboSE1Qw7UnnoYNfXTXHubIl1iaePGuGyfct4NPu5oVEZCH4Q6ZStfB1w4ssgu0uiB/Bg+fBrRFfVgVaLKBdYHMvT+ljUJzqVaeoThG9oXlduiw8PbS9U8DYAbDvWN3jqZLo4Z2YJbyovyDAvDTr/oC0+vssLqP7NmlNb3fF3Bj7StmOwJvQJTbRAtzxK5PP7OQe+0mbW+D7RqVkUiSswR8qJFWTeSe4nXXNIdZdueYhF/Xf25L+KitJS5IHdIHcKfEw3MQzHFb2ZsGWkjDQwxkwr7Noi0Zaa+gFtxCuatGFm9dFIyx217pmSHtA=="
+  }
 }
 ```
 
@@ -1034,32 +1080,33 @@ For the second set of example parameters (some non-ASCII characters):
 
 ```json
 {
-    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-    "method": "order.place",
-    "params": {
-        "symbol": "１２３４５６",
-        "side": "SELL",
-        "type": "LIMIT",
-        "timeInForce": "GTC",
-        "quantity": "1.00000000",
-        "price": "0.10000000",
-        "recvWindow": 5000,
-        "timestamp": 1645423376532,
-        "apiKey": "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
-        "signature": "F3o/79Ttvl2cVYGPfBOF3oEOcm5QcYmTYWpdVIrKve5u+8paMNDAdUE+teqMxFM9HcquetGcfuFpLYtsQames5bDx/tskGM76TWW8HaM+6tuSYBSFLrKqChfA9hQGLYGjAiflf1YBnDhY+7vNbJFusUborNOloOj+ufzP5q42PvI3H0uNy3W5V3pyfXpDGCBtfCYYr9NAqA4d+AQfyllL/zkO9h9JSdozN49t0/hWGoD2dWgSO0Je6MytKEvD4DQXGeqNlBTB6tUXcWnRW+FcaKZ4KYqnxCtb1u8rFXUYgFykr2CbcJLSmw6ydEJ3EZ/NaZopRr+cU0W2m0HZ3qucw=="
-    }
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol": "１２３４５６",
+    "side": "SELL",
+    "type": "LIMIT",
+    "timeInForce": "GTC",
+    "quantity": "1.00000000",
+    "price": "0.10000000",
+    "recvWindow": 5000,
+    "timestamp": 1645423376532,
+    "apiKey": "CAvIjXy3F44yW6Pou5k8Dy1swsYDWJZLeoK2r8G4cFDnE9nosRppc2eKc1T8TRTQ",
+    "signature": "F3o/79Ttvl2cVYGPfBOF3oEOcm5QcYmTYWpdVIrKve5u+8paMNDAdUE+teqMxFM9HcquetGcfuFpLYtsQames5bDx/tskGM76TWW8HaM+6tuSYBSFLrKqChfA9hQGLYGjAiflf1YBnDhY+7vNbJFusUborNOloOj+ufzP5q42PvI3H0uNy3W5V3pyfXpDGCBtfCYYr9NAqA4d+AQfyllL/zkO9h9JSdozN49t0/hWGoD2dWgSO0Je6MytKEvD4DQXGeqNlBTB6tUXcWnRW+FcaKZ4KYqnxCtb1u8rFXUYgFykr2CbcJLSmw6ydEJ3EZ/NaZopRr+cU0W2m0HZ3qucw=="
+  }
 }
 ```
 
 ### SIGNED Request Example (Ed25519)
 
-**Note: It is highly recommended to use Ed25519 API keys as they will provide the best performance and security out of all supported key types.**
+**Note: It is highly recommended to use Ed25519 API keys as they will provide the best performance
+and security out of all supported key types.**
 
 Here is a step-by-step guide on how to sign requests using an Ed25519 private key.
 
-Key          | Value
------------- | ------------
-`apiKey`       | `4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO`
+| Key      | Value                                                              |
+| -------- | ------------------------------------------------------------------ |
+| `apiKey` | `4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO` |
 
 These examples assume the private key is stored in the file `test-ed25519-prv.pem`.
 
@@ -1071,20 +1118,20 @@ Example of request with a symbol name comprised entirely of ASCII characters:
 
 ```json
 {
-    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-    "method": "order.place",
-    "params": {
-        "symbol": "BTCUSDT",
-        "side": "SELL",
-        "type": "LIMIT",
-        "timeInForce": "GTC",
-        "quantity": "0.01000000",
-        "price": "52000.00",
-        "recvWindow": 100,
-        "timestamp": 1645423376532,
-        "apiKey": "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
-        "signature": "------ FILL ME ------"
-    }
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol": "BTCUSDT",
+    "side": "SELL",
+    "type": "LIMIT",
+    "timeInForce": "GTC",
+    "quantity": "0.01000000",
+    "price": "52000.00",
+    "recvWindow": 100,
+    "timestamp": 1645423376532,
+    "apiKey": "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
+    "signature": "------ FILL ME ------"
+  }
 }
 ```
 
@@ -1092,54 +1139,55 @@ Example of a request with a symbol name containing non-ASCII characters:
 
 ```json
 {
-    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-    "method": "order.place",
-    "params": {
-        "symbol": "１２３４５６",
-        "side": "BUY",
-        "type": "LIMIT",
-        "timeInForce": "GTC",
-        "quantity": "0.01000000",
-        "price": "0.10000000",
-        "recvWindow": 5000,
-        "timestamp": 1645423376532,
-        "apiKey": "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
-        "signature": "------ FILL ME ------"
-    }
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol": "１２３４５６",
+    "side": "BUY",
+    "type": "LIMIT",
+    "timeInForce": "GTC",
+    "quantity": "0.01000000",
+    "price": "0.10000000",
+    "recvWindow": 5000,
+    "timestamp": 1645423376532,
+    "apiKey": "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
+    "signature": "------ FILL ME ------"
+  }
 }
 ```
 
 **Step 1: Construct the signature payload**
 
-Take all request `params` except `signature` and **sort them in alphabetical order by parameter name**:
+Take all request `params` except `signature` and **sort them in alphabetical order by parameter
+name**:
 
 For the first set of example parameters (ASCII only):
 
-Parameter        | Value
----------------- | ------------
-`apiKey`           | 4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO
-`price`            | 52000.00
-`quantity`         | 0.01000000
-`recvWindow`       | 100
-`side`             | SELL
-`symbol`           | BTCUSDT
-`timeInForce`      | GTC
-`timestamp`        | 1645423376532
-`type`             | LIMIT
+| Parameter     | Value                                                            |
+| ------------- | ---------------------------------------------------------------- |
+| `apiKey`      | 4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO |
+| `price`       | 52000.00                                                         |
+| `quantity`    | 0.01000000                                                       |
+| `recvWindow`  | 100                                                              |
+| `side`        | SELL                                                             |
+| `symbol`      | BTCUSDT                                                          |
+| `timeInForce` | GTC                                                              |
+| `timestamp`   | 1645423376532                                                    |
+| `type`        | LIMIT                                                            |
 
 For the second set of example parameters (some non-ASCII characters):
 
-Parameter     | Value
-------------  | ------------
-`apiKey`      | 4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO
-`price`       | 0.20000000
-`quantity`    | 1.00000000
-`recvWindow`  | 5000
-`side`        | SELL
-`symbol`      | １２３４５６
-`timeInForce` | GTC
-`timestamp`   | 1668481559918
-`type`        | LIMIT
+| Parameter     | Value                                                            |
+| ------------- | ---------------------------------------------------------------- |
+| `apiKey`      | 4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO |
+| `price`       | 0.20000000                                                       |
+| `quantity`    | 1.00000000                                                       |
+| `recvWindow`  | 5000                                                             |
+| `side`        | SELL                                                             |
+| `symbol`      | １２３４５６                                                     |
+| `timeInForce` | GTC                                                              |
+| `timestamp`   | 1668481559918                                                    |
+| `type`        | LIMIT                                                            |
 
 Format parameters as `parameter=value` pairs separated by `&`. Values need to be encoded in UTF-8.
 
@@ -1149,7 +1197,8 @@ For the first set of example parameters (ASCII only), the signature payload shou
 apiKey=4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO&price=52000.00&quantity=0.01000000&recvWindow=100&side=SELL&symbol=BTCUSDT&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
 ```
 
-For the second set of example parameters (some non-ASCII characters), the signature payload should look like this:
+For the second set of example parameters (some non-ASCII characters), the signature payload should
+look like this:
 
 ```console
 apiKey=4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO&price=0.10000000&quantity=1.00000000&recvWindow=5000&side=BUY&symbol=１２３４５６&timeInForce=GTC&timestamp=1645423376532&type=LIMIT
@@ -1157,7 +1206,8 @@ apiKey=4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO&price=0.
 
 **Step 2: Compute the signature**
 
-1. Sign the UTF-8 bytes of your signature payload constructed in Step 1 using the Ed25519 private key.
+1. Sign the UTF-8 bytes of your signature payload constructed in Step 1 using the Ed25519 private
+   key.
 2. Encode the output in base64.
 
 Note that `apiKey`, the payload, and the resulting `signature` are **case-sensitive**.
@@ -1190,21 +1240,21 @@ For the first set of example parameters (ASCII only):
 
 ```json
 {
-    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-    "method": "order.place",
-    "params": {
-        "symbol": "BTCUSDT",
-        "side": "SELL",
-        "type": "LIMIT",
-        "timeInForce": "GTC",
-        "quantity": "0.01000000",
-        "price": "52000.00",
-        "newOrderRespType": "ACK",
-        "recvWindow": 100,
-        "timestamp": 1645423376532,
-        "apiKey": "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
-        "signature": "EocljwPl29jDxWYaaRaOo4pJ9wEblFbklJvPugNscLLuKd5vHM2grWjn1z+rY0aJ7r/44enxHL6mOAJuJ1kqCg=="
-    }
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol": "BTCUSDT",
+    "side": "SELL",
+    "type": "LIMIT",
+    "timeInForce": "GTC",
+    "quantity": "0.01000000",
+    "price": "52000.00",
+    "newOrderRespType": "ACK",
+    "recvWindow": 100,
+    "timestamp": 1645423376532,
+    "apiKey": "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
+    "signature": "EocljwPl29jDxWYaaRaOo4pJ9wEblFbklJvPugNscLLuKd5vHM2grWjn1z+rY0aJ7r/44enxHL6mOAJuJ1kqCg=="
+  }
 }
 ```
 
@@ -1212,20 +1262,20 @@ For the second set of example parameters (some non-ASCII characters):
 
 ```json
 {
-    "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
-    "method": "order.place",
-    "params": {
-        "symbol": "１２３４５６",
-        "side": "SELL",
-        "type": "LIMIT",
-        "timeInForce": "GTC",
-        "quantity": "1.00000000",
-        "price": "0.10000000",
-        "recvWindow": 5000,
-        "timestamp": 1645423376532,
-        "apiKey": "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
-        "signature": "dtNHJeyKry+cNjiGv+sv5kynO9S40tf8k7D5CfAEQAp0s2scunZj+ovJdz2OgW8XhkB9G3/HmASkA9uY9eyFCA=="
-    }
+  "id": "4885f793-e5ad-4c3b-8f6c-55d891472b71",
+  "method": "order.place",
+  "params": {
+    "symbol": "１２３４５６",
+    "side": "SELL",
+    "type": "LIMIT",
+    "timeInForce": "GTC",
+    "quantity": "1.00000000",
+    "price": "0.10000000",
+    "recvWindow": 5000,
+    "timestamp": 1645423376532,
+    "apiKey": "4yNzx3yWC5bS6YTwEkSRaC0nRmSQIIStAUOh1b6kqaBrTLIhjCpI5lJH8q8R8WNO",
+    "signature": "dtNHJeyKry+cNjiGv+sv5kynO9S40tf8k7D5CfAEQAp0s2scunZj+ovJdz2OgW8XhkB9G3/HmASkA9uY9eyFCA=="
+  }
 }
 ```
 
@@ -1295,11 +1345,11 @@ print(result)
 
 **Note:** Only _Ed25519_ keys are supported for this feature.
 
-If you do not want to specify `apiKey` and `signature` in each individual request,
-you can authenticate your API key for the active WebSocket session.
+If you do not want to specify `apiKey` and `signature` in each individual request, you can
+authenticate your API key for the active WebSocket session.
 
-Once authenticated, you no longer have to specify `apiKey` and `signature` for those requests that need them.
-Requests will be performed on behalf of the account owning the authenticated API key.
+Once authenticated, you no longer have to specify `apiKey` and `signature` for those requests that
+need them. Requests will be performed on behalf of the account owning the authenticated API key.
 
 **Note:** You still have to specify the `timestamp` parameter for `SIGNED` requests.
 
@@ -1307,13 +1357,16 @@ Requests will be performed on behalf of the account owning the authenticated API
 
 You can authenticate an already established connection using session authentication requests:
 
-* [`session.logon`](#log-in-with-api-key-signed) – authenticate, or change the API key associated with the connection
-* [`session.status`](#query-session-status) – check connection status and the current API key
-* [`session.logout`](#log-out-of-the-session) – forget the API key associated with the connection
+- [`session.logon`](#session-logon) – authenticate, or change the API key associated with the
+  connection
+- [`session.status`](#query-session-status) – check connection status and the current API key
+- [`session.logout`](#log-out-of-the-session) – forget the API key associated with the connection
 
 **Regarding API key revocation:**
 
-If during an active session the API key becomes invalid for _any reason_ (e.g. IP address is not whitelisted, API key was deleted, API key doesn't have correct permissions, etc), after the next request the session will be revoked with the following error message:
+If during an active session the API key becomes invalid for _any reason_ (e.g. IP address is not
+whitelisted, API key was deleted, API key doesn't have correct permissions, etc), after the next
+request the session will be revoked with the following error message:
 
 ```javascript
 {
@@ -1328,30 +1381,31 @@ If during an active session the API key becomes invalid for _any reason_ (e.g. I
 
 ### Authorize _ad hoc_ requests
 
-Only one API key can be authenticated with the WebSocket connection.
-The authenticated API key is used by default for requests that require an `apiKey` parameter.
-However, you can always specify the `apiKey` and `signature` explicitly for individual requests,
-overriding the authenticated API key and using a different one to authorize a specific request.
+Only one API key can be authenticated with the WebSocket connection. The authenticated API key is
+used by default for requests that require an `apiKey` parameter. However, you can always specify the
+`apiKey` and `signature` explicitly for individual requests, overriding the authenticated API key
+and using a different one to authorize a specific request.
 
-For example, you might want to authenticate your `USER_DATA` key to be used by default,
-but specify the `TRADE` key with an explicit signature when placing orders.
+For example, you might want to authenticate your `USER_DATA` key to be used by default, but specify
+the `TRADE` key with an explicit signature when placing orders.
 
 ## Data sources
 
-* The API system is asynchronous. Some delay in the response is normal and expected.
+- The API system is asynchronous. Some delay in the response is normal and expected.
 
-* Each method has a data source indicating where the data is coming from, and thus how up-to-date it is.
+- Each method has a data source indicating where the data is coming from, and thus how up-to-date it
+  is.
 
-Data Source     | Latency  | Description
---------------- | -------- | -----------
-Matching Engine | lowest   | The Matching Engine produces the response directly
-Memory          | low      | Data is fetched from API server's local or external memory cache
-Database        | moderate | Data is retrieved from the database
+| Data Source     | Latency  | Description                                                      |
+| --------------- | -------- | ---------------------------------------------------------------- |
+| Matching Engine | lowest   | The Matching Engine produces the response directly               |
+| Memory          | low      | Data is fetched from API server's local or external memory cache |
+| Database        | moderate | Data is retrieved from the database                              |
 
-* Some methods have more than one data source (e.g., Memory => Database).
+- Some methods have more than one data source (e.g., Memory => Database).
 
-  This means that the API will look for the latest data in that order:
-  first in the cache, then in the database.
+  This means that the API will look for the latest data in that order: first in the cache, then in
+  the database.
 
 # Public API requests
 
@@ -1368,21 +1422,18 @@ Database        | moderate | Data is retrieved from the database
 
 Test connectivity to the WebSocket API.
 
-**Note:**
-You can use regular WebSocket ping frames to test connectivity as well,
-WebSocket API will respond with pong frames as soon as possible.
-`ping` request along with `time` is a safe way to test request-response handling in your application.
+**Note:** You can use regular WebSocket ping frames to test connectivity as well, WebSocket API will
+respond with pong frames as soon as possible. `ping` request along with `time` is a safe way to test
+request-response handling in your application.
 
-**Weight:**
-1
+**Weight:** 1
 
-**Parameters:**
-NONE
+**Parameters:** NONE
 
-**Data Source:**
-Memory
+**Data Source:** Memory
 
 **Response:**
+
 ```javascript
 {
     "id": "922bcc6e-9de8-440d-9e84-7c80933a8d0d",
@@ -1411,16 +1462,14 @@ Memory
 
 Test connectivity to the WebSocket API and get the current server time.
 
-**Weight:**
-1
+**Weight:** 1
 
-**Parameters:**
-NONE
+**Parameters:** NONE
 
-**Data Source:**
-Memory
+**Data Source:** Memory
 
 **Response:**
+
 ```javascript
 {
     "id": "187d3cb2-942d-484c-8271-4e2141bbadb1",
@@ -1456,8 +1505,7 @@ Memory
 
 Query current exchange trading rules, rate limits, and symbol information.
 
-**Weight:**
-20
+**Weight:** 20
 
 **Parameters:**
 
@@ -1502,28 +1550,33 @@ Query current exchange trading rules, rate limits, and symbol information.
 
 Notes:
 
-* Only one of `symbol`, `symbols`, `permissions` parameters can be specified.
+- Only one of `symbol`, `symbols`, `permissions` parameters can be specified.
 
-* Without parameters, `exchangeInfo` displays all symbols with `["SPOT, "MARGIN", "LEVERAGED"]` permissions.
+- Without parameters, `exchangeInfo` displays all symbols with `["SPOT, "MARGIN", "LEVERAGED"]`
+  permissions.
+  - In order to list _all_ active symbols on the exchange, you need to explicitly request all
+    permissions.
 
-  * In order to list *all* active symbols on the exchange, you need to explicitly request all permissions.
+- `permissions` accepts either a list of permissions, or a single permission name. E.g. `"SPOT"`.
 
-* `permissions` accepts either a list of permissions, or a single permission name. E.g. `"SPOT"`.
-
-* [Available Permissions](./enums.md#account-and-symbol-permissions)
+- [Available Permissions](enums.md#account-and-symbol-permissions-permissions)
 
 <a id="examples-of-symbol-permissions-interpretation-from-the-response"></a>
 
 **Examples of Symbol Permissions Interpretation from the Response:**
 
-* `[["A","B"]]` means you may place an order if your account has either permission "A" **or** permission "B".
-* `[["A"],["B"]]` means you can place an order if your account has permission "A" **and** permission "B".
-* `[["A"],["B","C"]]` means you can place an order if your account has permission "A" **and** permission "B" or permission "C". (Inclusive or is applied here, not exclusive or, so your account may have both permission "B" and permission "C".)
+- `[["A","B"]]` means you may place an order if your account has either permission "A" **or**
+  permission "B".
+- `[["A"],["B"]]` means you can place an order if your account has permission "A" **and** permission
+  "B".
+- `[["A"],["B","C"]]` means you can place an order if your account has permission "A" **and**
+  permission "B" or permission "C". (Inclusive or is applied here, not exclusive or, so your account
+  may have both permission "B" and permission "C".)
 
-**Data Source:**
-Memory
+**Data Source:** Memory
 
 **Response:**
+
 ```javascript
 {
     "id": "5494febb-d167-46a2-996d-70533eb4d976",
@@ -1649,20 +1702,20 @@ Memory
 
 **Weight**
 
-Parameter | Weight|
----        | ---
-`symbol`  | 2
-`symbols` | 2 for each `symbol`, capped at a max of 40|
-`symbolStatus` |40|
-None            |40|
+| Parameter      | Weight                                     |
+| -------------- | ------------------------------------------ |
+| `symbol`       | 2                                          |
+| `symbols`      | 2 for each `symbol`, capped at a max of 40 |
+| `symbolStatus` | 40                                         |
+| None           | 40                                         |
 
 **Parameters:**
 
-Name | Type | Mandatory | Description
------------- | ------------ | ------------ | ------------
-`symbol`   | STRING| No      | Query for specified symbol
-`symbols`  | STRING | No     | Query for multiple symbols
-`symbolStatus` |ENUM| No |Query for all symbols with the specified status. Supported values: `TRADING`, `HALT`, `BREAK`
+| Name           | Type   | Mandatory | Description                                                                                   |
+| -------------- | ------ | --------- | --------------------------------------------------------------------------------------------- |
+| `symbol`       | STRING | No        | Query for specified symbol                                                                    |
+| `symbols`      | STRING | No        | Query for multiple symbols                                                                    |
+| `symbolStatus` | ENUM   | No        | Query for all symbols with the specified status. Supported values: `TRADING`, `HALT`, `BREAK` |
 
 **Note:** No combination of multiple parameters is allowed.
 
@@ -1714,33 +1767,33 @@ Note that this request returns limited market depth.
 
 If you need to continuously monitor order book updates, please consider using WebSocket Streams:
 
-* [`<symbol>@depth<levels>`](web-socket-streams.md#partial-book-depth-streams)
-* [`<symbol>@depth`](web-socket-streams.md#diff-depth-stream)
+- [`<symbol>@depth<levels>`](web-socket-streams.md#partial-book-depth-streams)
+- [`<symbol>@depth`](web-socket-streams.md#diff-depth-stream)
 
-You can use `depth` request together with `<symbol>@depth` streams to [maintain a local order book](web-socket-streams.md#how-to-manage-a-local-order-book-correctly).
+You can use `depth` request together with `<symbol>@depth` streams to
+[maintain a local order book](web-socket-streams.md#how-to-manage-a-local-order-book-correctly).
 
-**Weight:**
-Adjusted based on the limit:
+**Weight:** Adjusted based on the limit:
 
-|  Limit    | Weight |
-|:---------:|:------:|
-|     1–100 |      5 |
-|   101–500 |      25|
-|  501–1000 |     50 |
-| 1001–5000 |     250 |
+|   Limit   | Weight |
+| :-------: | :----: |
+|   1–100   |   5    |
+|  101–500  |   25   |
+| 501–1000  |   50   |
+| 1001–5000 |  250   |
 
 **Parameters:**
 
-Name      | Type    | Mandatory | Description
---------- | ------- | --------- | -----------
-`symbol`  | STRING  | YES       |
-`limit`   | INT     | NO        | Default: 100; Maximum: 5000
-`symbolStatus`|ENUM | NO        | Filters for symbols that have this `tradingStatus`.<br/>A status mismatch returns error `-1220 SYMBOL_DOES_NOT_MATCH_STATUS`<br/>Valid values: `TRADING`, `HALT`, `BREAK`
+| Name           | Type   | Mandatory | Description                                                                                                                                                               |
+| -------------- | ------ | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `symbol`       | STRING | YES       |
+| `limit`        | INT    | NO        | Default: 100; Maximum: 5000                                                                                                                                               |
+| `symbolStatus` | ENUM   | NO        | Filters for symbols that have this `tradingStatus`.<br/>A status mismatch returns error `-1220 SYMBOL_DOES_NOT_MATCH_STATUS`<br/>Valid values: `TRADING`, `HALT`, `BREAK` |
 
-**Data Source:**
-Memory
+**Data Source:** Memory
 
 **Response:**
+
 ```javascript
 {
     "id": "51e2affb-0aba-4821-ba75-f2625006eb43",
@@ -1779,7 +1832,6 @@ Memory
 }
 ```
 
-
 ### Recent trades
 
 ```javascript
@@ -1797,22 +1849,21 @@ Get recent trades.
 
 If you need access to real-time trading activity, please consider using WebSocket Streams:
 
-* [`<symbol>@trade`](web-socket-streams.md#trade-streams)
+- [`<symbol>@trade`](web-socket-streams.md#trade-streams)
 
-**Weight:**
-25
+**Weight:** 25
 
 **Parameters:**
 
-Name      | Type    | Mandatory | Description
---------- | ------- | --------- | -----------
-`symbol`  | STRING  | YES       |
-`limit`   | INT     | NO        | Default: 500; Maximum: 1000
+| Name     | Type   | Mandatory | Description                 |
+| -------- | ------ | --------- | --------------------------- |
+| `symbol` | STRING | YES       |
+| `limit`  | INT    | NO        | Default: 500; Maximum: 1000 |
 
-**Data Source:**
-Memory
+**Data Source:** Memory
 
 **Response:**
+
 ```javascript
 {
     "id": "409a20bd-253d-41db-a6dd-687862a5882f",
@@ -1856,25 +1907,24 @@ Memory
 
 Get historical trades.
 
-**Weight:**
-25
+**Weight:** 25
 
 **Parameters:**
 
-Name      | Type    | Mandatory | Description
---------- | ------- | --------- | -----------
-`symbol`  | STRING  | YES       |
-`fromId`  | INT     | NO        | Trade ID to begin at
-`limit`   | INT     | NO        | Default: 500; Maximum: 1000
+| Name     | Type   | Mandatory | Description                 |
+| -------- | ------ | --------- | --------------------------- |
+| `symbol` | STRING | YES       |
+| `fromId` | INT    | NO        | Trade ID to begin at        |
+| `limit`  | INT    | NO        | Default: 500; Maximum: 1000 |
 
 Notes:
 
-* If `fromId` is not specified, the most recent trades are returned.
+- If `fromId` is not specified, the most recent trades are returned.
 
-**Data Source:**
-Database
+**Data Source:** Database
 
 **Response:**
+
 ```javascript
 {
     "id": "cffc9c7d-4efc-4ce0-b587-6b87448f052a",
@@ -1918,19 +1968,17 @@ Database
 
 Get block trades.
 
-**Weight:**
-25
+**Weight:** 25
 
 **Parameters:**
 
-Name        | Type    | Mandatory | Description
------------ | ------- | --------- | -----------
-`symbol`    | STRING  | YES       |
-`fromId`    | LONG    | YES       | Block trade ID to fetch from
-`limit`     | LONG    | NO        | Default: 500; Maximum: 1000
+| Name     | Type   | Mandatory | Description                  |
+| -------- | ------ | --------- | ---------------------------- |
+| `symbol` | STRING | YES       |
+| `fromId` | LONG   | YES       | Block trade ID to fetch from |
+| `limit`  | LONG   | NO        | Default: 500; Maximum: 1000  |
 
-**Data Source:**
-Database
+**Data Source:** Database
 
 **Response:**
 
@@ -1978,46 +2026,45 @@ Database
 
 Get aggregate trades.
 
-An *aggregate trade* (aggtrade) represents one or more individual trades.
-Trades that fill at the same time, from the same taker order, with the same price –
-those trades are collected into an aggregate trade with total quantity of the individual trades.
+An _aggregate trade_ (aggtrade) represents one or more individual trades. Trades that fill at the
+same time, from the same taker order, with the same price – those trades are collected into an
+aggregate trade with total quantity of the individual trades.
 
 If you need access to real-time trading activity, please consider using WebSocket Streams:
 
-* [`<symbol>@aggTrade`](web-socket-streams.md#aggregate-trade-streams)
+- [`<symbol>@aggTrade`](web-socket-streams.md#aggregate-trade-streams)
 
-If you need historical aggregate trade data,
-please consider using [data.binance.vision](https://github.com/binance/binance-public-data/#aggtrades).
+If you need historical aggregate trade data, please consider using
+[data.binance.vision](https://github.com/binance/binance-public-data/#aggtrades).
 
-**Weight:**
-4
+**Weight:** 4
 
 **Parameters:**
 
-Name        | Type    | Mandatory | Description
------------ | ------- | --------- | -----------
-`symbol`    | STRING  | YES       |
-`fromId`    | LONG     | NO        | Aggregate trade ID to begin at
-`startTime` | LONG    | NO        |
-`endTime`   | LONG    | NO        |
-`limit`     | LONG    | NO        | Default: 500; Maximum: 1000
+| Name        | Type   | Mandatory | Description                    |
+| ----------- | ------ | --------- | ------------------------------ |
+| `symbol`    | STRING | YES       |
+| `fromId`    | LONG   | NO        | Aggregate trade ID to begin at |
+| `startTime` | LONG   | NO        |
+| `endTime`   | LONG   | NO        |
+| `limit`     | LONG   | NO        | Default: 500; Maximum: 1000    |
 
 Notes:
 
-* If `fromId` is specified, return aggtrades with aggregate trade ID >= `fromId`.
+- If `fromId` is specified, return aggtrades with aggregate trade ID >= `fromId`.
 
   Use `fromId` and `limit` to page through all aggtrades.
 
-* If `startTime` and/or `endTime` are specified, aggtrades are filtered by execution time (`T`).
+- If `startTime` and/or `endTime` are specified, aggtrades are filtered by execution time (`T`).
 
   `fromId` cannot be used together with `startTime` and `endTime`.
 
-* If no condition is specified, the most recent aggregate trades are returned.
+- If no condition is specified, the most recent aggregate trades are returned.
 
-**Data Source:**
-Database
+**Data Source:** Database
 
 **Response:**
+
 ```javascript
 {
     "id": "189da436-d4bd-48ca-9f95-9f613d621717",
@@ -2067,52 +2114,51 @@ Klines are uniquely identified by their open & close time.
 
 If you need access to real-time kline updates, please consider using WebSocket Streams:
 
-* [`<symbol>@kline_<interval>`](web-socket-streams.md#klinecandlestick-streams-for-utc)
+- [`<symbol>@kline_<interval>`](web-socket-streams.md#klinecandlestick-streams-for-utc)
 
-If you need historical kline data,
-please consider using [data.binance.vision](https://github.com/binance/binance-public-data/#klines).
+If you need historical kline data, please consider using
+[data.binance.vision](https://github.com/binance/binance-public-data/#klines).
 
-**Weight:**
-2
+**Weight:** 2
 
 **Parameters:**
 
-Name        | Type    | Mandatory | Description
------------ | ------- | --------- | -----------
-`symbol`    | STRING  | YES       |
-`interval`  | ENUM    | YES       |
-`startTime` | LONG    | NO        |
-`endTime`   | LONG    | NO        |
-`timeZone`  | STRING  | NO        | Default: 0 (UTC)
-`limit`     | INT     | NO        | Default: 500; Maximum: 1000
+| Name        | Type   | Mandatory | Description                 |
+| ----------- | ------ | --------- | --------------------------- |
+| `symbol`    | STRING | YES       |
+| `interval`  | ENUM   | YES       |
+| `startTime` | LONG   | NO        |
+| `endTime`   | LONG   | NO        |
+| `timeZone`  | STRING | NO        | Default: 0 (UTC)            |
+| `limit`     | INT    | NO        | Default: 500; Maximum: 1000 |
 
-
+<!-- prettier-ignore -->
 <a id="kline-intervals"></a>
 Supported kline intervals (case-sensitive):
 
-Interval  | `interval` value
---------- | ----------------
-seconds   | `1s`
-minutes   | `1m`, `3m`, `5m`, `15m`, `30m`
-hours     | `1h`, `2h`, `4h`, `6h`, `8h`, `12h`
-days      | `1d`, `3d`
-weeks     | `1w`
-months    | `1M`
+| Interval | `interval` value                    |
+| -------- | ----------------------------------- |
+| seconds  | `1s`                                |
+| minutes  | `1m`, `3m`, `5m`, `15m`, `30m`      |
+| hours    | `1h`, `2h`, `4h`, `6h`, `8h`, `12h` |
+| days     | `1d`, `3d`                          |
+| weeks    | `1w`                                |
+| months   | `1M`                                |
 
 Notes:
 
-* If `startTime`, `endTime` are not specified, the most recent klines are returned.
-* Supported values for `timeZone`:
-  * Hours and minutes (e.g. `-1:00`, `05:45`)
-  * Only hours (e.g. `0`, `8`, `4`)
-  * Accepted range is strictly [-12:00 to +14:00] inclusive
-* If `timeZone` provided, kline intervals are interpreted in that timezone instead of UTC.
-* Note that `startTime` and `endTime` are always interpreted in UTC, regardless of timeZone.
+- If `startTime`, `endTime` are not specified, the most recent klines are returned.
+- Supported values for `timeZone`:
+  - Hours and minutes (e.g. `-1:00`, `05:45`)
+  - Only hours (e.g. `0`, `8`, `4`)
+  - Accepted range is strictly [-12:00 to +14:00] inclusive
+- If `timeZone` provided, kline intervals are interpreted in that timezone instead of UTC.
+- Note that `startTime` and `endTime` are always interpreted in UTC, regardless of timeZone.
 
-**Data Source:**
-Database
+**Data Source:** Database
 
 **Response:**
+
 ```javascript
 {
     "id": "1dbbeb56-8eea-466a-8f6e-86bdcfa2fc0b",
@@ -2162,37 +2208,36 @@ Database
 
 Get klines (candlestick bars) optimized for presentation.
 
-This request is similar to [`klines`](#klines), having the same parameters and response.
-`uiKlines` return modified kline data, optimized for presentation of candlestick charts.
+This request is similar to [`klines`](#klines), having the same parameters and response. `uiKlines`
+return modified kline data, optimized for presentation of candlestick charts.
 
-**Weight:**
-2
+**Weight:** 2
 
 **Parameters:**
 
-Name        | Type    | Mandatory | Description
------------ | ------- | --------- | -----------
-`symbol`    | STRING  | YES       |
-`interval`  | ENUM    | YES       | See [`klines`](#kline-intervals)
-`startTime` | LONG    | NO        |
-`endTime`   | LONG    | NO        |
-`timeZone`  | STRING  | NO        | Default: 0 (UTC)
-`limit`     | INT     | NO        | Default: 500; Maximum: 1000
+| Name        | Type   | Mandatory | Description                                                                      |
+| ----------- | ------ | --------- | -------------------------------------------------------------------------------- |
+| `symbol`    | STRING | YES       |
+| `interval`  | ENUM   | YES       | See [`klines`](web-socket-streams.md#klinecandlestick-streams-with-timezone-offset) |
+| `startTime` | LONG   | NO        |
+| `endTime`   | LONG   | NO        |
+| `timeZone`  | STRING | NO        | Default: 0 (UTC)                                                                 |
+| `limit`     | INT    | NO        | Default: 500; Maximum: 1000                                                      |
 
 Notes:
 
-* If `startTime`, `endTime` are not specified, the most recent klines are returned.
-* Supported values for `timeZone`:
-  * Hours and minutes (e.g. `-1:00`, `05:45`)
-  * Only hours (e.g. `0`, `8`, `4`)
-  * Accepted range is strictly [-12:00 to +14:00] inclusive
-* If `timeZone` provided, kline intervals are interpreted in that timezone instead of UTC.
-* Note that `startTime` and `endTime` are always interpreted in UTC, regardless of timeZone.
+- If `startTime`, `endTime` are not specified, the most recent klines are returned.
+- Supported values for `timeZone`:
+  - Hours and minutes (e.g. `-1:00`, `05:45`)
+  - Only hours (e.g. `0`, `8`, `4`)
+  - Accepted range is strictly [-12:00 to +14:00] inclusive
+- If `timeZone` provided, kline intervals are interpreted in that timezone instead of UTC.
+- Note that `startTime` and `endTime` are always interpreted in UTC, regardless of timeZone.
 
-**Data Source:**
-Database
+**Data Source:** Database
 
 **Response:**
+
 ```javascript
 {
     "id": "b137468a-fb20-4c06-bd6b-625148eec958",
@@ -2239,19 +2284,18 @@ Database
 
 Get current average price for a symbol.
 
-**Weight:**
-2
+**Weight:** 2
 
 **Parameters:**
 
-Name        | Type    | Mandatory | Description
------------ | ------- | --------- | -----------
-`symbol`    | STRING  | YES       |
+| Name     | Type   | Mandatory | Description |
+| -------- | ------ | --------- | ----------- |
+| `symbol` | STRING | YES       |
 
-**Data Source:**
-Memory
+**Data Source:** Memory
 
 **Response:**
+
 ```javascript
 {
     "id": "ddbfb65f-9ebf-42ec-8240-8f0f91de0867",
@@ -2289,21 +2333,21 @@ Get 24-hour rolling window price change statistics.
 
 If you need to continuously monitor trading statistics, please consider using WebSocket Streams:
 
-* [`<symbol>@ticker`](web-socket-streams.md#individual-symbol-ticker-streams)
-* [`<symbol>@miniTicker`](web-socket-streams.md#individual-symbol-mini-ticker-stream) or [`!miniTicker@arr`](web-socket-streams.md#all-market-mini-tickers-stream)
+- [`<symbol>@ticker`](web-socket-streams.md#individual-symbol-ticker-streams)
+- [`<symbol>@miniTicker`](web-socket-streams.md#individual-symbol-mini-ticker-stream) or
+  [`!miniTicker@arr`](web-socket-streams.md#all-market-mini-tickers-stream)
 
-If you need different window sizes,
-use the [`ticker`](#rolling-window-price-change-statistics) request.
+If you need different window sizes, use the [`ticker`](#rolling-window-price-change-statistics)
+request.
 
-**Weight:**
-Adjusted based on the number of requested symbols:
+**Weight:** Adjusted based on the number of requested symbols:
 
-| Symbols     | Weight |
-|:-----------:|:------:|
-|        1–20 |      2 |
-|      21–100 |     40 |
-| 101 or more |     80 |
-| all symbols |     80 |
+|   Symbols   | Weight |
+| :---------: | :----: |
+|    1–20     |   2    |
+|   21–100    |   40   |
+| 101 or more |   80   |
+| all symbols |   80   |
 
 **Parameters:**
 
@@ -2345,12 +2389,12 @@ Adjusted based on the number of requested symbols:
 
 Notes:
 
-* `symbol` and `symbols` cannot be used together.
+- `symbol` and `symbols` cannot be used together.
 
-* If no symbol is specified, returns information about all symbols currently trading on the exchange.
+- If no symbol is specified, returns information about all symbols currently trading on the
+  exchange.
 
-**Data Source:**
-Memory
+**Data Source:** Memory
 
 **Response:**
 
@@ -2510,7 +2554,8 @@ Price change statistics for a trading day.
 
 **Weight:**
 
-4 for each requested <tt>symbol</tt>. <br/><br/> The weight for this request will cap at 200 once the number of `symbols` in the request is more than 50.
+4 for each requested <tt>symbol</tt>. <br/><br/> The weight for this request will cap at 200 once
+the number of `symbols` in the request is more than 50.
 
 **Parameters:**
 
@@ -2554,12 +2599,11 @@ Price change statistics for a trading day.
 
 **Notes:**
 
-* Supported values for `timeZone`:
-  * Hours and minutes (e.g. `-1:00`, `05:45`)
-  * Only hours (e.g. `0`, `8`, `4`)
+- Supported values for `timeZone`:
+  - Hours and minutes (e.g. `-1:00`, `05:45`)
+  - Only hours (e.g. `0`, `8`, `4`)
 
-**Data Source:**
-Database
+**Data Source:** Database
 
 **Response: - FULL**
 
@@ -2749,12 +2793,12 @@ With `symbols`:
 
 Get rolling window price change statistics with a custom window.
 
-This request is similar to [`ticker.24hr`](#24hr-ticker-price-change-statistics),
-but statistics are computed on demand using the arbitrary window you specify.
+This request is similar to [`ticker.24hr`](#24hr-ticker-price-change-statistics), but statistics are
+computed on demand using the arbitrary window you specify.
 
-**Note:** Window size precision is limited to 1 minute.
-While the `closeTime` is the current time of the request, `openTime` always start on a minute boundary.
-As such, the effective window might be up to 59999 ms wider than the requested `windowSize`.
+**Note:** Window size precision is limited to 1 minute. While the `closeTime` is the current time of
+the request, `openTime` always start on a minute boundary. As such, the effective window might be up
+to 59999 ms wider than the requested `windowSize`.
 
 <details>
 <summary>Window computation example</summary>
@@ -2768,24 +2812,25 @@ For example, a request for `"windowSize": "7d"` might result in the following wi
 }
 ```
 
-Time of the request – `closeTime` – is 1660184865291 (August 11, 2022 02:27:45.291).
-Requested window size should put the `openTime` 7 days before that – August 4, 02:27:45.291 –
-but due to limited precision it ends up a bit earlier: 1659580020000 (August 4, 2022 02:27:00),
-exactly at the start of a minute.
+Time of the request – `closeTime` – is 1660184865291 (August 11, 2022 02:27:45.291). Requested
+window size should put the `openTime` 7 days before that – August 4, 02:27:45.291 – but due to
+limited precision it ends up a bit earlier: 1659580020000 (August 4, 2022 02:27:00), exactly at the
+start of a minute.
 
 </details>
 
 If you need to continuously monitor trading statistics, please consider using WebSocket Streams:
 
-* [`<symbol>@ticker_<window_size>`](web-socket-streams.md#individual-symbol-rolling-window-statistics-streams) or [`!ticker_<window-size>@arr`](web-socket-streams.md#all-market-rolling-window-statistics-streams)
+- [`<symbol>@ticker_<window_size>`](web-socket-streams.md#individual-symbol-rolling-window-statistics-streams)
+  or
+  [`!ticker_<window-size>@arr`](web-socket-streams.md#all-market-rolling-window-statistics-streams)
 
-**Weight:**
-Adjusted based on the number of requested symbols:
+**Weight:** Adjusted based on the number of requested symbols:
 
-| Symbols | Weight |
-|:-------:|:------:|
-|    1–50 | 4 per symbol |
-|  51–100 |    200 |
+| Symbols |    Weight    |
+| :-----: | :----------: |
+|  1–50   | 4 per symbol |
+| 51–100  |     200      |
 
 **Parameters:**
 
@@ -2833,23 +2878,21 @@ Adjusted based on the number of requested symbols:
 
 Supported window sizes:
 
-Unit    | `windowSize` value
-------- | ------------------
-minutes | `1m`, `2m` ... `59m`
-hours   | `1h`, `2h` ... `23h`
-days    | `1d`, `2d` ... `7d`
+| Unit    | `windowSize` value   |
+| ------- | -------------------- |
+| minutes | `1m`, `2m` ... `59m` |
+| hours   | `1h`, `2h` ... `23h` |
+| days    | `1d`, `2d` ... `7d`  |
 
 Notes:
 
-* Either `symbol` or `symbols` must be specified.
+- Either `symbol` or `symbols` must be specified.
 
-* Maximum number of symbols in one request: 200.
+- Maximum number of symbols in one request: 200.
 
-* Window size units cannot be combined.
-  E.g., <code>1d 2h</code> is not supported.
+- Window size units cannot be combined. E.g., <code>1d 2h</code> is not supported.
 
-**Data Source:**
-Database
+**Data Source:** Database
 
 **Response:**
 
@@ -2990,17 +3033,16 @@ Get the latest market price for a symbol.
 
 If you need access to real-time price updates, please consider using WebSocket Streams:
 
-* [`<symbol>@aggTrade`](web-socket-streams.md#aggregate-trade-streams)
-* [`<symbol>@trade`](web-socket-streams.md#trade-streams)
+- [`<symbol>@aggTrade`](web-socket-streams.md#aggregate-trade-streams)
+- [`<symbol>@trade`](web-socket-streams.md#trade-streams)
 
-**Weight:**
-Adjusted based on the number of requested symbols:
+**Weight:** Adjusted based on the number of requested symbols:
 
 | Parameter | Weight |
-| --------- |:------:|
-| `symbol`  |      2 |
-| `symbols` |      4 |
-| none      |      4 |
+| --------- | :----: |
+| `symbol`  |   2    |
+| `symbols` |   4    |
+| none      |   4    |
 
 **Parameters:**
 
@@ -3036,12 +3078,12 @@ Adjusted based on the number of requested symbols:
 
 Notes:
 
-* `symbol` and `symbols` cannot be used together.
+- `symbol` and `symbols` cannot be used together.
 
-* If no symbol is specified, returns information about all symbols currently trading on the exchange.
+- If no symbol is specified, returns information about all symbols currently trading on the
+  exchange.
 
-**Data Source:**
-Memory
+**Data Source:** Memory
 
 **Response:**
 
@@ -3113,16 +3155,15 @@ Get the current best price and quantity on the order book.
 
 If you need access to real-time order book ticker updates, please consider using WebSocket Streams:
 
-* [`<symbol>@bookTicker`](web-socket-streams.md#individual-symbol-book-ticker-streams)
+- [`<symbol>@bookTicker`](web-socket-streams.md#individual-symbol-book-ticker-streams)
 
-**Weight:**
-Adjusted based on the number of requested symbols:
+**Weight:** Adjusted based on the number of requested symbols:
 
 | Parameter | Weight |
-| --------- |:------:|
-| `symbol`  |      2 |
-| `symbols` |      4 |
-| none      |      4 |
+| --------- | :----: |
+| `symbol`  |   2    |
+| `symbols` |   4    |
+| none      |   4    |
 
 **Parameters:**
 
@@ -3158,12 +3199,12 @@ Adjusted based on the number of requested symbols:
 
 Notes:
 
-* `symbol` and `symbols` cannot be used together.
+- `symbol` and `symbols` cannot be used together.
 
-* If no symbol is specified, returns information about all symbols currently trading on the exchange.
+- If no symbol is specified, returns information about all symbols currently trading on the
+  exchange.
 
-**Data Source:**
-Memory
+**Data Source:** Memory
 
 **Response:**
 
@@ -3240,9 +3281,9 @@ If more than one symbol is requested, response returns an array:
 
 **Parameters**:
 
-| Name | Type | Mandatory | Description |
-| :---: | :---: | :---: | ----- |
-| `symbol` | STRING | Yes | |
+|   Name   |  Type  | Mandatory | Description |
+| :------: | :----: | :-------: | ----------- |
+| `symbol` | STRING |    Yes    |             |
 
 **Data Source:** Memory
 
@@ -3308,10 +3349,10 @@ Describes how reference price is calculated for a given symbol.
 
 **Parameters**:
 
-| Name | Type | Mandatory | Description |
-| ----- | ----- | ----- | ----- |
-|`symbol` | STRING | Yes |  |
-|`symbolStatus`|ENUM| No|Supported values: `TRADING`, `HALT`, `BREAK`|
+| Name           | Type   | Mandatory | Description                                  |
+| -------------- | ------ | --------- | -------------------------------------------- |
+| `symbol`       | STRING | Yes       |                                              |
+| `symbolStatus` | ENUM   | No        | Supported values: `TRADING`, `HALT`, `BREAK` |
 
 **Data Source:** Memory
 
@@ -3321,13 +3362,12 @@ If reference price is not being calculated:
 
 ```json
 {
-    "id": "5132affa-0aba-4831-b475-f262504556b41",
-    "status": 400,
-    "error":
-    {
-        "code": -2043,
-        "msg": "This symbol doesn't have a reference price."
-    }
+  "id": "5132affa-0aba-4831-b475-f262504556b41",
+  "status": 400,
+  "error": {
+    "code": -2043,
+    "msg": "This symbol doesn't have a reference price."
+  }
 }
 ```
 
@@ -3335,15 +3375,14 @@ If the reference price is being calculated by the matching engine as an arithmet
 
 ```json
 {
-    "id": "5132affa-0aba-4831-b475-f262504556b41",
-    "status": 200,
-    "result":
-    {
-        "symbol": "BAZUSD",
-        "calculationType": "ARITHMETIC_MEAN",
-        "bucketCount": 10,
-        "bucketWidthMs": 1000
-    }
+  "id": "5132affa-0aba-4831-b475-f262504556b41",
+  "status": 200,
+  "result": {
+    "symbol": "BAZUSD",
+    "calculationType": "ARITHMETIC_MEAN",
+    "bucketCount": 10,
+    "bucketWidthMs": 1000
+  }
 }
 ```
 
@@ -3351,14 +3390,13 @@ If the reference price is being calculated outside the matching engine:
 
 ```json
 {
-    "id": "5132affa-0aba-4831-b475-f262504556b41",
-    "status": 200,
-    "result":
-    {
-        "symbol": "BAZUSD",
-        "calculationType": "EXTERNAL",
-        "externalCalculationId": 42
-    }
+  "id": "5132affa-0aba-4831-b475-f262504556b41",
+  "status": 200,
+  "result": {
+    "symbol": "BAZUSD",
+    "calculationType": "EXTERNAL",
+    "externalCalculationId": 42
+  }
 }
 ```
 
@@ -3384,25 +3422,24 @@ If the reference price is being calculated outside the matching engine:
 
 Authenticate WebSocket connection using the provided API key.
 
-After calling `session.logon`, you can omit `apiKey` and `signature` parameters for future requests that require them.
+After calling `session.logon`, you can omit `apiKey` and `signature` parameters for future requests
+that require them.
 
-Note that only one API key can be authenticated.
-Calling `session.logon` multiple times changes the current authenticated API key.
+Note that only one API key can be authenticated. Calling `session.logon` multiple times changes the
+current authenticated API key.
 
-**Weight:**
-2
+**Weight:** 2
 
 **Parameters:**
 
-Name          | Type    | Mandatory | Description
-------------- | ------- | --------- | ------------
-`apiKey`      | STRING  | YES       |
-`recvWindow`  | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
-`signature`   | STRING  | YES       |
-`timestamp`   | LONG    | YES       |
+| Name         | Type    | Mandatory | Description                                                                                                                                             |
+| ------------ | ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `apiKey`     | STRING  | YES       |
+| `recvWindow` | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified. |
+| `signature`  | STRING  | YES       |
+| `timestamp`  | LONG    | YES       |
 
-**Data Source:**
-Memory
+**Data Source:** Memory
 
 **Response:**
 
@@ -3432,17 +3469,14 @@ Memory
 }
 ```
 
-Query the status of the WebSocket connection,
-inspecting which API key (if any) is used to authorize requests.
+Query the status of the WebSocket connection, inspecting which API key (if any) is used to authorize
+requests.
 
-**Weight:**
-2
+**Weight:** 2
 
-**Parameters:**
-NONE
+**Parameters:** NONE
 
-**Data Source:**
-Memory
+**Data Source:** Memory
 
 **Response:**
 
@@ -3471,21 +3505,18 @@ Memory
 }
 ```
 
-Forget the API key previously authenticated.
-If the connection is not authenticated, this request does nothing.
+Forget the API key previously authenticated. If the connection is not authenticated, this request
+does nothing.
 
-Note that the WebSocket connection stays open after `session.logout` request.
-You can continue using the connection,
-but now you will have to explicitly provide the `apiKey` and `signature` parameters where needed.
+Note that the WebSocket connection stays open after `session.logout` request. You can continue using
+the connection, but now you will have to explicitly provide the `apiKey` and `signature` parameters
+where needed.
 
-**Weight:**
-2
+**Weight:** 2
 
-**Parameters:**
-NONE
+**Parameters:** NONE
 
-**Data Source:**
-Memory
+**Data Source:** Memory
 
 **Response:**
 
@@ -3530,40 +3561,38 @@ Send in a new order.
 
 This adds 1 order to the `EXCHANGE_MAX_ORDERS` filter and the `MAX_NUM_ORDERS` filter.
 
-**Weight:**
-1
+**Weight:** 1
 
-**Unfilled Order Count:**
-1
+**Unfilled Order Count:** 1
 
 **Parameters:**
 
-Name                | Type    | Mandatory | Description
-------------------- | ------- | --------- | ------------
-`symbol`            | STRING  | YES       |
-`side`              | ENUM    | YES       | `BUY` or `SELL`
-`type`              | ENUM    | YES       |
-`timeInForce`       | ENUM    | NO *      |
-`price`             | DECIMAL | NO *      |
-`quantity`          | DECIMAL | NO *      |
-`quoteOrderQty`     | DECIMAL | NO *      |
-`newClientOrderId`  | STRING  | NO        | Arbitrary unique ID among open orders. Automatically generated if not sent
-`newOrderRespType`  | ENUM    | NO        | <p>Select response format: `ACK`, `RESULT`, `FULL`.</p><p>`MARKET` and `LIMIT` orders use `FULL` by default, other order types default to `ACK`.</p>
-`stopPrice`         | DECIMAL | NO *      |
-`trailingDelta`     | INT     | NO *      | See [Trailing Stop order FAQ](../faqs/trailing-stop-faq.md)
-`icebergQty`        | DECIMAL | NO        |
-`strategyId`        | LONG    | NO        | Arbitrary numeric value identifying the order within an order strategy.
-`strategyType`      | INT     | NO        | <p>Arbitrary numeric value identifying the order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
-`selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. Supported values: [STP Modes](enums.md#stpmodes)
-`pegPriceType`      | ENUM    | NO        | `PRIMARY_PEG` or `MARKET_PEG` <br> See [Pegged Orders](#pegged-orders-info) | |
-`pegOffsetValue`    | INT     | NO        | Price level to peg the price to (max: 100) <br> See [Pegged Orders](#pegged-orders-info) |
-`pegOffsetType`     | ENUM    | NO        | Only `PRICE_LEVEL` is supported <br> See [Pegged Orders](#pegged-orders-info)|   |
-`apiKey`            | STRING  | YES       |
-`recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
-`signature`         | STRING  | YES       |
-`timestamp`         | LONG    | YES       |
+| Name                      | Type    | Mandatory | Description                                                                                                                                             |
+| ------------------------- | ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `symbol`                  | STRING  | YES       |
+| `side`                    | ENUM    | YES       | `BUY` or `SELL`                                                                                                                                         |
+| `type`                    | ENUM    | YES       |
+| `timeInForce`             | ENUM    | NO \*     |
+| `price`                   | DECIMAL | NO \*     |
+| `quantity`                | DECIMAL | NO \*     |
+| `quoteOrderQty`           | DECIMAL | NO \*     |
+| `newClientOrderId`        | STRING  | NO        | Arbitrary unique ID among open orders. Automatically generated if not sent                                                                              |
+| `newOrderRespType`        | ENUM    | NO        | <p>Select response format: `ACK`, `RESULT`, `FULL`.</p><p>`MARKET` and `LIMIT` orders use `FULL` by default, other order types default to `ACK`.</p>    |
+| `stopPrice`               | DECIMAL | NO \*     |
+| `trailingDelta`           | INT     | NO \*     | See [Trailing Stop order FAQ](../faqs/trailing-stop-faq.md)                                                                                    |
+| `icebergQty`              | DECIMAL | NO        |
+| `strategyId`              | LONG    | NO        | Arbitrary numeric value identifying the order within an order strategy.                                                                                 |
+| `strategyType`            | INT     | NO        | <p>Arbitrary numeric value identifying the order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>                     |
+| `selfTradePreventionMode` | ENUM    | NO        | The allowed enums is dependent on what is configured on the symbol. Supported values: [STP Modes](enums.md#stp-modes)                       |
+| `pegPriceType`            | ENUM    | NO        | `PRIMARY_PEG` or `MARKET_PEG` <br> See [Pegged Orders](#pegged-orders-info)                                                                             |
+| `pegOffsetValue`          | INT     | NO        | Price level to peg the price to (max: 100) <br> See [Pegged Orders](#pegged-orders-info)                                                                |
+| `pegOffsetType`           | ENUM    | NO        | Only `PRICE_LEVEL` is supported <br> See [Pegged Orders](#pegged-orders-info)                                                                           |
+| `apiKey`                  | STRING  | YES       |
+| `recvWindow`              | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified. |
+| `signature`               | STRING  | YES       |
+| `timestamp`               | LONG    | YES       |
 
-<a id="order-type">Certain parameters (*)</a> become mandatory based on the order `type`:
+<a id="order-type">Certain parameters (\*)</a> become mandatory based on the order `type`:
 
 <table>
 <thead>
@@ -3746,47 +3775,53 @@ Supported order types:
 </tbody>
 </table>
 
+<!-- prettier-ignore -->
 <a id="pegged-orders-info"></a>
 Notes on using parameters for Pegged Orders:
 
-* These parameters are allowed for `LIMIT`, `LIMIT_MAKER`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT_LIMIT` orders.
-* If `pegPriceType` is specified, `price` becomes optional. Otherwise, it is still mandatory.
-* `pegPriceType=PRIMARY_PEG` means the primary peg, that is the best price on the same side of the order book as your order.
-* `pegPriceType=MARKET_PEG` means the market peg, that is the best price on the opposite side of the order book from your order.
-* Use `pegOffsetType` and `pegOffsetValue` to request a price level other than the best one. These parameters must be specified together.
+- These parameters are allowed for `LIMIT`, `LIMIT_MAKER`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT_LIMIT`
+  orders.
+- If `pegPriceType` is specified, `price` becomes optional. Otherwise, it is still mandatory.
+- `pegPriceType=PRIMARY_PEG` means the primary peg, that is the best price on the same side of the
+  order book as your order.
+- `pegPriceType=MARKET_PEG` means the market peg, that is the best price on the opposite side of the
+  order book from your order.
+- Use `pegOffsetType` and `pegOffsetValue` to request a price level other than the best one. These
+  parameters must be specified together.
 
 <a id="timeInForce"></a>
 
-Available `timeInForce` options,
-setting how long the order should be active before expiration:
+Available `timeInForce` options, setting how long the order should be active before expiration:
 
- TIF  | Description
------ | --------------
-`GTC` | **Good 'til Canceled** – the order will remain on the book until you cancel it, or the order is completely filled.
-`IOC` | **Immediate or Cancel** – the order will be filled for as much as possible, the unfilled quantity immediately expires.
-`FOK` | **Fill or Kill** – the order will expire unless it cannot be immediately filled for the entire quantity.
+| TIF   | Description                                                                                                            |
+| ----- | ---------------------------------------------------------------------------------------------------------------------- |
+| `GTC` | **Good 'til Canceled** – the order will remain on the book until you cancel it, or the order is completely filled.     |
+| `IOC` | **Immediate or Cancel** – the order will be filled for as much as possible, the unfilled quantity immediately expires. |
+| `FOK` | **Fill or Kill** – the order will expire unless it cannot be immediately filled for the entire quantity.               |
 
 Notes:
 
-* `newClientOrderId` specifies `clientOrderId` value for the order.
+- `newClientOrderId` specifies `clientOrderId` value for the order.
 
-  A new order with the same `clientOrderId` is accepted only when the previous one is filled or expired.
+  A new order with the same `clientOrderId` is accepted only when the previous one is filled or
+  expired.
 
-* Any `LIMIT` or `LIMIT_MAKER` order can be made into an iceberg order by specifying the `icebergQty`.
+- Any `LIMIT` or `LIMIT_MAKER` order can be made into an iceberg order by specifying the
+  `icebergQty`.
 
   An order with an `icebergQty` must have `timeInForce` set to `GTC`.
 
-* Trigger order price rules for `STOP_LOSS`/`TAKE_PROFIT` orders:
+- Trigger order price rules for `STOP_LOSS`/`TAKE_PROFIT` orders:
+  - `stopPrice` must be above market price: `STOP_LOSS BUY`, `TAKE_PROFIT SELL`
+  - `stopPrice` must be below market price: `STOP_LOSS SELL`, `TAKE_PROFIT BUY`
 
-  * `stopPrice` must be above market price: `STOP_LOSS BUY`, `TAKE_PROFIT SELL`
-  * `stopPrice` must be below market price: `STOP_LOSS SELL`, `TAKE_PROFIT BUY`
+- `MARKET` orders using `quoteOrderQty` follow [`LOT_SIZE`](filters.md#lot_size) filter
+  rules.
 
-* `MARKET` orders using `quoteOrderQty` follow [`LOT_SIZE`](filters.md#lot_size) filter rules.
+  The order will execute a quantity that has notional value as close as possible to requested
+  `quoteOrderQty`.
 
-  The order will execute a quantity that has notional value as close as possible to requested `quoteOrderQty`.
-
-**Data Source:**
-Matching Engine
+**Data Source:** Matching Engine
 
 **Response:**
 
@@ -3949,33 +3984,34 @@ Response format is selected by using the `newOrderRespType` parameter.
 }
 ```
 
+<!-- prettier-ignore -->
 <a id="conditional-fields-in-order-responses"></a>
-
 **Conditional fields in Order Responses**
 
-There are fields in the order responses (e.g. order placement, order query, order cancellation) that appear only if certain conditions are met.
+There are fields in the order responses (e.g. order placement, order query, order cancellation) that
+appear only if certain conditions are met.
 
 These fields can apply to Order lists.
 
 The fields are listed below:
 
-Field          |Description                                                      |Visibility conditions                                           | Examples |
-----           | -----                                                           | ---                                                            |---       |
-`icebergQty`   | Quantity for the iceberg order | Appears only if the parameter `icebergQty` was sent in the request.| `"icebergQty": "0.00000000"`
-`preventedMatchId` |  When used in combination with `symbol`, can be used to query a prevented match. | Appears only if the order expired due to STP.| `"preventedMatchId": 0`
-`preventedQuantity` | Order quantity that expired due to STP | Appears only if the order expired due to STP. | `"preventedQuantity": "1.200000"`
-`stopPrice`    | Price when the algorithmic order will be triggered | Appears for `STOP_LOSS`. `TAKE_PROFIT`, `STOP_LOSS_LIMIT` and `TAKE_PROFIT_LIMIT` orders.|`"stopPrice": "23500.00000000"`
-`strategyId`   | Can be used to label an order that's part of an order strategy. |Appears if the parameter was populated in the request.| `"strategyId": 37463720`
-`strategyType` | Can be used to label an order that is using an order strategy.|Appears if the parameter was populated in the request.| `"strategyType": 1000000`
-`trailingDelta`| Delta price change required before order activation| Appears for Trailing Stop Orders.|`"trailingDelta": 10`
-`trailingTime` | Time when the trailing order is now active and tracking price changes| Appears only for Trailing Stop Orders.| `"trailingTime": -1`
-`usedSor`      | Field that determines whether order used SOR | Appears when placing orders using SOR|`"usedSor": true`
-`workingFloor` | Field that determines whether the order is being filled by the SOR or by the order book the order was submitted to.|Appears when placing orders using SOR|`"workingFloor": "SOR"`
-`pegPriceType` |  Price peg type  |      Only for pegged orders  | `"pegPriceType": "PRIMARY_PEG"` |
-`pegOffsetType` | Price peg offset type | Only for pegged orders, if requested  | `"pegOffsetType": "PRICE_LEVEL"` |
-`pegOffsetValue` | Price peg offset value  | Only for pegged orders, if requested  | `"pegOffsetValue": 5` |
-`peggedPrice` | Current price order is pegged at | Only for pegged orders, once determined | `"peggedPrice": "87523.83710000"` |
-`expiryReason` | Cause of the order’s expiration | When an order has expired | `“expiryReason”: “INSUFFICIENT_LIQUIDITY”` |
+| Field               | Description                                                                                                         | Visibility conditions                                                                     | Examples                                   |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------ |
+| `icebergQty`        | Quantity for the iceberg order                                                                                      | Appears only if the parameter `icebergQty` was sent in the request.                       | `"icebergQty": "0.00000000"`               |
+| `preventedMatchId`  | When used in combination with `symbol`, can be used to query a prevented match.                                     | Appears only if the order expired due to STP.                                             | `"preventedMatchId": 0`                    |
+| `preventedQuantity` | Order quantity that expired due to STP                                                                              | Appears only if the order expired due to STP.                                             | `"preventedQuantity": "1.200000"`          |
+| `stopPrice`         | Price when the algorithmic order will be triggered                                                                  | Appears for `STOP_LOSS`. `TAKE_PROFIT`, `STOP_LOSS_LIMIT` and `TAKE_PROFIT_LIMIT` orders. | `"stopPrice": "23500.00000000"`            |
+| `strategyId`        | Can be used to label an order that's part of an order strategy.                                                     | Appears if the parameter was populated in the request.                                    | `"strategyId": 37463720`                   |
+| `strategyType`      | Can be used to label an order that is using an order strategy.                                                      | Appears if the parameter was populated in the request.                                    | `"strategyType": 1000000`                  |
+| `trailingDelta`     | Delta price change required before order activation                                                                 | Appears for Trailing Stop Orders.                                                         | `"trailingDelta": 10`                      |
+| `trailingTime`      | Time when the trailing order is now active and tracking price changes                                               | Appears only for Trailing Stop Orders.                                                    | `"trailingTime": -1`                       |
+| `usedSor`           | Field that determines whether order used SOR                                                                        | Appears when placing orders using SOR                                                     | `"usedSor": true`                          |
+| `workingFloor`      | Field that determines whether the order is being filled by the SOR or by the order book the order was submitted to. | Appears when placing orders using SOR                                                     | `"workingFloor": "SOR"`                    |
+| `pegPriceType`      | Price peg type                                                                                                      | Only for pegged orders                                                                    | `"pegPriceType": "PRIMARY_PEG"`            |
+| `pegOffsetType`     | Price peg offset type                                                                                               | Only for pegged orders, if requested                                                      | `"pegOffsetType": "PRICE_LEVEL"`           |
+| `pegOffsetValue`    | Price peg offset value                                                                                              | Only for pegged orders, if requested                                                      | `"pegOffsetValue": 5`                      |
+| `peggedPrice`       | Current price order is pegged at                                                                                    | Only for pegged orders, once determined                                                   | `"peggedPrice": "87523.83710000"`          |
+| `expiryReason`      | Cause of the order’s expiration                                                                                     | When an order has expired                                                                 | `“expiryReason”: “INSUFFICIENT_LIQUIDITY”` |
 
 ### Test new order (TRADE)
 
@@ -3999,27 +4035,26 @@ Field          |Description                                                     
 
 Test order placement.
 
-Validates new order parameters and verifies your signature
-but does not send the order into the matching engine.
+Validates new order parameters and verifies your signature but does not send the order into the
+matching engine.
 
 **Weight:**
 
-|Condition| Request Weight|
-|------------           | ------------ |
-|Without `computeCommissionRates`| 1|
-|With `computeCommissionRates`|20|
+| Condition                        | Request Weight |
+| -------------------------------- | -------------- |
+| Without `computeCommissionRates` | 1              |
+| With `computeCommissionRates`    | 20             |
 
 **Parameters:**
 
-In addition to all parameters accepted by [`order.place`](#place-new-order-trade),
-the following optional parameters are also accepted:
+In addition to all parameters accepted by [`order.place`](#place-new-order-trade), the following
+optional parameters are also accepted:
 
-Name                   |Type          | Mandatory    | Description
-------------           | ------------ | ------------ | ------------
-`computeCommissionRates` | BOOLEAN      | NO         | Default: `false` <br> See [Commissions FAQ](../faqs/commission_faq.md#test-order-diferences) to learn more.
+| Name                     | Type    | Mandatory | Description                                                                                                                                                                                                                                |
+| ------------------------ | ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `computeCommissionRates` | BOOLEAN | NO        | Default: `false` <br> See [Commissions FAQ](../faqs/commission_faq.md#what-is-the-difference-between-the-response-sending-a-test-order-with-computecommissionrates-vs-the-response-from-querying-commission-rates) to learn more. |
 
-**Data Source:**
-Memory
+**Data Source:** Memory
 
 **Response:**
 
@@ -4098,8 +4133,7 @@ With `computeCommissionRates`:
 
 Cancel an active order.
 
-**Weight:**
-1
+**Weight:** 1
 
 **Parameters:**
 
@@ -4171,16 +4205,20 @@ Cancel an active order.
 
 Notes:
 
-* If both `orderId` and `origClientOrderId` parameters are provided, the `orderId` is searched first, then the `origClientOrderId` from that result is checked against that order. If both conditions are not met the request will be rejected.
+- If both `orderId` and `origClientOrderId` parameters are provided, the `orderId` is searched
+  first, then the `origClientOrderId` from that result is checked against that order. If both
+  conditions are not met the request will be rejected.
 
-* `newClientOrderId` will replace `clientOrderId` of the canceled order, freeing it up for new orders.
+- `newClientOrderId` will replace `clientOrderId` of the canceled order, freeing it up for new
+  orders.
 
-* If you cancel an order that is a part of an order list, the entire order list is canceled.
+- If you cancel an order that is a part of an order list, the entire order list is canceled.
 
-* The performance for canceling an order (single cancel or as part of a cancel-replace) is always better when only `orderId` is sent. Sending `origClientOrderId` or both `orderId` + `origClientOrderId` will be slower.
+- The performance for canceling an order (single cancel or as part of a cancel-replace) is always
+  better when only `orderId` is sent. Sending `origClientOrderId` or both `orderId` +
+  `origClientOrderId` will be slower.
 
-**Data Source:**
-Matching Engine
+**Data Source:** Matching Engine
 
 **Response:**
 
@@ -4304,24 +4342,28 @@ When an order list is canceled:
 }
 ```
 
-**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+**Note:** The payload above does not show all fields that can appear. Please refer to
+[Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 <a id="regarding-cancelrestrictions"></a>
 
 **Regarding `cancelRestrictions`**
 
-* If the `cancelRestrictions` value is not any of the supported values, the error will be:
+- If the `cancelRestrictions` value is not any of the supported values, the error will be:
+
 ```json
 {
-    "code": -1145,
-    "msg": "Invalid cancelRestrictions"
+  "code": -1145,
+  "msg": "Invalid cancelRestrictions"
 }
 ```
-* If the order did not pass the conditions for `cancelRestrictions`, the error will be:
+
+- If the order did not pass the conditions for `cancelRestrictions`, the error will be:
+
 ```json
 {
-    "code": -2011,
-    "msg": "Order was not canceled due to cancel restrictions."
+  "code": -2011,
+  "msg": "Order was not canceled due to cancel restrictions."
 }
 ```
 
@@ -4347,15 +4389,15 @@ When an order list is canceled:
 }
 ```
 
-* Cancel an existing order and immediately place a new order instead of the canceled one.
-* A new order that was not attempted (i.e. when `newOrderResult: NOT_ATTEMPTED`), will still increase the unfilled order count by 1.
-* You can only cancel an individual order from an orderList using this method, but the result is the same as canceling the entire orderList.
+- Cancel an existing order and immediately place a new order instead of the canceled one.
+- A new order that was not attempted (i.e. when `newOrderResult: NOT_ATTEMPTED`), will still
+  increase the unfilled order count by 1.
+- You can only cancel an individual order from an orderList using this method, but the result is the
+  same as canceling the entire orderList.
 
-**Weight:**
-1
+**Weight:** 1
 
-**Unfilled Order Count:**
-1
+**Unfilled Order Count:** 1
 
 **Parameters:**
 
@@ -4491,7 +4533,7 @@ When an order list is canceled:
         <td>NO</td>
         <td>
             <p>The allowed enums is dependent on what is configured on the symbol.</p>
-            <p>Supported values: <a href="enums.md#stpmodes">STP Modes</a>.</p>
+            <p>Supported values: <a href="https://github.com/binance/binance-spot-api-docs/blob/master/testnet/enums.md#stp-modes">STP Modes</a>.</p>
         </td>
     </tr>
     <tr>
@@ -4551,13 +4593,13 @@ When an order list is canceled:
 </tbody>
 </table>
 
-Similar to the [`order.place`](#place-new-order-trade) request,
-additional mandatory parameters (*) are determined by the new order [`type`](#order-type).
+Similar to the [`order.place`](#place-new-order-trade) request, additional mandatory parameters (\*)
+are determined by the new order [`type`](enums.md#order-types-ordertypes-type).
 
 Available `cancelReplaceMode` options:
 
-* `STOP_ON_FAILURE` – if cancellation request fails, new order placement will not be attempted.
-* `ALLOW_FAILURE` – new order placement will be attempted even if the cancel request fails.
+- `STOP_ON_FAILURE` – if cancellation request fails, new order placement will not be attempted.
+- `ALLOW_FAILURE` – new order placement will be attempted even if the cancel request fails.
 
 <table>
 <thead>
@@ -4729,32 +4771,39 @@ Available `cancelReplaceMode` options:
 
 Notes:
 
-* If both `cancelOrderId` and `cancelOrigClientOrderId` parameters are provided, the `cancelOrderId` is searched first, then the `cancelOrigClientOrderId` from that result is checked against that order. If both conditions are not met the request will be rejected.
+- If both `cancelOrderId` and `cancelOrigClientOrderId` parameters are provided, the `cancelOrderId`
+  is searched first, then the `cancelOrigClientOrderId` from that result is checked against that
+  order. If both conditions are not met the request will be rejected.
 
-* `cancelNewClientOrderId` will replace `clientOrderId` of the canceled order, freeing it up for new orders.
+- `cancelNewClientOrderId` will replace `clientOrderId` of the canceled order, freeing it up for new
+  orders.
 
-* `newClientOrderId` specifies `clientOrderId` value for the placed order.
+- `newClientOrderId` specifies `clientOrderId` value for the placed order.
 
-  A new order with the same `clientOrderId` is accepted only when the previous one is filled or expired.
+  A new order with the same `clientOrderId` is accepted only when the previous one is filled or
+  expired.
 
   The new order can reuse old `clientOrderId` of the canceled order.
 
-* This cancel-replace operation is **not transactional**.
+- This cancel-replace operation is **not transactional**.
 
   If one operation succeeds but the other one fails, the successful operation is still executed.
 
-  For example, in `STOP_ON_FAILURE` mode, if the new order placement fails, the old order is still canceled.
+  For example, in `STOP_ON_FAILURE` mode, if the new order placement fails, the old order is still
+  canceled.
 
-* Filters and order count limits are evaluated before cancellation and order placement occurs.
+- Filters and order count limits are evaluated before cancellation and order placement occurs.
 
-* If new order placement is not attempted, your order count is still incremented.
+- If new order placement is not attempted, your order count is still incremented.
 
-* Like [`order.cancel`](#cancel-order-trade), if you cancel an individual order from an order list, the entire order list is canceled.
+- Like [`order.cancel`](#cancel-order-trade), if you cancel an individual order from an order list,
+  the entire order list is canceled.
 
-* The performance for canceling an order (single cancel or as part of a cancel-replace) is always better when only `orderId` is sent. Sending `origClientOrderId` or both `orderId` + `origClientOrderId` will be slower.
+- The performance for canceling an order (single cancel or as part of a cancel-replace) is always
+  better when only `orderId` is sent. Sending `origClientOrderId` or both `orderId` +
+  `origClientOrderId` will be slower.
 
-**Data Source:**
-Matching Engine
+**Data Source:** Matching Engine
 
 **Response:**
 
@@ -4833,8 +4882,8 @@ If both cancel and placement succeed, you get the following response with `"stat
 }
 ```
 
-In `STOP_ON_FAILURE` mode, failed order cancellation prevents new order from being placed
-and returns the following response with `"status": 400`:
+In `STOP_ON_FAILURE` mode, failed order cancellation prevents new order from being placed and
+returns the following response with `"status": 400`:
 
 ```javascript
 {
@@ -4879,9 +4928,8 @@ and returns the following response with `"status": 400`:
 }
 ```
 
-If cancel-replace mode allows failure and one of the operations fails,
-you get a response with `"status": 409`,
-and the `"data"` field detailing which operation succeeded, which failed, and why:
+If cancel-replace mode allows failure and one of the operations fails, you get a response with
+`"status": 409`, and the `"data"` field detailing which operation succeeded, which failed, and why:
 
 ```javascript
 {
@@ -5052,7 +5100,8 @@ If both operations fail, response will have `"status": 400`:
 }
 ```
 
-If `orderRateLimitExceededMode` is `DO_NOTHING` regardless of `cancelReplaceMode`, and you have exceeded your unfilled order count, you will get status `429` with the following error:
+If `orderRateLimitExceededMode` is `DO_NOTHING` regardless of `cancelReplaceMode`, and you have
+exceeded your unfilled order count, you will get status `429` with the following error:
 
 ```javascript
 {
@@ -5088,7 +5137,8 @@ If `orderRateLimitExceededMode` is `DO_NOTHING` regardless of `cancelReplaceMode
 }
 ```
 
-If `orderRateLimitExceededMode` is `CANCEL_ONLY` regardless of `cancelReplaceMode`, and you have exceeded your unfilled order count, you will get status `409` with the following error:
+If `orderRateLimitExceededMode` is `CANCEL_ONLY` regardless of `cancelReplaceMode`, and you have
+exceeded your unfilled order count, you will get status `409` with the following error:
 
 ```javascript
 {
@@ -5150,7 +5200,8 @@ If `orderRateLimitExceededMode` is `CANCEL_ONLY` regardless of `cancelReplaceMod
 }
 ```
 
-**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+**Note:** The payload above does not show all fields that can appear. Please refer to
+[Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 ### Order Amend Keep Priority (TRADE)
 
@@ -5178,20 +5229,19 @@ Read [Order Amend Keep Priority FAQ](../faqs/order_amend_keep_priority.md) to le
 
 **Weight**: 4
 
-**Unfilled Order Count:**
-0
+**Unfilled Order Count:** 0
 
 **Parameters:**
 
-Name | Type | Mandatory | Description |
-:---- | :---- | :---- | :---- |
-symbol | STRING | YES |  |
-orderId | LONG | NO\* | `orderId` or `origClientOrderId` must be sent  |
-origClientOrderId | STRING | NO\* | `orderId` or `origClientOrderId` must be sent  |
-newClientOrderId | STRING | NO\* | The new client order ID for the order after being amended. <br> If not sent, one will be randomly generated. <br> It is possible to reuse the current clientOrderId by sending it as the `newClientOrderId`. |
-newQty | DECIMAL | YES | `newQty` must be greater than 0 and less than the order's quantity. |
-recvWindow | DECIMAL | NO | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
-timestamp | LONG | YES |
+| Name              | Type    | Mandatory | Description                                                                                                                                                                                                  |
+| :---------------- | :------ | :-------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| symbol            | STRING  | YES       |                                                                                                                                                                                                              |
+| orderId           | LONG    | NO\*      | `orderId` or `origClientOrderId` must be sent                                                                                                                                                                |
+| origClientOrderId | STRING  | NO\*      | `orderId` or `origClientOrderId` must be sent                                                                                                                                                                |
+| newClientOrderId  | STRING  | NO\*      | The new client order ID for the order after being amended. <br> If not sent, one will be randomly generated. <br> It is possible to reuse the current clientOrderId by sending it as the `newClientOrderId`. |
+| newQty            | DECIMAL | YES       | `newQty` must be greater than 0 and less than the order's quantity.                                                                                                                                          |
+| recvWindow        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.                                                      |
+| timestamp         | LONG    | YES       |
 
 **Data Source**: Matching Engine
 
@@ -5298,7 +5348,8 @@ Response for an order which is part of an Order list:
 }
 ```
 
-**Note:** The payloads above do not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+**Note:** The payloads above do not show all fields that can appear. Please refer to
+[Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 ### Cancel open orders (TRADE)
 
@@ -5315,28 +5366,26 @@ Response for an order which is part of an Order list:
 }
 ```
 
-Cancel all open orders on a symbol.
-This includes orders that are part of an order list.
+Cancel all open orders on a symbol. This includes orders that are part of an order list.
 
-**Weight:**
-1
+**Weight:** 1
 
 **Parameters:**
 
-Name                | Type    | Mandatory | Description
-------------------- | ------- | --------- | ------------
-`symbol`            | STRING  | YES       |
-`apiKey`            | STRING  | YES       |
-`recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
-`signature`         | STRING  | YES       |
-`timestamp`         | LONG    | YES       |
+| Name         | Type    | Mandatory | Description                                                                                                                                             |
+| ------------ | ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `symbol`     | STRING  | YES       |
+| `apiKey`     | STRING  | YES       |
+| `recvWindow` | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified. |
+| `signature`  | STRING  | YES       |
+| `timestamp`  | LONG    | YES       |
 
-**Data Source:**
-Matching Engine
+**Data Source:** Matching Engine
 
 **Response:**
 
-Cancellation reports for orders and order lists have the same format as in [`order.cancel`](#cancel-order-trade).
+Cancellation reports for orders and order lists have the same format as in
+[`order.cancel`](#cancel-order-trade).
 
 ```javascript
 {
@@ -5440,7 +5489,8 @@ Cancellation reports for orders and order lists have the same format as in [`ord
 }
 ```
 
-**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+**Note:** The payload above does not show all fields that can appear. Please refer to
+[Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 ### Order lists
 
@@ -5467,72 +5517,72 @@ Cancellation reports for orders and order lists have the same format as in [`ord
 }
 ```
 
-Send in an one-cancels-the-other (OCO) pair, where activation of one order immediately cancels the other.
+Send in an one-cancels-the-other (OCO) pair, where activation of one order immediately cancels the
+other.
 
-* An OCO has 2 orders called the **above order** and **below order**.
-* One of the orders must be a `LIMIT_MAKER/TAKE_PROFIT/TAKE_PROFIT_LIMIT` order and the other must be `STOP_LOSS` or `STOP_LOSS_LIMIT` order.
-* Price restrictions:
-  * If the OCO is on the `SELL` side:
-    * `LIMIT_MAKER/TAKE_PROFIT_LIMIT` `price` > Last Traded Price > `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`
-    * `TAKE_PROFIT stopPrice` > Last Traded Price > `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
-  * If the OCO is on the `BUY` side:
-    * `LIMIT_MAKER` `price` < Last Traded Price < `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`
-    * `TAKE_PROFIT stopPrice` > Last Traded Price > `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
-* OCOs add **2 orders** to the `EXCHANGE_MAX_ORDERS` filter and `MAX_NUM_ORDERS` filter.
+- An OCO has 2 orders called the **above order** and **below order**.
+- One of the orders must be a `LIMIT_MAKER/TAKE_PROFIT/TAKE_PROFIT_LIMIT` order and the other must
+  be `STOP_LOSS` or `STOP_LOSS_LIMIT` order.
+- Price restrictions:
+  - If the OCO is on the `SELL` side:
+    - `LIMIT_MAKER/TAKE_PROFIT_LIMIT` `price` > Last Traded Price > `STOP_LOSS/STOP_LOSS_LIMIT`
+      `stopPrice`
+    - `TAKE_PROFIT stopPrice` > Last Traded Price > `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
+  - If the OCO is on the `BUY` side:
+    - `LIMIT_MAKER` `price` < Last Traded Price < `STOP_LOSS/STOP_LOSS_LIMIT` `stopPrice`
+    - `TAKE_PROFIT stopPrice` > Last Traded Price > `STOP_LOSS/STOP_LOSS_LIMIT stopPrice`
+- OCOs add **2 orders** to the `EXCHANGE_MAX_ORDERS` filter and `MAX_NUM_ORDERS` filter.
 
-**Weight:**
-1
+**Weight:** 1
 
-**Unfilled Order Count:**
-2
+**Unfilled Order Count:** 2
 
 **Parameters:**
 
-Name                     |Type    | Mandatory | Description
------                    |------  | -----     |----
-`symbol`                 |STRING  |YES        |
-`listClientOrderId`      |STRING  |NO         |Arbitrary unique ID among open order lists. Automatically generated if not sent. <br> A new order list with the same `listClientOrderId` is accepted only when the previous one is filled or completely expired. <br> `listClientOrderId` is distinct from the `aboveClientOrderId` and the `belowCLientOrderId`.
-`side`                   |ENUM    |YES        |`BUY` or `SELL`
-`quantity`               |DECIMAL |YES        |Quantity for both orders of the order list.
-`aboveType`              |ENUM    |YES        |Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
-`aboveClientOrderId`     |STRING  |NO         |Arbitrary unique ID among open orders for the above order. Automatically generated if not sent
-`aboveIcebergQty`        |LONG    |NO         |Note that this can only be used if `aboveTimeInForce` is `GTC`.
-`abovePrice`             |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
-`aboveStopPrice`         |DECIMAL |NO         |Can be used if `aboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`. <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.
-`aboveTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](../faqs/trailing-stop-faq.md).
-`aboveTimeInForce`       |ENUM    |NO         |Required if `aboveType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`.
-`aboveStrategyId`        |LONG    |NO         |Arbitrary numeric value identifying the above order within an order strategy.
-`aboveStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the above order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
-`abovePegPriceType`      |ENUM    |NO         |See [Pegged Orders](#pegged-orders-info) |
-`abovePegOffsetType`     |ENUM    |NO         |  |
-`abovePegOffsetValue`    |INT     |NO         |  |
-`belowType`              |ENUM    |YES        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
-`belowClientOrderId`     |STRING  |NO         |
-`belowIcebergQty`        |LONG    |NO         |Note that this can only be used if `belowTimeInForce` is `GTC`.
-`belowPrice`             |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
-`belowStopPrice`         |DECIMAL |NO         |Can be used if `belowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT` or `TAKE_PROFIT_LIMIT`. <br>Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.
-`belowTrailingDelta`     |LONG    |NO         |See [Trailing Stop order FAQ](../faqs/trailing-stop-faq.md).
-`belowTimeInForce`       |ENUM    |NO         |Required if `belowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`
-`belowStrategyId`        |LONG    |NO         |Arbitrary numeric value identifying the below order within an order strategy.
-`belowStrategyType`      |INT     |NO         |Arbitrary numeric value identifying the below order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.
-`belowPegPriceType`      |ENUM    |NO         |See [Pegged Orders](#pegged-orders-info) |
-`belowPegOffsetType`     |ENUM    |NO         |  |
-`belowPegOffsetValue`    |INT     |NO         |  |
-`newOrderRespType`       |ENUM    |NO         |Select response format: `ACK`, `RESULT`, `FULL`
-`selfTradePreventionMode`|ENUM    |NO         |The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](./enums.md#stpmodes).
-`apiKey`                 |STRING  |YES        |
-`recvWindow`             |DECIMAL |NO         |The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
-`timestamp`              |LONG    |YES        |
-`signature`              |STRING  |YES        |
+| Name                      | Type    | Mandatory | Description                                                                                                                                                                                                                                                                                                       |
+| ------------------------- | ------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `symbol`                  | STRING  | YES       |
+| `listClientOrderId`       | STRING  | NO        | Arbitrary unique ID among open order lists. Automatically generated if not sent. <br> A new order list with the same `listClientOrderId` is accepted only when the previous one is filled or completely expired. <br> `listClientOrderId` is distinct from the `aboveClientOrderId` and the `belowCLientOrderId`. |
+| `side`                    | ENUM    | YES       | `BUY` or `SELL`                                                                                                                                                                                                                                                                                                   |
+| `quantity`                | DECIMAL | YES       | Quantity for both orders of the order list.                                                                                                                                                                                                                                                                       |
+| `aboveType`               | ENUM    | YES       | Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`                                                                                                                                                                                                               |
+| `aboveClientOrderId`      | STRING  | NO        | Arbitrary unique ID among open orders for the above order. Automatically generated if not sent                                                                                                                                                                                                                    |
+| `aboveIcebergQty`         | LONG    | NO        | Note that this can only be used if `aboveTimeInForce` is `GTC`.                                                                                                                                                                                                                                                   |
+| `abovePrice`              | DECIMAL | NO        | Can be used if `aboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.                                                                                                                                                                                               |
+| `aboveStopPrice`          | DECIMAL | NO        | Can be used if `aboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`. <br>Either `aboveStopPrice` or `aboveTrailingDelta` or both, must be specified.                                                                                                                                 |
+| `aboveTrailingDelta`      | LONG    | NO        | See [Trailing Stop order FAQ](../faqs/trailing-stop-faq.md).                                                                                                                                                                                                                                                         |
+| `aboveTimeInForce`        | ENUM    | NO        | Required if `aboveType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`.                                                                                                                                                                                                                                              |
+| `aboveStrategyId`         | LONG    | NO        | Arbitrary numeric value identifying the above order within an order strategy.                                                                                                                                                                                                                                     |
+| `aboveStrategyType`       | INT     | NO        | Arbitrary numeric value identifying the above order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.                                                                                                                                                                                    |
+| `abovePegPriceType`       | ENUM    | NO        | See [Pegged Orders](#pegged-orders-info)                                                                                                                                                                                                                                                                          |
+| `abovePegOffsetType`      | ENUM    | NO        |                                                                                                                                                                                                                                                                                                                   |
+| `abovePegOffsetValue`     | INT     | NO        |                                                                                                                                                                                                                                                                                                                   |
+| `belowType`               | ENUM    | YES       | Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`                                                                                                                                                                                                                               |
+| `belowClientOrderId`      | STRING  | NO        |
+| `belowIcebergQty`         | LONG    | NO        | Note that this can only be used if `belowTimeInForce` is `GTC`.                                                                                                                                                                                                                                                   |
+| `belowPrice`              | DECIMAL | NO        | Can be used if `belowType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.                                                                                                                                                                                               |
+| `belowStopPrice`          | DECIMAL | NO        | Can be used if `belowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT` or `TAKE_PROFIT_LIMIT`. <br>Either `belowStopPrice` or `belowTrailingDelta` or both, must be specified.                                                                                                                               |
+| `belowTrailingDelta`      | LONG    | NO        | See [Trailing Stop order FAQ](../faqs/trailing-stop-faq.md).                                                                                                                                                                                                                                                         |
+| `belowTimeInForce`        | ENUM    | NO        | Required if `belowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`                                                                                                                                                                                                                                               |
+| `belowStrategyId`         | LONG    | NO        | Arbitrary numeric value identifying the below order within an order strategy.                                                                                                                                                                                                                                     |
+| `belowStrategyType`       | INT     | NO        | Arbitrary numeric value identifying the below order strategy. <br>Values smaller than 1000000 are reserved and cannot be used.                                                                                                                                                                                    |
+| `belowPegPriceType`       | ENUM    | NO        | See [Pegged Orders](#pegged-orders-info)                                                                                                                                                                                                                                                                          |
+| `belowPegOffsetType`      | ENUM    | NO        |                                                                                                                                                                                                                                                                                                                   |
+| `belowPegOffsetValue`     | INT     | NO        |                                                                                                                                                                                                                                                                                                                   |
+| `newOrderRespType`        | ENUM    | NO        | Select response format: `ACK`, `RESULT`, `FULL`                                                                                                                                                                                                                                                                   |
+| `selfTradePreventionMode` | ENUM    | NO        | The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](enums.md#stp-modes).                                                                                                                                                               |
+| `apiKey`                  | STRING  | YES       |
+| `recvWindow`              | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.                                                                                                                                                           |
+| `timestamp`               | LONG    | YES       |
+| `signature`               | STRING  | YES       |
 
-**Data Source:**
-Matching Engine
+**Data Source:** Matching Engine
 
 **Response:**
 
-Response format for `orderReports` is selected using the `newOrderRespType` parameter.
-The following example is for `RESULT` response type.
-See [`order.place`](#place-new-order-trade) for more examples.
+Response format for `orderReports` is selected using the `newOrderRespType` parameter. The following
+example is for `RESULT` response type. See [`order.place`](#place-new-order-trade) for more
+examples.
 
 ```javascript
 {
@@ -5650,55 +5700,61 @@ See [`order.place`](#place-new-order-trade) for more examples.
 
 Places an OTO.
 
-* An OTO (One-Triggers-the-Other) is an order list comprised of 2 orders.
-* The first order is called the **working order** and must be `LIMIT` or `LIMIT_MAKER`. Initially, only the working order goes on the order book.
-* The second order is called the **pending order**. It can be any order type except for `MARKET` orders using parameter `quoteOrderQty`. The pending order is only placed on the order book when the working order gets **fully filled**.
-* If either the working order or the pending order is cancelled individually, the other order in the order list will also be canceled or expired.
-* When the order list is placed, if the working order gets **immediately fully filled**, the placement response will show the working order as `FILLED` but the pending order will still appear as `PENDING_NEW`. You need to query the status of the pending order again to see its updated status.
-* OTOs add **2 orders** to the `EXCHANGE_MAX_NUM_ORDERS` filter and `MAX_NUM_ORDERS` filter.
+- An OTO (One-Triggers-the-Other) is an order list comprised of 2 orders.
+- The first order is called the **working order** and must be `LIMIT` or `LIMIT_MAKER`. Initially,
+  only the working order goes on the order book.
+- The second order is called the **pending order**. It can be any order type except for `MARKET`
+  orders using parameter `quoteOrderQty`. The pending order is only placed on the order book when
+  the working order gets **fully filled**.
+- If either the working order or the pending order is cancelled individually, the other order in the
+  order list will also be canceled or expired.
+- When the order list is placed, if the working order gets **immediately fully filled**, the
+  placement response will show the working order as `FILLED` but the pending order will still appear
+  as `PENDING_NEW`. You need to query the status of the pending order again to see its updated
+  status.
+- OTOs add **2 orders** to the `EXCHANGE_MAX_NUM_ORDERS` filter and `MAX_NUM_ORDERS` filter.
 
 **Weight:** 1
 
-**Unfilled Order Count:**
-2
+**Unfilled Order Count:** 2
 
 **Parameters:**
 
-Name                   |Type   |Mandatory | Description
-----                   |----   |------    |------
-`symbol`                 |STRING |YES       |
-`listClientOrderId`      |STRING |NO        |Arbitrary unique ID among open order lists. Automatically generated if not sent. <br>A new order list with the same listClientOrderId is accepted only when the previous one is filled or completely expired. <br> `listClientOrderId` is distinct from the `workingClientOrderId` and the `pendingClientOrderId`.
-`newOrderRespType`       |ENUM   |NO        |Format of the JSON response. Supported values: [Order Response Type](./enums.md#orderresponsetype)
-`selfTradePreventionMode`|ENUM   |NO        |The allowed values are dependent on what is configured on the symbol. Supported values: [STP Modes](./enums.md#stpmodes)
-`workingType`            |ENUM   |YES       |Supported values: `LIMIT`,`LIMIT_MAKER`
-`workingSide`            |ENUM   |YES       |Supported values: [Order side](./enums.md#side)
-`workingClientOrderId`   |STRING |NO        |Arbitrary unique ID among open orders for the working order.<br> Automatically generated if not sent.
-`workingPrice`           |DECIMAL|YES       |
-`workingQuantity`        |DECIMAL|YES       |Sets the quantity for the working order.
-`workingIcebergQty`      |DECIMAL|NO       |This can only be used if `workingTimeInForce` is `GTC`, or if `workingType` is `LIMIT_MAKER`.
-`workingTimeInForce`     |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
-`workingStrategyId`      |LONG   |NO        |Arbitrary numeric value identifying the working order within an order strategy.
-`workingStrategyType`    |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
-`workingPegPriceType`    |ENUM   |NO        |See [Pegged Orders](#pegged-orders-info) |
-`workingPegOffsetType`   |ENUM | NO |  |
-`workingPegOffsetValue`  |INT | NO |  |
-`pendingType`            |ENUM   |YES       |Supported values: [Order types](#order-type). <br> Note that `MARKET` orders using `quoteOrderQty` are not supported.
-`pendingSide`            |ENUM   |YES       |Supported values: [Order side](./enums.md#side)
-`pendingClientOrderId`   |STRING |NO        |Arbitrary unique ID among open orders for the pending order.<br> Automatically generated if not sent.
-`pendingPrice`           |DECIMAL|NO        |
-`pendingStopPrice`       |DECIMAL|NO        |
-`pendingTrailingDelta`   |DECIMAL|NO        |
-`pendingQuantity`        |DECIMAL|YES       |Sets the quantity for the pending order.
-`pendingIcebergQty`      |DECIMAL|NO        |This can only be used if `pendingTimeInForce` is `GTC`, or if `pendingType` is `LIMIT_MAKER`.
-`pendingTimeInForce`     |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
-`pendingStrategyId`      |LONG   |NO        |Arbitrary numeric value identifying the pending order within an order strategy.
-`pendingStrategyType`    |INT    |NO        |Arbitrary numeric value identifying the pending order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
-`pendingPegOffsetType`   |ENUM   |NO        |See [Pegged Orders](#pegged-orders-info) |
-`pendingPegPriceType`    |ENUM | NO |  |
-`pendingPegOffsetValue`  |INT    |NO        |  |
-`recvWindow`             |DECIMAL|NO        |The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
-`timestamp`              |LONG   |YES       |
-`signature`              |STRING |YES       |
+| Name                      | Type    | Mandatory | Description                                                                                                                                                                                                                                                                                                        |
+| ------------------------- | ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `symbol`                  | STRING  | YES       |
+| `listClientOrderId`       | STRING  | NO        | Arbitrary unique ID among open order lists. Automatically generated if not sent. <br>A new order list with the same listClientOrderId is accepted only when the previous one is filled or completely expired. <br> `listClientOrderId` is distinct from the `workingClientOrderId` and the `pendingClientOrderId`. |
+| `newOrderRespType`        | ENUM    | NO        | Format of the JSON response. Supported values: [Order Response Type](enums.md#order-response-type-neworderresptype)                                                                                                                                                                                    |
+| `selfTradePreventionMode` | ENUM    | NO        | The allowed values are dependent on what is configured on the symbol. Supported values: [STP Modes](enums.md#stp-modes)                                                                                                                                                                                |
+| `workingType`             | ENUM    | YES       | Supported values: `LIMIT`,`LIMIT_MAKER`                                                                                                                                                                                                                                                                            |
+| `workingSide`             | ENUM    | YES       | Supported values: [Order side](enums.md#order-side-side)                                                                                                                                                                                                                                               |
+| `workingClientOrderId`    | STRING  | NO        | Arbitrary unique ID among open orders for the working order.<br> Automatically generated if not sent.                                                                                                                                                                                                              |
+| `workingPrice`            | DECIMAL | YES       |
+| `workingQuantity`         | DECIMAL | YES       | Sets the quantity for the working order.                                                                                                                                                                                                                                                                           |
+| `workingIcebergQty`       | DECIMAL | NO        | This can only be used if `workingTimeInForce` is `GTC`, or if `workingType` is `LIMIT_MAKER`.                                                                                                                                                                                                                      |
+| `workingTimeInForce`      | ENUM    | NO        | Supported values: [Time In Force](enums.md#time-in-force-timeinforce)                                                                                                                                                                                                                                  |
+| `workingStrategyId`       | LONG    | NO        | Arbitrary numeric value identifying the working order within an order strategy.                                                                                                                                                                                                                                    |
+| `workingStrategyType`     | INT     | NO        | Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.                                                                                                                                                                                  |
+| `workingPegPriceType`     | ENUM    | NO        | See [Pegged Orders](#pegged-orders-info)                                                                                                                                                                                                                                                                           |
+| `workingPegOffsetType`    | ENUM    | NO        |                                                                                                                                                                                                                                                                                                                    |
+| `workingPegOffsetValue`   | INT     | NO        |                                                                                                                                                                                                                                                                                                                    |
+| `pendingType`             | ENUM    | YES       | Supported values: [Order types](enums.md#order-types-ordertypes-type). <br> Note that `MARKET` orders using `quoteOrderQty` are not supported.                                                                                                                                                 |
+| `pendingSide`             | ENUM    | YES       | Supported values: [Order side](enums.md#order-side-side)                                                                                                                                                                                                                                               |
+| `pendingClientOrderId`    | STRING  | NO        | Arbitrary unique ID among open orders for the pending order.<br> Automatically generated if not sent.                                                                                                                                                                                                              |
+| `pendingPrice`            | DECIMAL | NO        |
+| `pendingStopPrice`        | DECIMAL | NO        |
+| `pendingTrailingDelta`    | DECIMAL | NO        |
+| `pendingQuantity`         | DECIMAL | YES       | Sets the quantity for the pending order.                                                                                                                                                                                                                                                                           |
+| `pendingIcebergQty`       | DECIMAL | NO        | This can only be used if `pendingTimeInForce` is `GTC`, or if `pendingType` is `LIMIT_MAKER`.                                                                                                                                                                                                                      |
+| `pendingTimeInForce`      | ENUM    | NO        | Supported values: [Time In Force](enums.md#time-in-force-timeinforce)                                                                                                                                                                                                                                  |
+| `pendingStrategyId`       | LONG    | NO        | Arbitrary numeric value identifying the pending order within an order strategy.                                                                                                                                                                                                                                    |
+| `pendingStrategyType`     | INT     | NO        | Arbitrary numeric value identifying the pending order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.                                                                                                                                                                                  |
+| `pendingPegOffsetType`    | ENUM    | NO        | See [Pegged Orders](#pegged-orders-info)                                                                                                                                                                                                                                                                           |
+| `pendingPegPriceType`     | ENUM    | NO        |                                                                                                                                                                                                                                                                                                                    |
+| `pendingPegOffsetValue`   | INT     | NO        |                                                                                                                                                                                                                                                                                                                    |
+| `recvWindow`              | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.                                                                                                                                                            |
+| `timestamp`               | LONG    | YES       |
+| `signature`               | STRING  | YES       |
 
 <a id="mandatory-parameters-based-on-pendingtype-or-workingtype"></a>
 
@@ -5706,12 +5762,12 @@ Name                   |Type   |Mandatory | Description
 
 Depending on the `pendingType` or `workingType`, some optional parameters will become mandatory.
 
-|Type                                                  |Additional mandatory parameters|Additional information|
-|----                                                  |----                           |------
-|`workingType` = `LIMIT`                               |`workingTimeInForce`           |
-|`pendingType` = `LIMIT`                                |`pendingPrice`, `pendingTimeInForce`          |
-|`pendingType` = `STOP_LOSS` or `TAKE_PROFIT`           |`pendingStopPrice` and/or `pendingTrailingDelta`|
-|`pendingType` =`STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT`|`pendingPrice`, `pendingStopPrice` and/or `pendingTrailingDelta`, `pendingTimeInForce`|
+| Type                                                    | Additional mandatory parameters                                                        | Additional information |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------------- | ---------------------- |
+| `workingType` = `LIMIT`                                 | `workingTimeInForce`                                                                   |
+| `pendingType` = `LIMIT`                                 | `pendingPrice`, `pendingTimeInForce`                                                   |
+| `pendingType` = `STOP_LOSS` or `TAKE_PROFIT`            | `pendingStopPrice` and/or `pendingTrailingDelta`                                       |
+| `pendingType` =`STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT` | `pendingPrice`, `pendingStopPrice` and/or `pendingTrailingDelta`, `pendingTimeInForce` |
 
 **Data Source:**
 
@@ -5801,7 +5857,8 @@ Matching Engine
 }
 ```
 
-**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+**Note:** The payload above does not show all fields that can appear. Please refer to
+[Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 #### Place new Order list - OTOCO (TRADE)
 
@@ -5832,83 +5889,86 @@ Matching Engine
 
 Place an OTOCO.
 
-* An OTOCO (One-Triggers-One-Cancels-the-Other) is an order list comprised of 3 orders.
-* The first order is called the **working order** and must be `LIMIT` or `LIMIT_MAKER`. Initially, only the working order goes on the order book.
-  * The behavior of the working order is the same as the [OTO](#place-new-order-list---oto-trade).
-* OTOCO has 2 pending orders (pending above and pending below), forming an OCO pair. The pending orders are only placed on the order book when the working order gets **fully filled**.
-    * The rules of the pending above and pending below follow the same rules as the [Order list OCO](#place-new-order-list---oco-trade).
-* OTOCOs add **3 orders** to the `EXCHANGE_MAX_NUM_ORDERS` filter and `MAX_NUM_ORDERS` filter.
+- An OTOCO (One-Triggers-One-Cancels-the-Other) is an order list comprised of 3 orders.
+- The first order is called the **working order** and must be `LIMIT` or `LIMIT_MAKER`. Initially,
+  only the working order goes on the order book.
+  - The behavior of the working order is the same as the [OTO](#place-new-order-list---oto-trade).
+- OTOCO has 2 pending orders (pending above and pending below), forming an OCO pair. The pending
+  orders are only placed on the order book when the working order gets **fully filled**.
+  - The rules of the pending above and pending below follow the same rules as the
+    [Order list OCO](#place-new-order-list---oco-trade).
+- OTOCOs add **3 orders** to the `EXCHANGE_MAX_NUM_ORDERS` filter and `MAX_NUM_ORDERS` filter.
 
 **Weight:** 1
 
-**Unfilled Order Count:**
-3
+**Unfilled Order Count:** 3
 
 **Parameters:**
 
-Name                     |Type   |Mandatory | Description
-----                     |----   |------    |------
-`symbol`                   |STRING |YES       |
-`listClientOrderId`        |STRING |NO        |Arbitrary unique ID among open order lists. Automatically generated if not sent. <br>A new order list with the same listClientOrderId is accepted only when the previous one is filled or completely expired. <br> `listClientOrderId` is distinct from the `workingClientOrderId`, `pendingAboveClientOrderId`, and the `pendingBelowClientOrderId`.
-`newOrderRespType`         |ENUM   |NO        |Format of the JSON response. Supported values: [Order Response Type](./enums.md#orderresponsetype)
-`selfTradePreventionMode`  |ENUM   |NO        |The allowed values are dependent on what is configured on the symbol. Supported values: [STP Modes](./enums.md#stpmodes)
-`workingType`              |ENUM   |YES       |Supported values: `LIMIT`, `LIMIT_MAKER`
-`workingSide`              |ENUM   |YES       |Supported values: [Order Side](./enums.md#side)
-`workingClientOrderId`     |STRING |NO        |Arbitrary unique ID among open orders for the working order.<br> Automatically generated if not sent.
-`workingPrice`             |DECIMAL|YES       |
-`workingQuantity`          |DECIMAL|YES       |
-`workingIcebergQty`        |DECIMAL|NO        |This can only be used if `workingTimeInForce` is `GTC`, or if `workingType` is `LIMIT_MAKER`.|
-`workingTimeInForce`       |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
-`workingStrategyId`        |LONG    |NO        |Arbitrary numeric value identifying the working order within an order strategy.
-`workingStrategyType`      |INT    |NO        |Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
-`workingPegPriceType`      |ENUM   |NO        |See [Pegged Orders](#pegged-orders-info) |
-`workingPegOffsetType`     |ENUM   |NO |  |
-`workingPegOffsetValue`    |INT    |NO |  |
-`pendingSide`              |ENUM   |YES       |Supported values: [Order Side](./enums.md#side)
-`pendingQuantity`          |DECIMAL|YES       |
-`pendingAboveType`         |ENUM   |YES       |Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
-`pendingAboveClientOrderId`|STRING |NO        |Arbitrary unique ID among open orders for the pending above order.<br> Automatically generated if not sent.
-`pendingAbovePrice`        |DECIMAL|NO        |Can be used if `pendingAboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.
-`pendingAboveStopPrice`    |DECIMAL|NO        |Can be used if `pendingAboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`
-`pendingAboveTrailingDelta`|DECIMAL|NO        |See [Trailing Stop FAQ](../faqs/trailing-stop-faq.md)
-`pendingAboveIcebergQty`   |DECIMAL|NO        |This can only be used if `pendingAboveTimeInForce` is `GTC` or if `pendingAboveType` is `LIMIT_MAKER`.
-`pendingAboveTimeInForce`  |ENUM   |NO        |
-`pendingAboveStrategyId`   |LONG    |NO        |Arbitrary numeric value identifying the pending above order within an order strategy.
-`pendingAboveStrategyType` |INT    |NO        |Arbitrary numeric value identifying the pending above order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
-`pendingAbovePegPriceType` |ENUM   |NO       |See [Pegged Orders](#pegged-orders-info) |
-`pendingAbovePegOffsetType` | ENUM |NO |  |
-`pendingAbovePegOffsetValue` | INT |NO |  |
-`pendingBelowType`         |ENUM   |NO        |Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`
-`pendingBelowClientOrderId`|STRING |NO        |Arbitrary unique ID among open orders for the pending below order.<br> Automatically generated if not sent.
-`pendingBelowPrice`        |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT` to specify the limit price.
-`pendingBelowStopPrice`    |DECIMAL|NO        |Can be used if `pendingBelowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`. <br>Either `pendingBelowStopPrice` or `pendingBelowTrailingDelta` or both, must be specified.
-`pendingBelowTrailingDelta`|DECIMAL|NO        |
-`pendingBelowIcebergQty`   |DECIMAL|NO        |This can only be used if `pendingBelowTimeInForce` is `GTC`, or if `pendingBelowType` is `LIMIT_MAKER`.
-`pendingBelowTimeInForce`  |ENUM   |NO        |Supported values: [Time In Force](./enums.md#timeinforce)
-`pendingBelowStrategyId`   |LONG   |NO        |Arbitrary numeric value identifying the pending below order within an order strategy.
-`pendingBelowStrategyType` |INT    |NO        |Arbitrary numeric value identifying the pending below order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.
-`pendingBelowPegPriceType` | ENUM  |NO        |See [Pegged Orders](#pegged-orders-info) |
-`pendingBelowPegOffsetType` |ENUM | NO |  |
-`pendingBelowPegOffsetValue` |INT | NO |  |
-`recvWindow`               |DECIMAL|NO        |The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
-`timestamp`                |LONG   |YES       |
-`signature`                |STRING|YES|
+| Name                         | Type    | Mandatory | Description                                                                                                                                                                                                                                                                                                                                           |
+| ---------------------------- | ------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `symbol`                     | STRING  | YES       |
+| `listClientOrderId`          | STRING  | NO        | Arbitrary unique ID among open order lists. Automatically generated if not sent. <br>A new order list with the same listClientOrderId is accepted only when the previous one is filled or completely expired. <br> `listClientOrderId` is distinct from the `workingClientOrderId`, `pendingAboveClientOrderId`, and the `pendingBelowClientOrderId`. |
+| `newOrderRespType`           | ENUM    | NO        | Format of the JSON response. Supported values: [Order Response Type](enums.md#order-response-type-neworderresptype)                                                                                                                                                                                                                       |
+| `selfTradePreventionMode`    | ENUM    | NO        | The allowed values are dependent on what is configured on the symbol. Supported values: [STP Modes](enums.md#stp-modes)                                                                                                                                                                                                                   |
+| `workingType`                | ENUM    | YES       | Supported values: `LIMIT`, `LIMIT_MAKER`                                                                                                                                                                                                                                                                                                              |
+| `workingSide`                | ENUM    | YES       | Supported values: [Order Side](enums.md#order-side-side)                                                                                                                                                                                                                                                                                  |
+| `workingClientOrderId`       | STRING  | NO        | Arbitrary unique ID among open orders for the working order.<br> Automatically generated if not sent.                                                                                                                                                                                                                                                 |
+| `workingPrice`               | DECIMAL | YES       |
+| `workingQuantity`            | DECIMAL | YES       |
+| `workingIcebergQty`          | DECIMAL | NO        | This can only be used if `workingTimeInForce` is `GTC`, or if `workingType` is `LIMIT_MAKER`.                                                                                                                                                                                                                                                         |
+| `workingTimeInForce`         | ENUM    | NO        | Supported values: [Time In Force](enums.md#time-in-force-timeinforce)                                                                                                                                                                                                                                                                     |
+| `workingStrategyId`          | LONG    | NO        | Arbitrary numeric value identifying the working order within an order strategy.                                                                                                                                                                                                                                                                       |
+| `workingStrategyType`        | INT     | NO        | Arbitrary numeric value identifying the working order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.                                                                                                                                                                                                                     |
+| `workingPegPriceType`        | ENUM    | NO        | See [Pegged Orders](#pegged-orders-info)                                                                                                                                                                                                                                                                                                              |
+| `workingPegOffsetType`       | ENUM    | NO        |                                                                                                                                                                                                                                                                                                                                                       |
+| `workingPegOffsetValue`      | INT     | NO        |                                                                                                                                                                                                                                                                                                                                                       |
+| `pendingSide`                | ENUM    | YES       | Supported values: [Order Side](enums.md#order-side-side)                                                                                                                                                                                                                                                                                  |
+| `pendingQuantity`            | DECIMAL | YES       |
+| `pendingAboveType`           | ENUM    | YES       | Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`                                                                                                                                                                                                                                                   |
+| `pendingAboveClientOrderId`  | STRING  | NO        | Arbitrary unique ID among open orders for the pending above order.<br> Automatically generated if not sent.                                                                                                                                                                                                                                           |
+| `pendingAbovePrice`          | DECIMAL | NO        | Can be used if `pendingAboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.                                                                                                                                                                                                                            |
+| `pendingAboveStopPrice`      | DECIMAL | NO        | Can be used if `pendingAboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`                                                                                                                                                                                                                                               |
+| `pendingAboveTrailingDelta`  | DECIMAL | NO        | See [Trailing Stop FAQ](../faqs/trailing-stop-faq.md)                                                                                                                                                                                                                                                                                        |
+| `pendingAboveIcebergQty`     | DECIMAL | NO        | This can only be used if `pendingAboveTimeInForce` is `GTC` or if `pendingAboveType` is `LIMIT_MAKER`.                                                                                                                                                                                                                                                |
+| `pendingAboveTimeInForce`    | ENUM    | NO        |
+| `pendingAboveStrategyId`     | LONG    | NO        | Arbitrary numeric value identifying the pending above order within an order strategy.                                                                                                                                                                                                                                                                 |
+| `pendingAboveStrategyType`   | INT     | NO        | Arbitrary numeric value identifying the pending above order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.                                                                                                                                                                                                               |
+| `pendingAbovePegPriceType`   | ENUM    | NO        | See [Pegged Orders](#pegged-orders-info)                                                                                                                                                                                                                                                                                                              |
+| `pendingAbovePegOffsetType`  | ENUM    | NO        |                                                                                                                                                                                                                                                                                                                                                       |
+| `pendingAbovePegOffsetValue` | INT     | NO        |                                                                                                                                                                                                                                                                                                                                                       |
+| `pendingBelowType`           | ENUM    | NO        | Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`                                                                                                                                                                                                                                                                   |
+| `pendingBelowClientOrderId`  | STRING  | NO        | Arbitrary unique ID among open orders for the pending below order.<br> Automatically generated if not sent.                                                                                                                                                                                                                                           |
+| `pendingBelowPrice`          | DECIMAL | NO        | Can be used if `pendingBelowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT` to specify the limit price.                                                                                                                                                                                                                                             |
+| `pendingBelowStopPrice`      | DECIMAL | NO        | Can be used if `pendingBelowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`. <br>Either `pendingBelowStopPrice` or `pendingBelowTrailingDelta` or both, must be specified.                                                                                                                                                  |
+| `pendingBelowTrailingDelta`  | DECIMAL | NO        |
+| `pendingBelowIcebergQty`     | DECIMAL | NO        | This can only be used if `pendingBelowTimeInForce` is `GTC`, or if `pendingBelowType` is `LIMIT_MAKER`.                                                                                                                                                                                                                                               |
+| `pendingBelowTimeInForce`    | ENUM    | NO        | Supported values: [Time In Force](enums.md#time-in-force-timeinforce)                                                                                                                                                                                                                                                                     |
+| `pendingBelowStrategyId`     | LONG    | NO        | Arbitrary numeric value identifying the pending below order within an order strategy.                                                                                                                                                                                                                                                                 |
+| `pendingBelowStrategyType`   | INT     | NO        | Arbitrary numeric value identifying the pending below order strategy. <br> Values smaller than 1000000 are reserved and cannot be used.                                                                                                                                                                                                               |
+| `pendingBelowPegPriceType`   | ENUM    | NO        | See [Pegged Orders](#pegged-orders-info)                                                                                                                                                                                                                                                                                                              |
+| `pendingBelowPegOffsetType`  | ENUM    | NO        |                                                                                                                                                                                                                                                                                                                                                       |
+| `pendingBelowPegOffsetValue` | INT     | NO        |                                                                                                                                                                                                                                                                                                                                                       |
+| `recvWindow`                 | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.                                                                                                                                                                                               |
+| `timestamp`                  | LONG    | YES       |
+| `signature`                  | STRING  | YES       |
 
 <a id="mandatory-parameters-based-on-pendingabovetype-pendingbelowtype-or-workingtype"></a>
 
 **Mandatory parameters based on `pendingAboveType`, `pendingBelowType` or `workingType`**
 
-Depending on the `pendingAboveType`/`pendingBelowType` or `workingType`, some optional parameters will become mandatory.
+Depending on the `pendingAboveType`/`pendingBelowType` or `workingType`, some optional parameters
+will become mandatory.
 
-|Type                                                       |Additional mandatory parameters|Additional information|
-|----                                                       |----                           |------
-|`workingType` = `LIMIT`                                    |`workingTimeInForce`           |
-|`pendingAboveType`= `LIMIT_MAKER`                                |`pendingAbovePrice`          |
-|`pendingAboveType` = `STOP_LOSS/TAKE_PROFIT`         |`pendingAboveStopPrice` and/or `pendingAboveTrailingDelta`|
-|`pendingAboveType=STOP_LOSS_LIMIT/TAKE_PROFIT_LIMIT`|`pendingAbovePrice`, `pendingAboveStopPrice` and/or `pendingAboveTrailingDelta`, `pendingAboveTimeInForce`|
-|`pendingBelowType`= `LIMIT_MAKER`                                |`pendingBelowPrice`          |
-`pendingBelowType= STOP_LOSS/TAKE_PROFIT`         |`pendingBelowStopPrice` and/or `pendingBelowTrailingDelta`|
-|`pendingBelowType=STOP_LOSS_LIMIT/TAKE_PROFIT_LIMIT`|`pendingBelowPrice`, `pendingBelowStopPrice` and/or `pendingBelowTrailingDelta`, `pendingBelowTimeInForce`|
+| Type                                                 | Additional mandatory parameters                                                                            | Additional information |
+| ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `workingType` = `LIMIT`                              | `workingTimeInForce`                                                                                       |
+| `pendingAboveType`= `LIMIT_MAKER`                    | `pendingAbovePrice`                                                                                        |
+| `pendingAboveType` = `STOP_LOSS/TAKE_PROFIT`         | `pendingAboveStopPrice` and/or `pendingAboveTrailingDelta`                                                 |
+| `pendingAboveType=STOP_LOSS_LIMIT/TAKE_PROFIT_LIMIT` | `pendingAbovePrice`, `pendingAboveStopPrice` and/or `pendingAboveTrailingDelta`, `pendingAboveTimeInForce` |
+| `pendingBelowType`= `LIMIT_MAKER`                    | `pendingBelowPrice`                                                                                        |
+| `pendingBelowType= STOP_LOSS/TAKE_PROFIT`            | `pendingBelowStopPrice` and/or `pendingBelowTrailingDelta`                                                 |
+| `pendingBelowType=STOP_LOSS_LIMIT/TAKE_PROFIT_LIMIT` | `pendingBelowPrice`, `pendingBelowStopPrice` and/or `pendingBelowTrailingDelta`, `pendingBelowTimeInForce` |
 
 **Data Source:** Matching Engine
 
@@ -6020,34 +6080,35 @@ Depending on the `pendingAboveType`/`pendingBelowType` or `workingType`, some op
 }
 ```
 
-**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+**Note:** The payload above does not show all fields that can appear. Please refer to
+[Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 #### OPO (TRADE)
 
 ```json
 {
-    "id": "1762941318128",
-    "method": "orderList.place.opo",
-    "params": {
-        "workingPrice": "101496",
-        "workingQuantity": "0.0007",
-        "workingType": "LIMIT",
-        "workingTimeInForce": "GTC",
-        "pendingType": "MARKET",
-        "pendingSide": "SELL",
-        "recvWindow": 5000,
-        "workingSide": "BUY",
-        "symbol": "BTCUSDT",
-        "timestamp": 1762941318129,
-        "apiKey": "aHb4Ur1cK1biW3sgibqUFs39SE58f9d5Xwf4uEW0tFh7ibun5g035QKSktxoOBfE",
-        "signature": "b50ce8977333a78a3bbad21df178d7e104a8c985d19007b55df688cdf868639a"
-    }
+  "id": "1762941318128",
+  "method": "orderList.place.opo",
+  "params": {
+    "workingPrice": "101496",
+    "workingQuantity": "0.0007",
+    "workingType": "LIMIT",
+    "workingTimeInForce": "GTC",
+    "pendingType": "MARKET",
+    "pendingSide": "SELL",
+    "recvWindow": 5000,
+    "workingSide": "BUY",
+    "symbol": "BTCUSDT",
+    "timestamp": 1762941318129,
+    "apiKey": "aHb4Ur1cK1biW3sgibqUFs39SE58f9d5Xwf4uEW0tFh7ibun5g035QKSktxoOBfE",
+    "signature": "b50ce8977333a78a3bbad21df178d7e104a8c985d19007b55df688cdf868639a"
+  }
 }
 ```
 
 Place an [OPO](../faqs/opo.md).
 
-* OPOs add 2 orders to the EXCHANGE_MAX_NUM_ORDERS filter and MAX_NUM_ORDERS filter.
+- OPOs add 2 orders to the EXCHANGE_MAX_NUM_ORDERS filter and MAX_NUM_ORDERS filter.
 
 **Weight:** 1
 
@@ -6055,39 +6116,39 @@ Place an [OPO](../faqs/opo.md).
 
 **Parameters:**
 
-| Name | Type | Mandatory | Description |
-| ----- | ----- | ----- | ----- |
-| `symbol` | STRING | YES |  |
-| `listClientOrderId` | STRING | NO | Arbitrary unique ID among open order lists. Automatically generated if not sent. A new order list with the same listClientOrderId is accepted only when the previous one is filled or completely expired. `listClientOrderId` is distinct from the `workingClientOrderId` and the `pendingClientOrderId`. |
-| `newOrderRespType` | ENUM | NO | Format of the JSON response. Supported values: [Order Response Type](./enums.md#orderresponsetype) |
-| `selfTradePreventionMode` | ENUM | NO | The allowed values are dependent on what is configured on the symbol. Supported values: [STP Modes](./enums.md#stpmodes) |
-| `workingType` | ENUM | YES | Supported values: `LIMIT`,`LIMIT_MAKER` |
-| `workingSide` | ENUM | YES | Supported values: [Order Side](./enums.md#side) |
-| `workingClientOrderId` | STRING | NO | Arbitrary unique ID among open orders for the working order. Automatically generated if not sent. |
-| `workingPrice` | DECIMAL | YES |  |
-| `workingQuantity` | DECIMAL | YES | Sets the quantity for the working order. |
-| `workingIcebergQty` | DECIMAL | NO | This can only be used if `workingTimeInForce` is `GTC`, or if `workingType` is `LIMIT_MAKER`. |
-| `workingTimeInForce` | ENUM | NO | Supported values: [Time In Force](./enums.md#timeinforce) |
-| `workingStrategyId` | LONG | NO | Arbitrary numeric value identifying the working order within an order strategy. |
-| `workingStrategyType` | INT | NO | Arbitrary numeric value identifying the working order strategy. Values smaller than 1000000 are reserved and cannot be used. |
-| `workingPegPriceType` | ENUM | NO | See [Pegged Orders](#pegged-orders-info) |
-| `workingPegOffsetType` | ENUM | NO |  |
-| `workingPegOffsetValue` | INT | NO |  |
-| `pendingType` | ENUM | YES | Supported values: [Order Types](#order-type) Note that `MARKET` orders using `quoteOrderQty` are not supported. |
-| `pendingSide` | ENUM | YES | Supported values: [Order Side](./enums.md#side) |
-| `pendingClientOrderId` | STRING | NO | Arbitrary unique ID among open orders for the pending order. Automatically generated if not sent. |
-| `pendingPrice` | DECIMAL | NO |  |
-| `pendingStopPrice` | DECIMAL | NO |  |
-| `pendingTrailingDelta` | DECIMAL | NO |  |
-| `pendingIcebergQty` | DECIMAL | NO | This can only be used if `pendingTimeInForce` is `GTC` or if `pendingType` is `LIMIT_MAKER`. |
-| `pendingTimeInForce` | ENUM | NO | Supported values: [Time In Force](./enums.md#timeinforce) |
-| `pendingStrategyId` | LONG | NO | Arbitrary numeric value identifying the pending order within an order strategy. |
-| `pendingStrategyType` | INT | NO | Arbitrary numeric value identifying the pending order strategy. Values smaller than 1000000 are reserved and cannot be used. |
-| `pendingPegPriceType` | ENUM | NO | See [Pegged Orders](#pegged-orders-info) |
-| `pendingPegOffsetType` | ENUM | NO |  |
-| `pendingPegOffsetValue` | INT | NO |  |
-| `recvWindow` | DECIMAL | NO | The value cannot be greater than `60000`. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified. |
-| `timestamp` | LONG | YES |  |
+| Name                      | Type    | Mandatory | Description                                                                                                                                                                                                                                                                                               |
+| ------------------------- | ------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `symbol`                  | STRING  | YES       |                                                                                                                                                                                                                                                                                                           |
+| `listClientOrderId`       | STRING  | NO        | Arbitrary unique ID among open order lists. Automatically generated if not sent. A new order list with the same listClientOrderId is accepted only when the previous one is filled or completely expired. `listClientOrderId` is distinct from the `workingClientOrderId` and the `pendingClientOrderId`. |
+| `newOrderRespType`        | ENUM    | NO        | Format of the JSON response. Supported values: [Order Response Type](enums.md#order-response-type-neworderresptype)                                                                                                                                                                           |
+| `selfTradePreventionMode` | ENUM    | NO        | The allowed values are dependent on what is configured on the symbol. Supported values: [STP Modes](enums.md#stp-modes)                                                                                                                                                                       |
+| `workingType`             | ENUM    | YES       | Supported values: `LIMIT`,`LIMIT_MAKER`                                                                                                                                                                                                                                                                   |
+| `workingSide`             | ENUM    | YES       | Supported values: [Order Side](enums.md#order-side-side)                                                                                                                                                                                                                                      |
+| `workingClientOrderId`    | STRING  | NO        | Arbitrary unique ID among open orders for the working order. Automatically generated if not sent.                                                                                                                                                                                                         |
+| `workingPrice`            | DECIMAL | YES       |                                                                                                                                                                                                                                                                                                           |
+| `workingQuantity`         | DECIMAL | YES       | Sets the quantity for the working order.                                                                                                                                                                                                                                                                  |
+| `workingIcebergQty`       | DECIMAL | NO        | This can only be used if `workingTimeInForce` is `GTC`, or if `workingType` is `LIMIT_MAKER`.                                                                                                                                                                                                             |
+| `workingTimeInForce`      | ENUM    | NO        | Supported values: [Time In Force](enums.md#time-in-force-timeinforce)                                                                                                                                                                                                                         |
+| `workingStrategyId`       | LONG    | NO        | Arbitrary numeric value identifying the working order within an order strategy.                                                                                                                                                                                                                           |
+| `workingStrategyType`     | INT     | NO        | Arbitrary numeric value identifying the working order strategy. Values smaller than 1000000 are reserved and cannot be used.                                                                                                                                                                              |
+| `workingPegPriceType`     | ENUM    | NO        | See [Pegged Orders](#pegged-orders-info)                                                                                                                                                                                                                                                                  |
+| `workingPegOffsetType`    | ENUM    | NO        |                                                                                                                                                                                                                                                                                                           |
+| `workingPegOffsetValue`   | INT     | NO        |                                                                                                                                                                                                                                                                                                           |
+| `pendingType`             | ENUM    | YES       | Supported values: [Order Types](enums.md#order-types-ordertypes-type) Note that `MARKET` orders using `quoteOrderQty` are not supported.                                                                                                                                              |
+| `pendingSide`             | ENUM    | YES       | Supported values: [Order Side](enums.md#order-side-side)                                                                                                                                                                                                                                      |
+| `pendingClientOrderId`    | STRING  | NO        | Arbitrary unique ID among open orders for the pending order. Automatically generated if not sent.                                                                                                                                                                                                         |
+| `pendingPrice`            | DECIMAL | NO        |                                                                                                                                                                                                                                                                                                           |
+| `pendingStopPrice`        | DECIMAL | NO        |                                                                                                                                                                                                                                                                                                           |
+| `pendingTrailingDelta`    | DECIMAL | NO        |                                                                                                                                                                                                                                                                                                           |
+| `pendingIcebergQty`       | DECIMAL | NO        | This can only be used if `pendingTimeInForce` is `GTC` or if `pendingType` is `LIMIT_MAKER`.                                                                                                                                                                                                              |
+| `pendingTimeInForce`      | ENUM    | NO        | Supported values: [Time In Force](enums.md#time-in-force-timeinforce)                                                                                                                                                                                                                         |
+| `pendingStrategyId`       | LONG    | NO        | Arbitrary numeric value identifying the pending order within an order strategy.                                                                                                                                                                                                                           |
+| `pendingStrategyType`     | INT     | NO        | Arbitrary numeric value identifying the pending order strategy. Values smaller than 1000000 are reserved and cannot be used.                                                                                                                                                                              |
+| `pendingPegPriceType`     | ENUM    | NO        | See [Pegged Orders](#pegged-orders-info)                                                                                                                                                                                                                                                                  |
+| `pendingPegOffsetType`    | ENUM    | NO        |                                                                                                                                                                                                                                                                                                           |
+| `pendingPegOffsetValue`   | INT     | NO        |                                                                                                                                                                                                                                                                                                           |
+| `recvWindow`              | DECIMAL | NO        | The value cannot be greater than `60000`. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.                                                                                                                                                        |
+| `timestamp`               | LONG    | YES       |                                                                                                                                                                                                                                                                                                           |
 
 **Data Source**: Matching Engine
 
@@ -6095,96 +6156,97 @@ Place an [OPO](../faqs/opo.md).
 
 ```json
 {
-    "id": "1762941318128",
-    "status": 200,
-    "result": {
-        "orderListId": 2,
-        "contingencyType": "OTO",
-        "listStatusType": "EXEC_STARTED",
-        "listOrderStatus": "EXECUTING",
-        "listClientOrderId": "OiOgqvRagBefpzdM5gjYX3",
-        "transactionTime": 1762941318142,
+  "id": "1762941318128",
+  "status": 200,
+  "result": {
+    "orderListId": 2,
+    "contingencyType": "OTO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "OiOgqvRagBefpzdM5gjYX3",
+    "transactionTime": 1762941318142,
+    "symbol": "BTCUSDT",
+    "orders": [
+      {
         "symbol": "BTCUSDT",
-        "orders": [
-            {
-                "symbol": "BTCUSDT",
-                "orderId": 2,
-                "clientOrderId": "pUzhKBbc0ZVdMScIRAqitH"
-            },
-            {
-                "symbol": "BTCUSDT",
-                "orderId": 3,
-                "clientOrderId": "x7ISSjywZxFXOdzwsThNnd"
-            }
-        ],
-        "orderReports": [
-            {
-                "symbol": "BTCUSDT",
-                "orderId": 2,
-                "orderListId": 2,
-                "clientOrderId": "pUzhKBbc0ZVdMScIRAqitH",
-                "transactTime": 1762941318142,
-                "price": "101496.00000000",
-                "origQty": "0.00070000",
-                "executedQty": "0.00000000",
-                "origQuoteOrderQty": "0.00000000",
-                "cummulativeQuoteQty": "0.00000000",
-                "status": "NEW",
-                "timeInForce": "GTC",
-                "type": "LIMIT",
-                "side": "BUY",
-                "workingTime": 1762941318142,
-                "selfTradePreventionMode": "NONE"
-            },
-            {
-                "symbol": "BTCUSDT",
-                "orderId": 3,
-                "orderListId": 2,
-                "clientOrderId": "x7ISSjywZxFXOdzwsThNnd",
-                "transactTime": 1762941318142,
-                "price": "0.00000000",
-                "executedQty": "0.00000000",
-                "origQuoteOrderQty": "0.00000000",
-                "cummulativeQuoteQty": "0.00000000",
-                "status": "PENDING_NEW",
-                "timeInForce": "GTC",
-                "type": "MARKET",
-                "side": "SELL",
-                "workingTime": -1,
-                "selfTradePreventionMode": "NONE"
-            }
-        ]
-    }
+        "orderId": 2,
+        "clientOrderId": "pUzhKBbc0ZVdMScIRAqitH"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 3,
+        "clientOrderId": "x7ISSjywZxFXOdzwsThNnd"
+      }
+    ],
+    "orderReports": [
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 2,
+        "orderListId": 2,
+        "clientOrderId": "pUzhKBbc0ZVdMScIRAqitH",
+        "transactTime": 1762941318142,
+        "price": "101496.00000000",
+        "origQty": "0.00070000",
+        "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.00000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "BUY",
+        "workingTime": 1762941318142,
+        "selfTradePreventionMode": "NONE"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 3,
+        "orderListId": 2,
+        "clientOrderId": "x7ISSjywZxFXOdzwsThNnd",
+        "transactTime": 1762941318142,
+        "price": "0.00000000",
+        "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.00000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "PENDING_NEW",
+        "timeInForce": "GTC",
+        "type": "MARKET",
+        "side": "SELL",
+        "workingTime": -1,
+        "selfTradePreventionMode": "NONE"
+      }
+    ]
+  }
 }
 ```
 
-**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+**Note:** The payload above does not show all fields that can appear. Please refer to
+[Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 #### OPOCO (TRADE)
 
 ```json
 {
-    "id": "1763000139090",
-    "method": "orderList.place.opoco",
-    "params": {
-        "workingPrice": "102496",
-        "workingQuantity": "0.0017",
-        "workingType": "LIMIT",
-        "workingTimeInForce": "GTC",
-        "pendingAboveType": "LIMIT_MAKER",
-        "pendingAbovePrice": "104261",
-        "pendingBelowStopPrice": "10100",
-        "pendingBelowPrice": "101613",
-        "pendingBelowType": "STOP_LOSS_LIMIT",
-        "pendingBelowTimeInForce": "IOC",
-        "pendingSide": "SELL",
-        "recvWindow": 5000,
-        "workingSide": "BUY",
-        "symbol": "BTCUSDT",
-        "timestamp": 1763000139091,
-        "apiKey": "2wiKgTLyllTCu0QWXaEtKWX9tUQ5iQMiDQqTQPdUe2bZ1IVT9aXoS6o19wkYIKl2",
-        "signature": "adfa185c50f793392a54ad5a6e2c39fd34ef6d35944adf2ddd6f30e1866e58d3"
-    }
+  "id": "1763000139090",
+  "method": "orderList.place.opoco",
+  "params": {
+    "workingPrice": "102496",
+    "workingQuantity": "0.0017",
+    "workingType": "LIMIT",
+    "workingTimeInForce": "GTC",
+    "pendingAboveType": "LIMIT_MAKER",
+    "pendingAbovePrice": "104261",
+    "pendingBelowStopPrice": "10100",
+    "pendingBelowPrice": "101613",
+    "pendingBelowType": "STOP_LOSS_LIMIT",
+    "pendingBelowTimeInForce": "IOC",
+    "pendingSide": "SELL",
+    "recvWindow": 5000,
+    "workingSide": "BUY",
+    "symbol": "BTCUSDT",
+    "timestamp": 1763000139091,
+    "apiKey": "2wiKgTLyllTCu0QWXaEtKWX9tUQ5iQMiDQqTQPdUe2bZ1IVT9aXoS6o19wkYIKl2",
+    "signature": "adfa185c50f793392a54ad5a6e2c39fd34ef6d35944adf2ddd6f30e1866e58d3"
+  }
 }
 ```
 
@@ -6196,51 +6258,51 @@ Place an [OPOCO](../faqs/opo.md).
 
 **Parameters:**
 
-| Name | Type | Mandatory | Description |
-| ----- | ----- | ----- | ----- |
-| `symbol` | STRING | YES |  |
-| `listClientOrderId` | STRING | NO | Arbitrary unique ID among open order lists. Automatically generated if not sent. A new order list with the same listClientOrderId is accepted only when the previous one is filled or completely expired. `listClientOrderId` is distinct from the `workingClientOrderId`, `pendingAboveClientOrderId`, and the `pendingBelowClientOrderId`. |
-| `newOrderRespType` | ENUM | NO | Format of the JSON response. Supported values: [Order Response Type](./enums.md#orderresponsetype) |
-| `selfTradePreventionMode` | ENUM | NO | The allowed values are dependent on what is configured on the symbol. Supported values: [STP Modes](./enums.md#stpmodes) |
-| `workingType` | ENUM | YES | Supported values: `LIMIT`, `LIMIT_MAKER` |
-| `workingSide` | ENUM | YES | Supported values: [Order side](./enums.md#side) |
-| `workingClientOrderId` | STRING | NO | Arbitrary unique ID among open orders for the working order. Automatically generated if not sent. |
-| `workingPrice` | DECIMAL | YES |  |
-| `workingQuantity` | DECIMAL | YES |  |
-| `workingIcebergQty` | DECIMAL | NO | This can only be used if `workingTimeInForce` is `GTC`, or if `workingType` is `LIMIT_MAKER`. |
-| `workingTimeInForce` | ENUM | NO | Supported values: [Time In Force](./enums.md#timeinforce) |
-| `workingStrategyId` | LONG | NO | Arbitrary numeric value identifying the working order within an order strategy. |
-| `workingStrategyType` | INT | NO | Arbitrary numeric value identifying the working order strategy. Values smaller than 1000000 are reserved and cannot be used. |
-| `workingPegPriceType` | ENUM | NO | See [Pegged Orders](#pegged-orders-info) |
-| `workingPegOffsetType` | ENUM | NO |  |
-| `workingPegOffsetValue` | INT | NO |  |
-| `pendingSide` | ENUM | YES | Supported values: [Order side](./enums.md#side) |
-| `pendingAboveType` | ENUM | YES | Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` |
-| `pendingAboveClientOrderId` | STRING | NO | Arbitrary unique ID among open orders for the pending above order. Automatically generated if not sent. |
-| `pendingAbovePrice` | DECIMAL | NO | Can be used if `pendingAboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price. |
-| `pendingAboveStopPrice` | DECIMAL | NO | Can be used if `pendingAboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT` |
-| `pendingAboveTrailingDelta` | DECIMAL | NO | See [Trailing Stop FAQ](../faqs/trailing-stop-faq.md) |
-| `pendingAboveIcebergQty` | DECIMAL | NO | This can only be used if `pendingAboveTimeInForce` is `GTC` or if `pendingAboveType` is `LIMIT_MAKER`. |
-| `pendingAboveTimeInForce` | ENUM | NO |  |
-| `pendingAboveStrategyId` | LONG | NO | Arbitrary numeric value identifying the pending above order within an order strategy. |
-| `pendingAboveStrategyType` | INT | NO | Arbitrary numeric value identifying the pending above order strategy. Values smaller than 1000000 are reserved and cannot be used. |
-| `pendingAbovePegPriceType` | ENUM | NO | See [Pegged Orders](#pegged-orders-info) |
-| `pendingAbovePegOffsetType` | ENUM | NO |  |
-| `pendingAbovePegOffsetValue` | INT | NO |  |
-| `pendingBelowType` | ENUM | NO | Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT` |
-| `pendingBelowClientOrderId` | STRING | NO | Arbitrary unique ID among open orders for the pending below order. Automatically generated if not sent. |
-| `pendingBelowPrice` | DECIMAL | NO | Can be used if `pendingBelowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT` to specify limit price |
-| `pendingBelowStopPrice` | DECIMAL | NO | Can be used if `pendingBelowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`. Either `pendingBelowStopPrice` or `pendingBelowTrailingDelta` or both, must be specified. |
-| `pendingBelowTrailingDelta` | DECIMAL | NO |  |
-| `pendingBelowIcebergQty` | DECIMAL | NO | This can only be used if `pendingBelowTimeInForce` is `GTC`, or if `pendingBelowType` is `LIMIT_MAKER`. |
-| `pendingBelowTimeInForce` | ENUM | NO | Supported values: [Time In Force](./enums.md#timeinforce) |
-| `pendingBelowStrategyId` | LONG | NO | Arbitrary numeric value identifying the pending below order within an order strategy. |
-| `pendingBelowStrategyType` | INT | NO | Arbitrary numeric value identifying the pending below order strategy. Values smaller than 1000000 are reserved and cannot be used. |
-| `pendingBelowPegPriceType` | ENUM | NO | See [Pegged Orders](#pegged-orders-info) |
-| `pendingBelowPegOffsetType` | ENUM | NO |  |
-| `pendingBelowPegOffsetValue` | INT | NO |  |
-| `recvWindow` | DECIMAL | NO | The value cannot be greater than `60000`. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified. |
-| `timestamp` | LONG | YES |  |
+| Name                         | Type    | Mandatory | Description                                                                                                                                                                                                                                                                                                                                  |
+| ---------------------------- | ------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `symbol`                     | STRING  | YES       |                                                                                                                                                                                                                                                                                                                                              |
+| `listClientOrderId`          | STRING  | NO        | Arbitrary unique ID among open order lists. Automatically generated if not sent. A new order list with the same listClientOrderId is accepted only when the previous one is filled or completely expired. `listClientOrderId` is distinct from the `workingClientOrderId`, `pendingAboveClientOrderId`, and the `pendingBelowClientOrderId`. |
+| `newOrderRespType`           | ENUM    | NO        | Format of the JSON response. Supported values: [Order Response Type](enums.md#order-response-type-neworderresptype)                                                                                                                                                                                                              |
+| `selfTradePreventionMode`    | ENUM    | NO        | The allowed values are dependent on what is configured on the symbol. Supported values: [STP Modes](enums.md#stp-modes)                                                                                                                                                                                                          |
+| `workingType`                | ENUM    | YES       | Supported values: `LIMIT`, `LIMIT_MAKER`                                                                                                                                                                                                                                                                                                     |
+| `workingSide`                | ENUM    | YES       | Supported values: [Order side](enums.md#order-side-side)                                                                                                                                                                                                                                                                         |
+| `workingClientOrderId`       | STRING  | NO        | Arbitrary unique ID among open orders for the working order. Automatically generated if not sent.                                                                                                                                                                                                                                            |
+| `workingPrice`               | DECIMAL | YES       |                                                                                                                                                                                                                                                                                                                                              |
+| `workingQuantity`            | DECIMAL | YES       |                                                                                                                                                                                                                                                                                                                                              |
+| `workingIcebergQty`          | DECIMAL | NO        | This can only be used if `workingTimeInForce` is `GTC`, or if `workingType` is `LIMIT_MAKER`.                                                                                                                                                                                                                                                |
+| `workingTimeInForce`         | ENUM    | NO        | Supported values: [Time In Force](enums.md#time-in-force-timeinforce)                                                                                                                                                                                                                                                            |
+| `workingStrategyId`          | LONG    | NO        | Arbitrary numeric value identifying the working order within an order strategy.                                                                                                                                                                                                                                                              |
+| `workingStrategyType`        | INT     | NO        | Arbitrary numeric value identifying the working order strategy. Values smaller than 1000000 are reserved and cannot be used.                                                                                                                                                                                                                 |
+| `workingPegPriceType`        | ENUM    | NO        | See [Pegged Orders](#pegged-orders-info)                                                                                                                                                                                                                                                                                                     |
+| `workingPegOffsetType`       | ENUM    | NO        |                                                                                                                                                                                                                                                                                                                                              |
+| `workingPegOffsetValue`      | INT     | NO        |                                                                                                                                                                                                                                                                                                                                              |
+| `pendingSide`                | ENUM    | YES       | Supported values: [Order side](enums.md#order-side-side)                                                                                                                                                                                                                                                                         |
+| `pendingAboveType`           | ENUM    | YES       | Supported values: `STOP_LOSS_LIMIT`, `STOP_LOSS`, `LIMIT_MAKER`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`                                                                                                                                                                                                                                          |
+| `pendingAboveClientOrderId`  | STRING  | NO        | Arbitrary unique ID among open orders for the pending above order. Automatically generated if not sent.                                                                                                                                                                                                                                      |
+| `pendingAbovePrice`          | DECIMAL | NO        | Can be used if `pendingAboveType` is `STOP_LOSS_LIMIT` , `LIMIT_MAKER`, or `TAKE_PROFIT_LIMIT` to specify the limit price.                                                                                                                                                                                                                   |
+| `pendingAboveStopPrice`      | DECIMAL | NO        | Can be used if `pendingAboveType` is `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`                                                                                                                                                                                                                                      |
+| `pendingAboveTrailingDelta`  | DECIMAL | NO        | See [Trailing Stop FAQ](../faqs/trailing-stop-faq.md)                                                                                                                                                                                                                                                                               |
+| `pendingAboveIcebergQty`     | DECIMAL | NO        | This can only be used if `pendingAboveTimeInForce` is `GTC` or if `pendingAboveType` is `LIMIT_MAKER`.                                                                                                                                                                                                                                       |
+| `pendingAboveTimeInForce`    | ENUM    | NO        |                                                                                                                                                                                                                                                                                                                                              |
+| `pendingAboveStrategyId`     | LONG    | NO        | Arbitrary numeric value identifying the pending above order within an order strategy.                                                                                                                                                                                                                                                        |
+| `pendingAboveStrategyType`   | INT     | NO        | Arbitrary numeric value identifying the pending above order strategy. Values smaller than 1000000 are reserved and cannot be used.                                                                                                                                                                                                           |
+| `pendingAbovePegPriceType`   | ENUM    | NO        | See [Pegged Orders](#pegged-orders-info)                                                                                                                                                                                                                                                                                                     |
+| `pendingAbovePegOffsetType`  | ENUM    | NO        |                                                                                                                                                                                                                                                                                                                                              |
+| `pendingAbovePegOffsetValue` | INT     | NO        |                                                                                                                                                                                                                                                                                                                                              |
+| `pendingBelowType`           | ENUM    | NO        | Supported values: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`,`TAKE_PROFIT_LIMIT`                                                                                                                                                                                                                                                          |
+| `pendingBelowClientOrderId`  | STRING  | NO        | Arbitrary unique ID among open orders for the pending below order. Automatically generated if not sent.                                                                                                                                                                                                                                      |
+| `pendingBelowPrice`          | DECIMAL | NO        | Can be used if `pendingBelowType` is `STOP_LOSS_LIMIT` or `TAKE_PROFIT_LIMIT` to specify limit price                                                                                                                                                                                                                                         |
+| `pendingBelowStopPrice`      | DECIMAL | NO        | Can be used if `pendingBelowType` is `STOP_LOSS`, `STOP_LOSS_LIMIT, TAKE_PROFIT or TAKE_PROFIT_LIMIT`. Either `pendingBelowStopPrice` or `pendingBelowTrailingDelta` or both, must be specified.                                                                                                                                             |
+| `pendingBelowTrailingDelta`  | DECIMAL | NO        |                                                                                                                                                                                                                                                                                                                                              |
+| `pendingBelowIcebergQty`     | DECIMAL | NO        | This can only be used if `pendingBelowTimeInForce` is `GTC`, or if `pendingBelowType` is `LIMIT_MAKER`.                                                                                                                                                                                                                                      |
+| `pendingBelowTimeInForce`    | ENUM    | NO        | Supported values: [Time In Force](enums.md#time-in-force-timeinforce)                                                                                                                                                                                                                                                            |
+| `pendingBelowStrategyId`     | LONG    | NO        | Arbitrary numeric value identifying the pending below order within an order strategy.                                                                                                                                                                                                                                                        |
+| `pendingBelowStrategyType`   | INT     | NO        | Arbitrary numeric value identifying the pending below order strategy. Values smaller than 1000000 are reserved and cannot be used.                                                                                                                                                                                                           |
+| `pendingBelowPegPriceType`   | ENUM    | NO        | See [Pegged Orders](#pegged-orders-info)                                                                                                                                                                                                                                                                                                     |
+| `pendingBelowPegOffsetType`  | ENUM    | NO        |                                                                                                                                                                                                                                                                                                                                              |
+| `pendingBelowPegOffsetValue` | INT     | NO        |                                                                                                                                                                                                                                                                                                                                              |
+| `recvWindow`                 | DECIMAL | NO        | The value cannot be greater than `60000`. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.                                                                                                                                                                                           |
+| `timestamp`                  | LONG    | YES       |                                                                                                                                                                                                                                                                                                                                              |
 
 **Data Source:** Matching Engine
 
@@ -6248,93 +6310,94 @@ Place an [OPOCO](../faqs/opo.md).
 
 ```json
 {
-    "id": "1763000139090",
-    "status": 200,
-    "result": {
-        "orderListId": 1,
-        "contingencyType": "OTO",
-        "listStatusType": "EXEC_STARTED",
-        "listOrderStatus": "EXECUTING",
-        "listClientOrderId": "TVbG6ymkYMXTj7tczbOsBf",
-        "transactionTime": 1763000139104,
+  "id": "1763000139090",
+  "status": 200,
+  "result": {
+    "orderListId": 1,
+    "contingencyType": "OTO",
+    "listStatusType": "EXEC_STARTED",
+    "listOrderStatus": "EXECUTING",
+    "listClientOrderId": "TVbG6ymkYMXTj7tczbOsBf",
+    "transactionTime": 1763000139104,
+    "symbol": "BTCUSDT",
+    "orders": [
+      {
         "symbol": "BTCUSDT",
-        "orders": [
-            {
-                "symbol": "BTCUSDT",
-                "orderId": 6,
-                "clientOrderId": "3czuJSeyjPwV9Xo28j1Dv3"
-            },
-            {
-                "symbol": "BTCUSDT",
-                "orderId": 7,
-                "clientOrderId": "kyIKnMLKQclE5FmyYgaMSo"
-            },
-            {
-                "symbol": "BTCUSDT",
-                "orderId": 8,
-                "clientOrderId": "i76cGJWN9J1FpADS56TtQZ"
-            }
-        ],
-        "orderReports": [
-            {
-                "symbol": "BTCUSDT",
-                "orderId": 6,
-                "orderListId": 1,
-                "clientOrderId": "3czuJSeyjPwV9Xo28j1Dv3",
-                "transactTime": 1763000139104,
-                "price": "102496.00000000",
-                "origQty": "0.00170000",
-                "executedQty": "0.00000000",
-                "origQuoteOrderQty": "0.00000000",
-                "cummulativeQuoteQty": "0.00000000",
-                "status": "NEW",
-                "timeInForce": "GTC",
-                "type": "LIMIT",
-                "side": "BUY",
-                "workingTime": 1763000139104,
-                "selfTradePreventionMode": "NONE"
-            },
-            {
-                "symbol": "BTCUSDT",
-                "orderId": 7,
-                "orderListId": 1,
-                "clientOrderId": "kyIKnMLKQclE5FmyYgaMSo",
-                "transactTime": 1763000139104,
-                "price": "101613.00000000",
-                "executedQty": "0.00000000",
-                "origQuoteOrderQty": "0.00000000",
-                "cummulativeQuoteQty": "0.00000000",
-                "status": "PENDING_NEW",
-                "timeInForce": "IOC",
-                "type": "STOP_LOSS_LIMIT",
-                "side": "SELL",
-                "stopPrice": "10100.00000000",
-                "workingTime": -1,
-                "selfTradePreventionMode": "NONE"
-            },
-            {
-                "symbol": "BTCUSDT",
-                "orderId": 8,
-                "orderListId": 1,
-                "clientOrderId": "i76cGJWN9J1FpADS56TtQZ",
-                "transactTime": 1763000139104,
-                "price": "104261.00000000",
-                "executedQty": "0.00000000",
-                "origQuoteOrderQty": "0.00000000",
-                "cummulativeQuoteQty": "0.00000000",
-                "status": "PENDING_NEW",
-                "timeInForce": "GTC",
-                "type": "LIMIT_MAKER",
-                "side": "SELL",
-                "workingTime": -1,
-                "selfTradePreventionMode": "NONE"
-            }
-        ]
-    }
+        "orderId": 6,
+        "clientOrderId": "3czuJSeyjPwV9Xo28j1Dv3"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 7,
+        "clientOrderId": "kyIKnMLKQclE5FmyYgaMSo"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 8,
+        "clientOrderId": "i76cGJWN9J1FpADS56TtQZ"
+      }
+    ],
+    "orderReports": [
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 6,
+        "orderListId": 1,
+        "clientOrderId": "3czuJSeyjPwV9Xo28j1Dv3",
+        "transactTime": 1763000139104,
+        "price": "102496.00000000",
+        "origQty": "0.00170000",
+        "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.00000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT",
+        "side": "BUY",
+        "workingTime": 1763000139104,
+        "selfTradePreventionMode": "NONE"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 7,
+        "orderListId": 1,
+        "clientOrderId": "kyIKnMLKQclE5FmyYgaMSo",
+        "transactTime": 1763000139104,
+        "price": "101613.00000000",
+        "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.00000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "PENDING_NEW",
+        "timeInForce": "IOC",
+        "type": "STOP_LOSS_LIMIT",
+        "side": "SELL",
+        "stopPrice": "10100.00000000",
+        "workingTime": -1,
+        "selfTradePreventionMode": "NONE"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "orderId": 8,
+        "orderListId": 1,
+        "clientOrderId": "i76cGJWN9J1FpADS56TtQZ",
+        "transactTime": 1763000139104,
+        "price": "104261.00000000",
+        "executedQty": "0.00000000",
+        "origQuoteOrderQty": "0.00000000",
+        "cummulativeQuoteQty": "0.00000000",
+        "status": "PENDING_NEW",
+        "timeInForce": "GTC",
+        "type": "LIMIT_MAKER",
+        "side": "SELL",
+        "workingTime": -1,
+        "selfTradePreventionMode": "NONE"
+      }
+    ]
+  }
 }
 ```
 
-**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+**Note:** The payload above does not show all fields that can appear. Please refer to
+[Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 #### Cancel Order list (TRADE)
 
@@ -6354,8 +6417,7 @@ Place an [OPOCO](../faqs/opo.md).
 
 Cancel an active order list.
 
-**Weight**:
-1
+**Weight**: 1
 
 **Parameters:**
 
@@ -6421,12 +6483,14 @@ Cancel an active order list.
 
 Notes:
 
-* If both `orderListId` and `listClientOrderId` parameters are provided, the `orderListId` is searched first, then the `listClientOrderId` from that result is checked against that order. If both conditions are not met the request will be rejected.
+- If both `orderListId` and `listClientOrderId` parameters are provided, the `orderListId` is
+  searched first, then the `listClientOrderId` from that result is checked against that order. If
+  both conditions are not met the request will be rejected.
 
-* Canceling an individual order with [`order.cancel`](#cancel-order-trade) will cancel the entire order list as well.
+- Canceling an individual order with [`order.cancel`](#cancel-order-trade) will cancel the entire
+  order list as well.
 
-**Data Source:**
-Matching Engine
+**Data Source:** Matching Engine
 
 **Response:**
 
@@ -6532,37 +6596,35 @@ This adds 1 order to the `EXCHANGE_MAX_ORDERS` filter and the `MAX_NUM_ORDERS` f
 
 Read [SOR FAQ](../faqs/sor_faq.md) to learn more.
 
-**Weight:**
-1
+**Weight:** 1
 
-**Unfilled Order Count:**
-1
+**Unfilled Order Count:** 1
 
 **Parameters:**
 
-Name                | Type    | Mandatory | Description
-------------------- | ------- | --------- | ------------
-`symbol`            | STRING  | YES       |
-`side`              | ENUM    | YES       | `BUY` or `SELL`
-`type`              | ENUM    | YES       |
-`timeInForce`       | ENUM    | NO        | Applicable only to `LIMIT` order type
-`price`             | DECIMAL | NO        | Applicable only to `LIMIT` order type
-`quantity`          | DECIMAL | YES       |
-`newClientOrderId`  | STRING  | NO        | Arbitrary unique ID among open orders. Automatically generated if not sent
-`newOrderRespType`  | ENUM    | NO        | <p>Select response format: `ACK`, `RESULT`, `FULL`.</p><p>`MARKET` and `LIMIT` orders use `FULL` by default.</p>
-`icebergQty`        | DECIMAL | NO        |
-`strategyId`        | LONG    | NO        | Arbitrary numeric value identifying the order within an order strategy.
-`strategyType`      | INT     | NO        | <p>Arbitrary numeric value identifying the order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>
-`selfTradePreventionMode` |ENUM | NO      | The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](./enums.md#stpmodes).
-`apiKey`            | STRING  | YES       |
-`timestamp`         | LONG    | YES       |
-`recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
-`signature`         | STRING  | YES       |
+| Name                      | Type    | Mandatory | Description                                                                                                                                             |
+| ------------------------- | ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `symbol`                  | STRING  | YES       |
+| `side`                    | ENUM    | YES       | `BUY` or `SELL`                                                                                                                                         |
+| `type`                    | ENUM    | YES       |
+| `timeInForce`             | ENUM    | NO        | Applicable only to `LIMIT` order type                                                                                                                   |
+| `price`                   | DECIMAL | NO        | Applicable only to `LIMIT` order type                                                                                                                   |
+| `quantity`                | DECIMAL | YES       |
+| `newClientOrderId`        | STRING  | NO        | Arbitrary unique ID among open orders. Automatically generated if not sent                                                                              |
+| `newOrderRespType`        | ENUM    | NO        | <p>Select response format: `ACK`, `RESULT`, `FULL`.</p><p>`MARKET` and `LIMIT` orders use `FULL` by default.</p>                                        |
+| `icebergQty`              | DECIMAL | NO        |
+| `strategyId`              | LONG    | NO        | Arbitrary numeric value identifying the order within an order strategy.                                                                                 |
+| `strategyType`            | INT     | NO        | <p>Arbitrary numeric value identifying the order strategy.</p><p>Values smaller than `1000000` are reserved and cannot be used.</p>                     |
+| `selfTradePreventionMode` | ENUM    | NO        | The allowed enums is dependent on what is configured on the symbol. The possible supported values are: [STP Modes](enums.md#stp-modes).     |
+| `apiKey`                  | STRING  | YES       |
+| `timestamp`               | LONG    | YES       |
+| `recvWindow`              | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified. |
+| `signature`               | STRING  | YES       |
 
-**Note:** `sor.order.place` only supports `LIMIT` and `MARKET` orders. `quoteOrderQty` is not supported.
+**Note:** `sor.order.place` only supports `LIMIT` and `MARKET` orders. `quoteOrderQty` is not
+supported.
 
-**Data Source:**
-Matching Engine
+**Data Source:** Matching Engine
 
 **Response:**
 
@@ -6635,27 +6697,26 @@ Matching Engine
 }
 ```
 
-Test new order creation and signature/recvWindow using smart order routing (SOR).
-Creates and validates a new order but does not send it into the matching engine.
+Test new order creation and signature/recvWindow using smart order routing (SOR). Creates and
+validates a new order but does not send it into the matching engine.
 
 **Weight:**
 
-|Condition                       | Request Weight|
-|------------                    | ------------ |
-|Without `computeCommissionRates`| 1            |
-|With `computeCommissionRates`   |20            |
+| Condition                        | Request Weight |
+| -------------------------------- | -------------- |
+| Without `computeCommissionRates` | 1              |
+| With `computeCommissionRates`    | 20             |
 
 **Parameters:**
 
-In addition to all parameters accepted by [`sor.order.place`](#place-new-order-using-sor-trade),
-the following optional parameters are also accepted:
+In addition to all parameters accepted by [`sor.order.place`](#place-new-order-using-sor-trade), the
+following optional parameters are also accepted:
 
-Name                   |Type          | Mandatory    | Description
-------------           | ------------ | ------------ | ------------
-`computeCommissionRates` | BOOLEAN      | NO           | Default: `false`
+| Name                     | Type    | Mandatory | Description      |
+| ------------------------ | ------- | --------- | ---------------- |
+| `computeCommissionRates` | BOOLEAN | NO        | Default: `false` |
 
-**Data Source:**
-Memory
+**Data Source:** Memory
 
 **Response:**
 
@@ -6730,23 +6791,22 @@ With `computeCommissionRates`:
 
 Query information about your account.
 
-**Weight:**
-20
+**Weight:** 20
 
 **Parameters:**
 
-Name                | Type    | Mandatory | Description
-------------------- | ------- | --------- | ------------
-`apiKey`            | STRING  | YES       |
-`omitZeroBalances`  | BOOLEAN | NO        | When set to `true`, emits only the non-zero balances of an account. <br>Default value: false
-`recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
-`signature`         | STRING  | YES       |
-`timestamp`         | LONG    | YES       |
+| Name               | Type    | Mandatory | Description                                                                                                                                             |
+| ------------------ | ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `apiKey`           | STRING  | YES       |
+| `omitZeroBalances` | BOOLEAN | NO        | When set to `true`, emits only the non-zero balances of an account. <br>Default value: false                                                            |
+| `recvWindow`       | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified. |
+| `signature`        | STRING  | YES       |
+| `timestamp`        | LONG    | YES       |
 
-**Data Source:**
-Memory => Database
+**Data Source:** Memory => Database
 
 **Response:**
+
 ```javascript
 {
     "id": "605a6d20-6588-4cb9-afa0-b0ab087507ba",
@@ -6820,8 +6880,7 @@ Memory => Database
 
 Check execution status of an order.
 
-**Weight:**
-4
+**Weight:** 4
 
 **Parameters:**
 
@@ -6881,15 +6940,17 @@ Check execution status of an order.
 
 Notes:
 
-* If both `orderId` and `origClientOrderId` are provided, the `orderId` is searched first, then the `origClientOrderId` from that result is checked against that order. If both conditions are not met the request will be rejected.
+- If both `orderId` and `origClientOrderId` are provided, the `orderId` is searched first, then the
+  `origClientOrderId` from that result is checked against that order. If both conditions are not met
+  the request will be rejected.
 
-* For some historical orders the `cummulativeQuoteQty` response field may be negative,
-  meaning the data is not available at this time.
+- For some historical orders the `cummulativeQuoteQty` response field may be negative, meaning the
+  data is not available at this time.
 
-**Data Source:**
-Memory => Database
+**Data Source:** Memory => Database
 
 **Response:**
+
 ```javascript
 {
   "id": "aa62318a-5a97-4f3b-bdc7-640bbe33b291",
@@ -6934,7 +6995,8 @@ Memory => Database
 }
 ```
 
-**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+**Note:** The payload above does not show all fields that can appear. Please refer to
+[Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 ### Current open orders (USER_DATA)
 
@@ -6955,29 +7017,29 @@ Query execution status of all open orders.
 
 If you need to continuously monitor order status updates, please consider using WebSocket Streams:
 
-* [`userDataStream.subscribe`](#user-data-stream-subscribe) if on an authenticated session
-* [`userDataStream.subscribe.signature`](#user-data-signature) if subscribing through signature subscription
+- [`userDataStream.subscribe`](#subscribe-to-user-data-stream-user_stream) if on an authenticated
+  session
+- [`userDataStream.subscribe.signature`](#subscribe-to-user-data-stream-through-signature-subscription-user_stream)
+  if subscribing through signature subscription
 
-**Weight:**
-Adjusted based on the number of requested symbols:
+**Weight:** Adjusted based on the number of requested symbols:
 
 | Parameter | Weight |
 | --------- | ------ |
-| `symbol`  |      6 |
-| none      |     80 |
+| `symbol`  | 6      |
+| none      | 80     |
 
 **Parameters:**
 
-Name                | Type    | Mandatory | Description
-------------------- | ------- | --------- | ------------
-`symbol`            | STRING  | NO        | If omitted, open orders for all symbols are returned
-`apiKey`            | STRING  | YES       |
-`recvWindow`        | DECIMAL  | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
-`signature`         | STRING  | YES       |
-`timestamp`         | LONG    | YES       |
+| Name         | Type    | Mandatory | Description                                                                                                                                             |
+| ------------ | ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `symbol`     | STRING  | NO        | If omitted, open orders for all symbols are returned                                                                                                    |
+| `apiKey`     | STRING  | YES       |
+| `recvWindow` | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified. |
+| `signature`  | STRING  | YES       |
+| `timestamp`  | LONG    | YES       |
 
-**Data Source:**
-Memory => Database
+**Data Source:** Memory => Database
 
 **Response:**
 
@@ -6985,8 +7047,8 @@ Status reports for open orders are identical to [`order.status`](#query-order-us
 
 Note that some fields are optional and included only for orders that set them.
 
-Open orders are always returned as a flat list.
-If all symbols are requested, use the `symbol` field to tell which symbol the orders belong to.
+Open orders are always returned as a flat list. If all symbols are requested, use the `symbol` field
+to tell which symbol the orders belong to.
 
 ```javascript
 {
@@ -7028,7 +7090,8 @@ If all symbols are requested, use the `symbol` field to tell which symbol the or
 }
 ```
 
-**Note:** The payload above does not show all fields that can appear. Please refer to [Conditional fields in Order Responses](#conditional-fields-in-order-responses).
+**Note:** The payload above does not show all fields that can appear. Please refer to
+[Conditional fields in Order Responses](#conditional-fields-in-order-responses).
 
 ### Account order history (USER_DATA)
 
@@ -7050,40 +7113,38 @@ If all symbols are requested, use the `symbol` field to tell which symbol the or
 
 Query information about all your orders – active, canceled, filled – filtered by time range.
 
-**Weight:**
-20
+**Weight:** 20
 
 **Parameters:**
 
-Name                | Type    | Mandatory | Description
-------------------- | ------- | --------- | ------------
-`symbol`            | STRING  | YES       |
-`orderId`           | LONG     | NO        | Order ID to begin at
-`startTime`         | LONG    | NO        |
-`endTime`           | LONG    | NO        |
-`limit`             | INT     | NO        | Default: 500; Maximum: 1000
-`apiKey`            | STRING  | YES       |
-`recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
-`signature`         | STRING  | YES       |
-`timestamp`         | LONG    | YES       |
+| Name         | Type    | Mandatory | Description                                                                                                                                             |
+| ------------ | ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `symbol`     | STRING  | YES       |
+| `orderId`    | LONG    | NO        | Order ID to begin at                                                                                                                                    |
+| `startTime`  | LONG    | NO        |
+| `endTime`    | LONG    | NO        |
+| `limit`      | INT     | NO        | Default: 500; Maximum: 1000                                                                                                                             |
+| `apiKey`     | STRING  | YES       |
+| `recvWindow` | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified. |
+| `signature`  | STRING  | YES       |
+| `timestamp`  | LONG    | YES       |
 
 Notes:
 
-* If `startTime` and/or `endTime` are specified, `orderId` is ignored.
+- If `startTime` and/or `endTime` are specified, `orderId` is ignored.
 
   Orders are filtered by `time` of the last execution status update.
 
-* If `orderId` is specified, return orders with order ID >= `orderId`.
+- If `orderId` is specified, return orders with order ID >= `orderId`.
 
-* If no condition is specified, the most recent orders are returned.
+- If no condition is specified, the most recent orders are returned.
 
-* For some historical orders the `cummulativeQuoteQty` response field may be negative,
-  meaning the data is not available at this time.
+- For some historical orders the `cummulativeQuoteQty` response field may be negative, meaning the
+  data is not available at this time.
 
-* The time between `startTime` and `endTime` can't be longer than 24 hours.
+- The time between `startTime` and `endTime` can't be longer than 24 hours.
 
-**Data Source:**
-Database
+**Data Source:** Database
 
 **Response:**
 
@@ -7152,8 +7213,7 @@ Check execution status of an Order list.
 
 For execution status of individual orders, use [`order.status`](#query-order-user_data).
 
-**Weight:**
-4
+**Weight:** 4
 
 **Parameters**:
 
@@ -7207,13 +7267,12 @@ For execution status of individual orders, use [`order.status`](#query-order-use
 
 Notes:
 
-* `origClientOrderId` refers to `listClientOrderId` of the order list itself.
+- `origClientOrderId` refers to `listClientOrderId` of the order list itself.
 
-* If both `origClientOrderId` and `orderListId` parameters are specified,
-  only `origClientOrderId` is used and `orderListId` is ignored.
+- If both `origClientOrderId` and `orderListId` parameters are specified, only `origClientOrderId`
+  is used and `orderListId` is ignored.
 
-**Data Source:**
-Database
+**Data Source:** Database
 
 **Response:**
 
@@ -7272,23 +7331,23 @@ Query execution status of all open order lists.
 
 If you need to continuously monitor order status updates, please consider using WebSocket Streams:
 
-* [`userDataStream.subscribe`](#user-data-stream-subscribe) if on an authenticated session
-* [`userDataStream.subscribe.signature`](#user-data-signature) if subscribing through signature subscription
+- [`userDataStream.subscribe`](#subscribe-to-user-data-stream-user_stream) if on an authenticated
+  session
+- [`userDataStream.subscribe.signature`](#subscribe-to-user-data-stream-through-signature-subscription-user_stream)
+  if subscribing through signature subscription
 
-**Weight**:
-6
+**Weight**: 6
 
 **Parameters:**
 
-Name                | Type    | Mandatory | Description
-------------------- | ------- | --------- | ------------
-`apiKey`            | STRING  | YES       |
-`recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
-`signature`         | STRING  | YES       |
-`timestamp`         | LONG    | YES       |
+| Name         | Type    | Mandatory | Description                                                                                                                                             |
+| ------------ | ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `apiKey`     | STRING  | YES       |
+| `recvWindow` | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified. |
+| `signature`  | STRING  | YES       |
+| `timestamp`  | LONG    | YES       |
 
-**Data Source:**
-Database
+**Data Source:** Database
 
 **Response:**
 
@@ -7331,7 +7390,6 @@ Database
 }
 ```
 
-
 ### Account order list history (USER_DATA)
 
 ```javascript
@@ -7351,36 +7409,34 @@ Database
 
 Query information about all your order lists, filtered by time range.
 
-**Weight:**
-20
+**Weight:** 20
 
 **Parameters:**
 
-Name                | Type    | Mandatory | Description
-------------------- | ------- | --------- | ------------
-`fromId`            | INT     | NO        | Order list ID to begin at
-`startTime`         | LONG    | NO        |
-`endTime`           | LONG    | NO        |
-`limit`             | INT     | NO        | Default: 500; Maximum: 1000
-`apiKey`            | STRING  | YES       |
-`recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
-`signature`         | STRING  | YES       |
-`timestamp`         | LONG    | YES       |
+| Name         | Type    | Mandatory | Description                                                                                                                                             |
+| ------------ | ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fromId`     | INT     | NO        | Order list ID to begin at                                                                                                                               |
+| `startTime`  | LONG    | NO        |
+| `endTime`    | LONG    | NO        |
+| `limit`      | INT     | NO        | Default: 500; Maximum: 1000                                                                                                                             |
+| `apiKey`     | STRING  | YES       |
+| `recvWindow` | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified. |
+| `signature`  | STRING  | YES       |
+| `timestamp`  | LONG    | YES       |
 
 Notes:
 
-* If `startTime` and/or `endTime` are specified, `fromId` is ignored.
+- If `startTime` and/or `endTime` are specified, `fromId` is ignored.
 
   Order lists are filtered by `transactionTime` of the last order list execution status update.
 
-* If `fromId` is specified, return order lists with order list ID >= `fromId`.
+- If `fromId` is specified, return order lists with order list ID >= `fromId`.
 
-* If no condition is specified, the most recent order lists are returned.
+- If no condition is specified, the most recent order lists are returned.
 
-* The time between `startTime` and `endTime` can't be longer than 24 hours.
+- The time between `startTime` and `endTime` can't be longer than 24 hours.
 
-**Data Source:**
-Database
+**Data Source:** Database
 
 **Response:**
 
@@ -7446,44 +7502,43 @@ Query information about all your trades, filtered by time range.
 
 **Weight:**
 
-Condition| Weight|
----| ---
-|Without orderId|20|
-|With orderId|5|
+| Condition       | Weight |
+| --------------- | ------ |
+| Without orderId | 20     |
+| With orderId    | 5      |
 
 **Parameters:**
 
-Name                | Type    | Mandatory | Description
-------------------- | ------- | --------- | ------------
-`symbol`            | STRING  | YES       |
-`orderId`           | LONG     | NO        |
-`startTime`         | LONG    | NO        |
-`endTime`           | LONG    | NO        |
-`fromId`            | INT     | NO        | First trade ID to query
-`limit`             | INT     | NO        | Default: 500; Maximum: 1000
-`apiKey`            | STRING  | YES       |
-`recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
-`signature`         | STRING  | YES       |
-`timestamp`         | LONG    | YES       |
+| Name         | Type    | Mandatory | Description                                                                                                                                             |
+| ------------ | ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `symbol`     | STRING  | YES       |
+| `orderId`    | LONG    | NO        |
+| `startTime`  | LONG    | NO        |
+| `endTime`    | LONG    | NO        |
+| `fromId`     | INT     | NO        | First trade ID to query                                                                                                                                 |
+| `limit`      | INT     | NO        | Default: 500; Maximum: 1000                                                                                                                             |
+| `apiKey`     | STRING  | YES       |
+| `recvWindow` | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified. |
+| `signature`  | STRING  | YES       |
+| `timestamp`  | LONG    | YES       |
 
 Notes:
 
-* If `fromId` is specified, return trades with trade ID >= `fromId`.
+- If `fromId` is specified, return trades with trade ID >= `fromId`.
 
-* If `startTime` and/or `endTime` are specified, trades are filtered by execution time (`time`).
+- If `startTime` and/or `endTime` are specified, trades are filtered by execution time (`time`).
 
   `fromId` cannot be used together with `startTime` and `endTime`.
 
-* If `orderId` is specified, only trades related to that order are returned.
+- If `orderId` is specified, only trades related to that order are returned.
 
   `startTime` and `endTime` cannot be used together with `orderId`.
 
-* If no condition is specified, the most recent trades are returned.
+- If no condition is specified, the most recent trades are returned.
 
-* The time between `startTime` and `endTime` can't be longer than 24 hours.
+- The time between `startTime` and `endTime` can't be longer than 24 hours.
 
-**Data Source:**
-Memory => Database
+**Data Source:** Memory => Database
 
 **Response:**
 
@@ -7553,20 +7608,18 @@ Memory => Database
 
 Query your current unfilled order count for all intervals.
 
-**Weight:**
-40
+**Weight:** 40
 
 **Parameters:**
 
-Name                | Type    | Mandatory | Description
-------------------- | ------- | --------- | ------------
-`apiKey`            | STRING  | YES       |
-`recvWindow`        | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
-`signature`         | STRING  | YES       |
-`timestamp`         | LONG    | YES       |
+| Name         | Type    | Mandatory | Description                                                                                                                                             |
+| ------------ | ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `apiKey`     | STRING  | YES       |
+| `recvWindow` | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified. |
+| `signature`  | STRING  | YES       |
+| `timestamp`  | LONG    | YES       |
 
-**Data Source:**
-Memory
+**Data Source:** Memory
 
 **Response:**
 
@@ -7622,30 +7675,30 @@ Displays the list of orders that were expired due to STP.
 
 These are the combinations supported:
 
-* `symbol` + `preventedMatchId`
-* `symbol` + `orderId`
-* `symbol` + `orderId` + `fromPreventedMatchId` (`limit` will default to 500)
-* `symbol` + `orderId` + `fromPreventedMatchId` + `limit`
+- `symbol` + `preventedMatchId`
+- `symbol` + `orderId`
+- `symbol` + `orderId` + `fromPreventedMatchId` (`limit` will default to 500)
+- `symbol` + `orderId` + `fromPreventedMatchId` + `limit`
 
 **Parameters:**
 
-Name                | Type   | Mandatory    | Description
-------------        | ----   | ------------ | ------------
-symbol              | STRING | YES          |
-preventedMatchId    | LONG   | NO           |
-orderId             | LONG   | NO           |
-fromPreventedMatchId| LONG   | NO           |
-limit               | INT    | NO           | Default: `500`; Maximum: `1000`
-recvWindow          | DECIMAL| NO           | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
-timestamp           | LONG   | YES          |
+| Name                 | Type    | Mandatory | Description                                                                                                                                             |
+| -------------------- | ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| symbol               | STRING  | YES       |
+| preventedMatchId     | LONG    | NO        |
+| orderId              | LONG    | NO        |
+| fromPreventedMatchId | LONG    | NO        |
+| limit                | INT     | NO        | Default: `500`; Maximum: `1000`                                                                                                                         |
+| recvWindow           | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified. |
+| timestamp            | LONG    | YES       |
 
 **Weight**
 
-Case                            | Weight
-----                            | -----
-If `symbol` is invalid          | 2
-Querying by `preventedMatchId`  | 2
-Querying by `orderId`           | 20
+| Case                           | Weight |
+| ------------------------------ | ------ |
+| If `symbol` is invalid         | 2      |
+| Querying by `preventedMatchId` | 2      |
+| Querying by `orderId`          | 20     |
 
 **Data Source:**
 
@@ -7701,38 +7754,36 @@ Database
 
 Retrieves allocations resulting from SOR order placement.
 
-**Weight:**
-20
+**Weight:** 20
 
 **Parameters:**
 
-Name                       | Type  |Mandatory | Description
------                      | ---   |----      | ---------
-`symbol`                   |STRING |Yes        |
-`startTime`                |LONG   |No        |
-`endTime`                  |LONG   |No        |
-`fromAllocationId`         |INT    |No        |
-`limit`                    |INT    |No        |Default: 500; Maximum: 1000
-`orderId`                  |LONG   |No        |
-`recvWindow`               |DECIMAL|No        |The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
-`timestamp`                |LONG   |No        |
+| Name               | Type    | Mandatory | Description                                                                                                                                             |
+| ------------------ | ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `symbol`           | STRING  | Yes       |
+| `startTime`        | LONG    | No        |
+| `endTime`          | LONG    | No        |
+| `fromAllocationId` | INT     | No        |
+| `limit`            | INT     | No        | Default: 500; Maximum: 1000                                                                                                                             |
+| `orderId`          | LONG    | No        |
+| `recvWindow`       | DECIMAL | No        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified. |
+| `timestamp`        | LONG    | No        |
 
 Supported parameter combinations:
 
-Parameters                                  | Response |
-------------------------------------------- | -------- |
-`symbol`                                    | allocations from oldest to newest |
-`symbol` + `startTime`                      | oldest allocations since `startTime` |
-`symbol` + `endTime`                        | newest allocations until `endTime` |
-`symbol` + `startTime` + `endTime`          | allocations within the time range |
-`symbol` + `fromAllocationId`               | allocations by allocation ID |
-`symbol` + `orderId`                        | allocations related to an order starting with oldest |
-`symbol` + `orderId` + `fromAllocationId`   | allocations related to an order by allocation ID |
+| Parameters                                | Response                                             |
+| ----------------------------------------- | ---------------------------------------------------- |
+| `symbol`                                  | allocations from oldest to newest                    |
+| `symbol` + `startTime`                    | oldest allocations since `startTime`                 |
+| `symbol` + `endTime`                      | newest allocations until `endTime`                   |
+| `symbol` + `startTime` + `endTime`        | allocations within the time range                    |
+| `symbol` + `fromAllocationId`             | allocations by allocation ID                         |
+| `symbol` + `orderId`                      | allocations related to an order starting with oldest |
+| `symbol` + `orderId` + `fromAllocationId` | allocations related to an order by allocation ID     |
 
 **Note:** The time between `startTime` and `endTime` can't be longer than 24 hours.
 
-**Data Source:**
-Database
+**Data Source:** Database
 
 **Response:**
 
@@ -7789,15 +7840,13 @@ Get current account commission rates.
 
 **Parameters:**
 
-Name                       | Type  |Mandatory | Description
------                      | ---   |----      | ---------
-`symbol`                   |STRING |YES        |
+| Name     | Type   | Mandatory | Description |
+| -------- | ------ | --------- | ----------- |
+| `symbol` | STRING | YES       |
 
-**Weight:**
-20
+**Weight:** 20
 
-**Data Source:**
-Database
+**Data Source:** Database
 
 **Response:**
 
@@ -7863,22 +7912,20 @@ Database
 
 Queries all amendments of a single order.
 
-**Weight**:
-4
+**Weight**: 4
 
 **Parameters:**
 
-Name | Type | Mandatory | Description |
-:---- | :---- | :---- | :---- |
-symbol | STRING | YES |  |
-orderId | LONG | YES |  |
-fromExecutionId | LONG | NO |  |
-limit | INT | NO | Default:500; Maximum: 1000 |
-recvWindow | DECIMAL | NO | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
-timestamp | LONG | YES |
+| Name            | Type    | Mandatory | Description                                                                                                                                             |
+| :-------------- | :------ | :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| symbol          | STRING  | YES       |                                                                                                                                                         |
+| orderId         | LONG    | YES       |                                                                                                                                                         |
+| fromExecutionId | LONG    | NO        |                                                                                                                                                         |
+| limit           | INT     | NO        | Default:500; Maximum: 1000                                                                                                                              |
+| recvWindow      | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified. |
+| timestamp       | LONG    | YES       |
 
-**Data Source:**
-Database
+**Data Source:** Database
 
 **Response:**
 
@@ -7911,6 +7958,7 @@ Database
 ```
 
 <a id="myFilters"></a>
+
 ### Query Relevant Filters (USER_DATA)
 
 ```javascript
@@ -7927,21 +7975,21 @@ Database
 }
 ```
 
-Retrieves the list of [filters](filters.md) relevant to an account on a given symbol. This is the only method that shows if an account has [`MAX_ASSET`](filters.md#max_asset) filters applied to it.
+Retrieves the list of [filters](filters.md) relevant to an account on a given symbol.
+This is the only method that shows if an account has [`MAX_ASSET`](filters.md#max_asset)
+filters applied to it.
 
-**Weight:**
-40
+**Weight:** 40
 
 **Parameters:**
 
-Name       | Type         | Mandatory    | Description
----------- | ------------ | ------------ | ------------
-symbol     | STRING       | YES          |
-recvWindow | DECIMAL      | NO           | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
-timestamp  | LONG         | YES          |
+| Name       | Type    | Mandatory | Description                                                                                                                                             |
+| ---------- | ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| symbol     | STRING  | YES       |
+| recvWindow | DECIMAL | NO        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified. |
+| timestamp  | LONG    | YES       |
 
-**Data Source:**
-Memory
+**Data Source:** Memory
 
 **Response:**
 
@@ -7977,26 +8025,35 @@ Memory
 
 ### User Data Stream subscription
 
-<a id=general_info_user_data_stream_subscriptions></a>
-**General information:**
+<a id=general_info_user_data_stream_subscriptions></a> **General information:**
 
-* [User Data Stream](user-data-stream.md) subscriptions allow you to receive all the events related to a given account on a WebSocket connection.
-* There are 2 ways to start a subscription:
-  * If you have an authenticated session, then you can subscribe to events for that authenticated account using [`userDataStream.subscribe`](#user-data-stream-subscribe).
-  * In any session, authenticated or not, you can subscribe to events for one or more accounts for which you can provide an API Key signature, using [`userDataStream.subscribe.signature`](#user-data-signature).
-  * You can have only one active subscription for a given account on a given connection.
-* Subscriptions are identified by a `subscriptionId` which is returned when starting the subscription. That `subscriptionId` allows you to map the events you receive to a given subscription.
-  * All active subscriptions for a session can be found using [`session.subscriptions`](#session-subscription).
-* Limits
-  * A single session supports **up to 1,000 active subscriptions** simultaneously.
-    * Attempting to start a new subscription beyond this limit will result in an error.
-    * If your accounts are very active, we suggest not opening too many subscriptions at once, in order to not overload your connection.
-  * A single session can handle a maximum of **65,535 total subscriptions** over its lifetime.
-    * If this limit is reached, you will receive an error and must re-establish a new connection to be able to start new subscriptions.
-* To verify the status of User Data Stream subscriptions, check the `userDataStream` field in [`session.status`](#session-status):
-  * `null` - User Data Stream subscriptions are **not available** on this WebSocket API.
-  * `true` - There is at **least one subscription active** in this session.
-  * `false` - There are **no active subscriptions** in this session.
+- [User Data Stream](user-data-stream.md) subscriptions allow you to receive all the
+  events related to a given account on a WebSocket connection.
+- There are 2 ways to start a subscription:
+  - If you have an authenticated session, then you can subscribe to events for that authenticated
+    account using [`userDataStream.subscribe`](#subscribe-to-user-data-stream-user_stream).
+  - In any session, authenticated or not, you can subscribe to events for one or more accounts for
+    which you can provide an API Key signature, using
+    [`userDataStream.subscribe.signature`](#subscribe-to-user-data-stream-through-signature-subscription-user_stream).
+  - You can have only one active subscription for a given account on a given connection.
+- Subscriptions are identified by a `subscriptionId` which is returned when starting the
+  subscription. That `subscriptionId` allows you to map the events you receive to a given
+  subscription.
+  - All active subscriptions for a session can be found using
+    [`session.subscriptions`](#listing-all-subscriptions).
+- Limits
+  - A single session supports **up to 1,000 active subscriptions** simultaneously.
+    - Attempting to start a new subscription beyond this limit will result in an error.
+    - If your accounts are very active, we suggest not opening too many subscriptions at once, in
+      order to not overload your connection.
+  - A single session can handle a maximum of **65,535 total subscriptions** over its lifetime.
+    - If this limit is reached, you will receive an error and must re-establish a new connection to
+      be able to start new subscriptions.
+- To verify the status of User Data Stream subscriptions, check the `userDataStream` field in
+  [`session.status`](#query-session-status):
+  - `null` - User Data Stream subscriptions are **not available** on this WebSocket API.
+  - `true` - There is at **least one subscription active** in this session.
+  - `false` - There are **no active subscriptions** in this session.
 
 <a id="user-data-stream-subscribe"></a>
 
@@ -8013,17 +8070,19 @@ Subscribe to the User Data Stream in the current WebSocket connection.
 
 **Notes:**
 
-* This method requires an authenticated WebSocket connection using Ed25519 keys. Please refer to [`session.logon`](#session-logon).
-* To check the subscription status, use [`session.status`](#session-status), see the `userDataStream` flag indicating you have have an active subscription.
-* User Data Stream events are available in both JSON and [SBE](../faqs/sbe_faq.md) sessions.
-  * Please refer to [User Data Streams](user-data-stream.md) for the event format details.
-  * For SBE, only SBE schema 2:1 or later is supported.
+- This method requires an authenticated WebSocket connection using Ed25519 keys. Please refer to
+  [`session.logon`](#log-in-with-api-key-signed).
+- To check the subscription status, use [`session.status`](#query-session-status), see the
+  `userDataStream` flag indicating you have have an active subscription.
+- User Data Stream events are available in both JSON and [SBE](../faqs/sbe_faq.md)
+  sessions.
+  - Please refer to [User Data Streams](user-data-stream.md) for the event format
+    details.
+  - For SBE, only SBE schema 2:1 or later is supported.
 
-**Weight**:
-2
+**Weight**: 2
 
-**Parameters**:
-NONE
+**Parameters**: NONE
 
 **Response**:
 
@@ -8048,16 +8107,16 @@ NONE
 
 Stop listening to the User Data Stream in the current WebSocket connection.
 
-Note that `session.logout` will only close the subscription created with `userDataStream.subscribe` but not subscriptions opened with `userDataStream.subscribe.signature`.
+Note that `session.logout` will only close the subscription created with `userDataStream.subscribe`
+but not subscriptions opened with `userDataStream.subscribe.signature`.
 
-**Weight**:
-2
+**Weight**: 2
 
 **Parameters**:
 
-| Name | Type | Mandatory | Description |
-| --- | --- | --- | --- |
-| `subscriptionId` | INT | No | When called with no parameter, this will close all subscriptions. <br>When called with the `subscriptionId` parameter, this will attempt to close the subscription with that subscription id, if it exists. |
+| Name             | Type | Mandatory | Description                                                                                                                                                                                                 |
+| ---------------- | ---- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `subscriptionId` | INT  | No        | When called with no parameter, this will close all subscriptions. <br>When called with the `subscriptionId` parameter, this will attempt to close the subscription with that subscription id, if it exists. |
 
 **Response**:
 
@@ -8083,7 +8142,7 @@ Note that `session.logout` will only close the subscription created with `userDa
 
 **Note:**
 
-* Users are expected to track on their side which subscription corresponds to which account.
+- Users are expected to track on their side which subscription corresponds to which account.
 
 **Weight**: 2
 
@@ -8122,18 +8181,16 @@ Note that `session.logout` will only close the subscription created with `userDa
 }
 ```
 
-**Weight:**
-2
+**Weight:** 2
 
 **Parameters**:
 
-| Name | Type | Mandatory | Description |
-| --- | --- | --- | --- |
-| `apiKey` | STRING | Yes |  |
-| `timestamp` | LONG | Yes |  |
-| `signature` | STRING | Yes |  |
-|`recvWindow`|DECIMAL | No|The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.|
-
+| Name         | Type    | Mandatory | Description                                                                                                                                             |
+| ------------ | ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `apiKey`     | STRING  | Yes       |                                                                                                                                                         |
+| `timestamp`  | LONG    | Yes       |                                                                                                                                                         |
+| `signature`  | STRING  | Yes       |                                                                                                                                                         |
+| `recvWindow` | DECIMAL | No        | The value cannot be greater than `60000`. <br> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified. |
 
 **Data Source:** Memory
 

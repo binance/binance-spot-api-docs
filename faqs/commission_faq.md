@@ -2,21 +2,25 @@
 
 **Disclaimer:**
 
-* The commissions and prices used here are fictional, and do not imply anything about the actual setup on the live exchange.
-* This applies only for the SPOT Exchange.
+- The commissions and prices used here are fictional, and do not imply anything about the actual
+  setup on the live exchange.
+- This applies only for the SPOT Exchange.
 
 ### What are Commission Rates?
 
-These are the rates that determine the commission to be paid on trades when your order fills for any amount.
+These are the rates that determine the commission to be paid on trades when your order fills for any
+amount.
 
 ### What are the different types of rates?
 
 There are 3 types:
-* `standardCommission` - Standard commission rates on trades from the order.
-* `taxCommission` - Tax commission rates on trades from the order.
-* `specialCommission` - Extra commission that will be added in specific circumstances.
 
-Standard commission rate may be reduced, depending on promotions for specific trading pairs, applicable discounts, etc.
+- `standardCommission` - Standard commission rates on trades from the order.
+- `taxCommission` - Tax commission rates on trades from the order.
+- `specialCommission` - Extra commission that will be added in specific circumstances.
+
+Standard commission rate may be reduced, depending on promotions for specific trading pairs,
+applicable discounts, etc.
 
 ### How do I know what the commission rates are?
 
@@ -26,66 +30,72 @@ REST API: `GET /api/v3/account/commission`
 
 WebSocket API: `account.commission`
 
-You can also find out the commission rates to a trade from an order using the test order requests with `computeCommissionRates`.
+You can also find out the commission rates to a trade from an order using the test order requests
+with `computeCommissionRates`.
 
 <a id="test-order-diferences"></a>
+
 ### What is the difference between the response sending a test order with `computeCommissionRates` vs the response from querying commission rates?
 
-A test order with `computeCommissionRates` returns detailed commission rates for that specific order:
+A test order with `computeCommissionRates` returns detailed commission rates for that specific
+order:
 
 ```json
 {
-    "standardCommissionForOrder": {
-        "maker": "0.00000050",
-        "taker": "0.00000060"
-    },
-    "specialCommissionForOrder": {
-        "maker": "0.05000000",
-        "taker": "0.06000000"
-    },
-    "taxCommissionForOrder": {
-        "maker": "0.00000228",
-        "taker": "0.00000230"
-    },
-    "discount": {
-        "enabledForAccount": true,
-        "enabledForSymbol": true,
-        "discountAsset": "BNB",
-        "discount": "0.25000000"
-    }
+  "standardCommissionForOrder": {
+    "maker": "0.00000050",
+    "taker": "0.00000060"
+  },
+  "specialCommissionForOrder": {
+    "maker": "0.05000000",
+    "taker": "0.06000000"
+  },
+  "taxCommissionForOrder": {
+    "maker": "0.00000228",
+    "taker": "0.00000230"
+  },
+  "discount": {
+    "enabledForAccount": true,
+    "enabledForSymbol": true,
+    "discountAsset": "BNB",
+    "discount": "0.25000000"
+  }
 }
 ```
-Note: It does not show buyer/seller commissions separately, as these are already taken into account based on the order side.
 
-In contrast, querying commission rates returns your current commission rates for the symbol on your account.
+Note: It does not show buyer/seller commissions separately, as these are already taken into account
+based on the order side.
+
+In contrast, querying commission rates returns your current commission rates for the symbol on your
+account.
 
 ```json
 {
-    "symbol": "BTCUSDT",
-    "standardCommission": {
-        "maker": "0.00000040",
-        "taker": "0.00000050",
-        "buyer": "0.00000010",
-        "seller": "0.00000010"
-    },
-    "specialCommission": {
-        "maker": "0.04000000",
-        "taker": "0.05000000",
-        "buyer": "0.01000000",
-        "seller": "0.01000000"
-    },
-    "taxCommission": {
-        "maker": "0.00000128",
-        "taker": "0.00000130",
-        "buyer": "0.00000100",
-        "seller": "0.00000100"
-    },
-    "discount": {
-        "enabledForAccount": true,
-        "enabledForSymbol": true,
-        "discountAsset": "BNB",
-        "discount": "0.25000000"
-    }
+  "symbol": "BTCUSDT",
+  "standardCommission": {
+    "maker": "0.00000040",
+    "taker": "0.00000050",
+    "buyer": "0.00000010",
+    "seller": "0.00000010"
+  },
+  "specialCommission": {
+    "maker": "0.04000000",
+    "taker": "0.05000000",
+    "buyer": "0.01000000",
+    "seller": "0.01000000"
+  },
+  "taxCommission": {
+    "maker": "0.00000128",
+    "taker": "0.00000130",
+    "buyer": "0.00000100",
+    "seller": "0.00000100"
+  },
+  "discount": {
+    "enabledForAccount": true,
+    "enabledForSymbol": true,
+    "discountAsset": "BNB",
+    "discount": "0.25000000"
+  }
 }
 ```
 
@@ -95,50 +105,52 @@ Using an example commission configuration:
 
 ```json
 {
-    "symbol": "BTCUSDT",
-    "standardCommission": {
-        "maker": "0.00000010",
-        "taker": "0.00000020",
-        "buyer": "0.00000030",
-        "seller": "0.00000040"
-    },
-    "specialCommission": {
-        "maker": "0.01000000",
-        "taker": "0.02000000",
-        "buyer": "0.03000000",
-        "seller": "0.04000000"
-    },
-    "taxCommission": {
-        "maker": "0.00000112",
-        "taker": "0.00000114",
-        "buyer": "0.00000118",
-        "seller": "0.00000116"
-    },
-    "discount": {
-        "enabledForAccount": true,
-        "enabledForSymbol": true,
-        "discountAsset": "BNB",
-        "discount": "0.25000000"
-    }
+  "symbol": "BTCUSDT",
+  "standardCommission": {
+    "maker": "0.00000010",
+    "taker": "0.00000020",
+    "buyer": "0.00000030",
+    "seller": "0.00000040"
+  },
+  "specialCommission": {
+    "maker": "0.01000000",
+    "taker": "0.02000000",
+    "buyer": "0.03000000",
+    "seller": "0.04000000"
+  },
+  "taxCommission": {
+    "maker": "0.00000112",
+    "taker": "0.00000114",
+    "buyer": "0.00000118",
+    "seller": "0.00000116"
+  },
+  "discount": {
+    "enabledForAccount": true,
+    "enabledForSymbol": true,
+    "discountAsset": "BNB",
+    "discount": "0.25000000"
+  }
 }
 ```
 
-If you placed an order with the following parameters which took immediately and fully filled in a single trade:
+If you placed an order with the following parameters which took immediately and fully filled in a
+single trade:
 
-|Parameter| Value|
-|---      | ---  |
-|symbol   |BTCUSDT|
-|price    |35,000|
-|quantity |0.49975|
-|side     |SELL   |
-|type     |MARKET |
+| Parameter | Value   |
+| --------- | ------- |
+| symbol    | BTCUSDT |
+| price     | 35,000  |
+| quantity  | 0.49975 |
+| side      | SELL    |
+| type      | MARKET  |
 
 Since you sold BTC for USDT, the commission will be paid either in USDT or BNB.
 
 When standard commission is calculated, the received amount is multiplied with the sum of the rates.
 
-Since this order is on the `SELL` side, the received amount is the notional value. (For orders on the `BUY` side, the received amount would be `quantity`.)
-The order type was `MARKET`, making this the taker order for the trade.
+Since this order is on the `SELL` side, the received amount is the notional value. (For orders on
+the `BUY` side, the received amount would be `quantity`.) The order type was `MARKET`, making this
+the taker order for the trade.
 
 ```
 Standard Commission = Notional value * (taker + seller)
@@ -165,13 +177,16 @@ Special commission = Notional value * (taker + seller)
                = 1049.47500000 USDT
 ```
 
-If not paying in BNB, the total commission are summed up and deducted from your received amount of `USDT`.
+If not paying in BNB, the total commission are summed up and deducted from your received amount of
+`USDT`.
 
-Since `enabledforAccount` and `enabledForSymbol` under `discount` is set to `true`, this means the commission will be paid in BNB assuming you have a sufficient balance.
+Since `enabledforAccount` and `enabledForSymbol` under `discount` is set to `true`, this means the
+commission will be paid in BNB assuming you have a sufficient balance.
 
 If paying with BNB, then the standard commission will be reduced based on the `discount`.
 
-First the standard commission and tax commission will be converted into BNB based on the exchange rate. For this example, assume that 1 BNB = 260 USDT.
+First the standard commission and tax commission will be converted into BNB based on the exchange
+rate. For this example, assume that 1 BNB = 260 USDT.
 
 ```
 Standard commission (Discounted and in BNB) = (Standard commission * BNB exchange rate) * discount
@@ -199,4 +214,5 @@ Total Commission (in BNB) = Standard commission (Discounted) + Tax commission (i
                           = 4.036607129
 ```
 
-If you do not have enough BNB to pay the discounted commission, the full commission will be taken out of your received amount of USDT instead.
+If you do not have enough BNB to pay the discounted commission, the full commission will be taken
+out of your received amount of USDT instead.

@@ -1,3 +1,5 @@
+<a id="api-key-types"></a>
+
 # API Key 类型
 
 币安 API 需要 API Key 才能访问经过身份验证的接口以进行交易，账户历史记录等。
@@ -12,13 +14,13 @@
 
 **我们建议使用 Ed25519 API keys**，因为它在所有受支持的 API key 类型中提供最佳性能和安全性。
 
-请读 [REST API](../rest-api_CN.md#request-security) 或者 [WebSocket API](../web-socket-api_CN.md#request-security) 文档以了解如何使用不同的 API Key 类型。
+请读 [REST API](../rest-api_CN.md#request-security) 或者
+[WebSocket API](../web-socket-api_CN.md#request-security) 文档以了解如何使用不同的 API Key 类型。
 
 ### Ed25519
 
-Ed25519 keys 使用非对称加密技术。
-您只与币安共享您的 public key 并在本地使用 private key 签署 API 请求。
-币安 API 会使用 public key 来验证您的请求签名。
+Ed25519 keys 使用非对称加密技术。您只与币安共享您的 public key 并在本地使用 private
+key 签署 API 请求。币安 API 会使用 public key 来验证您的请求签名。
 
 Ed25519 Keys 提供与 3072 bits 的 RSA keys 相当的安全性，但是 key 更小，签名更小，签名的计算更快。
 
@@ -40,12 +42,11 @@ E7luAubOlcRxL10iQszvNCff+xJjwJrfajEHj1hOncmsgaSB4NE+A/BbQhCWwit/usNJ32/LeTwDYPoA
 
 ### HMAC
 
-HMAC keys 使用对称加密技术。
-币安生成并与您共享一个 secret key，您可以使用该 secret key 对 API 请求进行签名。
-币安 API 使用相同的共享 secret key 来验证您的请求签名。
+HMAC keys 使用对称加密技术。币安生成并与您共享一个 secret key，您可以使用该 secret
+key 对 API 请求进行签名。币安 API 使用相同的共享 secret key 来验证您的请求签名。
 
-HMAC 签名可以快速计算和压缩。<br>
-但是，由于共享 secret key 必须在多方之间共享，这就不如 Ed25519 或 RSA keys 使用的非对称加密技术那么安全。
+HMAC 签名可以快速计算和压缩。<br> 但是，由于共享 secret
+key 必须在多方之间共享，这就不如 Ed25519 或 RSA keys 使用的非对称加密技术那么安全。
 
 **不建议使用 HMAC keys。** 我们建议换成并使用非对称 API Keys，例如 Ed25519 或 RSA。
 
@@ -63,9 +64,8 @@ HMAC 签名例子:
 
 ### RSA
 
-RSA keys 使用非对称加密技术。 <br>
-您只与币安共享您的 public key 并在本地使用 private key 签署 API 请求。
-币安 API 会使用 public key 来验证您的请求签名。
+RSA keys 使用非对称加密技术。 <br> 您只与币安共享您的 public key 并在本地使用 private
+key 签署 API 请求。币安 API 会使用 public key 来验证您的请求签名。
 
 我们支持 2048 和 4096 bits 的 RSA keys。
 

@@ -1,216 +1,251 @@
+<a id="enum-definitions"></a>
+
 # 枚举定义
 
 这将适用于 REST API 和 WebSocket API。
 
+<a id="symbol-status-status"></a>
+
 ## 交易对的状态（status）
 
-* `TRADING` - 正常交易中
-* `END_OF_DAY` - 收盘
-* `HALT` - 交易终止(该交易对已下线)
-* `BREAK` - 交易暂停
-* `CANCEL_ONLY` - 仅可撤单
+- `TRADING` - 正常交易中
+- `END_OF_DAY` - 收盘
+- `HALT` - 交易终止(该交易对已下线)
+- `BREAK` - 交易暂停
+- `CANCEL_ONLY` - 仅可撤单
 
 <a id="account-and-symbol-permissions"></a>
 
+<a id="account-and-symbol-permissions-permissions"></a>
+
 ## 账户与交易对权限（permissions）
 
-* `SPOT` - 现货
-* `MARGIN` - 杠杆
-* `LEVERAGED` - 杠杆代币
-* `TRD_GRP_002` - 交易组 002
-* `TRD_GRP_003` - 交易组 003
-* `TRD_GRP_004` - 交易组 004
-* `TRD_GRP_005` - 交易组 005
-* `TRD_GRP_006` - 交易组 006
-* `TRD_GRP_007` - 交易组 007
-* `TRD_GRP_008` - 交易组 008
-* `TRD_GRP_009` - 交易组 009
-* `TRD_GRP_010` - 交易组 010
-* `TRD_GRP_011` - 交易组 011
-* `TRD_GRP_012` - 交易组 012
-* `TRD_GRP_013` - 交易组 013
-* `TRD_GRP_014` - 交易组 014
-* `TRD_GRP_015` - 交易组 015
-* `TRD_GRP_016` - 交易组 016
-* `TRD_GRP_017` - 交易组 017
-* `TRD_GRP_018` - 交易组 018
-* `TRD_GRP_019` - 交易组 019
-* `TRD_GRP_020` - 交易组 020
-* `TRD_GRP_021` - 交易组 021
-* `TRD_GRP_022` - 交易组 022
-* `TRD_GRP_023` - 交易组 023
-* `TRD_GRP_024` - 交易组 024
-* `TRD_GRP_025` - 交易组 025
+- `SPOT` - 现货
+- `MARGIN` - 杠杆
+- `LEVERAGED` - 杠杆代币
+- `TRD_GRP_002` - 交易组 002
+- `TRD_GRP_003` - 交易组 003
+- `TRD_GRP_004` - 交易组 004
+- `TRD_GRP_005` - 交易组 005
+- `TRD_GRP_006` - 交易组 006
+- `TRD_GRP_007` - 交易组 007
+- `TRD_GRP_008` - 交易组 008
+- `TRD_GRP_009` - 交易组 009
+- `TRD_GRP_010` - 交易组 010
+- `TRD_GRP_011` - 交易组 011
+- `TRD_GRP_012` - 交易组 012
+- `TRD_GRP_013` - 交易组 013
+- `TRD_GRP_014` - 交易组 014
+- `TRD_GRP_015` - 交易组 015
+- `TRD_GRP_016` - 交易组 016
+- `TRD_GRP_017` - 交易组 017
+- `TRD_GRP_018` - 交易组 018
+- `TRD_GRP_019` - 交易组 019
+- `TRD_GRP_020` - 交易组 020
+- `TRD_GRP_021` - 交易组 021
+- `TRD_GRP_022` - 交易组 022
+- `TRD_GRP_023` - 交易组 023
+- `TRD_GRP_024` - 交易组 024
+- `TRD_GRP_025` - 交易组 025
+
+<a id="order-status-status"></a>
 
 ## 订单状态（status）
 
-状态 |描述
------------|--------------
-`NEW` | 该订单被交易引擎接受。
-`PENDING_NEW` | 该订单处于待处理 (`PENDING`) 阶段，直到其所属订单列表（order list） 中的 `working order` 完全成交。
-`PARTIALLY_FILLED` | 部分订单已被成交。
-`FILLED`| 订单已完全成交。
-`CANCELED` | 用户撤销了订单。
-`PENDING_CANCEL` | 撤销中(目前并未使用)
-`REJECTED`       | 订单没有被交易引擎接受，也没被处理。
-`EXPIRED` | 该订单根据订单类型的规则被取消（例如，没有成交的 LIMIT FOK 订单, LIMIT IOC 或部分成交的 MARKET 订单）<br/>或者被交易引擎取消（例如，在强平期间被取消的订单，在交易所维护期间被取消的订单）
-`EXPIRED_IN_MATCH` | 表示订单由于 STP 而过期。（例如，带有 `EXPIRE_TAKER` 的订单与账簿上同属相同帐户或相同 `tradeGroupId` 的现有订单匹配）
+| 状态               | 描述                                                                                                                                                                                       |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `NEW`              | 该订单被交易引擎接受。                                                                                                                                                                     |
+| `PENDING_NEW`      | 该订单处于待处理 (`PENDING`) 阶段，直到其所属订单列表（order list） 中的 `working order` 完全成交。                                                                                        |
+| `PARTIALLY_FILLED` | 部分订单已被成交。                                                                                                                                                                         |
+| `FILLED`           | 订单已完全成交。                                                                                                                                                                           |
+| `CANCELED`         | 用户撤销了订单。                                                                                                                                                                           |
+| `PENDING_CANCEL`   | 撤销中(目前并未使用)                                                                                                                                                                       |
+| `REJECTED`         | 订单没有被交易引擎接受，也没被处理。                                                                                                                                                       |
+| `EXPIRED`          | 该订单根据订单类型的规则被取消（例如，没有成交的 LIMIT FOK 订单, LIMIT IOC 或部分成交的 MARKET 订单）<br/>或者被交易引擎取消（例如，在强平期间被取消的订单，在交易所维护期间被取消的订单） |
+| `EXPIRED_IN_MATCH` | 表示订单由于 STP 而过期。（例如，带有 `EXPIRE_TAKER` 的订单与账簿上同属相同帐户或相同 `tradeGroupId` 的现有订单匹配）                                                                      |
+
+<a id="order-list-status-liststatustype"></a>
 
 ## 订单列表（order list）状态 （状态类型集 listStatusType）
 
-状态 |描述
------------|--------------
-`RESPONSE` | 在 ListStatus 用于响应失败的操作时会被使用。（例如，下订单列表或取消订单列表）
-`EXEC_STARTED` | 订单列表已被下达或订单列表状态有更新。
-`UPDATED`  | 订单列表里的某个订单的 clientOrderId 被改变。
-`ALL_DONE` | 订单列表执行结束，因此不再处于活动状态。
+| 状态           | 描述                                                                           |
+| -------------- | ------------------------------------------------------------------------------ |
+| `RESPONSE`     | 在 ListStatus 用于响应失败的操作时会被使用。（例如，下订单列表或取消订单列表） |
+| `EXEC_STARTED` | 订单列表已被下达或订单列表状态有更新。                                         |
+| `UPDATED`      | 订单列表里的某个订单的 clientOrderId 被改变。                                  |
+| `ALL_DONE`     | 订单列表执行结束，因此不再处于活动状态。                                       |
+
+<a id="order-list-order-status-listorderstatus"></a>
 
 ## 订单列表（order list）中的订单状态 （订单状态集 listOrderStatus）
 
-状态 |描述
------------|--------------
-`EXECUTING` | 订单列表已被下达或订单列表状态有更新。
-`ALL_DONE`| 订单列表执行结束，因此不再处于活动状态。
-`REJECT` | 在 ListStatus 用于响应在下单阶段或取消订单列表期间的失败操作时会被使用，
+| 状态        | 描述                                                                     |
+| ----------- | ------------------------------------------------------------------------ |
+| `EXECUTING` | 订单列表已被下达或订单列表状态有更新。                                   |
+| `ALL_DONE`  | 订单列表执行结束，因此不再处于活动状态。                                 |
+| `REJECT`    | 在 ListStatus 用于响应在下单阶段或取消订单列表期间的失败操作时会被使用， |
+
+<a id="contingencytype"></a>
 
 ## 订单列表的类型
 
-* `OCO`
-* `OTO`
+- `OCO`
+- `OTO`
 
 <a id="allocationtype"></a>
 
 ## 分配类型
 
-* `SOR`
+- `SOR`
 
 <a id="ordertypes"></a>
 
+<a id="order-types-ordertypes-type"></a>
+
 ## 订单类型（orderTypes, type）
 
-* `LIMIT` - 限价单
-* `MARKET` - 市价单
-* `STOP_LOSS` - 止损单
-* `STOP_LOSS_LIMIT` - 限价止损单
-* `TAKE_PROFIT` - 止盈单
-* `TAKE_PROFIT_LIMIT` - 限价止盈单
-* `LIMIT_MAKER` - 限价做市单
+- `LIMIT` - 限价单
+- `MARKET` - 市价单
+- `STOP_LOSS` - 止损单
+- `STOP_LOSS_LIMIT` - 限价止损单
+- `TAKE_PROFIT` - 止盈单
+- `TAKE_PROFIT_LIMIT` - 限价止盈单
+- `LIMIT_MAKER` - 限价做市单
 
 <a id="orderresponsetype"></a>
 
+<a id="order-response-type-neworderresptype"></a>
+
 ## 订单返回类型 （newOrderRespType）
 
-* `ACK`
-* `RESULT`
-* `FULL`
+- `ACK`
+- `RESULT`
+- `FULL`
+
+<a id="working-floor"></a>
 
 ## 工作平台
 
-* `EXCHANGE` - 常规交易
-* `SOR` - 智能订单路由
+- `EXCHANGE` - 常规交易
+- `SOR` - 智能订单路由
 
 <a id="side"></a>
 
+<a id="order-side-side"></a>
+
 ## 订单方向 (side)
 
-* `BUY` - 买入
-* `SELL` - 卖出
+- `BUY` - 买入
+- `SELL` - 卖出
 
 <a id="timeinforce"></a>
+
+<a id="time-in-force-timeinforce"></a>
 
 ## 生效时间 （timeInForce）
 
 这里定义了订单在失效前的有效时间。
 
-状态 |描述
------------|--------------
-`GTC` | 成交为止 <br/> 订单会一直有效，直到被成交或者取消。
-`IOC` | 无法立即成交的部分就撤销 <br/> 订单在失效前会尽量多的成交。
-`FOK` | 无法全部立即成交就撤销 <br/> 如果无法全部成交，订单会失效。
+| 状态  | 描述                                                        |
+| ----- | ----------------------------------------------------------- |
+| `GTC` | 成交为止 <br/> 订单会一直有效，直到被成交或者取消。         |
+| `IOC` | 无法立即成交的部分就撤销 <br/> 订单在失效前会尽量多的成交。 |
+| `FOK` | 无法全部立即成交就撤销 <br/> 如果无法全部成交，订单会失效。 |
 
+<a id="rate-limiters-ratelimittype"></a>
 
 ## 速率限制种类（rateLimitType）
 
-* REQUEST_WEIGHT - 单位时间请求权重之和上限
+- REQUEST_WEIGHT - 单位时间请求权重之和上限
 
 ```json
 {
-    "rateLimitType": "REQUEST_WEIGHT",
-    "interval": "MINUTE",
-    "intervalNum": 1,
-    "limit": 6000
+  "rateLimitType": "REQUEST_WEIGHT",
+  "interval": "MINUTE",
+  "intervalNum": 1,
+  "limit": 6000
 }
 ```
 
-* ORDERS - 单位时间下单次数上限
+- ORDERS - 单位时间下单次数上限
 
 ```json
 {
-    "rateLimitType": "ORDERS",
-    "interval": "SECOND",
-    "intervalNum": 1,
-    "limit": 10
+  "rateLimitType": "ORDERS",
+  "interval": "SECOND",
+  "intervalNum": 1,
+  "limit": 10
 }
 ```
 
-* RAW_REQUESTS - 单位时间请求次数上限
+- RAW_REQUESTS - 单位时间请求次数上限
 
 ```json
 {
-    "rateLimitType": "RAW_REQUESTS",
-    "interval": "MINUTE",
-    "intervalNum": 5,
-    "limit": 61000
+  "rateLimitType": "RAW_REQUESTS",
+  "interval": "MINUTE",
+  "intervalNum": 5,
+  "limit": 61000
 }
 ```
+
+<a id="rate-limit-intervals-interval"></a>
 
 ## 速率限制间隔 （interval）
 
-* SECOND
-* MINUTE
-* DAY
+- SECOND
+- MINUTE
+- DAY
 
 <a id="stpmodes"></a>
+
+<a id="stp-modes"></a>
 
 ## STP 模式
 
 请参阅 [自我交易预防 (Self Trade Prevention - STP) 常见问题](faqs/stp_faq_CN.md)。
 
-* `NONE`
-* `EXPIRE_MAKER`
-* `EXPIRE_TAKER`
-* `EXPIRE_BOTH`
-* `DECREMENT`
-* `TRANSFER`
+- `NONE`
+- `EXPIRE_MAKER`
+- `EXPIRE_TAKER`
+- `EXPIRE_BOTH`
+- `DECREMENT`
+- `TRANSFER`
+
+<a id="execution-types"></a>
 
 ## 可能的执行类型:
 
-状态 |描述
------------|--------------
-`NEW`      | 新订单已被引擎接受。
-`CANCELED` | 订单被用户取消。
-`REPLACED` | 订单已被修改。
-`REJECTED` | 新订单被拒绝 （e.g. 在撤消挂单再下单时，其中新订单被拒绝但撤消挂单请求成功）。
-`TRADE`    | 订单有新成交。
-`EXPIRED`  | 订单已根据 Time In Force 参数的规则取消（e.g. 没有成交的 LIMIT FOK 订单或部分成交的 LIMIT IOC 订单）或者被交易所取消（e.g. 强平或维护期间取消的订单）。
-`TRADE_PREVENTION` | 订单因 STP 触发而过期。
+| 状态               | 描述                                                                                                                                                    |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `NEW`              | 新订单已被引擎接受。                                                                                                                                    |
+| `CANCELED`         | 订单被用户取消。                                                                                                                                        |
+| `REPLACED`         | 订单已被修改。                                                                                                                                          |
+| `REJECTED`         | 新订单被拒绝 （e.g. 在撤消挂单再下单时，其中新订单被拒绝但撤消挂单请求成功）。                                                                          |
+| `TRADE`            | 订单有新成交。                                                                                                                                          |
+| `EXPIRED`          | 订单已根据 Time In Force 参数的规则取消（e.g. 没有成交的 LIMIT FOK 订单或部分成交的 LIMIT IOC 订单）或者被交易所取消（e.g. 强平或维护期间取消的订单）。 |
+| `TRADE_PREVENTION` | 订单因 STP 触发而过期。                                                                                                                                 |
 
-<a id="execution rules"></a>
+<a id="execution-rules"></a>
 
 ## 执行规则
 
-* `PRICE_RANGE`
+- `PRICE_RANGE`
 
+<!-- prettier-ignore -->
 <a id="expiryreasons"></a>
+<a id="expiry-reasons"></a>
 
 ## 过期原因
 
-* `NONE`
-* `REJECTED`
-* `EXCHANGE_CANCELED`
-* `OCO_TRIGGER`
-* `OTO_PHASE_ONE_EXPIRED`
-* `UNFILLED_IOC_QUANTITY_EXPIRED`
-* `UNFILLED_FOK_ORDER_EXPIRED`
-* `INSUFFICIENT_LIQUIDITY`
-* `EXECUTION_RULE_PRICE_RANGE_EXCEEDED`
+| 过期原因 (`eR`)                       | 说明                                                                                                              |
+| :------------------------------------ | :---------------------------------------------------------------------------------------------------------------- |
+| `NONE`                                | 订单未过期。                                                                                                      |
+| `REJECTED`                            | 当尝试将条件单或OTO（One-Triggers-the-Other）订单放入订单簿时，被撮合引擎拒绝。常见原因包括资金不足和过滤器拒绝。 |
+| `EXCHANGE_CANCELED`                   | 订单被币安取消。                                                                                                  |
+| `OCO_TRIGGER`                         | OCO（One-Cancels-the-Other）订单对中的一个订单被取消，因为其另一个订单开始生效或整个OCO订单对过期。               |
+| `OTO_PHASE_ONE_EXPIRED`               | 订单列表中的生效订单过期，导致整个订单列表过期。                                                                  |
+| `UNFILLED_IOC_QUANTITY_EXPIRED`       | IOC（立即成交或取消）订单未完全成交，因此过期。                                                                   |
+| `UNFILLED_FOK_ORDER_EXPIRED`          | FOK（全部成交或取消）订单未完全成交，因此过期。                                                                   |
+| `INSUFFICIENT_LIQUIDITY`              | 订单簿中没有足够的订单与该订单匹配。                                                                              |
+| `EXECUTION_RULE_PRICE_RANGE_EXCEEDED` | 订单尝试以不符合价格区间执行规则的价格进行交易。                                                                  |

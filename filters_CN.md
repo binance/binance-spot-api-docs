@@ -1,24 +1,34 @@
+<a id="filters"></a>
+
 # 过滤器
-过滤器，即Filter，定义了一系列交易规则。
-共有三类，分别是针对交易对的过滤器 `symbol filters`，针对整个交易所的过滤器 `exchange filters` 和针对资产的过滤器 `asset filters`。
+
+过滤器，即Filter，定义了一系列交易规则。共有三类，分别是针对交易对的过滤器
+`symbol filters`，针对整个交易所的过滤器 `exchange filters` 和针对资产的过滤器 `asset filters`。
+
+<a id="symbol-filters"></a>
 
 ## 交易对过滤器
+
 <a id="price"></a>
+
 ### PRICE_FILTER 价格过滤器
+
 价格过滤器用于检测order订单中price参数的合法性
 
-* `minPrice` 定义了 `price`/`stopPrice` 允许的最小值; `minPrice` == 0 的时候则失效。
-* `maxPrice` 定义了 `price`/`stopPrice` 允许的最大值; `maxPrice` == 0 的时候则失效。
-* `tickSize` 定义了 `price`/`stopPrice` 的步进间隔; `tickSize` == 0 的时候则失效。
+- `minPrice` 定义了 `price`/`stopPrice` 允许的最小值; `minPrice` == 0 的时候则失效。
+- `maxPrice` 定义了 `price`/`stopPrice` 允许的最大值; `maxPrice` == 0 的时候则失效。
+- `tickSize` 定义了 `price`/`stopPrice` 的步进间隔; `tickSize` == 0 的时候则失效。
 
 以上每一项均可为0，为0时代表这一项不再做限制。
 
 订单需满足以下条件，方可通过该过滤器校验：
-* `price` >= `minPrice`
-* `price` <= `maxPrice`
-* `price` % `tickSize` == 0
+
+- `price` >= `minPrice`
+- `price` <= `maxPrice`
+- `price` % `tickSize` == 0
 
 **/exchangeInfo 响应中的格式:**
+
 ```javascript
 {
     "filterType": "PRICE_FILTER",
@@ -27,19 +37,25 @@
     "tickSize": "0.00000100"
 }
 ```
+
 <a id="percent_price"></a>
+
 ### PERCENT_PRICE 价格振幅过滤器
+
 `PERCENT_PRICE` 过滤器会根据`前序交易的平均成交价`来定义订单`价格`的有效范围。
 
-* 当该交易对存在非空的 [参考价格](./faqs/price_range_execution_rules_CN.md) 时，过滤器校验将使用该参考价格。
-* 当该交易对不存在非空的参考价格时，过滤器校验将使用 `avgPriceMins` 分钟前的成交量加权平均价。
-  * 如果 `avgPriceMins` 为 0，那么过滤器校验将使用最新成交价。
+- 当该交易对存在非空的 [参考价格](./faqs/price_range_execution_rules_CN.md)
+  时，过滤器校验将使用该参考价格。
+- 当该交易对不存在非空的参考价格时，过滤器校验将使用 `avgPriceMins` 分钟前的成交量加权平均价。
+  - 如果 `avgPriceMins` 为 0，那么过滤器校验将使用最新成交价。
 
 订单需满足以下条件，方可通过该过滤器校验：
-* `price` <= `average of previous trade prices` * `multiplierUp`
-* `price` >= `average of previous trade prices` * `multiplierDown`
+
+- `price` <= `average of previous trade prices` \* `multiplierUp`
+- `price` >= `average of previous trade prices` \* `multiplierDown`
 
 **/exchangeInfo 响应中的格式:**
+
 ```javascript
 {
     "filterType": "PERCENT_PRICE",
@@ -48,24 +64,30 @@
     "avgPriceMins": 5
 }
 ```
+
 <a id="percent_price_by_side"></a>
+
 #### PERCENT_PRICE_BY_SIDE
+
 `PERCENT_PRICE_BY_SIDE` 过滤器会根据`前序交易的平均成交价`来定义订单`价格`的有效范围。
 
-* 当该交易对存在非空的 [参考价格](./faqs/price_range_execution_rules_CN.md) 时，过滤器校验将使用该参考价格。
-* 当该交易对不存在非空的参考价格时，过滤器校验将使用 `avgPriceMins` 分钟前的成交量加权平均价。
-  * `avgPriceMins` 为 0，那么过滤器校验将使用最新成交价。
+- 当该交易对存在非空的 [参考价格](./faqs/price_range_execution_rules_CN.md)
+  时，过滤器校验将使用该参考价格。
+- 当该交易对不存在非空的参考价格时，过滤器校验将使用 `avgPriceMins` 分钟前的成交量加权平均价。
+  - `avgPriceMins` 为 0，那么过滤器校验将使用最新成交价。
 
 `买方`订单需满足以下条件，方可通过该过滤器校验：
 
-* `price` <= `average of previous trade prices` * `bidMultiplierUp`
-* `price` >= `average of previous trade prices` * `bidMultiplierDown`
+- `price` <= `average of previous trade prices` \* `bidMultiplierUp`
+- `price` >= `average of previous trade prices` \* `bidMultiplierDown`
 
 `卖方`订单需满足以下条件，方可通过该过滤器校验：
-* `price` <= `average of previous trade prices` * `askMultiplierUp`
-* `price` >= `average of previous trade prices` * `askMultiplierDown`
+
+- `price` <= `average of previous trade prices` \* `askMultiplierUp`
+- `price` >= `average of previous trade prices` \* `askMultiplierDown`
 
 **/exchangeInfo 响应中的格式:**
+
 ```javascript
 {
     "filterType": "PERCENT_PRICE_BY_SIDE",
@@ -76,21 +98,25 @@
     "avgPriceMins": 1
 }
 ```
+
 <a id="lot_size"></a>
+
 ### LOT_SIZE 订单尺寸
+
 "lots" 是拍卖术语，这个过滤器对订单中的 `quantity` 也就是数量参数进行合法性检查。包含三个部分：
 
-* `minQty` 表示 `quantity`/`icebergQty` 允许的最小值.
-* `maxQty` 表示 `quantity`/`icebergQty` 允许的最大值
-* `stepSize` 表示 `quantity`/`icebergQty` 允许的步进值。
+- `minQty` 表示 `quantity`/`icebergQty` 允许的最小值.
+- `maxQty` 表示 `quantity`/`icebergQty` 允许的最大值
+- `stepSize` 表示 `quantity`/`icebergQty` 允许的步进值。
 
 订单需满足以下条件，方可通过该过滤器校验：
 
-* `quantity` >= `minQty`
-* `quantity` <= `maxQty`
-* `quantity` % `stepSize` == 0
+- `quantity` >= `minQty`
+- `quantity` <= `maxQty`
+- `quantity` % `stepSize` == 0
 
 **/exchangeInfo 响应中的格式:**
+
 ```javascript
 {
     "filterType": "LOT_SIZE",
@@ -99,21 +125,28 @@
     "stepSize": "0.00100000"
 }
 ```
+
 <a id="min_notional"></a>
+
 ### MIN_NOTIONAL 最小金额
+
 `MIN_NOTIONAL` 过滤器定义了交易对订单所允许的最小名义价值(成交额)。
 
-* 订单的名义价值是 `价格` * `数量` 。
-* `applyToMarket` 确定 `MIN_NOTIONAL` 过滤器是否也将应用于 `MARKET` 订单。
-  * 由于 `MARKET` 订单没有`价格`，因此会使用`前序交易的平均成交价`。
-    * 当该交易对存在非空的 [参考价格](./faqs/price_range_execution_rules_CN.md) 时，过滤器校验将使用该参考价格来作为`价格`。
-    * 当该交易对不存在非空的参考价格时，过滤器校验将使用 `avgPriceMins` 分钟前的成交量加权平均价来作为`价格`。
-      * 如果 `avgPriceMins` 为 0，那么过滤器校验将使用最新成交价来作为`价格`。
+- 订单的名义价值是 `价格` \* `数量` 。
+- `applyToMarket` 确定 `MIN_NOTIONAL` 过滤器是否也将应用于 `MARKET` 订单。
+  - 由于 `MARKET` 订单没有`价格`，因此会使用`前序交易的平均成交价`。
+    - 当该交易对存在非空的 [参考价格](./faqs/price_range_execution_rules_CN.md)
+      时，过滤器校验将使用该参考价格来作为`价格`。
+    - 当该交易对不存在非空的参考价格时，过滤器校验将使用 `avgPriceMins`
+      分钟前的成交量加权平均价来作为`价格`。
+      - 如果 `avgPriceMins` 为 0，那么过滤器校验将使用最新成交价来作为`价格`。
 
 订单需满足以下条件，方可通过该过滤器校验：
-* `price` * `quantity` >= `minNotional`
+
+- `price` \* `quantity` >= `minNotional`
 
 **/exchangeInfo 响应中的格式:**
+
 ```javascript
 {
     "filterType": "MIN_NOTIONAL",
@@ -122,20 +155,26 @@
     "avgPriceMins": 5
 }
 ```
+
 <a id="notional"></a>
+
 ### NOTIONAL 名义价值
+
 名义价值过滤器(`NOTIONAL`)定义了订单在一个交易对上可以下单的名义价值区间。
 
-* `applyMinToMarket` 定义了 `minNotional` 是否适用于市价单(`MARKET`)。
-* `applyMaxToMarket` 定义了 `maxNotional` 是否适用于市价单(`MARKET`)。
-  * 由于 `MARKET` 订单没有`价格`，因此会使用`前序交易的平均成交价`。
-    * 当该交易对存在非空的 [参考价格](./faqs/price_range_execution_rules_CN.md) 时，过滤器校验将使用该参考价格来作为`价格`。
-    * 当该交易对不存在非空的参考价格时，过滤器校验将使用 `avgPriceMins` 分钟前的成交量加权平均价来作为`价格`。
-      * 如果 `avgPriceMins` 为 0，那么过滤器校验将使用最新成交价来作为`价格`。
+- `applyMinToMarket` 定义了 `minNotional` 是否适用于市价单(`MARKET`)。
+- `applyMaxToMarket` 定义了 `maxNotional` 是否适用于市价单(`MARKET`)。
+  - 由于 `MARKET` 订单没有`价格`，因此会使用`前序交易的平均成交价`。
+    - 当该交易对存在非空的 [参考价格](./faqs/price_range_execution_rules_CN.md)
+      时，过滤器校验将使用该参考价格来作为`价格`。
+    - 当该交易对不存在非空的参考价格时，过滤器校验将使用 `avgPriceMins`
+      分钟前的成交量加权平均价来作为`价格`。
+      - 如果 `avgPriceMins` 为 0，那么过滤器校验将使用最新成交价来作为`价格`。
 
 订单需满足以下条件，方可通过该过滤器校验：
-* `price` * `quantity` <= `maxNotional`
-* `price` * `quantity` >= `minNotional`
+
+- `price` \* `quantity` <= `maxNotional`
+- `price` \* `quantity` >= `minNotional`
 
 **/exchangeInfo 响应中的格式:**
 
@@ -151,11 +190,13 @@
 ```
 
 <a id="iceberg_parts"></a>
+
 ### ICEBERG_PARTS 冰山订单拆分数
-`ICEBERG_PARTS` 代表冰山订单最多可以拆分成多少个小订单。
-计算方法为 `向上取整(qty / icebergQty)`.
+
+`ICEBERG_PARTS` 代表冰山订单最多可以拆分成多少个小订单。计算方法为 `向上取整(qty / icebergQty)`.
 
 **/exchangeInfo 响应中的格式:**
+
 ```javascript
 {
     "filterType": "ICEBERG_PARTS",
@@ -164,20 +205,23 @@
 ```
 
 <a id="market_lot_size"></a>
+
 ### MARKET_LOT_SIZE 市价订单尺寸
+
 `MARKET_LOT_SIZE`过滤器为交易对上的`MARKET`订单定义了`数量`(即拍卖中的"手数")规则。 共有3部分：
 
-* `minQty`定义了允许的最小`quantity`。
-* `maxQty`定义了允许的最大数量。
-* `stepSize`定义了可以增加/减少数量的间隔。
+- `minQty`定义了允许的最小`quantity`。
+- `maxQty`定义了允许的最大数量。
+- `stepSize`定义了可以增加/减少数量的间隔。
 
 为了通过 `market lot size`，`quantity` 必须满足以下条件：
 
-* `quantity` >= `minQty`
-* `quantity` <= `maxQty`
-* `quantity` % `stepSize` == 0
+- `quantity` >= `minQty`
+- `quantity` <= `maxQty`
+- `quantity` % `stepSize` == 0
 
 **/exchangeInfo 响应中的格式:**
+
 ```javascript
 {
     "filterType": "MARKET_LOT_SIZE",
@@ -186,12 +230,15 @@
     "stepSize": "0.00100000"
 }
 ```
+
 <a id="max_num_orders"></a>
+
 ### MAX_NUM_ORDERS 最多订单数
-定义了某个交易对最多允许的挂单数量（不包括已关闭的订单）
-普通订单与条件订单均计算在内
+
+定义了某个交易对最多允许的挂单数量（不包括已关闭的订单）普通订单与条件订单均计算在内
 
 **/exchangeInfo 响应中的格式:**
+
 ```javascript
 {
     "filterType": "MAX_NUM_ORDERS",
@@ -200,10 +247,11 @@
 ```
 
 ### MAX_NUM_ALGO_ORDERS 最多条件单数
-`MAX_NUM_ALGO_ORDERS`过滤器定义允许账户在交易对上开设的"algo"订单的最大数量。
-"Algo"订单是`STOP_LOSS`，`STOP_LOSS_LIMIT`，`TAKE_PROFIT`和`TAKE_PROFIT_LIMIT`止盈止损单。
+
+`MAX_NUM_ALGO_ORDERS`过滤器定义允许账户在交易对上开设的"algo"订单的最大数量。"Algo"订单是`STOP_LOSS`，`STOP_LOSS_LIMIT`，`TAKE_PROFIT`和`TAKE_PROFIT_LIMIT`止盈止损单。
 
 **/exchangeInfo 响应中的格式:**
+
 ```javascript
 {
     "filterType": "MAX_NUM_ALGO_ORDERS",
@@ -212,10 +260,12 @@
 ```
 
 ### MAX_NUM_ICEBERG_ORDERS 最多冰山单数
+
 `MAX_NUM_ICEBERG_ORDERS`过滤器定义了允许在交易对上开设账户的`ICEBERG`订单的最大数量。
 `ICEBERG`订单是icebergQty大于0的任何订单。
 
 **/exchangeInfo 响应中的格式:**
+
 ```javascript
 {
     "filterType": "MAX_NUM_ICEBERG_ORDERS",
@@ -226,6 +276,7 @@
 ### MAX_POSITION 过滤器
 
 这个过滤器定义账户允许的基于`base asset`的最大仓位。一个用户的仓位可以定义为如下资产的总和:
+
 1. `base asset`的可用余额
 1. `base asset`的锁定余额
 1. 所有处于open的买单的数量总和
@@ -235,6 +286,7 @@
 如果一个订单的数量(`quantity`) 可能导致持有仓位溢出, 会触发过滤器 `MAX_POSITION`.
 
 **/exchangeInfo 响应中的格式:**
+
 ```javascript
 {
     "filterType": "MAX_POSITION",
@@ -244,22 +296,22 @@
 
 ### TRAILING_DELTA 过滤器
 
-
 此过滤器定义了参数[`trailingDelta`](faqs/trailing-stop-faq_CN.md)的最大和最小值.
 
 下追踪止损订单, 需要满足条件:
 
 对于 `STOP_LOSS BUY`, `STOP_LOSS_LIMIT_BUY`, `TAKE_PROFIT SELL` 和 `TAKE_PROFIT_LIMIT SELL` 订单:
 
-* `trailingDelta` >= `minTrailingAboveDelta`
-* `trailingDelta` <= `maxTrailingAboveDelta`
+- `trailingDelta` >= `minTrailingAboveDelta`
+- `trailingDelta` <= `maxTrailingAboveDelta`
 
 对于 `STOP_LOSS SELL`, `STOP_LOSS_LIMIT SELL`, `TAKE_PROFIT BUY`, 和 `TAKE_PROFIT_LIMIT BUY` 订单:
 
-* `trailingDelta` >= `minTrailingBelowDelta`
-* `trailingDelta` <= `maxTrailingBelowDelta`
+- `trailingDelta` >= `minTrailingBelowDelta`
+- `trailingDelta` <= `maxTrailingBelowDelta`
 
- **/exchangeInfo format:**
+  **/exchangeInfo format:**
+
 ```javascript
 {
     "filterType": "TRAILING_DELTA",
@@ -271,6 +323,7 @@
 ```
 
 <a id="max_num_order_amends"></a>
+
 ### MAX_NUM_ORDER_AMENDS 过滤器
 
 此过滤器定义了指定交易对的订单修改次数上限。
@@ -299,13 +352,16 @@
 }
 ```
 
+<a id="exchange-filters"></a>
 
 ## 交易所级别过滤器
+
 ### EXCHANGE_MAX_NUM_ORDERS 最多订单数
-`EXCHANGE_MAX_NUM_ORDERS`过滤器定义了允许在交易对上开设账户的最大订单数。
-请注意，此过滤器同时计算"algo"订单和常规订单。
+
+`EXCHANGE_MAX_NUM_ORDERS`过滤器定义了允许在交易对上开设账户的最大订单数。请注意，此过滤器同时计算"algo"订单和常规订单。
 
 **/exchangeInfo 响应中的格式:**
+
 ```javascript
 {
     "filterType": "EXCHANGE_MAX_NUM_ORDERS",
@@ -314,10 +370,12 @@
 ```
 
 ### EXCHANGE_MAX_NUM_ALGO_ORDERS 最多条件单数
-`EXCHANGE_MAX_NUM_ALGO_ORDERS` 过滤器定义了允许在交易上开设账户的"algo"订单的最大数量。
-"Algo"订单是`STOP_LOSS`，`STOP_LOSS_LIMIT`，`TAKE_PROFIT`和`TAKE_PROFIT_LIMIT`订单。
+
+`EXCHANGE_MAX_NUM_ALGO_ORDERS`
+过滤器定义了允许在交易上开设账户的"algo"订单的最大数量。"Algo"订单是`STOP_LOSS`，`STOP_LOSS_LIMIT`，`TAKE_PROFIT`和`TAKE_PROFIT_LIMIT`订单。
 
 **/exchangeInfo 响应中的格式:**
+
 ```javascript
 {
     "filterType": "EXCHANGE_MAX_NUM_ALGO_ORDERS",
@@ -328,7 +386,6 @@
 ### EXCHANGE_MAX_NUM_ICEBERG_ORDERS 冰山订单的最大订单数
 
 此过滤器定义了允许账号持有的最大冰山订单数量.
-
 
 **/exchangeInfo 响应中的格式:**
 
@@ -352,17 +409,19 @@
 }
 ```
 
+<a id="asset-filters"></a>
 
 ## 资产过滤器
+
 ### MAX_ASSET
 
 `MAX_ASSET` 过滤器定义了一个账户在单笔订单中可交易的资产最大数量。
 
-* 当资产是交易对的基础资产时，该限制适用于订单的数量。
-* 当资产是交易对的报价资产时，该限制适用于订单的名义价值。
-* 例如，针对 USDC 的 MAX_ASSET 过滤器适用于所有以 USDC 作为基础资产或报价资产的交易对，例如：
-  * USDCBNB
-  * BNBUSDC
+- 当资产是交易对的基础资产时，该限制适用于订单的数量。
+- 当资产是交易对的报价资产时，该限制适用于订单的名义价值。
+- 例如，针对 USDC 的 MAX_ASSET 过滤器适用于所有以 USDC 作为基础资产或报价资产的交易对，例如：
+  - USDCBNB
+  - BNBUSDC
 
 **/myFilters format:**
 

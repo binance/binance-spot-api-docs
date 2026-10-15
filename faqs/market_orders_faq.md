@@ -2,18 +2,24 @@
 
 **Disclaimer:**
 
-* The commissions and prices used here are fictional and do not reflect the actual setup on the live exchange.
-* The explanation pertains to the behavior on the Spot Exchange.
+- The commissions and prices used here are fictional and do not reflect the actual setup on the live
+  exchange.
+- The explanation pertains to the behavior on the Spot Exchange.
 
-`MARKET` orders allow users to buy or sell an asset at the best available prices and liquidity until the order is fully filled or the order book's liquidity is exhausted.
+`MARKET` orders allow users to buy or sell an asset at the best available prices and liquidity until
+the order is fully filled or the order book's liquidity is exhausted.
 
-If you do not have sufficient balance for the order to be completely filled, the order will be rejected.
+If you do not have sufficient balance for the order to be completely filled, the order will be
+rejected.
 
-If the exchange does not have enough liquidity to fill the order, your `MARKET` order will be partially filled to the extent of available liquidity, and the remaining quantity will expire.
+If the exchange does not have enough liquidity to fill the order, your `MARKET` order will be
+partially filled to the extent of available liquidity, and the remaining quantity will expire.
 
-If the order expires due to insufficient liquidity, the `status` field of the API response will be `EXPIRED`.
+If the order expires due to insufficient liquidity, the `status` field of the API response will be
+`EXPIRED`.
 
-Additionally, if you monitor the User Data Stream, in the payload `ExecutionReport`, you will see that both the Execution Type (`x`) and Order Status (`X`) are marked as `EXPIRED`.
+Additionally, if you monitor the User Data Stream, in the payload `ExecutionReport`, you will see
+that both the Execution Type (`x`) and Order Status (`X`) are marked as `EXPIRED`.
 
 Please refer to the sample payload below.
 
@@ -21,37 +27,37 @@ Please refer to the sample payload below.
 
 ```json
 {
-    "symbol": "LTCBNB",
-    "orderId": 32,
-    "orderListId": -1,
-    "clientOrderId": "8LGC97RRgNPVQk979VIhjt",
-    "transactTime": 1719467634105,
-    "price": "0.00000000",
-    "origQty": "6.00000000",
-    "executedQty": "4.00000000",
-    "cummulativeQuoteQty": "4.00000000",
-    "status": "EXPIRED",
-    "timeInForce": "GTC",
-    "type": "MARKET",
-    "side": "BUY",
-    "workingTime": 1719467634105,
-    "fills": [
-        {
-            "price": "1.00000000",
-            "qty": "2.00000000",
-            "commission": "0.00100000",
-            "commissionAsset": "BNB",
-            "tradeId": 7
-        },
-        {
-            "price": "1.00000000",
-            "qty": "2.00000000",
-            "commission": "0.00100000",
-            "commissionAsset": "BNB",
-            "tradeId": 8
-        }
-    ],
-    "selfTradePreventionMode": "NONE"
+  "symbol": "LTCBNB",
+  "orderId": 32,
+  "orderListId": -1,
+  "clientOrderId": "8LGC97RRgNPVQk979VIhjt",
+  "transactTime": 1719467634105,
+  "price": "0.00000000",
+  "origQty": "6.00000000",
+  "executedQty": "4.00000000",
+  "cummulativeQuoteQty": "4.00000000",
+  "status": "EXPIRED",
+  "timeInForce": "GTC",
+  "type": "MARKET",
+  "side": "BUY",
+  "workingTime": 1719467634105,
+  "fills": [
+    {
+      "price": "1.00000000",
+      "qty": "2.00000000",
+      "commission": "0.00100000",
+      "commissionAsset": "BNB",
+      "tradeId": 7
+    },
+    {
+      "price": "1.00000000",
+      "qty": "2.00000000",
+      "commission": "0.00100000",
+      "commissionAsset": "BNB",
+      "tradeId": 8
+    }
+  ],
+  "selfTradePreventionMode": "NONE"
 }
 ```
 

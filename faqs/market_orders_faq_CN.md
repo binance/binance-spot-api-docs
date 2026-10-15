@@ -1,19 +1,23 @@
+<a id="market-orders"></a>
+
 # 市价单
 
 **免责声明:**
 
-* 此处使用的佣金和价格是虚构的，并不反映实际交易所的设置。
-* 解释是针对现货交易所的行为。
+- 此处使用的佣金和价格是虚构的，并不反映实际交易所的设置。
+- 解释是针对现货交易所的行为。
 
 `MARKET` 订单允许用户以最佳可用价格和流动性买入或卖出资产，直到订单全部成交或订单簿的流动性耗尽。
 
 如果您的余额不足以完全填充订单，订单将被拒绝。
 
-如果交易所没有足够的流动性来填充订单，您的 `MARKET` 订单将根据当前可用流动性尽可能成交，未成交的剩余部分将自动失效。
+如果交易所没有足够的流动性来填充订单，您的 `MARKET`
+订单将根据当前可用流动性尽可能成交，未成交的剩余部分将自动失效。
 
 如果由于流动性不足订单过期，API 响应的 `status` 字段将显示为 `EXPIRED`。
 
-此外，如果您监听用户数据流，在 payload `ExecutionReport` 中，您会看到执行类型 (`x`) 和订单状态 (`X`) 都标记为 `EXPIRED`。
+此外，如果您监听用户数据流，在 payload `ExecutionReport`
+中，您会看到执行类型 (`x`) 和订单状态 (`X`) 都标记为 `EXPIRED`。
 
 请参阅下面的示例 payload。
 
@@ -21,37 +25,37 @@
 
 ```json
 {
-    "symbol": "LTCBNB",
-    "orderId": 32,
-    "orderListId": -1,
-    "clientOrderId": "8LGC97RRgNPVQk979VIhjt",
-    "transactTime": 1719467634105,
-    "price": "0.00000000",
-    "origQty": "6.00000000",
-    "executedQty": "4.00000000",
-    "cummulativeQuoteQty": "4.00000000",
-    "status": "EXPIRED",
-    "timeInForce": "GTC",
-    "type": "MARKET",
-    "side": "BUY",
-    "workingTime": 1719467634105,
-    "fills": [
-        {
-            "price": "1.00000000",
-            "qty": "2.00000000",
-            "commission": "0.00100000",
-            "commissionAsset": "BNB",
-            "tradeId": 7
-        },
-        {
-            "price": "1.00000000",
-            "qty": "2.00000000",
-            "commission": "0.00100000",
-            "commissionAsset": "BNB",
-            "tradeId": 8
-        }
-    ],
-    "selfTradePreventionMode": "NONE"
+  "symbol": "LTCBNB",
+  "orderId": 32,
+  "orderListId": -1,
+  "clientOrderId": "8LGC97RRgNPVQk979VIhjt",
+  "transactTime": 1719467634105,
+  "price": "0.00000000",
+  "origQty": "6.00000000",
+  "executedQty": "4.00000000",
+  "cummulativeQuoteQty": "4.00000000",
+  "status": "EXPIRED",
+  "timeInForce": "GTC",
+  "type": "MARKET",
+  "side": "BUY",
+  "workingTime": 1719467634105,
+  "fills": [
+    {
+      "price": "1.00000000",
+      "qty": "2.00000000",
+      "commission": "0.00100000",
+      "commissionAsset": "BNB",
+      "tradeId": 7
+    },
+    {
+      "price": "1.00000000",
+      "qty": "2.00000000",
+      "commission": "0.00100000",
+      "commissionAsset": "BNB",
+      "tradeId": 8
+    }
+  ],
+  "selfTradePreventionMode": "NONE"
 }
 ```
 

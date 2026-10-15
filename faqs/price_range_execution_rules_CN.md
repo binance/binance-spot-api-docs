@@ -1,38 +1,50 @@
+<a id="price-range-execution-rule"></a>
+
 # 价格区间执行规则
 
 **免责声明：**
 
-* 此处使用的交易对和数值均为虚构，不代表实际交易所的配置。
+- 此处使用的交易对和数值均为虚构，不代表实际交易所的配置。
+
+<a id="what-are-execution-rules"></a>
 
 ## 什么是执行规则？
 
 执行规则是在订单执行时强制执行的交易规则。目前唯一可用的执行规则是价格区间规则。
 
+<a id="what-does-the-price-range-execution-rule-do"></a>
+
 ## 价格区间执行规则的作用是什么？
 
 该规则确保交易只能在参考价格附近的价格区间内（包括区间边界）执行。
+
+<a id="how-can-i-query-the-execution-price-range-allowed-for-a-symbol"></a>
 
 ## 如何查询某个交易对允许的执行价格区间？
 
 请参考以下接口/方法：
 
-| API | 请求 |
-| ---- | ---- |
-| REST API | `GET /api/v3/executionRules` |
-| WebSocket API | `executionRules` |
+| API           | 请求                         |
+| ------------- | ---------------------------- |
+| REST API      | `GET /api/v3/executionRules` |
+| WebSocket API | `executionRules`             |
+
+<a id="how-can-i-query-the-reference-price"></a>
 
 ## 如何查询参考价格？
 
 请参考以下接口/方法：
 
-| API | 请求 |
-| ---- | ---- |
-| REST API | `GET /api/v3/referencePrice` |
-| WebSocket API | `referencePrice` |
-| WebSocket 数据流 | `<symbol>@referencePrice` |
+| API              | 请求                         |
+| ---------------- | ---------------------------- |
+| REST API         | `GET /api/v3/referencePrice` |
+| WebSocket API    | `referencePrice`             |
+| WebSocket 数据流 | `<symbol>@referencePrice`    |
 
 请注意，**参考价格是持续变化的**，建议通过 WebSocket 数据流实时监控参考价格。
+
 <a id="how-does-the-price-range-execution-rule-work"></a>
+
 ## 价格区间执行规则如何工作？
 
 举例说明，假设该交易对的执行规则如下：
@@ -73,105 +85,148 @@
 
 <a id="price_range_enforcement"></a>
 
+<a id="what-happens-if-a-symbol-has-no-execution-rule-of-type-price_range-and-no-reference-price"></a>
+
 ## 如果某个交易对没有类型为 `PRICE_RANGE` 的执行规则，也没有参考价格，会发生什么？
 
 该交易对不会强制执行价格区间执行规则。
+
+<a id="what-happens-if-a-symbol-has-no-execution-rule-of-type-price_range-but-does-have-a-reference-price"></a>
 
 ## 如果某个交易对没有类型为 `PRICE_RANGE` 的执行规则，但有参考价格，会发生什么？
 
 该交易对不会强制执行价格区间执行规则。
 
+<a id="what-happens-if-a-symbol-has-an-execution-rule-of-type-price_range-but-does-not-have-a-reference-price"></a>
+
 ## 如果某个交易对有类型为 `PRICE_RANGE` 的执行规则，但没有参考价格，会发生什么？
 
 该交易对不会强制执行价格区间执行规则。
 
+<a id="what-happens-if-a-symbol-has-an-execution-rule-of-type-price_range-that-does-not-have-all-four-multipliers"></a>
+
 ## 如果某个交易对有类型为 `PRICE_RANGE` 的执行规则，但没有全部四个乘数，会发生什么？
 
-当某个乘数未设置时，该交易对在对应的订单方向和价格方向上不会强制执行价格区间执行规则。
-例如，如果执行规则中没有 `bidMultiplierDown`，那么一笔 `BUY` 订单可以在低于或等于参考价格两倍的任意价格成交。
+当某个乘数未设置时，该交易对在对应的订单方向和价格方向上不会强制执行价格区间执行规则。例如，如果执行规则中没有
+`bidMultiplierDown`，那么一笔 `BUY` 订单可以在低于或等于参考价格两倍的任意价格成交。
+
+<a id="what-happens-if-the-symbols-reference-price-is-null"></a>
 
 ## 如果该交易对的参考价格为 `null`，会发生什么？
 
 该交易对不会强制执行价格区间执行规则。
 
 <a id="execution_price_limits"></a>
+
+<a id="when-are-the-execution-price-limits-for-an-order-set"></a>
+
 ## 订单的执行价格限制何时设定？
 
 当订单进入吃单阶段时，会重新计算参考价格，以设定该订单整个吃单阶段的执行价格限制。请注意，单个吃单订单在其吃单阶段可能会与多个挂单订单匹配。
 
+<a id="what-happens-if-an-order-attempts-to-execute-at-a-price-outside-of-the-allowed-price-range"></a>
+
 ## 如果订单尝试以超出允许价格区间的价格执行，会发生什么
 
-如果吃单尝试以超出允许价格区间的价格执行，该订单将会过期（状态为 `EXPIRED`），过期原因是 `EXECUTION_RULE_PRICE_RANGE_EXCEEDED`。
+如果吃单尝试以超出允许价格区间的价格执行，该订单将会过期（状态为 `EXPIRED`），过期原因是
+`EXECUTION_RULE_PRICE_RANGE_EXCEEDED`。
 
-| 服务 | 参考字段 |
-| ---- | ---- |
-| 非FIX接口 | `expiryReason` |
-| FIX接口| `ExpiryReason <25056>` |
-| 用户数据流 | `"eR"` |
+| 服务       | 参考字段               |
+| ---------- | ---------------------- |
+| 非FIX接口  | `expiryReason`         |
+| FIX接口    | `ExpiryReason <25056>` |
+| 用户数据流 | `"eR"`                 |
+
+<a id="how-is-the-reference-price-calculated"></a>
 
 ## 参考价格是如何计算的？
 
 如果参考价格由撮合引擎计算，则查询参考价格计算方式时返回 `"calculationType": "ARITHMETIC_MEAN"`。
 
-如果参考价格由撮合引擎外部计算，则查询参考价格计算方式时返回 `"calculationType": "EXTERNAL"`。详情见下文。
+如果参考价格由撮合引擎外部计算，则查询参考价格计算方式时返回
+`"calculationType": "EXTERNAL"`。详情见下文。
 
 <a id="matching-engine-calculation"></a>
+
+<a id="how-does-the-matching-engine-calculate-the-reference-price"></a>
+
 ## 撮合引擎如何计算参考价格？
 
 撮合引擎将参考价格计算为一段时间窗口内交易价格的简单移动平均。计算配置包括毫秒级的桶宽（`bucketWidthMs`）和桶数量（`bucketCount`）。桶宽乘以桶数量定义了时间窗口大小。
 
 当发生交易时，撮合引擎会记录该交易价格并将其添加到当前的时间桶中。每个时间桶包含：
 
-* 开始时间（open time），该时间是引擎时间与桶宽度取模
-* 交易数量（trade count），以固定小数点表示，精确到小数点后四位
-* 该时间桶内所有交易价格的总和，以固定小数点表示，精度比报价资产的精度多四位小数
+- 开始时间（open time），该时间是引擎时间与桶宽度取模
+- 交易数量（trade count），以固定小数点表示，精确到小数点后四位
+- 该时间桶内所有交易价格的总和，以固定小数点表示，精度比报价资产的精度多四位小数
 
 撮合引擎通过将总和除以交易数量计算该桶的平均价格。某个开始时间的第一个交易创建该桶，随着交易发生，撮合引擎逐渐累积桶。当桶的结束时间超出时间窗口时，该桶会被丢弃。这意味着：
 
-* 当前时间点最旧的桶的开始时间可能在时间窗口之外，但结束时间在时间窗口内。
-* 引擎维护的最大桶数实际上比配置的 `bucketCount` 多1。
+- 当前时间点最旧的桶的开始时间可能在时间窗口之外，但结束时间在时间窗口内。
+- 引擎维护的最大桶数实际上比配置的 `bucketCount` 多1。
 
 以下说明中，将时间窗口的最旧时间称为“截止时间”。
 
 当最旧的桶跨越截止时间时，其内容会被按比例调整：
 
-* 桶外过期部分的比例为：（截止时间 - 桶的开始时间）除以桶宽，称为“过期比例”。
-* 桶的交易数量按过期比例减少。
-* 桶的总和按过期比例减少。
-* 桶的开始时间设置为截止时间。
+- 桶外过期部分的比例为：（截止时间 - 桶的开始时间）除以桶宽，称为“过期比例”。
+- 桶的交易数量按过期比例减少。
+- 桶的总和按过期比例减少。
+- 桶的开始时间设置为截止时间。
 
 参考价格为所有桶的总和除以所有桶的交易数量，除法为截断式整数除法。
 
+<a id="how-are-reference-prices-calculated-outside-the-matching-engine"></a>
+
 ## 外部计算参考价格的方式？
 
-如果参考价格由撮合引擎外部计算，则查询参考价格计算方式时返回 `"externalCalculationId":` 后跟一个整数。每个数字代表不同的计算方法。
+如果参考价格由撮合引擎外部计算，则查询参考价格计算方式时返回 `"externalCalculationId":`
+后跟一个整数。每个数字代表不同的计算方法。
 
 <a id="externalCalculationId0"></a>
+
+<a id="external-reference-price-calculation-method-0"></a>
+
 ## 外部参考价格计算方法 0
 
 参考价格由人工手动设置。该计算方法仅在不适合使用算法计算参考价格的情况下使用。
 
 <a id="externalCalculationId1"></a>
+
+<a id="external-reference-price-calculation-method-1"></a>
+
 ## 外部参考价格计算方法 1
 
 参考价格为最多 4 个外部数据提供方的交易价格的平均值。
 
 <a id="externalCalculationId2"></a>
+
+<a id="external-reference-price-calculation-method-2"></a>
+
 ## 外部参考价格计算方法 2
 
 参考价格为对应的 USDⓈ-M 币安合约的指数价格。
 
 <a id="externalCalculationId3"></a>
+
+<a id="external-reference-price-calculation-method-3"></a>
+
 ## 外部参考价格计算方法 3
 
 参考价格为币安现货买卖中间价的 5 分钟简单移动平均值（SMA）。
 
 <a id="externalCalculationId4"></a>
+
+<a id="external-reference-price-calculation-method-4"></a>
+
 ## 外部参考价格计算方法 4
 
 参考价格设置为一个固定值。
 
 <a id="externalCalculationId5"></a>
+
+<a id="external-reference-price-calculation-method-5"></a>
+
 ## 外部参考价格计算方法 5
 
 参考价格为一系列币安现货买卖中间价的 5 分钟简单移动平均值（SMA）的乘积。

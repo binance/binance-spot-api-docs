@@ -2,41 +2,50 @@
 
 **免责声明:**
 
-* 此处使用的交易对和价格是虚构的，并不反映实际交易所的设置。
-* 为了简化过程，本文档中的示例不包括佣金。
+- 此处使用的交易对和价格是虚构的，并不反映实际交易所的设置。
+- 为了简化过程，本文档中的示例不包括佣金。
 
-## 什么是  Order Amend Keep Priority？
+<a id="what-is-order-amend-keep-priority"></a>
 
-保留优先级的修改订单请求（Order Amend Keep Priority）用于修改（修正）现有订单并 **不失去在订单簿上的优先级**。
+## 什么是 Order Amend Keep Priority？
+
+保留优先级的修改订单请求（Order Amend Keep Priority）用于修改（修正）现有订单并
+**不失去在订单簿上的优先级**。
 
 允许进行以下订单修改：
 
-* 减少现有订单的原始数量。
+- 减少现有订单的原始数量。
+
+<a id="how-can-i-amend-the-quantity-of-my-order"></a>
 
 ## 我该如何修改我的订单数量？
 
 使用以下请求：
 
-| API | 请求 |
-| :---- | :---- |
-| REST API | `PUT /api/v3/order/amend/keepPriority` |
-| WebSocket API | `order.amend.keepPriority` |
-| FIX API | OrderAmendKeepPriorityRequest `<XAK>` |
+| API           | 请求                                   |
+| :------------ | :------------------------------------- |
+| REST API      | `PUT /api/v3/order/amend/keepPriority` |
+| WebSocket API | `order.amend.keepPriority`             |
+| FIX API       | OrderAmendKeepPriorityRequest `<XAK>`  |
+
+<a id="what-is-the-difference-between-cancel-an-existing-order-and-send-a-new-order-cancel-replace-and-order-amend-keep-priority"></a>
 
 ## “撤消挂单再下单”（cancel-replace）和”保留优先级的修改订单请求“之间的区别？
 
-**撤消挂单再下单请求** 撤消挂单并重新下单。<br> 在时间上的优先级会被丢失。 新订单在相同价格的现有订单之后执行。
+**撤消挂单再下单请求** 撤消挂单并重新下单。<br>
+在时间上的优先级会被丢失。 新订单在相同价格的现有订单之后执行。
 
-**留优先级的修改订单请求** 就地修改现有订单。 <br>修改后的订单在相同价格的现有订单中保持其时间优先级。
+**留优先级的修改订单请求** 就地修改现有订单。
+<br>修改后的订单在相同价格的现有订单中保持其时间优先级。
 
 比如，拿下面的订单簿为例：
 
-| 用户| 订单 ID | 订单方向 | 订单价格 | 数量 |
-| :---- | ----: | :---- | ----: | ----: |
-| 用户 A | 10 | BUY | 87,000 | 1.00 |
-| ⭐️ 你 | 15 | BUY | 87,000 | 5.50 |
-| 用户 B | 20 | BUY | 87,000 | 4.00 |
-| 用户 C | 21 | BUY | 86,999 | 2.00 |
+| 用户   | 订单 ID | 订单方向 | 订单价格 | 数量 |
+| :----- | ------: | :------- | -------: | ---: |
+| 用户 A |      10 | BUY      |   87,000 | 1.00 |
+| ⭐️ 你  |      15 | BUY      |   87,000 | 5.50 |
+| 用户 B |      20 | BUY      |   87,000 | 4.00 |
+| 用户 C |      21 | BUY      |   86,999 | 2.00 |
 
 您的订单 15 是根据价格和时间排在队列中的第二个订单。
 
@@ -44,30 +53,34 @@
 
 如果您使用 **cancel-replace** 取消 `orderId=15` 并使用 `qty=5.00` 来下新订单， 订单簿将如下所示：
 
-| 用户| 订单 ID | 订单方向 | 订单价格 | 数量 |
-| :---- | ----: | :---- | ----: | ----: |
-| 用户 A | 10 | BUY | 87,000 | 1.00 |
-| ~~⭐️ 你~~ | ~~11~~ | ~~BUY~~ | ~~87,000~~ | ~~5.50~~ |
-| 用户 B | 20 | BUY | 87,000 | 4.00 |
-| ⭐️ 你 | (new) 22 | BUY | 87,000 | 5.00 |
-| 用户 C | 21 | BUY | 86,999 | 2.00 |
+| 用户      |  订单 ID | 订单方向 |   订单价格 |     数量 |
+| :-------- | -------: | :------- | ---------: | -------: |
+| 用户 A    |       10 | BUY      |     87,000 |     1.00 |
+| ~~⭐️ 你~~ |   ~~11~~ | ~~BUY~~  | ~~87,000~~ | ~~5.50~~ |
+| 用户 B    |       20 | BUY      |     87,000 |     4.00 |
+| ⭐️ 你     | (new) 22 | BUY      |     87,000 |     5.00 |
+| 用户 C    |       21 | BUY      |     86,999 |     2.00 |
 
 请注意：新订单将获得新的订单 ID，并且您会失去时间优先级：订单 22 将在订单 20 之后交易。
 
 如果您改用 **保留优先级的修改订单请求** 将 `orderId=15` 的数量减少到 `qty=5.00`，订单簿将如下所示：
 
-| 用户| 订单 ID | 订单方向 | 订单价格 | 数量 |
-| :---- | ----: | :---- | ----: | ----: |
-| 用户 A | 10 | BUY | 87,000 | 1.00 |
-| ⭐️ 你 | 15 | BUY | 87,000 | (amended) **5.00** |
-| 用户 B | 20 | BUY | 87,000 | 4.00 |
-| 用户 C | 21 | BUY | 86,999 | 2.00 |
+| 用户   | 订单 ID | 订单方向 | 订单价格 |               数量 |
+| :----- | ------: | :------- | -------: | -----------------: |
+| 用户 A |      10 | BUY      |   87,000 |               1.00 |
+| ⭐️ 你  |      15 | BUY      |   87,000 | (amended) **5.00** |
+| 用户 B |      20 | BUY      |   87,000 |               4.00 |
+| 用户 C |      21 | BUY      |   86,999 |               2.00 |
 
 请注意：订单 ID 保持不变，订单在队列中保持其优先级。只有订单数量会发生变化。
+
+<a id="does-order-amend-keep-priority-affect-unfilled-order-count-rate-limits"></a>
 
 ## 保留优先级的修改订单请求是否会影响未成交订单数量（速率限制)?
 
 目前，保留优先级的修改订单请求对未成交订单计数为 0。
+
+<a id="how-do-i-know-if-my-order-has-been-amended"></a>
 
 ## 我如何才能知道我的订单是否已被修改？
 
@@ -75,30 +88,40 @@
 
 在用户数据流上，您将收到执行类型为 `"x": "REPLACED"` 的 `"executionReport"` 事件。
 
-如果修改后的订单隶属于订单列表，并且 client order ID 已被更改，您还将收到一个列表状态类型为 `"l": "UPDATED"` 的 "listStatus" 事件。
+如果修改后的订单隶属于订单列表，并且 client order ID 已被更改，您还将收到一个列表状态类型为
+`"l": "UPDATED"` 的 "listStatus" 事件。
 
 您也可以使用以下请求来查询订单修改历史：
 
-| API | 请求 |
-| :---- | :---- |
-| REST API | `GET /api/v3/order/amendments` |
-| WebSocket API | `order.amendments` |
+| API           | 请求                           |
+| :------------ | :----------------------------- |
+| REST API      | `GET /api/v3/order/amendments` |
+| WebSocket API | `order.amendments`             |
+
+<a id="what-happens-if-my-amend-request-does-not-succeed"></a>
 
 ## 如果我的修改请求不成功，该怎么办？
 
 如果请求由于任何原因失败（比如，因为过滤器，权限，帐户限制等而失败），那么订单修改请求会被拒绝，而订单将保持不变。
 
+<a id="is-it-possible-to-reuse-the-current-clientorderid-for-my-amended-order"></a>
+
 ## 我有可能在我的修改订单请求中重用现在的 clientOrderId 么？
 
 没问题。
 
-默认状态下，被修改的订单会得到一个随即生成的新 client order ID。但是，你可以通过现有的 current client order ID 赋值给 `newClientOrderId` 参数的方式来重用数据。
+默认状态下，被修改的订单会得到一个随即生成的新 client order ID。但是，你可以通过现有的 current
+client order ID 赋值给 `newClientOrderId` 参数的方式来重用数据。
+
+<a id="can-iceberg-orders-be-amended"></a>
 
 ## 我可以对冰山订单进行修改吗？
 
 可以的。
 
 请注意：只有当 `newQty` 低于未修改前的可见数量时，冰山订单的可见数量才能被改变。
+
+<a id="can-order-lists-be-amended"></a>
 
 ## 我可以对订单列表进行修改吗？
 
@@ -108,7 +131,9 @@
 
 对于 OTO 订单，您可以对生效订单和待处理订单进行单独修改。
 
+<a id="which-symbols-allow-order-amend-keep-priority"></a>
+
 ## 哪些交易对允许保留优先级的修改订单请求？
 
-相关信息可在 Exchange Information 中找到。
-允许保留优先级的修改订单请求的交易对将会把 `amendAllowed` 设置为 `true`。
+相关信息可在 Exchange Information 中找到。允许保留优先级的修改订单请求的交易对将会把 `amendAllowed`
+设置为 `true`。

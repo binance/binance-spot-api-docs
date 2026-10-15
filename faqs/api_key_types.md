@@ -10,21 +10,25 @@ We support several types of API keys:
 
 This document provides an overview of supported API keys.
 
-**We recommend to use Ed25519 API keys** as it should provide the best performance and security out of all supported key types.
+**We recommend to use Ed25519 API keys** as it should provide the best performance and security out
+of all supported key types.
 
-Read [REST API](../rest-api.md#signed-endpoint-security) or [WebSocket API](../web-socket-api.md#request-security) documentation to learn how to use different API keys.
+Read [REST API](../rest-api.md#signed-endpoint-security) or
+[WebSocket API](../web-socket-api.md#request-security) documentation to learn how to use different
+API keys.
 
 ### Ed25519
 
-Ed25519 keys use asymmetric cryptography.
-You share your public key with Binance and use the private key to sign API requests.
-Binance API uses the public key to verify your signature.
+Ed25519 keys use asymmetric cryptography. You share your public key with Binance and use the private
+key to sign API requests. Binance API uses the public key to verify your signature.
 
-Ed25519 keys provide security comparable to 3072-bit RSA keys, but with considerably smaller key, smaller signature size, and faster signature computation.
+Ed25519 keys provide security comparable to 3072-bit RSA keys, but with considerably smaller key,
+smaller signature size, and faster signature computation.
 
 **We recommend to use Ed25519 API keys.**
 
 Sample Ed25519 key:
+
 ```
 -----BEGIN PUBLIC KEY-----
 MCowBQYDK2VwAyEAgmDRTtj2FA+wzJUIlAL9ly1eovjLBu7uXUFR+jFULmg=
@@ -39,14 +43,15 @@ E7luAubOlcRxL10iQszvNCff+xJjwJrfajEHj1hOncmsgaSB4NE+A/BbQhCWwit/usNJ32/LeTwDYPoA
 
 ### HMAC
 
-HMAC keys use symmetric cryptography.
-Binance generates and shares with you a secret key which you use to sign API requests.
-Binance API uses the same shared secret key to verify your signature.
+HMAC keys use symmetric cryptography. Binance generates and shares with you a secret key which you
+use to sign API requests. Binance API uses the same shared secret key to verify your signature.
 
-HMAC signatures are quick to compute and compact. <br>
-However, the shared secret must be shared between multiple parties which is less secure than asymmetric cryptography used by Ed25519 or RSA keys.
+HMAC signatures are quick to compute and compact. <br> However, the shared secret must be shared
+between multiple parties which is less secure than asymmetric cryptography used by Ed25519 or RSA
+keys.
 
-**HMAC keys are deprecated.** We recommend to migrate to asymmetric API keys, such as Ed25519 or RSA.
+**HMAC keys are deprecated.** We recommend to migrate to asymmetric API keys, such as Ed25519 or
+RSA.
 
 Sample HMAC key:
 
@@ -62,14 +67,13 @@ Sample HMAC signature:
 
 ### RSA
 
-RSA keys use asymmetric cryptography. <br>
-You share your public key with Binance and use the private key to sign API requests. <br>
-Binance API uses the public key to verify your signature.
+RSA keys use asymmetric cryptography. <br> You share your public key with Binance and use the
+private key to sign API requests. <br> Binance API uses the public key to verify your signature.
 
 We support 2048 and 4096 bit RSA keys.
 
-While RSA keys are more secure than HMAC keys,
-RSA signatures are much larger than HMAC and Ed25519 which can lead to a degradation to performance.
+While RSA keys are more secure than HMAC keys, RSA signatures are much larger than HMAC and Ed25519
+which can lead to a degradation to performance.
 
 Sample RSA key (2048 bits):
 

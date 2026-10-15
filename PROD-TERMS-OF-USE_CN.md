@@ -1,3 +1,5 @@
+<a id="spot-exchange-terms-of-use"></a>
+
 # SPOT 交易所使用条款
 
 使用币安产品和服务须遵守 [产品使用条款](https://www.binance.com/zh-CN/terms)。<br>
