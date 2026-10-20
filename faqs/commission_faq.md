@@ -183,7 +183,7 @@ If not paying in BNB, the total commission are summed up and deducted from your 
 Since `enabledforAccount` and `enabledForSymbol` under `discount` is set to `true`, this means the
 commission will be paid in BNB assuming you have a sufficient balance.
 
-If paying with BNB, then the standard commission will be reduced based on the `discount`.
+If paying with BNB, then the standard commission will be multiplied by the `discount`.
 
 First the standard commission and tax commission will be converted into BNB based on the exchange
 rate. For this example, assume that 1 BNB = 260 USDT.

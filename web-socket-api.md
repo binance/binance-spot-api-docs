@@ -7858,7 +7858,7 @@ Name | Type | Mandatory | Description
             "enabledForAccount": true,
             "enabledForSymbol": true,
             "discountAsset": "BNB",
-            "discount": "0.75000000" // Standard commission is reduced by this rate when paying commission in BNB.
+            "discount": "0.75000000" // Multiplier applied to the standard commission when paying commission in BNB (e.g. 0.75 = 75% of the standard commission is charged).
         }
     },
     "rateLimits": [
