@@ -28,6 +28,9 @@
 - All timestamps in JSON payloads are in **milliseconds by default**.
 - Events may contain non-ASCII characters encoded in UTF-8 if you own or trade any assets or symbols
   whose names contain non-ASCII characters.
+- You can also filter specific events. Please see
+  [User Data Stream Subscription Filters](web-socket-api.md#user-data-stream-subscription-filters)
+  for more information
 
 ## User Data Stream Events
 
@@ -210,6 +213,16 @@ For additional information on these parameters, please refer to the
     <td><code>pY</code></td>
     <td>Prevented Execution Quote Qty</td>
     <td><code>"pY":"0.21234562"</code></td>
+  </tr>
+  <tr>
+    <td><code>Qq</code></td>
+    <td>Quote Notional Limit</td>
+    <td>Appears only if the order was placed with a quote notional limit.</td>
+    <td><code>"Qq":"90.00000000"</code></td>
+    <td><code>eV</code></td>
+    <td>Effective Self Trade Prevention Mode</td>
+    <td>Appears on prevented-match reports when the applied STP mode differs from the order's <code>selfTradePreventionMode</code>. Values: <code>EXPIRE_MAKER</code>, <code>EXPIRE_BOTH</code>, <code>DECREMENT</code>.</td>
+    <td><code>"eV": "DECREMENT"</code></td>
   </tr>
   <tr>
     <td><code>W</code></td>

@@ -1,9 +1,151 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-10-07**
+**Last Updated: 2026-10-28**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-10-28
+
+**Notice: The changes in this section will be gradually rolled out starting from 2026-10-29 at**
+**00:00 UTC, and will take approximately 2 days to complete.**
+
+#### New Features
+
+- `userDataStream.subscribe` and `userDataStream.subscribe.signature` now accept an optional
+  `filter` parameter controlling which events are delivered. Supports filtering by event type (`e`),
+  symbol (`s`), asset (`a`), and execution type (`x`).
+  - WebSocket API: See
+    [User Data Stream Subscription Filters](web-socket-api.md#user-data-stream-subscription-filters).
+  - Unknown symbols and assets in `filter` are rejected with
+    [`-1121`](errors.md#-1121-bad_symbol) and
+    [`-1108`](errors.md#-1108-param_overflow) respectively. `-1108` has a new
+    message: "Invalid asset."
+
+#### General Changes
+
+- The `serverShutdown` event payload now includes a `T` field indicating when the WebSocket session
+  will be shut down.
+  - [WebSocket API](web-socket-api.md#server-shutdown)
+  - [WebSocket Streams](web-socket-streams.md#server-shutdown)
+  - [SBE Market Data Streams](sbe-market-data-streams.md#server-shutdown)
+  - In SBE sessions, the `T` field is only present in SBE schema 3:6 and later.
+- `-1015 TOO_MANY_ORDERS` message reads: "Too many orders placed without trading; current limit is X
+  non-trading orders per Y. Unable to place new orders until trades occur or window resets." See
+  [`-1015`](errors.md#-1015-too_many_orders) and the
+  [Spot Unfilled Order Count Rules](../faqs/order_count_decrement.md#spot-unfilled-order-count-rules)
+  FAQ.
+
+#### SBE
+
+- REST and WebSocket API SBE schema [spot_3_6.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_6.xml)
+  - The current schema 3:5 [spot_3_5.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_5.xml) is deprecated and
+    will be retired in 6 months per our
+    [schema deprecation policy](../faqs/sbe_faq.md#regarding-legacy-support).
+  - Changes in schema 3:6:
+    - Existing `expiryReason` enum: new variants `Exhausted` (9) and
+      `InsufficientQuoteNotionalLimit` (10)
+    - `ServerShutdownEvent`: new field `shutdownTime`
+    - `ExchangeInfoResponse` (symbols group): new fields `marketQuoteNotionalLimitAllowed`,
+      `limitQuoteNotionalLimitAllowed`, `opoAllowed`
+    - `NewOrderResultResponse`, `NewOrderFullResponse`, `OrderResponse`, `CancelOrderResponse`,
+      `OrdersResponse`, `NewOrderListResultResponse`, `NewOrderListFullResponse`,
+      `CancelOrderListResponse`, `OrderAmendKeepPriorityResponse`, `ExecutionReportEvent`: new field
+      `quoteNotionalLimit`
+    - `ExecutionReportEvent`: new field `effectiveSelfTradePreventionMode`
+    - `NewOrderFullResponse` and `NewOrderListFullResponse.orderReports` `preventedMatches` group:
+      new field `effectiveSelfTradePreventionMode`
+    - For more details on `quoteNotionalLimit` and `effectiveSelfTradePreventionMode`, see
+      [New Features](#2026-10-30-new-features) below.
+- FIX SBE schema [spot-fixsbe-1_2.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot-fixsbe-1_2.xml)
+  - The current schema 1:1 [spot-fixsbe-1_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot-fixsbe-1_1.xml) is
+    deprecated and will be retired in 6 months per our
+    [schema deprecation policy](../faqs/sbe_faq.md#regarding-legacy-support).
+  - Changes in schema 1:2:
+    - Existing `expiryReason` enum: new variants `Exhausted` (9) and
+      `InsufficientQuoteNotionalLimit` (10)
+    - `ExecutionReport`, `OrderCancelRequestAndNewOrderSingle`, `NewOrderSingle`, `NewOrderList`
+      (`Orders` group): new field `QuoteNotionalLimit` (custom tag 25057)
+      - For more details on this field, see [New Features](#2026-10-30-new-features) below.
+    - `ExecutionReport`: new field `EffectiveSelfTradePreventionMode` (custom tag 25058)
+      - For more details on this field, see [New Features](#2026-10-30-new-features) below.
+- The SBE lifecycle files have been updated to reflect these changes:
+  - [SBE lifecycle for Testnet](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_schema_lifecycle_testnet.json)
+  - [FIX SBE lifecycle for Testnet](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_fix_schema_lifecycle_testnet.json)
+
+#### FIX API
+
+- The [QuickFix schema for FIX OE](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml) has been updated:
+  - `ExpiryReason` (custom tag 25056): new values `EXHAUSTED` (9) and
+    `INSUFFICIENT_QUOTE_NOTIONAL_LIMIT` (10)
+  - `ExecutionReport`, `OrderCancelRequestAndNewOrderSingle`, `NewOrderSingle`, `NewOrderList`
+    (`Orders` group): new field `QuoteNotionalLimit` (custom tag 25057)
+    - For more details on this field, see [New Features](#2026-10-30-new-features) below.
+  - `ExecutionReport`: new field `EffectiveSelfTradePreventionMode` (custom tag 25058)
+    - For more details on this field, see [New Features](#2026-10-30-new-features) below.
+
+**Notice: The following changes will be available after 2026-10-30 10:00 UTC.**
+
+<a id="2026-10-30-new-features"></a>
+
+#### New Features
+
+- Orders on the `BUY` side accept a new optional parameter `quoteNotionalLimit`, which limits the
+  amount of the quote asset the order can spend. Order lists accept `aboveQuoteNotionalLimit` /
+  `belowQuoteNotionalLimit` (OCO) and `workingQuoteNotionalLimit` / `pendingQuoteNotionalLimit` /
+  `pendingAboveQuoteNotionalLimit` / `pendingBelowQuoteNotionalLimit` (OTO, OTOCO, OPO, OPOCO). See
+  Quote Notional Limit in the [REST API](rest-api.md#quote-notional-limit) and
+  [WebSocket API](web-socket-api.md#quote-notional-limit).
+  - `exchangeInfo` responses ([REST API](rest-api.md#exchange-information),
+    [WebSocket API](web-socket-api.md#exchange-information)) show whether a
+    symbol supports the parameter in the new fields `marketQuoteNotionalLimitAllowed` and
+    `limitQuoteNotionalLimitAllowed`.
+  - The new `expiryReason` value
+    [`INSUFFICIENT_QUOTE_NOTIONAL_LIMIT`](enums.md#expiry-reasons) is emitted
+    when the order's `quoteNotionalLimit` prevents the remaining quantity from executing or resting.
+  - SOR endpoints parse the parameter but reject it with
+    [`-1106`](errors.md#-1106-param_not_required).
+  - The legacy OCO endpoints (`POST /api/v3/order/oco`, WebSocket API `orderList.place`) do not
+    accept the new parameters.
+- User Data Stream [`executionReport`](user-data-stream.md#order-update) events,
+  FIX API [`ExecutionReport<8>`](fix-api.md#executionreport-8) messages, and
+  FULL order response `preventedMatches[]` entries now carry an optional
+  `effectiveSelfTradePreventionMode` (`eV` on JSON streams, FIX tag `25058`) distinguishing the STP
+  mode the engine applied from the one the order was placed with. The field is only emitted on
+  prevented-match reports and only when the applied mode differs from the order's own
+  `selfTradePreventionMode`. Values: `EXPIRE_MAKER`, `EXPIRE_BOTH`, `DECREMENT` (never `NONE`,
+  `EXPIRE_TAKER` or `TRANSFER`).
+
+#### General Changes
+
+- Orders amended down to their filled quantity or less now carry `expiryReason` =
+  [`EXHAUSTED`](enums.md#expiry-reasons). Previously, these orders expired
+  without an `expiryReason`.
+- `BUY` limit orders that trade on entry and then rest now release any order lock above what the
+  remaining quantity needs to rest (remaining quantity × limit price). The surplus, usually the
+  price improvement from the trade, is returned to `free` in the same balance update that the order
+  rests in. Previously, the surplus stayed locked until the order ended.
+  - Applies to `LIMIT` `GTC` orders, triggered `STOP_LOSS_LIMIT` and `TAKE_PROFIT_LIMIT` orders,
+    limit orders in order lists, and SOR orders. Iceberg orders keep the lock for their whole
+    remaining quantity, including the hidden part.
+
+#### Bug Fixes
+
+- SBE responses for canceling an order list now encode `listClientOrderId` as the
+  `listClientOrderId` of the original order list, matching the JSON response. Previously, SBE
+  responses encoded the `listClientOrderId` sent in the cancel request.
+  - REST API: `DELETE /api/v3/orderList`, `DELETE /api/v3/openOrders`
+  - WebSocket API: `orderList.cancel`, `openOrders.cancelAll`
+
+---
+
+### 2026-10-27
+
+- Added ExpiryReason(25056) in the
+  [FIX API documentation](fix-api.md#executionreport-8) which was previously
+  undocumented but was announced in an [earlier update](#2026-03-09).
+
+---
 
 ### 2026-10-07
 
@@ -29,7 +171,7 @@ for more details.
 
 REST and WebSocket API:
 
-- Reminder that SBE 3:1 schema will be retired on 2026-09-14,
+- Reminder that SBE 3:2 schema will be retired on 2026-09-14,
   [6 months after being deprecated](../faqs/sbe_faq.md#regarding-legacy-support).
 - The [SBE lifecycle for Testnet](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_schema_lifecycle_testnet.json) has
   been updated to reflect this change.
