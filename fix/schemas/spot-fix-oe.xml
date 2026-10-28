@@ -83,6 +83,8 @@
    <field name='ErrorCode' required='N'/>
    <field name='Text' required='N'/>
    <field name='ExpiryReason' required='N'/>
+   <field name='QuoteNotionalLimit' required='N'/>
+   <field name='EffectiveSelfTradePreventionMode' required='N'/>
   </message>
   <message name='OrderCancelReject' msgcat='app' msgtype='9'>
    <field name='ClOrdID' required='Y'/>
@@ -250,6 +252,7 @@
    <field name='TargetStrategy' required='N'/>
    <field name='StrategyID' required='N'/>
    <field name='SelfTradePreventionMode' required='N'/>
+   <field name='QuoteNotionalLimit' required='N'/>
   </component>
  </components>
  <fields>
@@ -548,6 +551,16 @@
    <value enum='6' description='UNFILLED_FOK_ORDER_EXPIRED'/>
    <value enum='7' description='INSUFFICIENT_LIQUIDITY'/>
    <value enum='8' description='EXECUTION_RULE_PRICE_RANGE_EXCEEDED'/>
+   <value enum='9' description='EXHAUSTED'/>
+   <value enum='10' description='INSUFFICIENT_QUOTE_NOTIONAL_LIMIT'/>
+  </field>
+  <field number='25057' name='QuoteNotionalLimit' type='PRICE'/>
+  <field number='25058' name='EffectiveSelfTradePreventionMode' type='CHAR'>
+   <value enum='2' description='EXPIRE_TAKER'/>
+   <value enum='3' description='EXPIRE_MAKER'/>
+   <value enum='4' description='EXPIRE_BOTH'/>
+   <value enum='5' description='DECREMENT'/>
+   <value enum='6' description='TRANSFER'/>
   </field>
  </fields>
 </fix>
