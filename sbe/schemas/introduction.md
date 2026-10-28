@@ -13,6 +13,6 @@
 # FIX SBE
 
 - [sbe_fix_schema_lifecycle_prod.json](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_fix_schema_lifecycle_prod.json)
-- [sbe_fix_schema_lifecycle_testnet.json](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_schema_lifecycle_testnet.json)
+- [sbe_fix_schema_lifecycle_testnet.json](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_fix_schema_lifecycle_testnet.json)
 - [spot-fixsbe-1_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot-fixsbe-1_1.xml)
 - [spot-fixsbe-1_0.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot-fixsbe-1_0.xml)
