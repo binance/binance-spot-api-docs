@@ -1,6 +1,13 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-09-18**
+**Last Updated: 2026-10-27**
+
+### 2026-10-27
+
+- Added ExpiryReason(25056) in the [FIX API documentation](fix-api.md#executionreport-8)
+  which was previously undocumented but was announced in an [earlier update](#2026-03-09).
+
+---
 
 ### 2026-09-18
 
@@ -3238,7 +3245,7 @@ REST API
 USER DATA STREAM
 
 - `Last quote asset transacted quantity` (as variable `Y`) added to execution reports. Represents
-  the `lastPrice` _ `lastQty` (`L` _ `l`).
+  the `lastPrice` \* `lastQty` (`L` \* `l`).
 
 ---
 
