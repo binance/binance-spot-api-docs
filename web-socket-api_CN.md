@@ -1475,7 +1475,7 @@ NONE
 `symbols` | ARRAY OF STRING | NO | 描述多个交易对
 `permissions` | ARRAY OF STRING | NO | 按权限过滤交易对
 `showPermissionSets` | BOOLEAN | NO | 控制 `permissionSets` 字段的内容是否填充。默认为 `true`。
-`symbolStatus` | ENUM | NO | 过滤具有此 `tradingStatus` 的交易对。有效值：`TRADING`, `HALT`, `BREAK`。不能与 `symbol` 或 `symbols` 组合使用。
+`symbolStatus` | ENUM | NO | 过滤具有此 `tradingStatus` 的交易对。有效值：`TRADING`, `HALT`, `BREAK`, `CANCEL_ONLY`。不能与 `symbol` 或 `symbols` 组合使用。
 
 **数据源:** 缓存
 
@@ -1655,7 +1655,7 @@ NONE
 ------------ | ------------ | ------------ | ------------
 `symbol` | STRING | NO | 查询指定的交易对。
 `symbols` | ARRAY OF STRING | NO | 查询多个交易对。
-`symbolStatus` | ENUM | NO | 查询指定状态的所有交易对。支持的值：`TRADING`, `HALT`, `BREAK`
+`symbolStatus` | ENUM | NO | 查询指定状态的所有交易对。支持的值：`TRADING`, `HALT`, `BREAK`, `CANCEL_ONLY`
 
 **数据源:** 缓存
 
@@ -2327,7 +2327,7 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
 `symbol` | STRING | NO |
 `symbols` | ARRAY OF STRING | NO |
 `type` | ENUM | NO | Ticker 类型: FULL (默认) 或者 MINI
-`symbolStatus` | ENUM | NO | 过滤具有此 `tradingStatus` 的交易对。对于单个交易对，如果状态不匹配，将返回错误 `-1220 交易对与状态不匹配`。对于多个或者全部交易对，响应中不会包括状态不匹配的交易对。有效值： `TRADING`, `HALT`, `BREAK`
+`symbolStatus` | ENUM | NO | 过滤具有此 `tradingStatus` 的交易对。对于单个交易对，如果状态不匹配，将返回错误 `-1220 交易对与状态不匹配`。对于多个或者全部交易对，响应中不会包括状态不匹配的交易对。有效值： `TRADING`, `HALT`, `BREAK`, `CANCEL_ONLY`
 
 **数据源:** 缓存
 
@@ -2513,7 +2513,7 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
 `symbols` | ARRAY OF STRING | NO |
 `timeZone` | STRING | NO | 默认值： 0 (UTC)
 `type` | ENUM | NO | Ticker 类型: FULL (默认) 或者 MINI
-`symbolStatus` | ENUM | NO | 过滤具有此 `tradingStatus` 的交易对。对于单个交易对，如果状态不匹配，将返回错误 `-1220 交易对与状态不匹配`。对于多个或者全部交易对，响应中不会包括状态不匹配的交易对。有效值： `TRADING`, `HALT`, `BREAK`
+`symbolStatus` | ENUM | NO | 过滤具有此 `tradingStatus` 的交易对。对于单个交易对，如果状态不匹配，将返回错误 `-1220 交易对与状态不匹配`。对于多个或者全部交易对，响应中不会包括状态不匹配的交易对。有效值： `TRADING`, `HALT`, `BREAK`, `CANCEL_ONLY`
 
 **数据源:** 数据库
 
@@ -2756,7 +2756,7 @@ uiKlines 是返回修改后的k线数据，针对k线图的呈现进行了优化
 `symbols` | ARRAY OF STRING | NO | 获取多个交易对的ticker
 `type` | ENUM | NO | Ticker 类型: FULL (默认) 或者 MINI
 `windowSize` | ENUM | NO | 默认为 1d
-`symbolStatus` | ENUM | NO | 过滤具有此 `tradingStatus` 的交易对。对于单个交易对，如果状态不匹配，将返回错误 `-1220 交易对与状态不匹配`。对于多个或者全部交易对，响应中不会包括状态不匹配的交易对。有效值： `TRADING`, `HALT`, `BREAK`
+`symbolStatus` | ENUM | NO | 过滤具有此 `tradingStatus` 的交易对。对于单个交易对，如果状态不匹配，将返回错误 `-1220 交易对与状态不匹配`。对于多个或者全部交易对，响应中不会包括状态不匹配的交易对。有效值： `TRADING`, `HALT`, `BREAK`, `CANCEL_ONLY`
 
 **数据源:** 数据库
 
@@ -2935,7 +2935,7 @@ days    | `1d`, `2d` ... `7d`
 ------------ | ------------ | ------------ | ------------
 `symbol` | STRING | NO | 获取单个交易对的价格
 `symbols` | ARRAY OF STRING | NO | 获取多个交易对的价格
-`symbolStatus` | ENUM | NO | 过滤具有此 `tradingStatus` 的交易对。对于单个交易对，如果状态不匹配，将返回错误 `-1220 交易对与状态不匹配`。对于多个或者全部交易对，响应中不会包括状态不匹配的交易对。有效值： `TRADING`, `HALT`, `BREAK`
+`symbolStatus` | ENUM | NO | 过滤具有此 `tradingStatus` 的交易对。对于单个交易对，如果状态不匹配，将返回错误 `-1220 交易对与状态不匹配`。对于多个或者全部交易对，响应中不会包括状态不匹配的交易对。有效值： `TRADING`, `HALT`, `BREAK`, `CANCEL_ONLY`
 
 **数据源:** 缓存
 
@@ -3031,7 +3031,7 @@ days    | `1d`, `2d` ... `7d`
 ------------ | ------------ | ------------ | ------------
 `symbol` | STRING | NO | 获取单个交易对的ticker
 `symbols` | ARRAY OF STRING | NO | 获取多个交易对的ticker
-`symbolStatus` | ENUM | NO | 过滤具有此 `tradingStatus` 的交易对。对于单个交易对，如果状态不匹配，将返回错误 `-1220 交易对与状态不匹配`。对于多个或者全部交易对，响应中不会包括状态不匹配的交易对。有效值： `TRADING`, `HALT`, `BREAK`
+`symbolStatus` | ENUM | NO | 过滤具有此 `tradingStatus` 的交易对。对于单个交易对，如果状态不匹配，将返回错误 `-1220 交易对与状态不匹配`。对于多个或者全部交易对，响应中不会包括状态不匹配的交易对。有效值： `TRADING`, `HALT`, `BREAK`, `CANCEL_ONLY`
 
 **数据源:** 缓存
 

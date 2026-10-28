@@ -2013,7 +2013,7 @@ GET /api/v3/referencePrice/calculation
 名称 | 类型 | 是否必须 | 描述
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-symbolStatus | ENUM | NO | 支持的值: `TRADING`, `HALT`, `BREAK`
+symbolStatus | ENUM | NO | 支持的值: `TRADING`, `HALT`, `BREAK`, `CANCEL_ONLY`
 
 **数据源:** 缓存
 

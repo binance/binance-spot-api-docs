@@ -2089,7 +2089,7 @@ Describes how reference price is calculated for a given symbol.
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 symbol | STRING | YES |
-symbolStatus | ENUM | NO | Supported values: `TRADING`, `HALT`, `BREAK`
+symbolStatus | ENUM | NO | Supported values: `TRADING`, `HALT`, `BREAK`, `CANCEL_ONLY`
 
 **Data Source:** Memory
 

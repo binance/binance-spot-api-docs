@@ -1559,7 +1559,7 @@ Name | Type | Mandatory | Description
 `symbols` | ARRAY OF STRING | NO | Describe multiple symbols
 `permissions` | ARRAY OF STRING | NO | Filter symbols by permissions
 `showPermissionSets` | BOOLEAN | NO | Controls whether the content of the `permissionSets` field is populated or not. Defaults to `true`.
-`symbolStatus` | ENUM | NO | Filters for symbols that have this `tradingStatus`. Valid values: `TRADING`, `HALT`, `BREAK`. Cannot be used in combination with `symbol` or `symbols`.
+`symbolStatus` | ENUM | NO | Filters for symbols that have this `tradingStatus`. Valid values: `TRADING`, `HALT`, `BREAK`, `CANCEL_ONLY`. Cannot be used in combination with `symbol` or `symbols`.
 
 **Data Source:** Memory
 
@@ -1737,7 +1737,7 @@ Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 `symbol` | STRING | NO | Query for specified symbol.
 `symbols` | ARRAY OF STRING | NO | Query for multiple symbols.
-`symbolStatus` | ENUM | NO | Query for all symbols with the specified status. Supported values: `TRADING`, `HALT`, `BREAK`
+`symbolStatus` | ENUM | NO | Query for all symbols with the specified status. Supported values: `TRADING`, `HALT`, `BREAK`, `CANCEL_ONLY`
 
 **Data Source:** Memory
 
@@ -2405,7 +2405,7 @@ Name | Type | Mandatory | Description
 `symbol` | STRING | NO |
 `symbols` | ARRAY OF STRING | NO |
 `type` | ENUM | NO | Ticker type. Supported values: FULL (default) or MINI
-`symbolStatus` | ENUM | NO | Filters for symbols that have this `tradingStatus`. For a single symbol, a status mismatch returns error `-1220 SYMBOL_DOES_NOT_MATCH_STATUS`. For multiple or all symbols, non-matching ones are simply excluded from the response. Valid values: `TRADING`, `HALT`, `BREAK`
+`symbolStatus` | ENUM | NO | Filters for symbols that have this `tradingStatus`. For a single symbol, a status mismatch returns error `-1220 SYMBOL_DOES_NOT_MATCH_STATUS`. For multiple or all symbols, non-matching ones are simply excluded from the response. Valid values: `TRADING`, `HALT`, `BREAK`, `CANCEL_ONLY`
 
 **Data Source:** Memory
 
@@ -2589,7 +2589,7 @@ Name | Type | Mandatory | Description
 `symbols` | ARRAY OF STRING | NO |
 `timeZone` | STRING | NO | Default: 0 (UTC)
 `type` | ENUM | NO | Ticker type. Supported values: FULL (default) or MINI
-`symbolStatus` | ENUM | NO | Filters for symbols that have this `tradingStatus`. For a single symbol, a status mismatch returns error `-1220 SYMBOL_DOES_NOT_MATCH_STATUS`. For multiple or all symbols, non-matching ones are simply excluded from the response. Valid values: `TRADING`, `HALT`, `BREAK`
+`symbolStatus` | ENUM | NO | Filters for symbols that have this `tradingStatus`. For a single symbol, a status mismatch returns error `-1220 SYMBOL_DOES_NOT_MATCH_STATUS`. For multiple or all symbols, non-matching ones are simply excluded from the response. Valid values: `TRADING`, `HALT`, `BREAK`, `CANCEL_ONLY`
 
 **Data Source:** Database
 
@@ -2832,7 +2832,7 @@ Name | Type | Mandatory | Description
 `symbols` | ARRAY OF STRING | NO | Query ticker for multiple symbols
 `type` | ENUM | NO | Ticker type. Supported values: FULL (default) or MINI
 `windowSize` | ENUM | NO | Defaults to 1d if no parameter provided.
-`symbolStatus` | ENUM | NO | Filters for symbols that have this `tradingStatus`. For a single symbol, a status mismatch returns error `-1220 SYMBOL_DOES_NOT_MATCH_STATUS`. For multiple or all symbols, non-matching ones are simply excluded from the response. Valid values: `TRADING`, `HALT`, `BREAK`
+`symbolStatus` | ENUM | NO | Filters for symbols that have this `tradingStatus`. For a single symbol, a status mismatch returns error `-1220 SYMBOL_DOES_NOT_MATCH_STATUS`. For multiple or all symbols, non-matching ones are simply excluded from the response. Valid values: `TRADING`, `HALT`, `BREAK`, `CANCEL_ONLY`
 
 **Data Source:** Database
 
@@ -3011,7 +3011,7 @@ Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 `symbol` | STRING | NO | Query price for a single symbol
 `symbols` | ARRAY OF STRING | NO | Query price for multiple symbols
-`symbolStatus` | ENUM | NO | Filters for symbols that have this `tradingStatus`. For a single symbol, a status mismatch returns error `-1220 SYMBOL_DOES_NOT_MATCH_STATUS`. For multiple or all symbols, non-matching ones are simply excluded from the response. Valid values: `TRADING`, `HALT`, `BREAK`
+`symbolStatus` | ENUM | NO | Filters for symbols that have this `tradingStatus`. For a single symbol, a status mismatch returns error `-1220 SYMBOL_DOES_NOT_MATCH_STATUS`. For multiple or all symbols, non-matching ones are simply excluded from the response. Valid values: `TRADING`, `HALT`, `BREAK`, `CANCEL_ONLY`
 
 **Data Source:** Memory
 
@@ -3106,7 +3106,7 @@ Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 `symbol` | STRING | NO | Query ticker for a single symbol
 `symbols` | ARRAY OF STRING | NO | Query ticker for multiple symbols
-`symbolStatus` | ENUM | NO | Filters for symbols that have this `tradingStatus`. For a single symbol, a status mismatch returns error `-1220 SYMBOL_DOES_NOT_MATCH_STATUS`. For multiple or all symbols, non-matching ones are simply excluded from the response. Valid values: `TRADING`, `HALT`, `BREAK`
+`symbolStatus` | ENUM | NO | Filters for symbols that have this `tradingStatus`. For a single symbol, a status mismatch returns error `-1220 SYMBOL_DOES_NOT_MATCH_STATUS`. For multiple or all symbols, non-matching ones are simply excluded from the response. Valid values: `TRADING`, `HALT`, `BREAK`, `CANCEL_ONLY`
 
 **Data Source:** Memory
 
