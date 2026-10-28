@@ -440,6 +440,11 @@ Prevented Match
 - A field found in Exchange Information that represents the number of decimals quote asset
   commission will be calculated to.
 
+`quoteNotionalLimit`
+
+- Optional parameter on `BUY` orders that limits the amount of the quote asset the order can spend.
+  Read [quoteNotionalLimit FAQ](./quoteNotionalLimit.md) to learn more.
+
 `quoteOrderQty`
 
 - `MARKET` order parameter that specifies the amount of the quote asset one wants to spend/receive

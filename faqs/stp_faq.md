@@ -54,6 +54,23 @@ In summary:
 | `TRANSFER`                                                         | `EXPIRE_MAKER`, `EXPIRE_TAKER`, `EXPIRE_BOTH`, `NONE`, `DECREMENT` | `DECREMENT`                 |
 | `EXPIRE_MAKER`, `EXPIRE_TAKER`, `EXPIRE_BOTH`, `NONE`, `DECREMENT` | ANY STP MODE                                                       | STP mode of the Taker Order |
 
+### How is the Effective STP Mode reported?
+
+The Effective STP Mode is reported back on prevented match execution reports and order responses
+whenever it differs from the STP mode the report's own order was placed with:
+
+- `FULL` order responses (REST and WebSocket API): `effectiveSelfTradePreventionMode` inside each
+  entry of `preventedMatches[]`.
+- User Data Stream `executionReport`: `eV`.
+- FIX `ExecutionReport<8>`: tag `25058 EffectiveSelfTradePreventionMode`.
+
+The field is only present when the applied STP mode differs from the mode specified on the report's
+own order. If the stated mode is applied as-is, the field is omitted. It is never reported as
+`NONE`.
+
+Each report carries this field relative to its own order's mode, so a single prevented match can
+produce a taker report with the field absent and a maker report with the field set, or vice versa.
+
 ### What is a Trade Group Id?
 
 Different accounts with the same `tradeGroupId` are considered part of the same "trade group".
