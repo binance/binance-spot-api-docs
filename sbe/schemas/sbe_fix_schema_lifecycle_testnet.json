@@ -3,11 +3,18 @@
     "latestSchema":
     {
         "id": 1,
-        "version": 1,
-        "releaseDate": "2026-03-12"
+        "version": 2,
+        "releaseDate": "2026-10-30"
     },
     "deprecatedSchemas":
-    [],
+    [
+        {
+           "id": 1,
+           "version": 1,
+           "releaseDate": "2026-03-12",
+           "deprecatedDate": "2026-10-30"
+        }
+    ],
     "retiredSchemas":
     [
         {

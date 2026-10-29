@@ -2,10 +2,16 @@
   "environment": "TESTNET",
   "latestSchema": {
     "id": 3,
-    "version": 5,
-    "releaseDate": "2026-06-30"
+    "version": 6,
+    "releaseDate": "2026-10-30"
   },
   "deprecatedSchemas": [
+    {
+      "id": 3,
+      "version": 5,
+      "releaseDate": "2026-06-30",
+      "deprecatedDate": "2026-10-30"
+    },
     {
       "id": 3,
       "version": 4,
