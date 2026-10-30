@@ -16,7 +16,8 @@
       "id": 3,
       "version": 3,
       "releaseDate": "2026-03-25",
-      "deprecatedDate": "2026-05-08"
+      "deprecatedDate": "2026-05-08",
+      "retiredDate":"2026-11-09"
     }
   ],
   "retiredSchemas": [
