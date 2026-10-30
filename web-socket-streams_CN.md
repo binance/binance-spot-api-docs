@@ -796,7 +796,7 @@ K线stream逐秒推送所请求的K线种类(最新一根K线)的更新。此更
 2. 开始缓存收到的event。请记录您收到的第一个event的 `U`值。
 3. 访问 `https://api.binance.com/api/v3/depth?symbol=BNBBTC&limit=5000` 获取深度快照。
 4. 如果快照中的 `lastUpdateId` 小于等于步骤 2 中的 `U` 值，请返回步骤 3。
-5. 在收到的event中，丢弃快照中 `u` <= `lastUpdateId` 的所有event。现在第一个event的 `lastUpdateId`
+5. 在收到的event中，丢弃快照中 `u` <= `lastUpdateId` 的所有event。现在第一个event的 `lastUpdateId + 1`
    应该在 `[U;u]` 范围以内。
 6. 将本地order book设置为快照。它的更新ID 为 `lastUpdateId`。
 7. 更新所有缓存的event，以及后续的所有event。
