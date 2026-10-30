@@ -2,12 +2,26 @@
 
 # 更新日志
 
+**最近更新：2026-10-30**
+
+### 2026-10-30
+
+REST 和 WebSocket API：
+
+- 注意：根据我们的 SBE 政策，[在被废止 6 个月后](faqs/sbe_faq_CN.md#sbe-schema)，SBE
+  3：3 模式将于 2026 年 11 月 09 日被停用。
+- [面向生产的 SBE 生命周期](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json)
+  已基于本次更改进行了更新。
+
+---
+
 **最近更新：2026-10-27**
 
 ### 2026-10-27
 
 - 在 [FIX API 文档](fix-api_CN.md#executionreport-8)
   中添加了字段 ExpiryReason(25056) 的说明。该字段已在[此前公告](#2026-03-09)中公布，但之前未有文档说明。
+
 
 ---
 

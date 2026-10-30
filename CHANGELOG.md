@@ -1,6 +1,17 @@
 # CHANGELOG for Binance's API
 
-**Last Updated: 2026-10-27**
+**Last Updated: 2026-10-30**
+
+### 2026-10-30
+
+REST and WebSocket API:
+
+- Reminder that SBE 3:3 schema will be retired on 2026-11-09,
+  [6 months after being deprecated](faqs/sbe_faq.md#sbe-schema).
+- The [SBE lifecycle for Production](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) has
+  been updated to reflect this change.
+
+---
 
 ### 2026-10-27
 
