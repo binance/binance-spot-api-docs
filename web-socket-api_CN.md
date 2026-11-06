@@ -6442,6 +6442,7 @@ TIF  | 描述
 ```
 发送一个 [OPO](faqs/opo_CN.md) 订单。
 
+* 生效订单必须为 `LIMIT` 或 `LIMIT_MAKER` 类型的订单。
 * OPO 会向 `EXCHANGE_MAX_NUM_ORDERS` 过滤器和 `MAX_NUM_ORDERS` 过滤器中添加 2 个订单。
 
 **权重:**
@@ -6593,6 +6594,8 @@ TIF  | 描述
 ```
 发送一个 [OPOCO](faqs/opo_CN.md) 订单。
 
+* 生效订单必须为 `LIMIT` 或 `LIMIT_MAKER` 类型的订单。
+
 **权重:**
 1
 
@@ -6608,7 +6611,7 @@ TIF  | 描述
 `listClientOrderId` | STRING | NO | 订单列表中的唯一 ID。如果未发送，则自动生成。只有当之前的同一 `listClientOrderId` 的订单列表已成交或完全过期后，才接受新的同一 `listClientOrderId` 的订单列表。`listClientOrderId` 与 `workingClientOrderId`、`pendingAboveClientOrderId` 和 `pendingBelowClientOrderId` 不同。
 `newOrderRespType` | ENUM | NO | JSON 响应格式。支持的数值：[订单返回类型](enums_CN.md#orderresponsetype)
 `selfTradePreventionMode` | ENUM | NO | 允许的数值取决于交易对的配置。支持的数值：[STP模式](enums_CN.md#stpmodes)
-`workingType` | ENUM | YES |
+`workingType` | ENUM | YES | 支持的数值：`LIMIT`，`LIMIT_MAKER`
 `workingSide` | ENUM | YES | 支持的数值：[订单方向](enums_CN.md#side)
 `workingClientOrderId` | STRING | NO | 生效订单中挂单的任意唯一 ID。如果未发送，则自动生成。
 `workingPrice` | DECIMAL | YES | 生效订单价格

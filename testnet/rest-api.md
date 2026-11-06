@@ -3779,6 +3779,7 @@ POST /api/v3/orderList/opo
 
 Place an [OPO](../faqs/opo.md).
 
+- The working order must be `LIMIT` or `LIMIT_MAKER`.
 - OPOs add 2 orders to the `EXCHANGE_MAX_NUM_ORDERS` filter and `MAX_NUM_ORDERS` filter.
 
 **Weight:** 1
@@ -3897,6 +3898,8 @@ POST /api/v3/orderList/opoco
 ```
 
 Place an [OPOCO](../faqs/opo.md).
+
+- The working order must be `LIMIT` or `LIMIT_MAKER`.
 
 **Weight**: 1
 

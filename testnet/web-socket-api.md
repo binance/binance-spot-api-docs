@@ -6144,6 +6144,7 @@ will become mandatory.
 
 Place an [OPO](../faqs/opo.md).
 
+- The working order must be `LIMIT` or `LIMIT_MAKER`.
 - OPOs add 2 orders to the EXCHANGE_MAX_NUM_ORDERS filter and MAX_NUM_ORDERS filter.
 
 **Weight:** 1
@@ -6288,6 +6289,8 @@ Place an [OPO](../faqs/opo.md).
 ```
 
 Place an [OPOCO](../faqs/opo.md).
+
+- The working order must be `LIMIT` or `LIMIT_MAKER`.
 
 **Weight**: 1
 

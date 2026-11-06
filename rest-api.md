@@ -3757,6 +3757,7 @@ POST /api/v3/orderList/opo
 ```
 Place an [OPO](faqs/opo.md).
 
+- The working order must be `LIMIT` or `LIMIT_MAKER`.
 - OPOs add 2 orders to the `EXCHANGE_MAX_NUM_ORDERS` filter and `MAX_NUM_ORDERS` filter.
 
 **Weight:**
@@ -3877,6 +3878,8 @@ POST /api/v3/orderList/opoco
 ```
 Place an [OPOCO](faqs/opo.md).
 
+- The working order must be `LIMIT` or `LIMIT_MAKER`.
+
 **Weight:**
 1
 
@@ -3891,7 +3894,7 @@ symbol | STRING | YES |
 listClientOrderId | STRING | NO | Arbitrary unique ID among open order lists. Automatically generated if not sent. A new order list with the same `listClientOrderId` is accepted only when the previous one is filled or completely expired. `listClientOrderId` is distinct from the `workingClientOrderId`, `pendingAboveClientOrderId`, and the `pendingBelowClientOrderId`.
 newOrderRespType | ENUM | NO | Format of the JSON response. Supported values: [Order Response Type](enums.md#orderresponsetype)
 selfTradePreventionMode | ENUM | NO | The allowed enums is dependent on what is configured on the symbol. Supported values: [STP Modes](enums.md#stpmodes)
-workingType | ENUM | YES |
+workingType | ENUM | YES | Supported values: `LIMIT`, `LIMIT_MAKER`
 workingSide | ENUM | YES | Supported values: [Order Side](enums.md#side)
 workingClientOrderId | STRING | NO | Arbitrary unique ID among open orders for the working order. Automatically generated if not sent.
 workingPrice | DECIMAL | YES | Price for the working order.
