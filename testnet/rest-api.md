@@ -2269,7 +2269,7 @@ This adds 1 order to the `EXCHANGE_MAX_ORDERS` filter and the `MAX_NUM_ORDERS` f
 | `LIMIT_MAKER`       | `quantity`, `price`                                                | This is a `LIMIT` order that will be rejected if the order immediately matches and trades as a taker. <br/> This is also known as a POST-ONLY order.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 
 <!-- prettier-ignore -->
-<a id="pegged-orders-info"></a> 
+<a id="pegged-orders-info"></a>
 Notes on using parameters for Pegged Orders:
 
 - These parameters are allowed for `LIMIT`, `LIMIT_MAKER`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT_LIMIT`
@@ -3779,7 +3779,7 @@ POST /api/v3/orderList/opo
 
 Place an [OPO](../faqs/opo.md).
 
-- OPOs add 2 orders to the EXCHANGE_MAX_NUM_ORDERS filter and MAX_NUM_ORDERS filter.
+- OPOs add 2 orders to the `EXCHANGE_MAX_NUM_ORDERS` filter and `MAX_NUM_ORDERS` filter.
 
 **Weight:** 1
 

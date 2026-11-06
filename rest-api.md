@@ -3757,7 +3757,7 @@ POST /api/v3/orderList/opo
 ```
 Place an [OPO](faqs/opo.md).
 
-- OPOs add 2 orders to the `EXCHANGE_MAX_NUM_ORDERS`` filter and `MAX_NUM_ORDERS`` filter.
+- OPOs add 2 orders to the `EXCHANGE_MAX_NUM_ORDERS` filter and `MAX_NUM_ORDERS` filter.
 
 **Weight:**
 1
