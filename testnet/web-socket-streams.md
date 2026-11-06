@@ -691,7 +691,7 @@ Order book price and quantity depth updates used to locally manage an order book
 1. If the `lastUpdateId` from the snapshot is strictly less than the `U` from step 2, go back to
    step 3.
 1. In the buffered events, discard any event where `u` is <= `lastUpdateId` of the snapshot. The
-   first buffered event should now have `lastUpdateId` within its `[U;u]` range.
+   first buffered event should now have `lastUpdateId + 1` within its `[U;u]` range.
 1. Set your local order book to the snapshot. Its update ID is `lastUpdateId`.
 1. Apply the update procedure below to all buffered events, and then to all subsequent events
    received.
