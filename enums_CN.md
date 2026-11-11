@@ -238,14 +238,16 @@
 
 ## 过期原因
 
-| 过期原因 (`eR`)                       | 说明                                                                                                              |
-| :------------------------------------ | :---------------------------------------------------------------------------------------------------------------- |
-| `NONE`                                | 订单未过期。                                                                                                      |
-| `REJECTED`                            | 当尝试将条件单或OTO（One-Triggers-the-Other）订单放入订单簿时，被撮合引擎拒绝。常见原因包括资金不足和过滤器拒绝。 |
-| `EXCHANGE_CANCELED`                   | 订单被币安取消。                                                                                                  |
-| `OCO_TRIGGER`                         | OCO（One-Cancels-the-Other）订单对中的一个订单被取消，因为其另一个订单开始生效或整个OCO订单对过期。               |
-| `OTO_PHASE_ONE_EXPIRED`               | 订单列表中的生效订单过期，导致整个订单列表过期。                                                                  |
-| `UNFILLED_IOC_QUANTITY_EXPIRED`       | IOC（立即成交或取消）订单未完全成交，因此过期。                                                                   |
-| `UNFILLED_FOK_ORDER_EXPIRED`          | FOK（全部成交或取消）订单未完全成交，因此过期。                                                                   |
-| `INSUFFICIENT_LIQUIDITY`              | 订单簿中没有足够的订单与该订单匹配。                                                                              |
-| `EXECUTION_RULE_PRICE_RANGE_EXCEEDED` | 订单尝试以不符合价格区间执行规则的价格进行交易。                                                                  |
+| 过期原因 (`eR`)                       | 说明                                                                                                                                |
+| :------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------------- |
+| `NONE`                                | 订单未过期。                                                                                                                        |
+| `REJECTED`                            | 当尝试将条件单或OTO（One-Triggers-the-Other）订单放入订单簿时，被撮合引擎拒绝。常见原因包括资金不足和过滤器拒绝。                   |
+| `EXCHANGE_CANCELED`                   | 订单被币安取消。                                                                                                                    |
+| `OCO_TRIGGER`                         | OCO（One-Cancels-the-Other）订单对中的一个订单被取消，因为其另一个订单开始生效或整个OCO订单对过期。                                 |
+| `OTO_PHASE_ONE_EXPIRED`               | 订单列表中的生效订单过期，导致整个订单列表过期。                                                                                    |
+| `UNFILLED_IOC_QUANTITY_EXPIRED`       | IOC（立即成交或取消）订单未完全成交，因此过期。                                                                                     |
+| `UNFILLED_FOK_ORDER_EXPIRED`          | FOK（全部成交或取消）订单未完全成交，因此过期。                                                                                     |
+| `INSUFFICIENT_LIQUIDITY`              | 订单簿中没有足够的订单与该订单匹配。                                                                                                |
+| `EXECUTION_RULE_PRICE_RANGE_EXCEEDED` | 订单尝试以不符合价格区间执行规则的价格进行交易。                                                                                    |
+| `INSUFFICIENT_QUOTE_NOTIONAL_LIMIT`   | 订单的 `quoteNotionalLimit` 导致剩余数量无法成交或挂单，因此订单过期。参见 [报价资产名义价值上限](faqs/quoteNotionalLimit_CN.md)。 |
+| `EXHAUSTED`                           | 订单数量被减少至等于或低于已成交数量，因此过期。                                                                                    |
