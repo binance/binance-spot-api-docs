@@ -16,6 +16,8 @@
 - 账户事件以 **实时** 方式推送。
 - JSON 数据中的所有时间戳默认均为 **毫秒**。
 - 如果您持有或交易任何名称包含非 ASCII 字符的资产或交易对，那么事件中可能包含以 UTF-8 编码的非 ASCII 字符。
+- 您也可以只订阅特定的事件。详情请参阅
+  [用户数据流订阅过滤器](web-socket-api_CN.md#user-data-stream-subscription-filters)。
 
 <a id="user-data-stream-events"></a>
 
@@ -131,6 +133,8 @@
         "pl": "2.123456",              // Prevented Execution Quantity
         "pL": "0.10000001",            // Prevented Execution Price
         "pY": "0.21234562",            // Prevented Execution Quote Qty
+        "Qq": "90.00000000",           // 报价资产名义价值上限。仅当下单时设置了报价资产名义价值上限时出现。
+        "eV": "DECREMENT",             // 实际生效的 STP 模式。仅在预防撮合的执行报告中，且实际生效的 STP 模式与订单的 `selfTradePreventionMode` 不同时出现。可能的值：`EXPIRE_MAKER`、`EXPIRE_BOTH`、`DECREMENT`。
         "b": "ONE_PARTY_TRADE_REPORT", // Match Type
         "a": 1234,                     // Allocation ID
         "k": "SOR",                    // Working Floor
@@ -153,31 +157,33 @@
 这些字段仅在满足特定条件时才会出现。有关这些参数的更多信息，请参阅
 [现货交易API术语表](faqs/spot_glossary_CN.md)。
 
-| 字段  | 名称                          | 描述                                             | 示例                             |
-| ----- | ----------------------------- | ------------------------------------------------ | -------------------------------- |
-| `d`   | Trailing Delta                | 出现在追踪止损订单中。                           | `"d": 4`                         |
-| `D`   | Trailing Time                 | 出现在追踪止损订单中。                           | `"D": 1668680518494`             |
-| `j`   | Strategy Id                   | 如果在请求中添加了`strategyId`参数，则会出现。   | `"j": 1`                         |
-| `J`   | Strategy Type                 | 如果在请求中添加了`strategyType`参数，则会出现。 | `"J": 1000000`                   |
-| `v`   | Prevented Match Id            | 只有在因为 STP 导致订单失效时可见。              | `"v": 3`                         |
-| `A`   | Prevented Quantity            | 只有在因为 STP 导致订单失效时可见。              | `"A": "3.000000"`                |
-| `B`   | Last Prevented Quantity       | 只有在因为 STP 导致订单失效时可见。              | `"B": "3.000000"`                |
-| `u`   | Trade Group Id                | 只有在因为 STP 导致订单失效时可见。              | `"u": 1`                         |
-| `U`   | Counter Order Id              | 只有在因为 STP 导致订单失效时可见。              | `"U": 37`                        |
-| `Cs`  | Counter Symbol                | 只有在因为 STP 导致订单失效时可见。              | `"Cs": "BTCUSDT"`                |
-| `pl`  | Prevented Execution Quantity  | 只有在因为 STP 导致订单失效时可见。              | `"pl": "2.123456"`               |
-| `pL`  | Prevented Execution Price     | 只有在因为 STP 导致订单失效时可见。              | `"pL": "0.10000001"`             |
-| `pY`  | Prevented Execution Quote Qty | 只有在因为 STP 导致订单失效时可见。              | `"pY": "0.21234562"`             |
-| `W`   | Working Time                  | 只有在订单在订单簿上时可见                       | `"W": 1668683798379`             |
-| `b`   | Match Type                    | 只有在订单有分配时可见                           | `"b": "ONE_PARTY_TRADE_REPORT"`  |
-| `a`   | Allocation ID                 | 只有在订单有分配时可见                           | `"a": 1234`                      |
-| `k`   | Working Floor                 | 只有在订单可能有分配时可见                       | `"k": "SOR"`                     |
-| `uS`  | UsedSor                       | 只有在订单使用 SOR 时可见                        | `"uS": true`                     |
-| `gP`  | Pegged Price Type             | 仅出现在挂钩订单中                               | `"gP": "PRIMARY_PEG"`            |
-| `gOT` | Pegged Offset Type            | 仅出现在挂钩订单中                               | `"gOT": "PRICE_LEVEL"`           |
-| `gOV` | Pegged Offset Value           | 仅出现在挂钩订单中                               | `"gOV": 5`                       |
-| `gp`  | Pegged Price                  | 仅出现在挂钩订单中                               | `"gp": "1.00000000"`             |
-| `eR`  | Expiry Reason                 | 出现在订单已过期时。                             | `"eR": "INSUFFICIENT_LIQUIDITY"` |
+| 字段  | 名称                                 | 描述                                                                                                                                         | 示例                             |
+| ----- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| `d`   | Trailing Delta                       | 出现在追踪止损订单中。                                                                                                                       | `"d": 4`                         |
+| `D`   | Trailing Time                        | 出现在追踪止损订单中。                                                                                                                       | `"D": 1668680518494`             |
+| `j`   | Strategy Id                          | 如果在请求中添加了`strategyId`参数，则会出现。                                                                                               | `"j": 1`                         |
+| `J`   | Strategy Type                        | 如果在请求中添加了`strategyType`参数，则会出现。                                                                                             | `"J": 1000000`                   |
+| `v`   | Prevented Match Id                   | 只有在因为 STP 导致订单失效时可见。                                                                                                          | `"v": 3`                         |
+| `A`   | Prevented Quantity                   | 只有在因为 STP 导致订单失效时可见。                                                                                                          | `"A": "3.000000"`                |
+| `B`   | Last Prevented Quantity              | 只有在因为 STP 导致订单失效时可见。                                                                                                          | `"B": "3.000000"`                |
+| `u`   | Trade Group Id                       | 只有在因为 STP 导致订单失效时可见。                                                                                                          | `"u": 1`                         |
+| `U`   | Counter Order Id                     | 只有在因为 STP 导致订单失效时可见。                                                                                                          | `"U": 37`                        |
+| `Cs`  | Counter Symbol                       | 只有在因为 STP 导致订单失效时可见。                                                                                                          | `"Cs": "BTCUSDT"`                |
+| `pl`  | Prevented Execution Quantity         | 只有在因为 STP 导致订单失效时可见。                                                                                                          | `"pl": "2.123456"`               |
+| `pL`  | Prevented Execution Price            | 只有在因为 STP 导致订单失效时可见。                                                                                                          | `"pL": "0.10000001"`             |
+| `pY`  | Prevented Execution Quote Qty        | 只有在因为 STP 导致订单失效时可见。                                                                                                          | `"pY": "0.21234562"`             |
+| `Qq`  | Quote Notional Limit                 | 只有在下单时设置了报价资产名义价值上限时可见。                                                                                                  | `"Qq": "90.00000000"`            |
+| `eV`  | Effective Self Trade Prevention Mode | 在预防撮合的回报中，实际生效的 STP 模式与订单的 `selfTradePreventionMode` 不同时可见。可能的值：`EXPIRE_MAKER`、`EXPIRE_BOTH`、`DECREMENT`。 | `"eV": "DECREMENT"`              |
+| `W`   | Working Time                         | 只有在订单在订单簿上时可见                                                                                                                   | `"W": 1668683798379`             |
+| `b`   | Match Type                           | 只有在订单有分配时可见                                                                                                                       | `"b": "ONE_PARTY_TRADE_REPORT"`  |
+| `a`   | Allocation ID                        | 只有在订单有分配时可见                                                                                                                       | `"a": 1234`                      |
+| `k`   | Working Floor                        | 只有在订单可能有分配时可见                                                                                                                   | `"k": "SOR"`                     |
+| `uS`  | UsedSor                              | 只有在订单使用 SOR 时可见                                                                                                                    | `"uS": true`                     |
+| `gP`  | Pegged Price Type                    | 仅出现在挂钩订单中                                                                                                                           | `"gP": "PRIMARY_PEG"`            |
+| `gOT` | Pegged Offset Type                   | 仅出现在挂钩订单中                                                                                                                           | `"gOT": "PRICE_LEVEL"`           |
+| `gOV` | Pegged Offset Value                  | 仅出现在挂钩订单中                                                                                                                           | `"gOV": 5`                       |
+| `gp`  | Pegged Price                         | 仅出现在挂钩订单中                                                                                                                           | `"gp": "1.00000000"`             |
+| `eR`  | Expiry Reason                        | 出现在订单已过期时。                                                                                                                         | `"eR": "INSUFFICIENT_LIQUIDITY"` |
 
 <a id="order-reject-reason"></a>
 

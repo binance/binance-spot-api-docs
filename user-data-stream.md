@@ -27,6 +27,9 @@
 - All timestamps in JSON payloads are in **milliseconds by default**.
 - Events may contain non-ASCII characters encoded in UTF-8 if you own or trade any assets or symbols
   whose names contain non-ASCII characters.
+- You can also filter specific events. Please see
+  [User Data Stream Subscription Filters](web-socket-api.md#user-data-stream-subscription-filters)
+  for more information.
 
 ## User Data Stream Events
 
@@ -133,6 +136,8 @@ Orders are updated with the `executionReport` event.
         "pl": "2.123456",              // Prevented Execution Quantity
         "pL": "0.10000001",            // Prevented Execution Price
         "pY": "0.21234562",            // Prevented Execution Quote Qty
+        "Qq": "90.00000000",           // Quote Notional Limit. Appears only if the order was placed with a quote notional limit.
+        "eV": "DECREMENT",             // Effective Self Trade Prevention Mode. Appears on prevented-match reports when the applied STP mode differs from the order's `selfTradePreventionMode`. Values: `EXPIRE_MAKER`, `EXPIRE_BOTH`, `DECREMENT`.
         "b": "ONE_PARTY_TRADE_REPORT", // Match Type
         "a": 1234,                     // Allocation ID
         "k": "SOR",                    // Working Floor
@@ -155,31 +160,33 @@ These are fields that appear in the payload only if certain conditions are met.
 For additional information on these parameters, please refer to the
 [Spot Glossary](faqs/spot_glossary.md).
 
-| Field | Name                          | Description                                                                     | Examples                         |
-| ----- | ----------------------------- | ------------------------------------------------------------------------------- | -------------------------------- |
-| `d`   | Trailing Delta                | Appears only for trailing stop orders.                                          | `"d": 4`                         |
-| `D`   | Trailing Time                 | Appears only for trailing stop orders.                                          | `"D": 1668680518494`             |
-| `j`   | Strategy Id                   | Appears only if the `strategyId` parameter was provided upon order placement.   | `"j": 1`                         |
-| `J`   | Strategy Type                 | Appears only if the `strategyType` parameter was provided upon order placement. | `"J": 1000000`                   |
-| `v`   | Prevented Match Id            | Appears only for orders that expired due to STP.                                | `"v": 3`                         |
-| `A`   | Prevented Quantity            | Appears only for orders that expired due to STP.                                | `"A": "3.000000"`                |
-| `B`   | Last Prevented Quantity       | Appears only for orders that expired due to STP.                                | `"B": "3.000000"`                |
-| `u`   | Trade Group Id                | Appears only for orders that expired due to STP.                                | `"u": 1`                         |
-| `U`   | Counter Order Id              | Appears only for orders that expired due to STP.                                | `"U": 37`                        |
-| `Cs`  | Counter Symbol                | Appears only for orders that expired due to STP.                                | `"Cs": "BTCUSDT"`                |
-| `pl`  | Prevented Execution Quantity  | Appears only for orders that expired due to STP.                                | `"pl": "2.123456"`               |
-| `pL`  | Prevented Execution Price     | Appears only for orders that expired due to STP.                                | `"pL": "0.10000001"`             |
-| `pY`  | Prevented Execution Quote Qty | Appears only for orders that expired due to STP.                                | `"pY": "0.21234562"`             |
-| `W`   | Working Time                  | Appears when the order is working on the book                                   | `"W": 1668683798379`             |
-| `b`   | Match Type                    | Appears for orders that have allocations                                        | `"b": "ONE_PARTY_TRADE_REPORT"`  |
-| `a`   | Allocation ID                 | Appears for orders that have allocations                                        | `"a": 1234`                      |
-| `k`   | Working Floor                 | Appears for orders that potentially have allocations                            | `"k": "SOR"`                     |
-| `uS`  | UsedSor                       | Appears for orders that used SOR                                                | `"uS": true`                     |
-| `gP`  | Pegged Price Type             | Appears only for Pegged Orders                                                  | `"gP": "PRIMARY_PEG"`            |
-| `gOT` | Pegged Offset Type            | Appears only for Pegged Orders                                                  | `"gOT": "PRICE_LEVEL"`           |
-| `gOV` | Pegged Offset Value           | Appears only for Pegged Orders                                                  | `"gOV": 5`                       |
-| `gp`  | Pegged Price                  | Appears only for Pegged Orders                                                  | `"gp": "1.00000000"`             |
-| `eR`  | Expiry Reason                 | Appears when the order has expired.                                             | `"eR": "INSUFFICIENT_LIQUIDITY"` |
+| Field | Name                                 | Description                                                                                                                                                          | Examples                         |
+| ----- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| `d`   | Trailing Delta                       | Appears only for trailing stop orders.                                                                                                                               | `"d": 4`                         |
+| `D`   | Trailing Time                        | Appears only for trailing stop orders.                                                                                                                               | `"D": 1668680518494`             |
+| `j`   | Strategy Id                          | Appears only if the `strategyId` parameter was provided upon order placement.                                                                                        | `"j": 1`                         |
+| `J`   | Strategy Type                        | Appears only if the `strategyType` parameter was provided upon order placement.                                                                                      | `"J": 1000000`                   |
+| `v`   | Prevented Match Id                   | Appears only for orders that expired due to STP.                                                                                                                     | `"v": 3`                         |
+| `A`   | Prevented Quantity                   | Appears only for orders that expired due to STP.                                                                                                                     | `"A": "3.000000"`                |
+| `B`   | Last Prevented Quantity              | Appears only for orders that expired due to STP.                                                                                                                     | `"B": "3.000000"`                |
+| `u`   | Trade Group Id                       | Appears only for orders that expired due to STP.                                                                                                                     | `"u": 1`                         |
+| `U`   | Counter Order Id                     | Appears only for orders that expired due to STP.                                                                                                                     | `"U": 37`                        |
+| `Cs`  | Counter Symbol                       | Appears only for orders that expired due to STP.                                                                                                                     | `"Cs": "BTCUSDT"`                |
+| `pl`  | Prevented Execution Quantity         | Appears only for orders that expired due to STP.                                                                                                                     | `"pl": "2.123456"`               |
+| `pL`  | Prevented Execution Price            | Appears only for orders that expired due to STP.                                                                                                                     | `"pL": "0.10000001"`             |
+| `pY`  | Prevented Execution Quote Qty        | Appears only for orders that expired due to STP.                                                                                                                     | `"pY": "0.21234562"`             |
+| `Qq`  | Quote Notional Limit                 | Appears only if the order was placed with a quote notional limit.                                                                                                    | `"Qq": "90.00000000"`            |
+| `eV`  | Effective Self Trade Prevention Mode | Appears on prevented-match reports when the applied STP mode differs from the order's `selfTradePreventionMode`. Values: `EXPIRE_MAKER`, `EXPIRE_BOTH`, `DECREMENT`. | `"eV": "DECREMENT"`              |
+| `W`   | Working Time                         | Appears when the order is working on the book                                                                                                                        | `"W": 1668683798379`             |
+| `b`   | Match Type                           | Appears for orders that have allocations                                                                                                                             | `"b": "ONE_PARTY_TRADE_REPORT"`  |
+| `a`   | Allocation ID                        | Appears for orders that have allocations                                                                                                                             | `"a": 1234`                      |
+| `k`   | Working Floor                        | Appears for orders that potentially have allocations                                                                                                                 | `"k": "SOR"`                     |
+| `uS`  | UsedSor                              | Appears for orders that used SOR                                                                                                                                     | `"uS": true`                     |
+| `gP`  | Pegged Price Type                    | Appears only for Pegged Orders                                                                                                                                       | `"gP": "PRIMARY_PEG"`            |
+| `gOT` | Pegged Offset Type                   | Appears only for Pegged Orders                                                                                                                                       | `"gOT": "PRICE_LEVEL"`           |
+| `gOV` | Pegged Offset Value                  | Appears only for Pegged Orders                                                                                                                                       | `"gOV": 5`                       |
+| `gp`  | Pegged Price                         | Appears only for Pegged Orders                                                                                                                                       | `"gp": "1.00000000"`             |
+| `eR`  | Expiry Reason                        | Appears when the order has expired.                                                                                                                                  | `"eR": "INSUFFICIENT_LIQUIDITY"` |
 
 #### Order Reject Reason
 
