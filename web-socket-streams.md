@@ -91,7 +91,8 @@
 ```javascript
 {
   "e": "serverShutdown", // Event type
-  "E": 1770123456789     // Event time
+  "E": 1770123456789,    // Event time
+  "T": 1770124000000     // Upcoming shutdown time
 }
 ```
 
@@ -102,10 +103,13 @@
   "stream": "!serverShutdown",
   "data": {
     "e": "serverShutdown", // Event type
-    "E": 1770123456789     // Event time
+    "E": 1770123456789,    // Event time
+    "T": 1770124000000     // Upcoming shutdown time
   }
 }
 ```
+
+The `T` field indicates when the WebSocket session will be shut down.
 
 Please establish a new connection as soon as possible to prevent interruption.
 
