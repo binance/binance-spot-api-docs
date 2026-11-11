@@ -359,23 +359,25 @@ These fields can apply to order lists.
 
 The fields are listed below:
 
-| Field               | Description                                                                                                         | Visibility conditions                                                                     | Examples                                   |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------ |
-| `icebergQty`        | Quantity for the iceberg order                                                                                      | Appears only if the parameter `icebergQty` was sent in the request.                       | `"icebergQty": "0.00000000"`               |
-| `preventedMatchId`  | When used in combination with `symbol`, can be used to query a prevented match.                                     | Appears only if the order expired due to STP.                                             | `"preventedMatchId": 0`                    |
-| `preventedQuantity` | Order quantity that expired due to STP                                                                              | Appears only if the order expired due to STP.                                             | `"preventedQuantity": "1.200000"`          |
-| `stopPrice`         | Price when the algorithmic order will be triggered                                                                  | Appears for `STOP_LOSS`. `TAKE_PROFIT`, `STOP_LOSS_LIMIT` and `TAKE_PROFIT_LIMIT` orders. | `"stopPrice": "23500.00000000"`            |
-| `strategyId`        | Can be used to label an order that's part of an order strategy.                                                     | Appears if the parameter was populated in the request.                                    | `"strategyId": 37463720`                   |
-| `strategyType`      | Can be used to label an order that is using an order strategy.                                                      | Appears if the parameter was populated in the request.                                    | `"strategyType": 1000000`                  |
-| `trailingDelta`     | Delta price change required before order activation                                                                 | Appears for Trailing Stop Orders.                                                         | `"trailingDelta": 10`                      |
-| `trailingTime`      | Time when the trailing order is now active and tracking price changes                                               | Appears only for Trailing Stop Orders.                                                    | `"trailingTime": -1`                       |
-| `usedSor`           | Field that determines whether order used SOR                                                                        | Appears when placing orders using SOR                                                     | `"usedSor": true`                          |
-| `workingFloor`      | Field that determines whether the order is being filled by the SOR or by the order book the order was submitted to. | Appears when placing orders using SOR                                                     | `"workingFloor": "SOR"`                    |
-| `pegPriceType`      | Price peg type                                                                                                      | Only for pegged orders                                                                    | `"pegPriceType": "PRIMARY_PEG"`            |
-| `pegOffsetType`     | Price peg offset type                                                                                               | Only for pegged orders, if requested                                                      | `"pegOffsetType": "PRICE_LEVEL"`           |
-| `pegOffsetValue`    | Price peg offset value                                                                                              | Only for pegged orders, if requested                                                      | `"pegOffsetValue": 5`                      |
-| `peggedPrice`       | Current price order is pegged at                                                                                    | Only for pegged orders, once determined                                                   | `"peggedPrice": "87523.83710000"`          |
-| `expiryReason`      | Cause of the order’s expiration                                                                                     | When an order has expired                                                                 | `"expiryReason": "INSUFFICIENT_LIQUIDITY"` |
+| Field                              | Description                                                                                                         | Visibility conditions                                                                                                                                     | Examples                                          |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| `icebergQty`                       | Quantity for the iceberg order                                                                                      | Appears only if the parameter `icebergQty` was sent in the request.                                                                                       | `"icebergQty": "0.00000000"`                      |
+| `quoteNotionalLimit`               | Maximum quote-asset notional the order may consume                                                                  | Appears only if the order was placed with a quote notional limit.                                                                                         | `"quoteNotionalLimit": "250.00000000"`            |
+| `preventedMatchId`                 | When used in combination with `symbol`, can be used to query a prevented match.                                     | Appears only if the order expired due to STP.                                                                                                             | `"preventedMatchId": 0`                           |
+| `preventedQuantity`                | Order quantity that expired due to STP                                                                              | Appears only if the order expired due to STP.                                                                                                             | `"preventedQuantity": "1.200000"`                 |
+| `effectiveSelfTradePreventionMode` | Self-trade-prevention mode the engine actually applied. Values: `EXPIRE_MAKER`, `EXPIRE_BOTH`, `DECREMENT`.         | Appears only inside `preventedMatches[]` entries of `FULL` order responses, when the applied STP mode differs from the order's `selfTradePreventionMode`. | `"effectiveSelfTradePreventionMode": "DECREMENT"` |
+| `stopPrice`                        | Price when the algorithmic order will be triggered                                                                  | Appears for `STOP_LOSS`. `TAKE_PROFIT`, `STOP_LOSS_LIMIT` and `TAKE_PROFIT_LIMIT` orders.                                                                 | `"stopPrice": "23500.00000000"`                   |
+| `strategyId`                       | Can be used to label an order that's part of an order strategy.                                                     | Appears if the parameter was populated in the request.                                                                                                    | `"strategyId": 37463720`                          |
+| `strategyType`                     | Can be used to label an order that is using an order strategy.                                                      | Appears if the parameter was populated in the request.                                                                                                    | `"strategyType": 1000000`                         |
+| `trailingDelta`                    | Delta price change required before order activation                                                                 | Appears for Trailing Stop Orders.                                                                                                                         | `"trailingDelta": 10`                             |
+| `trailingTime`                     | Time when the trailing order is now active and tracking price changes                                               | Appears only for Trailing Stop Orders.                                                                                                                    | `"trailingTime": -1`                              |
+| `usedSor`                          | Field that determines whether order used SOR                                                                        | Appears when placing orders using SOR                                                                                                                     | `"usedSor": true`                                 |
+| `workingFloor`                     | Field that determines whether the order is being filled by the SOR or by the order book the order was submitted to. | Appears when placing orders using SOR                                                                                                                     | `"workingFloor": "SOR"`                           |
+| `pegPriceType`                     | Price peg type                                                                                                      | Only for pegged orders                                                                                                                                    | `"pegPriceType": "PRIMARY_PEG"`                   |
+| `pegOffsetType`                    | Price peg offset type                                                                                               | Only for pegged orders, if requested                                                                                                                      | `"pegOffsetType": "PRICE_LEVEL"`                  |
+| `pegOffsetValue`                   | Price peg offset value                                                                                              | Only for pegged orders, if requested                                                                                                                      | `"pegOffsetValue": 5`                             |
+| `peggedPrice`                      | Current price order is pegged at                                                                                    | Only for pegged orders, once determined                                                                                                                   | `"peggedPrice": "87523.83710000"`                 |
+| `expiryReason`                     | Cause of the order’s expiration                                                                                     | When an order has expired                                                                                                                                 | `"expiryReason": "INSUFFICIENT_LIQUIDITY"`        |
 
 ## Event format
 
@@ -432,10 +434,19 @@ Event fields:
 {
   "event": {
     "e": "serverShutdown", // Event Type
-    "E": 1770123456789     // Event Time
+    "E": 1770123456789,    // Event Time
+    "T": 1770124000000     // Upcoming shutdown time
   }
 }
 ```
+
+The `T` field indicates when the WebSocket session will be shut down.
+
+> [!NOTE]
+>
+> In SBE sessions, the `T` field is only present in [SBE schema 3:6](https://github.com/binance/binance-spot-api-docs/tree/master/sbe/schemas) and
+> later.
+>
 
 Please establish a new connection as soon as possible to prevent interruption.
 
@@ -1650,6 +1661,8 @@ Name | Type | Mandatory | Description
                 "cancelReplaceAllowed": true,
                 "amendAllowed": false,
                 "pegInstructionsAllowed": true,
+                "marketQuoteNotionalLimitAllowed": true,
+                "limitQuoteNotionalLimitAllowed": true,
                 "isSpotTradingAllowed": true,
                 "isMarginTradingAllowed": true,
                 // Symbol filters are explained on the "Filters" page:
@@ -3573,6 +3586,7 @@ Name | Type | Mandatory | Description
 `pegPriceType` | ENUM | NO | See Pegged Orders Info
 `pegOffsetValue` | INT | NO | Maximum: 100. <br/> Price level to peg the price to (max: 100). See Pegged Orders Info
 `pegOffsetType` | ENUM | NO | Only `PRICE_LEVEL` is supported. See Pegged Orders Info
+`quoteNotionalLimit` | DECIMAL | NO | For orders on the BUY side only. Maximum quote-asset notional the order may consume. See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
 `recvWindow` | DECIMAL | NO | Maximum: 60000. <br/> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `timestamp` | LONG | YES | Unix timestamp used to sign the request, in milliseconds or microseconds. The value must reflect the current client <br/> time and is validated by the server for signed endpoints.
 `signature` | STRING | YES |
@@ -4034,6 +4048,7 @@ Name | Type | Mandatory | Description
 `pegPriceType` | ENUM | NO | `PRIMARY_PEG` or `MARKET_PEG`. See [Pegged Orders](faqs/pegged_orders.md)
 `pegOffsetValue` | INT | NO | Maximum: 100. <br/> Price level for pegging (max: 100). See [Pegged Orders](faqs/pegged_orders.md)
 `pegOffsetType` | ENUM | NO | Only `PRICE_LEVEL` is supported. See [Pegged Orders](faqs/pegged_orders.md)
+`quoteNotionalLimit` | DECIMAL | NO | For orders on the BUY side only. Maximum quote-asset notional the order may consume. See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
 `recvWindow` | DECIMAL | NO | Maximum: 60000. <br/> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `timestamp` | LONG | YES | Unix timestamp used to sign the request, in milliseconds or microseconds. The value must reflect the current client <br/> time and is validated by the server for signed endpoints.
 `signature` | STRING | YES |
@@ -4389,6 +4404,7 @@ Name | Type | Mandatory | Description
 `pegPriceType` | ENUM | NO | `PRIMARY_PEG` or `MARKET_PEG` <br> See Pegged Orders
 `pegOffsetValue` | INT | NO | Maximum: 100. <br/> Price level to peg the price to (max: 100) <br> See Pegged Orders
 `pegOffsetType` | ENUM | NO | Only `PRICE_LEVEL` is supported <br> See Pegged Orders
+`quoteNotionalLimit` | DECIMAL | NO | For replacement orders on the BUY side only. Maximum quote-asset notional the replacement order may consume. See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
 `recvWindow` | DECIMAL | NO | Maximum: 60000. <br/> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `timestamp` | LONG | YES | Unix timestamp used to sign the request, in milliseconds or microseconds. The value must reflect the current client <br/> time and is validated by the server for signed endpoints.
 `signature` | STRING | YES |
@@ -4959,7 +4975,7 @@ If `orderRateLimitExceededMode` is `CANCEL_ONLY` regardless of `cancelReplaceMod
             },
             "newOrderResponse": {
                 "code": -1015,
-                "msg": "Too many new orders; current limit is 50 orders per 10 SECOND."
+                "msg": "Too many orders placed without trading; current limit is 50 non-trading orders per 10 SECOND. Unable to place new orders until trades occur or window resets."
             }
         }
     },
@@ -4997,7 +5013,7 @@ If `orderRateLimitExceededMode` is `DO_NOTHING` regardless of `cancelReplaceMode
     "status": 429,
     "error": {
         "code": -1015,
-        "msg": "Too many new orders; current limit is 50 orders per 10 SECOND."
+        "msg": "Too many orders placed without trading; current limit is 50 non-trading orders per 10 SECOND. Unable to place new orders until trades occur or window resets."
     },
     "rateLimits": [
         {
@@ -5611,6 +5627,8 @@ Name | Type | Mandatory | Description
 `belowPegOffsetValue` | INT | NO | Maximum: 100.
 `newOrderRespType` | ENUM | NO | Select response format: `ACK`, `RESULT`, `FULL`.
 `selfTradePreventionMode` | ENUM | NO | The allowed enums is dependent on what is configured on the symbol. Supported values: [STP Modes](enums.md#stpmodes)
+`aboveQuoteNotionalLimit` | DECIMAL | NO | Quote notional limit for the above order (only for orders on the BUY side). See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
+`belowQuoteNotionalLimit` | DECIMAL | NO | Quote notional limit for the below order (only for orders on the BUY side). See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
 `recvWindow` | DECIMAL | NO | Maximum: 60000. <br/> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `timestamp` | LONG | YES | Unix timestamp used to sign the request, in milliseconds or microseconds. The value must reflect the current client <br/> time and is validated by the server for signed endpoints.
 `signature` | STRING | YES |
@@ -5796,6 +5814,8 @@ Name | Type | Mandatory | Description
 `pendingPegOffsetType` | ENUM | NO |
 `pendingPegPriceType` | ENUM | NO | See [Pegged Orders](faqs/pegged_orders.md)
 `pendingPegOffsetValue` | INT | NO | Maximum: 100.
+`workingQuoteNotionalLimit` | DECIMAL | NO | Quote notional limit for the working order (only for orders on the BUY side). See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
+`pendingQuoteNotionalLimit` | DECIMAL | NO | Quote notional limit for the pending order (only for orders on the BUY side). See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
 `recvWindow` | DECIMAL | NO | Maximum: 60000. <br/> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `timestamp` | LONG | YES | Unix timestamp used to sign the request, in milliseconds or microseconds. The value must reflect the current client <br/> time and is validated by the server for signed endpoints.
 `signature` | STRING | YES |
@@ -5992,6 +6012,9 @@ Name | Type | Mandatory | Description
 `pendingBelowPegPriceType` | ENUM | NO | See [Pegged Orders](faqs/pegged_orders.md)
 `pendingBelowPegOffsetType` | ENUM | NO |
 `pendingBelowPegOffsetValue` | INT | NO | Maximum: 100.
+`workingQuoteNotionalLimit` | DECIMAL | NO | Quote notional limit for the working order (only for orders on the BUY side). See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
+`pendingAboveQuoteNotionalLimit` | DECIMAL | NO | Quote notional limit for the pending above order (only for orders on the BUY side). See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
+`pendingBelowQuoteNotionalLimit` | DECIMAL | NO | Quote notional limit for the pending below order (only for orders on the BUY side). See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
 `recvWindow` | DECIMAL | NO | Maximum: 60000. <br/> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `timestamp` | LONG | YES | Unix timestamp used to sign the request, in milliseconds or microseconds. The value must reflect the current client <br/> time and is validated by the server for signed endpoints.
 `signature` | STRING | YES |
@@ -6194,6 +6217,7 @@ Name | Type | Mandatory | Description
 `pendingPegPriceType` | ENUM | NO | See [Pegged Orders](faqs/pegged_orders.md)
 `pendingPegOffsetType` | ENUM | NO |
 `pendingPegOffsetValue` | INT | NO | Maximum: 100.
+`workingQuoteNotionalLimit` | DECIMAL | NO | Quote notional limit for the working LIMIT order on the BUY side. See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
 `recvWindow` | DECIMAL | NO | Maximum: 60000. <br/> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `timestamp` | LONG | YES | Unix timestamp used to sign the request, in milliseconds or microseconds. The value must reflect the current client <br/> time and is validated by the server for signed endpoints.
 `signature` | STRING | YES |
@@ -6355,6 +6379,7 @@ Name | Type | Mandatory | Description
 `pendingBelowPegPriceType` | ENUM | NO | See [Pegged Orders](faqs/pegged_orders.md)
 `pendingBelowPegOffsetType` | ENUM | NO |
 `pendingBelowPegOffsetValue` | INT | NO | Maximum: 100.
+`workingQuoteNotionalLimit` | DECIMAL | NO | Quote notional limit for the working LIMIT order on the BUY side. See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
 `recvWindow` | DECIMAL | NO | Maximum: 60000. <br/> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `timestamp` | LONG | YES | Unix timestamp used to sign the request, in milliseconds or microseconds. The value must reflect the current client <br/> time and is validated by the server for signed endpoints.
 `signature` | STRING | YES |
@@ -8076,7 +8101,100 @@ Subscribe to the User Data Stream in the current WebSocket connection.
 
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
+`filter` | OBJECT | NO | Optional filter that controls which events are delivered on this subscription. See [User Data Stream Subscription Filters](#user-data-stream-subscription-filters). When omitted, all events for the subscribed account are delivered.
 `apiKey` | STRING | YES |
+
+<a id="user-data-stream-subscription-filters"></a>
+**User Data Stream Subscription Filters**
+
+The optional `filter` parameter accepted by [`userDataStream.subscribe`](web-socket-api.md#subscribe-to-user-data-stream-user_stream) and [`userDataStream.subscribe.signature`](web-socket-api.md#subscribe-to-user-data-stream-through-signature-subscription-user_stream) controls which events are delivered on the subscription. Without a filter, all events for the subscribed account are delivered. The filter object must contain at least one key when present; empty objects and empty arrays are rejected.
+
+Filters use the short field names that appear in event payloads. Within a filter key, values are logically ORed (match any). Across filter keys, matches are logically ANDed (an event must pass every specified filter). Filters that don't apply to an event type are ignored - the event passes through.
+
+**Available filter keys:**
+
+Key | Field | Values | Applies to | Bypass behavior
+--- | ----- | ------ | ---------- | ---------------
+`e` | Event type | camelCase event type names | All events | -
+`s` | Symbol | Instrument symbol names (e.g. `BTCUSDT`) | Events that carry a symbol field | Events without a symbol (`balanceUpdate`, `outboundAccountPosition`, `externalLockUpdate`) are delivered regardless.
+`a` | Asset | Asset names (e.g. `BTC`, `USDT`) | Events that carry an asset field | Events without an asset (`executionReport`, `listStatus`, `outboundAccountPosition`) are delivered regardless.
+`x` | Execution type | `SCREAMING_SNAKE_CASE` execution types | `executionReport` events only | All non-`executionReport` events are delivered regardless.
+
+**Event type values (`e`):**
+
+Value | Description
+----- | -----------
+`executionReport` | Order lifecycle events (new, trade, cancel, expire, amend)
+`balanceUpdate` | Balance credit/debit (deposits, withdrawals)
+`outboundAccountPosition` | Account position snapshot after a change
+`listStatus` | Order list (OCO, OTO, OTOCO, OPO, OPOCO) status updates
+`externalLockUpdate` | External lock balance changes
+
+**Execution type values (`x`):**
+
+Value | Description
+----- | -----------
+`NEW` | New order accepted
+`TRADE` | Order filled (partial or full)
+`CANCELED` | Order canceled
+`REPLACED` | Order replaced (cancel-replace)
+`REJECTED` | Order rejected
+`EXPIRED` | Order expired
+`TRADE_PREVENTION` | Self-trade prevention triggered
+
+**Examples:**
+
+Only execution reports and balance updates:
+
+```javascript
+{ "filter": { "e": ["executionReport", "balanceUpdate"] } }
+```
+
+Only events for BTCUSDT and ETHUSDT:
+
+```javascript
+{ "filter": { "s": ["BTCUSDT", "ETHUSDT"] } }
+```
+
+Only balance updates for BTC:
+
+```javascript
+{ "filter": { "e": ["balanceUpdate"], "a": ["BTC"] } }
+```
+
+Only fills on execution reports:
+
+```javascript
+{ "filter": { "e": ["executionReport"], "x": ["TRADE"] } }
+```
+
+**Validation rules:**
+
+Condition | Result
+--------- | ------
+`filter` omitted | All events delivered (no filter)
+`filter: {}` | Error: empty filter object
+`filter: {"e": []}` | Error: empty value array
+`filter: {"e": ["executionReport", "executionReport"]}` | Error: duplicate value
+`filter: {"e": ["badType"]}` | Error: unrecognized event type
+`filter: {"s": ["NOSYMBOL"]}` | Error: unknown symbol ([`-1121`](errors.md#-1121-bad_symbol))
+`filter: {"a": ["NOASSET"]}` | Error: unknown asset ([`-1108`](errors.md#-1108-bad_asset))
+`filter: {"z": [...]}` | Error: unknown filter key
+
+**Notes:**
+
+* `listenKeyExpired` and `eventStreamTerminated` lifecycle events are always delivered regardless of filters.
+* When using `userDataStream.subscribe.signature`, the `filter` must be included in the string that is signed. For the signature to match:
+  * Filter keys must be sorted alphabetically: `a`, `e`, `s`, `x`.
+  * There must be no whitespace between JSON elements of the filter.
+
+  Example parameter string being signed:
+
+  ```
+  apiKey=...&filter={"e":["executionReport"],"s":["BAZUSD"],"x":["TRADE"]}&timestamp=...
+  ```
+
+* When extending a signature subscription by re-subscribing with a new request, the active filter is replaced with the one in the new request.
 
 **Response:**
 ```javascript
@@ -8195,6 +8313,7 @@ Name | Type | Mandatory | Description
 `apiKey` | STRING | YES |
 `recvWindow` | DECIMAL | NO | Maximum: 60000. <br/> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 `timestamp` | LONG | YES | Unix timestamp used to sign the request, in milliseconds or microseconds. The value must reflect the current client <br/> time and is validated by the server for signed endpoints.
+`filter` | OBJECT | NO | Optional event filter. See [User Data Stream Subscription Filters](web-socket-api.md#user-data-stream-subscription-filters). When included, `filter` must be in the signed string with sorted keys and no whitespace between JSON elements.
 `signature` | STRING | YES |
 
 **Data Source:** Memory
