@@ -89,23 +89,25 @@
 
 订单响应中的有一些字段仅在满足特定条件时才会出现。这些订单响应可以来自下订单，查询订单或取消订单，并且可以包括订单列表类型。下面列出了这些字段：
 
-| 名称                | 描述                                                                  | 显示的条件                                                                        | 示例                                       |
-| ------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------ |
-| `icebergQty`        | 冰山订单的数量。                                                      | 只有在请求中发送 `icebergQty` 参数时才会出现。                                    | `"icebergQty": "0.00000000"`               |
-| `preventedMatchId`  | 与 `symbol` 结合使用时，可用于查询因为 STP 导致订单失效的过期订单。   | 只有在因为 STP 导致订单失效时可见。                                               | `"preventedMatchId": 0`                    |
-| `preventedQuantity` | 因为 STP 导致订单失效的数量。                                         | 只有在因为 STP 导致订单失效时可见。                                               | `"preventedQuantity": "1.200000"`          |
-| `stopPrice`         | 用于设置逻辑订单中的触发价。                                          | `STOP_LOSS`，`TAKE_PROFIT`，`STOP_LOSS_LIMIT` 和 `TAKE_PROFIT_LIMIT` 订单时可见。 | `"stopPrice": "23500.00000000"`            |
-| `strategyId`        | 策略单ID; 用以关联此订单对应的交易策略。                              | 如果在请求中添加了参数，则会出现。                                                | `"strategyId": 37463720`                   |
-| `strategyType`      | 策略单类型; 用以显示此订单对应的交易策略。                            | 如果在请求中添加了参数，则会出现。                                                | `"strategyType": 1000000`                  |
-| `trailingDelta`     | 用以定义追踪止盈止损订单被触发的价格差。                              | 出现在追踪止损订单中。                                                            | `"trailingDelta": 10`                      |
-| `trailingTime`      | 追踪单被激活和跟踪价格变化的时间。                                    | 出现在追踪止损订单中。                                                            | `"trailingTime": -1`                       |
-| `usedSor`           | 用于确定订单是否使用SOR的字段                                         | 在使用SOR下单时出现                                                               | `"usedSor": true`                          |
-| `workingFloor`      | 用以定义订单是通过 SOR 还是由订单提交到的订单簿（order book）成交的。 | 出现在使用了 SOR 的订单中。                                                       | `"workingFloor": "SOR"`                    |
-| `pegPriceType`      | 挂钩价格类型                                                          | 仅用于挂钩订单                                                                    | `"pegPriceType": "PRIMARY_PEG"`            |
-| `pegOffsetType`     | 挂钩价格偏移类型                                                      | 如若需要，仅用于挂钩订单                                                          | `"pegOffsetType": "PRICE_LEVEL"`           |
-| `pegOffsetValue`    | 挂钩价格偏移值                                                        | 如若需要，仅用于挂钩订单                                                          | `"pegOffsetValue": 5`                      |
-| `peggedPrice`       | 订单对应的当前挂钩价格                                                | 一旦确定，仅用于挂钩订单                                                          | `"peggedPrice": "87523.83710000"`          |
-| `expiryReason`      | 订单失效原因                                                          | 当订单失效时                                                                      | `"expiryReason": "INSUFFICIENT_LIQUIDITY"` |
+| 名称                               | 描述                                                                                | 显示的条件                                                                                                                   | 示例                                              |
+| ---------------------------------- | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| `icebergQty`                       | 冰山订单的数量。                                                                    | 只有在请求中发送 `icebergQty` 参数时才会出现。                                                                               | `"icebergQty": "0.00000000"`                      |
+| `quoteNotionalLimit`               | 订单可消耗的报价资产名义价值上限。                                                  | 只有在下单时设置了报价资产名义价值上限时才会出现。                                                                           | `"quoteNotionalLimit": "250.00000000"`            |
+| `preventedMatchId`                 | 与 `symbol` 结合使用时，可用于查询因为 STP 导致订单失效的过期订单。                 | 只有在因为 STP 导致订单失效时可见。                                                                                          | `"preventedMatchId": 0`                           |
+| `preventedQuantity`                | 因为 STP 导致订单失效的数量。                                                       | 只有在因为 STP 导致订单失效时可见。                                                                                          | `"preventedQuantity": "1.200000"`                 |
+| `effectiveSelfTradePreventionMode` | 撮合引擎实际生效的 STP 模式。可能的值：`EXPIRE_MAKER`、`EXPIRE_BOTH`、`DECREMENT`。 | 仅出现在 `FULL` 订单响应的 `preventedMatches[]` 条目中，且实际生效的 STP 模式与订单的 `selfTradePreventionMode` 不同时出现。 | `"effectiveSelfTradePreventionMode": "DECREMENT"` |
+| `stopPrice`                        | 用于设置逻辑订单中的触发价。                                                        | `STOP_LOSS`，`TAKE_PROFIT`，`STOP_LOSS_LIMIT` 和 `TAKE_PROFIT_LIMIT` 订单时可见。                                            | `"stopPrice": "23500.00000000"`                   |
+| `strategyId`                       | 策略单ID; 用以关联此订单对应的交易策略。                                            | 如果在请求中添加了参数，则会出现。                                                                                           | `"strategyId": 37463720`                          |
+| `strategyType`                     | 策略单类型; 用以显示此订单对应的交易策略。                                          | 如果在请求中添加了参数，则会出现。                                                                                           | `"strategyType": 1000000`                         |
+| `trailingDelta`                    | 用以定义追踪止盈止损订单被触发的价格差。                                            | 出现在追踪止损订单中。                                                                                                       | `"trailingDelta": 10`                             |
+| `trailingTime`                     | 追踪单被激活和跟踪价格变化的时间。                                                  | 出现在追踪止损订单中。                                                                                                       | `"trailingTime": -1`                              |
+| `usedSor`                          | 用于确定订单是否使用SOR的字段                                                       | 在使用SOR下单时出现                                                                                                          | `"usedSor": true`                                 |
+| `workingFloor`                     | 用以定义订单是通过 SOR 还是由订单提交到的订单簿（order book）成交的。               | 出现在使用了 SOR 的订单中。                                                                                                  | `"workingFloor": "SOR"`                           |
+| `pegPriceType`                     | 挂钩价格类型                                                                        | 仅用于挂钩订单                                                                                                               | `"pegPriceType": "PRIMARY_PEG"`                   |
+| `pegOffsetType`                    | 挂钩价格偏移类型                                                                    | 如若需要，仅用于挂钩订单                                                                                                     | `"pegOffsetType": "PRICE_LEVEL"`                  |
+| `pegOffsetValue`                   | 挂钩价格偏移值                                                                      | 如若需要，仅用于挂钩订单                                                                                                     | `"pegOffsetValue": 5`                             |
+| `peggedPrice`                      | 订单对应的当前挂钩价格                                                              | 一旦确定，仅用于挂钩订单                                                                                                     | `"peggedPrice": "87523.83710000"`                 |
+| `expiryReason`                     | 订单失效原因                                                                        | 当订单失效时                                                                                                                 | `"expiryReason": "INSUFFICIENT_LIQUIDITY"`        |
 
 <a id="limits"></a>
 
@@ -881,6 +883,8 @@ symbolStatus | ENUM | NO | 用于过滤具有此 `tradingStatus` 的交易对。
             "cancelReplaceAllowed": false,
             "amendAllowed": false,
             "pegInstructionsAllowed": true,
+            "marketQuoteNotionalLimitAllowed": true,
+            "limitQuoteNotionalLimitAllowed": true,
             "isSpotTradingAllowed": true,
             "isMarginTradingAllowed": true,
             // 交易对过滤器在"过滤器"页面上进行了说明：
@@ -2094,6 +2098,7 @@ selfTradePreventionMode | ENUM | NO | 允许的 ENUM 取决于交易对的配置
 pegPriceType | ENUM | NO | 参阅 关于挂钩订单参数的注意事项
 pegOffsetValue | INT | NO | 用于挂钩的价格水平（最大值：100）。参阅 关于挂钩订单参数的注意事项
 pegOffsetType | ENUM | NO | 仅支持 `PRICE_LEVEL`。参阅 关于挂钩订单参数的注意事项
+quoteNotionalLimit | DECIMAL | NO | 仅适用于买单。订单可消耗的报价资产名义价值上限。参见 [报价资产名义价值上限](faqs/quoteNotionalLimit_CN.md)。
 recvWindow | DECIMAL | NO | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp | LONG | YES | 用于请求签名的 Unix 时间戳，单位为毫秒或微秒。该值必须反映客户端当前时间，并会在签名接口中由服务器进行校验。
 
@@ -2271,6 +2276,7 @@ selfTradePreventionMode | ENUM | NO | 允许的 ENUM 取决于交易对的配置
 pegPriceType | ENUM | NO | `PRIMARY_PEG` 或 `MARKET_PEG`。 参阅 [关于挂钩订单参数的注意事项](faqs/pegged_orders_CN.md)
 pegOffsetValue | INT | NO | 用于挂钩的价格水平（最大值：100）。 参阅 [关于挂钩订单参数的注意事项](faqs/pegged_orders_CN.md)
 pegOffsetType | ENUM | NO | 仅支持 `PRICE_LEVEL`。 参阅 [关于挂钩订单参数的注意事项](faqs/pegged_orders_CN.md)
+quoteNotionalLimit | DECIMAL | NO | 仅适用于买单。订单可消耗的报价资产名义价值上限。参见 [报价资产名义价值上限](faqs/quoteNotionalLimit_CN.md)。
 recvWindow | DECIMAL | NO | 最大值为 `60000` 毫秒。 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp | LONG | YES | 用于请求签名的 Unix 时间戳，单位为毫秒或微秒。该值必须反映客户端当前时间，并会在签名接口中由服务器进行校验。
 
@@ -2583,6 +2589,7 @@ orderRateLimitExceededMode | ENUM | NO | 支持的值： <br></br> `DO_NOTHING`�
 pegPriceType | ENUM | NO | `PRIMARY_PEG` 或 `MARKET_PEG`。 <br> 参阅 关于挂钩订单参数的注意事项
 pegOffsetValue | INT | NO | 用于挂钩的价格水平（最大值：100）。 <br> 参阅 关于挂钩订单参数的注意事项
 pegOffsetType | ENUM | NO | 仅支持 `PRICE_LEVEL`。 <br> 参阅 关于挂钩订单参数的注意事项
+quoteNotionalLimit | DECIMAL | NO | 仅适用于买单方向的新订单。新订单可消耗的报价资产名义价值上限。参见 [报价资产名义价值上限](faqs/quoteNotionalLimit_CN.md)。
 recvWindow | DECIMAL | NO | 最大值为 `60000` 毫秒。 <br> 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp | LONG | YES | 用于请求签名的 Unix 时间戳，单位为毫秒或微秒。该值必须反映客户端当前时间，并会在签名接口中由服务器进行校验。
 
@@ -2964,7 +2971,7 @@ timestamp | LONG | YES | 用于请求签名的 Unix 时间戳，单位为毫秒�
         },
         "newOrderResponse": {
             "code": -1015,
-            "msg": "Too many new orders; current limit is 1 orders per 10 SECOND."
+            "msg": "Too many orders placed without trading; current limit is 1 non-trading orders per 10 SECOND. Unable to place new orders until trades occur or window resets."
         }
     }
 }
@@ -2975,7 +2982,7 @@ timestamp | LONG | YES | 用于请求签名的 Unix 时间戳，单位为毫秒�
 ```javascript
 {
     "code": -1015,
-    "msg": "Too many new orders; current limit is 1 orders per 10 SECOND."
+    "msg": "Too many orders placed without trading; current limit is 1 non-trading orders per 10 SECOND. Unable to place new orders until trades occur or window resets."
 }
 ```
 
@@ -3295,6 +3302,8 @@ belowPegOffsetType | ENUM | NO |
 belowPegOffsetValue | INT | NO |
 newOrderRespType | ENUM | NO | 响应格式可选值: `ACK`, `RESULT`, `FULL`。
 selfTradePreventionMode | ENUM | NO | 允许的 ENUM 取决于交易对上的配置。 支持值：[STP 模式](enums_CN.md#stpmodes)
+aboveQuoteNotionalLimit | DECIMAL | NO | 上方订单的报价资产名义价值上限（仅适用于买单）。参见 [报价资产名义价值上限](faqs/quoteNotionalLimit_CN.md)。
+belowQuoteNotionalLimit | DECIMAL | NO | 下方订单的报价资产名义价值上限（仅适用于买单）。参见 [报价资产名义价值上限](faqs/quoteNotionalLimit_CN.md)。
 recvWindow | DECIMAL | NO | 最大值为 `60000` 毫秒。 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp | LONG | YES | 用于请求签名的 Unix 时间戳，单位为毫秒或微秒。该值必须反映客户端当前时间，并会在签名接口中由服务器进行校验。
 
@@ -3424,6 +3433,8 @@ pendingStrategyType | INT | NO | 用于标识待处理订单策略的任意数�
 pendingPegPriceType | ENUM | NO | 参阅 [关于挂钩订单参数的注意事项](faqs/pegged_orders_CN.md)
 pendingPegOffsetType | ENUM | NO |
 pendingPegOffsetValue | INT | NO |
+workingQuoteNotionalLimit | DECIMAL | NO | 生效订单的报价资产名义价值上限（仅适用于买单）。参见 [报价资产名义价值上限](faqs/quoteNotionalLimit_CN.md)。
+pendingQuoteNotionalLimit | DECIMAL | NO | 待处理订单的报价资产名义价值上限（仅适用于买单）。参见 [报价资产名义价值上限](faqs/quoteNotionalLimit_CN.md)。
 recvWindow | DECIMAL | NO | 最大值为 `60000` 毫秒。 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp | LONG | YES | 用于请求签名的 Unix 时间戳，单位为毫秒或微秒。该值必须反映客户端当前时间，并会在签名接口中由服务器进行校验。
 
@@ -3578,6 +3589,9 @@ pendingBelowStrategyType | INT | NO | 用于标识待处理下方订单策略的
 pendingBelowPegPriceType | ENUM | NO | 参阅 [关于挂钩订单参数的注意事项](faqs/pegged_orders_CN.md)
 pendingBelowPegOffsetType | ENUM | NO |
 pendingBelowPegOffsetValue | INT | NO |
+workingQuoteNotionalLimit | DECIMAL | NO | 生效订单的报价资产名义价值上限（仅适用于买单）。参见 [报价资产名义价值上限](faqs/quoteNotionalLimit_CN.md)。
+pendingAboveQuoteNotionalLimit | DECIMAL | NO | 待处理上方订单的报价资产名义价值上限（仅适用于买单）。参见 [报价资产名义价值上限](faqs/quoteNotionalLimit_CN.md)。
+pendingBelowQuoteNotionalLimit | DECIMAL | NO | 待处理下方订单的报价资产名义价值上限（仅适用于买单）。参见 [报价资产名义价值上限](faqs/quoteNotionalLimit_CN.md)。
 recvWindow | DECIMAL | NO | 最大值为 `60000` 毫秒。 支持最多三位小数的精度（例如 6000.346），以便可以指定微秒。
 timestamp | LONG | YES | 用于请求签名的 Unix 时间戳，单位为毫秒或微秒。该值必须反映客户端当前时间，并会在签名接口中由服务器进行校验。
 
@@ -3753,6 +3767,7 @@ pendingBelowStrategyType | INT | NO | 用于标识待处理下方订单策略的
 pendingBelowPegPriceType | ENUM | NO | 参阅 [关于挂钩订单参数的注意事项](faqs/pegged_orders_CN.md)
 pendingBelowPegOffsetType | ENUM | NO |
 pendingBelowPegOffsetValue | INT | NO |
+workingQuoteNotionalLimit | DECIMAL | NO | 生效 LIMIT 买单的报价资产名义价值上限。参见 [报价资产名义价值上限](faqs/quoteNotionalLimit_CN.md)。
 recvWindow | DECIMAL | NO | 该值不能大于 `60000`。支持最多三位小数精度（例如 6000.346），以便指定微秒。
 timestamp | LONG | YES | 用于请求签名的 Unix 时间戳，单位为毫秒或微秒。该值必须反映客户端当前时间，并会在签名接口中由服务器进行校验。
 
@@ -4148,6 +4163,7 @@ pendingStrategyType | INT | NO | 用于标识待处理订单策略的任意数�
 pendingPegPriceType | ENUM | NO | 参阅 [关于挂钩订单参数的注意事项](faqs/pegged_orders_CN.md)
 pendingPegOffsetType | ENUM | NO |
 pendingPegOffsetValue | INT | NO |
+workingQuoteNotionalLimit | DECIMAL | NO | 生效 LIMIT 买单的报价资产名义价值上限。参见 [报价资产名义价值上限](faqs/quoteNotionalLimit_CN.md)。
 recvWindow | DECIMAL | NO | 最大值： 60000。 <br/> 该值不能大于 `60000`。支持最多三位小数精度（例如 6000.346），以便指定微秒。
 timestamp | LONG | YES | 用于请求签名的 Unix 时间戳，单位为毫秒或微秒。该值必须反映客户端当前时间，并会在签名接口中由服务器进行校验。
 

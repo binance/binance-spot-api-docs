@@ -178,23 +178,25 @@ These fields can apply to order lists.
 
 The fields are listed below:
 
-| Field               | Description                                                                                                         | Visibility conditions                                                                     | Examples                                   |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------ |
-| `icebergQty`        | Quantity for the iceberg order                                                                                      | Appears only if the parameter `icebergQty` was sent in the request.                       | `"icebergQty": "0.00000000"`               |
-| `preventedMatchId`  | When used in combination with `symbol`, can be used to query a prevented match.                                     | Appears only if the order expired due to STP.                                             | `"preventedMatchId": 0`                    |
-| `preventedQuantity` | Order quantity that expired due to STP                                                                              | Appears only if the order expired due to STP.                                             | `"preventedQuantity": "1.200000"`          |
-| `stopPrice`         | Price when the algorithmic order will be triggered                                                                  | Appears for `STOP_LOSS`. `TAKE_PROFIT`, `STOP_LOSS_LIMIT` and `TAKE_PROFIT_LIMIT` orders. | `"stopPrice": "23500.00000000"`            |
-| `strategyId`        | Can be used to label an order that's part of an order strategy.                                                     | Appears if the parameter was populated in the request.                                    | `"strategyId": 37463720`                   |
-| `strategyType`      | Can be used to label an order that is using an order strategy.                                                      | Appears if the parameter was populated in the request.                                    | `"strategyType": 1000000`                  |
-| `trailingDelta`     | Delta price change required before order activation                                                                 | Appears for Trailing Stop Orders.                                                         | `"trailingDelta": 10`                      |
-| `trailingTime`      | Time when the trailing order is now active and tracking price changes                                               | Appears only for Trailing Stop Orders.                                                    | `"trailingTime": -1`                       |
-| `usedSor`           | Field that determines whether order used SOR                                                                        | Appears when placing orders using SOR                                                     | `"usedSor": true`                          |
-| `workingFloor`      | Field that determines whether the order is being filled by the SOR or by the order book the order was submitted to. | Appears when placing orders using SOR                                                     | `"workingFloor": "SOR"`                    |
-| `pegPriceType`      | Price peg type                                                                                                      | Only for pegged orders                                                                    | `"pegPriceType": "PRIMARY_PEG"`            |
-| `pegOffsetType`     | Price peg offset type                                                                                               | Only for pegged orders, if requested                                                      | `"pegOffsetType": "PRICE_LEVEL"`           |
-| `pegOffsetValue`    | Price peg offset value                                                                                              | Only for pegged orders, if requested                                                      | `"pegOffsetValue": 5`                      |
-| `peggedPrice`       | Current price order is pegged at                                                                                    | Only for pegged orders, once determined                                                   | `"peggedPrice": "87523.83710000"`          |
-| `expiryReason`      | Cause of the order’s expiration                                                                                     | When an order has expired                                                                 | `"expiryReason": "INSUFFICIENT_LIQUIDITY"` |
+| Field                              | Description                                                                                                         | Visibility conditions                                                                                                                                     | Examples                                          |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| `icebergQty`                       | Quantity for the iceberg order                                                                                      | Appears only if the parameter `icebergQty` was sent in the request.                                                                                       | `"icebergQty": "0.00000000"`                      |
+| `quoteNotionalLimit`               | Maximum quote-asset notional the order may consume                                                                  | Appears only if the order was placed with a quote notional limit.                                                                                         | `"quoteNotionalLimit": "250.00000000"`            |
+| `preventedMatchId`                 | When used in combination with `symbol`, can be used to query a prevented match.                                     | Appears only if the order expired due to STP.                                                                                                             | `"preventedMatchId": 0`                           |
+| `preventedQuantity`                | Order quantity that expired due to STP                                                                              | Appears only if the order expired due to STP.                                                                                                             | `"preventedQuantity": "1.200000"`                 |
+| `effectiveSelfTradePreventionMode` | Self-trade-prevention mode the engine actually applied. Values: `EXPIRE_MAKER`, `EXPIRE_BOTH`, `DECREMENT`.         | Appears only inside `preventedMatches[]` entries of `FULL` order responses, when the applied STP mode differs from the order's `selfTradePreventionMode`. | `"effectiveSelfTradePreventionMode": "DECREMENT"` |
+| `stopPrice`                        | Price when the algorithmic order will be triggered                                                                  | Appears for `STOP_LOSS`. `TAKE_PROFIT`, `STOP_LOSS_LIMIT` and `TAKE_PROFIT_LIMIT` orders.                                                                 | `"stopPrice": "23500.00000000"`                   |
+| `strategyId`                       | Can be used to label an order that's part of an order strategy.                                                     | Appears if the parameter was populated in the request.                                                                                                    | `"strategyId": 37463720`                          |
+| `strategyType`                     | Can be used to label an order that is using an order strategy.                                                      | Appears if the parameter was populated in the request.                                                                                                    | `"strategyType": 1000000`                         |
+| `trailingDelta`                    | Delta price change required before order activation                                                                 | Appears for Trailing Stop Orders.                                                                                                                         | `"trailingDelta": 10`                             |
+| `trailingTime`                     | Time when the trailing order is now active and tracking price changes                                               | Appears only for Trailing Stop Orders.                                                                                                                    | `"trailingTime": -1`                              |
+| `usedSor`                          | Field that determines whether order used SOR                                                                        | Appears when placing orders using SOR                                                                                                                     | `"usedSor": true`                                 |
+| `workingFloor`                     | Field that determines whether the order is being filled by the SOR or by the order book the order was submitted to. | Appears when placing orders using SOR                                                                                                                     | `"workingFloor": "SOR"`                           |
+| `pegPriceType`                     | Price peg type                                                                                                      | Only for pegged orders                                                                                                                                    | `"pegPriceType": "PRIMARY_PEG"`                   |
+| `pegOffsetType`                    | Price peg offset type                                                                                               | Only for pegged orders, if requested                                                                                                                      | `"pegOffsetType": "PRICE_LEVEL"`                  |
+| `pegOffsetValue`                   | Price peg offset value                                                                                              | Only for pegged orders, if requested                                                                                                                      | `"pegOffsetValue": 5`                             |
+| `peggedPrice`                      | Current price order is pegged at                                                                                    | Only for pegged orders, once determined                                                                                                                   | `"peggedPrice": "87523.83710000"`                 |
+| `expiryReason`                     | Cause of the order’s expiration                                                                                     | When an order has expired                                                                                                                                 | `"expiryReason": "INSUFFICIENT_LIQUIDITY"`        |
 
 ## LIMITS
 
@@ -979,6 +981,8 @@ symbolStatus | ENUM | NO | Filters for symbols that have this `tradingStatus`. C
             "cancelReplaceAllowed": false,
             "amendAllowed": false,
             "pegInstructionsAllowed": true,
+            "marketQuoteNotionalLimitAllowed": true,
+            "limitQuoteNotionalLimitAllowed": true,
             "isSpotTradingAllowed": true,
             "isMarginTradingAllowed": true,
             // Symbol filters are explained on the "Filters" page:
@@ -2168,6 +2172,7 @@ selfTradePreventionMode | ENUM | NO | The allowed enums is dependent on what is 
 pegPriceType | ENUM | NO | See Pegged Orders Info
 pegOffsetValue | INT | NO | Maximum: 100. <br/> Price level to peg the price to (max: 100). See Pegged Orders Info
 pegOffsetType | ENUM | NO | Only `PRICE_LEVEL` is supported. See Pegged Orders Info
+quoteNotionalLimit | DECIMAL | NO | For orders on the BUY side only. Maximum quote-asset notional the order may consume. See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
 recvWindow | DECIMAL | NO | Maximum: 60000. <br/> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 timestamp | LONG | YES | Unix timestamp used to sign the request, in milliseconds or microseconds. The value must reflect the current client time and is validated by the server for signed endpoints.
 
@@ -2344,6 +2349,7 @@ selfTradePreventionMode | ENUM | NO | The allowed enums is dependent on what is 
 pegPriceType | ENUM | NO | `PRIMARY_PEG` or `MARKET_PEG`. See [Pegged Orders](faqs/pegged_orders.md)
 pegOffsetValue | INT | NO | Price level for pegging (max: 100). See [Pegged Orders](faqs/pegged_orders.md)
 pegOffsetType | ENUM | NO | Only `PRICE_LEVEL` is supported. See [Pegged Orders](faqs/pegged_orders.md)
+quoteNotionalLimit | DECIMAL | NO | For orders on the BUY side only. Maximum quote-asset notional the order may consume. See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
 recvWindow | DECIMAL | NO | The value cannot be greater than `60000`. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 timestamp | LONG | YES | Unix timestamp used to sign the request, in milliseconds or microseconds. The value must reflect the current client time and is validated by the server for signed endpoints.
 
@@ -2651,6 +2657,7 @@ orderRateLimitExceededMode | ENUM | NO | Supported values: <br> `DO_NOTHING` (de
 pegPriceType | ENUM | NO | `PRIMARY_PEG` or `MARKET_PEG` <br> See Pegged Orders
 pegOffsetValue | INT | NO | Price level to peg the price to (max: 100) <br> See Pegged Orders
 pegOffsetType | ENUM | NO | Only `PRICE_LEVEL` is supported <br> See Pegged Orders.
+quoteNotionalLimit | DECIMAL | NO | For replacement orders on the BUY side only. Maximum quote-asset notional the replacement order may consume. See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
 recvWindow | DECIMAL | NO | Maximum: 60000. <br/> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 timestamp | LONG | YES | Unix timestamp used to sign the request, in milliseconds or microseconds. The value must reflect the current client time and is validated by the server for signed endpoints.
 
@@ -3032,7 +3039,7 @@ Using `orderRateLimitExceededMode=CANCEL_ONLY`, and the account has exceeded its
         },
         "newOrderResponse": {
             "code": -1015,
-            "msg": "Too many new orders; current limit is 1 orders per 10 SECOND."
+            "msg": "Too many orders placed without trading; current limit is 1 non-trading orders per 10 SECOND. Unable to place new orders until trades occur or window resets."
         }
     }
 }
@@ -3043,7 +3050,7 @@ Using `orderRateLimitExceededMode=DO_NOTHING`, and the account has exceeded its 
 ```javascript
 {
     "code": -1015,
-    "msg": "Too many new orders; current limit is 1 orders per 10 SECOND."
+    "msg": "Too many orders placed without trading; current limit is 1 non-trading orders per 10 SECOND. Unable to place new orders until trades occur or window resets."
 }
 ```
 
@@ -3358,6 +3365,8 @@ belowPegOffsetType | ENUM | NO |
 belowPegOffsetValue | INT | NO |
 newOrderRespType | ENUM | NO | Select response format: `ACK`, `RESULT`, `FULL`.
 selfTradePreventionMode | ENUM | NO | The allowed enums is dependent on what is configured on the symbol. Supported values: [STP Modes](enums.md#stpmodes)
+aboveQuoteNotionalLimit | DECIMAL | NO | Quote notional limit for the above order (only for orders on the BUY side). See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
+belowQuoteNotionalLimit | DECIMAL | NO | Quote notional limit for the below order (only for orders on the BUY side). See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
 recvWindow | DECIMAL | NO | The value cannot be greater than `60000`. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 timestamp | LONG | YES | Unix timestamp used to sign the request, in milliseconds or microseconds. The value must reflect the current client time and is validated by the server for signed endpoints.
 
@@ -3485,6 +3494,8 @@ pendingStrategyType | INT | NO | Arbitrary numeric value identifying the pending
 pendingPegPriceType | ENUM | NO | See [Pegged Orders](faqs/pegged_orders.md)
 pendingPegOffsetType | ENUM | NO |
 pendingPegOffsetValue | INT | NO |
+workingQuoteNotionalLimit | DECIMAL | NO | Quote notional limit for the working order (only for orders on the BUY side). See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
+pendingQuoteNotionalLimit | DECIMAL | NO | Quote notional limit for the pending order (only for orders on the BUY side). See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
 recvWindow | DECIMAL | NO | The value cannot be greater than `60000`. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 timestamp | LONG | YES | Unix timestamp used to sign the request, in milliseconds or microseconds. The value must reflect the current client time and is validated by the server for signed endpoints.
 
@@ -3637,6 +3648,9 @@ pendingBelowStrategyType | INT | NO | Arbitrary numeric value identifying the pe
 pendingBelowPegPriceType | ENUM | NO | See [Pegged Orders](faqs/pegged_orders.md)
 pendingBelowPegOffsetType | ENUM | NO |
 pendingBelowPegOffsetValue | INT | NO |
+workingQuoteNotionalLimit | DECIMAL | NO | Quote notional limit for the working order (only for orders on the BUY side). See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
+pendingAboveQuoteNotionalLimit | DECIMAL | NO | Quote notional limit for the pending above order (only for orders on the BUY side). See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
+pendingBelowQuoteNotionalLimit | DECIMAL | NO | Quote notional limit for the pending below order (only for orders on the BUY side). See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
 recvWindow | DECIMAL | NO | The value cannot be greater than `60000`. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 timestamp | LONG | YES | Unix timestamp used to sign the request, in milliseconds or microseconds. The value must reflect the current client time and is validated by the server for signed endpoints.
 
@@ -3799,6 +3813,7 @@ pendingStrategyType | INT | NO | Arbitrary numeric value identifying the pending
 pendingPegPriceType | ENUM | NO | See [Pegged Orders](faqs/pegged_orders.md)
 pendingPegOffsetType | ENUM | NO |
 pendingPegOffsetValue | INT | NO |
+workingQuoteNotionalLimit | DECIMAL | NO | Quote notional limit for the working LIMIT order on the BUY side. See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
 recvWindow | DECIMAL | NO | Maximum: 60000. <br/> Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 timestamp | LONG | YES | Unix timestamp used to sign the request, in milliseconds or microseconds. The value must reflect the current client time and is validated by the server for signed endpoints.
 
@@ -3931,6 +3946,7 @@ pendingBelowStrategyType | INT | NO | Arbitrary numeric value identifying the pe
 pendingBelowPegPriceType | ENUM | NO | See [Pegged Orders](faqs/pegged_orders.md)
 pendingBelowPegOffsetType | ENUM | NO |
 pendingBelowPegOffsetValue | INT | NO |
+workingQuoteNotionalLimit | DECIMAL | NO | Quote notional limit for the working LIMIT order on the BUY side. See [Quote Notional Limit](faqs/quoteNotionalLimit.md).
 recvWindow | DECIMAL | NO | The value cannot be greater than `60000`. Supports up to three decimal places of precision (e.g., 6000.346) so that microseconds may be specified.
 timestamp | LONG | YES | Unix timestamp used to sign the request, in milliseconds or microseconds. The value must reflect the current client time and is validated by the server for signed endpoints.
 
