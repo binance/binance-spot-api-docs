@@ -443,7 +443,7 @@ Prevented Match
 `quoteNotionalLimit`
 
 - Optional parameter on `BUY` orders that limits the amount of the quote asset the order can spend.
-  Read [quoteNotionalLimit FAQ](./quoteNotionalLimit.md) to learn more.
+  Read [quoteNotionalLimit FAQ](quoteNotionalLimit.md) to learn more.
 
 `quoteOrderQty`
 

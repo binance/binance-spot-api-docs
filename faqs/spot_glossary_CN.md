@@ -409,6 +409,11 @@ Prevented Match
 
 - Exchange Information 响应中用来指明佣金是 `quoteAsset` 允许的最多小数位数。
 
+`quoteNotionalLimit`
+
+- `BUY` 订单的可选参数，用于限制订单可花费的报价资产数量。阅读
+  [quoteNotionalLimit 常见问题](quoteNotionalLimit_CN.md) 了解更多。
+
 `quoteOrderQty`
 
 - 市价单（`MARKET`）的下单接口中用于下反向市价单中的数量。
