@@ -2,7 +2,104 @@
 
 # 更新日志
 
-**最近更新：2026-10-30**
+**最近更新：2026-11-11**
+
+### 2026-11-11
+
+- 错误代码文档更正：
+  - `PARAM_OVERFLOW` 的错误代码为 [`-1018`](errors_CN.md#-1018-param_overflow)，此前文档误写为 `-1108`。
+  - 新增 [`-1108 BAD_ASSET`](errors_CN.md#-1108-bad_asset) "Invalid asset." 的文档说明。此前已在测试网[更新日志](testnet/CHANGELOG.md#2026-10-28)中说明。
+
+**注意：本节中的变更正在逐步推出，预计大约需要两周时间完成。**
+
+<a id="new-features"></a>
+
+#### 新功能
+
+- `userDataStream.subscribe` 和 `userDataStream.subscribe.signature` 现在接受可选参数 `filter`，用于控制推送哪些事件。支持按事件类型（`e`）、交易对（`s`）、资产（`a`）和执行类型（`x`）进行过滤。
+  - WebSocket API：参见 [用户数据流订阅过滤器](web-socket-api_CN.md#user-data-stream-subscription-filters)。
+  - `filter` 中的未知交易对和未知资产将分别被拒绝并返回 [`-1121`](errors_CN.md#-1121-bad_symbol) 和 [`-1108`](errors_CN.md#-1108-bad_asset)。
+
+<a id="general-changes"></a>
+
+#### 常规更改
+
+- `serverShutdown` 事件现在包含 `T` 字段，表示 WebSocket 会话将被关闭的时间。
+  - [WebSocket API](web-socket-api_CN.md#serverShutdown)
+  - [WebSocket 行情接口](web-socket-streams_CN.md#server-shutdown)
+  - [SBE 市场数据流](sbe-market-data-streams_CN.md#serverShutdown)
+  - 在 SBE 会话中，`T` 字段仅在 SBE schema 3:6 及更高版本中出现。
+- `-1015 TOO_MANY_ORDERS` 的错误消息已更改为：“Too many orders placed without trading; current limit is X non-trading orders per Y. Unable to place new orders until trades occur or window resets.”
+  参见 [`-1015`](errors_CN.md#-1015-too_many_orders) 和 [现货未成交订单计数规则常见问题](faqs/order_count_decrement_CN.md#spot-unfilled-order-count-rules)。
+
+#### SBE
+
+- REST 和 WebSocket API SBE schema [spot_3_6.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_6.xml)
+  - 当前的 schema 3:5 [spot_3_5.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot_3_5.xml) 已被弃用，将根据我们的 [schema 弃用政策](faqs/sbe_faq_CN.md#regarding-legacy-support) 在 6 个月后停用。
+  - schema 3:6 中的变更：
+    - 现有枚举 `expiryReason`：新增枚举值 `Exhausted` (9) 和 `InsufficientQuoteNotionalLimit` (10)
+    - `ServerShutdownEvent`：新增字段 `shutdownTime`
+    - `ExchangeInfoResponse`（symbols 组）：新增字段 `marketQuoteNotionalLimitAllowed`、`limitQuoteNotionalLimitAllowed`、`opoAllowed`
+    - `NewOrderResultResponse`、`NewOrderFullResponse`、`OrderResponse`、`CancelOrderResponse`、`OrdersResponse`、`NewOrderListResultResponse`、`NewOrderListFullResponse`、`CancelOrderListResponse`、`OrderAmendKeepPriorityResponse`、`ExecutionReportEvent`：新增字段 `quoteNotionalLimit`
+      - 有关该字段的更多详情，请参见下方的 [新功能](#2026-11-20-new-features)。
+    - `ExecutionReportEvent`：新增字段 `effectiveSelfTradePreventionMode`
+      - 有关该字段的更多详情，请参见下方的 [新功能](#2026-11-20-new-features)。
+    - `NewOrderFullResponse` 和 `NewOrderListFullResponse.orderReports` 的 `preventedMatches` 组：新增字段 `effectiveSelfTradePreventionMode`
+      - 有关该字段的更多详情，请参见下方的 [新功能](#2026-11-20-new-features)。
+  - [面向生产的 SBE 生命周期](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) 已基于本次更改进行了更新。
+- FIX SBE schema [spot-fixsbe-1_2.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot-fixsbe-1_2.xml)
+  - 当前的 schema 1:1 [spot-fixsbe-1_1.xml](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/spot-fixsbe-1_1.xml) 已被弃用，将根据我们的 [schema 弃用政策](faqs/sbe_faq_CN.md#regarding-legacy-support) 在 6 个月后停用。
+  - schema 1:2 中的变更：
+    - 现有枚举 `expiryReason`：新增枚举值 `Exhausted` (9) 和 `InsufficientQuoteNotionalLimit` (10)
+    - `ExecutionReport`、`OrderCancelRequestAndNewOrderSingle`、`NewOrderSingle`、`NewOrderList`（`Orders` 组）：新增字段 `QuoteNotionalLimit`（自定义标签 25057）
+      - 有关该字段的更多详情，请参见下方的 [新功能](#2026-11-20-new-features)。
+    - `ExecutionReport`：新增字段 `EffectiveSelfTradePreventionMode`（自定义标签 25058）
+      - 有关该字段的更多详情，请参见下方的 [新功能](#2026-11-20-new-features)。
+  - [面向生产的 FIX SBE 生命周期](https://github.com/binance/binance-spot-api-docs/blob/master/sbe/schemas/sbe_fix_schema_lifecycle_prod.json) 已基于本次更改进行了更新。
+
+#### FIX API
+
+- [FIX OE 的 QuickFIX schema](https://github.com/binance/binance-spot-api-docs/blob/master/fix/schemas/spot-fix-oe.xml) 已更新：
+  - `ExpiryReason`（自定义标签 25056）：新增值 `EXHAUSTED` (9) 和 `INSUFFICIENT_QUOTE_NOTIONAL_LIMIT` (10)
+  - `ExecutionReport`、`OrderCancelRequestAndNewOrderSingle`、`NewOrderSingle`、`NewOrderList`（`Orders` 组）：新增字段 `QuoteNotionalLimit`（自定义标签 25057）
+    - 有关该字段的更多详情，请参见下方的 [新功能](#2026-11-20-new-features)。
+  - `ExecutionReport`：新增字段 `EffectiveSelfTradePreventionMode`（自定义标签 25058）
+    - 有关该字段的更多详情，请参见下方的 [新功能](#2026-11-20-new-features)。
+
+**注意：以下变更将于 2026-11-20 07:00 UTC 之后生效。**
+
+<a id="2026-11-20-new-features"></a>
+
+<a id="new-features"></a>
+
+#### 新功能
+
+- `BUY` 方向的订单接受新的可选参数 `quoteNotionalLimit`，用于限制订单可花费的报价资产数量。
+  **该功能的启用时间尚未确定。**
+  - 订单列表接受 `aboveQuoteNotionalLimit` / `belowQuoteNotionalLimit`（OCO）以及 `workingQuoteNotionalLimit` / `pendingQuoteNotionalLimit` / `pendingAboveQuoteNotionalLimit` / `pendingBelowQuoteNotionalLimit`（OTO、OTOCO、OPO、OPOCO）。参见 [报价资产名义价值上限](faqs/quoteNotionalLimit_CN.md)。
+  - [REST API](rest-api_CN.md#exchange-information) 和 [WebSocket API](web-socket-api_CN.md#exchange-information) 的 `exchangeInfo` 响应通过新字段 `marketQuoteNotionalLimitAllowed` 和 `limitQuoteNotionalLimitAllowed` 显示交易对是否支持该参数。
+  - 当订单的 `quoteNotionalLimit` 导致剩余数量无法成交或挂单时，将返回新的 `expiryReason` 值 [`INSUFFICIENT_QUOTE_NOTIONAL_LIMIT`](enums_CN.md#expiryreasons)。
+  - SOR 端点会解析该参数，但会拒绝并返回 [`-1106`](errors_CN.md#-1106-param_not_required)。
+  - 旧版 OCO 端点（REST API `POST /api/v3/order/oco`、WebSocket API `orderList.place`）不接受这些新参数。
+- 用户数据流 [`executionReport`](user-data-stream_CN.md#executionReport) 事件、FIX API [`ExecutionReport<8>`](fix-api_CN.md#executionreport-8) 消息以及 FULL 订单响应的 `preventedMatches[]` 条目现在会包含可选字段 `effectiveSelfTradePreventionMode`（JSON 数据流中为 `eV`，FIX 标签为 `25058`），用于区分撮合引擎实际生效的 STP 模式与下单时指定的 STP 模式。该字段仅在预防撮合的回报中出现，且仅当实际生效的模式与订单自身的 `selfTradePreventionMode` 不同时出现。可能的值：`EXPIRE_MAKER`、`EXPIRE_BOTH`、`DECREMENT`（不会出现 `NONE`、`EXPIRE_TAKER` 或 `TRANSFER`）。
+
+<a id="general-changes"></a>
+
+#### 常规更改
+
+- 修改后数量等于或低于已成交数量的订单，现在会带有 `expiryReason` = [`EXHAUSTED`](enums_CN.md#expiryreasons)。此前，这些订单过期时不带 `expiryReason`。
+- 下单时即成交、随后挂单的 `BUY` 限价单，现在会释放超出剩余数量挂单所需（剩余数量 × 限价）的订单锁定资金。多出的部分（通常是成交带来的价格改善）会在订单挂单的同一次余额更新中退回到 `free`。此前，多出的部分会一直锁定，直到订单结束。
+  - 适用于 `LIMIT` `GTC` 订单、已触发的 `STOP_LOSS_LIMIT` 和 `TAKE_PROFIT_LIMIT` 订单、订单列表中的限价单以及 SOR 订单。冰山订单会为其全部剩余数量（包括隐藏部分）保留锁定。
+
+<a id="bug-fixes"></a>
+
+#### 问题修复
+
+- 撤销订单列表的 SBE 响应现在会将 `listClientOrderId` 编码为原订单列表的 `listClientOrderId`，与 JSON 响应一致。此前，SBE 响应编码的是撤单请求中发送的 `listClientOrderId`。
+  - REST API：`DELETE /api/v3/orderList`、`DELETE /api/v3/openOrders`
+  - WebSocket API：`orderList.cancel`、`openOrders.cancelAll`
+
+---
 
 ### 2026-10-30
 
