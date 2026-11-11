@@ -126,7 +126,7 @@ Please refer to the following table:
 >
 
 [Smart Order Routing (SOR)](sor_faq.md) does not support `quoteNotionalLimit`: SOR endpoints reject
-requests with this parameter, returning [`-1106`](../testnet/errors.md#-1106-param_not_required).
+requests with this parameter, returning [`-1106`](../errors.md#-1106-param_not_required).
 
 This sample REST API response shows `quoteNotionalLimit` on a BUY `LIMIT` order for `10` at `30`
 with `quoteNotionalLimit=250`. Resting all `10` on the book would need `10 * 30 = 300`, which
@@ -170,7 +170,7 @@ Note that `quoteNotionalLimit` is only present in a response when the order was 
 parameter.
 
 It appears on order placement (`RESULT`/`FULL`), order status, open orders, all orders, cancel,
-cancel-replace and amend-keep-priority responses, as well as in `orderReports` entries for order
+cancel-replace, and amend-keep-priority responses, as well as in `orderReports` entries for order
 lists.
 
 ### Example market buy
@@ -188,8 +188,8 @@ Send a signed REST API `POST /api/v3/order` request with these parameters, plus 
 | `newOrderRespType`   | `FULL`             |
 | `newClientOrderId`   | `notional_example` |
 
-With an ask for `1 BTC` at `100,000 USDT`, the order buys `0.6 BTC`, spends `60,000 USDT`, and
-expires because its remaining `0.4 BTC` would exceed the notional limit.
+If the best ask on the order book is for `1 BTC` at `100,000 USDT`, the order buys `0.6 BTC`, spends
+`60,000 USDT`, and expires because its remaining `0.4 BTC` would exceed the notional limit.
 
 Response:
 
@@ -228,31 +228,33 @@ Response:
 `origQty` remains the requested quantity. `executedQty` and `cummulativeQuoteQty` show what the
 order actually bought and spent; `quoteNotionalLimit` retains the supplied limit.
 
-## What order types support orders with a notional limit?
+## What order types support a notional limit?
 
-Only BUY orders accept `quoteNotionalLimit`. On orders on the SELL side, the parameter is rejected
-with `-1013` "Quote notional limit is not allowed for this order."
+Only BUY orders accept `quoteNotionalLimit`. Orders on the SELL side reject the parameter with
+`-1013` "Quote notional limit is not allowed for this order."
 
 ### Market orders
 
 - `MARKET`, `STOP_LOSS`, `TAKE_PROFIT`
 - Supported when `marketQuoteNotionalLimitAllowed` is `true` for the symbol. This field is shown in
-  `exchangeInfo`.
+  Exchange Information responses (REST API `GET /api/v3/exchangeInfo`, WebSocket API
+  `exchangeInfo`).
 - The order locks the supplied notional limit at entry instead of estimating a lock from the book.
 - `STOP_LOSS` and `TAKE_PROFIT` keep the notional limit locked through the waiting phase so when the
   order triggers, it never fails for lack of funds.
 - `quoteNotionalLimit` and `quoteOrderQty` cannot both be specified on the same order. This is
-  rejected with [`-1106`](../testnet/errors.md#-1106-param_not_required).
+  rejected with [`-1106`](../errors.md#-1106-param_not_required).
 
 ### Limit orders
 
 - `LIMIT`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT_LIMIT`
 - Supported when `limitQuoteNotionalLimitAllowed` is `true` for the symbol. This field is shown in
-  `exchangeInfo`.
+  Exchange Information responses (REST API `GET /api/v3/exchangeInfo`, WebSocket API
+  `exchangeInfo`).
 - The order locks the supplied notional limit instead of `price * quantity`. The notional limit must
   be strictly less than `price * quantity`, otherwise, the request is rejected with
-  [`-1013`](../testnet/errors.md#-1013-invalid_message).
-- `LIMIT_MAKER` orders cannot have a notional limit, because it would conflict with their resting
+  [`-1013`](../errors.md#-1013-invalid_message).
+- `LIMIT_MAKER` orders cannot have a notional limit because it would conflict with their resting
   notional. The same applies anywhere a `LIMIT_MAKER` can appear, including order lists.
 - Pegged `LIMIT` orders lock the smaller of the notional limit and `quantity * peg price`.
 
@@ -273,7 +275,7 @@ by the taker order plus the candidate fill. If the notional limit would be excee
 fill is reduced until the notional limit would not be exceeded and then further reduced so the
 candidate fill is a quantity in whole `LOT_SIZE` steps. If the taker order has any unfilled
 quantity, it expires with the new expiry reason `INSUFFICIENT_QUOTE_NOTIONAL_LIMIT` (see
-[enums](../testnet/enums.md#expiry-reasons)).
+[enums](../enums.md#expiry-reasons)).
 
 The taker order reaching its notional limit does not affect the maker order's quantity or priority.
 
@@ -281,15 +283,15 @@ Note that a market order expires with the expiry reason `INSUFFICIENT_LIQUIDITY`
 on the book after it takes, even if the last fill spent the whole notional limit.
 
 For a BUY `GTC` `LIMIT`, the remainder rests only if `spent + remaining quantity * price` still fits
-within the notional limit. Otherwise the remainder expires with `INSUFFICIENT_QUOTE_NOTIONAL_LIMIT`,
-even if the book (not the notional limit) ended the take.
+within the notional limit. Otherwise, the remainder expires with
+`INSUFFICIENT_QUOTE_NOTIONAL_LIMIT`, even if the book (not the notional limit) ended the take.
 
 For `IOC`, any remaining quantity expires after the take. The expiry reason is
 `INSUFFICIENT_QUOTE_NOTIONAL_LIMIT` when the notional limit stopped the take and asks at or below
 the limit price remain on the book. Otherwise it is `UNFILLED_IOC_QUANTITY_EXPIRED`, even if the
 last fill spent the whole notional limit.
 
-For `FOK`, the engine first checks that the entire quantity fits within the notional limit; if not,
+For `FOK`, the engine first checks that the entire quantity fits within the notional limit. If not,
 the order expires with `UNFILLED_FOK_ORDER_EXPIRED` and no fills.
 
 [Self-Trade Prevention (STP)](stp_faq.md) affects the notional limit depending on the STP mode
@@ -300,7 +302,7 @@ applied to the prevented match:
   the `GTC` rest check above, transferred notional counts as spent.
 - `DECREMENT`: the prevented quantity reduces the order's remaining quantity but does not count
   toward the notional limit. This also applies when an order specifies `TRANSFER` but `DECREMENT` is
-  applied, for example when both orders are from the same account.
+  applied, for example, when both orders are from the same account.
 - `EXPIRE_TAKER`, `EXPIRE_MAKER`, `EXPIRE_BOTH`: behave the same as for orders without a notional
   limit.
 
@@ -314,9 +316,9 @@ User data stream `executionReport` events:
 | 2     | `TRADE`   | `PARTIALLY_FILLED` | 3   | 30  | 3   | 90  | absent                              |
 | 3     | `EXPIRED` | `EXPIRED`          | 0   | 0   | 3   | 90  | `INSUFFICIENT_QUOTE_NOTIONAL_LIMIT` |
 
-Every event retains `q=10`, `Qq=90` and `Q=0`. The quote asset lock is `90` at entry and `0` after
-the expiry; the full notional limit was spent. The maker trade event comes before the expiry event.
-If an order fills completely exactly at the notional limit, there is a single `FILLED` event and no
+Every event retains `q=10`, `Qq=90`, and `Q=0`. The quote asset lock is `90` at entry and `0` after
+the expiry. The full notional limit was spent. The maker trade event comes before the expiry event.
+If an order completely fills exactly at the notional limit, there is a single `FILLED` event and no
 expiry event.
 
 ### Example: BUY `10` at `30` `GTC` with `quoteNotionalLimit=250`
@@ -326,6 +328,7 @@ expiry event.
 | None         | 0     | 10        | 300                              | Expire with `INSUFFICIENT_QUOTE_NOTIONAL_LIMIT`; release `250`               |
 | `2` at `20`  | 40    | 8         | 280                              | Expire remaining `8` with `INSUFFICIENT_QUOTE_NOTIONAL_LIMIT`; release `210` |
 | `5` at `20`  | 100   | 5         | 250                              | Rest `5` with lock `150`; nothing to release                                 |
+| `8` at `20`  | 160   | 2         | 220                              | Rest `2` with lock `60`; release `30`                                        |
 | `10` at `20` | 200   | 0         | 200                              | `FILLED`; release `50`                                                       |
 
 In the "`2` at `20`" case, the events are `NEW`, `TRADE` with `z=2`/`Z=40`, then `EXPIRED` with the
@@ -334,19 +337,15 @@ appear in `openOrders`.
 
 ## Which symbols allow orders with a notional limit?
 
-Please refer to Exchange Information requests and look for two new per-symbol fields:
+Please refer to Exchange Information responses (REST API `GET /api/v3/exchangeInfo`, WebSocket API
+`exchangeInfo`) and look for two new per-symbol fields:
 
-- `marketQuoteNotionalLimitAllowed` — if `true`, `MARKET`, `STOP_LOSS` and `TAKE_PROFIT` BUY orders
+- `marketQuoteNotionalLimitAllowed` — if `true`, `MARKET`, `STOP_LOSS`, and `TAKE_PROFIT` BUY orders
   can have a notional limit.
-- `limitQuoteNotionalLimitAllowed` — if `true`, `LIMIT`, `STOP_LOSS_LIMIT` and `TAKE_PROFIT_LIMIT`
+- `limitQuoteNotionalLimitAllowed` — if `true`, `LIMIT`, `STOP_LOSS_LIMIT`, and `TAKE_PROFIT_LIMIT`
   BUY orders can have a notional limit.
 
-The two flags are independent of each other and independent of `quoteOrderQtyMarketAllowed`. When
-the applicable flag is `false`, sending the parameter is rejected with `-1013` "Quote notional limit
-is not supported for this order type on this symbol."
-
-For example, these `exchangeInfo` fields allow both groups. This excerpt omits unrelated symbol
-fields.
+For example, this response excerpt allows a notional limit on market and limit order types.
 
 ```json
 {
@@ -365,18 +364,28 @@ fields.
 }
 ```
 
+The two fields are independent of each other and independent of `quoteOrderQtyMarketAllowed`. When
+the applicable field is `false`, sending the parameter is rejected with `-1013`:
+
+```json
+{
+  "code": -1013,
+  "msg": "Quote notional limit is not supported for this order type on this symbol."
+}
+```
+
 ## Which filters are applicable to orders with a notional limit?
 
 Orders with a notional limit are checked against the same filters as orders without one, with the
 following adjustments:
 
-- `MIN_NOTIONAL`, `NOTIONAL` (including iceberg slice checks) and quote asset `MAX_ASSET` filters
+- `MIN_NOTIONAL`, `NOTIONAL` (including iceberg slice checks), and quote asset `MAX_ASSET` filters
   use the smaller of the notional limit and the computed notional.
-- `MARKET_LOT_SIZE`, `LOT_SIZE`, `PRICE_FILTER` and max position checks are unchanged. Max position
-  is checked against the supplied `quantity` at entry (unlike quote-asset quantity market orders,
-  which defer the check).
+- `MARKET_LOT_SIZE`, `LOT_SIZE`, `PRICE_FILTER`, and `MAX_POSITION` checks are unchanged.
+  `MAX_POSITION` is checked against the supplied `quantity` at entry (unlike quote-asset quantity
+  market orders, which defer the check).
 - The notional limit itself is not checked against any step size or precision filter beyond the
-  quote asset's own decimals.
+  quote asset's precision.
 - For a BUY `MARKET` order with a notional limit on a symbol with no last price, `MIN_NOTIONAL` with
   `applyToMarket` and `NOTIONAL` with `applyMinToMarket` still reject the order, because the
   notional limit is only an upper bound and the trade could still fall below the minimum.
