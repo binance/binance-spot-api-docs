@@ -78,12 +78,22 @@
 ### -1015 订单太多
 
 - 下单(撤单)太多
+- 未成交订单过多；当前限制为每 Y 内最多 X 个未成交订单。在有成交发生或时间窗口重置之前，无法下达新订单。
+
+请参阅 [现货未成交订单计数规则](faqs/order_count_decrement_CN.md#spot-unfilled-order-count-rules)
+了解计数的维护和递减方式。
 
 <a id="-1016-service_shutting_down"></a>
 
 ### -1016 服务器下线
 
 - 服务器下线
+
+<a id="-1018-param_overflow"></a>
+
+### -1018 参数溢出
+
+- Parameter '%s' overflowed.
 
 <a id="-1020-unsupported_operation"></a>
 
@@ -184,11 +194,11 @@
 - Parameter '%s' sent when not required.
 - A tag '%s' was sent when not required.
 
-<a id="-1108-param_overflow"></a>
+<a id="-1108-bad_asset"></a>
 
-### -1108 参数溢出
+### -1108 无效的资产
 
-- Parameter '%s' overflowed.
+- Invalid asset.
 
 <a id="-1111-bad_precision"></a>
 
@@ -686,48 +696,52 @@
 
 这个错误代码是由撮合引擎抛出的。下面的消息会指明具体的错误：
 
-| 错误消息                                                                       | 描述                                                                                                                                                                                                         |
-| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| "Unknown order sent."                                                          | 找不到订单， (根据请求里发送的 `orderId`, `clOrdId`, `origClOrdId`)。                                                                                                                                        |
-| "Duplicate order sent."                                                        | 客户自定义的订单号重复了。                                                                                                                                                                                   |
-| "Market is closed."                                                            | 该交易对交易关闭了。                                                                                                                                                                                         |
-| "Account has insufficient balance for requested action."                       | 账户金额不足。                                                                                                                                                                                               |
-| "Market orders are not supported for this symbol."                             | 该交易对无法发起市价单。                                                                                                                                                                                     |
-| "Iceberg orders are not supported for this symbol."                            | 该交易对无法发起冰山订单。                                                                                                                                                                                   |
-| "Stop loss orders are not supported for this symbol."                          | 该交易对无法发起止损单。                                                                                                                                                                                     |
-| "Stop loss limit orders are not supported for this symbol."                    | 该交易对无法发起止损限价单。                                                                                                                                                                                 |
-| "Take profit orders are not supported for this symbol."                        | 该交易对无法发起止盈单。                                                                                                                                                                                     |
-| "Take profit limit orders are not supported for this symbol."                  | 该交易对无法发起止盈限价单。                                                                                                                                                                                 |
-| "Order amend is not supported for this symbol."                                | 该交易对无法发起保持优先级的修改订单操作。                                                                                                                                                                   |
-| "Price \* QTY is zero or less."                                                | 订单金额必须大于0。                                                                                                                                                                                          |
-| "IcebergQty exceeds QTY."                                                      | 冰山订单中小订单的Quantity必须小于总的Quantity。                                                                                                                                                             |
-| "This action is disabled on this account."                                     | 联系客户支持； 该账户已禁用了某些操作。                                                                                                                                                                      |
-| "This account may not place or cancel orders."                                 | 联系客户支持： 该账户已被禁用了交易操作。                                                                                                                                                                    |
-| "Unsupported order combination"                                                | `orderType`, `timeInForce`, `stopPrice`, `icebergQty` 某些参数取某些值的时候另一些参数必须/不得提供。                                                                                                        |
-| "Order would trigger immediately."                                             | 止盈、止损单必须在未来触发，如果条件太弱现在的市场行情就可以触发（通常是误操作填错了条件），就会报这个错误。                                                                                                 |
-| "Cancel order is invalid. Check origClOrdId and orderId."                      | 撤销订单必须提供 `origClOrdId` 或者 `orderId` 中的一个。                                                                                                                                                     |
-| "Order would immediately match and take."                                      | `LIMIT_MAKER` 订单如果按照规则会成为Taker，就会报此错。                                                                                                                                                      |
-| "The relationship of the prices for the orders is not correct."                | `OCO`订单中设置的价格不符合报价规则：<br/> 请参考以下示例： <br/> `BUY`：`LIMIT_MAKER` `price` < Last Traded Price < `stopPrice` <br/> `SELL`：`LIMIT_MAKER` `price` > Last Traded Price > `stopPrice` <br/> |
-| "OCO orders are not supported for this symbol"                                 | `OCO`订单不支持该交易对。                                                                                                                                                                                    |
-| "Quote order qty market orders are not support for this symbol."               | 这个交易对，市价单不支持参数 `quoteOrderQty`。                                                                                                                                                               |
-| "Trailing stop orders are not supported for this symbol."                      | 此symbol不支持 `trailingDelta`。                                                                                                                                                                             |
-| "Order cancel-replace is not supported for this symbol."                       | 此symbol不支持 `POST /api/v3/order/cancelReplace` 或者 `order.cancelReplace` (WebSocket API)。                                                                                                               |
-| "This symbol is not permitted for this account."                               | 账户和交易对的权限不一致 (比如 `SPOT`, `MARGIN` 等)。                                                                                                                                                        |
-| "This symbol is restricted for this account."                                  | 账户没有权限在此交易对交易 (比如账户只拥有 `ISOLATED_MARGIN`权限，则无法下`SPOT` 订单)。                                                                                                                     |
-| "Order was not canceled due to cancel restrictions."                           | `cancelRestrictions` 设置为 `ONLY_NEW` 但订单状态不是 `NEW` <br/> 或 <br/> `cancelRestrictions` 设置为 `ONLY_PARTIALLY_FILLED` 但订单状态不是 `PARTIALLY_FILLED`。                                           |
-| "Rest API trading is not enabled." / "WebSocket API trading is not enabled."   | 下单时，服务器没有设置为允许访问 `TRADE` 的接口。                                                                                                                                                            |
-| "FIX API trading is not enabled.                                               | 订单放置在未启用 TRADE 的 FIX 服务器上.                                                                                                                                                                      |
-| "Order book liquidity is less than `LOT_SIZE` filter minimum quantity."        | 当订单簿流动性小于 `LOT_SIZE` 过滤器配置的最小数量时，无法提交包含 `quoteOrderQty` 的市价单。                                                                                                                |
-| "Order book liquidity is less than `MARKET_LOT_SIZE` filter minimum quantity." | 当订单簿流动性小于 `MARKET_LOT_SIZE` 过滤器的最小数量时，无法提交包含 `quoteOrderQty` 的市价单。                                                                                                             |
-| "Order book liquidity is less than symbol minimum quantity."                   | 当订单簿里没有订单时，无法提交包含 `quoteOrderQty` 的市价单。                                                                                                                                                |
-| "Order amend (quantity increase) is not supported."                            | `newQty` 必须小于原来订单的数量 (`quantity`)。                                                                                                                                                               |
-| "The requested action would change no state; rejecting".                       | 发送的请求将不会改变现状；拒绝。<br></br>(比如， `newQty` 不能和原来订单的数量 (`quantity`)是一样的。)                                                                                                       |
-| "Pegged orders are not supported for this symbol."                             | `pegInstructionsAllowed` 还没有启用。                                                                                                                                                                        |
-| "This order type may not use pegged price."                                    | 在不被支持的订单类型上使用 `pegPriceType` 参数 (例如， `MARKET`)。                                                                                                                                           |
-| "This price peg cannot be used with this order type."                          | 在 `LIMIT_MAKER` 订单上使用 `pegPriceType`=`MARKET_PEG`。                                                                                                                                                    |
-| "Order book liquidity is too low for this pegged order."                       | 订单簿中没有最佳价格水平可用以固定价格。                                                                                                                                                                     |
-| OPO orders are not supported for this symbol.                                  | 该交易对不支持 OPO 订单                                                                                                                                                                                      |
-| Order amend (pending OPO order) is not supported.                              | OPO 订单中的待处理订单无法修改数量                                                                                                                                                                           |
+| 错误消息                                                                               | 描述                                                                                                                                                                                                         |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| "Unknown order sent."                                                                  | 找不到订单， (根据请求里发送的 `orderId`, `clOrdId`, `origClOrdId`)。                                                                                                                                        |
+| "Duplicate order sent."                                                                | 客户自定义的订单号重复了。                                                                                                                                                                                   |
+| "Market is closed."                                                                    | 该交易对交易关闭了。                                                                                                                                                                                         |
+| "Account has insufficient balance for requested action."                               | 账户金额不足。                                                                                                                                                                                               |
+| "Market orders are not supported for this symbol."                                     | 该交易对无法发起市价单。                                                                                                                                                                                     |
+| "Iceberg orders are not supported for this symbol."                                    | 该交易对无法发起冰山订单。                                                                                                                                                                                   |
+| "Stop loss orders are not supported for this symbol."                                  | 该交易对无法发起止损单。                                                                                                                                                                                     |
+| "Stop loss limit orders are not supported for this symbol."                            | 该交易对无法发起止损限价单。                                                                                                                                                                                 |
+| "Take profit orders are not supported for this symbol."                                | 该交易对无法发起止盈单。                                                                                                                                                                                     |
+| "Take profit limit orders are not supported for this symbol."                          | 该交易对无法发起止盈限价单。                                                                                                                                                                                 |
+| "Order amend is not supported for this symbol."                                        | 该交易对无法发起保持优先级的修改订单操作。                                                                                                                                                                   |
+| "Price \* QTY is zero or less."                                                        | 订单金额必须大于0。                                                                                                                                                                                          |
+| "IcebergQty exceeds QTY."                                                              | 冰山订单中小订单的Quantity必须小于总的Quantity。                                                                                                                                                             |
+| "This action is disabled on this account."                                             | 联系客户支持； 该账户已禁用了某些操作。                                                                                                                                                                      |
+| "This account may not place or cancel orders."                                         | 联系客户支持： 该账户已被禁用了交易操作。                                                                                                                                                                    |
+| "Unsupported order combination"                                                        | `orderType`, `timeInForce`, `stopPrice`, `icebergQty` 某些参数取某些值的时候另一些参数必须/不得提供。                                                                                                        |
+| "Order would trigger immediately."                                                     | 止盈、止损单必须在未来触发，如果条件太弱现在的市场行情就可以触发（通常是误操作填错了条件），就会报这个错误。                                                                                                 |
+| "Cancel order is invalid. Check origClOrdId and orderId."                              | 撤销订单必须提供 `origClOrdId` 或者 `orderId` 中的一个。                                                                                                                                                     |
+| "Order would immediately match and take."                                              | `LIMIT_MAKER` 订单如果按照规则会成为Taker，就会报此错。                                                                                                                                                      |
+| "The relationship of the prices for the orders is not correct."                        | `OCO`订单中设置的价格不符合报价规则：<br/> 请参考以下示例： <br/> `BUY`：`LIMIT_MAKER` `price` < Last Traded Price < `stopPrice` <br/> `SELL`：`LIMIT_MAKER` `price` > Last Traded Price > `stopPrice` <br/> |
+| "OCO orders are not supported for this symbol"                                         | `OCO`订单不支持该交易对。                                                                                                                                                                                    |
+| "Quote order qty market orders are not support for this symbol."                       | 这个交易对，市价单不支持参数 `quoteOrderQty`。                                                                                                                                                               |
+| "Trailing stop orders are not supported for this symbol."                              | 此symbol不支持 `trailingDelta`。                                                                                                                                                                             |
+| "Order cancel-replace is not supported for this symbol."                               | 此symbol不支持 `POST /api/v3/order/cancelReplace` 或者 `order.cancelReplace` (WebSocket API)。                                                                                                               |
+| "This symbol is not permitted for this account."                                       | 账户和交易对的权限不一致 (比如 `SPOT`, `MARGIN` 等)。                                                                                                                                                        |
+| "This symbol is restricted for this account."                                          | 账户没有权限在此交易对交易 (比如账户只拥有 `ISOLATED_MARGIN`权限，则无法下`SPOT` 订单)。                                                                                                                     |
+| "Order was not canceled due to cancel restrictions."                                   | `cancelRestrictions` 设置为 `ONLY_NEW` 但订单状态不是 `NEW` <br/> 或 <br/> `cancelRestrictions` 设置为 `ONLY_PARTIALLY_FILLED` 但订单状态不是 `PARTIALLY_FILLED`。                                           |
+| "Rest API trading is not enabled." / "WebSocket API trading is not enabled."           | 下单时，服务器没有设置为允许访问 `TRADE` 的接口。                                                                                                                                                            |
+| "FIX API trading is not enabled.                                                       | 订单放置在未启用 TRADE 的 FIX 服务器上.                                                                                                                                                                      |
+| "Order book liquidity is less than `LOT_SIZE` filter minimum quantity."                | 当订单簿流动性小于 `LOT_SIZE` 过滤器配置的最小数量时，无法提交包含 `quoteOrderQty` 的市价单。                                                                                                                |
+| "Order book liquidity is less than `MARKET_LOT_SIZE` filter minimum quantity."         | 当订单簿流动性小于 `MARKET_LOT_SIZE` 过滤器的最小数量时，无法提交包含 `quoteOrderQty` 的市价单。                                                                                                             |
+| "Order book liquidity is less than symbol minimum quantity."                           | 当订单簿里没有订单时，无法提交包含 `quoteOrderQty` 的市价单。                                                                                                                                                |
+| "Order amend (quantity increase) is not supported."                                    | `newQty` 必须小于原来订单的数量 (`quantity`)。                                                                                                                                                               |
+| "The requested action would change no state; rejecting".                               | 发送的请求将不会改变现状；拒绝。<br></br>(比如， `newQty` 不能和原来订单的数量 (`quantity`)是一样的。)                                                                                                       |
+| "Pegged orders are not supported for this symbol."                                     | `pegInstructionsAllowed` 还没有启用。                                                                                                                                                                        |
+| "This order type may not use pegged price."                                            | 在不被支持的订单类型上使用 `pegPriceType` 参数 (例如， `MARKET`)。                                                                                                                                           |
+| "This price peg cannot be used with this order type."                                  | 在 `LIMIT_MAKER` 订单上使用 `pegPriceType`=`MARKET_PEG`。                                                                                                                                                    |
+| "Order book liquidity is too low for this pegged order."                               | 订单簿中没有最佳价格水平可用以固定价格。                                                                                                                                                                     |
+| OPO orders are not supported for this symbol.                                          | 该交易对不支持 OPO 订单                                                                                                                                                                                      |
+| Order amend (pending OPO order) is not supported.                                      | OPO 订单中的待处理订单无法修改数量                                                                                                                                                                           |
+| "Quote notional limit is not allowed for this order."                                  | 在不能设置 `quoteNotionalLimit` 的订单上提供了该参数，例如卖单或 OPO/OPOCO 的待处理订单。`LIMIT_MAKER` 及其他参数层面的冲突会改为返回 `-1106`。                                                              |
+| "Quote notional limit is not supported for this order type on this symbol."            | 交易对未开启 `marketQuoteNotionalLimitAllowed`（适用于 `MARKET` / `STOP_LOSS` / `TAKE_PROFIT` 买单）或 `limitQuoteNotionalLimitAllowed`（适用于 `LIMIT` / `STOP_LOSS_LIMIT` / `TAKE_PROFIT_LIMIT` 买单）。   |
+| "Quote notional limit must be less than the notional of the order at its limit price." | 非挂钩限价单提供的 `quoteNotionalLimit` 大于或等于 `quantity * 限价`（`>= quantity * limit price`）。挂钩限价单不受此规则限制。                                                                              |
+| "Quote notional limit is over the symbol's maximum notional."                          | `quoteNotionalLimit` 大于交易对的最大数量乘以最大价格。                                                                                                                                                      |
 
 <a id="errors-regarding-placing-orders-via-cancelreplace"></a>
 
