@@ -69,6 +69,8 @@ Note that this message will be in JSON.
 }
 ```
 
+The `T` field indicates when the WebSocket session will be shut down.
+
 Please establish a new connection as soon as possible to prevent interruption.
 
 ## Available Streams

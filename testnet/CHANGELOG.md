@@ -1,9 +1,19 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-10-30**
+**Last Updated: 2026-11-11**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-11-11
+
+- Error code documentation corrections:
+  - `PARAM_OVERFLOW` is [`-1018`](errors.md#-1018-param_overflow). It was previously documented as
+    `-1108`.
+  - `-1108` is [`BAD_ASSET`](errors.md#-1108-bad_asset) "Invalid asset." It was previously
+    documented as a new message of `-1108 PARAM_OVERFLOW` in the [2026-10-28](#2026-10-28) entry.
+
+---
 
 ### 2026-10-30
 
@@ -30,7 +40,7 @@ REST and WebSocket API:
     [User Data Stream Subscription Filters](web-socket-api.md#user-data-stream-subscription-filters).
   - Unknown symbols and assets in `filter` are rejected with
     [`-1121`](errors.md#-1121-bad_symbol) and
-    [`-1108`](errors.md#-1108-param_overflow) respectively. `-1108` has a new
+    [`-1108`](errors.md#-1108-bad_asset) respectively. `-1108` has a new
     message: "Invalid asset."
 
 #### General Changes

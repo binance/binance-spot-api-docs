@@ -8152,8 +8152,9 @@ the subscription. Without a filter, all events for the subscribed account are de
 object must contain at least one key when present; empty objects and empty arrays are rejected.
 
 Filters use the short field names that appear in event payloads. Within a filter key, values are
-OR'd (match any). Across filter keys, matches are AND'd (an event must pass every specified filter).
-Filters that don't apply to an event type are ignored - the event passes through.
+logically ORed (match any). Across filter keys, matches are logically ANDed (an event must pass
+every specified filter). Filters that don't apply to an event type are ignored - the event passes
+through.
 
 **Available filter keys:**
 
@@ -8171,7 +8172,7 @@ Filters that don't apply to an event type are ignored - the event passes through
 | `executionReport`         | Order lifecycle events (new, trade, cancel, expire, amend) |
 | `balanceUpdate`           | Balance credit/debit (deposits, withdrawals)               |
 | `outboundAccountPosition` | Account position snapshot after a change                   |
-| `listStatus`              | Order list (OCO/OTO) status updates                        |
+| `listStatus`              | Order list (OCO, OTO, OTOCO, OPO, OPOCO) status updates    |
 | `externalLockUpdate`      | External lock balance changes                              |
 
 **Execution type values (`x`):**
@@ -8229,7 +8230,6 @@ Only fills on execution reports:
 
 - `listenKeyExpired` and `eventStreamTerminated` lifecycle events are always delivered regardless of
   filters.
-- Symbols and assets are resolved to internal IDs at subscribe time.
 - When using `userDataStream.subscribe.signature`, the `filter` must be included in the string that
   is signed. For the signature to match:
   - Filter keys must be sorted alphabetically: `a`, `e`, `s`, `x`.

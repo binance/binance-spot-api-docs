@@ -67,6 +67,10 @@ vary. Here is the error JSON payload:
 
 - This service is no longer available.
 
+### -1018 PARAM_OVERFLOW
+
+- Parameter '%s' overflowed.
+
 ### -1020 UNSUPPORTED_OPERATION
 
 - This operation is not supported.
@@ -138,9 +142,8 @@ vary. Here is the error JSON payload:
 - Parameter '%s' sent when not required.
 - A tag '%s' was sent when not required.
 
-### -1108 PARAM_OVERFLOW
+### -1108 BAD_ASSET
 
-- Parameter '%s' overflowed.
 - Invalid asset.
 
 ### -1111 BAD_PRECISION
