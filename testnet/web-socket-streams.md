@@ -714,9 +714,9 @@ To apply an event to your local order book, follow this update procedure:
 
 > [!NOTE]
 >
-> Since depth snapshots retrieved from the API have a limit on the number of price levels (5000 on
+> Since depth snapshots retrieved from the API have a limit on the number of price levels (7500 on
 > each side maximum), you won't learn the quantities for the levels outside of the initial snapshot
 > unless they change. <br> So be careful when using the information for those levels, since they might
-> not reflect the full view of the order book. <br> However, for most use cases, seeing 5000 levels on
+> not reflect the full view of the order book. <br> However, for most use cases, seeing 7500 levels on
 > each side is enough to understand the market and trade effectively.
 >

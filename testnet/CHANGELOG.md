@@ -1,9 +1,18 @@
 # CHANGELOG for Binance SPOT Testnet
 
-**Last Updated: 2026-11-11**
+**Last Updated: 2026-11-24**
 
 **Note:** All features here will only apply to the [SPOT Testnet](https://testnet.binance.vision/).
 This is not always synced with the live exchange.
+
+### 2026-11-24
+
+- Order Book depth now supports additional levels. This affects the following endpoints:
+  - REST API: [`GET /api/v3/depth`](rest-api.md#order-book)
+  - WebSocket API: [`depth`](web-socket-api.md#order-book)
+  - FIX Market Data: [MarketDataRequest `<V>`](fix-api.md#marketdatarequest)
+
+---
 
 ### 2026-11-11
 
