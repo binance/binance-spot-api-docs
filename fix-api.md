@@ -1420,7 +1420,7 @@ Order book price and quantity depth updates used to locally manage an order book
 - `SubscriptionRequestType` with value `SUBSCRIBE(1)`
 - `MDEntryType` with value `BID(0)`
 - `MDEntryType` with value `OFFER(1)`
-- `MarketDepth` with a value between `2` and `5000`, which controls the size of the initial snapshot
+- `MarketDepth` with a value between `2` and `7500`, which controls the size of the initial snapshot
   and has no effect on subsequent [MarketDataIncrementalRefresh`<X>`](#marketdataincrementalrefresh)
   messages
 
@@ -1429,17 +1429,17 @@ Order book price and quantity depth updates used to locally manage an order book
 > [!NOTE]
 >
 > Since the [MarketDataSnapshot`<W>`](#marketdatasnapshot-w) have a limit on the number of price
-> levels (5000 on each side maximum), you won't learn the quantities for the levels outside of the
+> levels (7500 on each side maximum), you won't learn the quantities for the levels outside of the
 > initial snapshot unless they change. So be careful when using the information for those levels,
 > since they might not reflect the full view of the order book. However, for most use cases, seeing
-> 5000 levels on each side is enough to understand the market and trade effectively.
+> 7500 levels on each side is enough to understand the market and trade effectively.
 >
 
 | Tag   | Name                    | Type       | Required | Description                                                                                                                       |
 | :---- | ----------------------- | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | 262   | MDReqID                 | STRING     | Y        | ID of this request                                                                                                                |
 | 263   | SubscriptionRequestType | CHAR       | Y        | Subscription Request Type. Possible values: <br></br> `1` - SUBSCRIBE <br></br> `2` - UNSUBSCRIBE                                 |
-| 264   | MarketDepth             | INT        | N        | Subscription depth. <br></br> Possible values: <br></br> `1` - Book Ticker subscription <br></br> `2`-`5000` - Diff. Depth Stream |
+| 264   | MarketDepth             | INT        | N        | Subscription depth. <br></br> Possible values: <br></br> `1` - Book Ticker subscription <br></br> `2`-`7500` - Diff. Depth Stream |
 | 266   | AggregatedBook          | NUMINGROUP | N        | Possible values: <br></br> `Y` - one book entry per side per price                                                                |
 | 146   | NoRelatedSym            | NUMINGROUP | N        | Number of symbols                                                                                                                 |
 | =>55  | Symbol                  | STRING     | Y        |                                                                                                                                   |

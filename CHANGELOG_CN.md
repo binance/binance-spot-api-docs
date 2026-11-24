@@ -2,7 +2,16 @@
 
 # 更新日志
 
-**最近更新：2026-11-11**
+**最近更新：2026-11-24**
+
+### 2026-11-24
+
+- 订单簿深度现在支持更多价位。此变更影响以下接口：
+  - REST API：[`GET /api/v3/depth`](rest-api_CN.md#order-book)
+  - WebSocket API：[`depth`](web-socket-api_CN.md#order-book)
+  - FIX Market Data：[MarketDataRequest `<V>`](fix-api_CN.md#marketdatarequest)
+
+---
 
 ### 2026-11-11
 

@@ -1814,13 +1814,14 @@ Adjusted based on the limit:
 101-500| 25
 501-1000| 50
 1001-5000| 250
+5001-7500| 500
 
 **Parameters:**
 
 Name | Type | Mandatory | Description
 ------------ | ------------ | ------------ | ------------
 `symbol` | STRING | YES |
-`limit` | INT | NO | Default: 100; Maximum: 5000.
+`limit` | INT | NO | Default: 100; Maximum: 7500. <br/> If limit > 7500, only 7500 entries will be returned.
 `symbolStatus` | ENUM | NO | Filters for symbols that have this `tradingStatus`. <br/> A status mismatch returns error `-1220 SYMBOL_DOES_NOT_MATCH_STATUS`.
 
 **Data Source:** Memory

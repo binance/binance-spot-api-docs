@@ -1341,7 +1341,7 @@ Your connection is about to be closed. Please reconnect.
 - `SubscriptionRequestType` 值为 `SUBSCRIBE(1)`
 - `MDEntryType` 值为 `BID (0)`
 - `MDEntryType` 值为 `OFFER (1)`
-- `MarketDepth` 值介于 `2` 和 `5000` 之间，用于控制初始快照的大小，对后续的
+- `MarketDepth` 值介于 `2` 和 `7500` 之间，用于控制初始快照的大小，对后续的
   [MarketDataIncrementalRefresh `<X>` ](#marketdataincrementalrefresh) 消息没有影响
 
 **更新速度：** 100 毫秒
@@ -1349,14 +1349,14 @@ Your connection is about to be closed. Please reconnect.
 > [!NOTE]
 >
 > 由于 [MarketDataSnapshot`<W>`](#marketdatasnapshot)
-> 对价格的深度有限制，所在初始快照之外没有数量变化的价格不会在增量深度信息数据流中。<br></br>因此，即使更新所有推送的数据流信息，依然会导致本地订单簿与真实订单簿有些微差异。<br></br>对于大多数情况，5000 的深度限制就足以理解市场和进行有效的交易。
+> 对价格的深度有限制，所在初始快照之外没有数量变化的价格不会在增量深度信息数据流中。<br></br>因此，即使更新所有推送的数据流信息，依然会导致本地订单簿与真实订单簿有些微差异。<br></br>对于大多数情况，7500 的深度限制就足以理解市场和进行有效的交易。
 >
 
 | Tag   | Name                    | Type       | Required | Description                                                                                      |
 | :---- | ----------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------ |
 | 262   | MDReqID                 | STRING     | Y        | 此请求的 ID                                                                                      |
 | 263   | SubscriptionRequestType | CHAR       | Y        | 订阅请求类型。 可能的值： <br></br> `1` - SUBSCRIBE <br></br> `2` - UNSUBSCRIBE                  |
-| 264   | MarketDepth             | INT        | N        | 订阅深度。<br></br>可能的值： <br></br> `1` - Book Ticker 订阅 <br></br> `2`-`5000` - 增量深度流 |
+| 264   | MarketDepth             | INT        | N        | 订阅深度。<br></br>可能的值： <br></br> `1` - Book Ticker 订阅 <br></br> `2`-`7500` - 增量深度流 |
 | 266   | AggregatedBook          | NUMINGROUP | N        | 可能的值： <br></br> `Y` - 每个价格每侧 1 个帐簿条目                                             |
 | 146   | NoRelatedSym            | NUMINGROUP | N        | 交易对数量                                                                                       |
 | =>55  | Symbol                  | STRING     | Y        |                                                                                                  |
