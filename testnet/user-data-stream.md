@@ -124,7 +124,30 @@ Orders are updated with the `executionReport` event.
     "Y": "0.00000000",              // Last quote asset transacted quantity (i.e. lastPrice * lastQty)
     "Q": "0.00000000",              // Quote Order Quantity
     "W": 1499405658657,             // Working Time; This is only visible if the order has been placed on the book.
-    "V": "NONE"                     // SelfTradePreventionMode
+    "V": "NONE",                    // SelfTradePreventionMode
+    "d": 4,                         // Trailing Delta
+    "D": 1668680518494,             // Trailing Time
+    "j": 1,                         // Strategy Id
+    "J": 1000000,                   // Strategy Type
+    "A": "3.000000",                // Prevented Quantity
+    "B": "3.000000",                // Last Prevented Quantity
+    "u": 1,                         // Trade Group Id
+    "U": 37,                        // Counter Order Id
+    "Cs": "BTCUSDT",                // Counter Symbol
+    "pl": "2.123456",               // Prevented Execution Quantity
+    "pL": "0.10000001",             // Prevented Execution Price
+    "pY": "0.21234562",             // Prevented Execution Quote Qty
+    "Qq": "90.00000000",            // Quote Notional Limit. Appears only if the order was placed with a quote notional limit.
+    "eV": "DECREMENT",              // Effective Self Trade Prevention Mode. Appears on prevented-match reports when the applied STP mode differs from the order's `selfTradePreventionMode`. Values: `EXPIRE_MAKER`, `EXPIRE_BOTH`, `DECREMENT`.
+    "b": "ONE_PARTY_TRADE_REPORT",  // Match Type
+    "a": 1234,                      // Allocation ID
+    "k": "SOR",                     // Working Floor
+    "uS": true,                     // UsedSor
+    "gP": "PRIMARY_PEG",            // Pegged Price Type
+    "gOT": "PRICE_LEVEL",           // Pegged Offset Type
+    "gOV": 5,                       // Pegged Offset Value
+    "gp": "1.00000000",             // Pegged Price
+    "eR": "INSUFFICIENT_LIQUIDITY"  // Expiry Reason. Appears when the order has expired.
   }
 }
 ```
@@ -175,7 +198,7 @@ For additional information on these parameters, please refer to the
     <td><code>"v": 3</code></td>
   </tr>
   <tr>
-    <td><code>A</code>
+    <td><code>A</code></td>
     <td>Prevented Quantity</td>
     <td><code>"A":"3.000000"</code></td>
   </tr>
@@ -219,6 +242,8 @@ For additional information on these parameters, please refer to the
     <td>Quote Notional Limit</td>
     <td>Appears only if the order was placed with a quote notional limit.</td>
     <td><code>"Qq":"90.00000000"</code></td>
+  </tr>
+  <tr>
     <td><code>eV</code></td>
     <td>Effective Self Trade Prevention Mode</td>
     <td>Appears on prevented-match reports when the applied STP mode differs from the order's <code>selfTradePreventionMode</code>. Values: <code>EXPIRE_MAKER</code>, <code>EXPIRE_BOTH</code>, <code>DECREMENT</code>.</td>
@@ -273,6 +298,12 @@ For additional information on these parameters, please refer to the
       <td><code>gp</code></td>
       <td>Pegged Price</td>
       <td><code>"gp": "1.00000000"</code></td>
+   </tr>
+   <tr>
+      <td><code>eR</code></td>
+      <td>Expiry Reason</td>
+      <td>Appears when the order has expired.</td>
+      <td><code>"eR": "INSUFFICIENT_LIQUIDITY"</code></td>
    </tr>
 </table>
 
