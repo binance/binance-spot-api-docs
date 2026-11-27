@@ -1242,7 +1242,7 @@ Read [Order Amend Keep Priority FAQ](../faqs/order_amend_keep_priority.md) to le
 
 <a id="orderamendreject"></a>
 
-### OrderAmendReject `<XAR>`
+#### OrderAmendReject `<XAR>`
 
 Sent by the server when the OrderAmendKeepPriorityRequest `<XAK>` has failed.
 
